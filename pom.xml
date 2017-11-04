@@ -62,6 +62,7 @@
         <jdk.version>1.7</jdk.version>
         <junit.version>4.11</junit.version>
         <squidlib.version>8dac074860</squidlib.version>
+        <gdx.version>1.9.6</gdx.version>
     </properties>
 
 
@@ -77,6 +78,26 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.badlogicgames.gdx</groupId>
+            <artifactId>gdx</artifactId>
+            <version>${gdx.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.badlogicgames.gdx</groupId>
+            <artifactId>gdx-backend-lwjgl</artifactId>
+            <version>${gdx.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.badlogicgames.gdx</groupId>
+            <artifactId>gdx-platform</artifactId>
+            <version>${gdx.version}</version>
+            <classifier>natives-desktop</classifier>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <prerequisites>
