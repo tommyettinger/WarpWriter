@@ -56,4 +56,77 @@ public class Tools3D {
         }
         return next;
     }
+
+    public static byte[][][] mirrorX(byte[][][] voxels)
+    {
+        int xs, ys, zs;
+        byte[][][] next = new byte[(xs = voxels.length) << 1][ys = voxels[0].length][zs = voxels[0][0].length];
+        for (int x = 0; x < xs; x++) {
+            for (int y = 0; y < ys; y++) {
+                System.arraycopy(voxels[x][y], 0, next[x][y], 0, zs);
+                System.arraycopy(voxels[x][y], 0, next[(xs << 1) - 1 - x][y], 0, zs);
+            }
+        }
+        return next;
+    }
+
+    public static byte[][][] mirrorY(byte[][][] voxels)
+    {
+        int xs, ys, zs;
+        byte[][][] next = new byte[xs = voxels.length][(ys = voxels[0].length) << 1][zs = voxels[0][0].length];
+        for (int x = 0; x < xs; x++) {
+            for (int y = 0; y < ys; y++) {
+                System.arraycopy(voxels[x][y], 0, next[x][y], 0, zs);
+                System.arraycopy(voxels[x][y], 0, next[x][(ys << 1) - 1 - y], 0, zs);
+            }
+        }
+        return next;
+    }
+
+    public static byte[][][] mirrorXY(byte[][][] voxels)
+    {
+        int xs, ys, zs;
+        byte[][][] next = new byte[(xs = voxels.length) << 1][(ys = voxels[0].length) << 1][zs = voxels[0][0].length];
+        for (int x = 0; x < xs; x++) {
+            for (int y = 0; y < ys; y++) {
+                System.arraycopy(voxels[x][y], 0, next[x][y], 0, zs);
+                System.arraycopy(voxels[x][y], 0, next[(xs << 1) - 1 - x][y], 0, zs);
+                System.arraycopy(voxels[x][y], 0, next[x][(ys << 1) - 1 - y], 0, zs);
+                System.arraycopy(voxels[x][y], 0, next[(xs << 1) - 1 - x][(ys << 1) - 1 - y], 0, zs);
+            }
+        }
+        return next;
+    }
+
+
+    public static int countNot(byte[][][] voxels, int avoid)
+    {
+        final int xs = voxels.length, ys = voxels[0].length, zs = voxels[0][0].length;
+        int c = 0;
+        for (int x = 0; x < xs; x++) {
+            for (int y = 0; y < ys; y++) {
+                for (int z = 0; z < zs; z++) {
+                    c += (voxels[x][y][z] != avoid) ? 1 : 0;
+                }
+            }
+        }
+        return c;
+    }
+    public static int count(byte[][][] voxels)
+    {
+        return countNot(voxels, 0);
+    }
+    public static int count(byte[][][] voxels, int match)
+    {
+        final int xs = voxels.length, ys = voxels[0].length, zs = voxels[0][0].length;
+        int c = 0;
+        for (int x = 0; x < xs; x++) {
+            for (int y = 0; y < ys; y++) {
+                for (int z = 0; z < zs; z++) {
+                    c+= (voxels[x][y][z] == match) ? 1 : 0;
+                }
+            }
+        }
+        return c;
+    }
 }
