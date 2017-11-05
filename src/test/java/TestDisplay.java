@@ -1,5 +1,7 @@
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
@@ -16,21 +18,56 @@ import warpwriter.ModelRenderer;
 public class TestDisplay extends ApplicationAdapter {
     SpriteBatch batch;
     Texture tex;
+    Pixmap pix;
+    ModelMaker mm = new ModelMaker();
+    ModelRenderer mr = new ModelRenderer();
+    InputAdapter input;
+    byte[][][] voxels;
+    int dir = 0;
     @Override
     public void create() {
         batch = new SpriteBatch();
-        Pixmap pix = new Pixmap(16, 16, Pixmap.Format.RGBA8888);
-        ModelMaker mm = new ModelMaker();
-        byte[][][] voxels = mm.fullyRandom();
-        ModelRenderer mr = new ModelRenderer();
-        int[][] indices = mr.render16x16(voxels, 0);
+        pix = new Pixmap(16, 16, Pixmap.Format.RGBA8888);
+        tex = new Texture(16, 16, Pixmap.Format.RGBA8888);
+        remake(true);
+        input = new InputAdapter(){
+            @Override
+            public boolean keyUp(int keycode) {
+                if(keycode == Input.Keys.Q)
+                {
+                    Gdx.app.exit();
+                    return true;
+                }
+                else if(keycode == Input.Keys.N)
+                    remake(true);
+                else
+                    remake(false);
+                return true;
+            }
+        };
+        Gdx.input.setInputProcessor(input);
+    }
+    public void remake(boolean newModel)
+    {
+        if(newModel)
+        {
+            voxels = mm.shipRandom();
+            dir = 0;
+        }
+        else
+        {
+            dir++;
+        }
+        pix.setColor(0);
+        pix.fill();
+        int[][] indices = mr.render16x16(voxels, dir);
         for (int y = 0; y < 16; y++) {
             for (int x = 0; x < 16; x++) {
                 pix.drawPixel(x, y, Coloring.CW_PALETTE[indices[x][y]]);
             }
         }
-        tex = new Texture(16, 16, Pixmap.Format.RGBA8888);
         tex.draw(pix, 0, 0);
+
     }
 
     @Override
