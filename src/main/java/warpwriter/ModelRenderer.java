@@ -73,7 +73,11 @@ public class ModelRenderer {
                         px = con.voxelToPixelX(c, a, b);
                         py = con.voxelToPixelY(c, a, b);
                         current = voxels[c][a][b] & 255;
-                        if(current != 0)
+                        if(current == 2)
+                        {
+                            render[px][py] = 2;
+                        }
+                        else if(current != 0)
                         {
                             if(b == zs - 1 || voxels[c][a][b+1] == 0)
                                 render[px][py] = current + 2;
@@ -93,7 +97,11 @@ public class ModelRenderer {
                         px = con.voxelToPixelX(a, c, b);
                         py = con.voxelToPixelY(a, c, b);
                         current = voxels[a][c][b] & 255;
-                        if(current != 0)
+                        if(current == 2)
+                        {
+                            render[px][py] = 2;
+                        }
+                        else if(current != 0)
                         {
                             if(b == zs - 1 || voxels[a][c][b+1] == 0)
                                 render[px][py] = current + 2;
@@ -145,7 +153,7 @@ public class ModelRenderer {
             new Converter() {
                 @Override
                 public int voxelToPixelX(int vx, int vy, int vz) {
-                    return vy + 1;
+                    return vy + 2;
                 }
 
                 @Override
@@ -181,7 +189,7 @@ public class ModelRenderer {
             new Converter() {
                 @Override
                 public int voxelToPixelX(int vx, int vy, int vz) {
-                    return vx + 1;
+                    return vx + 2;
                 }
 
                 @Override
