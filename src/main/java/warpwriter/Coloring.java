@@ -7,15 +7,15 @@ public class Coloring {
     // values with special meanings
     /** Empty space with nothing in it. */
     public static final byte EMPTY = 0,
-    /** A solid object that is transparent, so it will have an outline but no color of its own. */ CLEAR = 1,
-    /** Used for shadows on the ground, only if nothing is at that space. */ SHADOW = 2,
-    /** A solid black outline drawn around the perimeter of a 2D image; never used in 3D. */ OUTLINE = 3;
+    /** Used for shadows on the ground, only if nothing is at that space; does not produce outlines. */ SHADOW = 1,
+    /** A solid black outline drawn around the perimeter of a 2D image; never used in 3D. */ OUTLINE = 2,
+    /** A solid object that is transparent, so it will have an outline but no color of its own. */ CLEAR = 3;
     // 4, 5, 6, and 7 are reserved for later use.
     // all other bytes are organized so the bottom 3 bits determine shading, from darkest at 0 to lightest at 7, while
     // the top 5 bits are palette-dependent and are used to determine the precise hue and saturation.
 
     public static final int[] CW_PALETTE = {
-            0x00000000, 0x88ffff00, 0x444444ff, 0x000000ff, 0xff0000ff, 0x00ff00ff, 0x0000ffff, 0xffff00ff,
+            0x00000000, 0x444444ff, 0x000000ff, 0x88ffff00, 0xff0000ff, 0x00ff00ff, 0x0000ffff, 0xffff00ff,
             0x1f1f1fff, 0x3f3f3fff, 0x5f5f5fff, 0x7f7f7fff, 0x9f9f9fff, 0xbfbfbfff, 0xdfdfdfff, 0xffffffff,
             0xa11616ff, 0x923535ff, 0xbe1111ff, 0xe21414ff, 0xb76363ff, 0xf43b3bff, 0xed8383ff, 0xe4a7a7ff,
             0xa35113ff, 0xa36b41ff, 0xc15b0fff, 0xe56d11ff, 0xcc9b75ff, 0xf68a39ff, 0xf1b283ff, 0xecc7abff,
