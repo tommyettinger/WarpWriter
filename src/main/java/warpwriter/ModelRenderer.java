@@ -1,5 +1,7 @@
 package warpwriter;
 
+import squidpony.ArrayTools;
+
 /**
  * Created by Tommy Ettinger on 11/4/2017.
  */
@@ -25,7 +27,7 @@ public class ModelRenderer {
     {
         final int xs = voxels.length, ys = voxels[0].length, zs = voxels[0][0].length;
         Converter con = directions16x16[direction &= 3];
-        int[][] render = new int[16][16];
+        int[][] working = new int[16][16], depths = new int[16][16], render;
         int aa, cc, aStep, cStep, aMax, cMax, px, py;
         boolean flip = true;
         int current;
@@ -75,16 +77,17 @@ public class ModelRenderer {
                         current = voxels[c][a][b] & 255;
                         if(current == 2)
                         {
-                            render[px][py] = 2;
+                            working[px][py] = 2;
                         }
                         else if(current != 0)
                         {
                             if(b == zs - 1 || voxels[c][a][b+1] == 0)
-                                render[px][py] = current + 2;
+                                working[px][py] = current + 2;
                             else if(b == 0 || voxels[c][a][b-1] == 0)
-                                render[px][py] = current - 2;
+                                working[px][py] = current - 2;
                             else
-                                render[px][py] = current;
+                                working[px][py] = current;
+                            depths[px][py] = b * 2 - c;
                         }
                     }
                 }
@@ -99,29 +102,33 @@ public class ModelRenderer {
                         current = voxels[a][c][b] & 255;
                         if(current == 2)
                         {
-                            render[px][py] = 2;
+                            working[px][py] = 2;
                         }
                         else if(current != 0)
                         {
                             if(b == zs - 1 || voxels[a][c][b+1] == 0)
-                                render[px][py] = current + 2;
+                                working[px][py] = current + 2;
                             else if(b == 0 || voxels[a][c][b-1] == 0)
-                                render[px][py] = current - 2;
+                                working[px][py] = current - 2;
                             else
-                                render[px][py] = current;
+                                working[px][py] = current;
+                            depths[px][py] = b * 2 - a;
                         }
                     }
                 }
             }
         }
+        int d;
+        render = ArrayTools.copy(working);
         for (int x = 1; x < 15; x++) {
             for (int y = 1; y < 15; y++) {
-                if(render[x][y] > 2)
+                if((working[x][y]) > 2)
                 {
-                    if(render[x-1][y] == 0) render[x-1][y] = 2;
-                    if(render[x+1][y] == 0) render[x+1][y] = 2;
-                    if(render[x][y-1] == 0) render[x][y-1] = 2;
-                    if(render[x][y+1] == 0) render[x][y+1] = 2;
+                    d = depths[x][y];
+                    if(working[x-1][y] == 0 || depths[x-1][y] < d - 2) render[x-1][y] = 2;
+                    if(working[x+1][y] == 0 || depths[x+1][y] < d - 2) render[x+1][y] = 2;
+                    if(working[x][y-1] == 0 || depths[x][y-1] < d - 2) render[x][y-1] = 2;
+                    if(working[x][y+1] == 0 || depths[x][y+1] < d - 2) render[x][y+1] = 2;
                 }
             }
         }

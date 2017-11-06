@@ -39,21 +39,29 @@ public class ModelMaker {
         byte[][][] voxels = new byte[12][12][8];
         byte mainColor = (byte)((rng.nextIntHasty(22) << 3) + rng.between(10, 13)),
                 highlightColor = (byte)((rng.nextIntHasty(22) << 3) + rng.between(11, 13));
-        int ctr = 32;
-        for (int x = 0; x < 12; x++) {
-            for (int y = 0; y < 6; y++) {
-                if(y > (x <= 3 ? 2 - x : (x >> 1) - 2)) {
+        int ctr = 0;
+        do {
+            ctr = 0;
+            for (int x = 0; x < 12; x++) {
+                for (int y = 0; y < 6; y++) {
                     for (int z = 1; z < 8; z++) {
-                        voxels[x][11 - y][z] = voxels[x][y][z] =
-                                // + (60 - (x + 1) * (12 - x) + 6 - y) * 47
-                                (rng.nextIntHasty((11 - y * 2) * 37 + (Math.abs(x - 3) + 1) * (9 - y) * 21 + Math.abs(z - 4) * 37 + ( (60 - (x + 1) * (12 - x)) * (Math.abs(z - 4) + 2) * (8 - y)) * 6) < 420) ?
-                                        (rng.next(7) < ctr--) ? 2
-                                                : (rng.next(4) == 0) ? highlightColor : mainColor
-                                        : 0;
+                        if (y > (x <= 3 ? 2 - x : (x >> 1) - 2)) {
+                            if ((voxels[x][11 - y][z] = voxels[x][y][z] =
+                                    // + (60 - (x + 1) * (12 - x) + 6 - y) * 47
+                                    (rng.nextIntHasty((11 - y * 2) * 23 +
+                                            (Math.abs(x - 3) + 1) * (9 - y) * 15 +
+                                            Math.abs(z - 3) * 195 +
+                                            ((57 - (x + 1) * (12 - x)) * (Math.abs(z - 4) + 2) * (8 - y)) * 7) < 590) ?
+                                            (rng.next(9) < 10) ? 2
+                                                    : (rng.next(5) < 3) ? highlightColor : mainColor
+                                            : 0) != 0) ctr++;
+                        } else {
+                            voxels[x][11 - y][z] = voxels[x][y][z] = 0;
+                        }
                     }
                 }
             }
-        }
-        return Tools3D.runCA(voxels, 3);
+        }while (ctr < 56);
+        return Tools3D.runCA(voxels, 4);
     }
 }

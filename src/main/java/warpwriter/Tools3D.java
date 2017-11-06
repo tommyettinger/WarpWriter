@@ -181,7 +181,7 @@ public class Tools3D {
                     for(int z = 0; z < zs; z++)
                     {
                         Arrays.fill(colorCount, 0);
-                        if(x == 0 || y == 0 || z == 0 || x == xs - 1 || y == ys - 1 || z == zs - 1 || vs0[x][y][z] == 3)
+                        if(x == 0 || y == 0 || z == 0 || x == xs - 1 || y == ys - 1 || z == zs - 1 || vs0[x][y][z] == 2)
                         {
                             colorCount[vs0[x][y][z] & 255] = 10000;
                             colorCount[0] = -100000;
@@ -200,18 +200,18 @@ public class Tools3D {
                                 }
                             }
                         }
-                        if(colorCount[0] >= 22)
+                        if(colorCount[0] >= 23)
                         {
                             vs1[x][y][z] = 0;
                         }
                         else
                         {
                             byte max = 0;
-                            int cc = 0, tmp;
+                            int cc = colorCount[0] / 3, tmp;
                             for(byte idx = 1; idx != 0; idx++)
                             {
                                 tmp = colorCount[idx & 255];
-                                if(tmp > cc)
+                                if(tmp > 0 && tmp > cc)
                                 {
                                     cc = tmp;
                                     max = idx;
