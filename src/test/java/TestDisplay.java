@@ -41,7 +41,7 @@ public class TestDisplay extends ApplicationAdapter {
                     case Input.Keys.SPACE:
                         remake(true);
                         return true;
-                    case Input.Keys.DOWN:
+                    case Input.Keys.UP:
                         dir = 0;
                         remake(false);
                         return true;
@@ -49,7 +49,7 @@ public class TestDisplay extends ApplicationAdapter {
                         dir = 1;
                         remake(false);
                         return true;
-                    case Input.Keys.UP:
+                    case Input.Keys.DOWN:
                         dir = 2;
                         remake(false);
                         return true;
