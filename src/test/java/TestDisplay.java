@@ -24,40 +24,48 @@ public class TestDisplay extends ApplicationAdapter {
     InputAdapter input;
     byte[][][] voxels;
     int dir = 0;
+
     @Override
     public void create() {
         batch = new SpriteBatch();
         pix = new Pixmap(16, 16, Pixmap.Format.RGBA8888);
         tex = new Texture(16, 16, Pixmap.Format.RGBA8888);
         remake(true);
-        input = new InputAdapter(){
+        input = new InputAdapter() {
             @Override
-            public boolean keyUp(int keycode) {
-                if(keycode == Input.Keys.Q)
-                {
-                    Gdx.app.exit();
-                    return true;
+            public boolean keyDown(int keycode) {
+                switch (keycode) {
+                    case Input.Keys.Q:
+                        Gdx.app.exit();
+                        return true;
+                    case Input.Keys.SPACE:
+                        remake(true);
+                        return true;
+                    case Input.Keys.UP:
+                        dir = 0;
+                        remake(false);
+                        return true;
+                    case Input.Keys.RIGHT:
+                        dir = 1;
+                        remake(false);
+                        return true;
+                    case Input.Keys.DOWN:
+                        dir = 2;
+                        remake(false);
+                        return true;
+                    case Input.Keys.LEFT:
+                        dir = 3;
+                        remake(false);
+                    default:
+                        return true;
                 }
-                else if(keycode == Input.Keys.N)
-                    remake(true);
-                else
-                    remake(false);
-                return true;
             }
         };
         Gdx.input.setInputProcessor(input);
     }
-    public void remake(boolean newModel)
-    {
-        if(newModel)
-        {
-            voxels = mm.shipRandom();
-            dir = 0;
-        }
-        else
-        {
-            dir++;
-        }
+
+    public void remake(boolean newModel) {
+        if (newModel) voxels = mm.shipRandom();
         pix.setColor(0);
         pix.fill();
         int[][] indices = mr.render16x16(voxels, dir);
@@ -67,7 +75,6 @@ public class TestDisplay extends ApplicationAdapter {
             }
         }
         tex.draw(pix, 0, 0);
-
     }
 
     @Override
@@ -77,19 +84,18 @@ public class TestDisplay extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
-        batch.draw(tex, 64 -  8, 240 -  8, 16, 16);
+        batch.draw(tex, 64 - 8, 240 - 8, 16, 16);
         batch.draw(tex, 192 - 16, 240 - 16, 32, 32);
         batch.draw(tex, 320 - 32, 240 - 32, 64, 64);
         batch.draw(tex, 512 - 64, 240 - 64, 128, 128);
         batch.end();
     }
 
-    public static void main (String[] arg) {
+    public static void main(String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "Display Test";
         config.width = 640;
         config.height = 480;
         new LwjglApplication(new TestDisplay(), config);
     }
-
 }
