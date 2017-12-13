@@ -75,19 +75,23 @@ public class ModelRenderer {
                         px = con.voxelToPixelX(c, a, b);
                         py = con.voxelToPixelY(c, a, b);
                         current = voxels[c][a][b] & 255;
-                        if(current == 2)
-                        {
-                            working[px][py] = 2;
-                        }
-                        else if(current != 0)
-                        {
-                            if(b == zs - 1 || voxels[c][a][b+1] == 0)
-                                working[px][py] = current + 2;
-                            else if(b == 0 || voxels[c][a][b-1] == 0)
-                                working[px][py] = current - 2;
-                            else
+                        if (current != 0) {
+                            if (current <= 2) {
                                 working[px][py] = current;
-                            depths[px][py] = b * 2 - c;
+                            } else if(current == 3) {
+                                if(working[px][py] == 0)
+                                    working[px][py] = 3;
+                            }
+                            else
+                            {
+                                if (b == zs - 1 || voxels[c][a][b + 1] == 0)
+                                    working[px][py] = current + 2;
+                                else if (b == 0 || voxels[c][a][b - 1] == 0)
+                                    working[px][py] = current - 2;
+                                else
+                                    working[px][py] = current;
+                                depths[px][py] = b * 2 - c;
+                            }
                         }
                     }
                 }
@@ -100,19 +104,24 @@ public class ModelRenderer {
                         px = con.voxelToPixelX(a, c, b);
                         py = con.voxelToPixelY(a, c, b);
                         current = voxels[a][c][b] & 255;
-                        if(current == 2)
+                        if(current != 0)
                         {
-                            working[px][py] = 2;
-                        }
-                        else if(current != 0)
-                        {
-                            if(b == zs - 1 || voxels[a][c][b+1] == 0)
-                                working[px][py] = current + 2;
-                            else if(b == 0 || voxels[a][c][b-1] == 0)
-                                working[px][py] = current - 2;
-                            else
+                            if(current <= 2) {
                                 working[px][py] = current;
-                            depths[px][py] = b * 2 - a;
+                            } else if(current == 3) {
+                                if(working[px][py] == 0)
+                                    working[px][py] = 3;
+                            }
+                            else
+                            {
+                                if(b == zs - 1 || voxels[a][c][b+1] == 0)
+                                    working[px][py] = current + 2;
+                                else if(b == 0 || voxels[a][c][b-1] == 0)
+                                    working[px][py] = current - 2;
+                                else
+                                    working[px][py] = current;
+                                depths[px][py] = b * 2 - a;
+                            }
                         }
                     }
                 }

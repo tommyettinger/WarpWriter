@@ -3,6 +3,8 @@ package warpwriter;
 import squidpony.squidmath.StatefulRNG;
 import squidpony.squidmath.ThrustAltRNG;
 
+import java.io.InputStream;
+
 /**
  * Created by Tommy Ettinger on 11/4/2017.
  */
@@ -10,15 +12,23 @@ public class ModelMaker {
     // separate from the rng so we can call skip(), if needed, or use GreasedRegion stuff
     public ThrustAltRNG thrust;
     public StatefulRNG rng;
+    byte[][][] ship;
+    final int xSize, ySize, zSize;
     public ModelMaker()
     {
-        thrust = new ThrustAltRNG();
-        rng = new StatefulRNG(thrust);
+        this((long) (Math.random() * Long.MAX_VALUE));
     }
     public ModelMaker(long seed)
     {
         thrust = new ThrustAltRNG(seed);
         rng = new StatefulRNG(thrust);
+        InputStream is = this.getClass().getResourceAsStream("/ship.vox");
+        ship = VoxReader.readVox(new LittleEndianDataInputStream(is));
+        if(ship == null) ship = new byte[12][12][8];
+        xSize = ship.length;
+        ySize = ship[0].length;
+        zSize = ship[0][0].length;
+
     }
     public byte[][][] fullyRandom()
     {
@@ -34,10 +44,10 @@ public class ModelMaker {
         }
         return voxels;
     }
-    public byte[][][] shipRandom()
+    public byte[][][] fishRandom()
     {
         byte[][][] voxels = new byte[12][12][8];
-        byte mainColor = (byte)((rng.nextIntHasty(22) << 3) + rng.between(10, 13)),
+        final byte mainColor = (byte)((rng.nextIntHasty(22) << 3) + rng.between(10, 13)),
                 highlightColor = (byte)((rng.nextIntHasty(22) << 3) + rng.between(11, 13));
         int ctr = 0;
         do {
@@ -63,5 +73,29 @@ public class ModelMaker {
             }
         }while (ctr < 58);
         return Tools3D.runCA(voxels, 2);
+    }
+    public byte[][][] shipRandom()
+    {
+        byte[][][] nextShip = new byte[xSize][ySize][zSize];
+        final int halfY = ySize >> 1, smallYSize = ySize - 1;
+        byte color;
+        final byte mainColor = (byte)((rng.nextIntHasty(22) << 3) + rng.between(10, 13)),
+                highlightColor = (byte)((rng.nextIntHasty(22) << 3) + rng.between(11, 13));
+
+        for (int x = 0; x < xSize; x++) {
+            for (int y = 0; y < halfY; y++) {
+                for (int z = 0; z < zSize; z++) {
+                    color = ship[x][y][z];
+                    if (color != 0) {
+                        if (color > 0 && color < 8) {
+                            nextShip[x][smallYSize - y][z] = nextShip[x][y][z] = 11;
+                        } else {
+                            nextShip[x][smallYSize - y][z] = nextShip[x][y][z] = (rng.next(5) < 13) ? 0 : (rng.next(4) == 0) ? highlightColor : mainColor;
+                        }
+                    }
+                }
+            }
+        }
+        return nextShip;
     }
 }
