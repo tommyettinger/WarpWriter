@@ -8,30 +8,34 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import squidpony.squidmath.ThrustRNG;
 import warpwriter.Coloring;
 import warpwriter.ModelMaker;
 import warpwriter.ModelRenderer;
 
 /**
+ * Displays pseudo-random spaceships, currently, with the sequence advancing when you press space, and rotating when you
+ * press the arrow keys. Pressing q quits, and any other key will change the seed, producing different ships on the next
+ * generation (by pressing space).
  * Created by Tommy Ettinger on 11/4/2017.
  */
 public class TestDisplay extends ApplicationAdapter {
-    SpriteBatch batch;
-    Texture tex;
-    Pixmap pix;
-    ModelMaker mm = new ModelMaker();
-    ModelRenderer mr = new ModelRenderer();
-    InputAdapter input;
-    byte[][][] voxels;
-    int dir = 0;
+    private SpriteBatch batch;
+    private Texture tex;
+    private Pixmap pix;
+    private long seed = 0x1337BEEF42C0FFEEL;
+    private ModelMaker mm = new ModelMaker(seed);
+    private ModelRenderer mr = new ModelRenderer();
+    private byte[][][] voxels;
+    private int dir = 0;
 
     @Override
     public void create() {
         batch = new SpriteBatch();
         pix = new Pixmap(16, 16, Pixmap.Format.RGBA8888);
         tex = new Texture(16, 16, Pixmap.Format.RGBA8888);
-        remake(true);
-        input = new InputAdapter() {
+        remake(seed);
+        InputAdapter input = new InputAdapter() {
             @Override
             public boolean keyDown(int keycode) {
                 switch (keycode) {
@@ -39,25 +43,26 @@ public class TestDisplay extends ApplicationAdapter {
                         Gdx.app.exit();
                         return true;
                     case Input.Keys.SPACE:
-                        remake(true);
+                        remake(++seed);
                         return true;
                     case Input.Keys.UP:
                         dir = 2;
-                        remake(false);
+                        remake(0);
                         return true;
                     case Input.Keys.RIGHT:
                         dir = 3;
-                        remake(false);
+                        remake(0);
                         return true;
                     case Input.Keys.DOWN:
                         dir = 0;
-                        remake(false);
+                        remake(0);
                         return true;
                     case Input.Keys.LEFT:
                         dir = 1;
-                        remake(false);
+                        remake(0);
                         return true;
                     default:
+                        seed += ThrustRNG.determine(keycode);
                         return true;
                 }
             }
@@ -65,8 +70,11 @@ public class TestDisplay extends ApplicationAdapter {
         Gdx.input.setInputProcessor(input);
     }
 
-    public void remake(boolean newModel) {
-        if (newModel) voxels = mm.shipRandom();
+    public void remake(long newModel) {
+        if (newModel != 0){
+            mm.thrust.state = ThrustRNG.determine(newModel);
+            voxels = mm.shipRandom();
+        }
         pix.setColor(0);
         pix.fill();
         int[][] indices = mr.render16x16(voxels, dir);

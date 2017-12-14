@@ -2,6 +2,7 @@ package warpwriter;
 
 import squidpony.squidmath.StatefulRNG;
 import squidpony.squidmath.ThrustAltRNG;
+import squidpony.squidmath.WhirlingNoise;
 
 import java.io.InputStream;
 
@@ -12,8 +13,8 @@ public class ModelMaker {
     // separate from the rng so we can call skip(), if needed, or use GreasedRegion stuff
     public ThrustAltRNG thrust;
     public StatefulRNG rng;
-    byte[][][] ship;
-    final int xSize, ySize, zSize;
+    private byte[][][] ship;
+    private final int xSize, ySize, zSize;
     public ModelMaker()
     {
         this((long) (Math.random() * Long.MAX_VALUE));
@@ -76,26 +77,45 @@ public class ModelMaker {
     }
     public byte[][][] shipRandom()
     {
+        long seed = rng.nextLong(), current;
         byte[][][] nextShip = new byte[xSize][ySize][zSize];
         final int halfY = ySize >> 1, smallYSize = ySize - 1;
         byte color;
-        final byte mainColor = (byte)((rng.nextIntHasty(22) << 3) + rng.between(10, 13)),
-                highlightColor = (byte)((rng.nextIntHasty(22) << 3) + rng.between(11, 13));
+        final byte mainColor = (byte)((ThrustAltRNG.determineBounded(seed + 1L, 22) << 3) + ThrustAltRNG.determineBounded(seed + 22L, 4) + 10),
+                highlightColor = (byte)((ThrustAltRNG.determineBounded(seed + 333L, 22) << 3) + ThrustAltRNG.determineBounded(seed + 4444L, 3) + 11);
 
         for (int x = 0; x < xSize; x++) {
             for (int y = 0; y < halfY; y++) {
                 for (int z = 0; z < zSize; z++) {
                     color = ship[x][y][z];
                     if (color != 0) {
-                        if (color > 0 && color < 8) {
+                        // this 3-input-plus-state hash is really a slight modification on ThrustAltRNG.determine(), but
+                        // it mixes the x, y, and z inputs more thoroughly than other techniques do, and we then use
+                        // different sections of the random bits for different purposes, which helps reduce the possible
+                        // issues from using rng.next(5) and rng.next(6) all over if the bits those use have a pattern.
+                        current = WhirlingNoise.hashAll(x * 3 >> 2, y, z, seed);
+                        if (color > 0 && color < 8 && (current & 0x3f) > 5) { // checks bottom 6 bits
                             nextShip[x][smallYSize - y][z] = nextShip[x][y][z] = 11;
                         } else {
-                            nextShip[x][smallYSize - y][z] = nextShip[x][y][z] = (rng.next(5) < 13) ? 0 : (rng.next(4) == 0) ? highlightColor : mainColor;
+                            nextShip[x][smallYSize - y][z] = nextShip[x][y][z] =
+                                    // checks another 6 bits, starting after discarding 6 bits from the bottom
+                                    ((current >>> 6 & 0x3F) < 47)
+                                            ? 0
+                                            // checks another 6 bits, starting after discarding 12 bits from the bottom
+                                            : ((current >>> 12 & 0x3F) < 11) ? highlightColor : mainColor;
+//                            if(rng.next(8) < 3) // occasional random asymmetry
+//                            {
+//                                if(rng.nextBoolean())
+//                                    nextShip[x][y][z] = highlightColor;
+//                                else
+//                                    nextShip[x][smallYSize - y][z] = highlightColor;
+//                            }
                         }
                     }
                 }
             }
         }
         return nextShip;
+        //return Tools3D.runCA(nextShip, 1);
     }
 }
