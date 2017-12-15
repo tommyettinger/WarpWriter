@@ -99,7 +99,7 @@ public class ModelMaker {
                         } else {
                             nextShip[x][smallYSize - y][z] = nextShip[x][y][z] =
                                     // checks another 6 bits, starting after discarding 6 bits from the bottom
-                                    ((current >>> 6 & 0x3F) < 47)
+                                    ((current >>> 6 & 0x3F) < 43)
                                             ? 0
                                             // checks another 6 bits, starting after discarding 12 bits from the bottom
                                             : ((current >>> 12 & 0x3F) < 11) ? highlightColor : mainColor;
