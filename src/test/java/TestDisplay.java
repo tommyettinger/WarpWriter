@@ -23,19 +23,19 @@ public class TestDisplay extends ApplicationAdapter {
     private SpriteBatch batch;
     private Texture tex;
     private Pixmap pix;
-    private long seed = 0x1337BEEFC0FFEEL;
+    private long seed = 0x31337BEEFC0FFEEL;
     private ModelMaker mm = new ModelMaker(seed);
     private ModelRenderer mr = new ModelRenderer();
     private byte[][][] voxels;
-    private int dir = 0;
-
+    private int dir = 1;
+    private final int width = 28, height = 42;
     @Override
     public void create() {
         batch = new SpriteBatch();
 //        pix = new Pixmap(16, 16, Pixmap.Format.RGBA8888);
 //        tex = new Texture(16, 16, Pixmap.Format.RGBA8888);
-        pix = new Pixmap(50, 64, Pixmap.Format.RGBA8888);
-        tex = new Texture(50, 64, Pixmap.Format.RGBA8888);
+        pix = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+        tex = new Texture(width, height, Pixmap.Format.RGBA8888);
         remake(seed);
         InputAdapter input = new InputAdapter() {
             @Override
@@ -80,8 +80,8 @@ public class TestDisplay extends ApplicationAdapter {
         pix.setColor(0);
         pix.fill();
         int[][] indices = mr.renderIso(voxels, dir);
-        for (int x = 0; x < 50; x++) {
-            for (int y = 0; y < 64; y++) {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
                 pix.drawPixel(x, y, Coloring.CW_PALETTE[indices[x][y]]);
             }
         }
@@ -95,10 +95,10 @@ public class TestDisplay extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
-        batch.draw(tex, 100 - 25, 300 - 32, 50, 64);
-        batch.draw(tex, 250 - 50, 300 - 64, 100, 128);
-        batch.draw(tex, 600 - 100, 300 - 128, 200,  256);
-        batch.draw(tex, 1000 - 200, 300 - 256, 400, 512);
+        batch.draw(tex, width * 2, 200 - (width >> 1), width, height);
+        batch.draw(tex, width * 4, 200 - (width), width << 1, height << 1);
+        batch.draw(tex, width * 7, 200 - (width << 1), width << 2,  height << 2);
+        batch.draw(tex, width * 11, 200 - (width << 2), width << 3, height << 3);
 
 //        batch.draw(tex, 64 - 8, 240 - 8, 16, 16);
 //        batch.draw(tex, 192 - 16, 240 - 16, 32, 32);
@@ -110,8 +110,8 @@ public class TestDisplay extends ApplicationAdapter {
     public static void main(String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "Display Test";
-        config.width = 1250;
-        config.height = 600;
+        config.width = 600;
+        config.height = 400;
         new LwjglApplication(new TestDisplay(), config);
     }
 }

@@ -89,17 +89,19 @@ public class ModelMaker {
                 for (int z = 0; z < zSize; z++) {
                     color = ship[x][y][z];
                     if (color != 0) {
-                        // this 3-input-plus-state hash is really a slight modification on ThrustAltRNG.determine(), but
+                        // this 4-input-plus-state hash is really a slight modification on ThrustAltRNG.determine(), but
                         // it mixes the x, y, and z inputs more thoroughly than other techniques do, and we then use
-                        // different sections of the random bits for different purposes, which helps reduce the possible
+                        // different sections of the random bits for different purposes. This helps reduce the possible
                         // issues from using rng.next(5) and rng.next(6) all over if the bits those use have a pattern.
-                        current = WhirlingNoise.hashAll(x * 3 >> 2, y, z, seed);
-                        if (color > 0 && color < 8 && (current & 0x3f) > 5) { // checks bottom 6 bits
+                        // In the original model, all voxels of the same color will be hashed with similar behavior but
+                        // any with different colors will get unrelated values.
+                        current = WhirlingNoise.hashAll(x * 3 >> 2, y, z, color, seed);
+                        if (color > 0 && color < 8 && (current & 0x3f) > 3) { // checks bottom 6 bits
                             nextShip[x][smallYSize - y][z] = nextShip[x][y][z] = 11;
                         } else {
                             nextShip[x][smallYSize - y][z] = nextShip[x][y][z] =
                                     // checks another 6 bits, starting after discarding 6 bits from the bottom
-                                    ((current >>> 6 & 0x3F) < 43)
+                                    ((current >>> 6 & 0x3F) < 53)
                                             ? 0
                                             // checks another 6 bits, starting after discarding 12 bits from the bottom
                                             : ((current >>> 12 & 0x3F) < 11) ? highlightColor : mainColor;
