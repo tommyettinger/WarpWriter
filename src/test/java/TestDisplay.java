@@ -75,7 +75,7 @@ public class TestDisplay extends ApplicationAdapter {
     public void remake(long newModel) {
         if (newModel != 0){
             mm.thrust.state = ThrustRNG.determine(newModel);
-            voxels = mm.shipRandom();
+            voxels = mm.fishRandom();
         }
         pix.setColor(0);
         pix.fill();

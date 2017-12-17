@@ -159,8 +159,11 @@ public class ModelRenderer {
         int px, py;
         int current;
         for (int b = 0; b < zs; b++) {
-            for (int a = ys - 1; a >= 0; a--) {
-                for (int c = 0; c < xs; c++) {
+//            for (int a = ys - 1; a >= 0; a--) {
+//                for (int c = xs - 1; c >= 0; c--) {
+            for (int c = 0; c < xs; c++) {
+                for (int a = ys - 1; a >= 0; a--) {
+
                     px = con.voxelToPixelX(c, a, b);
                     py = con.voxelToPixelY(c, a, b);
                     current = voxels[c][a][b] & 255;
@@ -168,29 +171,36 @@ public class ModelRenderer {
                         if (current <= 2) {
                             working[px][py] = current;
                         } else if (current == 3) {
-                            for (int ix = 0; ix < 4; ix++) {
-                                for (int iy = 0; iy < 4; iy++) {
+                            for (int ix = 0; ix < 2; ix++) {
+                                for (int iy = 0; iy < 2; iy++) {
                                     if (working[px + ix][py + iy] == 0)
                                         working[px + ix][py + iy] = 3;
                                 }
                             }
+                        } else if (current == 4) {
+                            working[px][py] = 14;
+                            depths[px][py] = b + c - a;
+                            working[px+1][py] = 8;
+                            depths[px+1][py] = b + c - a;
+                            working[px][py+1] = 8;
+                            depths[px][py+1] = b + c - a;
+                            working[px+1][py+1] = 8;
+                            depths[px+1][py+1] = b + c - a;
                         } else {
-                            for (int iy = 0; iy < 2; iy++) {
-                                for (int ix = 0; ix < 4; ix++) {
-                                    working[px + ix][py + iy] = current + 2;
-                                    depths[px + ix][py + iy] = b + c - a;
-                                }
+                            //for (int iy = 0; iy < 2; iy++) {
+                            for (int ix = 0; ix < 2; ix++) {
+                                working[px + ix][py] = current + 2;
+                                depths[px + ix][py] = b + c - a;
                             }
-                            for (int iy = 2; iy < 4; iy++) {
-                                for (int ix = 0; ix < 2; ix++) {
-                                    working[px + ix][py + iy] = current + 1;
-                                    depths[px + ix][py + iy] = b + c - a;
-                                }
-                                for (int ix = 2; ix < 4; ix++) {
-                                    working[px + ix][py + iy] = current;
-                                    depths[px + ix][py + iy] = b + c - a;
-                                }
-                            }
+                            //}
+                            //for (int iy = 2; iy < 4; iy++) {
+                            working[px][py + 1] = current + 1;
+                            depths[px][py + 1] = b + c - a;
+                            //for (int ix = 2; ix < 4; ix++) {
+                            working[px + 1][py + 1] = current;
+                            depths[px + 1][py + 1] = b + c - a;
+                            //}
+                            //}
                         }
                     }
                 }

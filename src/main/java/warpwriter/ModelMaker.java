@@ -6,6 +6,8 @@ import squidpony.squidmath.WhirlingNoise;
 
 import java.io.InputStream;
 
+import static squidpony.squidmath.ThrustAltRNG.determineBounded;
+
 /**
  * Created by Tommy Ettinger on 11/4/2017.
  */
@@ -48,32 +50,64 @@ public class ModelMaker {
     public byte[][][] fishRandom()
     {
         byte[][][] voxels = new byte[12][12][8];
-        final byte mainColor = (byte)((rng.nextIntHasty(22) << 3) + rng.between(10, 13)),
-                highlightColor = (byte)((rng.nextIntHasty(22) << 3) + rng.between(11, 13));
-        int ctr = 0;
+        int ctr;
+        long current, state = rng.getState();
         do {
+            final long seed = rng.nextLong();
+            final byte mainColor = (byte)((determineBounded(seed + 1L, 22) << 3) + determineBounded(seed + 22L, 4) + 10),
+                    highlightColor = (byte)((determineBounded(seed + 333L, 22) << 3) + determineBounded(seed + 4444L, 3) + 11);
             ctr = 0;
             for (int x = 0; x < 12; x++) {
                 for (int y = 0; y < 6; y++) {
                     for (int z = 1; z < 7; z++) {
-                        if (y > (x <= 4 ? 2 - x : (x >> 1) - 2)) {
-                            if ((voxels[x][11 - y][z] = voxels[x][y][z] =
+                        if (y > (x >= 8 ? (x >> 1) - 4 : 3 - (x >> 1))) {
+                            current = WhirlingNoise.hashAll(x >> 1, y >> 1, z >> 1, seed);
+                            //current = WhirlingNoise.hashAll(x, y, z, seed);
+                            if ((voxels[x][11 - y][z] = (voxels[x][y][z] =
                                     // + (60 - (x + 1) * (12 - x) + 6 - y) * 47
-                                    (rng.nextIntHasty((11 - y * 2) * 23 +
-                                            (Math.abs(x - 4) + 1) * (9 - y) * 15 +
+                                    (determineBounded(current, (11 - y * 2) * 23 +
+                                            (Math.abs(x - 8) + 1) * (9 - y) * 15 +
                                             Math.abs(z - 3) * 255 +
-                                            ((Math.abs(x - 4) + 3) * (Math.abs(z - 3) + 2) * (8 - y)) * 23) < 540) ?
-                                            (rng.next(9) < 10) ? 2
-                                                    : (rng.next(5) < 3) ? highlightColor : mainColor
-                                            : 0) != 0) ctr++;
+                                            ((Math.abs(x - 8) + 3) * (Math.abs(z - 3) + 2) * (8 - y)) * 23) < 520) ?
+                                            ((current & 0x3F) < 11 ? highlightColor : mainColor)
+                                            : 0)) != 0) ctr++;
                         } else {
                             voxels[x][11 - y][z] = voxels[x][y][z] = 0;
                         }
                     }
                 }
             }
-        }while (ctr < 58);
-        return Tools3D.runCA(voxels, 2);
+        }while (ctr < 90);
+        voxels = Tools3D.runCA(voxels, 2);
+        for (int x = 10; x >= 5; x--) {
+            for (int y = 4; y >= 1; y--) {
+                for (int z = 6; z >= 2; z--) {
+                    if(voxels[x][y][z + 1] != 0) break;
+                    if (voxels[x][y][z] != 0 && (WhirlingNoise.hashAll(x, y, z, state) & 0xFFL) < 95) {
+                        voxels[x][11 - y][z] = voxels[x][y][z] = 8;
+                        voxels[x][12 - y][z] = voxels[x][y - 1][z] = 8;
+                        voxels[x + 1][11 - y][z] = voxels[x + 1][y][z] = 8;
+                        voxels[x + 1][12 - y][z] = voxels[x + 1][y - 1][z] = 4;
+                        if(x < 10) {
+                            voxels[x + 2][11 - y][z] = voxels[x + 2][y][z] = 0;
+                            voxels[x + 2][12 - y][z] = voxels[x + 2][y - 1][z] = 0;
+                        }
+                        for (int i = z + 1; i < 8; i++) {
+                            voxels[x][11 - y][i] = voxels[x][y][i] = 0;
+                            voxels[x][12 - y][i] = voxels[x][y - 1][i] = 0;
+                            voxels[x + 1][11 - y][i] = voxels[x + 1][y][i] = 0;
+                            voxels[x + 1][12 - y][i] = voxels[x + 1][y - 1][i] = 0;
+                            if(x < 10) {
+                                voxels[x + 2][11 - y][i] = voxels[x + 2][y][i] = 0;
+                                voxels[x + 2][12 - y][i] = voxels[x + 2][y - 1][i] = 0;
+                            }
+                        }
+                        return voxels;
+                    }
+                }
+            }
+        }
+        return voxels;
     }
     public byte[][][] shipRandom()
     {
@@ -81,8 +115,8 @@ public class ModelMaker {
         byte[][][] nextShip = new byte[xSize][ySize][zSize];
         final int halfY = ySize >> 1, smallYSize = ySize - 1;
         byte color;
-        final byte mainColor = (byte)((ThrustAltRNG.determineBounded(seed + 1L, 22) << 3) + ThrustAltRNG.determineBounded(seed + 22L, 4) + 10),
-                highlightColor = (byte)((ThrustAltRNG.determineBounded(seed + 333L, 22) << 3) + ThrustAltRNG.determineBounded(seed + 4444L, 3) + 11);
+        final byte mainColor = (byte)((determineBounded(seed + 1L, 22) << 3) + determineBounded(seed + 22L, 4) + 10),
+                highlightColor = (byte)((determineBounded(seed + 333L, 22) << 3) + determineBounded(seed + 4444L, 3) + 11);
 
         for (int x = 0; x < xSize; x++) {
             for (int y = 0; y < halfY; y++) {
