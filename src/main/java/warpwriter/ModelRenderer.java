@@ -154,8 +154,8 @@ public class ModelRenderer {
      */
     public int[][] renderIso(byte[][][] voxels, int direction) {
         final int xs = voxels.length, ys = voxels[0].length, zs = voxels[0][0].length;
-        Converter con = directionsIso28x42[direction & 3];
-        int[][] working = new int[28][42], depths = new int[28][42], render;
+        Converter con = directionsIso32x46[direction & 3];
+        int[][] working = new int[32][46], depths = new int[32][46], render;
         int px, py;
         int current;
         for (int b = 0; b < zs; b++) {
@@ -209,8 +209,8 @@ public class ModelRenderer {
 
         int d;
         render = ArrayTools.copy(working);
-        for (int x = 1; x < 27; x++) {
-            for (int y = 1; y < 41; y++) {
+        for (int x = 1; x < 31; x++) {
+            for (int y = 1; y < 45; y++) {
                 if((working[x][y]) > 2)
                 {
                     d = depths[x][y];
@@ -246,12 +246,16 @@ public class ModelRenderer {
          */
         int voxelToPixelY(int vx, int vy, int vz);
     }
+
+    /**
+     * For a max of a 14x14x8 voxel space, produces pixel coordinates for a 16x16 area
+     */
     protected Converter[] directions16x16 = {
             // direction 0, no rotation
             new Converter() {
                 @Override
                 public int voxelToPixelX(int vx, int vy, int vz) {
-                    return vy + 2;
+                    return vy + 1;
                 }
 
                 @Override
@@ -263,31 +267,31 @@ public class ModelRenderer {
             new Converter() {
                 @Override
                 public int voxelToPixelX(int vx, int vy, int vz) {
-                    return 13 - vx;
+                    return 14 - vx;
                 }
 
                 @Override
                 public int voxelToPixelY(int vx, int vy, int vz) {
-                    return 13 - (vy >> 1) - vz;
+                    return 14 - (vy >> 1) - vz;
                 }
             },
             // direction 2
             new Converter() {
                 @Override
                 public int voxelToPixelX(int vx, int vy, int vz) {
-                    return 13 - vy;
+                    return 14 - vy;
                 }
 
                 @Override
                 public int voxelToPixelY(int vx, int vy, int vz) {
-                    return 13 - (vx >> 1) - vz;
+                    return 14 - (vx >> 1) - vz;
                 }
             },
             // direction 3
             new Converter() {
                 @Override
                 public int voxelToPixelX(int vx, int vy, int vz) {
-                    return vx + 2;
+                    return vx + 1;
                 }
 
                 @Override
@@ -296,7 +300,7 @@ public class ModelRenderer {
                 }
             }
     };
-    protected Converter[] directionsIso28x42 = {
+    protected Converter[] directionsIso32x46 = {
             // direction 0, no rotation
             new Converter() {
                 @Override
@@ -307,7 +311,7 @@ public class ModelRenderer {
 
                 @Override
                 public int voxelToPixelY(int vx, int vy, int vz) {
-                    return (vx - vy - vz) + 29;
+                    return (vx - vy - vz) + 31;
                     //return (vx >> 1) + 8 - vz;
                 }
             },
@@ -315,13 +319,13 @@ public class ModelRenderer {
             new Converter() {
                 @Override
                 public int voxelToPixelX(int vx, int vy, int vz) {
-                    return (22 - vy - vx) + 1;
+                    return (26 - vy - vx) + 1;
                     //return 13 - vy;
                 }
 
                 @Override
                 public int voxelToPixelY(int vx, int vy, int vz) {
-                    return ((11 - vy) - (11 - vx) - vz) + 29;
+                    return (vx - vy - vz) + 31; //(13 - vy) - (13 - vx)
                     //return 13 - (vx >> 1) - vz;
                 }
             },
@@ -329,13 +333,13 @@ public class ModelRenderer {
             new Converter() {
                 @Override
                 public int voxelToPixelX(int vx, int vy, int vz) {
-                    return (vy - vx + 11) + 1;
+                    return (vy - vx + 13) + 1;
                     //return 13 - vx;
                 }
 
                 @Override
                 public int voxelToPixelY(int vx, int vy, int vz) {
-                    return (11 - vx - vy - vz) + 29;
+                    return (13 - vx - vy - vz) + 31;
                     //return 13 - (vy >> 1) - vz;
                 }
             },
@@ -343,13 +347,13 @@ public class ModelRenderer {
             new Converter() {
                 @Override
                 public int voxelToPixelX(int vx, int vy, int vz) {
-                    return (vx - vy + 11) + 1;
+                    return (vx - vy + 13) + 1;
                     //return vx + 2;
                 }
 
                 @Override
                 public int voxelToPixelY(int vx, int vy, int vz) {
-                    return ((11 - vy) - vx - vz) + 29;
+                    return ((13 - vy) - vx - vz) + 31;
                     //return (vy >> 1) + 8 - vz;
                 }
             }

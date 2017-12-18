@@ -27,14 +27,19 @@ public class TestDisplay extends ApplicationAdapter {
     private ModelMaker mm = new ModelMaker(seed);
     private ModelRenderer mr = new ModelRenderer();
     private byte[][][] voxels;
+    private byte[][][][] animatedVoxels;
     private int dir = 1;
-    private final int width = 28, height = 42;
+    private final int width = 32, height = 46, frames = 8;
+    private Pixmap[] pixes = new Pixmap[frames];
     @Override
     public void create() {
         batch = new SpriteBatch();
 //        pix = new Pixmap(16, 16, Pixmap.Format.RGBA8888);
 //        tex = new Texture(16, 16, Pixmap.Format.RGBA8888);
-        pix = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+        for (int i = 0; i < frames; i++) {
+            pixes[i] = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+        }
+        pix = pixes[0];
         tex = new Texture(width, height, Pixmap.Format.RGBA8888);
         remake(seed);
         InputAdapter input = new InputAdapter() {
@@ -76,20 +81,25 @@ public class TestDisplay extends ApplicationAdapter {
         if (newModel != 0){
             mm.thrust.state = ThrustRNG.determine(newModel);
             voxels = mm.fishRandom();
+            animatedVoxels = mm.animateFish(voxels, frames);
         }
-        pix.setColor(0);
-        pix.fill();
-        int[][] indices = mr.renderIso(voxels, dir);
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                pix.drawPixel(x, y, Coloring.CW_PALETTE[indices[x][y]]);
+        for (int f = 0; f < frames; f++) {
+            pix = pixes[f];
+            pix.setColor(0);
+            pix.fill();
+            int[][] indices = mr.renderIso(animatedVoxels[f], dir);
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    pix.drawPixel(x, y, Coloring.CW_PALETTE[indices[x][y]]);
+                }
             }
         }
-        tex.draw(pix, 0, 0);
     }
 
     @Override
     public void render() {
+        tex.draw(pixes[(int) ((System.currentTimeMillis() >> 7) % frames)], 0, 0);
+
         // standard clear the background routine for libGDX
         Gdx.gl.glClearColor(0.7f, 0.99f, 0.6f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

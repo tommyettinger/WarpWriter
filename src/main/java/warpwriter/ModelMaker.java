@@ -1,5 +1,6 @@
 package warpwriter;
 
+import squidpony.squidmath.NumberTools;
 import squidpony.squidmath.StatefulRNG;
 import squidpony.squidmath.ThrustAltRNG;
 import squidpony.squidmath.WhirlingNoise;
@@ -35,11 +36,11 @@ public class ModelMaker {
     }
     public byte[][][] fullyRandom()
     {
-        byte[][][] voxels = new byte[12][12][8];
+        byte[][][] voxels = new byte[14][14][8];
         byte mainColor = (byte)((rng.nextIntHasty(22) << 3) + rng.between(10, 13)),
                 highlightColor = (byte)((rng.nextIntHasty(22) << 3) + rng.between(11, 13));
-        for (int x = 0; x < 12; x++) {
-            for (int y = 0; y < 12; y++) {
+        for (int x = 1; x < 13; x++) {
+            for (int y = 1; y < 13; y++) {
                 for (int z = 0; z < 8; z++) {
                     voxels[x][y][z] = (rng.next(4) < 7) ? 0 : (rng.next(5) == 0) ? highlightColor : mainColor;
                 }
@@ -49,7 +50,7 @@ public class ModelMaker {
     }
     public byte[][][] fishRandom()
     {
-        byte[][][] voxels = new byte[12][12][8];
+        byte[][][] voxels = new byte[14][14][8];
         int ctr;
         long current, state = rng.getState();
         do {
@@ -63,43 +64,43 @@ public class ModelMaker {
                         if (y > (x >= 8 ? (x >> 1) - 4 : 3 - (x >> 1))) {
                             current = WhirlingNoise.hashAll(x >> 1, y >> 1, z >> 1, seed);
                             //current = WhirlingNoise.hashAll(x, y, z, seed);
-                            if ((voxels[x][11 - y][z] = (voxels[x][y][z] =
+                            if ((voxels[x+1][12 - y][z] = voxels[x+1][y+1][z] =
                                     // + (60 - (x + 1) * (12 - x) + 6 - y) * 47
                                     (determineBounded(current, (11 - y * 2) * 23 +
                                             (Math.abs(x - 8) + 1) * (9 - y) * 15 +
                                             Math.abs(z - 3) * 255 +
                                             ((Math.abs(x - 8) + 3) * (Math.abs(z - 3) + 2) * (8 - y)) * 23) < 520) ?
                                             ((current & 0x3F) < 11 ? highlightColor : mainColor)
-                                            : 0)) != 0) ctr++;
+                                            : 0) != 0) ctr++;
                         } else {
-                            voxels[x][11 - y][z] = voxels[x][y][z] = 0;
+                            voxels[x+1][12 - y][z] = voxels[x+1][y+1][z] = 0;
                         }
                     }
                 }
             }
         }while (ctr < 90);
         voxels = Tools3D.runCA(voxels, 2);
-        for (int x = 10; x >= 5; x--) {
-            for (int y = 4; y >= 1; y--) {
+        for (int x = 11; x >= 6; x--) {
+            for (int y = 5; y >= 1; y--) {
                 for (int z = 6; z >= 2; z--) {
                     if(voxels[x][y][z + 1] != 0) break;
                     if (voxels[x][y][z] != 0 && (WhirlingNoise.hashAll(x, y, z, state) & 0xFFL) < 95) {
-                        voxels[x][11 - y][z] = voxels[x][y][z] = 8;
-                        voxels[x][12 - y][z] = voxels[x][y - 1][z] = 8;
-                        voxels[x + 1][11 - y][z] = voxels[x + 1][y][z] = 8;
-                        voxels[x + 1][12 - y][z] = voxels[x + 1][y - 1][z] = 4;
+                        voxels[x][13 - y][z] = voxels[x][y][z] = 8;
+                        voxels[x][14 - y][z] = voxels[x][y - 1][z] = 8;
+                        voxels[x + 1][14 - y][z] = voxels[x + 1][y][z] = 8;     // intentionally asymmetrical
+                        voxels[x + 1][13 - y][z] = voxels[x + 1][y - 1][z] = 4; // intentionally asymmetrical
                         if(x < 10) {
-                            voxels[x + 2][11 - y][z] = voxels[x + 2][y][z] = 0;
-                            voxels[x + 2][12 - y][z] = voxels[x + 2][y - 1][z] = 0;
+                            voxels[x + 2][13 - y][z] = voxels[x + 2][y][z] = 0;
+                            voxels[x + 2][14 - y][z] = voxels[x + 2][y - 1][z] = 0;
                         }
                         for (int i = z + 1; i < 8; i++) {
-                            voxels[x][11 - y][i] = voxels[x][y][i] = 0;
-                            voxels[x][12 - y][i] = voxels[x][y - 1][i] = 0;
-                            voxels[x + 1][11 - y][i] = voxels[x + 1][y][i] = 0;
-                            voxels[x + 1][12 - y][i] = voxels[x + 1][y - 1][i] = 0;
+                            voxels[x][14 - y][i] = voxels[x][y][i] = 0;
+                            voxels[x][14 - y][i] = voxels[x][y - 1][i] = 0;
+                            voxels[x + 1][13 - y][i] = voxels[x + 1][y][i] = 0;
+                            voxels[x + 1][14 - y][i] = voxels[x + 1][y - 1][i] = 0;
                             if(x < 10) {
-                                voxels[x + 2][11 - y][i] = voxels[x + 2][y][i] = 0;
-                                voxels[x + 2][12 - y][i] = voxels[x + 2][y - 1][i] = 0;
+                                voxels[x + 2][13 - y][i] = voxels[x + 2][y][i] = 0;
+                                voxels[x + 2][14 - y][i] = voxels[x + 2][y - 1][i] = 0;
                             }
                         }
                         return voxels;
@@ -109,6 +110,24 @@ public class ModelMaker {
         }
         return voxels;
     }
+
+    public byte[][][][] animateFish(byte[][][] fish, final int frameCount)
+    {
+        final int xSize = fish.length, ySize = fish[0].length, zSize = fish[0][0].length;
+        byte[][][][] frames = new byte[frameCount][xSize][ySize][zSize];
+        float changeAmount = 2f / (frameCount);
+        int adjustment;
+        for (int f = 0; f < frameCount; f++) {
+            for (int x = 1; x < xSize - 1; x++) {
+                adjustment = (int) (NumberTools.sway(changeAmount * (f + x * 0.6f) + 0.5f) * 1.99f);
+                for (int y = 1; y < ySize - 1; y++) {
+                    System.arraycopy(fish[x][y], 0, frames[f][x][y + adjustment], 0, zSize);
+                }
+            }
+        }
+        return frames;
+    }
+
     public byte[][][] shipRandom()
     {
         long seed = rng.nextLong(), current;
