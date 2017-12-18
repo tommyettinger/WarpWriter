@@ -8,10 +8,12 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import squidpony.FakeLanguageGen;
 import squidpony.squidmath.ThrustRNG;
 import warpwriter.Coloring;
 import warpwriter.ModelMaker;
 import warpwriter.ModelRenderer;
+import warpwriter.VoxIO;
 
 /**
  * Displays pseudo-random spaceships, currently, with the sequence advancing when you press space, and rotating when you
@@ -43,6 +45,7 @@ public class TestDisplay extends ApplicationAdapter {
         tex = new Texture(width, height, Pixmap.Format.RGBA8888);
         remake(seed);
         InputAdapter input = new InputAdapter() {
+            String name = "Wriggler";
             @Override
             public boolean keyDown(int keycode) {
                 switch (keycode) {
@@ -67,6 +70,14 @@ public class TestDisplay extends ApplicationAdapter {
                     case Input.Keys.LEFT:
                         dir = 1;
                         remake(0);
+                        return true;
+                    case Input.Keys.W:
+                        name = FakeLanguageGen.SIMPLISH.word(true);
+                        VoxIO.writeVOX(name + ".vox", voxels, Coloring.CW_PALETTE);
+                        VoxIO.writeAnimatedVOX(name + "_Animated.vox", animatedVoxels, Coloring.CW_PALETTE);
+//                        for (int f = 0; f < frames; f++) {
+//                            VoxIO.writeVOX(name + "_" + f + ".vox", animatedVoxels[f], Coloring.CW_PALETTE);
+//                        }
                         return true;
                     default:
                         seed += ThrustRNG.determine(keycode);
