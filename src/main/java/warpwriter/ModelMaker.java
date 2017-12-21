@@ -3,11 +3,11 @@ package warpwriter;
 import squidpony.squidmath.NumberTools;
 import squidpony.squidmath.StatefulRNG;
 import squidpony.squidmath.ThrustAltRNG;
-import squidpony.squidmath.WhirlingNoise;
 
 import java.io.InputStream;
 
 import static squidpony.squidmath.ThrustAltRNG.determineBounded;
+import static squidpony.squidmath.WhirlingNoise.hashAll;
 
 /**
  * Created by Tommy Ettinger on 11/4/2017.
@@ -18,6 +18,7 @@ public class ModelMaker {
     public StatefulRNG rng;
     private byte[][][] ship;
     private final int xSize, ySize, zSize;
+
     public ModelMaker()
     {
         this((long) (Math.random() * Long.MAX_VALUE));
@@ -59,17 +60,17 @@ public class ModelMaker {
                     highlightColor = (byte)((determineBounded(seed + 333L, 22) << 3) + determineBounded(seed + 4444L, 3) + 11);
             ctr = 0;
             for (int x = 0; x < 12; x++) {
-                for (int y = 0; y < 6; y++) {
-                    for (int z = 1; z < 7; z++) {
-                        if (y > (x >= 8 ? (x >> 1) - 4 : 3 - (x >> 1))) {
-                            current = WhirlingNoise.hashAll(x >> 1, y >> 1, z >> 1, seed);
+                for (int y = 1; y < 6; y++) {
+                    for (int z = 0; z < 8; z++) {
+                        if (y > (Math.abs(x - 6) < 2 ? 4 - (seed >>> (63 - (seed & 1))) : 4)) {
+                            current = hashAll(x >> 1, y >> 1, z >> 1, seed);
                             //current = WhirlingNoise.hashAll(x, y, z, seed);
                             if ((voxels[x+1][12 - y][z] = voxels[x+1][y+1][z] =
                                     // + (60 - (x + 1) * (12 - x) + 6 - y) * 47
-                                    (determineBounded(current, (11 - y * 2) * 23 +
-                                            (Math.abs(x - 8) + 1) * (9 - y) * 15 +
-                                            Math.abs(z - 3) * 255 +
-                                            ((Math.abs(x - 8) + 3) * (Math.abs(z - 3) + 2) * (8 - y)) * 23) < 520) ?
+                                    (determineBounded(current, //(11 - y * 2) * 23 +
+                                            (Math.abs(x - 6) + 1) * Math.abs(z - 4) * 15 +
+                                                    (5 - y) * 355 +
+                                            ((Math.abs(x - 7) + 3) * (Math.abs(z - 4) + 2) * (7 - y)) * 23) < 520) ?
                                             ((current & 0x3F) < 11 ? highlightColor : mainColor)
                                             : 0) != 0) ctr++;
                         } else {
@@ -78,13 +79,13 @@ public class ModelMaker {
                     }
                 }
             }
-        }while (ctr < 90);
+        }while (ctr < 73);
         voxels = Tools3D.runCA(voxels, 2);
-        for (int x = 11; x >= 6; x--) {
-            for (int y = 5; y >= 1; y--) {
-                for (int z = 6; z >= 2; z--) {
-                    if(voxels[x][y][z + 1] != 0) break;
-                    if (voxels[x][y][z] != 0 && (WhirlingNoise.hashAll(x, y, z, state) & 0xFFL) < 95) {
+        for (int x = 11; x >= 8; x--) {
+            for (int z = 6; z >= 3; z--) {
+                for (int y = 2; y <= 5; y++) {
+                    if(voxels[x][y - 1][z] != 0 || voxels[x][y][z + 1] != 0) break;
+                    if (voxels[x][y][z] != 0 && (hashAll(x, y, z, state) & 0xFFL) < 185) {
                         voxels[x][13 - y][z] = voxels[x][y][z] = 8;
                         voxels[x][14 - y][z] = voxels[x][y - 1][z] = 8;
                         voxels[x + 1][14 - y][z] = voxels[x + 1][y][z] = 8;     // intentionally asymmetrical
@@ -148,7 +149,7 @@ public class ModelMaker {
                         // issues from using rng.next(5) and rng.next(6) all over if the bits those use have a pattern.
                         // In the original model, all voxels of the same color will be hashed with similar behavior but
                         // any with different colors will get unrelated values.
-                        current = WhirlingNoise.hashAll(x * 3 >> 2, y, z, color, seed);
+                        current = hashAll(x * 3 >> 2, y, z, color, seed);
                         if (color > 0 && color < 8 && (current & 0x3f) > 3) { // checks bottom 6 bits
                             nextShip[x][smallYSize - y][z] = nextShip[x][y][z] = 11;
                         } else {
