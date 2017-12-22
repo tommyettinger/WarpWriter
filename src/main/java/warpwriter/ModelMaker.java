@@ -7,6 +7,7 @@ import squidpony.squidmath.ThrustAltRNG;
 import java.io.InputStream;
 
 import static squidpony.squidmath.ThrustAltRNG.determineBounded;
+import static squidpony.squidmath.WhirlingNoise.hash256;
 import static squidpony.squidmath.WhirlingNoise.hashAll;
 
 /**
@@ -53,24 +54,24 @@ public class ModelMaker {
     {
         byte[][][] voxels = new byte[14][14][8];
         int ctr;
-        long current, state = rng.getState();
+        long state = rng.getState(), current = determineBounded(state + 1L, 22);
+        final byte mainColor = (byte)((current << 3) + determineBounded(state + 22L, 4) + 10),
+                highlightColor = (byte)(((current + 7 + determineBounded(state + 333L, 14)) % 22 << 3) + determineBounded(state + 4444L, 3) + 11);
         do {
             final long seed = rng.nextLong();
-            final byte mainColor = (byte)((determineBounded(seed + 1L, 22) << 3) + determineBounded(seed + 22L, 4) + 10),
-                    highlightColor = (byte)((determineBounded(seed + 333L, 22) << 3) + determineBounded(seed + 4444L, 3) + 11);
             ctr = 0;
             for (int x = 0; x < 12; x++) {
                 for (int y = 1; y < 6; y++) {
                     for (int z = 0; z < 8; z++) {
                         if (y > (Math.abs(x - 6) < 2 ? 4 - (seed >>> (63 - (seed & 1))) : 4)) {
-                            current = hashAll(x >> 1, y >> 1, z >> 1, seed);
-                            //current = WhirlingNoise.hashAll(x, y, z, seed);
+                            //current = hashAll(x >> 1, y >> 1, z >> 1, seed);
+                            current = hashAll(x, y, z, seed);
                             if ((voxels[x+1][12 - y][z] = voxels[x+1][y+1][z] =
                                     // + (60 - (x + 1) * (12 - x) + 6 - y) * 47
                                     (determineBounded(current, //(11 - y * 2) * 23 +
-                                            (Math.abs(x - 6) + 1) * Math.abs(z - 4) * 15 +
+                                            (Math.abs(x - 6) + 1) * (1 + Math.abs(z - 4)) * 15 +
                                                     (5 - y) * 355 +
-                                            ((Math.abs(x - 7) + 3) * (Math.abs(z - 4) + 2) * (7 - y)) * 23) < 520) ?
+                                            ((Math.abs(x - 7) + 3) * (Math.abs(z - 4) + 2) * (7 - y)) * 21) < 530) ?
                                             ((current & 0x3F) < 11 ? highlightColor : mainColor)
                                             : 0) != 0) ctr++;
                         } else {
@@ -79,18 +80,18 @@ public class ModelMaker {
                     }
                 }
             }
-        }while (ctr < 73);
-        voxels = Tools3D.runCA(voxels, 2);
-        for (int x = 11; x >= 8; x--) {
-            for (int z = 6; z >= 3; z--) {
-                for (int y = 2; y <= 5; y++) {
-                    if(voxels[x][y - 1][z] != 0 || voxels[x][y][z + 1] != 0) break;
-                    if (voxels[x][y][z] != 0 && (hashAll(x, y, z, state) & 0xFFL) < 185) {
+        }while (ctr < 45);
+        voxels = Tools3D.runCA(voxels, 1);
+        for (int x = 12; x >= 6; x--) {
+            for (int z = 7; z >= 2; z--) {
+                for (int y = 1; y < 6; y++) {
+                    if(voxels[x][y - 1][z] != 0) break;
+                    if (voxels[x][y][z] != 0 && hash256(x, y, z, state) < 255) {
                         voxels[x][13 - y][z] = voxels[x][y][z] = 8;
                         voxels[x][14 - y][z] = voxels[x][y - 1][z] = 8;
                         voxels[x + 1][14 - y][z] = voxels[x + 1][y][z] = 8;     // intentionally asymmetrical
                         voxels[x + 1][13 - y][z] = voxels[x + 1][y - 1][z] = 4; // intentionally asymmetrical
-                        if(x < 10) {
+                        if(x <= 11) {
                             voxels[x + 2][13 - y][z] = voxels[x + 2][y][z] = 0;
                             voxels[x + 2][14 - y][z] = voxels[x + 2][y - 1][z] = 0;
                         }
@@ -99,9 +100,17 @@ public class ModelMaker {
                             voxels[x][14 - y][i] = voxels[x][y - 1][i] = 0;
                             voxels[x + 1][13 - y][i] = voxels[x + 1][y][i] = 0;
                             voxels[x + 1][14 - y][i] = voxels[x + 1][y - 1][i] = 0;
-                            if(x < 10) {
+                            if(x <= 11) {
                                 voxels[x + 2][13 - y][i] = voxels[x + 2][y][i] = 0;
                                 voxels[x + 2][14 - y][i] = voxels[x + 2][y - 1][i] = 0;
+                            }
+                        }
+                        for (int z2 = z - 2; z2 > 0; z2--) {
+                            for (int x2 = 12; x2 >= x - 1; x2--) {
+                                if (voxels[x2][6][z2] != 0) {
+                                    voxels[x2+1][6][z2] = voxels[x2+1][7][z2] = voxels[x2][6][z2] = voxels[x2][7][z2] = highlightColor;
+                                    return voxels;
+                                }
                             }
                         }
                         return voxels;
