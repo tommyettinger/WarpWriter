@@ -6,9 +6,9 @@ import squidpony.squidmath.ThrustAltRNG;
 
 import java.io.InputStream;
 
+import static squidpony.squidmath.Noise.PointHash.hash256;
+import static squidpony.squidmath.Noise.PointHash.hashAll;
 import static squidpony.squidmath.ThrustAltRNG.determineBounded;
-import static squidpony.squidmath.WhirlingNoise.hash256;
-import static squidpony.squidmath.WhirlingNoise.hashAll;
 
 /**
  * Created by Tommy Ettinger on 11/4/2017.
