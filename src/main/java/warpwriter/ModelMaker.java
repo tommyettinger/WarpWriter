@@ -87,9 +87,9 @@ public class ModelMaker {
                 for (int y = 1; y < 6; y++) {
                     if(voxels[x][y - 1][z] != 0) break;
                     if (voxels[x][y][z] != 0 && hash256(x, y, z, state) < 255) {
-                        voxels[x][13 - y][z] = voxels[x][y][z] = 8;
-                        voxels[x][14 - y][z] = voxels[x][y - 1][z] = 8;
-                        voxels[x + 1][14 - y][z] = voxels[x + 1][y][z] = 8;     // intentionally asymmetrical
+                        voxels[x][13 - y][z] = voxels[x][y][z] = 9;
+                        voxels[x][14 - y][z] = voxels[x][y - 1][z] = 9;
+                        voxels[x + 1][14 - y][z] = voxels[x + 1][y][z] = 9;     // intentionally asymmetrical
                         voxels[x + 1][13 - y][z] = voxels[x + 1][y - 1][z] = 4; // intentionally asymmetrical
                         if(x <= 11) {
                             voxels[x + 2][13 - y][z] = voxels[x + 2][y][z] = 0;

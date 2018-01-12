@@ -212,25 +212,25 @@ public class ModelRenderer {
                                 for (int sx = 0; sx < 3; sx++) {
                                     for (int sy = 0; sy < 3; sy++) {
                                         working[px+sx][py+sy] = 8;
-                                        depths[px+sx][py+sy] = b * 2 - c;
+                                        depths[px+sx][py+sy] = b * 5 - c * 2;// + sy;
                                     }
                                     for (int sy = 3; sy < 5; sy++) {
                                         working[px+sx][py+sy] = 8;
-                                        depths[px+sx][py+sy] = b * 2 - c;
+                                        depths[px+sx][py+sy] = b * 5 - c * 2;// + sy;
                                     }
                                 }
-                                working[px][py+3] = 14;
+                                working[px][py+2] = 14;
                             }
                             else
                             {
                                 for (int sx = 0; sx < 3; sx++) {
                                     for (int sy = 0; sy < 3; sy++) {
                                         working[px+sx][py+sy] = current + 2;
-                                        depths[px+sx][py+sy] = b * 2 - c;
+                                        depths[px+sx][py+sy] = b * 5 - c * 2;// + sy;
                                     }
                                     for (int sy = 3; sy < 5; sy++) {
-                                        working[px+sx][py+sy] = current;
-                                        depths[px+sx][py+sy] = b * 2 - c;
+                                        working[px+sx][py+sy] = current + 1;
+                                        depths[px+sx][py+sy] = b * 5 - c * 2;// + sy;
                                     }
                                 }
                             }
@@ -264,25 +264,25 @@ public class ModelRenderer {
                                 for (int sx = 0; sx < 3; sx++) {
                                     for (int sy = 0; sy < 3; sy++) {
                                         working[px+sx][py+sy] = 8;
-                                        depths[px+sx][py+sy] = b * 2 - c;
+                                        depths[px+sx][py+sy] = b * 5 - a * 2;// + sy;
                                     }
                                     for (int sy = 3; sy < 5; sy++) {
                                         working[px+sx][py+sy] = 8;
-                                        depths[px+sx][py+sy] = b * 2 - c;
+                                        depths[px+sx][py+sy] = b * 5 - a * 2;// + sy;
                                     }
                                 }
-                                working[px][py+3] = 14;
+                                working[px][py+2] = 14;
                             }
                             else
                             {
                                 for (int sx = 0; sx < 3; sx++) {
                                     for (int sy = 0; sy < 3; sy++) {
                                         working[px+sx][py+sy] = current + 2;
-                                        depths[px+sx][py+sy] = b * 2 - a;
+                                        depths[px+sx][py+sy] = b * 5 - a * 2;// + sy;
                                     }
                                     for (int sy = 3; sy < 5; sy++) {
-                                        working[px+sx][py+sy] = current;
-                                        depths[px+sx][py+sy] = b * 2 - a;
+                                        working[px+sx][py+sy] = current + 1;
+                                        depths[px+sx][py+sy] = b * 5 - a * 2;// + sy;
                                     }
                                 }
                             }
@@ -291,21 +291,26 @@ public class ModelRenderer {
                 }
             }
         }
-        int d;
+        int d, w;
         render = ArrayTools.copy(working);
         for (int x = 1; x < 59; x++) {
             for (int y = 1; y < 67; y++) {
-                if((working[x][y]) > 2)
-                {
+                if((w = working[x][y] - 1) > 3) {
                     d = depths[x][y];
-                    if(working[x-1][y] == 0) render[x-1][y] = 2; else if(depths[x-1][y] < d - 2) render[x-1][y] = working[x-1][y] - 1;
-                    if(working[x+1][y] == 0) render[x+1][y] = 2; else if(depths[x+1][y] < d - 2) render[x+1][y] = working[x+1][y] - 1;
-                    if(working[x][y-1] == 0) render[x][y-1] = 2; else if(depths[x][y-1] < d - 2) render[x][y-1] = working[x][y-1] - 1;
-                    if(working[x][y+1] == 0) render[x][y+1] = 2; else if(depths[x][y+1] < d - 2) render[x][y+1] = working[x][y+1] - 1;
+                    if (working[x - 1][y] == 0 && working[x][y - 1] == 0) render[x][y] = 2;
+                    else if (working[x + 1][y] == 0 && working[x][y - 1] == 0) render[x][y] = 2;
+                    else if (working[x - 1][y] == 0 && working[x][y + 1] == 0) render[x][y] = 2;
+                    else if (working[x + 1][y] == 0 && working[x][y + 1] == 0) render[x][y] = 2;
+                    else {
+                        if (working[x - 1][y] == 0) render[x - 1][y] = 2; else if (render[x - 1][y] != 2 && depths[x - 1][y] < d - 2) render[x - 1][y] = w;
+                        if (working[x + 1][y] == 0) render[x + 1][y] = 2; else if (render[x + 1][y] != 2 && depths[x + 1][y] < d - 2) render[x + 1][y] = w;
+                        if (working[x][y - 1] == 0) render[x][y - 1] = 2; else if (render[x][y - 1] != 2 && depths[x][y - 1] < d - 5) render[x][y - 1] = w;
+                        if (working[x][y + 1] == 0) render[x][y + 1] = 2; else if (render[x][y + 1] != 2 && depths[x][y + 1] < d - 5) render[x][y + 1] = w;
+                    }
                 }
             }
         }
-        return render;
+        return easeSquares(render);
     }
 
 
@@ -372,23 +377,33 @@ public class ModelRenderer {
             }
         }
 
-        int d;
+        int d, w;
         working = size2(working);
         depths = size2(depths);
         render = ArrayTools.copy(working);
         for (int x = 1; x < 59; x++) {
             for (int y = 1; y < 67; y++) {
-                if((working[x][y]) > 2)
-                {
+                if((w = working[x][y] - 1) > 3) {
                     d = depths[x][y];
-                    if(working[x-1][y] == 0) render[x-1][y] = 2; else if(depths[x-1][y] < d - 8) render[x-1][y] = working[x-1][y] - 1;
-                    if(working[x+1][y] == 0) render[x+1][y] = 2; else if(depths[x+1][y] < d - 8) render[x+1][y] = working[x+1][y] - 1;
-                    if(working[x][y-1] == 0) render[x][y-1] = 2; else if(depths[x][y-1] < d - 8) render[x][y-1] = working[x][y-1] - 1;
-                    if(working[x][y+1] == 0) render[x][y+1] = 2; else if(depths[x][y+1] < d - 8) render[x][y+1] = working[x][y+1] - 1;
+                    if (working[x - 1][y] == 0 && working[x][y - 1] == 0) render[x][y] = 2;
+                    else if (working[x + 1][y] == 0 && working[x][y - 1] == 0) render[x][y] = 2;
+                    else if (working[x - 1][y] == 0 && working[x][y + 1] == 0) render[x][y] = 2;
+                    else if (working[x + 1][y] == 0 && working[x][y + 1] == 0) render[x][y] = 2;
+                    else {
+                        if (working[x - 1][y] == 0) render[x - 1][y] = 2;
+                        else if (depths[x - 1][y] < d - 8) render[x - 1][y] = w;
+                        if (working[x + 1][y] == 0) render[x + 1][y] = 2;
+                        else if (depths[x + 1][y] < d - 8) render[x + 1][y] = w;
+                        if (working[x][y - 1] == 0) render[x][y - 1] = 2;
+                        else if (depths[x][y - 1] < d - 8) render[x][y - 1] = w;
+                        if (working[x][y + 1] == 0) render[x][y + 1] = 2;
+                        else if (depths[x][y + 1] < d - 8) render[x][y + 1] = w;
+                    }
                 }
             }
         }
-        return render;
+
+        return easeSquares(render);
     }
 
     public int[][] size2(int[][] original)
@@ -402,7 +417,26 @@ public class ModelRenderer {
         }
         return out;
     }
-
+    public int[][] easeSquares(int[][] original){
+        int xSize = original.length - 1, ySize = original[0].length - 1;
+        int[][] out = ArrayTools.copy(original);
+        int a, b, c, d;
+        for (int x = 0; x < xSize; x++) {
+            for (int y = 0; y < ySize; y++) {
+                a = original[x][y];
+                b = original[x + 1][y];
+                c = original[x][y + 1];
+                d = original[x + 1][y + 1];
+                if (a > 2 && b > 2 && c > 2 && d > 2) {
+                    if (a == b && b == c) out[x + 1][y + 1] = c;
+                    else if (a == b && b == d) out[x][y + 1] = d;
+                    else if (a == c && c == d) out[x + 1][y] = d;
+                    else if (b == c && c == d) out[x][y] = d;
+                }
+            }
+        }
+        return out;
+    }
     protected interface Converter
     {
         /**

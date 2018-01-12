@@ -176,10 +176,10 @@ public class TestDisplay extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
-        batch.draw(tex, width >> 1, 200 - (width >> 1), width, height);
-        batch.draw(tex, width * 3 >> 1, 200 - (width), width << 1, height << 1);
-        batch.draw(tex, width * 3, 200 - (width << 1), width << 2,  height << 2);
-        batch.draw(tex, width * 6, 200 - (width << 2), width << 3, height << 3);
+        batch.draw(tex, width >> 1, 250 - (width >> 1), width, height);
+        batch.draw(tex, width * 3 >> 1, 250 - (width), width << 1, height << 1);
+        batch.draw(tex, width * 3, 250 - (width << 1), width << 2,  height << 2);
+        batch.draw(tex, width * 6, 250 - (width << 2), width << 3, height << 3);
 
 //        batch.draw(tex, 64 - 8, 240 - 8, 16, 16);
 //        batch.draw(tex, 192 - 16, 240 - 16, 32, 32);
