@@ -31,7 +31,7 @@ public class TestDisplay extends ApplicationAdapter {
     private byte[][][] voxels;
     private byte[][][][] animatedVoxels;
     private int dir = 1;
-    private final int width = 32, height = 46, frames = 8;
+    private final int width = 60, height = 68, frames = 8;
     private Pixmap[] pixes = new Pixmap[frames];
     @Override
     public void create() {
@@ -56,19 +56,40 @@ public class TestDisplay extends ApplicationAdapter {
                         remakeShip(++seed);
                         return true;
                     case Input.Keys.UP:
+                    case Input.Keys.NUMPAD_8:
                         dir = 2;
                         remakeShip(0);
                         return true;
+                    case Input.Keys.NUMPAD_6:
                     case Input.Keys.RIGHT:
                         dir = 3;
                         remakeShip(0);
                         return true;
+                    case Input.Keys.NUMPAD_2:
                     case Input.Keys.DOWN:
                         dir = 0;
                         remakeShip(0);
                         return true;
+                    case Input.Keys.NUMPAD_4:
                     case Input.Keys.LEFT:
                         dir = 1;
+                        remakeShip(0);
+                        return true;
+
+                    case Input.Keys.NUMPAD_7:
+                        dir = 6;
+                        remakeShip(0);
+                        return true;
+                    case Input.Keys.NUMPAD_9:
+                        dir = 7;
+                        remakeShip(0);
+                        return true;
+                    case Input.Keys.NUMPAD_3:
+                        dir = 4;
+                        remakeShip(0);
+                        return true;
+                    case Input.Keys.NUMPAD_1:
+                        dir = 5;
                         remakeShip(0);
                         return true;
 
@@ -118,7 +139,7 @@ public class TestDisplay extends ApplicationAdapter {
             pix = pixes[f];
             pix.setColor(0);
             pix.fill();
-            int[][] indices = mr.renderIso(animatedVoxels[f], dir);
+            int[][] indices = mr.renderOrtho(animatedVoxels[f], dir);
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
                     pix.drawPixel(x, y, Coloring.CW_PALETTE[indices[x][y]]);
@@ -137,7 +158,7 @@ public class TestDisplay extends ApplicationAdapter {
             pix = pixes[f];
             pix.setColor(0);
             pix.fill();
-            int[][] indices = mr.renderIso(animatedVoxels[f], dir);
+            int[][] indices = dir >= 4 ? mr.renderIso(animatedVoxels[f], dir) : mr.renderOrtho(animatedVoxels[f], dir);
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
                     pix.drawPixel(x, y, Coloring.CW_PALETTE[indices[x][y]]);
@@ -155,10 +176,10 @@ public class TestDisplay extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
-        batch.draw(tex, width * 2, 200 - (width >> 1), width, height);
-        batch.draw(tex, width * 4, 200 - (width), width << 1, height << 1);
-        batch.draw(tex, width * 7, 200 - (width << 1), width << 2,  height << 2);
-        batch.draw(tex, width * 11, 200 - (width << 2), width << 3, height << 3);
+        batch.draw(tex, width >> 1, 200 - (width >> 1), width, height);
+        batch.draw(tex, width * 3 >> 1, 200 - (width), width << 1, height << 1);
+        batch.draw(tex, width * 3, 200 - (width << 1), width << 2,  height << 2);
+        batch.draw(tex, width * 6, 200 - (width << 2), width << 3, height << 3);
 
 //        batch.draw(tex, 64 - 8, 240 - 8, 16, 16);
 //        batch.draw(tex, 192 - 16, 240 - 16, 32, 32);
@@ -170,8 +191,8 @@ public class TestDisplay extends ApplicationAdapter {
     public static void main(String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "Display Test";
-        config.width = 600;
-        config.height = 400;
+        config.width = 800;
+        config.height = 500;
         new LwjglApplication(new TestDisplay(), config);
     }
 }

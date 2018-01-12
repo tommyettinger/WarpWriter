@@ -30,7 +30,7 @@ public class ModelMaker {
         rng = new StatefulRNG(thrust);
         InputStream is = this.getClass().getResourceAsStream("/ship.vox");
         ship = VoxIO.readVox(new LittleEndianDataInputStream(is));
-        if(ship == null) ship = new byte[12][12][8];
+        if(ship == null) ship = new byte[14][14][8];
         xSize = ship.length;
         ySize = ship[0].length;
         zSize = ship[0][0].length;

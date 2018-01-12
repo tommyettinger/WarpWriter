@@ -134,10 +134,174 @@ public class ModelRenderer {
                 if((working[x][y]) > 2)
                 {
                     d = depths[x][y];
-                    if(working[x-1][y] == 0) render[x-1][y] = 2; else if(depths[x-1][y] < d - 2) render[x-1][y] = working[x-1][y] - 2;
-                    if(working[x+1][y] == 0) render[x+1][y] = 2; else if(depths[x+1][y] < d - 2) render[x+1][y] = working[x+1][y] - 2;
-                    if(working[x][y-1] == 0) render[x][y-1] = 2; else if(depths[x][y-1] < d - 2) render[x][y-1] = working[x][y-1] - 2;
-                    if(working[x][y+1] == 0) render[x][y+1] = 2; else if(depths[x][y+1] < d - 2) render[x][y+1] = working[x][y+1] - 2;
+                    if(working[x-1][y] == 0) render[x-1][y] = 2; else if(depths[x-1][y] < d - 2) render[x-1][y] = working[x-1][y] - 1;
+                    if(working[x+1][y] == 0) render[x+1][y] = 2; else if(depths[x+1][y] < d - 2) render[x+1][y] = working[x+1][y] - 1;
+                    if(working[x][y-1] == 0) render[x][y-1] = 2; else if(depths[x][y-1] < d - 2) render[x][y-1] = working[x][y-1] - 1;
+                    if(working[x][y+1] == 0) render[x][y+1] = 2; else if(depths[x][y+1] < d - 2) render[x][y+1] = working[x][y+1] - 1;
+                }
+            }
+        }
+        return render;
+    }
+    public int[][] renderOrtho(byte[][][] voxels, int direction)
+    {
+        final int xs = voxels.length, ys = voxels[0].length, zs = voxels[0][0].length;
+        Converter con = directionsOrtho60x68[direction &= 3];
+        int[][] working = new int[60][68], depths = new int[60][68], render;
+        int aa, cc, aStep, cStep, aMax, cMax, px, py;
+        boolean flip = true;
+        int current;
+        switch (direction)
+        {
+            case 0:
+                aa = 0;
+                aStep = 1;
+                aMax = ys;
+                cc = 0;
+                cStep = 1;
+                cMax = xs;
+                break;
+            case 1:
+                aa = xs - 1;
+                aStep = -1;
+                aMax = -1;
+                cc = ys - 1;
+                cStep = -1;
+                cMax = -1;
+                flip = false;
+                break;
+            case 2:
+                aa = ys - 1;
+                aStep = -1;
+                aMax = -1;
+                cc = xs - 1;
+                cStep = -1;
+                cMax = -1;
+                break;
+            default:
+                aa = 0;
+                aStep = 1;
+                aMax = xs;
+                cc = 0;
+                cStep = 1;
+                cMax = ys;
+                flip = false;
+                break;
+        }
+        if(flip) {
+            for (int a = aa; a != aMax; a += aStep) {
+                for (int b = 0; b < zs; b++) {
+                    for (int c = cc; c != cMax; c += cStep) {
+                        px = con.voxelToPixelX(c, a, b);
+                        py = con.voxelToPixelY(c, a, b);
+                        current = voxels[c][a][b] & 255;
+                        if (current != 0) {
+                            if (current <= 2) {
+                                for (int sx = 0; sx < 3; sx++) {
+                                    for (int sy = 0; sy < 5; sy++) {
+                                        working[px+sx][py+sy] = current;
+                                    }
+                                }
+                            } else if(current == 3) {
+                                for (int sx = 0; sx < 3; sx++) {
+                                    for (int sy = 0; sy < 5; sy++) {
+                                        if(working[px+sx][py+sy] == 0) working[px+sx][py+sy] = current;
+                                    }
+                                }
+                            } else if(current == 4) {
+                                for (int sx = 0; sx < 3; sx++) {
+                                    for (int sy = 0; sy < 3; sy++) {
+                                        working[px+sx][py+sy] = 8;
+                                        depths[px+sx][py+sy] = b * 2 - c;
+                                    }
+                                    for (int sy = 3; sy < 5; sy++) {
+                                        working[px+sx][py+sy] = 8;
+                                        depths[px+sx][py+sy] = b * 2 - c;
+                                    }
+                                }
+                                working[px][py+3] = 14;
+                            }
+                            else
+                            {
+                                for (int sx = 0; sx < 3; sx++) {
+                                    for (int sy = 0; sy < 3; sy++) {
+                                        working[px+sx][py+sy] = current + 2;
+                                        depths[px+sx][py+sy] = b * 2 - c;
+                                    }
+                                    for (int sy = 3; sy < 5; sy++) {
+                                        working[px+sx][py+sy] = current;
+                                        depths[px+sx][py+sy] = b * 2 - c;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else  {
+            for (int a = aa; a != aMax; a += aStep) {
+                for (int b = 0; b < zs; b++) {
+                    for (int c = cc; c != cMax; c += cStep) {
+                        px = con.voxelToPixelX(a, c, b);
+                        py = con.voxelToPixelY(a, c, b);
+                        current = voxels[a][c][b] & 255;
+                        if(current != 0)
+                        {
+                            if (current <= 2) {
+                                for (int sx = 0; sx < 3; sx++) {
+                                    for (int sy = 0; sy < 5; sy++) {
+                                        working[px+sx][py+sy] = current;
+                                    }
+                                }
+                            } else if(current == 3) {
+                                for (int sx = 0; sx < 3; sx++) {
+                                    for (int sy = 0; sy < 5; sy++) {
+                                        if(working[px+sx][py+sy] == 0) working[px+sx][py+sy] = current;
+                                    }
+                                }
+                            } else if(current == 4) {
+                                for (int sx = 0; sx < 3; sx++) {
+                                    for (int sy = 0; sy < 3; sy++) {
+                                        working[px+sx][py+sy] = 8;
+                                        depths[px+sx][py+sy] = b * 2 - c;
+                                    }
+                                    for (int sy = 3; sy < 5; sy++) {
+                                        working[px+sx][py+sy] = 8;
+                                        depths[px+sx][py+sy] = b * 2 - c;
+                                    }
+                                }
+                                working[px][py+3] = 14;
+                            }
+                            else
+                            {
+                                for (int sx = 0; sx < 3; sx++) {
+                                    for (int sy = 0; sy < 3; sy++) {
+                                        working[px+sx][py+sy] = current + 2;
+                                        depths[px+sx][py+sy] = b * 2 - a;
+                                    }
+                                    for (int sy = 3; sy < 5; sy++) {
+                                        working[px+sx][py+sy] = current;
+                                        depths[px+sx][py+sy] = b * 2 - a;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        int d;
+        render = ArrayTools.copy(working);
+        for (int x = 1; x < 59; x++) {
+            for (int y = 1; y < 67; y++) {
+                if((working[x][y]) > 2)
+                {
+                    d = depths[x][y];
+                    if(working[x-1][y] == 0) render[x-1][y] = 2; else if(depths[x-1][y] < d - 2) render[x-1][y] = working[x-1][y] - 1;
+                    if(working[x+1][y] == 0) render[x+1][y] = 2; else if(depths[x+1][y] < d - 2) render[x+1][y] = working[x+1][y] - 1;
+                    if(working[x][y-1] == 0) render[x][y-1] = 2; else if(depths[x][y-1] < d - 2) render[x][y-1] = working[x][y-1] - 1;
+                    if(working[x][y+1] == 0) render[x][y+1] = 2; else if(depths[x][y+1] < d - 2) render[x][y+1] = working[x][y+1] - 1;
                 }
             }
         }
@@ -154,8 +318,8 @@ public class ModelRenderer {
      */
     public int[][] renderIso(byte[][][] voxels, int direction) {
         final int xs = voxels.length, ys = voxels[0].length, zs = voxels[0][0].length;
-        Converter con = directionsIso32x46[direction &= 3];
-        int[][] working = new int[32][46], depths = new int[32][46], render;
+        Converter con = directionsIso32x36[direction &= 3];
+        int[][] working = new int[32][36], depths = new int[32][36], render;
         int px, py;
         int current;
         int cStart = direction < 2 ? 0 : xs - 1, cEnd = direction < 2 ? xs : -1, cChange = direction < 2 ? 1 : -1;
@@ -209,9 +373,11 @@ public class ModelRenderer {
         }
 
         int d;
+        working = size2(working);
+        depths = size2(depths);
         render = ArrayTools.copy(working);
-        for (int x = 1; x < 31; x++) {
-            for (int y = 1; y < 45; y++) {
+        for (int x = 1; x < 59; x++) {
+            for (int y = 1; y < 67; y++) {
                 if((working[x][y]) > 2)
                 {
                     d = depths[x][y];
@@ -225,6 +391,17 @@ public class ModelRenderer {
         return render;
     }
 
+    public int[][] size2(int[][] original)
+    {
+        int xSize = original.length - 2, ySize = original[0].length - 2;
+        int[][] out = new int[xSize * 2][ySize * 2];
+        for (int x = 0, xx = 0; x < xSize; x++, xx += 2) {
+            for (int y = 0, yy = 0; y < ySize; y++, yy += 2) {
+                out[xx][yy] = out[xx+1][yy] = out[xx][yy+1] = out[xx+1][yy+1] = original[x+1][y+1];
+            }
+        }
+        return out;
+    }
 
     protected interface Converter
     {
@@ -301,7 +478,61 @@ public class ModelRenderer {
                 }
             }
     };
-    protected Converter[] directionsIso32x46 = {
+
+    /**
+     * For a max of a 14x14x8 voxel space, produces pixel coordinates for a 16x16 area
+     */
+    protected Converter[] directionsOrtho60x68 = {
+            // direction 0, no rotation
+            new Converter() {
+                @Override
+                public int voxelToPixelX(int vx, int vy, int vz) {
+                    return vy * 3 + 9;
+                }
+
+                @Override
+                public int voxelToPixelY(int vx, int vy, int vz) {
+                    return (vx * 3) + 20 - vz * 2;
+                }
+            },
+            // direction 1
+            new Converter() {
+                @Override
+                public int voxelToPixelX(int vx, int vy, int vz) {
+                    return 48 - vx * 3;
+                }
+
+                @Override
+                public int voxelToPixelY(int vx, int vy, int vz) {
+                    return 59 - (vy * 3) - vz * 2;
+                }
+            },
+            // direction 2
+            new Converter() {
+                @Override
+                public int voxelToPixelX(int vx, int vy, int vz) {
+                    return 48 - vy * 3;
+                }
+
+                @Override
+                public int voxelToPixelY(int vx, int vy, int vz) {
+                    return 59 - (vx * 3) - vz * 2;
+                }
+            },
+            // direction 3
+            new Converter() {
+                @Override
+                public int voxelToPixelX(int vx, int vy, int vz) {
+                    return vx * 3 + 9;
+                }
+
+                @Override
+                public int voxelToPixelY(int vx, int vy, int vz) {
+                    return (vy * 3) + 20 - vz * 2;
+                }
+            }
+    };
+    protected Converter[] directionsIso32x36 = {
             // direction 0, no rotation
             new Converter() {
                 @Override
@@ -312,7 +543,7 @@ public class ModelRenderer {
 
                 @Override
                 public int voxelToPixelY(int vx, int vy, int vz) {
-                    return (vx - vy - vz) + 31;
+                    return (vx - vy - vz) + 21;
                     //return (vx >> 1) + 8 - vz;
                 }
             },
@@ -326,7 +557,7 @@ public class ModelRenderer {
 
                 @Override
                 public int voxelToPixelY(int vx, int vy, int vz) {
-                    return (vx - vy - vz) + 31; //(13 - vy) - (13 - vx)
+                    return (vx - vy - vz) + 21; //(13 - vy) - (13 - vx)
                     //return 13 - (vx >> 1) - vz;
                 }
             },
@@ -340,7 +571,7 @@ public class ModelRenderer {
 
                 @Override
                 public int voxelToPixelY(int vx, int vy, int vz) {
-                    return (13 - vx - vy - vz) + 31;
+                    return (13 - vx - vy - vz) + 21;
                     //return 13 - (vy >> 1) - vz;
                 }
             },
@@ -354,7 +585,7 @@ public class ModelRenderer {
 
                 @Override
                 public int voxelToPixelY(int vx, int vy, int vz) {
-                    return ((13 - vy) - vx - vz) + 31;
+                    return ((13 - vy) - vx - vz) + 21;
                     //return (vy >> 1) + 8 - vz;
                 }
             }
