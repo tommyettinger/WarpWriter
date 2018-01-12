@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import squidpony.FakeLanguageGen;
-import squidpony.squidmath.ThrustRNG;
+import squidpony.squidmath.ThrustAltRNG;
 import warpwriter.Coloring;
 import warpwriter.ModelMaker;
 import warpwriter.ModelRenderer;
@@ -25,7 +25,7 @@ public class TestDisplay extends ApplicationAdapter {
     private SpriteBatch batch;
     private Texture tex;
     private Pixmap pix;
-    private long seed = 0x31337BEEFC0FFEEL;
+    private long seed = 0x1337BEEFL;
     private ModelMaker mm = new ModelMaker(seed);
     private ModelRenderer mr = new ModelRenderer();
     private byte[][][] voxels;
@@ -43,7 +43,7 @@ public class TestDisplay extends ApplicationAdapter {
         }
         pix = pixes[0];
         tex = new Texture(width, height, Pixmap.Format.RGBA8888);
-        remake(seed);
+        remakeShip(seed);
         InputAdapter input = new InputAdapter() {
             String name = "Wriggler";
             @Override
@@ -53,25 +53,45 @@ public class TestDisplay extends ApplicationAdapter {
                         Gdx.app.exit();
                         return true;
                     case Input.Keys.SPACE:
-                        remake(++seed);
+                        remakeShip(++seed);
                         return true;
                     case Input.Keys.UP:
                         dir = 2;
-                        remake(0);
+                        remakeShip(0);
                         return true;
                     case Input.Keys.RIGHT:
                         dir = 3;
-                        remake(0);
+                        remakeShip(0);
                         return true;
                     case Input.Keys.DOWN:
                         dir = 0;
-                        remake(0);
+                        remakeShip(0);
                         return true;
                     case Input.Keys.LEFT:
                         dir = 1;
-                        remake(0);
+                        remakeShip(0);
+                        return true;
+
+                    case Input.Keys.F:
+                        remakeFish(++seed);
                         return true;
                     case Input.Keys.W:
+                        dir = 2;
+                        remakeFish(0);
+                        return true;
+                    case Input.Keys.A:
+                        dir = 1;
+                        remakeShip(0);
+                        return true;
+                    case Input.Keys.S:
+                        dir = 0;
+                        remakeFish(0);
+                        return true;
+                    case Input.Keys.D:
+                        dir = 3;
+                        remakeFish(0);
+                        return true;
+                    case Input.Keys.O: // output
                         name = FakeLanguageGen.SIMPLISH.word(true);
                         VoxIO.writeVOX(name + ".vox", voxels, Coloring.CW_PALETTE);
                         VoxIO.writeAnimatedVOX(name + "_Animated.vox", animatedVoxels, Coloring.CW_PALETTE);
@@ -80,7 +100,7 @@ public class TestDisplay extends ApplicationAdapter {
 //                        }
                         return true;
                     default:
-                        seed += ThrustRNG.determine(keycode);
+                        seed += ThrustAltRNG.determine(keycode);
                         return true;
                 }
             }
@@ -88,11 +108,30 @@ public class TestDisplay extends ApplicationAdapter {
         Gdx.input.setInputProcessor(input);
     }
 
-    public void remake(long newModel) {
+    public void remakeFish(long newModel) {
         if (newModel != 0){
-            mm.thrust.state = ThrustRNG.determine(newModel);
+            mm.thrust.state = ThrustAltRNG.determine(newModel);
             voxels = mm.fishRandom();
             animatedVoxels = mm.animateFish(voxels, frames);
+        }
+        for (int f = 0; f < frames; f++) {
+            pix = pixes[f];
+            pix.setColor(0);
+            pix.fill();
+            int[][] indices = mr.renderIso(animatedVoxels[f], dir);
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    pix.drawPixel(x, y, Coloring.CW_PALETTE[indices[x][y]]);
+                }
+            }
+        }
+    }
+
+    public void remakeShip(long newModel) {
+        if (newModel != 0){
+            mm.thrust.state = ThrustAltRNG.determine(newModel);
+            voxels = mm.shipRandom();
+            animatedVoxels = mm.animateShip(voxels, frames);
         }
         for (int f = 0; f < frames; f++) {
             pix = pixes[f];

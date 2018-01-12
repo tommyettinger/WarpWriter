@@ -146,7 +146,7 @@ public class ModelRenderer {
 
 
     /**
-     * Renders the given 3D voxel byte array, which should be no larger than 12x12x8, to a 28x42 2D int array storing
+     * Renders the given 3D voxel byte array, which should be no larger than 12x12x8, to a 32x42 2D int array storing
      * color indices, using the given direction to rotate the model's facing (from 0 to 3).
      * @param voxels a 3D byte array with each byte storing color information for a voxel.
      * @param direction a 90-degree-increment counter-clockwise direction, from 0 to 3.
@@ -154,14 +154,15 @@ public class ModelRenderer {
      */
     public int[][] renderIso(byte[][][] voxels, int direction) {
         final int xs = voxels.length, ys = voxels[0].length, zs = voxels[0][0].length;
-        Converter con = directionsIso32x46[direction & 3];
+        Converter con = directionsIso32x46[direction &= 3];
         int[][] working = new int[32][46], depths = new int[32][46], render;
         int px, py;
         int current;
+        int cStart = direction < 2 ? 0 : xs - 1, cEnd = direction < 2 ? xs : -1, cChange = direction < 2 ? 1 : -1;
         for (int b = 0; b < zs; b++) {
 //            for (int a = ys - 1; a >= 0; a--) {
 //                for (int c = xs - 1; c >= 0; c--) {
-            for (int c = 0; c < xs; c++) {
+            for (int c = cStart; c != cEnd; c += cChange) {
                 for (int a = ys - 1; a >= 0; a--) {
 
                     px = con.voxelToPixelX(c, a, b);

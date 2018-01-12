@@ -158,16 +158,18 @@ public class ModelMaker {
                         // issues from using rng.next(5) and rng.next(6) all over if the bits those use have a pattern.
                         // In the original model, all voxels of the same color will be hashed with similar behavior but
                         // any with different colors will get unrelated values.
-                        current = hashAll(x * 3 >> 2, y, z, color, seed);
+                        current = hashAll(x + (x | z) >> 2, y + (y | z) >> 1, z, color, seed); // x * 3 >> 2
                         if (color > 0 && color < 8 && (current & 0x3f) > 3) { // checks bottom 6 bits
-                            nextShip[x][smallYSize - y][z] = nextShip[x][y][z] = 11;
+                            nextShip[x][smallYSize - y][z] = nextShip[x][y][z] = 9;
                         } else {
                             nextShip[x][smallYSize - y][z] = nextShip[x][y][z] =
                                     // checks another 6 bits, starting after discarding 6 bits from the bottom
-                                    ((current >>> 6 & 0x3F) < 53)
+                                    ((current >>> 6 & 0x3F) < 45)
                                             ? 0
                                             // checks another 6 bits, starting after discarding 12 bits from the bottom
-                                            : ((current >>> 12 & 0x3F) < 11) ? highlightColor : mainColor;
+                                            : ((current >>> 12 & 0x3F) < 40) ? (byte)(10 + (current & 3))
+                                            // checks another 6 bits, starting after discarding 18 bits from the bottom
+                                            : ((current >>> 18 & 0x3F) < 8) ? highlightColor : mainColor;
 //                            if(rng.next(8) < 3) // occasional random asymmetry
 //                            {
 //                                if(rng.nextBoolean())
@@ -183,4 +185,21 @@ public class ModelMaker {
         return nextShip;
         //return Tools3D.runCA(nextShip, 1);
     }
+    public byte[][][][] animateShip(byte[][][] spaceship, final int frameCount)
+    {
+        final int xSize = spaceship.length, ySize = spaceship[0].length, zSize = spaceship[0][0].length;
+        byte[][][][] frames = new byte[frameCount][xSize][ySize][zSize];
+        float changeAmount = 2f / (frameCount);
+        int adjustment;
+        for (int f = 0; f < frameCount; f++) {
+            adjustment = (int) (NumberTools.sway(changeAmount * f + 0.5f) * 1.75f) + 1;
+            for (int x = 1; x < xSize - 1; x++) {
+                for (int y = 1; y < ySize - 1; y++) {
+                    System.arraycopy(spaceship[x][y], 1, frames[f][x][y], adjustment, 6);
+                }
+            }
+        }
+        return frames;
+    }
+
 }
