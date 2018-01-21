@@ -29,6 +29,7 @@ public class TestOutput extends ApplicationAdapter {
     private Pixmap[] pixes = new Pixmap[frames];
     private String pathName, shipName;
     StatefulRNG srng = new StatefulRNG(initialSeed);
+    int[] palette = Coloring.ALT_PALETTE;
     @Override
     public void create() {
 
@@ -68,7 +69,7 @@ public class TestOutput extends ApplicationAdapter {
             int[][] indices = mr.renderOrtho(animatedVoxels[f], dir);
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
-                    pix.drawPixel(x, y, Coloring.CW_PALETTE[indices[x][y]]);
+                    pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
         }
@@ -87,7 +88,7 @@ public class TestOutput extends ApplicationAdapter {
         int[][] indices = dir >= 4 ? mr.renderIso(voxels, dir) : mr.renderOrtho(voxels, dir);
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                pix.drawPixel(x, y, Coloring.CW_PALETTE[indices[x][y]]);
+                pix.drawPixel(x, y, palette[indices[x][y]]);
             }
         }
         PixmapIO.writePNG(Gdx.files.local(pathName + "/" + shipName + "/" + shipName + "_dir" + dir + "_0.png"), pix);

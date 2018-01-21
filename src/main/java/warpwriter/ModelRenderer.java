@@ -6,14 +6,8 @@ import squidpony.ArrayTools;
  * Created by Tommy Ettinger on 11/4/2017.
  */
 public class ModelRenderer {
-    public int[] palette;
     public ModelRenderer()
     {
-        palette = Coloring.CW_PALETTE;
-    }
-    public ModelRenderer(int[] palette)
-    {
-        this.palette = palette;
     }
 
     /**

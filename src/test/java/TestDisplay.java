@@ -33,6 +33,7 @@ public class TestDisplay extends ApplicationAdapter {
     private int dir = 1;
     private final int width = 60, height = 68, frames = 8;
     private Pixmap[] pixes = new Pixmap[frames];
+    private int[] palette = Coloring.ALT_PALETTE;
     @Override
     public void create() {
         batch = new SpriteBatch();
@@ -114,10 +115,10 @@ public class TestDisplay extends ApplicationAdapter {
                         return true;
                     case Input.Keys.O: // output
                         name = FakeLanguageGen.SIMPLISH.word(true);
-                        VoxIO.writeVOX(name + ".vox", voxels, Coloring.CW_PALETTE);
-                        VoxIO.writeAnimatedVOX(name + "_Animated.vox", animatedVoxels, Coloring.CW_PALETTE);
+                        VoxIO.writeVOX(name + ".vox", voxels, palette);
+                        VoxIO.writeAnimatedVOX(name + "_Animated.vox", animatedVoxels, palette);
 //                        for (int f = 0; f < frames; f++) {
-//                            VoxIO.writeVOX(name + "_" + f + ".vox", animatedVoxels[f], Coloring.CW_PALETTE);
+//                            VoxIO.writeVOX(name + "_" + f + ".vox", animatedVoxels[f], palette);
 //                        }
                         return true;
                     default:
@@ -142,7 +143,7 @@ public class TestDisplay extends ApplicationAdapter {
             int[][] indices = mr.renderOrtho(animatedVoxels[f], dir);
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
-                    pix.drawPixel(x, y, Coloring.CW_PALETTE[indices[x][y]]);
+                    pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
         }
@@ -161,7 +162,7 @@ public class TestDisplay extends ApplicationAdapter {
             int[][] indices = dir >= 4 ? mr.renderIso(animatedVoxels[f], dir) : mr.renderOrtho(animatedVoxels[f], dir);
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
-                    pix.drawPixel(x, y, Coloring.CW_PALETTE[indices[x][y]]);
+                    pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
         }
