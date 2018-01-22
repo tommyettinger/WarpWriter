@@ -30,12 +30,12 @@ public class Tools3D {
         }
         return target;
     }
-    public static void fill(byte[][][] array3d, byte value) {
+    public static void fill(byte[][][] array3d, int value) {
         final int depth = array3d.length;
         final int breadth = depth == 0 ? 0 : array3d[0].length;
         final int height = breadth == 0 ? 0 : array3d[0][0].length;
         if(depth > 0 && breadth > 0) {
-            Arrays.fill(array3d[0][0], value);
+            Arrays.fill(array3d[0][0], (byte)value);
         }
         for (int y = 1; y < breadth; y++) {
             System.arraycopy(array3d[0][0], 0, array3d[0][y], 0, height);
@@ -224,6 +224,108 @@ public class Tools3D {
             }
         }
         return vs1;
+    }
+
+    private static int firstTight(byte[][][] voxels)
+    {
+        final int xs = voxels.length, ys = voxels[0].length, zs = voxels[0][0].length;
+        for (int x = 0; x < xs; x++) {
+            for (int y = 0; y < ys; y++) {
+                for (int z = 0; z < zs; z++) {
+                    if (voxels[x][y][z] != 0)
+                        return zs * (x * ys + y) + z;
+                }
+            }
+        }
+        return -1;
+    }
+    public static int flood(byte[][][] base, byte[][][] bounds)
+    {
+        final int xs = base.length, ys = base[0].length, zs = base[0][0].length;
+        int initialSize, size = 0;
+        /*
+        for (int x = 0; x < xs; x++) {
+            for (int y = 0; y < ys; y++) {
+                for (int z = 0; z < zs; z++) {
+                    if(base[x][y][z] != 0 && bounds[x][y][z] != 0)
+                        size++;
+                }
+            }
+        }
+        */
+
+        byte[][][] nx = deepCopy(base);
+        byte t;
+        do {
+            initialSize = size;
+            size = 0;
+            for (int x = 0; x < xs; x++) {
+                for (int y = 0; y < ys; y++) {
+                    for (int z = 0; z < zs; z++) {
+                        if (nx[x][y][z] != 0 && (t = bounds[x][y][z]) != 0) {
+                            nx[x][y][z] = t;
+                            ++size;
+                            if (x > 0 && nx[x - 1][y][z] == 0 && (t = bounds[x - 1][y][z]) != 0) {
+                                nx[x - 1][y][z] = t;
+                                ++size;
+                            }
+                            if (x < xs - 1 && nx[x + 1][y][z] == 0 && (t = bounds[x + 1][y][z]) != 0) {
+                                nx[x + 1][y][z] = t;
+                                ++size;
+                            }
+                            if (y > 0 && nx[x][y - 1][z] == 0 && (t = bounds[x][y - 1][z]) != 0) {
+                                nx[x][y - 1][z] = t;
+                                ++size;
+                            }
+                            if (y < ys - 1 && nx[x][y + 1][z] == 0 && (t = bounds[x][y + 1][z]) != 0) {
+                                nx[x][y + 1][z] = t;
+                                ++size;
+                            }
+                            if (z > 0 && nx[x][y][z - 1] == 0 && (t = bounds[x][y][z - 1]) != 0) {
+                                nx[x][y][z - 1] = t;
+                                ++size;
+                            }
+                            if (z < zs - 1 && nx[x][y][z + 1] == 0 && (t = bounds[x][y][z + 1]) != 0) {
+                                nx[x][y][z + 1] = t;
+                                ++size;
+                            }
+                        }
+                    }
+                }
+            }
+        } while (initialSize < size);
+        deepCopyInto(nx, base);
+        return size;
+    }
+
+    public static byte[][][] largestPart(byte[][][] voxels)
+    {
+        final int xs = voxels.length, ys = voxels[0].length, zs = voxels[0][0].length;
+        int fst = firstTight(voxels), bestSize = 0, currentSize, x, y, z;
+
+        byte[][][] remaining = deepCopy(voxels), filled = new byte[xs][ys][zs],
+                choice = new byte[xs][ys][zs];
+        while (fst >= 0) {
+            fill(filled, 0);
+            filled[x = fst / (ys * zs)][y = (fst / zs) % ys][z = fst % zs] = voxels[x][y][z];
+            currentSize = flood(filled, remaining);
+            if(currentSize > bestSize)
+            {
+                bestSize = currentSize;
+                deepCopyInto(filled, choice);
+            }
+
+            for (x = 0; x < xs; x++) {
+                for (y = 0; y < ys; y++) {
+                    for (z = 0; z < zs; z++) {
+                        if(filled[x][y][z] != 0)
+                            remaining[x][y][z] = 0;
+                    }
+                }
+            }
+            fst = firstTight(remaining);
+        }
+        return choice;
     }
 
 }

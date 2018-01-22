@@ -156,6 +156,9 @@ public class ModelRenderer {
                 cMax = xs;
                 break;
             case 1:
+//                aa = 0;
+//                aStep = 1;
+//                aMax = xs;
                 aa = xs - 1;
                 aStep = -1;
                 aMax = -1;
@@ -176,6 +179,9 @@ public class ModelRenderer {
                 aa = 0;
                 aStep = 1;
                 aMax = xs;
+//                aa = xs - 1;
+//                aStep = -1;
+//                aMax = -1;
                 cc = 0;
                 cStep = 1;
                 cMax = ys;
@@ -213,7 +219,12 @@ public class ModelRenderer {
                                         depths[px+sx][py+sy] = b * 5 - c * 2;// + sy;
                                     }
                                 }
-                                working[px][py+2] = 14;
+                                working[px][py] = 14;
+                                working[px+1][py] = 14;
+                                working[px][py+1] = 14;
+                                working[px+1][py+1] = 14;
+//                                working[px][py+2] = 14;
+//                                working[px+1][py+2] = 14;
                             }
                             else
                             {
@@ -265,7 +276,12 @@ public class ModelRenderer {
                                         depths[px+sx][py+sy] = b * 5 - a * 2;// + sy;
                                     }
                                 }
-                                working[px][py+2] = 14;
+                                working[px][py] = 14;
+                                working[px+1][py] = 14;
+                                working[px][py+1] = 14;
+                                working[px+1][py+1] = 14;
+//                                working[px][py+2] = 14;
+//                                working[px+1][py+2] = 14;
                             }
                             else
                             {
@@ -386,8 +402,8 @@ public class ModelRenderer {
                     else if (working[x - 1][y] == 0 && working[x][y + 1] == 0) { shaded[x][y] = render[x][y] = 2; }
                     else if (working[x + 1][y] == 0 && working[x][y + 1] == 0) { shaded[x][y] = render[x][y] = 2; }
                     else {
-                        if (working[x - 1][y] == 0) { shaded[x - 1][y] = render[x - 1][y] = 2; } else if ((shaded[x][y]) > (w) && depths[x - 1][y] < d - 5) { shaded[x][y] = render[x][y] = w; }
-                        if (working[x + 1][y] == 0) { shaded[x + 1][y] = render[x + 1][y] = 2; } else if ((shaded[x][y]) > (w) && depths[x + 1][y] < d - 5) { shaded[x][y] = render[x][y] = w; }
+                        if (working[x - 1][y] == 0) { shaded[x - 1][y] = render[x - 1][y] = 2; } else if ((shaded[x][y]) > (w) && depths[x - 1][y] < d - 7) { shaded[x][y] = render[x][y] = w; }
+                        if (working[x + 1][y] == 0) { shaded[x + 1][y] = render[x + 1][y] = 2; } else if ((shaded[x][y]) > (w) && depths[x + 1][y] < d - 7) { shaded[x][y] = render[x][y] = w; }
                         if (working[x][y - 1] == 0) { shaded[x][y - 1] = render[x][y - 1] = 2; } else if ((shaded[x][y]) > (w) && depths[x][y - 1] < d - 5) { shaded[x][y] = render[x][y] = w; }
                         if (working[x][y + 1] == 0) { shaded[x][y + 1] = render[x][y + 1] = 2; } else if ((shaded[x][y]) > (w) && depths[x][y + 1] < d - 5) { shaded[x][y] = render[x][y] = w; }
                     }

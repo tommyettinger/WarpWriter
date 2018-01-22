@@ -71,7 +71,7 @@ public class ModelMaker {
                                     (determineBounded(current, //(11 - y * 2) * 23 +
                                             (Math.abs(x - 6) + 1) * (1 + Math.abs(z - 4)) * 15 +
                                                     (5 - y) * 355 +
-                                            ((Math.abs(x - 7) + 3) * (Math.abs(z - 4) + 2) * (7 - y)) * 21) < 530) ?
+                                            ((Math.abs(x - 7) + 3) * (Math.abs(z - 4) + 2) * (7 - y)) * 21) < 555f) ?
                                             ((current & 0x3F) < 11 ? highlightColor : mainColor)
                                             : 0) != 0) ctr++;
                         } else {
@@ -81,7 +81,7 @@ public class ModelMaker {
                 }
             }
         }while (ctr < 45);
-        voxels = Tools3D.runCA(voxels, 1);
+        voxels = Tools3D.largestPart(Tools3D.runCA(voxels, 1));
         for (int x = 12; x >= 6; x--) {
             for (int z = 7; z >= 2; z--) {
                 for (int y = 1; y < 6; y++) {
@@ -129,7 +129,7 @@ public class ModelMaker {
         int adjustment;
         for (int f = 0; f < frameCount; f++) {
             for (int x = 1; x < xSize - 1; x++) {
-                adjustment = (int) (NumberTools.sway(changeAmount * (f + x * 0.6f) + 0.5f) * 1.99f);
+                adjustment = (int) (NumberTools.sin(changeAmount * (f + x * 0.6f) * Math.PI) * 1.5f);
                 for (int y = 1; y < ySize - 1; y++) {
                     System.arraycopy(fish[x][y], 0, frames[f][x][y + adjustment], 0, zSize);
                 }

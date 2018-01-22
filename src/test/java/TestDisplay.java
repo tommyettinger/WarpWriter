@@ -98,21 +98,42 @@ public class TestDisplay extends ApplicationAdapter {
                         remakeFish(++seed);
                         return true;
                     case Input.Keys.W:
+                    case Input.Keys.K:
                         dir = 2;
                         remakeFish(0);
                         return true;
                     case Input.Keys.A:
+                    case Input.Keys.H:
                         dir = 1;
-                        remakeShip(0);
+                        remakeFish(0);
                         return true;
                     case Input.Keys.S:
+                    case Input.Keys.J:
                         dir = 0;
                         remakeFish(0);
                         return true;
                     case Input.Keys.D:
+                    case Input.Keys.L:
                         dir = 3;
                         remakeFish(0);
                         return true;
+                    case Input.Keys.Y:
+                        dir = 6;
+                        remakeFish(0);
+                        return true;
+                    case Input.Keys.U:
+                        dir = 7;
+                        remakeFish(0);
+                        return true;
+                    case Input.Keys.N:
+                        dir = 4;
+                        remakeFish(0);
+                        return true;
+                    case Input.Keys.B:
+                        dir = 5;
+                        remakeFish(0);
+                        return true;
+
                     case Input.Keys.O: // output
                         name = FakeLanguageGen.SIMPLISH.word(true);
                         VoxIO.writeVOX(name + ".vox", voxels, palette);
@@ -140,7 +161,7 @@ public class TestDisplay extends ApplicationAdapter {
             pix = pixes[f];
             pix.setColor(0);
             pix.fill();
-            int[][] indices = mr.renderOrtho(animatedVoxels[f], dir);
+            int[][] indices = dir >= 4 ? mr.renderIso(animatedVoxels[f], dir) : mr.renderOrtho(animatedVoxels[f], dir);
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
