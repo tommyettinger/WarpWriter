@@ -44,7 +44,7 @@ public class ModelMaker {
         for (int x = 1; x < 13; x++) {
             for (int y = 1; y < 13; y++) {
                 for (int z = 0; z < 8; z++) {
-                    voxels[x][y][z] = (rng.next(4) < 7) ? 0 : (rng.next(5) == 0) ? highlightColor : mainColor;
+                    voxels[x][y][z] = (rng.next(5) == 0) ? highlightColor : mainColor; //(rng.next(4) < 7) ? 0 :
                 }
             }
         }

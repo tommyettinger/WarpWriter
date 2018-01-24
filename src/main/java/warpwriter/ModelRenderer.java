@@ -2,6 +2,8 @@ package warpwriter;
 
 import squidpony.ArrayTools;
 
+import java.util.Arrays;
+
 /**
  * Created by Tommy Ettinger on 11/4/2017.
  */
@@ -140,8 +142,8 @@ public class ModelRenderer {
     public int[][] renderOrtho(byte[][][] voxels, int direction)
     {
         final int xs = voxels.length, ys = voxels[0].length, zs = voxels[0][0].length;
-        Converter con = directionsOrtho60x68[direction &= 3];
-        int[][] working = new int[60][68], depths = new int[60][68], render;
+        Converter con = directionsOrtho52x64[direction &= 3];
+        int[][] working = new int[52][64], depths = new int[52][64], render;
         int aa, cc, aStep, cStep, aMax, cMax, px, py;
         boolean flip = true;
         int current;
@@ -304,9 +306,9 @@ public class ModelRenderer {
         working = easeSquares(working);
         int d, w;
         render = ArrayTools.copy(working);
-        int[][] shaded = ArrayTools.fill(256, 60, 68);
-        for (int x = 1; x < 59; x++) {
-            for (int y = 1; y < 67; y++) {
+        int[][] shaded = ArrayTools.fill(256, 52, 64);
+        for (int x = 1; x < 51; x++) {
+            for (int y = 1; y < 63; y++) {
                 if((w = working[x][y] - 1) > 3) {
                     d = depths[x][y];
                     if (working[x - 1][y] == 0 && working[x][y - 1] == 0)      { shaded[x][y] = render[x][y] = 2; }
@@ -335,8 +337,8 @@ public class ModelRenderer {
      */
     public int[][] renderIso(byte[][][] voxels, int direction) {
         final int xs = voxels.length, ys = voxels[0].length, zs = voxels[0][0].length;
-        Converter con = directionsIso32x36[direction &= 3];
-        int[][] working = new int[32][36], depths = new int[32][36], render;
+        Converter con = directionsIso28x35[direction &= 3];
+        int[][] working = new int[28][35], depths = new int[28][35], render;
         int px, py;
         int current;
         int d, w;
@@ -351,7 +353,7 @@ public class ModelRenderer {
                     py = con.voxelToPixelY(c, a, b);
                     current = voxels[c][a][b] & 255;
                     if (current != 0) {
-                        d = 3 * (b + (c * cChange - a)) + 256;
+                        d = 4 * (b + (c * cChange - a)) + 256;
                         if (current <= 2) {
                             working[px][py] = current;
                         } else if (current == 3) {
@@ -390,11 +392,13 @@ public class ModelRenderer {
         }
 
         working = easeSquares(size2(working));
+        //working = size2(working);
+        //depths = size2Mix(depths);
         depths = size2(depths);
         render = ArrayTools.copy(working);
-        int[][] shaded = ArrayTools.fill(65535, 60, 68);
-        for (int x = 1; x < 59; x++) {
-            for (int y = 1; y < 67; y++) {
+        int[][] shaded = ArrayTools.fill(65535, 52, 64);
+        for (int x = 1; x < 51; x++) {
+            for (int y = 1; y < 63; y++) {
                 if((w = working[x][y] - 1) > 3) {
                     d = depths[x][y];
                     if (working[x - 1][y] == 0 && working[x][y - 1] == 0)      { shaded[x][y] = render[x][y] = 2; }
@@ -402,10 +406,10 @@ public class ModelRenderer {
                     else if (working[x - 1][y] == 0 && working[x][y + 1] == 0) { shaded[x][y] = render[x][y] = 2; }
                     else if (working[x + 1][y] == 0 && working[x][y + 1] == 0) { shaded[x][y] = render[x][y] = 2; }
                     else {
-                        if (working[x - 1][y] == 0) { shaded[x - 1][y] = render[x - 1][y] = 2; } else if ((shaded[x][y]) > (w) && depths[x - 1][y] < d - 7) { shaded[x][y] = render[x][y] = w; }
-                        if (working[x + 1][y] == 0) { shaded[x + 1][y] = render[x + 1][y] = 2; } else if ((shaded[x][y]) > (w) && depths[x + 1][y] < d - 7) { shaded[x][y] = render[x][y] = w; }
-                        if (working[x][y - 1] == 0) { shaded[x][y - 1] = render[x][y - 1] = 2; } else if ((shaded[x][y]) > (w) && depths[x][y - 1] < d - 5) { shaded[x][y] = render[x][y] = w; }
-                        if (working[x][y + 1] == 0) { shaded[x][y + 1] = render[x][y + 1] = 2; } else if ((shaded[x][y]) > (w) && depths[x][y + 1] < d - 5) { shaded[x][y] = render[x][y] = w; }
+                        if (working[x - 1][y] == 0) { shaded[x - 1][y] = render[x - 1][y] = 2; } else if ((shaded[x][y] & 7) > (w & 7) && depths[x - 1][y] < d - 10 + (x & 1)) { shaded[x][y] = render[x][y] = w; }
+                        if (working[x + 1][y] == 0) { shaded[x + 1][y] = render[x + 1][y] = 2; } else if ((shaded[x][y] & 7) > (w & 7) && depths[x + 1][y] < d - 10 + (x & 1)) { shaded[x][y] = render[x][y] = w; }
+                        if (working[x][y - 1] == 0) { shaded[x][y - 1] = render[x][y - 1] = 2; } else if ((shaded[x][y] & 7) > (w & 7) && depths[x][y - 1] < d - 4) { shaded[x][y] = render[x][y] = w; }
+                        if (working[x][y + 1] == 0) { shaded[x][y + 1] = render[x][y + 1] = 2; } else if ((shaded[x][y] & 7) > (w & 7) && depths[x][y + 1] < d - 4) { shaded[x][y] = render[x][y] = w; }
                     }
                 }
             }
@@ -439,29 +443,90 @@ public class ModelRenderer {
     {
         int xSize = original.length - 2, ySize = original[0].length - 2;
         int[][] out = new int[xSize * 2][ySize * 2];
-        for (int x = 0, xx = 0; x < xSize; x++, xx += 2) {
-            for (int y = 0, yy = 0; y < ySize; y++, yy += 2) {
-                out[xx][yy] = out[xx+1][yy] = out[xx][yy+1] = out[xx+1][yy+1] = original[x+1][y+1];
+        for (int x = 1, xx = 0; x < xSize; x++, xx += 2) {
+            for (int y = 2, yy = 1; y <= ySize; y++, yy += 2) {
+                out[xx][yy] = out[xx+1][yy] = out[xx][yy+1] = out[xx+1][yy+1] = original[x][y];
+            }
+        }
+        return out;
+    }
+
+    public int[][] size2Mix(int[][] original)
+    {
+        int xSize = original.length - 2, ySize = original[0].length - 2, ne, nw, se, sw;
+        int[][] out = new int[xSize * 2][ySize * 2];
+        //int toggle = 8;
+        for (int x = 1, xx = 0; x <= xSize; x++, xx += 2) {
+            for (int y = 1, yy = 0; y <= ySize; y++, yy += 2) {
+                nw = original[x][y];
+                if(nw <= 0)
+                {
+                    out[xx][yy] = 0;
+                    out[xx+1][yy] = 0;
+                    out[xx][yy+1] = 0;
+                    out[xx+1][yy+1] = 0;
+                }
+                else {
+                    out[xx][yy] = nw;
+                    ne = original[x + 1][y];
+                    sw = original[x][y + 1];
+                    se = original[x + 1][y + 1];
+                    out[xx + 1][yy] = (ne > 0) ? nw + ne >> 1 : nw;
+                    out[xx][yy + 1] = (sw > 0) ? nw + sw >> 1 : nw;
+                    out[xx + 1][yy + 1] = (se > 0) ? nw + se >> 1 : nw - 4;
+                }
             }
         }
         return out;
     }
     public int[][] easeSquares(int[][] original){
-        int xSize = original.length - 1, ySize = original[0].length - 1;
+        int xSize = original.length - 1, ySize = original[0].length - 1, idx, bestIdx, bestCount;
         int[][] out = ArrayTools.copy(original);
-        int a, b, c, d;
-        for (int x = 0; x < xSize; x++) {
-            for (int y = 0; y < ySize; y++) {
-                a = original[x][y];
-                b = original[x + 1][y];
-                c = original[x][y + 1];
-                d = original[x + 1][y + 1];
-                if (a > 2 && b > 2 && c > 2 && d > 2) {
-                         if (a == b && b == c /* && d > c */) out[x + 1][y + 1] = c;
-                    else if (a == b && b == d /* && c > d */) out[x][y + 1] = d;
-                    else if (a == c && c == d /* && b > d */) out[x + 1][y] = d;
-                    else if (b == c && c == d /* && a > d */) out[x][y] = d;
+        int[] colors = new int[9], counts = new int[9];
+        for (int x = 1; x < xSize; x++) {
+            CELL:
+            for (int y = 1; y < ySize; y++) {
+                Arrays.fill(colors, 0);
+                Arrays.fill(counts, -1);
+                for (int xx = x-1, i = 0; i < 3; i++, xx++) {
+                    for (int yy = y - 1, j = 0; j < 3; j++, yy++) {
+                        if((colors[idx = i * 3 + j] = original[xx][yy]) <= 2) continue CELL;
+                        for (int c = 0; c <= idx; c++) {
+                            if(colors[idx] == colors[c])
+                            {
+                                counts[c]++;
+                                break;
+                            }
+                        }
+                    }
                 }
+                bestIdx = 0;
+                bestCount = -1;
+                for (int i = 0; i < 9; i++) {
+                    if(counts[i] > bestCount)
+                    {
+                        bestIdx = i;
+                        bestCount = counts[i];
+                    }
+
+                }
+                if((colors[bestIdx] & 7) > (out[x][y] & 7))
+                    out[x][y] = colors[bestIdx];
+//                c = original[x][y];
+//                e = original[x + 1][y];
+//                n = original[x][y + 1];
+//                w = original[x - 1][y];
+//                s = original[x][y - 1];
+//                ne = original[x + 1][y + 1];
+//                se = original[x + 1][y - 1];
+//                nw = original[x - 1][y + 1];
+//                sw = original[x - 1][y - 1];
+//                if (c > 2 && e > 2 && n > 2 && s > 2 && w > 2) {
+//                         if (c == e && e == n /* && (d & -8) == (c & -8) */) out[x + 1][y + 1] = n;
+//                    else if (c == e && e == ne /* && (c & -8) == (d & -8) */) out[x][y + 1] = ne;
+//                    else if (c == n && n == ne /* && (b & -8) == (d & -8) */) out[x + 1][y] = ne;
+//                    else if (e == n && n == ne /* && (a & -8) == (d & -8) */) out[x][y] = ne;
+//                }
             }
         }
         return out;
@@ -545,68 +610,68 @@ public class ModelRenderer {
     /**
      * For a max of a 14x14x8 voxel space, produces pixel coordinates for a 16x16 area
      */
-    protected Converter[] directionsOrtho60x68 = {
+    protected Converter[] directionsOrtho52x64 = {
             // direction 0, no rotation
             new Converter() {
                 @Override
                 public int voxelToPixelX(int vx, int vy, int vz) {
-                    return vy * 3 + 9;
+                    return vy * 3 + 4;
                 }
 
                 @Override
                 public int voxelToPixelY(int vx, int vy, int vz) {
-                    return (vx * 3) + 20 - vz * 2;
+                    return (vx * 3) + 16 - vz * 2;
                 }
             },
             // direction 1
             new Converter() {
                 @Override
                 public int voxelToPixelX(int vx, int vy, int vz) {
-                    return 48 - vx * 3;
+                    return 43 - vx * 3;
                 }
 
                 @Override
                 public int voxelToPixelY(int vx, int vy, int vz) {
-                    return 59 - (vy * 3) - vz * 2;
+                    return 55 - (vy * 3) - vz * 2;
                 }
             },
             // direction 2
             new Converter() {
                 @Override
                 public int voxelToPixelX(int vx, int vy, int vz) {
-                    return 48 - vy * 3;
+                    return 43 - vy * 3;
                 }
 
                 @Override
                 public int voxelToPixelY(int vx, int vy, int vz) {
-                    return 59 - (vx * 3) - vz * 2;
+                    return 55 - (vx * 3) - vz * 2;
                 }
             },
             // direction 3
             new Converter() {
                 @Override
                 public int voxelToPixelX(int vx, int vy, int vz) {
-                    return vx * 3 + 9;
+                    return vx * 3 + 4;
                 }
 
                 @Override
                 public int voxelToPixelY(int vx, int vy, int vz) {
-                    return (vy * 3) + 20 - vz * 2;
+                    return (vy * 3) + 16 - vz * 2;
                 }
             }
     };
-    protected Converter[] directionsIso32x36 = {
+    protected Converter[] directionsIso28x35 = {
             // direction 0, no rotation
             new Converter() {
                 @Override
                 public int voxelToPixelX(int vx, int vy, int vz) {
-                    return (vy + vx) + 1;
+                    return (vy + vx);
                     //return vy + 2;
                 }
 
                 @Override
                 public int voxelToPixelY(int vx, int vy, int vz) {
-                    return (vx - vy - vz) + 21;
+                    return (vx - vy - vz) + 20;
                     //return (vx >> 1) + 8 - vz;
                 }
             },
@@ -614,13 +679,13 @@ public class ModelRenderer {
             new Converter() {
                 @Override
                 public int voxelToPixelX(int vx, int vy, int vz) {
-                    return (26 - vy - vx) + 1;
+                    return (26 - vy - vx);
                     //return 13 - vy;
                 }
 
                 @Override
                 public int voxelToPixelY(int vx, int vy, int vz) {
-                    return (vx - vy - vz) + 21; //(13 - vy) - (13 - vx)
+                    return (vx - vy - vz) + 20; //(13 - vy) - (13 - vx)
                     //return 13 - (vx >> 1) - vz;
                 }
             },
@@ -628,13 +693,13 @@ public class ModelRenderer {
             new Converter() {
                 @Override
                 public int voxelToPixelX(int vx, int vy, int vz) {
-                    return (vy - vx + 13) + 1;
+                    return (vy - vx + 13);
                     //return 13 - vx;
                 }
 
                 @Override
                 public int voxelToPixelY(int vx, int vy, int vz) {
-                    return (13 - vx - vy - vz) + 21;
+                    return (13 - vx - vy - vz) + 20;
                     //return 13 - (vy >> 1) - vz;
                 }
             },
@@ -642,13 +707,13 @@ public class ModelRenderer {
             new Converter() {
                 @Override
                 public int voxelToPixelX(int vx, int vy, int vz) {
-                    return (vx - vy + 13) + 1;
+                    return (vx - vy + 13);
                     //return vx + 2;
                 }
 
                 @Override
                 public int voxelToPixelY(int vx, int vy, int vz) {
-                    return ((13 - vy) - vx - vz) + 21;
+                    return ((13 - vy) - vx - vz) + 20;
                     //return (vy >> 1) + 8 - vz;
                 }
             }

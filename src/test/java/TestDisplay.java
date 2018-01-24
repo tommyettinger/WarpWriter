@@ -15,6 +15,8 @@ import warpwriter.ModelMaker;
 import warpwriter.ModelRenderer;
 import warpwriter.VoxIO;
 
+import java.util.Arrays;
+
 /**
  * Displays pseudo-random spaceships, currently, with the sequence advancing when you press space, and rotating when you
  * press the arrow keys. Pressing q quits, and any other key will change the seed, producing different ships on the next
@@ -25,13 +27,13 @@ public class TestDisplay extends ApplicationAdapter {
     private SpriteBatch batch;
     private Texture tex;
     private Pixmap pix;
-    private long seed = 0x1337BEEFL;
+    private long seed = 0x1337BEEFD00DL;
     private ModelMaker mm = new ModelMaker(seed);
     private ModelRenderer mr = new ModelRenderer();
     private byte[][][] voxels;
     private byte[][][][] animatedVoxels;
     private int dir = 1;
-    private final int width = 60, height = 68, frames = 8;
+    private final int width = 52, height = 64, frames = 8;
     private Pixmap[] pixes = new Pixmap[frames];
     private int[] palette = Coloring.ALT_PALETTE;
     @Override
@@ -52,6 +54,9 @@ public class TestDisplay extends ApplicationAdapter {
                 switch (keycode) {
                     case Input.Keys.Q:
                         Gdx.app.exit();
+                        return true;
+                    case Input.Keys.COMMA:
+                        remakeFull(++seed);
                         return true;
                     case Input.Keys.SPACE:
                         remakeShip(++seed);
@@ -189,6 +194,25 @@ public class TestDisplay extends ApplicationAdapter {
         }
     }
 
+    public void remakeFull(long newModel) {
+        if (newModel != 0){
+            mm.thrust.state = ThrustAltRNG.determine(newModel);
+            voxels = mm.fullyRandom();
+            Arrays.fill(animatedVoxels, voxels);
+        }
+        for (int f = 0; f < frames; f++) {
+            pix = pixes[f];
+            pix.setColor(0);
+            pix.fill();
+            int[][] indices = dir >= 4 ? mr.renderIso(animatedVoxels[f], dir) : mr.renderOrtho(animatedVoxels[f], dir);
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    pix.drawPixel(x, y, palette[indices[x][y]]);
+                }
+            }
+        }
+    }
+
     @Override
     public void render() {
         tex.draw(pixes[(int) ((System.currentTimeMillis() >> 7) % frames)], 0, 0);
@@ -199,9 +223,9 @@ public class TestDisplay extends ApplicationAdapter {
 
         batch.begin();
         batch.draw(tex, width >> 1, 250 - (width >> 1), width, height);
-        batch.draw(tex, width * 3 >> 1, 250 - (width), width << 1, height << 1);
-        batch.draw(tex, width * 3, 250 - (width << 1), width << 2,  height << 2);
-        batch.draw(tex, width * 6, 250 - (width << 2), width << 3, height << 3);
+        batch.draw(tex, width * 5 >> 1, 250 - (width), width << 1, height << 1);
+        batch.draw(tex, width * 10 >> 1, 250 - (width << 1), width << 2,  height << 2);
+        batch.draw(tex, width * 19 >> 1, 250 - (width << 2), width << 3, height << 3);
 
 //        batch.draw(tex, 64 - 8, 240 - 8, 16, 16);
 //        batch.draw(tex, 192 - 16, 240 - 16, 32, 32);
@@ -213,8 +237,8 @@ public class TestDisplay extends ApplicationAdapter {
     public static void main(String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "Display Test";
-        config.width = 800;
-        config.height = 500;
+        config.width = 1200;
+        config.height = 600;
         new LwjglApplication(new TestDisplay(), config);
     }
 }

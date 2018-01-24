@@ -25,9 +25,9 @@ public class TestOutput extends ApplicationAdapter {
     private byte[][][] voxels;
     private byte[][][][] animatedVoxels;
     private int dir = 1;
-    private final int width = 60, height = 68, frames = 8;
+    private final int width = 52, height = 64, frames = 8;
     private Pixmap[] pixes = new Pixmap[frames];
-    private String pathName, shipName;
+    private String pathName, modelName;
     StatefulRNG srng = new StatefulRNG(initialSeed);
     int[] palette = Coloring.ALT_PALETTE;
     @Override
@@ -40,23 +40,24 @@ public class TestOutput extends ApplicationAdapter {
 
         pathName = "target/out/" + StringKit.hex(seed);
         Gdx.files.local(pathName).mkdirs();
+        FakeLanguageGen language = FakeLanguageGen.randomLanguage(initialSeed).removeAccents();
         UnorderedSet<String> names = new UnorderedSet<>(100);
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 12; i++) {
             dir = 0;
-            shipName = FakeLanguageGen.JAPANESE_ROMANIZED.word(srng, true);
-            while (names.contains(shipName))
-                shipName = FakeLanguageGen.JAPANESE_ROMANIZED.word(srng, true);
-            names.add(shipName);
-            Gdx.files.local(pathName + "/" + shipName).mkdirs();
-            remakeShip(seed++);
+            modelName = language.word(srng, true);
+            while (names.contains(modelName))
+                modelName = language.word(srng, true);
+            names.add(modelName);
+            Gdx.files.local(pathName + "/" + modelName).mkdirs();
+            remakeModel(seed++);
             for (dir = 1; dir < 8; dir++) {
-                remakeShip(0);
+                remakeModel(0);
             }
         }
         Gdx.app.exit();
     }
 
-    public void remakeFish(long newModel) {
+    public void remakeModel(long newModel) {
         if (newModel != 0){
             mm.thrust.state = ThrustAltRNG.determine(newModel);
             voxels = mm.fishRandom();
@@ -66,12 +67,13 @@ public class TestOutput extends ApplicationAdapter {
             pix = pixes[f];
             pix.setColor(0);
             pix.fill();
-            int[][] indices = mr.renderOrtho(animatedVoxels[f], dir);
+            int[][] indices = dir >= 4 ? mr.renderIso(animatedVoxels[f], dir) : mr.renderOrtho(animatedVoxels[f], dir);
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
+            PixmapIO.writePNG(Gdx.files.local(pathName + "/" + modelName + "/" + modelName + "_dir" + dir + "_" + f + ".png"), pix);
         }
     }
 
@@ -91,7 +93,7 @@ public class TestOutput extends ApplicationAdapter {
                 pix.drawPixel(x, y, palette[indices[x][y]]);
             }
         }
-        PixmapIO.writePNG(Gdx.files.local(pathName + "/" + shipName + "/" + shipName + "_dir" + dir + "_0.png"), pix);
+        PixmapIO.writePNG(Gdx.files.local(pathName + "/" + modelName + "/" + modelName + "_dir" + dir + "_0.png"), pix);
     }
 
     @Override
