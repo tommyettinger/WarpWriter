@@ -316,10 +316,10 @@ public class ModelRenderer {
                     else if (working[x - 1][y] == 0 && working[x][y + 1] == 0) { shaded[x][y] = render[x][y] = 2; }
                     else if (working[x + 1][y] == 0 && working[x][y + 1] == 0) { shaded[x][y] = render[x][y] = 2; }
                     else {
-                        if (working[x - 1][y] == 0) { shaded[x - 1][y] = render[x - 1][y] = 2; } else if (shaded[x - 1][y] > w && depths[x - 1][y] < d - 2) { shaded[x - 1][y] = render[x - 1][y] = w; }
-                        if (working[x + 1][y] == 0) { shaded[x + 1][y] = render[x + 1][y] = 2; } else if (shaded[x + 1][y] > w && depths[x + 1][y] < d - 2) { shaded[x + 1][y] = render[x + 1][y] = w; }
-                        if (working[x][y - 1] == 0) { shaded[x][y - 1] = render[x][y - 1] = 2; } else if (shaded[x][y - 1] > w && depths[x][y - 1] < d - 5) { shaded[x][y - 1] = render[x][y - 1] = w; }
-                        if (working[x][y + 1] == 0) { shaded[x][y + 1] = render[x][y + 1] = 2; } else if (shaded[x][y + 1] > w && depths[x][y + 1] < d - 5) { shaded[x][y + 1] = render[x][y + 1] = w; }
+                        if (working[x - 1][y] == 0) { shaded[x - 1][y] = render[x - 1][y] = 2; } else if ((shaded[x - 1][y] & 7) > (w & 7) && depths[x - 1][y] < d - 2) { shaded[x - 1][y] = render[x - 1][y] = w; }
+                        if (working[x + 1][y] == 0) { shaded[x + 1][y] = render[x + 1][y] = 2; } else if ((shaded[x + 1][y] & 7) > (w & 7) && depths[x + 1][y] < d - 2) { shaded[x + 1][y] = render[x + 1][y] = w; }
+                        if (working[x][y - 1] == 0) { shaded[x][y - 1] = render[x][y - 1] = 2; } else if ((shaded[x][y - 1] & 7) > (w & 7) && depths[x][y - 1] < d - 5) { shaded[x][y - 1] = render[x][y - 1] = w; }
+                        if (working[x][y + 1] == 0) { shaded[x][y + 1] = render[x][y + 1] = 2; } else if ((shaded[x][y + 1] & 7) > (w & 7) && depths[x][y + 1] < d - 5) { shaded[x][y + 1] = render[x][y + 1] = w; }
                     }
                 }
             }
@@ -425,10 +425,10 @@ public class ModelRenderer {
                     else if (working[x - 1][y] == 0 && working[x][y + 1] == 0) { render[x][y] = 2; }
                     else if (working[x + 1][y] == 0 && working[x][y + 1] == 0) { render[x][y] = 2; }
                     else {
-                        if (working[x - 1][y] == 0) { render[x - 1][y] = 2; } else if ((working[x][y]) > (w) && depths[x - 1][y] < d - 5) { render[x][y] = w; }
-                        if (working[x + 1][y] == 0) { render[x + 1][y] = 2; } else if ((working[x][y]) > (w) && depths[x + 1][y] < d - 5) { render[x][y] = w; }
-                        if (working[x][y - 1] == 0) { render[x][y - 1] = 2; } else if ((working[x][y]) > (w) && depths[x][y - 1] < d - 5) { render[x][y] = w; }
-                        if (working[x][y + 1] == 0) { render[x][y + 1] = 2; } else if ((working[x][y]) > (w) && depths[x][y + 1] < d - 5) { render[x][y] = w; }
+                        if (working[x - 1][y] == 0) { render[x - 1][y] = 2; } else if ((working[x][y] & 7) > (w & 7) && depths[x - 1][y] < d - 5) { render[x][y] = w; }
+                        if (working[x + 1][y] == 0) { render[x + 1][y] = 2; } else if ((working[x][y] & 7) > (w & 7) && depths[x + 1][y] < d - 5) { render[x][y] = w; }
+                        if (working[x][y - 1] == 0) { render[x][y - 1] = 2; } else if ((working[x][y] & 7) > (w & 7) && depths[x][y - 1] < d - 5) { render[x][y] = w; }
+                        if (working[x][y + 1] == 0) { render[x][y + 1] = 2; } else if ((working[x][y] & 7) > (w & 7) && depths[x][y + 1] < d - 5) { render[x][y] = w; }
                     }
                 }
             }

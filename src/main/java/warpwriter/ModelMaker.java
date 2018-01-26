@@ -145,8 +145,8 @@ public class ModelMaker {
         final int halfY = ySize >> 1, smallYSize = ySize - 1;
         byte color;
         final byte mainColor = (byte)((determineBounded(seed + 1L, 22) << 3) + determineBounded(seed + 22L, 4) + 10),
-                highlightColor = (byte)((determineBounded(seed + 333L, 22) << 3) + determineBounded(seed + 4444L, 3) + 11);
-
+                highlightColor = (byte)((determineBounded(seed + 333L, 22) << 3) + determineBounded(seed + 4444L, 3) + 11),
+                cockpitColor = (byte)(-85 - (determineBounded(seed + 55555L, 7) << 3));
         for (int x = 0; x < xSize; x++) {
             for (int y = 0; y < halfY; y++) {
                 for (int z = 0; z < zSize; z++) {
@@ -160,16 +160,16 @@ public class ModelMaker {
                         // any with different colors will get unrelated values.
                         current = hashAll(x + (x | z) >> 2, y + (y | z) >> 1, z, color, seed); // x * 3 >> 2
                         if (color > 0 && color < 8 && (current & 0x3f) > 3) { // checks bottom 6 bits
-                            nextShip[x][smallYSize - y][z] = nextShip[x][y][z] = 9;
+                            nextShip[x][smallYSize - y][z] = nextShip[x][y][z] = (byte) (cockpitColor + (z - 4));//9;
                         } else {
                             nextShip[x][smallYSize - y][z] = nextShip[x][y][z] =
                                     // checks another 6 bits, starting after discarding 6 bits from the bottom
-                                    ((current >>> 6 & 0x3F) < 45)
+                                    ((current >>> 6 & 0x3FL) < 45L)
                                             ? 0
                                             // checks another 6 bits, starting after discarding 12 bits from the bottom
-                                            : ((current >>> 12 & 0x3F) < 40) ? (byte)(10 + (current & 3))
+                                            : ((current >>> 12 & 0x3FL) < 40L) ? (byte)(10 + (current & 3))
                                             // checks another 6 bits, starting after discarding 18 bits from the bottom
-                                            : ((current >>> 18 & 0x3F) < 8) ? highlightColor : mainColor;
+                                            : ((current >>> 18 & 0x3FL) < 8L) ? highlightColor : mainColor;
 //                            if(rng.next(8) < 3) // occasional random asymmetry
 //                            {
 //                                if(rng.nextBoolean())
