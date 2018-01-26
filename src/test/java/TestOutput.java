@@ -25,7 +25,7 @@ public class TestOutput extends ApplicationAdapter {
     private byte[][][] voxels;
     private byte[][][][] animatedVoxels;
     private int dir = 1;
-    private final int width = 52, height = 64, frames = 8;
+    private final int width = 52, height = 64, frames = 1;
     private Pixmap[] pixes = new Pixmap[frames];
     private String pathName, modelName;
     StatefulRNG srng = new StatefulRNG(initialSeed);
@@ -42,7 +42,7 @@ public class TestOutput extends ApplicationAdapter {
         Gdx.files.local(pathName).mkdirs();
         FakeLanguageGen language = FakeLanguageGen.randomLanguage(initialSeed).removeAccents();
         UnorderedSet<String> names = new UnorderedSet<>(100);
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < 100; i++) {
             dir = 0;
             modelName = language.word(srng, true);
             while (names.contains(modelName))
@@ -60,8 +60,8 @@ public class TestOutput extends ApplicationAdapter {
     public void remakeModel(long newModel) {
         if (newModel != 0){
             mm.thrust.state = ThrustAltRNG.determine(newModel);
-            voxels = mm.fishRandom();
-            animatedVoxels = mm.animateFish(voxels, frames);
+            voxels = mm.shipRandom();
+            animatedVoxels = mm.animateShip(voxels, frames);
         }
         for (int f = 0; f < frames; f++) {
             pix = pixes[f];

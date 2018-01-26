@@ -338,7 +338,7 @@ public class ModelRenderer {
     public int[][] renderIso(byte[][][] voxels, int direction) {
         final int xs = voxels.length, ys = voxels[0].length, zs = voxels[0][0].length;
         Converter con = directionsIso28x35[direction &= 3];
-        int[][] working = new int[28][35], depths = new int[28][35], render;
+        int[][] working = new int[52][64], depths = new int[52][64], render;
         int px, py;
         int current;
         int d, w;
@@ -351,69 +351,128 @@ public class ModelRenderer {
 
                     px = con.voxelToPixelX(c, a, b);
                     py = con.voxelToPixelY(c, a, b);
+                    if(px < 1 || py < 2) continue;
+                    px = px - 1 << 1;
+                    py = (py - 2 << 1) + 1;
                     current = voxels[c][a][b] & 255;
                     if (current != 0) {
-                        d = 4 * (b + (c * cChange - a)) + 256;
+                        d = 3 * (b + (c * cChange - a)) + 256;
                         if (current <= 2) {
                             working[px][py] = current;
                         } else if (current == 3) {
-                            for (int ix = 0; ix < 2; ix++) {
-                                for (int iy = 0; iy < 2; iy++) {
+                            for (int ix = 0; ix < 4; ix++) {
+                                for (int iy = 0; iy < 4; iy++) {
                                     if (working[px + ix][py + iy] == 0)
+                                    {
                                         working[px + ix][py + iy] = 3;
+                                        depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 0 for left and right edges of a voxel, or 1 for middle pixels of a voxel
+                                    }
                                 }
                             }
                         } else if (current == 4) {
-                            working[px][py] = 14;
-                            depths[px][py] = d;
-                            working[px+1][py] = 8;
-                            depths[px+1][py] = d;
-                            working[px][py+1] = 8;
-                            depths[px][py+1] = d;
-                            working[px+1][py+1] = 8;
-                            depths[px+1][py+1] = d;
+                            for (int ix = 0; ix < 4; ix++) {
+                                for (int iy = 0; iy < 4; iy++) {
+                                    if (ix < 2 && iy < 2)
+                                    {
+                                        working[px + ix][py + iy] = 14;
+                                        depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 0 for left and right edges of a voxel, or 1 for middle pixels of a voxel
+                                    }
+                                    else
+                                    {
+                                        working[px + ix][py + iy] = 8;
+                                        depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 0 for left and right edges of a voxel, or 1 for middle pixels of a voxel
+                                    }
+                                }
+                            }
                         } else {
-                            working[px][py] = current + 2;
-                            depths[px][py] = d;
-                            working[px + 1][py] = current + 2;
-                            depths[px + 1][py] = d;
-                            //for (int iy = 2; iy < 4; iy++) {
-                            working[px][py + 1] = current + 1;
-                            depths[px][py + 1] = d;
-                            //for (int ix = 2; ix < 4; ix++) {
-                            working[px + 1][py + 1] = current;
-                            depths[px + 1][py + 1] = d;
-                            //}
-                            //}
+                            for (int ix = 0; ix < 4; ix++) {
+                                for (int iy = 0; iy < 2; iy++) {
+                                    working[px + ix][py + iy] = current + 2;
+                                    depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 0 for left and right edges of a voxel, or 1 for middle pixels of a voxel
+                                }
+                            }
+                            for (int ix = 0; ix < 2; ix++) {
+                                for (int iy = 2; iy < 4; iy++) {
+                                    working[px + ix][py + iy] = current + 1;
+                                    depths[px + ix][py + iy] = d + ix; // adds 0 for left and right edges of a voxel, or 1 for middle pixels of a voxel
+                                }
+                            }
+                            for (int ix = 2; ix < 4; ix++) {
+                                for (int iy = 2; iy < 4; iy++) {
+                                    working[px + ix][py + iy] = current;
+                                    depths[px + ix][py + iy] = d - ix + 3; // adds 0 for left and right edges of a voxel, or 1 for middle pixels of a voxel
+                                }
+                            }
                         }
                     }
                 }
             }
         }
-
-        working = easeSquares(size2(working));
+        working = easeSquares(working);
+        //working = easeSquares(size2(working));
         //working = size2(working);
         //depths = size2Mix(depths);
-        depths = size2(depths);
+        //depths = size2(depths);
         render = ArrayTools.copy(working);
-        int[][] shaded = ArrayTools.fill(65535, 52, 64);
+        //int[][] shaded = ArrayTools.fill(65535, 52, 64);
+
         for (int x = 1; x < 51; x++) {
             for (int y = 1; y < 63; y++) {
                 if((w = working[x][y] - 1) > 3) {
                     d = depths[x][y];
-                    if (working[x - 1][y] == 0 && working[x][y - 1] == 0)      { shaded[x][y] = render[x][y] = 2; }
-                    else if (working[x + 1][y] == 0 && working[x][y - 1] == 0) { shaded[x][y] = render[x][y] = 2; }
-                    else if (working[x - 1][y] == 0 && working[x][y + 1] == 0) { shaded[x][y] = render[x][y] = 2; }
-                    else if (working[x + 1][y] == 0 && working[x][y + 1] == 0) { shaded[x][y] = render[x][y] = 2; }
+                    if (working[x - 1][y] == 0 && working[x][y - 1] == 0)      { render[x][y] = 2; }
+                    else if (working[x + 1][y] == 0 && working[x][y - 1] == 0) { render[x][y] = 2; }
+                    else if (working[x - 1][y] == 0 && working[x][y + 1] == 0) { render[x][y] = 2; }
+                    else if (working[x + 1][y] == 0 && working[x][y + 1] == 0) { render[x][y] = 2; }
                     else {
-                        if (working[x - 1][y] == 0) { shaded[x - 1][y] = render[x - 1][y] = 2; } else if ((shaded[x][y] & 7) > (w & 7) && depths[x - 1][y] < d - 10 + (x & 1)) { shaded[x][y] = render[x][y] = w; }
-                        if (working[x + 1][y] == 0) { shaded[x + 1][y] = render[x + 1][y] = 2; } else if ((shaded[x][y] & 7) > (w & 7) && depths[x + 1][y] < d - 10 + (x & 1)) { shaded[x][y] = render[x][y] = w; }
-                        if (working[x][y - 1] == 0) { shaded[x][y - 1] = render[x][y - 1] = 2; } else if ((shaded[x][y] & 7) > (w & 7) && depths[x][y - 1] < d - 4) { shaded[x][y] = render[x][y] = w; }
-                        if (working[x][y + 1] == 0) { shaded[x][y + 1] = render[x][y + 1] = 2; } else if ((shaded[x][y] & 7) > (w & 7) && depths[x][y + 1] < d - 4) { shaded[x][y] = render[x][y] = w; }
+                        if (working[x - 1][y] == 0) { render[x - 1][y] = 2; } else if ((working[x][y]) > (w) && depths[x - 1][y] < d - 5) { render[x][y] = w; }
+                        if (working[x + 1][y] == 0) { render[x + 1][y] = 2; } else if ((working[x][y]) > (w) && depths[x + 1][y] < d - 5) { render[x][y] = w; }
+                        if (working[x][y - 1] == 0) { render[x][y - 1] = 2; } else if ((working[x][y]) > (w) && depths[x][y - 1] < d - 5) { render[x][y] = w; }
+                        if (working[x][y + 1] == 0) { render[x][y + 1] = 2; } else if ((working[x][y]) > (w) && depths[x][y + 1] < d - 5) { render[x][y] = w; }
                     }
                 }
             }
         }
+
+//        for (int x = 1; x < 51; x++) {
+//            for (int y = 1; y < 63; y++) {
+//                if((w = working[x][y] - 1) > 3) {
+//                    d = depths[x][y];
+//                    if (working[x - 1][y] == 0 && working[x][y - 1] == 0)      { render[x][y] = 2; }
+//                    else if (working[x + 1][y] == 0 && working[x][y - 1] == 0) { render[x][y] = 2; }
+//                    else if (working[x - 1][y] == 0 && working[x][y + 1] == 0) { render[x][y] = 2; }
+//                    else if (working[x + 1][y] == 0 && working[x][y + 1] == 0) { render[x][y] = 2; }
+//                    else {
+//                        if (working[x - 1][y] == 0) { render[x - 1][y] = 2; } else if ((working[x - 1][y]) > (w) && depths[x - 1][y] < d - 5) { render[x - 1][y] = w; }
+//                        if (working[x + 1][y] == 0) { render[x + 1][y] = 2; } else if ((working[x + 1][y]) > (w) && depths[x + 1][y] < d - 5) { render[x + 1][y] = w; }
+//                        if (working[x][y - 1] == 0) { render[x][y - 1] = 2; } else if ((working[x][y - 1]) > (w) && depths[x][y - 1] < d - 5) { render[x][y - 1] = w; }
+//                        if (working[x][y + 1] == 0) { render[x][y + 1] = 2; } else if ((working[x][y + 1]) > (w) && depths[x][y + 1] < d - 5) { render[x][y + 1] = w; }
+//                    }
+//                }
+//            }
+//        }
+
+
+
+//        for (int x = 1; x < 51; x++) {
+//            for (int y = 1; y < 63; y++) {
+//                if((w = working[x][y] - 1) > 3) {
+//                    d = depths[x][y];
+//                    if (working[x - 1][y] == 0 && working[x][y - 1] == 0)      { shaded[x][y] = render[x][y] = 2; }
+//                    else if (working[x + 1][y] == 0 && working[x][y - 1] == 0) { shaded[x][y] = render[x][y] = 2; }
+//                    else if (working[x - 1][y] == 0 && working[x][y + 1] == 0) { shaded[x][y] = render[x][y] = 2; }
+//                    else if (working[x + 1][y] == 0 && working[x][y + 1] == 0) { shaded[x][y] = render[x][y] = 2; }
+//                    else {
+//                        if (working[x - 1][y] == 0) { shaded[x - 1][y] = render[x - 1][y] = 2; } else if ((shaded[x - 1][y] & 7) > (w & 7) && depths[x - 1][y] < d - 9 + (x & 1)) { shaded[x - 1][y] = render[x - 1][y] = w; }
+//                        if (working[x + 1][y] == 0) { shaded[x + 1][y] = render[x + 1][y] = 2; } else if ((shaded[x + 1][y] & 7) > (w & 7) && depths[x + 1][y] < d - 9 + (x & 1)) { shaded[x + 1][y] = render[x + 1][y] = w; }
+//                        if (working[x][y - 1] == 0) { shaded[x][y - 1] = render[x][y - 1] = 2; } else if ((shaded[x][y - 1] & 7) > (w & 7) && depths[x][y - 1] < d - 4)           { shaded[x][y - 1] = render[x][y - 1] = w; }
+//                        if (working[x][y + 1] == 0) { shaded[x][y + 1] = render[x][y + 1] = 2; } else if ((shaded[x][y + 1] & 7) > (w & 7) && depths[x][y + 1] < d - 4)           { shaded[x][y + 1] = render[x][y + 1] = w; }
+//                    }
+//                }
+//            }
+//        }
+
+
 //        for (int x = 1; x < 59; x++) {
 //            for (int y = 1; y < 67; y++) {
 //                if((w = working[x][y] - 1) > 3) {
@@ -474,6 +533,27 @@ public class ModelRenderer {
                     out[xx + 1][yy] = (ne > 0) ? nw + ne >> 1 : nw;
                     out[xx][yy + 1] = (sw > 0) ? nw + sw >> 1 : nw;
                     out[xx + 1][yy + 1] = (se > 0) ? nw + se >> 1 : nw - 4;
+                }
+            }
+        }
+        return out;
+    }
+
+    public int[][] easeSquares0(int[][] original){
+        int xSize = original.length - 1, ySize = original[0].length - 1;
+        int[][] out = ArrayTools.copy(original);
+        int a, b, c, d;
+        for (int x = 0; x < xSize; x++) {
+            for (int y = 0; y < ySize; y++) {
+                a = original[x][y];
+                b = original[x + 1][y];
+                c = original[x][y + 1];
+                d = original[x + 1][y + 1];
+                if (a > 2 && b > 2 && c > 2 && d > 2) {
+                    if (a == b && b == c /* && d > c */) out[x + 1][y + 1] = c;
+                    else if (a == b && b == d /* && c > d */) out[x][y + 1] = d;
+                    else if (a == c && c == d /* && b > d */) out[x + 1][y] = d;
+                    else if (b == c && c == d /* && a > d */) out[x][y] = d;
                 }
             }
         }
