@@ -25,7 +25,7 @@ public class TestOutput extends ApplicationAdapter {
     private byte[][][] voxels;
     private byte[][][][] animatedVoxels;
     private int dir = 1;
-    private final int width = 52, height = 64, frames = 1;
+    private final int width = 24, height = 32, frames = 1;
     private Pixmap[] pixes = new Pixmap[frames];
     private String pathName, modelName;
     StatefulRNG srng = new StatefulRNG(initialSeed);
@@ -41,8 +41,8 @@ public class TestOutput extends ApplicationAdapter {
         pathName = "target/out/" + StringKit.hex(seed);
         Gdx.files.local(pathName).mkdirs();
         FakeLanguageGen language = FakeLanguageGen.randomLanguage(initialSeed).removeAccents();
-        UnorderedSet<String> names = new UnorderedSet<>(100);
-        for (int i = 0; i < 100; i++) {
+        UnorderedSet<String> names = new UnorderedSet<>(1000);
+        for (int i = 0; i < 1000; i++) {
             dir = 0;
             modelName = language.word(srng, true);
             while (names.contains(modelName))
@@ -50,7 +50,7 @@ public class TestOutput extends ApplicationAdapter {
             names.add(modelName);
             Gdx.files.local(pathName + "/" + modelName).mkdirs();
             remakeModel(seed++);
-            for (dir = 1; dir < 8; dir++) {
+            for (dir = 1; dir < 4; dir++) {
                 remakeModel(0);
             }
         }
@@ -67,7 +67,8 @@ public class TestOutput extends ApplicationAdapter {
             pix = pixes[f];
             pix.setColor(0);
             pix.fill();
-            int[][] indices = dir >= 4 ? mr.renderIso(animatedVoxels[f], dir) : mr.renderOrtho(animatedVoxels[f], dir);
+            int[][] indices = mr.renderIso24x32(animatedVoxels[f], dir);
+                    //dir >= 4 ? mr.renderIso24x32(animatedVoxels[f], dir) : mr.renderOrtho(animatedVoxels[f], dir);
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
