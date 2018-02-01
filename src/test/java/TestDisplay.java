@@ -32,7 +32,7 @@ public class TestDisplay extends ApplicationAdapter {
     private ModelRenderer mr = new ModelRenderer();
     private byte[][][] voxels;
     private byte[][][][] animatedVoxels;
-    private int dir = 1;
+    private int dir = 1, counter = 0;
     private final int width = 52, height = 64, frames = 8;
     private Pixmap[] pixes = new Pixmap[frames];
     private int[] palette = Coloring.ALT_PALETTE;
@@ -215,7 +215,16 @@ public class TestDisplay extends ApplicationAdapter {
 
     @Override
     public void render() {
-        tex.draw(pixes[(int) ((System.currentTimeMillis() >> 7) % frames)], 0, 0);
+        int time = ++counter % frames, tempDir;
+        if(time == 0)
+        {
+            ++dir;
+            tempDir = (dir &= 7);
+            dir = (dir << 2 & 4) | ((dir >> 1) + (dir & 1) & 3);
+            remakeShip(0);
+            dir = tempDir;
+        }
+        tex.draw(pixes[time], 0, 0);
 
         // standard clear the background routine for libGDX
         Gdx.gl.glClearColor(0.7f, 0.99f, 0.6f, 1.0f);
@@ -237,8 +246,10 @@ public class TestDisplay extends ApplicationAdapter {
     public static void main(String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "Display Test";
-        config.width = 1200;
+        config.width = 1000;
         config.height = 600;
+        config.foregroundFPS = 10;
+        config.backgroundFPS = 10;
         new LwjglApplication(new TestDisplay(), config);
     }
 }
