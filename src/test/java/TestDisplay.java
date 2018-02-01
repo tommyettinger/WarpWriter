@@ -33,6 +33,7 @@ public class TestDisplay extends ApplicationAdapter {
     private byte[][][] voxels;
     private byte[][][][] animatedVoxels;
     private int dir = 1, counter = 0;
+    private boolean playing = true, tiny = false;
     private final int width = 52, height = 64, frames = 8;
     private Pixmap[] pixes = new Pixmap[frames];
     private int[] palette = Coloring.ALT_PALETTE;
@@ -57,6 +58,12 @@ public class TestDisplay extends ApplicationAdapter {
                         return true;
                     case Input.Keys.COMMA:
                         remakeFull(++seed);
+                        return true;
+                    case Input.Keys.P:
+                        playing = !playing;
+                        return true;
+                    case Input.Keys.T:
+                        tiny = !tiny;
                         return true;
                     case Input.Keys.SPACE:
                         remakeShip(++seed);
@@ -166,7 +173,7 @@ public class TestDisplay extends ApplicationAdapter {
             pix = pixes[f];
             pix.setColor(0);
             pix.fill();
-            int[][] indices = dir >= 4 ? mr.renderIso(animatedVoxels[f], dir) : mr.renderOrtho(animatedVoxels[f], dir);
+            int[][] indices = tiny ? mr.renderIso24x32(animatedVoxels[f], dir) : dir >= 4 ? mr.renderIso(animatedVoxels[f], dir) : mr.renderOrtho(animatedVoxels[f], dir);
             for (int x = 0; x < indices.length; x++) {
                 for (int y = 0; y < indices[0].length; y++) {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
@@ -185,7 +192,7 @@ public class TestDisplay extends ApplicationAdapter {
             pix = pixes[f];
             pix.setColor(0);
             pix.fill();
-            int[][] indices = dir >= 4 ? mr.renderIso(animatedVoxels[f], dir) : mr.renderOrtho(animatedVoxels[f], dir);
+            int[][] indices = tiny ? mr.renderIso24x32(animatedVoxels[f], dir) : dir >= 4 ? mr.renderIso(animatedVoxels[f], dir) : mr.renderOrtho(animatedVoxels[f], dir);
             for (int x = 0; x < indices.length; x++) {
                 for (int y = 0; y < indices[0].length; y++) {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
@@ -204,7 +211,7 @@ public class TestDisplay extends ApplicationAdapter {
             pix = pixes[f];
             pix.setColor(0);
             pix.fill();
-            int[][] indices = dir >= 4 ? mr.renderIso(animatedVoxels[f], dir) : mr.renderOrtho(animatedVoxels[f], dir);
+            int[][] indices = tiny ? mr.renderIso24x32(animatedVoxels[f], dir) : dir >= 4 ? mr.renderIso(animatedVoxels[f], dir) : mr.renderOrtho(animatedVoxels[f], dir);
             for (int x = 0; x < indices.length; x++) {
                 for (int y = 0; y < indices[0].length; y++) {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
@@ -215,7 +222,7 @@ public class TestDisplay extends ApplicationAdapter {
 
     @Override
     public void render() {
-        int time = ++counter % frames, tempDir;
+        int time = (playing ? ++counter : counter) % (frames << (tiny ? 0 : 1)), tempDir;
         if(time == 0)
         {
             ++dir;
@@ -224,12 +231,11 @@ public class TestDisplay extends ApplicationAdapter {
             remakeShip(0);
             dir = tempDir;
         }
-        tex.draw(pixes[time], 0, 0);
+        tex.draw(pixes[time % frames], 0, 0);
 
         // standard clear the background routine for libGDX
         Gdx.gl.glClearColor(0.7f, 0.99f, 0.6f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         batch.begin();
         batch.draw(tex, width >> 1, 250 - (width >> 1), width, height);
         batch.draw(tex, width * 5 >> 1, 250 - (width), width << 1, height << 1);

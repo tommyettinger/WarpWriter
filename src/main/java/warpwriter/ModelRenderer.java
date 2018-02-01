@@ -214,11 +214,11 @@ public class ModelRenderer {
                                 for (int sx = 0; sx < 3; sx++) {
                                     for (int sy = 0; sy < 3; sy++) {
                                         working[px+sx][py+sy] = 8;
-                                        depths[px+sx][py+sy] = b * 5 - c * 2;// + sy;
+                                        depths[px+sx][py+sy] = 256 + b * 5 - c * 2;// + sy;
                                     }
                                     for (int sy = 3; sy < 5; sy++) {
                                         working[px+sx][py+sy] = 8;
-                                        depths[px+sx][py+sy] = b * 5 - c * 2;// + sy;
+                                        depths[px+sx][py+sy] = 255 + b * 5 - c * 2;// + sy;
                                     }
                                 }
                                 working[px][py] = 14;
@@ -233,11 +233,11 @@ public class ModelRenderer {
                                 for (int sx = 0; sx < 3; sx++) {
                                     for (int sy = 0; sy < 3; sy++) {
                                         working[px+sx][py+sy] = current + 2;
-                                        depths[px+sx][py+sy] = b * 5 - c * 2;// + sy;
+                                        depths[px+sx][py+sy] = 256 + b * 5 - c * 2;// + sy;
                                     }
                                     for (int sy = 3; sy < 5; sy++) {
                                         working[px+sx][py+sy] = current + 1;
-                                        depths[px+sx][py+sy] = b * 5 - c * 2;// + sy;
+                                        depths[px+sx][py+sy] = 255 + b * 5 - c * 2;// + sy;
                                     }
                                 }
                             }
@@ -271,11 +271,11 @@ public class ModelRenderer {
                                 for (int sx = 0; sx < 3; sx++) {
                                     for (int sy = 0; sy < 3; sy++) {
                                         working[px+sx][py+sy] = 8;
-                                        depths[px+sx][py+sy] = b * 5 - a * 2;// + sy;
+                                        depths[px+sx][py+sy] = 256 + b * 5 - a * 2;// + sy;
                                     }
                                     for (int sy = 3; sy < 5; sy++) {
                                         working[px+sx][py+sy] = 8;
-                                        depths[px+sx][py+sy] = b * 5 - a * 2;// + sy;
+                                        depths[px+sx][py+sy] = 255 + b * 5 - a * 2;// + sy;
                                     }
                                 }
                                 working[px][py] = 14;
@@ -290,11 +290,11 @@ public class ModelRenderer {
                                 for (int sx = 0; sx < 3; sx++) {
                                     for (int sy = 0; sy < 3; sy++) {
                                         working[px+sx][py+sy] = current + 2;
-                                        depths[px+sx][py+sy] = b * 5 - a * 2;// + sy;
+                                        depths[px+sx][py+sy] = 256 + b * 5 - a * 2;// + sy;
                                     }
                                     for (int sy = 3; sy < 5; sy++) {
                                         working[px+sx][py+sy] = current + 1;
-                                        depths[px+sx][py+sy] = b * 5 - a * 2;// + sy;
+                                        depths[px+sx][py+sy] = 255 + b * 5 - a * 2;// + sy;
                                     }
                                 }
                             }
@@ -303,27 +303,46 @@ public class ModelRenderer {
                 }
             }
         }
-        working = easeSquares(working);
+        //working = easeSquares(working);
         int d, w;
+//        render = ArrayTools.copy(working);
+//        int[][] shaded = ArrayTools.fill(256, 52, 64);
+//        for (int x = 1; x < 51; x++) {
+//            for (int y = 1; y < 63; y++) {
+//                if((w = working[x][y] - 1) > 3) {
+//                    d = depths[x][y];
+//                    if (working[x - 1][y] == 0 && working[x][y - 1] == 0)      { shaded[x][y] = render[x][y] = 2; }
+//                    else if (working[x + 1][y] == 0 && working[x][y - 1] == 0) { shaded[x][y] = render[x][y] = 2; }
+//                    else if (working[x - 1][y] == 0 && working[x][y + 1] == 0) { shaded[x][y] = render[x][y] = 2; }
+//                    else if (working[x + 1][y] == 0 && working[x][y + 1] == 0) { shaded[x][y] = render[x][y] = 2; }
+//                    else {
+//                        if (working[x - 1][y] == 0) { shaded[x - 1][y] = render[x - 1][y] = 2; } else if ((shaded[x - 1][y] & 7) > (w & 7) && depths[x - 1][y] < d - 2) { shaded[x - 1][y] = render[x - 1][y] = w; }
+//                        if (working[x + 1][y] == 0) { shaded[x + 1][y] = render[x + 1][y] = 2; } else if ((shaded[x + 1][y] & 7) > (w & 7) && depths[x + 1][y] < d - 2) { shaded[x + 1][y] = render[x + 1][y] = w; }
+//                        if (working[x][y - 1] == 0) { shaded[x][y - 1] = render[x][y - 1] = 2; } else if ((shaded[x][y - 1] & 7) > (w & 7) && depths[x][y - 1] < d - 2) { shaded[x][y - 1] = render[x][y - 1] = w; }
+//                        if (working[x][y + 1] == 0) { shaded[x][y + 1] = render[x][y + 1] = 2; } else if ((shaded[x][y + 1] & 7) > (w & 7) && depths[x][y + 1] < d - 2) { shaded[x][y + 1] = render[x][y + 1] = w; }
+//                    }
+//                }
+//            }
+//        }
         render = ArrayTools.copy(working);
-        int[][] shaded = ArrayTools.fill(256, 52, 64);
         for (int x = 1; x < 51; x++) {
             for (int y = 1; y < 63; y++) {
                 if((w = working[x][y] - 1) > 3) {
                     d = depths[x][y];
-                    if (working[x - 1][y] == 0 && working[x][y - 1] == 0)      { shaded[x][y] = render[x][y] = 2; }
-                    else if (working[x + 1][y] == 0 && working[x][y - 1] == 0) { shaded[x][y] = render[x][y] = 2; }
-                    else if (working[x - 1][y] == 0 && working[x][y + 1] == 0) { shaded[x][y] = render[x][y] = 2; }
-                    else if (working[x + 1][y] == 0 && working[x][y + 1] == 0) { shaded[x][y] = render[x][y] = 2; }
+                    if (working[x - 1][y] == 0 && working[x][y - 1] == 0)      { render[x][y] = 0; }
+                    else if (working[x + 1][y] == 0 && working[x][y - 1] == 0) { render[x][y] = 0; }
+                    else if (working[x - 1][y] == 0 && working[x][y + 1] == 0) { render[x][y] = 0; }
+                    else if (working[x + 1][y] == 0 && working[x][y + 1] == 0) { render[x][y] = 0; }
                     else {
-                        if (working[x - 1][y] == 0) { shaded[x - 1][y] = render[x - 1][y] = 2; } else if ((shaded[x - 1][y] & 7) > (w & 7) && depths[x - 1][y] < d - 2) { shaded[x - 1][y] = render[x - 1][y] = w; }
-                        if (working[x + 1][y] == 0) { shaded[x + 1][y] = render[x + 1][y] = 2; } else if ((shaded[x + 1][y] & 7) > (w & 7) && depths[x + 1][y] < d - 2) { shaded[x + 1][y] = render[x + 1][y] = w; }
-                        if (working[x][y - 1] == 0) { shaded[x][y - 1] = render[x][y - 1] = 2; } else if ((shaded[x][y - 1] & 7) > (w & 7) && depths[x][y - 1] < d - 5) { shaded[x][y - 1] = render[x][y - 1] = w; }
-                        if (working[x][y + 1] == 0) { shaded[x][y + 1] = render[x][y + 1] = 2; } else if ((shaded[x][y + 1] & 7) > (w & 7) && depths[x][y + 1] < d - 5) { shaded[x][y + 1] = render[x][y + 1] = w; }
+                        /* if (working[x - 1][y] == 0) { render[x - 1][y] = 2; } else */ if (working[x - 1][y] == 0 || depths[x - 1][y] < d - 2) { render[x][y] = w; }
+                        /* if (working[x + 1][y] == 0) { render[x + 1][y] = 2; } else */ if (working[x + 1][y] == 0 || depths[x + 1][y] < d - 2) { render[x][y] = w; }
+                        /* if (working[x][y - 1] == 0) { render[x][y - 1] = 2; } else */ if (working[x][y - 1] == 0 || depths[x][y - 1] < d - 2) { render[x][y] = w; }
+                        /* if (working[x][y + 1] == 0) { render[x][y + 1] = 2; } else */ if (working[x][y + 1] == 0 || depths[x][y + 1] < d - 2) { render[x][y] = w; }
                     }
                 }
             }
         }
+
         return (render);
     }
 
@@ -408,27 +427,46 @@ public class ModelRenderer {
                 }
             }
         }
-        working = easeSquares(working);
+        //working = easeSquares(working);
         //working = easeSquares(size2(working));
         //working = size2(working);
         //depths = size2Mix(depths);
         //depths = size2(depths);
-        render = ArrayTools.copy(working);
+
         //int[][] shaded = ArrayTools.fill(65535, 52, 64);
+
+        render = ArrayTools.copy(working);
+//        for (int x = 1; x < 51; x++) {
+//            for (int y = 1; y < 63; y++) {
+//                if((w = working[x][y] - 1) > 3) {
+//                    d = depths[x][y];
+//                    if (working[x - 1][y] == 0 && working[x][y - 1] == 0)      { render[x][y] = 2; }
+//                    else if (working[x + 1][y] == 0 && working[x][y - 1] == 0) { render[x][y] = 2; }
+//                    else if (working[x - 1][y] == 0 && working[x][y + 1] == 0) { render[x][y] = 2; }
+//                    else if (working[x + 1][y] == 0 && working[x][y + 1] == 0) { render[x][y] = 2; }
+//                    else {
+//                        if (working[x - 1][y] == 0) { render[x - 1][y] = 2; } else if ((working[x][y] & 7) > (w & 7) && depths[x - 1][y] < d - 5) { render[x][y] = w; }
+//                        if (working[x + 1][y] == 0) { render[x + 1][y] = 2; } else if ((working[x][y] & 7) > (w & 7) && depths[x + 1][y] < d - 5) { render[x][y] = w; }
+//                        if (working[x][y - 1] == 0) { render[x][y - 1] = 2; } else if ((working[x][y] & 7) > (w & 7) && depths[x][y - 1] < d - 5) { render[x][y] = w; }
+//                        if (working[x][y + 1] == 0) { render[x][y + 1] = 2; } else if ((working[x][y] & 7) > (w & 7) && depths[x][y + 1] < d - 5) { render[x][y] = w; }
+//                    }
+//                }
+//            }
+//        }
 
         for (int x = 1; x < 51; x++) {
             for (int y = 1; y < 63; y++) {
                 if((w = working[x][y] - 1) > 3) {
                     d = depths[x][y];
-                    if (working[x - 1][y] == 0 && working[x][y - 1] == 0)      { render[x][y] = 2; }
-                    else if (working[x + 1][y] == 0 && working[x][y - 1] == 0) { render[x][y] = 2; }
-                    else if (working[x - 1][y] == 0 && working[x][y + 1] == 0) { render[x][y] = 2; }
-                    else if (working[x + 1][y] == 0 && working[x][y + 1] == 0) { render[x][y] = 2; }
+                    if (working[x - 1][y] == 0 && working[x][y - 1] == 0)      { render[x][y] = 0; }
+                    else if (working[x + 1][y] == 0 && working[x][y - 1] == 0) { render[x][y] = 0; }
+                    else if (working[x - 1][y] == 0 && working[x][y + 1] == 0) { render[x][y] = 0; }
+                    else if (working[x + 1][y] == 0 && working[x][y + 1] == 0) { render[x][y] = 0; }
                     else {
-                        if (working[x - 1][y] == 0) { render[x - 1][y] = 2; } else if ((working[x][y] & 7) > (w & 7) && depths[x - 1][y] < d - 5) { render[x][y] = w; }
-                        if (working[x + 1][y] == 0) { render[x + 1][y] = 2; } else if ((working[x][y] & 7) > (w & 7) && depths[x + 1][y] < d - 5) { render[x][y] = w; }
-                        if (working[x][y - 1] == 0) { render[x][y - 1] = 2; } else if ((working[x][y] & 7) > (w & 7) && depths[x][y - 1] < d - 5) { render[x][y] = w; }
-                        if (working[x][y + 1] == 0) { render[x][y + 1] = 2; } else if ((working[x][y] & 7) > (w & 7) && depths[x][y + 1] < d - 5) { render[x][y] = w; }
+                        /* if (working[x - 1][y] == 0) { render[x - 1][y] = 2; } else */ if (working[x - 1][y] == 0 || depths[x - 1][y] < d - 5) { render[x][y] = w; }
+                        /* if (working[x + 1][y] == 0) { render[x + 1][y] = 2; } else */ if (working[x + 1][y] == 0 || depths[x + 1][y] < d - 5) { render[x][y] = w; }
+                        /* if (working[x][y - 1] == 0) { render[x][y - 1] = 2; } else */ if (working[x][y - 1] == 0 || depths[x][y - 1] < d - 5) { render[x][y] = w; }
+                        /* if (working[x][y + 1] == 0) { render[x][y + 1] = 2; } else */ if (working[x][y + 1] == 0 || depths[x][y + 1] < d - 5) { render[x][y] = w; }
                     }
                 }
             }
@@ -495,7 +533,7 @@ public class ModelRenderer {
 //            }
 //        }
 
-        return render;
+        return easeSquares(render);
     }
 
     /**
@@ -593,7 +631,7 @@ public class ModelRenderer {
 
         for (int x = 2, rx = 0; x < 50 && rx < 24; x += 2, rx++) {
             for (int y = 2, ry=1; y < 64 && ry < 32; y += 2, ry++) {
-                if((w = working[x][y] - 2) > 3) {
+                if((w = working[x][y] - 1) > 3) {
                     d = depths[x][y];
                     //if (working[x - 1][y] == 0 && working[x][y - 1] == 0)      { render[rx][ry] = 2; }
                     //else if (working[x + 1][y] == 0 && working[x][y - 1] == 0) { render[rx][ry] = 2; }
@@ -765,7 +803,6 @@ public class ModelRenderer {
                         bestIdx = i;
                         bestCount = counts[i];
                     }
-
                 }
                 if((colors[bestIdx] & 7) > (out[x][y] & 7))
                     out[x][y] = colors[bestIdx];
