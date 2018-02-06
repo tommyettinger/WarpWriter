@@ -33,7 +33,7 @@ public class TestDisplay extends ApplicationAdapter {
     private byte[][][] voxels;
     private byte[][][][] animatedVoxels;
     private int dir = 1, counter = 0;
-    private boolean playing = true, tiny = false;
+    private boolean playing = true, tiny = false, below = false;
     private final int width = 52, height = 64, frames = 8;
     private Pixmap[] pixes = new Pixmap[frames];
     private int[] palette = Coloring.ALT_PALETTE;
@@ -65,43 +65,54 @@ public class TestDisplay extends ApplicationAdapter {
                     case Input.Keys.T:
                         tiny = !tiny;
                         return true;
+                    case Input.Keys.B:
+                        below = !below;
+                        return true;
                     case Input.Keys.SPACE:
                         remakeShip(++seed);
                         return true;
                     case Input.Keys.UP:
                     case Input.Keys.NUMPAD_8:
+                    case Input.Keys.NUM_8:
                         dir = 2;
                         remakeShip(0);
                         return true;
                     case Input.Keys.NUMPAD_6:
+                    case Input.Keys.NUM_6:
                     case Input.Keys.RIGHT:
                         dir = 3;
                         remakeShip(0);
                         return true;
                     case Input.Keys.NUMPAD_2:
+                    case Input.Keys.NUM_2:
                     case Input.Keys.DOWN:
                         dir = 0;
                         remakeShip(0);
                         return true;
                     case Input.Keys.NUMPAD_4:
+                    case Input.Keys.NUM_4:
                     case Input.Keys.LEFT:
                         dir = 1;
                         remakeShip(0);
                         return true;
 
                     case Input.Keys.NUMPAD_7:
+                    case Input.Keys.NUM_7:
                         dir = 6;
                         remakeShip(0);
                         return true;
                     case Input.Keys.NUMPAD_9:
+                    case Input.Keys.NUM_9:
                         dir = 7;
                         remakeShip(0);
                         return true;
                     case Input.Keys.NUMPAD_3:
+                    case Input.Keys.NUM_3:
                         dir = 4;
                         remakeShip(0);
                         return true;
                     case Input.Keys.NUMPAD_1:
+                    case Input.Keys.NUM_1:
                         dir = 5;
                         remakeShip(0);
                         return true;
@@ -109,43 +120,6 @@ public class TestDisplay extends ApplicationAdapter {
                     case Input.Keys.F:
                         remakeFish(++seed);
                         return true;
-                    case Input.Keys.W:
-                    case Input.Keys.K:
-                        dir = 2;
-                        remakeFish(0);
-                        return true;
-                    case Input.Keys.A:
-                    case Input.Keys.H:
-                        dir = 1;
-                        remakeFish(0);
-                        return true;
-                    case Input.Keys.S:
-                    case Input.Keys.J:
-                        dir = 0;
-                        remakeFish(0);
-                        return true;
-                    case Input.Keys.D:
-                    case Input.Keys.L:
-                        dir = 3;
-                        remakeFish(0);
-                        return true;
-                    case Input.Keys.Y:
-                        dir = 6;
-                        remakeFish(0);
-                        return true;
-                    case Input.Keys.U:
-                        dir = 7;
-                        remakeFish(0);
-                        return true;
-                    case Input.Keys.N:
-                        dir = 4;
-                        remakeFish(0);
-                        return true;
-                    case Input.Keys.B:
-                        dir = 5;
-                        remakeFish(0);
-                        return true;
-
                     case Input.Keys.O: // output
                         name = FakeLanguageGen.SIMPLISH.word(true);
                         VoxIO.writeVOX(name + ".vox", voxels, palette);
@@ -154,10 +128,11 @@ public class TestDisplay extends ApplicationAdapter {
 //                            VoxIO.writeVOX(name + "_" + f + ".vox", animatedVoxels[f], palette);
 //                        }
                         return true;
-                    default:
+                    case Input.Keys.PERIOD:
                         seed += ThrustAltRNG.determine(keycode);
                         return true;
                 }
+                return true;
             }
         };
         Gdx.input.setInputProcessor(input);
@@ -173,7 +148,15 @@ public class TestDisplay extends ApplicationAdapter {
             pix = pixes[f];
             pix.setColor(0);
             pix.fill();
-            int[][] indices = tiny ? mr.renderIso24x32(animatedVoxels[f], dir) : dir >= 4 ? mr.renderIso(animatedVoxels[f], dir) : mr.renderOrtho(animatedVoxels[f], dir);
+            int[][] indices = tiny
+                    ? mr.renderIso24x32(animatedVoxels[f], dir)
+                    : dir >= 4
+                    ? below
+                    ? mr.renderIsoBelow(animatedVoxels[f], dir)
+                    : mr.renderIso(animatedVoxels[f], dir)
+                    : below
+                    ? mr.renderOrthoBelow(animatedVoxels[f], dir)
+                    : mr.renderOrtho(animatedVoxels[f], dir);
             for (int x = 0; x < indices.length; x++) {
                 for (int y = 0; y < indices[0].length; y++) {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
@@ -192,7 +175,15 @@ public class TestDisplay extends ApplicationAdapter {
             pix = pixes[f];
             pix.setColor(0);
             pix.fill();
-            int[][] indices = tiny ? mr.renderIso24x32(animatedVoxels[f], dir) : dir >= 4 ? mr.renderIso(animatedVoxels[f], dir) : mr.renderOrtho(animatedVoxels[f], dir);
+            int[][] indices = tiny
+                    ? mr.renderIso24x32(animatedVoxels[f], dir)
+                    : dir >= 4
+                    ? below
+                    ? mr.renderIsoBelow(animatedVoxels[f], dir)
+                    : mr.renderIso(animatedVoxels[f], dir)
+                    : below
+                    ? mr.renderOrthoBelow(animatedVoxels[f], dir)
+                    : mr.renderOrtho(animatedVoxels[f], dir);
             for (int x = 0; x < indices.length; x++) {
                 for (int y = 0; y < indices[0].length; y++) {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
@@ -211,7 +202,15 @@ public class TestDisplay extends ApplicationAdapter {
             pix = pixes[f];
             pix.setColor(0);
             pix.fill();
-            int[][] indices = tiny ? mr.renderIso24x32(animatedVoxels[f], dir) : dir >= 4 ? mr.renderIso(animatedVoxels[f], dir) : mr.renderOrtho(animatedVoxels[f], dir);
+            int[][] indices = tiny
+                    ? mr.renderIso24x32(animatedVoxels[f], dir)
+                    : dir >= 4
+                    ? below
+                    ? mr.renderIsoBelow(animatedVoxels[f], dir)
+                    : mr.renderIso(animatedVoxels[f], dir)
+                    : below
+                    ? mr.renderOrthoBelow(animatedVoxels[f], dir)
+                    : mr.renderOrtho(animatedVoxels[f], dir);
             for (int x = 0; x < indices.length; x++) {
                 for (int y = 0; y < indices[0].length; y++) {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
