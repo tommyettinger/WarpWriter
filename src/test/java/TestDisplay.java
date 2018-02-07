@@ -33,7 +33,13 @@ public class TestDisplay extends ApplicationAdapter {
     private byte[][][] voxels;
     private byte[][][][] animatedVoxels;
     private int dir = 1, counter = 0;
-    private boolean playing = true, tiny = false, below = false;
+    /**
+     * The height of the viewing angle, with 0 being directly below (bottom), 1 being at a 45 degree angle from below
+     * (below), 2 being at the same height (side), 3 being a sorta-isometric view at a 45 degree angle from above (this
+     * is the default and usually isn't mentioned in names), and 4 being directly above (top).
+     */
+    private int angle = 3;
+    private boolean playing = true, tiny = false;
     private final int width = 52, height = 64, frames = 8;
     private Pixmap[] pixes = new Pixmap[frames];
     private int[] palette = Coloring.ALT_PALETTE;
@@ -65,8 +71,17 @@ public class TestDisplay extends ApplicationAdapter {
                     case Input.Keys.T:
                         tiny = !tiny;
                         return true;
-                    case Input.Keys.B:
-                        below = !below;
+                    case Input.Keys.B: // below
+                        angle = 1;
+                        return true;
+                    case Input.Keys.S: // side
+                        angle = 2;
+                        return true;
+                    case Input.Keys.A: // above
+                        angle = 3;
+                        return true;
+                    case Input.Keys.H: // height cycling
+                        angle = (angle % 3) + 1;
                         return true;
                     case Input.Keys.SPACE:
                         remakeShip(++seed);
@@ -148,15 +163,23 @@ public class TestDisplay extends ApplicationAdapter {
             pix = pixes[f];
             pix.setColor(0);
             pix.fill();
-            int[][] indices = tiny
-                    ? mr.renderIso24x32(animatedVoxels[f], dir)
-                    : dir >= 4
-                    ? below
-                    ? mr.renderIsoBelow(animatedVoxels[f], dir)
-                    : mr.renderIso(animatedVoxels[f], dir)
-                    : below
-                    ? mr.renderOrthoBelow(animatedVoxels[f], dir)
-                    : mr.renderOrtho(animatedVoxels[f], dir);
+            int[][] indices;
+            if(tiny) indices = mr.renderIso24x32(animatedVoxels[f], dir);
+            else
+            {
+                switch (angle)
+                {
+                    case 1: if(dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
+                    else indices = mr.renderOrthoBelow(animatedVoxels[f], dir);
+                        break;
+                    case 2: if(dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
+                    else indices = mr.renderOrthoSide(animatedVoxels[f], dir);
+                        break;
+                    default: if(dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
+                    else indices = mr.renderOrtho(animatedVoxels[f], dir);
+                        break;
+                }
+            }
             for (int x = 0; x < indices.length; x++) {
                 for (int y = 0; y < indices[0].length; y++) {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
@@ -175,15 +198,23 @@ public class TestDisplay extends ApplicationAdapter {
             pix = pixes[f];
             pix.setColor(0);
             pix.fill();
-            int[][] indices = tiny
-                    ? mr.renderIso24x32(animatedVoxels[f], dir)
-                    : dir >= 4
-                    ? below
-                    ? mr.renderIsoBelow(animatedVoxels[f], dir)
-                    : mr.renderIso(animatedVoxels[f], dir)
-                    : below
-                    ? mr.renderOrthoBelow(animatedVoxels[f], dir)
-                    : mr.renderOrtho(animatedVoxels[f], dir);
+            int[][] indices;
+            if(tiny) indices = mr.renderIso24x32(animatedVoxels[f], dir);
+            else
+            {
+                switch (angle)
+                {
+                    case 1: if(dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
+                    else indices = mr.renderOrthoBelow(animatedVoxels[f], dir);
+                        break;
+                    case 2: if(dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
+                    else indices = mr.renderOrthoSide(animatedVoxels[f], dir);
+                        break;
+                    default: if(dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
+                    else indices = mr.renderOrtho(animatedVoxels[f], dir);
+                        break;
+                }
+            }
             for (int x = 0; x < indices.length; x++) {
                 for (int y = 0; y < indices[0].length; y++) {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
@@ -202,15 +233,23 @@ public class TestDisplay extends ApplicationAdapter {
             pix = pixes[f];
             pix.setColor(0);
             pix.fill();
-            int[][] indices = tiny
-                    ? mr.renderIso24x32(animatedVoxels[f], dir)
-                    : dir >= 4
-                    ? below
-                    ? mr.renderIsoBelow(animatedVoxels[f], dir)
-                    : mr.renderIso(animatedVoxels[f], dir)
-                    : below
-                    ? mr.renderOrthoBelow(animatedVoxels[f], dir)
-                    : mr.renderOrtho(animatedVoxels[f], dir);
+            int[][] indices;
+            if(tiny) indices = mr.renderIso24x32(animatedVoxels[f], dir);
+            else
+            {
+                switch (angle)
+                {
+                    case 1: if(dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
+                    else indices = mr.renderOrthoBelow(animatedVoxels[f], dir);
+                        break;
+                    case 2: if(dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
+                    else indices = mr.renderOrthoSide(animatedVoxels[f], dir);
+                        break;
+                    default: if(dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
+                    else indices = mr.renderOrtho(animatedVoxels[f], dir);
+                        break;
+                }
+            }
             for (int x = 0; x < indices.length; x++) {
                 for (int y = 0; y < indices[0].length; y++) {
                     pix.drawPixel(x, y, palette[indices[x][y]]);

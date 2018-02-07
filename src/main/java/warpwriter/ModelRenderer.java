@@ -3,7 +3,10 @@ package warpwriter;
 import squidpony.ArrayTools;
 
 import java.util.Arrays;
-
+/*
+ TODO: Rotations 0 and 1 are transposed versions of each other, not rotations. Same for 2 and 3.
+ This is noticeable only on models that aren't symmetrical.
+  */
 /**
  * Created by Tommy Ettinger on 11/4/2017.
  */
@@ -324,7 +327,7 @@ public class ModelRenderer {
             }
         }
 
-        return (render);
+        return easeSquares(render);
     }
 
 
@@ -363,7 +366,7 @@ public class ModelRenderer {
                                     if (working[px + ix][py + iy] == 0)
                                     {
                                         working[px + ix][py + iy] = 3;
-                                        depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 0 for left and right edges of a voxel, or 1 for middle pixels of a voxel
+                                        depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 1 only on the right edge of a voxel
                                     }
                                 }
                             }
@@ -373,12 +376,12 @@ public class ModelRenderer {
                                     if (ix < 2 && iy < 2)
                                     {
                                         working[px + ix][py + iy] = 14;
-                                        depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 0 for left and right edges of a voxel, or 1 for middle pixels of a voxel
+                                        depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 1 only on the right edge of a voxel
                                     }
                                     else
                                     {
                                         working[px + ix][py + iy] = 8;
-                                        depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 0 for left and right edges of a voxel, or 1 for middle pixels of a voxel
+                                        depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 1 only on the right edge of a voxel
                                     }
                                 }
                             }
@@ -386,19 +389,19 @@ public class ModelRenderer {
                             for (int ix = 0; ix < 4; ix++) {
                                 for (int iy = 0; iy < 2; iy++) {
                                     working[px + ix][py + iy] = current + 2;
-                                    depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 0 for left and right edges of a voxel, or 1 for middle pixels of a voxel
+                                    depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 1 only on the right edge of a voxel
                                 }
                             }
                             for (int ix = 0; ix < 2; ix++) {
                                 for (int iy = 2; iy < 4; iy++) {
                                     working[px + ix][py + iy] = current + 1;
-                                    depths[px + ix][py + iy] = d + ix; // adds 0 for left and right edges of a voxel, or 1 for middle pixels of a voxel
+                                    depths[px + ix][py + iy] = d + ix; // adds 1 only on the right edge of a voxel
                                 }
                             }
                             for (int ix = 2; ix < 4; ix++) {
                                 for (int iy = 2; iy < 4; iy++) {
                                     working[px + ix][py + iy] = current;
-                                    depths[px + ix][py + iy] = d - ix + 3; // adds 0 for left and right edges of a voxel, or 1 for middle pixels of a voxel
+                                    depths[px + ix][py + iy] = d - ix + 3; // adds 1 only on the right edge of a voxel
                                 }
                             }
                         }
@@ -485,7 +488,7 @@ public class ModelRenderer {
                                     if (working[px + ix][py + iy] == 0)
                                     {
                                         working[px + ix][py + iy] = 3;
-                                        depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 0 for left and right edges of a voxel, or 1 for middle pixels of a voxel
+                                        depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 1 only on the right edge of a voxel
                                     }
                                 }
                             }
@@ -495,12 +498,12 @@ public class ModelRenderer {
                                     if (ix < 2 && iy < 2)
                                     {
                                         working[px + ix][py + iy] = 14;
-                                        depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 0 for left and right edges of a voxel, or 1 for middle pixels of a voxel
+                                        depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 1 only on the right edge of a voxel
                                     }
                                     else
                                     {
                                         working[px + ix][py + iy] = 8;
-                                        depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 0 for left and right edges of a voxel, or 1 for middle pixels of a voxel
+                                        depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 1 only on the right edge of a voxel
                                     }
                                 }
                             }
@@ -508,19 +511,19 @@ public class ModelRenderer {
                             for (int ix = 0; ix < 4; ix++) {
                                 for (int iy = 0; iy < 2; iy++) {
                                     working[px + ix][py + iy] = current + 2;
-                                    depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 0 for left and right edges of a voxel, or 1 for middle pixels of a voxel
+                                    depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 1 only on the right edge of a voxel
                                 }
                             }
                             for (int ix = 0; ix < 2; ix++) {
                                 for (int iy = 2; iy < 4; iy++) {
                                     working[px + ix][py + iy] = current + 1;
-                                    depths[px + ix][py + iy] = d + ix; // adds 0 for left and right edges of a voxel, or 1 for middle pixels of a voxel
+                                    depths[px + ix][py + iy] = d + ix; // adds 1 only in center of voxel
                                 }
                             }
                             for (int ix = 2; ix < 4; ix++) {
                                 for (int iy = 2; iy < 4; iy++) {
                                     working[px + ix][py + iy] = current;
-                                    depths[px + ix][py + iy] = d - ix + 3; // adds 0 for left and right edges of a voxel, or 1 for middle pixels of a voxel
+                                    depths[px + ix][py + iy] = d - ix + 3; // adds 1 only in center of voxel
                                 }
                             }
                         }
@@ -798,7 +801,7 @@ public class ModelRenderer {
             }
         }
 
-        return (render);
+        return easeSquares(render);
     }
 
     /**
@@ -821,7 +824,7 @@ public class ModelRenderer {
                 for (int a = ys - 1; a >= 0; a--) {
 
                     px = con.voxelToPixelX(c, a, b);
-                    py = con.voxelToPixelY(xs - 1 - c, ys - 1 - a, zs - 1 - b);
+                    py = con.voxelToPixelY(xs - 1 - c, ys - 1 - a, b);
                     if(px < 1 || py < 2) continue;
                     px = px - 1 << 1;
                     py = (py - 2 << 1) + 1;
@@ -836,7 +839,7 @@ public class ModelRenderer {
                                     if (working[px + ix][py + iy] == 0)
                                     {
                                         working[px + ix][py + iy] = 3;
-                                        depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 0 for left and right edges of a voxel, or 1 for middle pixels of a voxel
+                                        depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 1 only on the right edge of a voxel
                                     }
                                 }
                             }
@@ -846,12 +849,12 @@ public class ModelRenderer {
                                     if (ix < 2 && iy < 2)
                                     {
                                         working[px + ix][py + iy] = 14;
-                                        depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 0 for left and right edges of a voxel, or 1 for middle pixels of a voxel
+                                        depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 1 only on the right edge of a voxel
                                     }
                                     else
                                     {
                                         working[px + ix][py + iy] = 8;
-                                        depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 0 for left and right edges of a voxel, or 1 for middle pixels of a voxel
+                                        depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 1 only on the right edge of a voxel
                                     }
                                 }
                             }
@@ -859,19 +862,19 @@ public class ModelRenderer {
                             for (int ix = 0; ix < 4; ix++) {
                                 for (int iy = 2; iy < 4; iy++) {
                                     working[px + ix][py + iy] = current - 1;
-                                    depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 0 for left and right edges of a voxel, or 1 for middle pixels of a voxel
+                                    depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 1 only on the right edge of a voxel
                                 }
                             }
                             for (int ix = 0; ix < 2; ix++) {
                                 for (int iy = 0; iy < 2; iy++) {
                                     working[px + ix][py + iy] = current + 1;
-                                    depths[px + ix][py + iy] = d + ix; // adds 0 for left and right edges of a voxel, or 1 for middle pixels of a voxel
+                                    depths[px + ix][py + iy] = d + ix; // adds 1 only in center of voxel
                                 }
                             }
                             for (int ix = 2; ix < 4; ix++) {
                                 for (int iy = 0; iy < 2; iy++) {
                                     working[px + ix][py + iy] = current;
-                                    depths[px + ix][py + iy] = d - ix + 3; // adds 0 for left and right edges of a voxel, or 1 for middle pixels of a voxel
+                                    depths[px + ix][py + iy] = d - ix + 3; // adds 1 only in center of voxel
                                 }
                             }
                         }
@@ -922,6 +925,295 @@ public class ModelRenderer {
         return easeSquares(render);
     }
 
+    public int[][] renderOrthoSide(byte[][][] voxels, int direction)
+    {
+        final int xs = voxels.length, ys = voxels[0].length, zs = voxels[0][0].length;
+        Converter con = directionsOrthoSide52x64[direction &= 3];
+        int[][] working = new int[52][64], depths = new int[52][64], render;
+        int aa, cc, aStep, cStep, aMax, cMax, px, py;
+        boolean flip = true;
+        int current;
+        switch (direction)
+        {
+            case 0:
+                aa = 0;
+                aStep = 1;
+                aMax = ys;
+                cc = 0;
+                cStep = 1;
+                cMax = xs;
+                break;
+            case 1:
+//                aa = 0;
+//                aStep = 1;
+//                aMax = xs;
+                aa = xs - 1;
+                aStep = -1;
+                aMax = -1;
+                cc = ys - 1;
+                cStep = -1;
+                cMax = -1;
+                flip = false;
+                break;
+            case 2:
+                aa = ys - 1;
+                aStep = -1;
+                aMax = -1;
+                cc = xs - 1;
+                cStep = -1;
+                cMax = -1;
+                break;
+            default:
+                aa = 0;
+                aStep = 1;
+                aMax = xs;
+//                aa = xs - 1;
+//                aStep = -1;
+//                aMax = -1;
+                cc = 0;
+                cStep = 1;
+                cMax = ys;
+                flip = false;
+                break;
+        }
+        if(flip) {
+            for (int a = aa; a != aMax; a += aStep) {
+                for (int b = 0; b < zs; b++) {
+                    for (int c = cc; c != cMax; c += cStep) {
+                        px = con.voxelToPixelX(c, a, b);
+                        py = con.voxelToPixelY(c, a, b);
+                        current = voxels[c][a][b] & 255;
+                        if (current != 0) {
+                            if (current <= 2) {
+                                for (int sx = 0; sx < 3; sx++) {
+                                    for (int sy = 0; sy < 4; sy++) {
+                                        working[px+sx][py+sy] = current;
+                                    }
+                                }
+                            } else if(current == 3) {
+                                for (int sx = 0; sx < 3; sx++) {
+                                    for (int sy = 0; sy < 4; sy++) {
+                                        if(working[px+sx][py+sy] == 0) working[px+sx][py+sy] = current;
+                                    }
+                                }
+                            } else if(current == 4) {
+                                for (int sx = 0; sx < 3; sx++) {
+                                    for (int sy = 1; sy < 4; sy++) {
+                                        working[px+sx][py+sy] = 8;
+                                        depths[px+sx][py+sy] = 256 - c * 2;
+                                    }                                     
+                                    working[px+sx][py] = 8;
+                                    depths[px+sx][py] = 256 - c * 2;
+                                    
+                                }
+                                working[px][py] = 14;
+                                working[px+1][py] = 14;
+                                working[px][py+1] = 14;
+                                working[px+1][py+1] = 14;
+                            }
+                            else
+                            {
+                                for (int sx = 0; sx < 3; sx++) {
+                                    for (int sy = 1; sy < 4; sy++) {
+                                        working[px+sx][py+sy] = current + 1;
+                                        depths[px+sx][py+sy] = 256 - c * 2;
+                                    }
+                                    working[px+sx][py] = current + 2;                                     
+                                    depths[px+sx][py] = 256 - c * 2;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else  {
+            for (int a = aa; a != aMax; a += aStep) {
+                for (int b = 0; b < zs; b++) {
+                    for (int c = cc; c != cMax; c += cStep) {
+                        px = con.voxelToPixelX(a, c, b);
+                        py = con.voxelToPixelY(a, c, b);
+                        current = voxels[a][c][b] & 255;
+                        if(current != 0)
+                        {
+                            if (current <= 2) {
+                                for (int sx = 0; sx < 3; sx++) {
+                                    for (int sy = 0; sy < 4; sy++) {
+                                        working[px+sx][py+sy] = current;
+                                    }
+                                }
+                            } else if(current == 3) {
+                                for (int sx = 0; sx < 3; sx++) {
+                                    for (int sy = 0; sy < 4; sy++) {
+                                        if(working[px+sx][py+sy] == 0) working[px+sx][py+sy] = current;
+                                    }
+                                }
+                            } else if(current == 4) {
+                                for (int sx = 0; sx < 3; sx++) {
+                                    for (int sy = 1; sy < 4; sy++) {
+                                        working[px+sx][py+sy] = 8;
+                                        depths[px+sx][py+sy] = 256 - a * 2;
+                                    }
+                                    working[px+sx][py] = 8;
+                                    depths[px+sx][py] = 256 - a * 2;
+
+                                }
+                                working[px][py] = 14;
+                                working[px+1][py] = 14;
+                                working[px][py+1] = 14;
+                                working[px+1][py+1] = 14;
+                            }
+                            else
+                            {
+                                for (int sx = 0; sx < 3; sx++) {
+                                    for (int sy = 1; sy < 4; sy++) {
+                                        working[px+sx][py+sy] = current + 1;
+                                        depths[px+sx][py+sy] = 256 - a * 2;
+                                    }
+                                    working[px+sx][py] = current + 2;
+                                    depths[px+sx][py] = 256 - a * 2;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        //working = easeSquares(working);
+        int d, w;
+        render = ArrayTools.copy(working);
+        for (int x = 1; x < 51; x++) {
+            for (int y = 1; y < 63; y++) {
+                if((w = working[x][y] - 1) > 3) {
+                    d = depths[x][y];
+                    if (working[x - 1][y] == 0 && working[x][y - 1] == 0)      { render[x][y] = 0; }
+                    else if (working[x + 1][y] == 0 && working[x][y - 1] == 0) { render[x][y] = 0; }
+                    else if (working[x - 1][y] == 0 && working[x][y + 1] == 0) { render[x][y] = 0; }
+                    else if (working[x + 1][y] == 0 && working[x][y + 1] == 0) { render[x][y] = 0; }
+                    else {
+                        /* if (working[x - 1][y] == 0) { render[x - 1][y] = 2; } else */ if (working[x - 1][y] == 0 || depths[x - 1][y] < d - 2) { render[x][y] = w; }
+                        /* if (working[x + 1][y] == 0) { render[x + 1][y] = 2; } else */ if (working[x + 1][y] == 0 || depths[x + 1][y] < d - 2) { render[x][y] = w; }
+                        /* if (working[x][y - 1] == 0) { render[x][y - 1] = 2; } else */ if (working[x][y - 1] == 0 || depths[x][y - 1] < d - 2) { render[x][y] = w; }
+                        /* if (working[x][y + 1] == 0) { render[x][y + 1] = 2; } else */ if (working[x][y + 1] == 0 || depths[x][y + 1] < d - 2) { render[x][y] = w; }
+                    }
+                }
+            }
+        }
+
+        return easeSquares(render);
+    }
+    public int[][] renderIsoSide(byte[][][] voxels, int direction) {
+        final int xs = voxels.length, ys = voxels[0].length, zs = voxels[0][0].length;
+        Converter con = directionsIsoSide52x64[direction &= 3];
+        int[][] working = new int[52][64], depths = new int[52][64], render;
+        int px, py;
+        int current;
+        int d, w;
+        int cStart = direction < 2 ? 0 : xs - 1, cEnd = direction < 2 ? xs : -1, cChange = direction < 2 ? 1 : -1;
+        for (int b = 0; b < zs; b++) {
+            for (int c = cStart; c != cEnd; c += cChange) {
+                for (int a = ys - 1; a >= 0; a--) {
+
+                    px = con.voxelToPixelX(c, a, b);
+                    py = con.voxelToPixelY(c, a, b);
+                    if(px < 1 || py < 2) continue;
+//                    px = px - 1 << 1;
+//                    py = (py - 2 << 1) + 1;
+                    current = voxels[c][a][b] & 255;
+                    if (current != 0) {
+                        d = 3 * (c * cChange - a) + 256;
+                        if (current <= 2) {
+                            working[px][py] = current;
+                        } else if (current == 3) {
+                            for (int ix = 0; ix < 4; ix++) {
+                                for (int iy = 0; iy < 4; iy++) {
+                                    if (working[px + ix][py + iy] == 0)
+                                    {
+                                        working[px + ix][py + iy] = 3;
+                                        depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 1 only on the right edge of a voxel
+                                    }
+                                }
+                            }
+                        } else if (current == 4) {
+                            for (int ix = 0; ix < 4; ix++) {
+                                for (int iy = 0; iy < 4; iy++) {
+                                    if (ix < 2 && iy < 2)
+                                    {
+                                        working[px + ix][py + iy] = 14;
+                                        depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 1 only on the right edge of a voxel
+                                    }
+                                    else
+                                    {
+                                        working[px + ix][py + iy] = 8;
+                                        depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 1 only on the right edge of a voxel
+                                    }
+                                }
+                            }
+                        } else {
+                            for (int ix = 0; ix < 4; ix++) {
+                                //for (int iy = 0; iy < 2; iy++) {
+                                    working[px + ix][py] = current + 2;
+                                    depths[px + ix][py] = d + (ix & ix >>> 1); // adds 1 only on the right edge of a voxel
+                                //}
+                            }
+                            for (int ix = 0; ix < 2; ix++) {
+                                for (int iy = 1; iy < 4; iy++) {
+                                    working[px + ix][py + iy] = current + 1;
+                                    depths[px + ix][py + iy] = d + ix; // adds 1 only in center of voxel
+                                }
+                            }
+                            for (int ix = 2; ix < 4; ix++) {
+                                for (int iy = 1; iy < 4; iy++) {
+                                    working[px + ix][py + iy] = current;
+                                    depths[px + ix][py + iy] = d - ix + 3; // adds 1 only in center of voxel
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        //working = easeSquares(working);
+        //int[][] shaded = ArrayTools.fill(65535, 52, 64);
+
+        render = ArrayTools.copy(working);
+//        for (int x = 1; x < 51; x++) {
+//            for (int y = 1; y < 63; y++) {
+//                if((w = working[x][y] - 1) > 3) {
+//                    d = depths[x][y];
+//                    if (working[x - 1][y] == 0 && working[x][y - 1] == 0)      { render[x][y] = 2; }
+//                    else if (working[x + 1][y] == 0 && working[x][y - 1] == 0) { render[x][y] = 2; }
+//                    else if (working[x - 1][y] == 0 && working[x][y + 1] == 0) { render[x][y] = 2; }
+//                    else if (working[x + 1][y] == 0 && working[x][y + 1] == 0) { render[x][y] = 2; }
+//                    else {
+//                        if (working[x - 1][y] == 0) { render[x - 1][y] = 2; } else if ((working[x][y] & 7) > (w & 7) && depths[x - 1][y] < d - 5) { render[x][y] = w; }
+//                        if (working[x + 1][y] == 0) { render[x + 1][y] = 2; } else if ((working[x][y] & 7) > (w & 7) && depths[x + 1][y] < d - 5) { render[x][y] = w; }
+//                        if (working[x][y - 1] == 0) { render[x][y - 1] = 2; } else if ((working[x][y] & 7) > (w & 7) && depths[x][y - 1] < d - 5) { render[x][y] = w; }
+//                        if (working[x][y + 1] == 0) { render[x][y + 1] = 2; } else if ((working[x][y] & 7) > (w & 7) && depths[x][y + 1] < d - 5) { render[x][y] = w; }
+//                    }
+//                }
+//            }
+//        }
+
+        for (int x = 1; x < 51; x++) {
+            for (int y = 1; y < 63; y++) {
+                if((w = working[x][y] - 1) > 3) {
+                    d = depths[x][y];
+                    if (working[x - 1][y] == 0 && working[x][y - 1] == 0)      { render[x][y] = 0; }
+                    else if (working[x + 1][y] == 0 && working[x][y - 1] == 0) { render[x][y] = 0; }
+                    else if (working[x - 1][y] == 0 && working[x][y + 1] == 0) { render[x][y] = 0; }
+                    else if (working[x + 1][y] == 0 && working[x][y + 1] == 0) { render[x][y] = 0; }
+                    else {
+                        /* if (working[x - 1][y] == 0) { render[x - 1][y] = 2; } else */ if (working[x - 1][y] == 0 || depths[x - 1][y] < d - 5) { render[x][y] = w; }
+                        /* if (working[x + 1][y] == 0) { render[x + 1][y] = 2; } else */ if (working[x + 1][y] == 0 || depths[x + 1][y] < d - 5) { render[x][y] = w; }
+                        /* if (working[x][y - 1] == 0) { render[x][y - 1] = 2; } else */ if (working[x][y - 1] == 0 || depths[x][y - 1] < d - 5) { render[x][y] = w; }
+                        /* if (working[x][y + 1] == 0) { render[x][y + 1] = 2; } else */ if (working[x][y + 1] == 0 || depths[x][y + 1] < d - 5) { render[x][y] = w; }
+                    }
+                }
+            }
+        }
+        return easeSquares(render);
+    }
 
 
     public int[][] size2(int[][] original)
@@ -1223,4 +1515,106 @@ public class ModelRenderer {
                 }
             }
     };
+    protected Converter[] directionsOrthoSide52x64 = {
+            // direction 0, no rotation
+            new Converter() {
+                @Override
+                public int voxelToPixelX(int vx, int vy, int vz) {
+                    return vy * 3 + 4;
+                }
+
+                @Override
+                public int voxelToPixelY(int vx, int vy, int vz) {
+                    return 36 - vz * 3;
+                }
+            },
+            // direction 1
+            new Converter() {
+                @Override
+                public int voxelToPixelX(int vx, int vy, int vz) {
+                    return 43 - vx * 3;
+                }
+
+                @Override
+                public int voxelToPixelY(int vx, int vy, int vz) {
+                    return 36 - vz * 3;
+                }
+            },
+            // direction 2
+            new Converter() {
+                @Override
+                public int voxelToPixelX(int vx, int vy, int vz) {
+                    return 43 - vy * 3;
+                }
+
+                @Override
+                public int voxelToPixelY(int vx, int vy, int vz) {
+                    return 36 - vz * 3;
+                }
+            },
+            // direction 3
+            new Converter() {
+                @Override
+                public int voxelToPixelX(int vx, int vy, int vz) {
+                    return vx * 3 + 4;
+                }
+
+                @Override
+                public int voxelToPixelY(int vx, int vy, int vz) {
+                    return 36 - vz * 3;
+                }
+            }
+    };
+    
+    protected Converter[] directionsIsoSide52x64 = {
+            // direction 0, no rotation
+            new Converter() {
+                @Override
+                public int voxelToPixelX(int vx, int vy, int vz) {
+                    return (vy + vx) - 1 << 1;
+                }
+
+                @Override
+                public int voxelToPixelY(int vx, int vy, int vz) {
+                    return 36 - vz * 3;
+                }
+            },
+            // direction 1
+            new Converter() {
+                @Override
+                public int voxelToPixelX(int vx, int vy, int vz) {
+                    return (26 - vy - vx) - 1 << 1;
+                }
+
+                @Override
+                public int voxelToPixelY(int vx, int vy, int vz) {
+                    return 36 - vz * 3;
+                }
+            },
+            // direction 2
+            new Converter() {
+                @Override
+                public int voxelToPixelX(int vx, int vy, int vz) {
+                    return (vy - vx + 13) - 1 << 1;
+                }
+
+                @Override
+                public int voxelToPixelY(int vx, int vy, int vz) {
+                    return 36 - vz * 3;
+                }
+            },
+            // direction 3
+            new Converter() {
+                @Override
+                public int voxelToPixelX(int vx, int vy, int vz) {
+                    return (vx - vy + 13) - 1 << 1;
+                }
+
+                @Override
+                public int voxelToPixelY(int vx, int vy, int vz) {
+                    return 36 - vz * 3;
+                }
+            }
+    };
+
 }
