@@ -161,15 +161,12 @@ public class ModelRenderer {
                 cMax = xs;
                 break;
             case 1:
-//                aa = 0;
-//                aStep = 1;
-//                aMax = xs;
                 aa = xs - 1;
                 aStep = -1;
                 aMax = -1;
-                cc = ys - 1;
-                cStep = -1;
-                cMax = -1;
+                cc = 0;
+                cStep = 1;
+                cMax = ys;
                 flip = false;
                 break;
             case 2:
@@ -184,12 +181,9 @@ public class ModelRenderer {
                 aa = 0;
                 aStep = 1;
                 aMax = xs;
-//                aa = xs - 1;
-//                aStep = -1;
-//                aMax = -1;
-                cc = 0;
-                cStep = 1;
-                cMax = ys;
+                cc = ys - 1;
+                cStep = -1;
+                cMax = -1;
                 flip = false;
                 break;
         }
@@ -345,11 +339,16 @@ public class ModelRenderer {
         int px, py;
         int current;
         int d, w;
-        int cStart = direction < 2 ? 0 : xs - 1, cEnd = direction < 2 ? xs : -1, cChange = direction < 2 ? 1 : -1;
+        // for 0, v> , x low to high, y high to low
+        // for 1, <v , x low to high, y low to high
+        // for 2, <^ , x high to low, y low to high
+        // for 3, ^> , x high to low, x high to low
+        final int gray = direction ^ direction >>> 1;
+        final int cStart = (gray & 2) == 0 ? 0 : xs - 1, cEnd = (gray & 2) == 0 ? xs : -1, cChange = (gray & 2) == 0 ? 1 : -1;
+        final int aStart = (gray & 1) == 0 ? ys - 1 : 0, aEnd = (gray & 1) == 0 ? -1 : ys, aChange = (gray & 1) == 0 ? -1 : 1;
         for (int b = 0; b < zs; b++) {
             for (int c = cStart; c != cEnd; c += cChange) {
-                for (int a = ys - 1; a >= 0; a--) {
-
+                for (int a = aStart; a != aEnd; a += aChange) {
                     px = con.voxelToPixelX(c, a, b);
                     py = con.voxelToPixelY(c, a, b);
                     if(px < 1 || py < 2) continue;
@@ -465,12 +464,12 @@ public class ModelRenderer {
         int px, py;
         int current;
         int d, w;
-        int cStart = direction < 2 ? 0 : xs - 1, cEnd = direction < 2 ? xs : -1, cChange = direction < 2 ? 1 : -1;
+        final int gray = direction ^ direction >>> 1;
+        final int cStart = (gray & 2) == 0 ? 0 : xs - 1, cEnd = (gray & 2) == 0 ? xs : -1, cChange = (gray & 2) == 0 ? 1 : -1;
+        final int aStart = (gray & 1) == 0 ? ys - 1 : 0, aEnd = (gray & 1) == 0 ? -1 : ys, aChange = (gray & 1) == 0 ? -1 : 1;
         for (int b = 0; b < zs; b++) {
-//            for (int a = ys - 1; a >= 0; a--) {
-//                for (int c = xs - 1; c >= 0; c--) {
             for (int c = cStart; c != cEnd; c += cChange) {
-                for (int a = ys - 1; a >= 0; a--) {
+                for (int a = aStart; a != aEnd; a += aChange) {
 
                     px = con.voxelToPixelX(c, a, b);
                     py = con.voxelToPixelY(c, a, b);
@@ -636,48 +635,52 @@ public class ModelRenderer {
         int current;
         switch (direction)
         {
-            case 2:
+            case 0:
                 aa = 0;
                 aStep = 1;
                 aMax = ys;
-                cc = 0;
-                cStep = 1;
-                cMax = xs;
+                cc = xs - 1;
+                cStep = -1;
+                cMax = -1;
+
                 break;
             case 1:
                 aa = xs - 1;
                 aStep = -1;
                 aMax = -1;
-                cc = 0;
-                cStep = 1;
-                cMax = ys;
+                cc = ys - 1;
+                cStep = -1;
+                cMax = -1;
+
                 flip = false;
                 break;
-            case 0:
+            case 2:
                 aa = ys - 1;
                 aStep = -1;
                 aMax = -1;
-                cc = xs - 1;
-                cStep = -1;
-                cMax = -1;
+                cc = 0;
+                cStep = 1;
+                cMax = xs;
+
                 break;
             default:
                 aa = 0;
                 aStep = 1;
                 aMax = xs;
-                cc = ys - 1;
-                cStep = -1;
-                cMax = -1;
+                cc = 0;
+                cStep = 1;
+                cMax = ys;
+
                 flip = false;
                 break;
         }
         if(flip) {
-            for (int a = aa; a != aMax; a += aStep) {
-                for (int b = zs - 1; b >= 0; b--) {
+            for (int b = zs - 1; b >= 0; b--) {
+                for (int a = aa; a != aMax; a += aStep) {
                     for (int c = cc; c != cMax; c += cStep) {
                         px = con.voxelToPixelX(c, a, b);
                         py = con.voxelToPixelY(c, a, b);
-                        current = voxels[c][a][b] & 255;
+                        current = voxels[13 - c][a][b] & 255;
                         if (current != 0) {
                             if (current <= 2) {
                                 for (int sx = 0; sx < 3; sx++) {
@@ -726,12 +729,12 @@ public class ModelRenderer {
             }
         }
         else  {
-            for (int a = aa; a != aMax; a += aStep) {
-                for (int b = zs - 1; b >= 0; b--) {
+            for (int b = zs - 1; b >= 0; b--) {
+                for (int a = aa; a != aMax; a += aStep) {
                     for (int c = cc; c != cMax; c += cStep) {
                         px = con.voxelToPixelX(a, c, b);
                         py = con.voxelToPixelY(a, c, b);
-                        current = voxels[a][c][b] & 255;
+                        current = voxels[a][13 - c][b] & 255;
                         if(current != 0)
                         {
                             if (current <= 2) {
@@ -813,22 +816,23 @@ public class ModelRenderer {
      */
     public int[][] renderIsoBelow(byte[][][] voxels, int direction) {
         final int xs = voxels.length, ys = voxels[0].length, zs = voxels[0][0].length;
-        Converter con = directionsIso28x35[direction = 3 - direction & 3];
+        Converter con = directionsIso28x35[direction = 2 - direction & 3];
         int[][] working = new int[52][64], depths = new int[52][64], render;
         int px, py;
         int current;
         int d, w;
-        int cStart = direction < 2 ? 0 : xs - 1, cEnd = direction < 2 ? xs : -1, cChange = direction < 2 ? 1 : -1;
+        final int gray = direction ^ direction >>> 1;
+        final int cStart = (gray & 2) == 0 ? 0 : xs - 1, cEnd = (gray & 2) == 0 ? xs : -1, cChange = (gray & 2) == 0 ? 1 : -1;
+        final int aStart = (gray & 1) == 0 ? ys - 1 : 0, aEnd = (gray & 1) == 0 ? -1 : ys, aChange = (gray & 1) == 0 ? -1 : 1;
         for (int b = zs - 1; b >= 0; b--) {
             for (int c = cStart; c != cEnd; c += cChange) {
-                for (int a = ys - 1; a >= 0; a--) {
-
+                for (int a = aStart; a != aEnd; a += aChange) {
                     px = con.voxelToPixelX(c, a, b);
                     py = con.voxelToPixelY(xs - 1 - c, ys - 1 - a, b);
                     if(px < 1 || py < 2) continue;
                     px = px - 1 << 1;
                     py = (py - 2 << 1) + 1;
-                    current = voxels[c][a][b] & 255;
+                    current = voxels[13 - c][a][b] & 255;
                     if (current != 0) {
                         d = 3 * (b + (c * cChange - a)) + 256;
                         if (current <= 2) {
@@ -944,15 +948,12 @@ public class ModelRenderer {
                 cMax = xs;
                 break;
             case 1:
-//                aa = 0;
-//                aStep = 1;
-//                aMax = xs;
                 aa = xs - 1;
                 aStep = -1;
                 aMax = -1;
-                cc = ys - 1;
-                cStep = -1;
-                cMax = -1;
+                cc = 0;
+                cStep = 1;
+                cMax = ys;
                 flip = false;
                 break;
             case 2:
@@ -967,12 +968,9 @@ public class ModelRenderer {
                 aa = 0;
                 aStep = 1;
                 aMax = xs;
-//                aa = xs - 1;
-//                aStep = -1;
-//                aMax = -1;
-                cc = 0;
-                cStep = 1;
-                cMax = ys;
+                cc = ys - 1;
+                cStep = -1;
+                cMax = -1;
                 flip = false;
                 break;
         }
@@ -1109,11 +1107,13 @@ public class ModelRenderer {
         int px, py;
         int current;
         int d, w;
-        int cStart = direction < 2 ? 0 : xs - 1, cEnd = direction < 2 ? xs : -1, cChange = direction < 2 ? 1 : -1;
+        final int gray = direction ^ direction >>> 1;
+        final int cStart = (gray & 2) == 0 ? 0 : xs - 1, cEnd = (gray & 2) == 0 ? xs : -1, cChange = (gray & 2) == 0 ? 1 : -1;
+        final int aStart = (gray & 1) == 0 ? ys - 1 : 0, aEnd = (gray & 1) == 0 ? -1 : ys, aChange = (gray & 1) == 0 ? -1 : 1;
+        //final int aStart = ys - 1, aEnd = -1, aChange = -1;
         for (int b = 0; b < zs; b++) {
             for (int c = cStart; c != cEnd; c += cChange) {
-                for (int a = ys - 1; a >= 0; a--) {
-
+                for (int a = aStart; a != aEnd; a += aChange) {
                     px = con.voxelToPixelX(c, a, b);
                     py = con.voxelToPixelY(c, a, b);
                     if(px < 1 || py < 2) continue;
@@ -1417,7 +1417,7 @@ public class ModelRenderer {
 
                 @Override
                 public int voxelToPixelY(int vx, int vy, int vz) {
-                    return (vx * 3) + 16 - vz * 2;
+                    return 16 + (vx * 3) - vz * 2;
                 }
             },
             // direction 1
@@ -1429,7 +1429,7 @@ public class ModelRenderer {
 
                 @Override
                 public int voxelToPixelY(int vx, int vy, int vz) {
-                    return 55 - (vy * 3) - vz * 2;
+                    return 16 + (vy * 3) - vz * 2;
                 }
             },
             // direction 2
@@ -1453,7 +1453,7 @@ public class ModelRenderer {
 
                 @Override
                 public int voxelToPixelY(int vx, int vy, int vz) {
-                    return (vy * 3) + 16 - vz * 2;
+                    return 55 - (vy * 3) - vz * 2;
                 }
             }
     };
@@ -1476,28 +1476,28 @@ public class ModelRenderer {
             new Converter() {
                 @Override
                 public int voxelToPixelX(int vx, int vy, int vz) {
-                    return (26 - vy - vx);
-                    //return 13 - vy;
-                }
-
-                @Override
-                public int voxelToPixelY(int vx, int vy, int vz) {
-                    return (vx - vy - vz) + 20; //(13 - vy) - (13 - vx)
-                    //return 13 - (vx >> 1) - vz;
-                }
-            },
-            // direction 2
-            new Converter() {
-                @Override
-                public int voxelToPixelX(int vx, int vy, int vz) {
                     return (vy - vx + 13);
                     //return 13 - vx;
                 }
 
                 @Override
                 public int voxelToPixelY(int vx, int vy, int vz) {
-                    return (13 - vx - vy - vz) + 20;
+                    return (vy + vx - vz) + 7;
                     //return 13 - (vy >> 1) - vz;
+                }
+            },
+            // direction 2
+            new Converter() {
+                @Override
+                public int voxelToPixelX(int vx, int vy, int vz) {
+                    return (26 - vy - vx);
+                    //return 13 - vy;
+                }
+
+                @Override
+                public int voxelToPixelY(int vx, int vy, int vz) {
+                    return (vy - vx - vz) + 20; //(13 - vy) - (13 - vx)
+                    //return 13 - (vx >> 1) - vz;
                 }
             },
             // direction 3
@@ -1510,7 +1510,7 @@ public class ModelRenderer {
 
                 @Override
                 public int voxelToPixelY(int vx, int vy, int vz) {
-                    return ((13 - vy) - vx - vz) + 20;
+                    return ((13 - vx) - vy - vz) + 20;
                     //return (vy >> 1) + 8 - vz;
                 }
             }
@@ -1583,7 +1583,7 @@ public class ModelRenderer {
             new Converter() {
                 @Override
                 public int voxelToPixelX(int vx, int vy, int vz) {
-                    return (26 - vy - vx) - 1 << 1;
+                    return (vy - vx + 13) - 1 << 1;
                 }
 
                 @Override
@@ -1595,7 +1595,7 @@ public class ModelRenderer {
             new Converter() {
                 @Override
                 public int voxelToPixelX(int vx, int vy, int vz) {
-                    return (vy - vx + 13) - 1 << 1;
+                    return (26 - vy - vx) - 1 << 1;
                 }
 
                 @Override
