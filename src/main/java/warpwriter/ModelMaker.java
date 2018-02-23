@@ -146,7 +146,7 @@ public class ModelMaker {
         byte color;
         final byte mainColor = (byte)((determineBounded(seed + 1L, 22) << 3) + determineBounded(seed + 22L, 4) + 11),
                 highlightColor = (byte)((determineBounded(seed + 333L, 22) << 3) + determineBounded(seed + 4444L, 3) + 12),
-                cockpitColor = (byte)(-85 - (determineBounded(seed + 55555L, 7) << 3));
+                cockpitColor = (byte)(-101 - (determineBounded(seed + 55555L, 7) << 3));
         for (int x = 0; x < xSize; x++) {
             for (int y = 0; y < halfY; y++) {
                 for (int z = 0; z < zSize; z++) {

@@ -76,9 +76,10 @@ public class VoxIO {
                         }
                     } else if(chunkName.equals("RGBA") && voxelData != null)
                     {
-                        for (int i = 0; i < 256; i++) {
+                        for (int i = 1; i < 256; i++) {
                             lastPalette[i] = Integer.reverseBytes(stream.readInt());
                         }
+                        stream.readInt();
                     }
                     else stream.skipBytes(chunkSize);   // read any excess bytes
                 }
@@ -88,6 +89,9 @@ public class VoxIO {
         } catch (IOException e) {
             e.printStackTrace();
         }
+//        for (int i = 0; i < 256; i++) {
+//            System.out.println(StringKit.hex(lastPalette[i]));
+//        }
         return voxelData;
     }
     private static void writeInt(DataOutputStream bin, int value) throws IOException

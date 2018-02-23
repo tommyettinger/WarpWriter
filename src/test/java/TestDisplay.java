@@ -156,6 +156,7 @@ public class TestDisplay extends ApplicationAdapter {
     public void remakeFish(long newModel) {         
         mm.thrust.state = ThrustAltRNG.determine(newModel);
         voxels = mm.fishRandom();
+        palette = Coloring.ALT_PALETTE;
         animatedVoxels = mm.animateFish(voxels, frames);
         
         for (int f = 0; f < frames; f++) {
@@ -191,6 +192,7 @@ public class TestDisplay extends ApplicationAdapter {
         if (newModel != 0){
             mm.thrust.state = ThrustAltRNG.determine(newModel);
             voxels = mm.shipRandom();
+            palette = Coloring.ALT_PALETTE;
             animatedVoxels = mm.animateShip(voxels, frames);
         }
         for (int f = 0; f < frames; f++) {
@@ -226,6 +228,7 @@ public class TestDisplay extends ApplicationAdapter {
 
         mm.thrust.state = ThrustAltRNG.determine(newModel);
         voxels = mm.fullyRandom();
+        palette = Coloring.ALT_PALETTE;
         Arrays.fill(animatedVoxels, voxels);
 
         for (int f = 0; f < frames; f++) {
@@ -262,6 +265,7 @@ public class TestDisplay extends ApplicationAdapter {
 
         try {
             voxels = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream(name)));
+            palette = VoxIO.lastPalette;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return;

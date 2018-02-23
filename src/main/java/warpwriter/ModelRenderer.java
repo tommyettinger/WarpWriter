@@ -320,8 +320,8 @@ public class ModelRenderer {
                 }
             }
         }
-
-        return easeSquares(render);
+        return render;
+//        return easeSquares(render);
     }
 
 
@@ -439,15 +439,16 @@ public class ModelRenderer {
                     else if (working[x - 1][y] == 0 && working[x][y + 1] == 0) { render[x][y] = 0; }
                     else if (working[x + 1][y] == 0 && working[x][y + 1] == 0) { render[x][y] = 0; }
                     else {
-                        /* if (working[x - 1][y] == 0) { render[x - 1][y] = 2; } else */ if (working[x - 1][y] == 0 || depths[x - 1][y] < d - 5) { render[x][y] = w; }
-                        /* if (working[x + 1][y] == 0) { render[x + 1][y] = 2; } else */ if (working[x + 1][y] == 0 || depths[x + 1][y] < d - 5) { render[x][y] = w; }
-                        /* if (working[x][y - 1] == 0) { render[x][y - 1] = 2; } else */ if (working[x][y - 1] == 0 || depths[x][y - 1] < d - 5) { render[x][y] = w; }
-                        /* if (working[x][y + 1] == 0) { render[x][y + 1] = 2; } else */ if (working[x][y + 1] == 0 || depths[x][y + 1] < d - 5) { render[x][y] = w; }
+                        /* if (working[x - 1][y] == 0) { render[x - 1][y] = 2; } else */ if (working[x - 1][y] == 0 || depths[x - 1][y] < d - 9) { render[x][y] = w; }
+                        /* if (working[x + 1][y] == 0) { render[x + 1][y] = 2; } else */ if (working[x + 1][y] == 0 || depths[x + 1][y] < d - 9) { render[x][y] = w; }
+                        /* if (working[x][y - 1] == 0) { render[x][y - 1] = 2; } else */ if (working[x][y - 1] == 0 || depths[x][y - 1] < d - 9) { render[x][y] = w; }
+                        /* if (working[x][y + 1] == 0) { render[x][y + 1] = 2; } else */ if (working[x][y + 1] == 0 || depths[x][y + 1] < d - 9) { render[x][y] = w; }
                     }
                 }
             }
         }
-        return easeSquares(render);
+//        return render;
+        return easeSquares(render, working);
     }
 
     /**
@@ -803,8 +804,8 @@ public class ModelRenderer {
                 }
             }
         }
-
-        return easeSquares(render);
+        return render;
+        //return easeSquares(render, working);
     }
 
     /**
@@ -926,7 +927,8 @@ public class ModelRenderer {
                 }
             }
         }
-        return easeSquares(render);
+        return easeSquares(render, working);
+        //return easeSquares(render);
     }
 
     public int[][] renderOrthoSide(byte[][][] voxels, int direction)
@@ -1097,8 +1099,8 @@ public class ModelRenderer {
                 }
             }
         }
-
-        return easeSquares(render);
+        return render;
+//        return easeSquares(render);
     }
     public int[][] renderIsoSide(byte[][][] voxels, int direction) {
         final int xs = voxels.length, ys = voxels[0].length, zs = voxels[0][0].length;
@@ -1212,7 +1214,8 @@ public class ModelRenderer {
                 }
             }
         }
-        return easeSquares(render);
+        return easeSquares(render, working);
+        //return easeSquares(render);
     }
 
 
@@ -1257,26 +1260,31 @@ public class ModelRenderer {
         return out;
     }
 
-    public int[][] easeSquares0(int[][] original){
+    public int[][] easeSquares(int[][] original, int[][] out){
         int xSize = original.length - 1, ySize = original[0].length - 1;
-        int[][] out = ArrayTools.copy(original);
-        int a, b, c, d;
-        for (int x = 0; x < xSize; x++) {
-            for (int y = 0; y < ySize; y++) {
-                a = original[x][y];
-                b = original[x + 1][y];
-                c = original[x][y + 1];
+//        for (int i = 0; i < original.length; i++) {
+//            System.arraycopy(original[i], 0, out[i], 0, original[0].length);
+//        }
+        int o, a, b, c, d;
+        for (int x = 1; x < xSize; x++) {
+            for (int y = 1; y < ySize; y++) {
+                o = original[x][y];
+                a = original[x - 1][y - 1];
+                b = original[x + 1][y - 1];
+                c = original[x - 1][y + 1];
                 d = original[x + 1][y + 1];
-                if (a > 2 && b > 2 && c > 2 && d > 2) {
-                    if (a == b && b == c /* && d > c */) out[x + 1][y + 1] = c;
-                    else if (a == b && b == d /* && c > d */) out[x][y + 1] = d;
-                    else if (a == c && c == d /* && b > d */) out[x + 1][y] = d;
-                    else if (b == c && c == d /* && a > d */) out[x][y] = d;
+                if (o > 2 && a > 2 && b > 2 && c > 2 && d > 2) {
+                    if (a == d && a > o) out[x][y] = a;
+                    else if (b == c && b > o) out[x][y] = b;
+                    else out[x][y] = o;
                 }
+                else out[x][y] = o;
             }
         }
         return out;
     }
+    
+    // not the same algo as 2-arg easeSquares; this can completely remove small details...
     public int[][] easeSquares(int[][] original){
         int xSize = original.length - 1, ySize = original[0].length - 1, idx, bestIdx, bestCount;
         int[][] out = ArrayTools.copy(original);
