@@ -39,8 +39,8 @@ public class ModelMaker {
     public byte[][][] fullyRandom()
     {
         byte[][][] voxels = new byte[14][14][8];
-        byte mainColor = (byte)((rng.nextIntHasty(22) << 3) + rng.between(10, 13)),
-                highlightColor = (byte)((rng.nextIntHasty(22) << 3) + rng.between(11, 13));
+        byte mainColor = (byte)((rng.nextIntHasty(22) << 3) + rng.between(11, 14)),
+                highlightColor = (byte)((rng.nextIntHasty(22) << 3) + rng.between(12, 14));
         for (int x = 1; x < 13; x++) {
             for (int y = 1; y < 13; y++) {
                 for (int z = 0; z < 8; z++) {
@@ -55,8 +55,8 @@ public class ModelMaker {
         byte[][][] voxels = new byte[14][14][8];
         int ctr;
         long state = rng.getState(), current = determineBounded(state + 1L, 22);
-        final byte mainColor = (byte)((current << 3) + determineBounded(state + 22L, 4) + 10),
-                highlightColor = (byte)(((current + 7 + determineBounded(state + 333L, 14)) % 22 << 3) + determineBounded(state + 4444L, 3) + 11);
+        final byte mainColor = (byte)((current << 3) + determineBounded(state + 22L, 4) + 11),
+                highlightColor = (byte)(((current + 7 + determineBounded(state + 333L, 14)) % 22 << 3) + determineBounded(state + 4444L, 3) + 12);
         do {
             final long seed = rng.nextLong();
             ctr = 0;
@@ -144,8 +144,8 @@ public class ModelMaker {
         byte[][][] nextShip = new byte[xSize][ySize][zSize];
         final int halfY = ySize >> 1, smallYSize = ySize - 1;
         byte color;
-        final byte mainColor = (byte)((determineBounded(seed + 1L, 22) << 3) + determineBounded(seed + 22L, 4) + 10),
-                highlightColor = (byte)((determineBounded(seed + 333L, 22) << 3) + determineBounded(seed + 4444L, 3) + 11),
+        final byte mainColor = (byte)((determineBounded(seed + 1L, 22) << 3) + determineBounded(seed + 22L, 4) + 11),
+                highlightColor = (byte)((determineBounded(seed + 333L, 22) << 3) + determineBounded(seed + 4444L, 3) + 12),
                 cockpitColor = (byte)(-85 - (determineBounded(seed + 55555L, 7) << 3));
         for (int x = 0; x < xSize; x++) {
             for (int y = 0; y < halfY; y++) {

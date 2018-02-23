@@ -1,7 +1,7 @@
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
 import squidpony.FakeLanguageGen;
@@ -102,10 +102,9 @@ public class TestOutput extends ApplicationAdapter {
     }
 
     public static void main(String[] arg) {
-        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.title = "Output! Seed is " + StringKit.hex(initialSeed);
-        config.width = 500;
-        config.height = 500;
-        new LwjglApplication(new TestOutput(), config);
+        Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        config.setTitle("Output! Seed is " + StringKit.hex(initialSeed));
+        config.setWindowedMode(500, 500);
+        new Lwjgl3Application(new TestOutput(), config);
     }
 }

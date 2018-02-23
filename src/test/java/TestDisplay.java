@@ -2,19 +2,19 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3WindowAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import squidpony.FakeLanguageGen;
 import squidpony.squidmath.ThrustAltRNG;
-import warpwriter.Coloring;
-import warpwriter.ModelMaker;
-import warpwriter.ModelRenderer;
-import warpwriter.VoxIO;
+import warpwriter.*;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.Arrays;
 
 /**
@@ -153,12 +153,11 @@ public class TestDisplay extends ApplicationAdapter {
         Gdx.input.setInputProcessor(input);
     }
 
-    public void remakeFish(long newModel) {
-        if (newModel != 0){
-            mm.thrust.state = ThrustAltRNG.determine(newModel);
-            voxels = mm.fishRandom();
-            animatedVoxels = mm.animateFish(voxels, frames);
-        }
+    public void remakeFish(long newModel) {         
+        mm.thrust.state = ThrustAltRNG.determine(newModel);
+        voxels = mm.fishRandom();
+        animatedVoxels = mm.animateFish(voxels, frames);
+        
         for (int f = 0; f < frames; f++) {
             pix = pixes[f];
             pix.setColor(0);
@@ -224,11 +223,51 @@ public class TestDisplay extends ApplicationAdapter {
     }
 
     public void remakeFull(long newModel) {
-        if (newModel != 0){
-            mm.thrust.state = ThrustAltRNG.determine(newModel);
-            voxels = mm.fullyRandom();
-            Arrays.fill(animatedVoxels, voxels);
+
+        mm.thrust.state = ThrustAltRNG.determine(newModel);
+        voxels = mm.fullyRandom();
+        Arrays.fill(animatedVoxels, voxels);
+
+        for (int f = 0; f < frames; f++) {
+            pix = pixes[f];
+            pix.setColor(0);
+            pix.fill();
+            int[][] indices;
+            if(tiny) indices = mr.renderIso24x32(animatedVoxels[f], dir);
+            else
+            {
+                switch (angle)
+                {
+                    case 1: if(dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
+                    else indices = mr.renderOrthoBelow(animatedVoxels[f], dir);
+                        break;
+                    case 2: if(dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
+                    else indices = mr.renderOrthoSide(animatedVoxels[f], dir);
+                        break;
+                    default: if(dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
+                    else indices = mr.renderOrtho(animatedVoxels[f], dir);
+                        break;
+                }
+            }
+            for (int x = 0; x < indices.length; x++) {
+                for (int y = 0; y < indices[0].length; y++) {
+                    pix.drawPixel(x, y, palette[indices[x][y]]);
+                }
+            }
         }
+    }
+
+
+    public void load(String name) {
+
+        try {
+            voxels = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream(name)));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return;
+        }
+        Arrays.fill(animatedVoxels, voxels);
+
         for (int f = 0; f < frames; f++) {
             pix = pixes[f];
             pix.setColor(0);
@@ -260,7 +299,7 @@ public class TestDisplay extends ApplicationAdapter {
 
     @Override
     public void render() {
-        int time = (playing ? ++counter : counter) % (frames << (tiny ? 0 : 1)), tempDir;
+        int time = (playing ? ++counter : counter) % ((frames << (tiny ? 0 : 1)) * 6), tempDir;
         if(time == 0)
         {
             ++dir;
@@ -269,7 +308,7 @@ public class TestDisplay extends ApplicationAdapter {
             remakeShip(0);
             dir = tempDir;
         }
-        tex.draw(pixes[time % frames], 0, 0);
+        tex.draw(pixes[(time / 6) % frames], 0, 0);
 
         // standard clear the background routine for libGDX
         Gdx.gl.glClearColor(0.7f, 0.99f, 0.6f, 1.0f);
@@ -288,12 +327,20 @@ public class TestDisplay extends ApplicationAdapter {
     }
 
     public static void main(String[] arg) {
-        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.title = "Display Test";
-        config.width = 1000;
-        config.height = 600;
-        config.foregroundFPS = 10;
-        config.backgroundFPS = 10;
-        new LwjglApplication(new TestDisplay(), config);
+        Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        config.setTitle( "Display Test");
+        config.setWindowedMode(1000, 600);
+        config.setIdleFPS(10);
+        final TestDisplay testDisplay = new TestDisplay();
+        config.setWindowListener(new Lwjgl3WindowAdapter() {
+            @Override
+            public void filesDropped(String[] files) {
+                if (files != null && files.length > 0) { 
+                    testDisplay.load(files[0]);
+                }
+            }
+        });
+			
+        new Lwjgl3Application(testDisplay, config);
     }
 }
