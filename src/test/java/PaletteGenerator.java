@@ -1,18 +1,17 @@
 import com.badlogic.gdx.graphics.Color;
 import warpwriter.Coloring;
 
-import static warpwriter.Coloring.CW_PALETTE;
-
 /**
  * Created by Tommy Ettinger on 1/21/2018.
  */
 public class PaletteGenerator {
     public static void main(String[] args) {
-        System.arraycopy(Coloring.ALT_PALETTE, 0, CW_PALETTE, 0, 7);
+        int[] PALETTE = new int[256];
+        System.arraycopy(Coloring.CW_PALETTE, 0, PALETTE, 0, 7);
         Color temp = Color.WHITE.cpy();
         float[] hsv = new float[3];
         for (int i = 0; i < 9; i++) {
-            CW_PALETTE[7 + i] = Color.rgba8888(temp.fromHsv(0, 0, 0.06f + 0.11f * i));
+            PALETTE[7 + i] = Color.rgba8888(temp.fromHsv(0, 0, 0.06f + 0.11f * i));
         }
 //        float[] hues = {0.0f, 0.07179487f, 0.07749468f, 0.098445594f, 0.09782606f, 0.14184391f, 0.16522992f,
 //                0.20281118f, 0.20285714f, 0.21867621f, 0.25163394f, 0.3141666f, 0.3715499f, 0.37061405f, 0.44054055f,
@@ -25,27 +24,27 @@ public class PaletteGenerator {
 //                        0.746888f, 0.46153846f, 0.48863637f, 0.9395605f};
         float hue, sat;
         for (int i = 0; i < 21; i++) {
-            Color.rgba8888ToColor(temp, Coloring.ALT_PALETTE[21 + i * 8]);
+            Color.rgba8888ToColor(temp, Coloring.CW_PALETTE[21 + i * 8]);
             temp.toHsv(hsv);
             hue = hsv[0];
-            sat = hsv[1] * 1.25f;
+            sat = hsv[1];
 //            sat = 0.5f * (sats[i] + 0.625f);
 //            hue = hues[i] * 360;
 //            sat = sats[i];
             for (int j = 0; j < 8; j++) {
-                CW_PALETTE[16 + j + i * 8] = Color.rgba8888(temp.fromHsv(hue, sat + 0.0625f * (5.75f - j), 0.09375f + 0.125f * j));
+                PALETTE[16 + j + i * 8] = Color.rgba8888(temp.fromHsv(hue, sat + 0.15625f * (3.5f - j), 0.125f + 0.125f * j));
             }
         }
         for (int i = 0; i < 16; i++) {
-            CW_PALETTE[184 + i] = i * 0x10101000 | 0xFF;
+            PALETTE[184 + i] = i * 0x10101000 | 0xFF;
         }
-        System.arraycopy(Coloring.CW_PALETTE, 16 + 4 * 8, CW_PALETTE, 208, 8);
-        System.arraycopy(Coloring.CW_PALETTE, 16 + 8, CW_PALETTE, 216, 8);
-        System.arraycopy(Coloring.CW_PALETTE, 16 + 2 * 8, CW_PALETTE, 224, 8);
-        System.arraycopy(Coloring.CW_PALETTE, 16, CW_PALETTE, 232, 8);
+        System.arraycopy(PALETTE, 16 + 4 * 8, PALETTE, 208, 8);
+        System.arraycopy(PALETTE, 16 + 8, PALETTE, 216, 8);
+        System.arraycopy(PALETTE, 16 + 2 * 8, PALETTE, 224, 8);
+        System.arraycopy(PALETTE, 16, PALETTE, 232, 8);
         for (int i = 0; i < 32; i++) {
             for (int j = 0; j < 8; j++) {
-                System.out.printf("0x%08X, ", CW_PALETTE[i << 3 | j]);
+                System.out.printf("0x%08X, ", PALETTE[i << 3 | j]);
             }
             System.out.println();
         }
