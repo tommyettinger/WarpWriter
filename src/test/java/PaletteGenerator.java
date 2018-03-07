@@ -32,7 +32,7 @@ public class PaletteGenerator {
 //            hue = hues[i] * 360;
 //            sat = sats[i];
             for (int j = 0; j < 8; j++) {
-                PALETTE[16 + j + i * 8] = Color.rgba8888(temp.fromHsv(hue, sat + 0.15625f * (3.5f - j), 0.125f + 0.125f * j));
+                PALETTE[16 + j + i * 8] = Color.rgba8888(temp.fromHsv(hue, sat + 0.0175f * (45f - (j+1) * (j+1)), 0.125f + 0.125f * j));
             }
         }
         for (int i = 0; i < 16; i++) {
