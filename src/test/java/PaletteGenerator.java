@@ -22,6 +22,8 @@ public class PaletteGenerator {
 //                        0.9067358f, 0.94630873f, 0.20731705f, 0.91324204f, 0.6946903f, 0.4691358f, 0.74596775f,
 //                        0.47698745f, 0.38f, 0.8846154f, 0.86624205f, 0.25777775f, 0.9575472f, 0.81385285f, 0.6453901f,
 //                        0.746888f, 0.46153846f, 0.48863637f, 0.9395605f};
+        //final float[] vals = {0.2f, 0.33f, 0.45f, 0.56f, 0.66f, 0.75f, 0.93f, 1f};
+        final float[] vals = {0.2f, 0.3f, 0.42f, 0.58f, 0.74f, 0.86f, 0.96f, 1f};
         float hue, sat;
         for (int i = 0; i < 21; i++) {
             Color.rgba8888ToColor(temp, Coloring.CW_PALETTE[21 + i * 8]);
@@ -32,7 +34,7 @@ public class PaletteGenerator {
 //            hue = hues[i] * 360;
 //            sat = sats[i];
             for (int j = 0; j < 8; j++) {
-                PALETTE[16 + j + i * 8] = Color.rgba8888(temp.fromHsv(hue, sat + 0.0175f * (45f - (j+1) * (j+1)), 0.125f + 0.125f * j));
+                PALETTE[16 + j + i * 8] = Color.rgba8888(temp.fromHsv(hue, sat + 0.018f * (35f - (j+1) * (j+1)), vals[j]));
             }
         }
         for (int i = 0; i < 16; i++) {
