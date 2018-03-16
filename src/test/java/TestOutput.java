@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.PixmapIO;
 import squidpony.FakeLanguageGen;
 import squidpony.StringKit;
 import squidpony.squidmath.StatefulRNG;
-import squidpony.squidmath.ThrustAltRNG;
+import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.UnorderedSet;
 import warpwriter.Coloring;
 import warpwriter.ModelMaker;
@@ -18,7 +18,7 @@ import warpwriter.ModelRenderer;
  */
 public class TestOutput extends ApplicationAdapter {
     private Pixmap pix;
-    private static long initialSeed = ThrustAltRNG.determine(System.nanoTime());
+    private static long initialSeed = LightRNG.determine(System.nanoTime());
     private long seed = initialSeed;
     private ModelMaker mm = new ModelMaker(seed);
     private ModelRenderer mr = new ModelRenderer();
@@ -59,7 +59,7 @@ public class TestOutput extends ApplicationAdapter {
 
     public void remakeModel(long newModel) {
         if (newModel != 0){
-            mm.thrust.state = ThrustAltRNG.determine(newModel);
+            mm.light.state = LightRNG.determine(newModel);
             voxels = mm.shipRandom();
             animatedVoxels = mm.animateShip(voxels, frames);
         }
@@ -80,7 +80,7 @@ public class TestOutput extends ApplicationAdapter {
 
     public void remakeShip(long newModel) {
         if (newModel != 0) {
-            mm.thrust.state = ThrustAltRNG.determine(newModel);
+            mm.light.state = LightRNG.determine(newModel);
             voxels = mm.shipRandom();
             //animatedVoxels = mm.animateShip(voxels, frames);
         }

@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import squidpony.FakeLanguageGen;
-import squidpony.squidmath.ThrustAltRNG;
+import squidpony.squidmath.LightRNG;
 import warpwriter.*;
 
 import java.io.FileInputStream;
@@ -40,7 +40,7 @@ public class TestDisplay extends ApplicationAdapter {
      */
     private int angle = 3;
     private boolean playing = true, tiny = false;
-    private final int width = 52, height = 64, frames = 8;
+    private int width = 52, height = 64, frames = 8;
     private Pixmap[] pixes = new Pixmap[frames];
     private int[] palette = Coloring.ALT_PALETTE;
     @Override
@@ -144,7 +144,7 @@ public class TestDisplay extends ApplicationAdapter {
 //                        }
                         return true;
                     case Input.Keys.PERIOD:
-                        seed += ThrustAltRNG.determine(keycode);
+                        seed += LightRNG.determine(keycode);
                         return true;
                 }
                 return true;
@@ -154,7 +154,7 @@ public class TestDisplay extends ApplicationAdapter {
     }
 
     public void remakeFish(long newModel) {         
-        mm.thrust.state = ThrustAltRNG.determine(newModel);
+        mm.light.state = LightRNG.determine(newModel);
         voxels = mm.fishRandom();
         palette = Coloring.ALT_PALETTE;
         animatedVoxels = mm.animateFish(voxels, frames);
@@ -190,7 +190,7 @@ public class TestDisplay extends ApplicationAdapter {
 
     public void remakeShip(long newModel) {
         if (newModel != 0){
-            mm.thrust.state = ThrustAltRNG.determine(newModel);
+            mm.light.state = LightRNG.determine(newModel);
             voxels = mm.shipRandom();
             palette = Coloring.ALT_PALETTE;
             animatedVoxels = mm.animateShip(voxels, frames);
@@ -226,7 +226,7 @@ public class TestDisplay extends ApplicationAdapter {
 
     public void remakeFull(long newModel) {
 
-        mm.thrust.state = ThrustAltRNG.determine(newModel);
+        mm.light.state = LightRNG.determine(newModel);
         voxels = mm.fullyRandom();
         palette = Coloring.ALT_PALETTE;
         Arrays.fill(animatedVoxels, voxels);
@@ -272,11 +272,8 @@ public class TestDisplay extends ApplicationAdapter {
             return;
         }
         Arrays.fill(animatedVoxels, voxels);
-
+        
         for (int f = 0; f < frames; f++) {
-            pix = pixes[f];
-            pix.setColor(0);
-            pix.fill();
             int[][] indices;
             if(tiny) indices = mr.renderIso24x32(animatedVoxels[f], dir);
             else
@@ -294,12 +291,18 @@ public class TestDisplay extends ApplicationAdapter {
                         break;
                 }
             }
+            width = indices.length;
+            height = indices[0].length;
+            pix = pixes[f] = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+            pix.setColor(0);
+            pix.fill();
             for (int x = 0; x < indices.length; x++) {
                 for (int y = 0; y < indices[0].length; y++) {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
         }
+        tex = new Texture(width, height, Pixmap.Format.RGBA8888);
     }
 
     @Override
@@ -314,7 +317,7 @@ public class TestDisplay extends ApplicationAdapter {
             dir = tempDir;
         }
         tex.draw(pixes[(time / 6) % frames], 0, 0);
-
+        
         // standard clear the background routine for libGDX
         Gdx.gl.glClearColor(0.7f, 0.99f, 0.6f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

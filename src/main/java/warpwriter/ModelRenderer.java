@@ -145,8 +145,10 @@ public class ModelRenderer {
     public int[][] renderOrtho(byte[][][] voxels, int direction)
     {
         final int xs = voxels.length, ys = voxels[0].length, zs = voxels[0][0].length;
-        Converter con = directionsOrtho52x64[direction &= 3];
-        int[][] working = new int[52][64], depths = new int[52][64], render;
+        VariableConverter con = directionsOrthoV[direction &= 3];
+        int[][] working = makeRenderArray(xs, ys, zs, 3, 5, 1);
+        int width = working.length, height = working[0].length;
+        int[][] depths = new int[width][height], render;
         int aa, cc, aStep, cStep, aMax, cMax, px, py;
         boolean flip = true;
         int current;
@@ -191,8 +193,8 @@ public class ModelRenderer {
             for (int a = aa; a != aMax; a += aStep) {
                 for (int b = 0; b < zs; b++) {
                     for (int c = cc; c != cMax; c += cStep) {
-                        px = con.voxelToPixelX(c, a, b);
-                        py = con.voxelToPixelY(c, a, b);
+                        px = con.voxelToPixelX(c+1, a+1, b, xs, ys, zs);
+                        py = con.voxelToPixelY(c+1, a+1, b, xs, ys, zs);
                         current = voxels[c][a][b] & 255;
                         if (current != 0) {
                             if (current <= 2) {
@@ -247,8 +249,8 @@ public class ModelRenderer {
             for (int a = aa; a != aMax; a += aStep) {
                 for (int b = 0; b < zs; b++) {
                     for (int c = cc; c != cMax; c += cStep) {
-                        px = con.voxelToPixelX(a, c, b);
-                        py = con.voxelToPixelY(a, c, b);
+                        px = con.voxelToPixelX(a+1, c+1, b, xs, ys, zs);
+                        py = con.voxelToPixelY(a+1, c+1, b, xs, ys, zs);
                         current = voxels[a][c][b] & 255;
                         if(current != 0)
                         {
@@ -303,9 +305,9 @@ public class ModelRenderer {
         //working = easeSquares(working);
         int d, w;
         render = ArrayTools.copy(working);
-        for (int x = 1; x < 51; x++) {
-            for (int y = 1; y < 63; y++) {
-                if((w = working[x][y] - 1) > 3) {
+        for (int x = 1; x < width - 1; x++) {
+            for (int y = 1; y < height - 1; y++) {
+                if((w = clampDown(working[x][y])) > 3) {
                     d = depths[x][y];
                     if (working[x - 1][y] == 0 && working[x][y - 1] == 0)      { render[x][y] = 0; }
                     else if (working[x + 1][y] == 0 && working[x][y - 1] == 0) { render[x][y] = 0; }
@@ -323,7 +325,21 @@ public class ModelRenderer {
         return render;
 //        return easeSquares(render);
     }
+    public static int clamp (int value, int min, int max) {
+        if (value < min) return min;
+        if (value > max) return max;
+        return value;
+    }
 
+    public static int clampAlter(int color, int change)
+    {
+        return (color & -8) + clamp((color & 7) + change, 0, 7);
+    }
+
+    public static int clampDown(int color)
+    {
+        return (color & -8) + clamp((color & 7) - 1, 0, 7);
+    }
 
     /**
      * Renders the given 3D voxel byte array, which should be no larger than 12x12x8, to a 52x64 2D int array storing
@@ -334,8 +350,10 @@ public class ModelRenderer {
      */
     public int[][] renderIso(byte[][][] voxels, int direction) {
         final int xs = voxels.length, ys = voxels[0].length, zs = voxels[0][0].length;
-        Converter con = directionsIso28x35[direction &= 3];
-        int[][] working = new int[52][64], depths = new int[52][64], render;
+        VariableConverter con = directionsIsoV[direction &= 3];
+        int[][] working = makeRenderArray(xs, ys, zs, 4, 4, 1);
+        int width = working.length, height = working[0].length;
+        int[][] depths = new int[width][height], render;
         int px, py;
         int current;
         int d, w;
@@ -349,11 +367,11 @@ public class ModelRenderer {
         for (int b = 0; b < zs; b++) {
             for (int c = cStart; c != cEnd; c += cChange) {
                 for (int a = aStart; a != aEnd; a += aChange) {
-                    px = con.voxelToPixelX(c, a, b);
-                    py = con.voxelToPixelY(c, a, b);
-                    if(px < 1 || py < 2) continue;
-                    px = px - 1 << 1;
-                    py = (py - 2 << 1) + 1;
+                    px = con.voxelToPixelX(c + 1, a + 1, b, xs, ys, zs);
+                    py = con.voxelToPixelY(c + 1, a + 1, b, xs, ys, zs);
+                    if(px < 0 || py < 0) continue;
+                    //px = px - 1 << 1;
+                    //py = (py - 2 << 1) + 1;
                     current = voxels[c][a][b] & 255;
                     if (current != 0) {
                         d = 3 * (b + (c * cChange - a)) + 256;
@@ -430,9 +448,9 @@ public class ModelRenderer {
 //            }
 //        }
 
-        for (int x = 1; x < 51; x++) {
-            for (int y = 1; y < 63; y++) {
-                if((w = working[x][y] - 1) > 3) {
+        for (int x = 1; x < width - 1; x++) {
+            for (int y = 1; y < height - 1; y++) {
+                if((w = clampDown(working[x][y])) > 3) {
                     d = depths[x][y];
                     if (working[x - 1][y] == 0 && working[x][y - 1] == 0)      { render[x][y] = 0; }
                     else if (working[x + 1][y] == 0 && working[x][y - 1] == 0) { render[x][y] = 0; }
@@ -472,8 +490,8 @@ public class ModelRenderer {
             for (int c = cStart; c != cEnd; c += cChange) {
                 for (int a = aStart; a != aEnd; a += aChange) {
 
-                    px = con.voxelToPixelX(c, a, b);
-                    py = con.voxelToPixelY(c, a, b);
+                    px = con.voxelToPixelX(c+1, a+1, b);
+                    py = con.voxelToPixelY(c+1, a+1, b);
                     if(px < 1 || py < 2) continue;
                     px = px - 1 << 1;
                     py = (py - 2 << 1) + 1;
@@ -546,7 +564,7 @@ public class ModelRenderer {
 
         for (int x = 2, rx = 0; x < 50 && rx < 24; x += 2, rx++) {
             for (int y = 2, ry=1; y < 64 && ry < 32; y += 2, ry++) {
-                if((w = working[x][y] - 1) > 3) {
+                if((w = clampDown(working[x][y])) > 3) {
                     d = depths[x][y];
                     //if (working[x - 1][y] == 0 && working[x][y - 1] == 0)      { render[rx][ry] = 2; }
                     //else if (working[x + 1][y] == 0 && working[x][y - 1] == 0) { render[rx][ry] = 2; }
@@ -629,8 +647,10 @@ public class ModelRenderer {
     public int[][] renderOrthoBelow(byte[][][] voxels, int direction)
     {
         final int xs = voxels.length, ys = voxels[0].length, zs = voxels[0][0].length;
-        Converter con = directionsOrtho52x64[direction &= 3];
-        int[][] working = new int[52][64], depths = new int[52][64], render;
+        VariableConverter con = directionsOrthoV[direction &= 3];
+        int[][] working = makeRenderArray(xs, ys, zs, 3, 5, 1);
+        int width = working.length, height = working[0].length;
+        int[][] depths = new int[width][height], render;
         int aa, cc, aStep, cStep, aMax, cMax, px, py;
         boolean flip = true;
         int current;
@@ -679,9 +699,9 @@ public class ModelRenderer {
             for (int b = zs - 1; b >= 0; b--) {
                 for (int a = aa; a != aMax; a += aStep) {
                     for (int c = cc; c != cMax; c += cStep) {
-                        px = con.voxelToPixelX(c, a, b);
-                        py = con.voxelToPixelY(c, a, b);
-                        current = voxels[13 - c][a][b] & 255;
+                        px = con.voxelToPixelX(c + 1, a + 1, b, xs, ys, zs);
+                        py = con.voxelToPixelY(c + 1, a + 1, b, xs, ys, zs);
+                        current = voxels[xs - 1 - c][a][b] & 255;
                         if (current != 0) {
                             if (current <= 2) {
                                 for (int sx = 0; sx < 3; sx++) {
@@ -733,9 +753,9 @@ public class ModelRenderer {
             for (int b = zs - 1; b >= 0; b--) {
                 for (int a = aa; a != aMax; a += aStep) {
                     for (int c = cc; c != cMax; c += cStep) {
-                        px = con.voxelToPixelX(a, c, b);
-                        py = con.voxelToPixelY(a, c, b);
-                        current = voxels[a][13 - c][b] & 255;
+                        px = con.voxelToPixelX(a + 1, c + 1, b, xs, ys, zs);
+                        py = con.voxelToPixelY(a + 1, c + 1, b, xs, ys, zs);
+                        current = voxels[a][ys - 1 - c][b] & 255;
                         if(current != 0)
                         {
                             if (current <= 2) {
@@ -787,9 +807,9 @@ public class ModelRenderer {
         //working = easeSquares(working);
         int d, w;
         render = ArrayTools.copy(working);
-        for (int x = 1; x < 51; x++) {
-            for (int y = 1; y < 63; y++) {
-                if((w = working[x][y] - 1) > 3) {
+        for (int x = 1; x < width - 1; x++) {
+            for (int y = 1; y < height - 1; y++) {
+                if((w = clampDown(working[x][y])) > 3) {
                     d = depths[x][y];
                     if (working[x - 1][y] == 0 && working[x][y - 1] == 0)      { render[x][y] = 0; }
                     else if (working[x + 1][y] == 0 && working[x][y - 1] == 0) { render[x][y] = 0; }
@@ -817,8 +837,10 @@ public class ModelRenderer {
      */
     public int[][] renderIsoBelow(byte[][][] voxels, int direction) {
         final int xs = voxels.length, ys = voxels[0].length, zs = voxels[0][0].length;
-        Converter con = directionsIso28x35[direction = 2 - direction & 3];
-        int[][] working = new int[52][64], depths = new int[52][64], render;
+        VariableConverter con = directionsIsoV[direction = 2 - direction & 3];
+        int[][] working = makeRenderArray(xs, ys, zs, 4, 4, 1);
+        int width = working.length, height = working[0].length;
+        int[][] depths = new int[width][height], render;
         int px, py;
         int current;
         int d, w;
@@ -828,12 +850,12 @@ public class ModelRenderer {
         for (int b = zs - 1; b >= 0; b--) {
             for (int c = cStart; c != cEnd; c += cChange) {
                 for (int a = aStart; a != aEnd; a += aChange) {
-                    px = con.voxelToPixelX(c, a, b);
-                    py = con.voxelToPixelY(xs - 1 - c, ys - 1 - a, b);
-                    if(px < 1 || py < 2) continue;
-                    px = px - 1 << 1;
-                    py = (py - 2 << 1) + 1;
-                    current = voxels[13 - c][a][b] & 255;
+                    px = con.voxelToPixelX(c + 1, a + 1, b, xs, ys, zs);
+                    py = con.voxelToPixelY(xs - c, ys - a, b, xs, ys, zs);
+                    if(px < 0 || py < 0) continue;
+//                    px = px - 1 << 1;
+//                    py = (py - 2 << 1) + 1;
+                    current = voxels[xs - 1 - c][a][b] & 255;
                     if (current != 0) {
                         d = 3 * (b + (c * cChange - a)) + 256;
                         if (current <= 2) {
@@ -909,10 +931,9 @@ public class ModelRenderer {
 //            }
 //        }
 
-        for (int x = 1; x < 51; x++) {
-            for (int y = 1; y < 63; y++) {
-                if((w = working[x][y] - 1) > 3) {
-                    if((working[x][y] & 7) < (w & 7)) w++;
+        for (int x = 1; x < width - 1; x++) {
+            for (int y = 1; y < height - 1; y++) {
+                if((w = clampDown(working[x][y])) > 3) {
                     d = depths[x][y];
                     if (working[x - 1][y] == 0 && working[x][y - 1] == 0)      { render[x][y] = 0; }
                     else if (working[x + 1][y] == 0 && working[x][y - 1] == 0) { render[x][y] = 0; }
@@ -934,8 +955,10 @@ public class ModelRenderer {
     public int[][] renderOrthoSide(byte[][][] voxels, int direction)
     {
         final int xs = voxels.length, ys = voxels[0].length, zs = voxels[0][0].length;
-        Converter con = directionsOrthoSide52x64[direction &= 3];
-        int[][] working = new int[52][64], depths = new int[52][64], render;
+        VariableConverter con = directionsOrthoSideV[direction &= 3];
+        int[][] working = makeRenderArray(xs, ys, zs, 3, 4, 1);
+        int width = working.length, height = working[0].length;
+        int[][] depths = new int[width][height], render;
         int aa, cc, aStep, cStep, aMax, cMax, px, py;
         boolean flip = true;
         int current;
@@ -980,8 +1003,8 @@ public class ModelRenderer {
             for (int a = aa; a != aMax; a += aStep) {
                 for (int b = 0; b < zs; b++) {
                     for (int c = cc; c != cMax; c += cStep) {
-                        px = con.voxelToPixelX(c, a, b);
-                        py = con.voxelToPixelY(c, a, b);
+                        px = con.voxelToPixelX(c + 1, a + 1, b, xs, ys, zs);
+                        py = con.voxelToPixelY(c + 1, a + 1, b, xs, ys, zs);
                         current = voxels[c][a][b] & 255;
                         if (current != 0) {
                             if (current <= 2) {
@@ -1031,8 +1054,8 @@ public class ModelRenderer {
             for (int a = aa; a != aMax; a += aStep) {
                 for (int b = 0; b < zs; b++) {
                     for (int c = cc; c != cMax; c += cStep) {
-                        px = con.voxelToPixelX(a, c, b);
-                        py = con.voxelToPixelY(a, c, b);
+                        px = con.voxelToPixelX(a + 1, c + 1, b, xs, ys, zs);
+                        py = con.voxelToPixelY(a + 1, c + 1, b, xs, ys, zs);
                         current = voxels[a][c][b] & 255;
                         if(current != 0)
                         {
@@ -1082,9 +1105,9 @@ public class ModelRenderer {
         //working = easeSquares(working);
         int d, w;
         render = ArrayTools.copy(working);
-        for (int x = 1; x < 51; x++) {
-            for (int y = 1; y < 63; y++) {
-                if((w = working[x][y] - 1) > 3) {
+        for (int x = 1; x < width - 1; x++) {
+            for (int y = 1; y < height - 1; y++) {
+                if((w = clampDown(working[x][y])) > 3) {
                     d = depths[x][y];
                     if (working[x - 1][y] == 0 && working[x][y - 1] == 0)      { render[x][y] = 0; }
                     else if (working[x + 1][y] == 0 && working[x][y - 1] == 0) { render[x][y] = 0; }
@@ -1104,8 +1127,10 @@ public class ModelRenderer {
     }
     public int[][] renderIsoSide(byte[][][] voxels, int direction) {
         final int xs = voxels.length, ys = voxels[0].length, zs = voxels[0][0].length;
-        Converter con = directionsIsoSide52x64[direction &= 3];
-        int[][] working = new int[52][64], depths = new int[52][64], render;
+        VariableConverter con = directionsIsoSideV[direction &= 3];
+        int[][] working = makeRenderArray(xs, ys, zs, 4, 4, 1);
+        int width = working.length, height = working[0].length;
+        int[][] depths = new int[width][height], render;
         int px, py;
         int current;
         int d, w;
@@ -1116,9 +1141,9 @@ public class ModelRenderer {
         for (int b = 0; b < zs; b++) {
             for (int c = cStart; c != cEnd; c += cChange) {
                 for (int a = aStart; a != aEnd; a += aChange) {
-                    px = con.voxelToPixelX(c, a, b);
-                    py = con.voxelToPixelY(c, a, b);
-                    if(px < 1 || py < 2) continue;
+                    px = con.voxelToPixelX(c + 1, a + 1, b, xs, ys, zs);
+                    py = con.voxelToPixelY(c + 1, a + 1, b, xs, ys, zs);
+                    if(px < 0 || py < 0) continue;
 //                    px = px - 1 << 1;
 //                    py = (py - 2 << 1) + 1;
                     current = voxels[c][a][b] & 255;
@@ -1197,9 +1222,9 @@ public class ModelRenderer {
 //            }
 //        }
 
-        for (int x = 1; x < 51; x++) {
-            for (int y = 1; y < 63; y++) {
-                if((w = working[x][y] - 1) > 3) {
+        for (int x = 1; x < width - 1; x++) {
+            for (int y = 1; y < height - 1; y++) {
+                if((w = clampDown(working[x][y])) > 3) {
                     d = depths[x][y];
                     if (working[x - 1][y] == 0 && working[x][y - 1] == 0)      { render[x][y] = 0; }
                     else if (working[x + 1][y] == 0 && working[x][y - 1] == 0) { render[x][y] = 0; }
@@ -1358,10 +1383,38 @@ public class ModelRenderer {
         int voxelToPixelY(int vx, int vy, int vz);
     }
 
+    protected interface VariableConverter
+    {
+        /**
+         * Converts from voxel space to pixel space and gets the 2D x position. Here, the x-axis runs back-to-front,
+         * the y-axis runs left-to-right, and the z-axis runs bottom-to-top, before rotations are applied.
+         * @param vx before rotating, the position on the 3D back-to-front x axis
+         * @param vy before rotating, the position on the 3D left-to-right y axis
+         * @param vz before rotating, the position on the 3D bottom-to-top z axis
+         * @param xSize size of the bounding box's x dimension
+         * @param ySize size of the bounding box's y dimension
+         * @param zSize size of the bounding box's z dimension
+         * @return the 2D x position of the voxel, with 0 at the left
+         */
+        int voxelToPixelX(int vx, int vy, int vz, int xSize, int ySize, int zSize);
+        /**
+         * Converts from voxel space to pixel space and gets the 2D y position. Here, the x-axis runs back-to-front,
+         * the y-axis runs left-to-right, and the z-axis runs bottom-to-top, before rotations are applied.
+         * @param vx before rotating, the position on the 3D back-to-front x axis
+         * @param vy before rotating, the position on the 3D left-to-right y axis
+         * @param vz before rotating, the position on the 3D bottom-to-top z axis
+         * @param xSize size of the bounding box's x dimension
+         * @param ySize size of the bounding box's y dimension
+         * @param zSize size of the bounding box's z dimension
+         * @return the 2D y position of the voxel, with 0 at the top
+         */
+        int voxelToPixelY(int vx, int vy, int vz, int xSize, int ySize, int zSize);
+    }
+
     /**
      * For a max of a 14x14x8 voxel space, produces pixel coordinates for a 16x16 area
      */
-    protected Converter[] directions16x16 = {
+    protected static final  Converter[] directions16x16 = {
             // direction 0, no rotation
             new Converter() {
                 @Override
@@ -1415,7 +1468,7 @@ public class ModelRenderer {
     /**
      * For a max of a 14x14x8 voxel space, produces pixel coordinates for a 16x16 area
      */
-    protected Converter[] directionsOrtho52x64 = {
+    protected static final  Converter[] directionsOrtho52x64 = {
             // direction 0, no rotation
             new Converter() {
                 @Override
@@ -1465,7 +1518,7 @@ public class ModelRenderer {
                 }
             }
     };
-    protected Converter[] directionsIso28x35 = {
+    protected static final Converter[] directionsIso28x35 = {
             // direction 0, no rotation
             new Converter() {
                 @Override
@@ -1523,7 +1576,7 @@ public class ModelRenderer {
                 }
             }
     };
-    protected Converter[] directionsOrthoSide52x64 = {
+    protected static final  Converter[] directionsOrthoSide52x64 = {
             // direction 0, no rotation
             new Converter() {
                 @Override
@@ -1573,8 +1626,8 @@ public class ModelRenderer {
                 }
             }
     };
-    
-    protected Converter[] directionsIsoSide52x64 = {
+
+    protected static final  Converter[] directionsIsoSide52x64 = {
             // direction 0, no rotation
             new Converter() {
                 @Override
@@ -1624,5 +1677,243 @@ public class ModelRenderer {
                 }
             }
     };
+    protected  static final VariableConverter[] directionsOrthoV = {
+            // direction 0, no rotation
+            new VariableConverter() {
+                @Override
+                public int voxelToPixelX(int vx, int vy, int vz, int xs, int ys, int zs) {
+                    return vy * 3 + 4;
+                }
 
+                @Override
+                public int voxelToPixelY(int vx, int vy, int vz, int xs, int ys, int zs) {
+                    return (vx * 3) + (zs - vz) * 2;
+                }
+            },
+            // direction 1
+            new VariableConverter() {
+                @Override
+                public int voxelToPixelX(int vx, int vy, int vz, int xs, int ys, int zs) {
+                    return 7 + (xs - vx) * 3;
+                }
+
+                @Override
+                public int voxelToPixelY(int vx, int vy, int vz, int xs, int ys, int zs) {
+                    return (vy * 3) + (zs - vz) * 2;
+                }
+            },
+            // direction 2
+            new VariableConverter() {
+                @Override
+                public int voxelToPixelX(int vx, int vy, int vz, int xs, int ys, int zs) {
+                    return 7 + (ys - vy) * 3;
+                }
+
+                @Override
+                public int voxelToPixelY(int vx, int vy, int vz, int xs, int ys, int zs) {
+                    return 3 + (xs - vx) * 3 + (zs - vz) * 2;
+                }
+            },
+            // direction 3
+            new VariableConverter() {
+                @Override
+                public int voxelToPixelX(int vx, int vy, int vz, int xs, int ys, int zs) {
+                    return vx * 3 + 4;
+                }
+
+                @Override
+                public int voxelToPixelY(int vx, int vy, int vz, int xs, int ys, int zs) {
+                    return 3 + (ys - vy) * 3 + (zs - vz) * 2;
+                }
+            }
+    };
+    protected static final  VariableConverter[] directionsIsoV = {
+            
+            /*
+                    px = px - 1 << 1;
+                    py = (py - 2 << 1) + 1;
+
+             */
+            
+            // direction 0, no rotation
+            new VariableConverter() {
+                @Override
+                public int voxelToPixelX(int vx, int vy, int vz, int xs, int ys, int zs) {
+                    return (vy + vx) - 1 << 1;
+                }
+
+                @Override
+                public int voxelToPixelY(int vx, int vy, int vz, int xs, int ys, int zs) {
+                    return (((vx - vy - vz) + ys + zs) << 1) - 1;
+                    //return (vx >> 1) + 8 - vz;
+                }
+            },
+            // direction 1
+            new VariableConverter() {
+                @Override
+                public int voxelToPixelX(int vx, int vy, int vz, int xs, int ys, int zs) {
+                    return (vy - vx + xs) - 2 << 1;
+                }
+
+                @Override
+                public int voxelToPixelY(int vx, int vy, int vz, int xs, int ys, int zs) {
+                    return ((vy + vx - vz + zs) << 1) - 3;
+                }
+            },
+            // direction 2
+            new VariableConverter() {
+                @Override
+                public int voxelToPixelX(int vx, int vy, int vz, int xs, int ys, int zs) {
+                    return ((xs + ys - vy - vx) << 1) - 5;
+                }
+
+                @Override
+                public int voxelToPixelY(int vx, int vy, int vz, int xs, int ys, int zs) {
+                    return ((vy - vx - vz + xs + zs) << 1) - 5;
+                }
+            },
+            // direction 3
+            new VariableConverter() {
+                @Override
+                public int voxelToPixelX(int vx, int vy, int vz, int xs, int ys, int zs) {
+                    return (vx - vy + ys) - 2 << 1;
+                }
+
+                @Override
+                public int voxelToPixelY(int vx, int vy, int vz, int xs, int ys, int zs) {
+                    return ((xs + ys + zs - vy - vx - vz) << 1) - 3;
+                }
+            }
+    };
+    protected static final VariableConverter[] directionsOrthoSideV = {
+            // direction 0, no rotation
+            new VariableConverter() {
+                @Override
+                public int voxelToPixelX(int vx, int vy, int vz, int xs, int ys, int zs) {
+                    return vy * 3 + 4;
+                }
+
+                @Override
+                public int voxelToPixelY(int vx, int vy, int vz, int xs, int ys, int zs) {
+                    return 4 + zs * 4 - vz * 3;
+                }
+            },
+            // direction 1
+            new VariableConverter() {
+                @Override
+                public int voxelToPixelX(int vx, int vy, int vz, int xs, int ys, int zs) {
+                    return 7 + (xs - vx) * 3;
+                }
+
+                @Override
+                public int voxelToPixelY(int vx, int vy, int vz, int xs, int ys, int zs) {
+                    return 4 + zs * 4 - vz * 3;
+                }
+            },
+            // direction 2
+            new VariableConverter() {
+                @Override
+                public int voxelToPixelX(int vx, int vy, int vz, int xs, int ys, int zs) {
+                    return 7 + (ys - vy) * 3;
+                }
+
+                @Override
+                public int voxelToPixelY(int vx, int vy, int vz, int xs, int ys, int zs) {
+                    return 4 + zs * 4 - vz * 3;
+                }
+            },
+            // direction 3
+            new VariableConverter() {
+                @Override
+                public int voxelToPixelX(int vx, int vy, int vz, int xs, int ys, int zs) {
+                    return vx * 3 + 4;
+                }
+
+                @Override
+                public int voxelToPixelY(int vx, int vy, int vz, int xs, int ys, int zs) {
+                    return 4 + zs * 4 - vz * 3;
+                }
+            }
+    };
+
+    protected static final VariableConverter[] directionsIsoSideV = {
+            // direction 0, no rotation
+            new VariableConverter() {
+                @Override
+                public int voxelToPixelX(int vx, int vy, int vz, int xs, int ys, int zs) {
+                    return (vy + vx) - 1 << 1;
+                }
+
+                @Override
+                public int voxelToPixelY(int vx, int vy, int vz, int xs, int ys, int zs) {
+                    return 4 + zs * 4 - vz * 3;
+                }
+            },
+            // direction 1
+            new VariableConverter() {
+                @Override
+                public int voxelToPixelX(int vx, int vy, int vz, int xs, int ys, int zs) {
+                    return (vy - vx + xs) - 2 << 1;
+                }
+
+                @Override
+                public int voxelToPixelY(int vx, int vy, int vz, int xs, int ys, int zs) {
+                    return 4 + zs * 4 - vz * 3;
+                }
+            },
+            // direction 2
+            new VariableConverter() {
+                @Override
+                public int voxelToPixelX(int vx, int vy, int vz, int xs, int ys, int zs) {
+                    return ((xs + ys - vy - vx) << 1) - 5;
+                }
+
+                @Override
+                public int voxelToPixelY(int vx, int vy, int vz, int xs, int ys, int zs) {
+                    return 4 + zs * 4 - vz * 3;
+                }
+            },
+            // direction 3
+            new VariableConverter() {
+                @Override
+                public int voxelToPixelX(int vx, int vy, int vz, int xs, int ys, int zs) {
+                    return ((ys - vy + vx) - 1 << 1);
+                }
+
+                @Override
+                public int voxelToPixelY(int vx, int vy, int vz, int xs, int ys, int zs) {
+                    return 4 + zs * 4 - vz * 3;
+                }
+            }
+    };
+    
+    protected static final VariableConverter[][] allDirectionsV = {
+            directionsIsoV, directionsOrthoV, directionsIsoSideV, directionsOrthoSideV
+    };
+    
+    public int[][] makeRenderArray(int xs, int ys, int zs, int voxelWidth, int voxelHeight, int outline)
+    {
+        int w = voxelWidth, h = voxelHeight;
+        for(VariableConverter[] cons : allDirectionsV) {
+            for (VariableConverter vc : cons) {
+                w = Math.max(w, vc.voxelToPixelX(0, 0, 0, xs, ys, zs) + voxelWidth);
+                h = Math.max(h, vc.voxelToPixelY(0, 0, 0, xs, ys, zs) + voxelHeight);
+                w = Math.max(w, vc.voxelToPixelX(xs, 0, 0, xs, ys, zs) + voxelWidth);
+                h = Math.max(h, vc.voxelToPixelY(xs, 0, 0, xs, ys, zs) + voxelHeight);
+                w = Math.max(w, vc.voxelToPixelX(0, ys, 0, xs, ys, zs) + voxelWidth);
+                h = Math.max(h, vc.voxelToPixelY(0, ys, 0, xs, ys, zs) + voxelHeight);
+                w = Math.max(w, vc.voxelToPixelX(xs, ys, 0, xs, ys, zs) + voxelWidth);
+                h = Math.max(h, vc.voxelToPixelY(xs, ys, 0, xs, ys, zs) + voxelHeight);
+                w = Math.max(w, vc.voxelToPixelX(0, 0, zs - 1, xs, ys, zs) + voxelWidth);
+                h = Math.max(h, vc.voxelToPixelY(0, 0, zs - 1, xs, ys, zs) + voxelHeight);
+                w = Math.max(w, vc.voxelToPixelX(xs, 0, zs - 1, xs, ys, zs) + voxelWidth);
+                h = Math.max(h, vc.voxelToPixelY(xs, 0, zs - 1, xs, ys, zs) + voxelHeight);
+                w = Math.max(w, vc.voxelToPixelX(0, ys, zs - 1, xs, ys, zs) + voxelWidth);
+                h = Math.max(h, vc.voxelToPixelY(0, ys, zs - 1, xs, ys, zs) + voxelHeight);
+                w = Math.max(w, vc.voxelToPixelX(xs, ys, zs - 1, xs, ys, zs) + voxelWidth);
+                h = Math.max(h, vc.voxelToPixelY(xs, ys, zs - 1, xs, ys, zs) + voxelHeight);
+            }
+        }
+        return new int[w + (outline << 1)][h + (outline << 1)];
+    }
 }
