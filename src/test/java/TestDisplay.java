@@ -236,7 +236,10 @@ public class TestDisplay extends ApplicationAdapter {
             pix.setColor(0);
             pix.fill();
             int[][] indices;
-            if(tiny) indices = mr.renderIso24x32(animatedVoxels[f], dir);
+            if(tiny)
+            {
+                indices = mr.renderIso24x32(animatedVoxels[f], dir);
+            }
             else
             {
                 switch (angle)
@@ -319,7 +322,7 @@ public class TestDisplay extends ApplicationAdapter {
         tex.draw(pixes[(time / 6) % frames], 0, 0);
         
         // standard clear the background routine for libGDX
-        Gdx.gl.glClearColor(0.7f, 0.99f, 0.6f, 1.0f);
+        Gdx.gl.glClearColor(0.6f, 0.97f, 0.5f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         batch.draw(tex, width >> 1, 250 - (width >> 1), width, height);

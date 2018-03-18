@@ -383,7 +383,7 @@ public class ModelRenderer {
                                     if (working[px + ix][py + iy] == 0)
                                     {
                                         working[px + ix][py + iy] = 3;
-                                        depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 1 only on the right edge of a voxel
+                                        depths[px + ix][py + iy] = d + ((ix ^ ix >>> 1) & 1); // adds 1 only in center of a voxel
                                     }
                                 }
                             }
@@ -393,12 +393,12 @@ public class ModelRenderer {
                                     if (ix < 2 && iy < 2)
                                     {
                                         working[px + ix][py + iy] = 14;
-                                        depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 1 only on the right edge of a voxel
+                                        depths[px + ix][py + iy] = d + ((ix ^ ix >>> 1) & 1); // adds 1 only in center of a voxel
                                     }
                                     else
                                     {
                                         working[px + ix][py + iy] = 8;
-                                        depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 1 only on the right edge of a voxel
+                                        depths[px + ix][py + iy] = d + ((ix ^ ix >>> 1) & 1); // adds 1 only in center of a voxel
                                     }
                                 }
                             }
@@ -406,19 +406,19 @@ public class ModelRenderer {
                             for (int ix = 0; ix < 4; ix++) {
                                 for (int iy = 0; iy < 2; iy++) {
                                     working[px + ix][py + iy] = current + 1;
-                                    depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 1 only on the right edge of a voxel
+                                    depths[px + ix][py + iy] = d + ((ix ^ ix >>> 1) & 1); // adds 1 only in center of a voxel
                                 }
                             }
                             for (int ix = 0; ix < 2; ix++) {
                                 for (int iy = 2; iy < 4; iy++) {
                                     working[px + ix][py + iy] = current;
-                                    depths[px + ix][py + iy] = d + ix; // adds 1 only on the right edge of a voxel
+                                    depths[px + ix][py + iy] = d + ((ix ^ ix >>> 1) & 1); // adds 1 only in center of a voxel
                                 }
                             }
                             for (int ix = 2; ix < 4; ix++) {
                                 for (int iy = 2; iy < 4; iy++) {
                                     working[px + ix][py + iy] = current - 1;
-                                    depths[px + ix][py + iy] = d - ix + 3; // adds 1 only on the right edge of a voxel
+                                    depths[px + ix][py + iy] = d + ((ix ^ ix >>> 1) & 1); // adds 1 only in center of a voxel
                                 }
                             }
                         }
@@ -837,7 +837,7 @@ public class ModelRenderer {
      */
     public int[][] renderIsoBelow(byte[][][] voxels, int direction) {
         final int xs = voxels.length, ys = voxels[0].length, zs = voxels[0][0].length;
-        VariableConverter con = directionsIsoV[direction = 2 - direction & 3];
+        VariableConverter con = directionsIsoV[direction &= 3];
         int[][] working = makeRenderArray(xs, ys, zs, 4, 4, 1);
         int width = working.length, height = working[0].length;
         int[][] depths = new int[width][height], render;
@@ -855,7 +855,7 @@ public class ModelRenderer {
                     if(px < 0 || py < 0) continue;
 //                    px = px - 1 << 1;
 //                    py = (py - 2 << 1) + 1;
-                    current = voxels[xs - 1 - c][a][b] & 255;
+                    current = voxels[c][a][b] & 255;
                     if (current != 0) {
                         d = 3 * (b + (c * cChange - a)) + 256;
                         if (current <= 2) {
@@ -866,7 +866,7 @@ public class ModelRenderer {
                                     if (working[px + ix][py + iy] == 0)
                                     {
                                         working[px + ix][py + iy] = 3;
-                                        depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 1 only on the right edge of a voxel
+                                        depths[px + ix][py + iy] = d + ((ix ^ ix >>> 1) & 1); // adds 1 only in center of a voxel
                                     }
                                 }
                             }
@@ -876,12 +876,12 @@ public class ModelRenderer {
                                     if (ix < 2 && iy < 2)
                                     {
                                         working[px + ix][py + iy] = 14;
-                                        depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 1 only on the right edge of a voxel
+                                        depths[px + ix][py + iy] = d + ((ix ^ ix >>> 1) & 1); // adds 1 only in center of a voxel
                                     }
                                     else
                                     {
                                         working[px + ix][py + iy] = 8;
-                                        depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 1 only on the right edge of a voxel
+                                        depths[px + ix][py + iy] = d + ((ix ^ ix >>> 1) & 1); // adds 1 only in center of a voxel
                                     }
                                 }
                             }
@@ -889,19 +889,19 @@ public class ModelRenderer {
                             for (int ix = 0; ix < 4; ix++) {
                                 for (int iy = 2; iy < 4; iy++) {
                                     working[px + ix][py + iy] = current - 1;
-                                    depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 1 only on the right edge of a voxel
+                                    depths[px + ix][py + iy] = d + ((ix ^ ix >>> 1) & 1); // adds 1 only in center of a voxel
                                 }
                             }
                             for (int ix = 0; ix < 2; ix++) {
                                 for (int iy = 0; iy < 2; iy++) {
                                     working[px + ix][py + iy] = current + 1;
-                                    depths[px + ix][py + iy] = d + ix; // adds 1 only in center of voxel
+                                    depths[px + ix][py + iy] = d + ((ix ^ ix >>> 1) & 1); // adds 1 only in center of a voxel
                                 }
                             }
                             for (int ix = 2; ix < 4; ix++) {
                                 for (int iy = 0; iy < 2; iy++) {
                                     working[px + ix][py + iy] = current;
-                                    depths[px + ix][py + iy] = d - ix + 3; // adds 1 only in center of voxel
+                                    depths[px + ix][py + iy] = d + ((ix ^ ix >>> 1) & 1); // adds 1 only in center of a voxel
                                 }
                             }
                         }
@@ -940,10 +940,10 @@ public class ModelRenderer {
                     else if (working[x - 1][y] == 0 && working[x][y + 1] == 0) { render[x][y] = 0; }
                     else if (working[x + 1][y] == 0 && working[x][y + 1] == 0) { render[x][y] = 0; }
                     else {
-                        /* if (working[x - 1][y] == 0) { render[x - 1][y] = 2; } else */ if (working[x - 1][y] == 0 || depths[x - 1][y] < d - 5) { render[x][y] = w; }
-                        /* if (working[x + 1][y] == 0) { render[x + 1][y] = 2; } else */ if (working[x + 1][y] == 0 || depths[x + 1][y] < d - 5) { render[x][y] = w; }
-                        /* if (working[x][y - 1] == 0) { render[x][y - 1] = 2; } else */ if (working[x][y - 1] == 0 || depths[x][y - 1] < d - 5) { render[x][y] = w; }
-                        /* if (working[x][y + 1] == 0) { render[x][y + 1] = 2; } else */ if (working[x][y + 1] == 0 || depths[x][y + 1] < d - 5) { render[x][y] = w; }
+                        /* if (working[x - 1][y] == 0) { render[x - 1][y] = 2; } else */ if (working[x - 1][y] == 0 || depths[x - 1][y] < d - 9) { render[x][y] = w; }
+                        /* if (working[x + 1][y] == 0) { render[x + 1][y] = 2; } else */ if (working[x + 1][y] == 0 || depths[x + 1][y] < d - 9) { render[x][y] = w; }
+                        /* if (working[x][y - 1] == 0) { render[x][y - 1] = 2; } else */ if (working[x][y - 1] == 0 || depths[x][y - 1] < d - 9) { render[x][y] = w; }
+                        /* if (working[x][y + 1] == 0) { render[x][y + 1] = 2; } else */ if (working[x][y + 1] == 0 || depths[x][y + 1] < d - 9) { render[x][y] = w; }
                     }
                 }
             }
@@ -1744,7 +1744,7 @@ public class ModelRenderer {
 
                 @Override
                 public int voxelToPixelY(int vx, int vy, int vz, int xs, int ys, int zs) {
-                    return (((vx - vy - vz) + ys + zs) << 1) - 1;
+                    return ((vx - vy - vz + ys + zs) << 1) - 2;
                     //return (vx >> 1) + 8 - vz;
                 }
             },
@@ -1752,36 +1752,36 @@ public class ModelRenderer {
             new VariableConverter() {
                 @Override
                 public int voxelToPixelX(int vx, int vy, int vz, int xs, int ys, int zs) {
-                    return (vy - vx + xs) - 2 << 1;
+                    return (vy - vx + xs) << 1;
                 }
 
                 @Override
                 public int voxelToPixelY(int vx, int vy, int vz, int xs, int ys, int zs) {
-                    return ((vy + vx - vz + zs) << 1) - 3;
+                    return ((vy + vx - vz + zs) << 1) - 4;
                 }
             },
             // direction 2
             new VariableConverter() {
                 @Override
                 public int voxelToPixelX(int vx, int vy, int vz, int xs, int ys, int zs) {
-                    return ((xs + ys - vy - vx) << 1) - 5;
+                    return ((xs + ys - vy - vx) << 1) + 2;
                 }
 
                 @Override
                 public int voxelToPixelY(int vx, int vy, int vz, int xs, int ys, int zs) {
-                    return ((vy - vx - vz + xs + zs) << 1) - 5;
+                    return ((vy - vx - vz + xs + zs) << 1) - 2;
                 }
             },
             // direction 3
             new VariableConverter() {
                 @Override
                 public int voxelToPixelX(int vx, int vy, int vz, int xs, int ys, int zs) {
-                    return (vx - vy + ys) - 2 << 1;
+                    return (vx - vy + ys) << 1;
                 }
 
                 @Override
                 public int voxelToPixelY(int vx, int vy, int vz, int xs, int ys, int zs) {
-                    return ((xs + ys + zs - vy - vx - vz) << 1) - 3;
+                    return ((xs + ys + zs - vy - vx - vz) << 1);
                 }
             }
     };
@@ -1853,7 +1853,7 @@ public class ModelRenderer {
             new VariableConverter() {
                 @Override
                 public int voxelToPixelX(int vx, int vy, int vz, int xs, int ys, int zs) {
-                    return (vy - vx + xs) - 2 << 1;
+                    return (vy - vx + xs) << 1;
                 }
 
                 @Override
@@ -1865,7 +1865,7 @@ public class ModelRenderer {
             new VariableConverter() {
                 @Override
                 public int voxelToPixelX(int vx, int vy, int vz, int xs, int ys, int zs) {
-                    return ((xs + ys - vy - vx) << 1) - 5;
+                    return ((xs + ys - vy - vx) + 1 << 1);
                 }
 
                 @Override
@@ -1877,7 +1877,7 @@ public class ModelRenderer {
             new VariableConverter() {
                 @Override
                 public int voxelToPixelX(int vx, int vy, int vz, int xs, int ys, int zs) {
-                    return ((ys - vy + vx) - 1 << 1);
+                    return ((ys - vy + vx) << 1);
                 }
 
                 @Override
