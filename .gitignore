@@ -238,3 +238,5 @@ target/
 *#*.*#
 /bin/
 
+GeneratedPalette.txt
+GeneratedPalette.png

@@ -11,8 +11,10 @@ import java.util.Arrays;
  * Created by Tommy Ettinger on 11/4/2017.
  */
 public class ModelRenderer {
+    private transient int[] tempPalette;
     public ModelRenderer()
     {
+        tempPalette = new int[256];
     }
 
     /**
@@ -1290,6 +1292,12 @@ public class ModelRenderer {
 //        for (int i = 0; i < original.length; i++) {
 //            System.arraycopy(original[i], 0, out[i], 0, original[0].length);
 //        }
+        Arrays.fill(tempPalette, 0);
+        for (int x = 0; x < xSize + 1; x++) {
+            for (int y = 0; y < ySize + 1; y++) { 
+                tempPalette[out[x][y] & 255]++;
+            }
+        }
         int o, a, b, c, d;
         for (int x = 1; x < xSize; x++) {
             for (int y = 1; y < ySize; y++) {
@@ -1299,8 +1307,8 @@ public class ModelRenderer {
                 c = original[x - 1][y + 1];
                 d = original[x + 1][y + 1];
                 if (o > 2 && a > 2 && b > 2 && c > 2 && d > 2) {
-                    if (a == d && a > o) out[x][y] = a;
-                    else if (b == c && b > o) out[x][y] = b;
+                    if (a == d && tempPalette[a] < tempPalette[o]) out[x][y] = a;
+                    else if (b == c && tempPalette[b] < tempPalette[o]) out[x][y] = b;
                     else out[x][y] = o;
                 }
                 else out[x][y] = o;

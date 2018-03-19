@@ -1,11 +1,27 @@
+import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.PixmapIO;
+import squidpony.StringKit;
 import warpwriter.Coloring;
 
 /**
  * Created by Tommy Ettinger on 1/21/2018.
  */
-public class PaletteGenerator {
-    public static void main(String[] args) {
+public class PaletteGenerator extends ApplicationAdapter {
+
+    public static void main(String[] arg) {
+        Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        config.setTitle("Palette Stuff");
+        config.setWindowedMode(1000, 600);
+        config.setIdleFPS(10);
+        new Lwjgl3Application(new PaletteGenerator(), config);
+    }
+
+    public void create() {
         int[] PALETTE = new int[256];
         System.arraycopy(Coloring.CW_PALETTE, 0, PALETTE, 0, 7);
         Color temp = Color.WHITE.cpy();
@@ -44,11 +60,21 @@ public class PaletteGenerator {
         System.arraycopy(PALETTE, 16 + 8, PALETTE, 216, 8);
         System.arraycopy(PALETTE, 16 + 2 * 8, PALETTE, 224, 8);
         System.arraycopy(PALETTE, 16, PALETTE, 232, 8);
+        StringBuilder sb = new StringBuilder((1 + 12 * 8) * 32);
         for (int i = 0; i < 32; i++) {
             for (int j = 0; j < 8; j++) {
-                System.out.printf("0x%08X, ", PALETTE[i << 3 | j]);
+                sb.append("0x").append(StringKit.hex(PALETTE[i << 3 | j])).append(", ");
             }
-            System.out.println();
+            sb.append('\n');
         }
+        String sbs = sb.toString();
+        System.out.println(sbs);
+        Gdx.files.local("GeneratedPalette.txt").writeString(sbs, false);
+        Pixmap pix = new Pixmap(256, 1, Pixmap.Format.RGBA8888);
+        for (int i = 0; i < 255; i++) {
+            pix.drawPixel(i, 0, PALETTE[i+1]);
+        }
+        pix.drawPixel(255, 1, 0);
+        PixmapIO.writePNG(Gdx.files.local("GeneratedPalette.png"), pix);
     }
 }
