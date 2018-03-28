@@ -148,7 +148,7 @@ public class ModelRenderer {
     {
         final int xs = voxels.length, ys = voxels[0].length, zs = voxels[0][0].length;
         VariableConverter con = directionsOrthoV[direction &= 3];
-        int[][] working = makeRenderArray(xs, ys, zs, 3, 5, 1);
+        int[][] working = makeRenderArray(xs, ys, zs, 4, 5, 1);
         int width = working.length, height = working[0].length;
         int[][] depths = new int[width][height], render;
         int aa, cc, aStep, cStep, aMax, cMax, px, py;
@@ -353,7 +353,7 @@ public class ModelRenderer {
     public int[][] renderIso(byte[][][] voxels, int direction) {
         final int xs = voxels.length, ys = voxels[0].length, zs = voxels[0][0].length;
         VariableConverter con = directionsIsoV[direction &= 3];
-        int[][] working = makeRenderArray(xs, ys, zs, 4, 4, 1);
+        int[][] working = makeRenderArray(xs, ys, zs, 4, 5, 1);
         int width = working.length, height = working[0].length;
         int[][] depths = new int[width][height], render;
         int px, py;
@@ -650,7 +650,7 @@ public class ModelRenderer {
     {
         final int xs = voxels.length, ys = voxels[0].length, zs = voxels[0][0].length;
         VariableConverter con = directionsOrthoV[direction &= 3];
-        int[][] working = makeRenderArray(xs, ys, zs, 3, 5, 1);
+        int[][] working = makeRenderArray(xs, ys, zs, 4, 5, 1);
         int width = working.length, height = working[0].length;
         int[][] depths = new int[width][height], render;
         int aa, cc, aStep, cStep, aMax, cMax, px, py;
@@ -840,7 +840,7 @@ public class ModelRenderer {
     public int[][] renderIsoBelow(byte[][][] voxels, int direction) {
         final int xs = voxels.length, ys = voxels[0].length, zs = voxels[0][0].length;
         VariableConverter con = directionsIsoV[direction &= 3];
-        int[][] working = makeRenderArray(xs, ys, zs, 4, 4, 1);
+        int[][] working = makeRenderArray(xs, ys, zs, 4, 5, 1);
         int width = working.length, height = working[0].length;
         int[][] depths = new int[width][height], render;
         int px, py;
@@ -958,7 +958,7 @@ public class ModelRenderer {
     {
         final int xs = voxels.length, ys = voxels[0].length, zs = voxels[0][0].length;
         VariableConverter con = directionsOrthoSideV[direction &= 3];
-        int[][] working = makeRenderArray(xs, ys, zs, 3, 4, 1);
+        int[][] working = makeRenderArray(xs, ys, zs, 4, 5, 1);
         int width = working.length, height = working[0].length;
         int[][] depths = new int[width][height], render;
         int aa, cc, aStep, cStep, aMax, cMax, px, py;
@@ -1130,7 +1130,7 @@ public class ModelRenderer {
     public int[][] renderIsoSide(byte[][][] voxels, int direction) {
         final int xs = voxels.length, ys = voxels[0].length, zs = voxels[0][0].length;
         VariableConverter con = directionsIsoSideV[direction &= 3];
-        int[][] working = makeRenderArray(xs, ys, zs, 4, 4, 1);
+        int[][] working = makeRenderArray(xs, ys, zs, 4, 5, 1);
         int width = working.length, height = working[0].length;
         int[][] depths = new int[width][height], render;
         int px, py;
@@ -1904,20 +1904,20 @@ public class ModelRenderer {
         int w = voxelWidth, h = voxelHeight;
         for(VariableConverter[] cons : allDirectionsV) {
             for (VariableConverter vc : cons) {
-                w = Math.max(w, vc.voxelToPixelX(0, 0, 0, xs, ys, zs) + voxelWidth);
-                h = Math.max(h, vc.voxelToPixelY(0, 0, 0, xs, ys, zs) + voxelHeight);
-                w = Math.max(w, vc.voxelToPixelX(xs, 0, 0, xs, ys, zs) + voxelWidth);
-                h = Math.max(h, vc.voxelToPixelY(xs, 0, 0, xs, ys, zs) + voxelHeight);
-                w = Math.max(w, vc.voxelToPixelX(0, ys, 0, xs, ys, zs) + voxelWidth);
-                h = Math.max(h, vc.voxelToPixelY(0, ys, 0, xs, ys, zs) + voxelHeight);
+                w = Math.max(w, vc.voxelToPixelX(1, 1, 0, xs, ys, zs) + voxelWidth);
+                h = Math.max(h, vc.voxelToPixelY(1, 1, 0, xs, ys, zs) + voxelHeight);
+                w = Math.max(w, vc.voxelToPixelX(xs, 1, 0, xs, ys, zs) + voxelWidth);
+                h = Math.max(h, vc.voxelToPixelY(xs, 1, 0, xs, ys, zs) + voxelHeight);
+                w = Math.max(w, vc.voxelToPixelX(1, ys, 0, xs, ys, zs) + voxelWidth);
+                h = Math.max(h, vc.voxelToPixelY(1, ys, 0, xs, ys, zs) + voxelHeight);
                 w = Math.max(w, vc.voxelToPixelX(xs, ys, 0, xs, ys, zs) + voxelWidth);
                 h = Math.max(h, vc.voxelToPixelY(xs, ys, 0, xs, ys, zs) + voxelHeight);
-                w = Math.max(w, vc.voxelToPixelX(0, 0, zs - 1, xs, ys, zs) + voxelWidth);
-                h = Math.max(h, vc.voxelToPixelY(0, 0, zs - 1, xs, ys, zs) + voxelHeight);
-                w = Math.max(w, vc.voxelToPixelX(xs, 0, zs - 1, xs, ys, zs) + voxelWidth);
-                h = Math.max(h, vc.voxelToPixelY(xs, 0, zs - 1, xs, ys, zs) + voxelHeight);
-                w = Math.max(w, vc.voxelToPixelX(0, ys, zs - 1, xs, ys, zs) + voxelWidth);
-                h = Math.max(h, vc.voxelToPixelY(0, ys, zs - 1, xs, ys, zs) + voxelHeight);
+                w = Math.max(w, vc.voxelToPixelX(1, 1, zs - 1, xs, ys, zs) + voxelWidth);
+                h = Math.max(h, vc.voxelToPixelY(1, 1, zs - 1, xs, ys, zs) + voxelHeight);
+                w = Math.max(w, vc.voxelToPixelX(xs, 1, zs - 1, xs, ys, zs) + voxelWidth);
+                h = Math.max(h, vc.voxelToPixelY(xs, 1, zs - 1, xs, ys, zs) + voxelHeight);
+                w = Math.max(w, vc.voxelToPixelX(1, ys, zs - 1, xs, ys, zs) + voxelWidth);
+                h = Math.max(h, vc.voxelToPixelY(1, ys, zs - 1, xs, ys, zs) + voxelHeight);
                 w = Math.max(w, vc.voxelToPixelX(xs, ys, zs - 1, xs, ys, zs) + voxelWidth);
                 h = Math.max(h, vc.voxelToPixelY(xs, ys, zs - 1, xs, ys, zs) + voxelHeight);
             }

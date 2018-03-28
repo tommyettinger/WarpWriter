@@ -25,33 +25,34 @@ public class TestOutput extends ApplicationAdapter {
     private byte[][][] voxels;
     private byte[][][][] animatedVoxels;
     private int dir = 1;
-    private final int width = 24, height = 32, frames = 1;
+    private int width = 24, height = 32, frames = 1;
     private Pixmap[] pixes = new Pixmap[frames];
     private String pathName, modelName;
     StatefulRNG srng = new StatefulRNG(initialSeed);
     int[] palette = Coloring.ALT_PALETTE;
     @Override
     public void create() {
-
+        int[][] rendered = mr.renderIso(mm.shipRandom(), 0);
+        width = rendered.length;
+        height = rendered[0].length;
         for (int i = 0; i < frames; i++) {
             pixes[i] = new Pixmap(width, height, Pixmap.Format.RGBA8888);
         }
         pix = pixes[0];
-
         pathName = "target/out/" + StringKit.hex(seed);
         Gdx.files.local(pathName).mkdirs();
         FakeLanguageGen language = FakeLanguageGen.randomLanguage(initialSeed).removeAccents();
-        UnorderedSet<String> names = new UnorderedSet<>(1000);
-        for (int i = 0; i < 1000; i++) {
+        UnorderedSet<String> names = new UnorderedSet<>(500);
+        for (int i = 0; i < 500; i++) {
             dir = 0;
             modelName = language.word(srng, true);
             while (names.contains(modelName))
                 modelName = language.word(srng, true);
             names.add(modelName);
             Gdx.files.local(pathName + "/" + modelName).mkdirs();
-            remakeModel(seed++);
-            for (dir = 1; dir < 4; dir++) {
-                remakeModel(0);
+            remakeShip(++seed);
+            for (dir = 1; dir < 8; dir++) {
+                remakeShip(0);
             }
         }
         Gdx.app.exit();
@@ -103,7 +104,7 @@ public class TestOutput extends ApplicationAdapter {
 
     public static void main(String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-        config.setTitle("Output! Seed is " + StringKit.hex(initialSeed));
+        config.setTitle("Output! Seed is 0x" + StringKit.hex(initialSeed));
         config.setWindowedMode(500, 500);
         new Lwjgl3Application(new TestOutput(), config);
     }
