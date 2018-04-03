@@ -73,18 +73,23 @@ public class TestDisplay extends ApplicationAdapter {
                         return true;
                     case Input.Keys.T:
                         tiny = !tiny;
+                        remakeShip(0);
                         return true;
                     case Input.Keys.B: // below
                         angle = 1;
+                        remakeShip(0);
                         return true;
                     case Input.Keys.S: // side
                         angle = 2;
+                        remakeShip(0);
                         return true;
                     case Input.Keys.A: // above
                         angle = 3;
+                        remakeShip(0);
                         return true;
                     case Input.Keys.H: // height cycling
                         angle = (angle % 3) + 1;
+                        remakeShip(0);
                         return true;
                     case Input.Keys.SPACE:
                         remakeShip(++seed);
