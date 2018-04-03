@@ -39,7 +39,7 @@ public class TestDisplay extends ApplicationAdapter {
      * is the default and usually isn't mentioned in names), and 4 being directly above (top).
      */
     private int angle = 3;
-    private boolean playing = false, tiny = false;
+    private boolean playing = true, rotating = false, tiny = false;
     private int width = 52, height = 64, frames = 8;
     private Pixmap[] pixes = new Pixmap[frames];
     private int[] palette = Coloring.ALT_PALETTE;
@@ -67,6 +67,9 @@ public class TestDisplay extends ApplicationAdapter {
                         return true;
                     case Input.Keys.P:
                         playing = !playing;
+                        return true;
+                    case Input.Keys.R:
+                        rotating = !rotating;
                         return true;
                     case Input.Keys.T:
                         tiny = !tiny;
@@ -311,7 +314,7 @@ public class TestDisplay extends ApplicationAdapter {
     @Override
     public void render() {
         int time = (playing ? ++counter : counter) % ((frames << (tiny ? 0 : 1)) * 6), tempDir;
-        if(time == 0)
+        if(time == 0 && rotating)
         {
             ++dir;
             tempDir = (dir &= 7);
