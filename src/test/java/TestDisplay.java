@@ -32,14 +32,14 @@ public class TestDisplay extends ApplicationAdapter {
     private ModelRenderer mr = new ModelRenderer();
     private byte[][][] voxels;
     private byte[][][][] animatedVoxels;
-    private int dir = 1, counter = 0;
+    private int dir = 1, counter = 1;
     /**
      * The height of the viewing angle, with 0 being directly below (bottom), 1 being at a 45 degree angle from below
      * (below), 2 being at the same height (side), 3 being a sorta-isometric view at a 45 degree angle from above (this
      * is the default and usually isn't mentioned in names), and 4 being directly above (top).
      */
     private int angle = 3;
-    private boolean playing = true, tiny = false;
+    private boolean playing = false, tiny = false;
     private int width = 52, height = 64, frames = 8;
     private Pixmap[] pixes = new Pixmap[frames];
     private int[] palette = Coloring.ALT_PALETTE;
