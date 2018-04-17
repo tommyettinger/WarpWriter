@@ -330,7 +330,7 @@ public class TestDisplay extends ApplicationAdapter {
         tex.draw(pixes[(time / 6) % frames], 0, 0);
         
         // standard clear the background routine for libGDX
-        Gdx.gl.glClearColor(0.6f, 0.97f, 0.5f, 1.0f);
+        Gdx.gl.glClearColor(0.63f, 0.91f, 0.55f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         batch.draw(tex, width >> 1, 250 - (width >> 1), width, height);

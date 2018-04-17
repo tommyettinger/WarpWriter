@@ -39,7 +39,7 @@ public class ModelMaker {
     {
         byte[][][] voxels = new byte[12][12][8];
         byte mainColor = (byte)((rng.nextIntHasty(18) * 6) + rng.between(22, 25)),
-                highlightColor = (byte)((rng.nextIntHasty(18) * 6) + rng.between(21, 25));
+                highlightColor = (byte)((rng.nextIntHasty(18) * 6) + rng.between(21, 24));
         for (int x = 0; x < 12; x++) {
             for (int y = 0; y < 12; y++) {
                 for (int z = 0; z < 8; z++) {
