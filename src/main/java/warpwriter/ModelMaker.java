@@ -7,7 +7,6 @@ import squidpony.squidmath.StatefulRNG;
 import java.io.InputStream;
 
 import static squidpony.squidmath.LightRNG.determineBounded;
-import static squidpony.squidmath.Noise.PointHash.hash256;
 import static squidpony.squidmath.Noise.PointHash.hashAll;
 
 /**
@@ -39,8 +38,8 @@ public class ModelMaker {
     public byte[][][] fullyRandom()
     {
         byte[][][] voxels = new byte[12][12][8];
-        byte mainColor = (byte)((rng.nextIntHasty(22) << 3) + rng.between(11, 14)),
-                highlightColor = (byte)((rng.nextIntHasty(22) << 3) + rng.between(12, 14));
+        byte mainColor = (byte)((rng.nextIntHasty(18) * 6) + rng.between(22, 25)),
+                highlightColor = (byte)((rng.nextIntHasty(18) * 6) + rng.between(21, 25));
         for (int x = 0; x < 12; x++) {
             for (int y = 0; y < 12; y++) {
                 for (int z = 0; z < 8; z++) {
@@ -54,16 +53,16 @@ public class ModelMaker {
     {
         byte[][][] voxels = new byte[12][12][8];
         int ctr;
-        long state = rng.getState(), current = determineBounded(state + 1L, 22);
-        final byte mainColor = (byte)((current << 3) + determineBounded(state + 22L, 4) + 11),
-                highlightColor = (byte)(((current + 7 + determineBounded(state + 333L, 14)) % 22 << 3) + determineBounded(state + 4444L, 3) + 12);
+        long state = rng.getState(), current = determineBounded(state + 1L, 18);
+        final byte mainColor = (byte)((current * 6) + determineBounded(state + 22L, 3) + 22),
+                highlightColor = (byte)(((current + 4 + determineBounded(state + 333L, 10)) % 18) * 6 + determineBounded(state + 4444L, 3) + 21);
         do {
             final long seed = rng.nextLong();
             ctr = 0;
             for (int x = 0; x < 12; x++) {
                 for (int y = 1; y < 6; y++) {
                     for (int z = 0; z < 8; z++) {
-                        if (y > (Math.abs(x - 6) < 2 ? 4 - (seed >>> (63 - (seed & 1))) : 4)) {
+                        if (y > (Math.abs(x - 6) < 2 ? 4 - (seed >>> (63 - (seed & 1))) : 3)) {
                             //current = hashAll(x >> 1, y >> 1, z >> 1, seed);
                             current = hashAll(x, y, z, seed);
                             if ((voxels[x][11 - y][z] = voxels[x][y][z] =
@@ -84,24 +83,24 @@ public class ModelMaker {
         voxels = Tools3D.largestPart(Tools3D.runCA(voxels, 1));
         for (int x = 10; x >= 5; x--) {
             for (int z = 7; z >= 2; z--) {
-                for (int y = 0; y < 5; y++) {
+                for (int y = 1; y < 5; y++) {
                     if(y != 0 && voxels[x][y - 1][z] != 0) break;
-                    if (voxels[x][y][z] != 0 && hash256(x + 1, y + 1, z, state) < 255) {
-                        voxels[x][10 - y][z] = voxels[x][y + 1][z] = 9;
-                        voxels[x][11 - y][z] = voxels[x][y    ][z] = 9;
-                        voxels[x + 1][11 - y][z] = voxels[x + 1][y + 1][z] = 9;     // intentionally asymmetrical
-                        voxels[x + 1][10 - y][z] = voxels[x + 1][y    ][z] = 4; // intentionally asymmetrical
+                    if (voxels[x][y][z] != 0) {
+                        voxels[x][12 - y][z] = voxels[x][y - 1][z] = 30;
+                        voxels[x][11 - y][z] = voxels[x][y    ][z] = 30;
+                        voxels[x + 1][12 - y][z] = voxels[x + 1][y    ][z] = 30;     // intentionally asymmetrical
+                        voxels[x + 1][11 - y][z] = voxels[x + 1][y - 1][z] = 4; // intentionally asymmetrical
                         if(x <= 9) {
-                            voxels[x + 2][10 - y][z] = voxels[x + 2][y + 1][z] = 0;
+                            voxels[x + 2][12 - y][z] = voxels[x + 2][y - 1][z] = 0;
                             voxels[x + 2][11 - y][z] = voxels[x + 2][y    ][z] = 0;
                         }
                         for (int i = z + 1; i < 8; i++) {
-                            voxels[x][10 - y][i] = voxels[x][y + 1][i] = 0;
+                            voxels[x][12 - y][i] = voxels[x][y - 1][i] = 0;
                             voxels[x][11 - y][i] = voxels[x][y    ][i] = 0;
-                            voxels[x + 1][10 - y][i] = voxels[x + 1][y + 1][i] = 0;
+                            voxels[x + 1][12 - y][i] = voxels[x + 1][y - 1][i] = 0;
                             voxels[x + 1][11 - y][i] = voxels[x + 1][y    ][i] = 0;
                             if(x <= 9) {
-                                voxels[x + 2][10 - y][i] = voxels[x + 2][y + 1][i] = 0;
+                                voxels[x + 2][12 - y][i] = voxels[x + 2][y - 1][i] = 0;
                                 voxels[x + 2][11 - y][i] = voxels[x + 2][y    ][i] = 0;
                             }
                         }
@@ -144,9 +143,9 @@ public class ModelMaker {
         byte[][][] nextShip = new byte[xSize][ySize][zSize];
         final int halfY = ySize >> 1, smallYSize = ySize - 1;
         byte color;
-        final byte mainColor = (byte)((determineBounded(seed + 1L, 22) << 3) + determineBounded(seed + 22L, 4) + 11),
-                highlightColor = (byte)((determineBounded(seed + 333L, 22) << 3) + determineBounded(seed + 4444L, 3) + 12),
-                cockpitColor = (byte)(-101 - (determineBounded(seed + 55555L, 7) << 3));
+        final byte mainColor = (byte)((determineBounded(seed + 1L, 18) * 6) + determineBounded(seed + 22L, 3) + 22),
+                highlightColor = (byte)((determineBounded(seed + 333L, 18) * 6) + determineBounded(seed + 4444L, 3) + 21),
+                cockpitColor = (byte)(84 + (determineBounded(seed + 55555L, 6) * 6));
         int xx, yy;
         for (int x = 0; x < xSize; x++) {
             for (int y = 0; y < halfY; y++) {
@@ -162,15 +161,15 @@ public class ModelMaker {
                         xx = x + 1;
                         yy = y + 1;
                         current = hashAll(xx + (xx | z) >> 2, yy + (yy | z) >> 1, z, color, seed); // x * 3 >> 2
-                        if (color > 0 && color < 8 && (current & 0x3f) > 3) { // checks bottom 6 bits
-                            nextShip[x][smallYSize - y][z] = nextShip[x][y][z] = (byte) (cockpitColor + (z - 4));//9;
+                        if (color > 0 && color < 8 && (current & 0x3f) > 3 && z >= 2) { // checks bottom 6 bits
+                            nextShip[x][smallYSize - y][z] = nextShip[x][y][z] = (byte) (cockpitColor - (z - 2 >> 1));//9;
                         } else {
                             nextShip[x][smallYSize - y][z] = nextShip[x][y][z] =
                                     // checks another 6 bits, starting after discarding 6 bits from the bottom
                                     ((current >>> 6 & 0x3FL) < 45L)
                                             ? 0
                                             // checks another 6 bits, starting after discarding 12 bits from the bottom
-                                            : ((current >>> 12 & 0x3FL) < 40L) ? (byte)(10 + (current & 3))
+                                            : ((current >>> 12 & 0x3FL) < 40L) ? (byte)(18 + (current & 7))
                                             // checks another 6 bits, starting after discarding 18 bits from the bottom
                                             : ((current >>> 18 & 0x3FL) < 8L) ? highlightColor : mainColor;
 //                            if(rng.next(8) < 3) // occasional random asymmetry

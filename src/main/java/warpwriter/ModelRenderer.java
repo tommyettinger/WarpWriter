@@ -3,10 +3,6 @@ package warpwriter;
 import squidpony.ArrayTools;
 
 import java.util.Arrays;
-/*
- TODO: Rotations 0 and 1 are transposed versions of each other, not rotations. Same for 2 and 3.
- This is noticeable only on models that aren't symmetrical.
-  */
 /**
  * Created by Tommy Ettinger on 11/4/2017.
  */
@@ -214,18 +210,18 @@ public class ModelRenderer {
                             } else if(current == 4) {
                                 for (int sx = 0; sx < 3; sx++) {
                                     for (int sy = 0; sy < 3; sy++) {
-                                        working[px+sx][py+sy] = 8;
+                                        working[px+sx][py+sy] = 30;
                                         depths[px+sx][py+sy] = 256 + b * 5 - c * 2;// + sy;
                                     }
                                     for (int sy = 3; sy < 5; sy++) {
-                                        working[px+sx][py+sy] = 8;
+                                        working[px+sx][py+sy] = 30;
                                         depths[px+sx][py+sy] = 255 + b * 5 - c * 2;// + sy;
                                     }
                                 }
-                                working[px][py] = 14;
-                                working[px+1][py] = 14;
-                                working[px][py+1] = 14;
-                                working[px+1][py+1] = 14;
+                                working[px][py] = 17;
+                                working[px+1][py] = 17;
+                                working[px][py+1] = 17;
+                                working[px+1][py+1] = 17;
 //                                working[px][py+2] = 14;
 //                                working[px+1][py+2] = 14;
                             }
@@ -233,7 +229,7 @@ public class ModelRenderer {
                             {
                                 for (int sx = 0; sx < 3; sx++) {
                                     for (int sy = 0; sy < 3; sy++) {
-                                        working[px+sx][py+sy] = current + 1;
+                                        working[px+sx][py+sy] = current - 1;
                                         depths[px+sx][py+sy] = 256 + b * 5 - c * 2;// + sy;
                                     }
                                     for (int sy = 3; sy < 5; sy++) {
@@ -271,18 +267,18 @@ public class ModelRenderer {
                             } else if(current == 4) {
                                 for (int sx = 0; sx < 3; sx++) {
                                     for (int sy = 0; sy < 3; sy++) {
-                                        working[px+sx][py+sy] = 8;
+                                        working[px+sx][py+sy] = 30;
                                         depths[px+sx][py+sy] = 256 + b * 5 - a * 2;// + sy;
                                     }
                                     for (int sy = 3; sy < 5; sy++) {
-                                        working[px+sx][py+sy] = 8;
+                                        working[px+sx][py+sy] = 30;
                                         depths[px+sx][py+sy] = 255 + b * 5 - a * 2;// + sy;
                                     }
                                 }
-                                working[px][py] = 14;
-                                working[px+1][py] = 14;
-                                working[px][py+1] = 14;
-                                working[px+1][py+1] = 14;
+                                working[px][py] = 17;
+                                working[px+1][py] = 17;
+                                working[px][py+1] = 17;
+                                working[px+1][py+1] = 17;
 //                                working[px][py+2] = 14;
 //                                working[px+1][py+2] = 14;
                             }
@@ -290,7 +286,7 @@ public class ModelRenderer {
                             {
                                 for (int sx = 0; sx < 3; sx++) {
                                     for (int sy = 0; sy < 3; sy++) {
-                                        working[px+sx][py+sy] = current + 1;
+                                        working[px+sx][py+sy] = current - 1;
                                         depths[px+sx][py+sy] = 256 + b * 5 - a * 2;// + sy;
                                     }
                                     for (int sy = 3; sy < 5; sy++) {
@@ -332,15 +328,14 @@ public class ModelRenderer {
         if (value > max) return max;
         return value;
     }
-
-    public static int clampAlter(int color, int change)
-    {
-        return (color & -8) + clamp((color & 7) + change, 0, 7);
-    }
-
+    
     public static int clampDown(int color)
     {
-        return (color & -8) + clamp((color & 7) - 1, 0, 7);
+        if(color < 16) return color;
+        if(color < 32) return clamp(color + 1, 17, 31);
+        color -= 32;
+        int m = (color % 6);
+        return (color - m) + clamp(m + 1, 1, 5) + 32;
     }
 
     /**
@@ -394,12 +389,12 @@ public class ModelRenderer {
                                 for (int iy = 0; iy < 4; iy++) {
                                     if (ix < 2 && iy < 2)
                                     {
-                                        working[px + ix][py + iy] = 14;
+                                        working[px + ix][py + iy] = 17;
                                         depths[px + ix][py + iy] = d + ((ix ^ ix >>> 1) & 1); // adds 1 only in center of a voxel
                                     }
                                     else
                                     {
-                                        working[px + ix][py + iy] = 8;
+                                        working[px + ix][py + iy] = 30;
                                         depths[px + ix][py + iy] = d + ((ix ^ ix >>> 1) & 1); // adds 1 only in center of a voxel
                                     }
                                 }
@@ -407,7 +402,7 @@ public class ModelRenderer {
                         } else {
                             for (int ix = 0; ix < 4; ix++) {
                                 for (int iy = 0; iy < 2; iy++) {
-                                    working[px + ix][py + iy] = current + 1;
+                                    working[px + ix][py + iy] = current - 1;
                                     depths[px + ix][py + iy] = d + ((ix ^ ix >>> 1) & 1); // adds 1 only in center of a voxel
                                 }
                             }
@@ -419,7 +414,7 @@ public class ModelRenderer {
                             }
                             for (int ix = 2; ix < 4; ix++) {
                                 for (int iy = 2; iy < 4; iy++) {
-                                    working[px + ix][py + iy] = current - 1;
+                                    working[px + ix][py + iy] = current + 1;
                                     depths[px + ix][py + iy] = d + ((ix ^ ix >>> 1) & 1); // adds 1 only in center of a voxel
                                 }
                             }
