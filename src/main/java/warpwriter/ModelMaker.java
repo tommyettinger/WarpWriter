@@ -161,7 +161,7 @@ public class ModelMaker {
                         xx = x + 1;
                         yy = y + 1;
                         current = hashAll(xx + (xx | z) >> 2, yy + (yy | z) >> 1, z, color, seed); // x * 3 >> 2
-                        if (color > 0 && color < 8 && (current & 0x3f) > 3 && z >= 2) { // checks bottom 6 bits
+                        if (color > 0 && color < 8 /* && (current & 0x3f) > 3 */ && z >= 2) { // checks bottom 6 bits
                             nextShip[x][smallYSize - y][z] = nextShip[x][y][z] = (byte) (cockpitColor - (z - 2 >> 1));//9;
                         } else {
                             nextShip[x][smallYSize - y][z] = nextShip[x][y][z] =
