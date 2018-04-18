@@ -331,11 +331,13 @@ public class ModelRenderer {
     
     public static int clampDown(int color)
     {
-        if(color < 16) return color;
-        if(color < 32) return clamp(color + 1, 17, 31);
+        final int off = color & 128;
+        color -= off;
+        if(color < 16) return color + off;
+        if(color < 32) return clamp(color + 1, 17, 31) + off;
         color -= 32;
         int m = (color % 6);
-        return (color - m) + clamp(m + 1, 1, 5) + 32;
+        return (color - m) + clamp(m + 1, 1, 5) + 32 + off;
     }
 
     /**
@@ -1072,10 +1074,10 @@ public class ModelRenderer {
                                 for (int sx = 0; sx < 3; sx++) {
                                     for (int sy = 1; sy < 4; sy++) {
                                         working[px+sx][py+sy] = 30;
-                                        depths[px+sx][py+sy] = 256 - a * 2;
+                                        depths[px+sx][py+sy] = 256 - c * 2;
                                     }
                                     working[px+sx][py] = 30;
-                                    depths[px+sx][py] = 256 - a * 2;
+                                    depths[px+sx][py] = 256 - c * 2;
 
                                 }
                                 working[px][py] = 17;
@@ -1088,10 +1090,10 @@ public class ModelRenderer {
                                 for (int sx = 0; sx < 3; sx++) {
                                     for (int sy = 1; sy < 4; sy++) {
                                         working[px+sx][py+sy] = current;
-                                        depths[px+sx][py+sy] = 256 - a * 2;
+                                        depths[px+sx][py+sy] = 256 - c * 2;
                                     }
                                     working[px+sx][py] = current - 1;
-                                    depths[px+sx][py] = 256 - a * 2;
+                                    depths[px+sx][py] = 256 - c * 2;
                                 }
                             }
                         }
