@@ -88,7 +88,7 @@ public class TestDisplay extends ApplicationAdapter {
                         remakeShip(0);
                         return true;
                     case Input.Keys.H: // height cycling
-                        angle = (angle % 3) + 1;
+                        angle = ((angle + 1) % 4);
                         remakeShip(0);
                         return true;
                     case Input.Keys.SPACE:
@@ -176,15 +176,18 @@ public class TestDisplay extends ApplicationAdapter {
             else
             {
                 switch (angle)
-                {
-                    case 1: if(dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
-                    else indices = mr.renderOrthoBelow(animatedVoxels[f], dir);
+                { 
+                    case 1:
+                        if(dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
+                        else indices = mr.renderOrthoBelow(animatedVoxels[f], dir);
                         break;
-                    case 2: if(dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
-                    else indices = mr.renderOrthoSide(animatedVoxels[f], dir);
+                    case 3:
+                        if(dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
+                        else indices = mr.renderOrtho(animatedVoxels[f], dir);
                         break;
-                    default: if(dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
-                    else indices = mr.renderOrtho(animatedVoxels[f], dir);
+                    default:
+                        if(dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
+                        else indices = mr.renderOrthoSide(animatedVoxels[f], dir);
                         break;
                 }
             }
@@ -213,14 +216,17 @@ public class TestDisplay extends ApplicationAdapter {
             {
                 switch (angle)
                 {
-                    case 1: if(dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
-                    else indices = mr.renderOrthoBelow(animatedVoxels[f], dir);
+                    case 1:
+                        if(dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
+                        else indices = mr.renderOrthoBelow(animatedVoxels[f], dir);
                         break;
-                    case 2: if(dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
-                    else indices = mr.renderOrthoSide(animatedVoxels[f], dir);
+                    case 3:
+                        if(dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
+                        else indices = mr.renderOrtho(animatedVoxels[f], dir);
                         break;
-                    default: if(dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
-                    else indices = mr.renderOrtho(animatedVoxels[f], dir);
+                    default:
+                        if(dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
+                        else indices = mr.renderOrthoSide(animatedVoxels[f], dir);
                         break;
                 }
             }
@@ -252,14 +258,17 @@ public class TestDisplay extends ApplicationAdapter {
             {
                 switch (angle)
                 {
-                    case 1: if(dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
-                    else indices = mr.renderOrthoBelow(animatedVoxels[f], dir);
+                    case 1:
+                        if(dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
+                        else indices = mr.renderOrthoBelow(animatedVoxels[f], dir);
                         break;
-                    case 2: if(dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
-                    else indices = mr.renderOrthoSide(animatedVoxels[f], dir);
+                    case 3:
+                        if(dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
+                        else indices = mr.renderOrtho(animatedVoxels[f], dir);
                         break;
-                    default: if(dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
-                    else indices = mr.renderOrtho(animatedVoxels[f], dir);
+                    default:
+                        if(dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
+                        else indices = mr.renderOrthoSide(animatedVoxels[f], dir);
                         break;
                 }
             }
