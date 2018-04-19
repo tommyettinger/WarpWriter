@@ -750,7 +750,7 @@ public class ModelRenderer {
                                         depths[px+sx][py+sy] = 254 + b * 5 - c * 2;// + sy;
                                     }
                                     for (int sy = 0; sy < 3; sy++) {
-                                        working[px+sx][py+sy] = current - 1;
+                                        working[px+sx][py+sy] = current;
                                         depths[px+sx][py+sy] = 255 + b * 5 - c * 2;// + sy;
                                     }
                                 }
@@ -805,7 +805,7 @@ public class ModelRenderer {
                                         depths[px+sx][py+sy] = 254 + b * 5 - a * 2;// + sy;
                                     }
                                     for (int sy = 0; sy < 3; sy++) {
-                                        working[px+sx][py+sy] = current - 1;
+                                        working[px+sx][py+sy] = current;
                                         depths[px+sx][py+sy] = 255 + b * 5 - a * 2;// + sy;
                                     }
                                 }
@@ -857,6 +857,8 @@ public class ModelRenderer {
         int d, w;
         final int gray = direction ^ direction >>> 1;
         final int cStart = (gray & 2) == 0 ? 0 : xs - 1, cEnd = (gray & 2) == 0 ? xs : -1, cChange = (gray & 2) == 0 ? 1 : -1;
+        //final int cStart = (gray & 2) == 2 ? 0 : xs - 1, cEnd = (gray & 2) == 2 ? xs : -1, cChange = (gray & 2) == 2 ? 1 : -1;
+        //final int aStart = 0, aEnd = ys, aChange = 1;
         final int aStart = (gray & 1) == 0 ? ys - 1 : 0, aEnd = (gray & 1) == 0 ? -1 : ys, aChange = (gray & 1) == 0 ? -1 : 1;
         for (int b = zs - 1; b >= 0; b--) {
             for (int c = cStart; c != cEnd; c += cChange) {
@@ -898,19 +900,19 @@ public class ModelRenderer {
                             }
                         } else {
                             for (int ix = 0; ix < 4; ix++) {
-                                for (int iy = 0; iy < 2; iy++) {
-                                    working[px + ix][py + iy] = current - 1;
-                                    depths[px + ix][py + iy] = d + ((ix ^ ix >>> 1) & 1); // adds 1 only in center of a voxel
-                                }
-                            }
-                            for (int ix = 0; ix < 2; ix++) {
                                 for (int iy = 2; iy < 4; iy++) {
                                     working[px + ix][py + iy] = current;
                                     depths[px + ix][py + iy] = d + ((ix ^ ix >>> 1) & 1); // adds 1 only in center of a voxel
                                 }
                             }
+                            for (int ix = 0; ix < 2; ix++) {
+                                for (int iy = 0; iy < 2; iy++) {
+                                    working[px + ix][py + iy] = current - 1;
+                                    depths[px + ix][py + iy] = d + ((ix ^ ix >>> 1) & 1); // adds 1 only in center of a voxel
+                                }
+                            }
                             for (int ix = 2; ix < 4; ix++) {
-                                for (int iy = 2; iy < 4; iy++) {
+                                for (int iy = 0; iy < 2; iy++) {
                                     working[px + ix][py + iy] = current + 1;
                                     depths[px + ix][py + iy] = d + ((ix ^ ix >>> 1) & 1); // adds 1 only in center of a voxel
                                 }
