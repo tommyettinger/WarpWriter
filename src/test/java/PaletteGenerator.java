@@ -33,22 +33,22 @@ public class PaletteGenerator extends ApplicationAdapter {
                 0xff574600, 0xffb14600, 0xfffd4600, 0x4bff4600, 0x51bf6c00, 0x4697ff00, 0x9146ff00, 0xff46ae00,
                 0xffffffff, 0xeeeeeeff, 0xddddddff, 0xccccccff, 0xbbbbbbff, 0xaaaaaaff, 0x999999ff, 0x888888ff,
                 0x777777ff, 0x666666ff, 0x555555ff, 0x444444ff, 0x333333ff, 0x222222ff, 0x111111ff, 0x000000ff,
-                0xff978cfe, 0xff5746fe, 0xeb3623fe, 0xcc1c0afe, 0xa50f00fe, 0x720a00fe,
-                0xffd0ccfe, 0xebb1abfe, 0xcc8b84fe, 0xa5655ffe, 0x79423cfe, 0x46211dfe,
-                0xffce8cfe, 0xffb146fe, 0xeb9723fe, 0xcc7a0afe, 0xa56000fe, 0x724200fe,
-                0xffe9ccfe, 0xebd0abfe, 0xccae84fe, 0xa5885ffe, 0x795f3cfe, 0x46351dfe,
-                0xfffe8cfe, 0xfffd46fe, 0xebea23fe, 0xccca0afe, 0xa5a400fe, 0x727200fe,
-                0xfff0d8fe, 0xf2d19dfe, 0xdfb46ffe, 0xbf9147fe, 0x996e2afe, 0x6c4b15fe,
-                0x8fff8cfe, 0x4bff46fe, 0x29eb23fe, 0x10cc0afe, 0x05a500fe, 0x037200fe,
-                0xcdffccfe, 0xadebabfe, 0x86cc84fe, 0x61a55ffe, 0x3e793cfe, 0x1f461dfe,
-                0x8ecc9efe, 0x51bf6cfe, 0x33ac51fe, 0x1d923afe, 0x0f7929fe, 0x06591bfe,
-                0xccfffdfe, 0xabebeafe, 0x84ccc9fe, 0x5fa5a3fe, 0x3c7977fe, 0x1d4644fe,
-                0x8cbefffe, 0x4697fffe, 0x237bebfe, 0x0a5eccfe, 0x0048a5fe, 0x003272fe,
-                0xcce2fffe, 0xabc7ebfe, 0x84a3ccfe, 0x5f7ea5fe, 0x3c5779fe, 0x1d2f46fe,
-                0xba8cfffe, 0x9146fffe, 0x7423ebfe, 0x580accfe, 0x4300a5fe, 0x2e0072fe,
-                0xe0ccfffe, 0xc5abebfe, 0xa184ccfe, 0x7b5fa5fe, 0x553c79fe, 0x2e1d46fe,
-                0xff8cccfe, 0xff46aefe, 0xeb2394fe, 0xcc0a77fe, 0xa5005dfe, 0x720040fe,
-                0xffcce8fe, 0xebabcffe, 0xcc84acfe, 0xa55f86fe, 0x793c5efe, 0x461d34fe,
+                0xff8b7fff, 0xff5746ff, 0xeb3623ff, 0xcc1c0aff, 0xa50f00ff, 0x720a00ff,
+                0xffcbb2ff, 0xebb093ff, 0xcc8a6bff, 0xa5684aff, 0x79462dff, 0x4c2816ff,
+                0xffc87fff, 0xffaf46ff, 0xeb9623ff, 0xcc790aff, 0xa55e00ff, 0x724100ff,
+                0xffe3bfff, 0xebcb9fff, 0xcca675ff, 0xa58252ff, 0x795b33ff, 0x4c371aff,
+                0xfffeacff, 0xfffd59ff, 0xf2f136ff, 0xdfdd1bff, 0xc5c409ff, 0xacab00ff,
+                0xf8e7cdff, 0xf2d09dff, 0xdfb26fff, 0xbf8f47ff, 0x996c2aff, 0x6c4915ff,
+                0x83ff7fff, 0x4bff46ff, 0x29eb23ff, 0x10cc0aff, 0x05a500ff, 0x037200ff,
+                0xc1ffbfff, 0xa1eb9fff, 0x78cc75ff, 0x55a552ff, 0x357933ff, 0x1c4c1aff,
+                0x8ecc9eff, 0x51bf6cff, 0x33ac51ff, 0x1d923aff, 0x0f7929ff, 0x06591bff,
+                0xbffffdff, 0x9febe9ff, 0x75ccc9ff, 0x52a5a3ff, 0x337977ff, 0x1a4c4bff,
+                0x7fb7ffff, 0x4697ffff, 0x237bebff, 0x0a5eccff, 0x0048a5ff, 0x003272ff,
+                0xbfdbffff, 0x9fc0ebff, 0x759bccff, 0x5277a5ff, 0x335179ff, 0x1a304cff,
+                0xb37fffff, 0x9146ffff, 0x7423ebff, 0x580accff, 0x4300a5ff, 0x2e0072ff,
+                0xd9bfffff, 0xbe9febff, 0x9875ccff, 0x7452a5ff, 0x4f3379ff, 0x2e1a4cff,
+                0xff7fc7ff, 0xff46aeff, 0xeb2394ff, 0xcc0a77ff, 0xa5005dff, 0x720040ff,
+                0xffbfe3ff, 0xeb9fcaff, 0xcc75a6ff, 0xa55281ff, 0x79335aff, 0x4c1a36ff,
         };
         System.arraycopy(initial, 0, PALETTE, 0, 128);
         System.arraycopy(initial, 0, PALETTE, 128, 128);
@@ -95,24 +95,24 @@ public class PaletteGenerator extends ApplicationAdapter {
         }
         String sbs = sb.toString();
         System.out.println(sbs);
-        Gdx.files.local("GeneratedPalette.txt").writeString(sbs, false);
+        //Gdx.files.local("GeneratedPalette.txt").writeString(sbs, false);
         sb.setLength(0);
-        for (int i = 7; i < 120; i++) {
-            final int p = PALETTE[i];
-            int diff = Integer.MAX_VALUE;
-            for (int j = 7; j < 120; j++) {
-                if(i == j) continue;
-                diff = Math.min(difference2(p, PALETTE[j]), diff);
-            }
-            sb.append("0x").append(StringKit.hex(p)).append(' ').append(diff).append('\n');
-        }
-        Gdx.files.local("PaletteDifferences.txt").writeString(sb.toString(), false);
+//        for (int i = 7; i < 120; i++) {
+//            final int p = PALETTE[i];
+//            int diff = Integer.MAX_VALUE;
+//            for (int j = 7; j < 120; j++) {
+//                if(i == j) continue;
+//                diff = Math.min(difference2(p, PALETTE[j]), diff);
+//            }
+//            sb.append("0x").append(StringKit.hex(p)).append(' ').append(diff).append('\n');
+//        }
+//        Gdx.files.local("PaletteDifferences.txt").writeString(sb.toString(), false);
         Pixmap pix = new Pixmap(256, 1, Pixmap.Format.RGBA8888);
         for (int i = 0; i < 255; i++) {
             pix.drawPixel(i, 0, PALETTE[i+1]);
         }
         pix.drawPixel(255, 1, 0);
-        PixmapIO.writePNG(Gdx.files.local("GeneratedPalette.png"), pix);
+        PixmapIO.writePNG(Gdx.files.local("WarpWriterPalette2.png"), pix);
         Gdx.app.exit();
     }
 
