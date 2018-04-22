@@ -16,8 +16,8 @@ public class ModelMaker {
     // separate from the rng so we can call skip(), if needed, or use GreasedRegion stuff
     public LightRNG light;
     public StatefulRNG rng;
-    private byte[][][] ship;
-    private final int xSize, ySize, zSize;
+    private byte[][][] ship, shipLarge;
+    private int xSize, ySize, zSize;
 
     public ModelMaker()
     {
@@ -30,6 +30,9 @@ public class ModelMaker {
         InputStream is = this.getClass().getResourceAsStream("/ship.vox");
         ship = VoxIO.readVox(new LittleEndianDataInputStream(is));
         if(ship == null) ship = new byte[12][12][8];
+        is = this.getClass().getResourceAsStream("/ship_40_40_30.vox");
+        shipLarge = VoxIO.readVox(new LittleEndianDataInputStream(is));
+        if(shipLarge == null) shipLarge = new byte[40][40][30];
         xSize = ship.length;
         ySize = ship[0].length;
         zSize = ship[0][0].length;
@@ -140,6 +143,9 @@ public class ModelMaker {
     public byte[][][] shipRandom()
     {
         long seed = rng.nextLong(), current;
+        xSize = ship.length;
+        ySize = ship[0].length;
+        zSize = ship[0][0].length;
         byte[][][] nextShip = new byte[xSize][ySize][zSize];
         final int halfY = ySize >> 1, smallYSize = ySize - 1;
         byte color;
@@ -172,13 +178,54 @@ public class ModelMaker {
                                             : ((current >>> 12 & 0x3FL) < 40L) ? (byte)(18 + (current & 7))
                                             // checks another 6 bits, starting after discarding 18 bits from the bottom
                                             : ((current >>> 18 & 0x3FL) < 8L) ? highlightColor : mainColor;
-//                            if(rng.next(8) < 3) // occasional random asymmetry
-//                            {
-//                                if(rng.nextBoolean())
-//                                    nextShip[x][y][z] = highlightColor;
-//                                else
-//                                    nextShip[x][smallYSize - y][z] = highlightColor;
-//                            }
+                        }
+                    }
+                }
+            }
+        }
+        return nextShip;
+        //return Tools3D.runCA(nextShip, 1);
+    }
+
+    public byte[][][] shipLargeRandom()
+    {
+        long seed = rng.nextLong(), current;
+        xSize = shipLarge.length;
+        ySize = shipLarge[0].length;
+        zSize = shipLarge[0][0].length;
+        byte[][][] nextShip = new byte[xSize][ySize][zSize];
+        final int halfY = ySize >> 1, smallYSize = ySize - 1;
+        byte color;
+        final byte mainColor = (byte)((determineBounded(seed + 1L, 18) * 6) + determineBounded(seed + 22L, 3) + 22),
+                highlightColor = (byte)((determineBounded(seed + 333L, 18) * 6) + determineBounded(seed + 4444L, 3) + 21),
+                cockpitColor = (byte)(84 + (determineBounded(seed + 55555L, 6) * 6));
+        int xx, yy;
+        for (int x = 0; x < xSize; x++) {
+            for (int y = 0; y < halfY; y++) {
+                for (int z = 0; z < zSize; z++) {
+                    color = shipLarge[x][y][z];
+                    if (color != 0) {
+                        // this 4-input-plus-state hash is really a slight modification on LightRNG.determine(), but
+                        // it mixes the x, y, and z inputs more thoroughly than other techniques do, and we then use
+                        // different sections of the random bits for different purposes. This helps reduce the possible
+                        // issues from using rng.next(5) and rng.next(6) all over if the bits those use have a pattern.
+                        // In the original model, all voxels of the same color will be hashed with similar behavior but
+                        // any with different colors will get unrelated values.
+                        xx = x + 1;
+                        yy = y + 1;
+                        current = hashAll((xx + (xx | z)) / 7, (yy + (yy | z)) / 5, z, color, seed); // x * 3 >> 2
+                        if (color > 0 && color < 8) { // checks bottom 6 bits
+                            if((current >>> 6 & 0x7L) != 0)
+                            nextShip[x][smallYSize - y][z] = nextShip[x][y][z] = (byte) (cockpitColor - (z + 6 >> 3));//9;
+                        } else {
+                            nextShip[x][smallYSize - y][z] = nextShip[x][y][z] =
+                                    // checks another 6 bits, starting after discarding 6 bits from the bottom
+                                    ((current >>> 6 & 0x3FL) < 52L)
+                                            ? 0
+                                            // checks another 6 bits, starting after discarding 12 bits from the bottom
+                                            : ((current >>> 12 & 0x3FL) < 40L) ? (byte)(18 + (current & 7))
+                                            // checks another 6 bits, starting after discarding 18 bits from the bottom
+                                            : ((current >>> 18 & 0x3FL) < 8L) ? highlightColor : mainColor;
                         }
                     }
                 }
@@ -197,7 +244,7 @@ public class ModelMaker {
             adjustment = (int) (NumberTools.sway(changeAmount * f + 0.5f) * 1.75f) + 1;
             for (int x = 0; x < xSize; x++) {
                 for (int y = 0; y < ySize; y++) {
-                    System.arraycopy(spaceship[x][y], 1, frames[f][x][y], adjustment, 6);
+                    System.arraycopy(spaceship[x][y], 1, frames[f][x][y], adjustment, zSize - 2);
                 }
             }
         }

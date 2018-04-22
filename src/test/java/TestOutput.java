@@ -17,6 +17,7 @@ import warpwriter.ModelRenderer;
  * Created by Tommy Ettinger on 1/19/2018.
  */
 public class TestOutput extends ApplicationAdapter {
+    private static final int LIMIT = 100;
     private Pixmap pix;
     private static long initialSeed = LightRNG.determine(System.nanoTime());
     private long seed = initialSeed;
@@ -25,14 +26,14 @@ public class TestOutput extends ApplicationAdapter {
     private byte[][][] voxels;
     private byte[][][][] animatedVoxels;
     private int dir = 1;
-    private int width = 24, height = 32, frames = 1;
+    private int width, height, frames = 1;
     private Pixmap[] pixes = new Pixmap[frames];
     private String pathName, modelName;
     StatefulRNG srng = new StatefulRNG(initialSeed);
     int[] palette = Coloring.ALT_PALETTE;
     @Override
     public void create() {
-        int[][] rendered = mr.renderIso(mm.shipRandom(), 0);
+        int[][] rendered = mr.renderIso(mm.shipLargeRandom(), 0);
         width = rendered.length;
         height = rendered[0].length;
         for (int i = 0; i < frames; i++) {
@@ -42,8 +43,8 @@ public class TestOutput extends ApplicationAdapter {
         pathName = "target/out/" + StringKit.hex(seed);
         Gdx.files.local(pathName).mkdirs();
         FakeLanguageGen language = FakeLanguageGen.randomLanguage(initialSeed).removeAccents();
-        UnorderedSet<String> names = new UnorderedSet<>(500);
-        for (int i = 0; i < 500; i++) {
+        UnorderedSet<String> names = new UnorderedSet<>(LIMIT);
+        for (int i = 0; i < LIMIT; i++) {
             dir = 0;
             modelName = language.word(srng, true);
             while (names.contains(modelName))
@@ -82,7 +83,7 @@ public class TestOutput extends ApplicationAdapter {
     public void remakeShip(long newModel) {
         if (newModel != 0) {
             mm.light.state = LightRNG.determine(newModel);
-            voxels = mm.shipRandom();
+            voxels = mm.shipLargeRandom();
             //animatedVoxels = mm.animateShip(voxels, frames);
         }
 

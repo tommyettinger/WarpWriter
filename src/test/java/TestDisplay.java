@@ -199,7 +199,7 @@ public class TestDisplay extends ApplicationAdapter {
         }
     }
 
-    public void remakeShip(long newModel) {
+    public void remakeShipSmall(long newModel) {
         if (newModel != 0){
             mm.light.state = LightRNG.determine(newModel);
             voxels = mm.shipRandom();
@@ -236,6 +236,48 @@ public class TestDisplay extends ApplicationAdapter {
                 }
             }
         }
+    }
+
+    public void remakeShip(long newModel) {
+        if (newModel != 0){
+            mm.light.state = LightRNG.determine(newModel);
+            voxels = mm.shipLargeRandom();
+            palette = Coloring.ALT_PALETTE;
+            animatedVoxels = mm.animateShip(voxels, frames);
+        }
+        for (int f = 0; f < frames; f++) {
+            int[][] indices;
+            if(tiny) indices = mr.renderIso24x32(animatedVoxels[f], dir);
+            else
+            {
+                switch (angle)
+                {
+                    case 1:
+                        if(dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
+                        else indices = mr.renderOrthoBelow(animatedVoxels[f], dir);
+                        break;
+                    case 3:
+                        if(dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
+                        else indices = mr.renderOrtho(animatedVoxels[f], dir);
+                        break;
+                    default:
+                        if(dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
+                        else indices = mr.renderOrthoSide(animatedVoxels[f], dir);
+                        break;
+                }
+            }
+            width = indices.length;
+            height = indices[0].length;
+            pix = pixes[f] = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+            pix.setColor(0);
+            pix.fill();
+            for (int x = 0; x < indices.length; x++) {
+                for (int y = 0; y < indices[0].length; y++) {
+                    pix.drawPixel(x, y, palette[indices[x][y]]);
+                }
+            }
+        }
+        tex = new Texture(width, height, Pixmap.Format.RGBA8888);
     }
 
     public void remakeFull(long newModel) {
