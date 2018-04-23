@@ -39,7 +39,7 @@ public class TestDisplay extends ApplicationAdapter {
      * is the default and usually isn't mentioned in names), and 4 being directly above (top).
      */
     private int angle = 3;
-    private boolean playing = true, rotating = false, tiny = false;
+    private boolean playing = true, rotating = false, tiny = false, large = true;
     private int width = 52, height = 64, frames = 8;
     private Pixmap[] pixes = new Pixmap[frames];
     private int[] palette = Coloring.ALT_PALETTE;
@@ -70,6 +70,9 @@ public class TestDisplay extends ApplicationAdapter {
                         return true;
                     case Input.Keys.R:
                         rotating = !rotating;
+                        return true;
+                    case Input.Keys.L:
+                        large = !large;
                         return true;
                     case Input.Keys.T:
                         tiny = !tiny;
@@ -241,7 +244,7 @@ public class TestDisplay extends ApplicationAdapter {
     public void remakeShip(long newModel) {
         if (newModel != 0){
             mm.light.state = LightRNG.determine(newModel);
-            voxels = mm.shipLargeRandom();
+            voxels = large ? mm.shipLargeRandom() : mm.shipRandom();
             palette = Coloring.ALT_PALETTE;
             animatedVoxels = mm.animateShip(voxels, frames);
         }
