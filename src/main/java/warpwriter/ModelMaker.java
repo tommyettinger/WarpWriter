@@ -166,7 +166,7 @@ public class ModelMaker {
                         // any with different colors will get unrelated values.
                         xx = x + 1;
                         yy = y + 1;
-                        current = hashAll(xx + (xx | z) >> 2, yy + (yy | z) >> 1, z, color, seed); // x * 3 >> 2
+                        current = hashAll(xx + (xx | z) >> 2, yy + (yy | z) >> 1, z, color, seed);
                         if (color > 0 && color < 8 /* && (current & 0x3f) > 3 */ && z >= 2) { // checks bottom 6 bits
                             nextShip[x][smallYSize - y][z] = nextShip[x][y][z] = (byte) (cockpitColor - (z - 2 >> 1));//9;
                         } else {
@@ -189,7 +189,7 @@ public class ModelMaker {
 
     public byte[][][] shipLargeRandom()
     {
-        long seed = rng.nextLong(), current;
+        long seed = rng.nextLong(), current, paint;
         xSize = shipLarge.length;
         ySize = shipLarge[0].length;
         zSize = shipLarge[0][0].length;
@@ -199,7 +199,7 @@ public class ModelMaker {
         final byte mainColor = (byte)((determineBounded(seed + 1L, 18) * 6) + determineBounded(seed + 22L, 3) + 22),
                 highlightColor = (byte)((determineBounded(seed + 333L, 18) * 6) + determineBounded(seed + 4444L, 3) + 21),
                 cockpitColor = (byte)(84 + (determineBounded(seed + 55555L, 6) * 6));
-        int xx, yy;
+        int xx, yy, zz;
         for (int x = 0; x < xSize; x++) {
             for (int y = 0; y < halfY; y++) {
                 for (int z = 0; z < zSize; z++) {
@@ -213,19 +213,21 @@ public class ModelMaker {
                         // any with different colors will get unrelated values.
                         xx = x + 1;
                         yy = y + 1;
-                        current = hashAll((xx + (xx | z)) / 7, (yy + (yy | z)) / 5, z, color, seed); // x * 3 >> 2
+                        zz = z / 3;
+                        current = hashAll(xx + (xx | zz) >> 3, (yy + (yy | zz)) / 3, zz, color, seed);
+                        paint = hashAll((xx + (xx | z)) / 7, (yy + (yy | z)) / 5, z, color, seed);
                         if (color > 0 && color < 8) { // checks bottom 6 bits
                             if((current >>> 6 & 0x7L) != 0)
                             nextShip[x][smallYSize - y][z] = nextShip[x][y][z] = (byte) (cockpitColor - (z + 6 >> 3));//9;
                         } else {
                             nextShip[x][smallYSize - y][z] = nextShip[x][y][z] =
                                     // checks another 6 bits, starting after discarding 6 bits from the bottom
-                                    ((current >>> 6 & 0x3FL) < 52L)
+                                    ((current >>> 6 & 0x3FL) < (color & 255L))
                                             ? 0
                                             // checks another 6 bits, starting after discarding 12 bits from the bottom
-                                            : ((current >>> 12 & 0x3FL) < 40L) ? (byte)(18 + (current & 7))
+                                            : ((paint >>> 12 & 0x3FL) < 40L) ? (byte)(18 + (paint & 7))
                                             // checks another 6 bits, starting after discarding 18 bits from the bottom
-                                            : ((current >>> 18 & 0x3FL) < 8L) ? highlightColor : mainColor;
+                                            : ((paint >>> 18 & 0x3FL) < 8L) ? highlightColor : mainColor;
                         }
                     }
                 }
