@@ -195,7 +195,7 @@ public class ModelMaker {
         zSize = shipLarge[0][0].length;
         byte[][][] nextShip = new byte[xSize][ySize][zSize];
         final int halfY = ySize >> 1, smallYSize = ySize - 1;
-        byte color;
+        int color;
         final byte mainColor = (byte)((determineBounded(seed + 1L, 18) * 6) + determineBounded(seed + 22L, 3) + 22),
                 highlightColor = (byte)((determineBounded(seed + 333L, 18) * 6) + determineBounded(seed + 4444L, 3) + 21),
                 cockpitColor = (byte)(84 + (determineBounded(seed + 55555L, 6) * 6));
@@ -203,7 +203,7 @@ public class ModelMaker {
         for (int x = 0; x < xSize; x++) {
             for (int y = 0; y < halfY; y++) {
                 for (int z = 0; z < zSize; z++) {
-                    color = shipLarge[x][y][z];
+                    color = (shipLarge[x][y][z] & 255);
                     if (color != 0) {
                         // this 4-input-plus-state hash is really a slight modification on LightRNG.determine(), but
                         // it mixes the x, y, and z inputs more thoroughly than other techniques do, and we then use
@@ -216,13 +216,13 @@ public class ModelMaker {
                         zz = z / 3;
                         current = hashAll(xx + (xx | zz) >> 3, (yy + (yy | zz)) / 3, zz, color, seed);
                         paint = hashAll((xx + (xx | z)) / 7, (yy + (yy | z)) / 5, z, color, seed);
-                        if (color > 0 && color < 8) { // checks bottom 6 bits
+                        if (color < 8) { // checks bottom 6 bits
                             if((current >>> 6 & 0x7L) != 0)
                             nextShip[x][smallYSize - y][z] = nextShip[x][y][z] = (byte) (cockpitColor - (z + 6 >> 3));//9;
                         } else {
                             nextShip[x][smallYSize - y][z] = nextShip[x][y][z] =
                                     // checks another 6 bits, starting after discarding 6 bits from the bottom
-                                    ((current >>> 6 & 0x3FL) < (color & 255L))
+                                    ((current >>> 6 & 0x1FFL) < color * 6)
                                             ? 0
                                             // checks another 6 bits, starting after discarding 12 bits from the bottom
                                             : ((paint >>> 12 & 0x3FL) < 40L) ? (byte)(18 + (paint & 7))
@@ -233,7 +233,8 @@ public class ModelMaker {
                 }
             }
         }
-        return nextShip;
+        return Tools3D.largestPart(nextShip);
+        //return nextShip;
         //return Tools3D.runCA(nextShip, 1);
     }
     public byte[][][][] animateShip(byte[][][] spaceship, final int frameCount)

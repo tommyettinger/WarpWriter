@@ -242,7 +242,7 @@ public class Tools3D {
     public static int flood(byte[][][] base, byte[][][] bounds)
     {
         final int xs = base.length, ys = base[0].length, zs = base[0][0].length;
-        int initialSize, size = 0;
+        int size = count(base), totalSize = 0;
         /*
         for (int x = 0; x < xs; x++) {
             for (int y = 0; y < ys; y++) {
@@ -257,14 +257,14 @@ public class Tools3D {
         byte[][][] nx = deepCopy(base);
         byte t;
         do {
-            initialSize = size;
+            totalSize += size;
             size = 0;
             for (int x = 0; x < xs; x++) {
                 for (int y = 0; y < ys; y++) {
                     for (int z = 0; z < zs; z++) {
                         if (nx[x][y][z] != 0 && (t = bounds[x][y][z]) != 0) {
                             nx[x][y][z] = t;
-                            ++size;
+                            //++size;
                             if (x > 0 && nx[x - 1][y][z] == 0 && (t = bounds[x - 1][y][z]) != 0) {
                                 nx[x - 1][y][z] = t;
                                 ++size;
@@ -293,9 +293,9 @@ public class Tools3D {
                     }
                 }
             }
-        } while (initialSize < size);
+        } while (size != 0);
         deepCopyInto(nx, base);
-        return size;
+        return totalSize + size;
     }
 
     public static byte[][][] largestPart(byte[][][] voxels)
@@ -307,7 +307,7 @@ public class Tools3D {
                 choice = new byte[xs][ys][zs];
         while (fst >= 0) {
             fill(filled, 0);
-            filled[x = fst / (ys * zs)][y = (fst / zs) % ys][z = fst % zs] = voxels[x][y][z];
+            System.out.println(filled[x = fst / (ys * zs)][y = (fst / zs) % ys][z = fst % zs] = voxels[x][y][z]);
             currentSize = flood(filled, remaining);
             if(currentSize > bestSize)
             {
