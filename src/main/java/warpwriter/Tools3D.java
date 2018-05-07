@@ -307,7 +307,7 @@ public class Tools3D {
                 choice = new byte[xs][ys][zs];
         while (fst >= 0) {
             fill(filled, 0);
-            System.out.println(filled[x = fst / (ys * zs)][y = (fst / zs) % ys][z = fst % zs] = voxels[x][y][z]);
+            filled[x = fst / (ys * zs)][y = (fst / zs) % ys][z = fst % zs] = voxels[x][y][z];
             currentSize = flood(filled, remaining);
             if(currentSize > bestSize)
             {
