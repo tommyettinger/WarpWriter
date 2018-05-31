@@ -175,7 +175,7 @@ public class TestDisplay extends ApplicationAdapter {
             pix.setColor(0);
             pix.fill();
             int[][] indices;
-            if(tiny) indices = mr.renderIso24x32(animatedVoxels[f], dir);
+            if(tiny && !large) indices = mr.renderIso24x32(animatedVoxels[f], dir);
             else
             {
                 switch (angle)
@@ -214,7 +214,7 @@ public class TestDisplay extends ApplicationAdapter {
             pix.setColor(0);
             pix.fill();
             int[][] indices;
-            if(tiny) indices = mr.renderIso24x32(animatedVoxels[f], dir);
+            if(tiny && !large) indices = mr.renderIso24x32(animatedVoxels[f], dir);
             else
             {
                 switch (angle)
@@ -250,7 +250,7 @@ public class TestDisplay extends ApplicationAdapter {
         }
         for (int f = 0; f < frames; f++) {
             int[][] indices;
-            if(tiny) indices = mr.renderIso24x32(animatedVoxels[f], dir);
+            if(tiny && !large) indices = mr.renderIso24x32(animatedVoxels[f], dir);
             else
             {
                 switch (angle)
@@ -295,7 +295,7 @@ public class TestDisplay extends ApplicationAdapter {
             pix.setColor(0);
             pix.fill();
             int[][] indices;
-            if(tiny)
+            if(tiny && !large)
             {
                 indices = mr.renderIso24x32(animatedVoxels[f], dir);
             }
@@ -340,7 +340,7 @@ public class TestDisplay extends ApplicationAdapter {
         
         for (int f = 0; f < frames; f++) {
             int[][] indices;
-            if(tiny) indices = mr.renderIso24x32(animatedVoxels[f], dir);
+            if(tiny && !large) indices = mr.renderIso24x32(animatedVoxels[f], dir);
             else
             {
                 switch (angle)
@@ -372,7 +372,7 @@ public class TestDisplay extends ApplicationAdapter {
 
     @Override
     public void render() {
-        int time = (playing ? ++counter : counter) % ((frames << (tiny ? 0 : 1)) * 6), tempDir;
+        int time = (playing ? ++counter : counter) % ((frames << (tiny && !large ? 0 : 1)) * 6), tempDir;
         if(time == 0 && rotating)
         {
             ++dir;

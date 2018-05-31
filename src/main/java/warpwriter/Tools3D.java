@@ -226,7 +226,7 @@ public class Tools3D {
         return vs1;
     }
 
-    private static int firstTight(byte[][][] voxels)
+    public static int firstTight(byte[][][] voxels)
     {
         final int xs = voxels.length, ys = voxels[0].length, zs = voxels[0][0].length;
         for (int x = 0; x < xs; x++) {
@@ -238,6 +238,24 @@ public class Tools3D {
             }
         }
         return -1;
+    }
+
+    public static void findConnectors(byte[][][] voxels, int[] connectors)
+    {
+        Arrays.fill(connectors, -1);
+        int curr;
+        final int xs = voxels.length, ys = voxels[0].length, zs = voxels[0][0].length;
+        for (int x = 0; x < xs; x++) {
+            for (int y = 0; y < ys; y++) {
+                for (int z = 0; z < zs; z++) {
+                    curr = voxels[x][y][z] & 255;
+                    if(curr >= 8 && curr < 16)
+                        connectors[curr - 8] = zs * (x * ys + y) + z;
+                    else if(curr >= 136 && curr < 144)
+                        connectors[curr - 128] = zs * (x * ys + y) + z;
+                }
+            }
+        }
     }
     public static int flood(byte[][][] base, byte[][][] bounds)
     {
@@ -328,4 +346,40 @@ public class Tools3D {
         return choice;
     }
 
+    public static byte[][][] translateCopy(byte[][][] voxels, int xMove, int yMove, int zMove)
+    {
+        int xs, ys, zs;
+        byte[][][] next = new byte[xs = voxels.length][ys = voxels[0].length][zs = voxels[0][0].length];
+        final int xLimit = xs - Math.abs(xMove), xStart = Math.max(0, -xMove);
+        final int yLimit = ys - Math.abs(yMove), yStart = Math.max(0, -yMove);
+        final int zLimit = zs - Math.abs(zMove), zStart = Math.max(0, -zMove);
+        if(zLimit <= 0)
+            return next;
+        for (int x = xStart, xx = 0; x < xs && xx < xLimit && xx < xs; x++, xx++) {
+            for (int y = yStart, yy = 0; y < ys && yy < yLimit && yy < ys; y++, yy++) {
+                System.arraycopy(voxels[x][y], 0, next[xx][yy], zStart, zLimit);
+            }
+        }
+        return next;
+
+    }
+
+    public static void translateCopyInto(byte[][][] voxels, byte[][][] into, int xMove, int yMove, int zMove)
+    {
+        int xs, ys, zs;
+        xs = voxels.length;
+        ys = voxels[0].length;
+        zs = voxels[0][0].length;
+        final int xLimit = xs - Math.abs(xMove), xStart = Math.max(0, -xMove);
+        final int yLimit = ys - Math.abs(yMove), yStart = Math.max(0, -yMove);
+        final int zLimit = zs - Math.abs(zMove), zStart = Math.max(0, -zMove);
+        for (int x = xStart, xx = 0; x < xs && xx < xLimit && xx < xs; x++, xx++) {
+            for (int y = yStart, yy = 0; y < ys && yy < yLimit && yy < ys; y++, yy++) {
+                for (int z = zStart, zz = 0; z < zs && zz < zLimit && zz < zs; z++, zz++) {
+                    if(into[xx][yy][zz] == 0 && voxels[x][y][z] != 0)
+                        into[xx][yy][zz] = voxels[x][y][z];
+                }
+            }
+        }
+    }
 }

@@ -16,7 +16,7 @@ public class ModelMaker {
     // separate from the rng so we can call skip(), if needed, or use GreasedRegion stuff
     public LightRNG light;
     public StatefulRNG rng;
-    private byte[][][] ship, shipLarge;
+    private byte[][][] ship, shipLarge, warriorMale, sword0, spear0, shield0, shield1;
     private int xSize, ySize, zSize;
 
     public ModelMaker()
@@ -36,8 +36,62 @@ public class ModelMaker {
         xSize = ship.length;
         ySize = ship[0].length;
         zSize = ship[0][0].length;
-
+        is = this.getClass().getResourceAsStream("/Warrior_Male_Attach.vox");
+        warriorMale = VoxIO.readVox(new LittleEndianDataInputStream(is));
+        if(warriorMale == null) warriorMale = new byte[12][12][8];
+        is = this.getClass().getResourceAsStream("/Sword_1H_Attach.vox");
+        sword0 = VoxIO.readVox(new LittleEndianDataInputStream(is));
+        if(sword0 == null) sword0 = new byte[12][12][8];
+        is = this.getClass().getResourceAsStream("/Spear_1H_Attach.vox");
+        spear0 = VoxIO.readVox(new LittleEndianDataInputStream(is));
+        if(spear0 == null) spear0 = new byte[12][12][8];
+        is = this.getClass().getResourceAsStream("/Board_Shield_1H_Attach.vox");
+        shield0 = VoxIO.readVox(new LittleEndianDataInputStream(is));
+        if(shield0 == null) shield0 = new byte[12][12][8];
+        is = this.getClass().getResourceAsStream("/Round_Shield_1H_Attach.vox");
+        shield1 = VoxIO.readVox(new LittleEndianDataInputStream(is));
+        if(shield1 == null) shield1 = new byte[12][12][8];
     }
+    
+    public byte[][][] combine(byte[][][] start, byte[][][]... additional)
+    {
+        final int xSize = start.length, ySize = start[0].length, zSize = start[0][0].length;
+        byte[][][] next = Tools3D.deepCopy(start);
+        int[] startConn = new int[16], nextConn = new int[16];
+        int[][] actualConn = new int[3][16];
+        int nx = -1, ny = -1, nz = -1;
+        Tools3D.findConnectors(start, startConn);
+        for (int i = 0; i < 16; i++) {
+            int c = startConn[i];
+            if (c < 0)
+                actualConn[0][i] = actualConn[1][i] = actualConn[2][i] = -1;
+            else {
+                actualConn[0][i] = c / (ySize * zSize);
+                actualConn[1][i] = (c / zSize) % ySize;
+                actualConn[2][i] = c % zSize;
+                next[actualConn[0][i]][actualConn[1][i]][actualConn[2][i]] =  0;
+            }
+        }
+        for(byte[][][] n : additional)
+        {
+            Tools3D.findConnectors(n, nextConn);
+            for (int i = 0; i < 16; i++) {
+                int c = nextConn[i];
+                if (c >= 0)
+                {
+                    nx = c / (ySize * zSize);
+                    ny = (c / zSize) % ySize;
+                    nz = c % zSize;
+                    Tools3D.translateCopyInto(n, next, actualConn[0][i] - nx, actualConn[1][i] - ny, actualConn[2][i] - nz);
+                    next[actualConn[0][i]][actualConn[1][i]][actualConn[2][i]] = 0;
+                    break;
+                }
+            }
+
+        }
+        return next;
+    }
+    
     public byte[][][] fullyRandom()
     {
         byte[][][] voxels = new byte[12][12][8];
