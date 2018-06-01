@@ -146,6 +146,9 @@ public class TestDisplay extends ApplicationAdapter {
                     case Input.Keys.F:
                         remakeFish(++seed);
                         return true;
+                    case Input.Keys.K: // knight
+                        remakeWarrior(++seed);
+                        return true;
                     case Input.Keys.O: // output
                         name = FakeLanguageGen.SIMPLISH.word(true);
                         VoxIO.writeVOX(name + ".vox", voxels, palette);
@@ -164,12 +167,12 @@ public class TestDisplay extends ApplicationAdapter {
         Gdx.input.setInputProcessor(input);
     }
 
-    public void remakeFish(long newModel) {         
+    public void remakeFish(long newModel) {
         mm.light.state = LightRNG.determine(newModel);
         voxels = mm.fishRandom();
         palette = Coloring.ALT_PALETTE;
         animatedVoxels = mm.animateFish(voxels, frames);
-        
+
         for (int f = 0; f < frames; f++) {
             pix = pixes[f];
             pix.setColor(0);
@@ -179,7 +182,45 @@ public class TestDisplay extends ApplicationAdapter {
             else
             {
                 switch (angle)
-                { 
+                {
+                    case 1:
+                        if(dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
+                        else indices = mr.renderOrthoBelow(animatedVoxels[f], dir);
+                        break;
+                    case 3:
+                        if(dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
+                        else indices = mr.renderOrtho(animatedVoxels[f], dir);
+                        break;
+                    default:
+                        if(dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
+                        else indices = mr.renderOrthoSide(animatedVoxels[f], dir);
+                        break;
+                }
+            }
+            for (int x = 0; x < indices.length; x++) {
+                for (int y = 0; y < indices[0].length; y++) {
+                    pix.drawPixel(x, y, palette[indices[x][y]]);
+                }
+            }
+        }
+    }
+
+    public void remakeWarrior(long newModel) {
+        mm.light.state = LightRNG.determine(newModel);
+        voxels = mm.warriorRandom();
+        palette = Coloring.ALT_PALETTE;
+        Arrays.fill(animatedVoxels, voxels);
+
+        for (int f = 0; f < frames; f++) {
+            pix = pixes[f];
+            pix.setColor(0);
+            pix.fill();
+            int[][] indices;
+            if(tiny && !large) indices = mr.renderIso24x32(animatedVoxels[f], dir);
+            else
+            {
+                switch (angle)
+                {
                     case 1:
                         if(dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
                         else indices = mr.renderOrthoBelow(animatedVoxels[f], dir);

@@ -17,6 +17,7 @@ public class ModelMaker {
     public LightRNG light;
     public StatefulRNG rng;
     private byte[][][] ship, shipLarge, warriorMale, sword0, spear0, shield0, shield1;
+    private byte[][][][] rightHand, leftHand;
     private int xSize, ySize, zSize;
 
     public ModelMaker()
@@ -51,6 +52,9 @@ public class ModelMaker {
         is = this.getClass().getResourceAsStream("/Round_Shield_1H_Attach.vox");
         shield1 = VoxIO.readVox(new LittleEndianDataInputStream(is));
         if(shield1 == null) shield1 = new byte[12][12][8];
+        
+        rightHand = new byte[][][][]{sword0, spear0};
+        leftHand = new byte[][][][]{shield0, shield1};
     }
     
     public byte[][][] combine(byte[][][] start, byte[][][]... additional)
@@ -77,7 +81,7 @@ public class ModelMaker {
             Tools3D.findConnectors(n, nextConn);
             for (int i = 0; i < 16; i++) {
                 int c = nextConn[i];
-                if (c >= 0)
+                if (c >= 0 && actualConn[0][i] != -1)
                 {
                     nx = c / (ySize * zSize);
                     ny = (c / zSize) % ySize;
@@ -87,7 +91,6 @@ public class ModelMaker {
                     break;
                 }
             }
-
         }
         return next;
     }
@@ -307,5 +310,15 @@ public class ModelMaker {
         }
         return frames;
     }
+    
+    public byte[][][] warriorRandom()
+    {
+        byte[][][][] used = new byte[rng.maxIntOf(2, 4) + 1][][][];
+        used[0] = rng.getRandomElement(rightHand);
+        if(used.length > 1)
+            used[1] = rng.getRandomElement(leftHand);
+        return combine(warriorMale, used);
+    }
+    
 
 }
