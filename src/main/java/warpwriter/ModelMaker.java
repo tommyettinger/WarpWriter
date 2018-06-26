@@ -1,20 +1,19 @@
 package warpwriter;
 
-import squidpony.squidmath.LightRNG;
+import squidpony.squidmath.LinnormRNG;
 import squidpony.squidmath.NumberTools;
 import squidpony.squidmath.StatefulRNG;
 
 import java.io.InputStream;
 
-import static squidpony.squidmath.LightRNG.determineBounded;
+import static squidpony.squidmath.LinnormRNG.determineBounded;
 import static squidpony.squidmath.Noise.PointHash.hashAll;
 
 /**
  * Created by Tommy Ettinger on 11/4/2017.
  */
 public class ModelMaker {
-    // separate from the rng so we can call skip(), if needed, or use GreasedRegion stuff
-    public LightRNG light;
+    public LinnormRNG source;
     public StatefulRNG rng;
     private byte[][][] ship, shipLarge, warriorMale, sword0, spear0, shield0, shield1;
     private byte[][][][] rightHand, leftHand;
@@ -22,12 +21,12 @@ public class ModelMaker {
 
     public ModelMaker()
     {
-        this((long) (Math.random() * Long.MAX_VALUE));
+        this((long)((Math.random() - 0.5) * 4.503599627370496E15) ^ (long)((Math.random() - 0.5) * 2.0 * -9.223372036854776E18));
     }
     public ModelMaker(long seed)
     {
-        light = new LightRNG(seed);
-        rng = new StatefulRNG(light);
+        source = new LinnormRNG(seed);
+        rng = new StatefulRNG(source);
         InputStream is = this.getClass().getResourceAsStream("/ship.vox");
         ship = VoxIO.readVox(new LittleEndianDataInputStream(is));
         if(ship == null) ship = new byte[12][12][8];

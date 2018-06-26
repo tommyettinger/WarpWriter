@@ -24,13 +24,14 @@ import static squidpony.squidmath.LinnormRNG.determine;
  * generation (by pressing space).
  * Created by Tommy Ettinger on 11/4/2017.
  */
-public class TestDisplay extends ApplicationAdapter {
+public class TestDetailedDisplay extends ApplicationAdapter {
     private SpriteBatch batch;
     private Texture tex;
     private Pixmap pix;
     private long seed = 0x1337BEEFD00DL;
     private ModelMaker mm = new ModelMaker(seed);
-    private ModelRenderer mr = new ModelRenderer();
+    private DetailedModelRenderer mr = new DetailedModelRenderer();
+    private PaletteReducer reducer;
     private byte[][][] voxels;
     private byte[][][][] animatedVoxels;
     private int dir = 1, counter = 1;
@@ -40,13 +41,14 @@ public class TestDisplay extends ApplicationAdapter {
      * is the default and usually isn't mentioned in names), and 4 being directly above (top).
      */
     private int angle = 3;
-    private boolean playing = true, rotating = false, tiny = false, large = true;
+    private boolean playing = true, rotating = false, large = true;
     private int width = 52, height = 64, frames = 8;
     private Pixmap[] pixes = new Pixmap[frames];
     private int[] palette = Coloring.ALT_PALETTE;
     @Override
     public void create() {
         batch = new SpriteBatch();
+        reducer = new PaletteReducer(Coloring.ALT_PALETTE);
 //        pix = new Pixmap(16, 16, Pixmap.Format.RGBA8888);
 //        tex = new Texture(16, 16, Pixmap.Format.RGBA8888);
         for (int i = 0; i < frames; i++) {
@@ -74,10 +76,6 @@ public class TestDisplay extends ApplicationAdapter {
                         return true;
                     case Input.Keys.L:
                         large = !large;
-                        return true;
-                    case Input.Keys.T:
-                        tiny = !tiny;
-                        remakeShip(0);
                         return true;
                     case Input.Keys.B: // below
                         angle = 1;
@@ -179,8 +177,6 @@ public class TestDisplay extends ApplicationAdapter {
             pix.setColor(0);
             pix.fill();
             int[][] indices;
-            if(tiny && !large) indices = mr.renderIso24x32(animatedVoxels[f], dir);
-            else
             {
                 switch (angle)
                 {
@@ -200,9 +196,10 @@ public class TestDisplay extends ApplicationAdapter {
             }
             for (int x = 0; x < indices.length; x++) {
                 for (int y = 0; y < indices[0].length; y++) {
-                    pix.drawPixel(x, y, palette[indices[x][y]]);
+                    pix.drawPixel(x, y, indices[x][y]);
                 }
             }
+            reducer.reduceSolid(pix);
         }
     }
 
@@ -217,8 +214,6 @@ public class TestDisplay extends ApplicationAdapter {
             pix.setColor(0);
             pix.fill();
             int[][] indices;
-            if(tiny && !large) indices = mr.renderIso24x32(animatedVoxels[f], dir);
-            else
             {
                 switch (angle)
                 {
@@ -238,51 +233,13 @@ public class TestDisplay extends ApplicationAdapter {
             }
             for (int x = 0; x < indices.length; x++) {
                 for (int y = 0; y < indices[0].length; y++) {
-                    pix.drawPixel(x, y, palette[indices[x][y]]);
+                    pix.drawPixel(x, y, indices[x][y]);
                 }
             }
+            reducer.reduceSolid(pix);
         }
     }
-
-    public void remakeShipSmall(long newModel) {
-        if (newModel != 0){
-            mm.rng.setState(determine(newModel));
-            voxels = mm.shipRandom();
-            palette = Coloring.ALT_PALETTE;
-            animatedVoxels = mm.animateShip(voxels, frames);
-        }
-        for (int f = 0; f < frames; f++) {
-            pix = pixes[f];
-            pix.setColor(0);
-            pix.fill();
-            int[][] indices;
-            if(tiny && !large) indices = mr.renderIso24x32(animatedVoxels[f], dir);
-            else
-            {
-                switch (angle)
-                {
-                    case 1:
-                        if(dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
-                        else indices = mr.renderOrthoBelow(animatedVoxels[f], dir);
-                        break;
-                    case 3:
-                        if(dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
-                        else indices = mr.renderOrtho(animatedVoxels[f], dir);
-                        break;
-                    default:
-                        if(dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
-                        else indices = mr.renderOrthoSide(animatedVoxels[f], dir);
-                        break;
-                }
-            }
-            for (int x = 0; x < indices.length; x++) {
-                for (int y = 0; y < indices[0].length; y++) {
-                    pix.drawPixel(x, y, palette[indices[x][y]]);
-                }
-            }
-        }
-    }
-
+    
     public void remakeShip(long newModel) {
         if (newModel != 0){
             mm.rng.setState(determine(newModel));
@@ -292,8 +249,6 @@ public class TestDisplay extends ApplicationAdapter {
         }
         for (int f = 0; f < frames; f++) {
             int[][] indices;
-            if(tiny && !large) indices = mr.renderIso24x32(animatedVoxels[f], dir);
-            else
             {
                 switch (angle)
                 {
@@ -318,9 +273,10 @@ public class TestDisplay extends ApplicationAdapter {
             pix.fill();
             for (int x = 0; x < indices.length; x++) {
                 for (int y = 0; y < indices[0].length; y++) {
-                    pix.drawPixel(x, y, palette[indices[x][y]]);
+                    pix.drawPixel(x, y, indices[x][y]);
                 }
             }
+            reducer.reduceSolid(pix);
         }
         tex = new Texture(width, height, Pixmap.Format.RGBA8888);
     }
@@ -337,11 +293,6 @@ public class TestDisplay extends ApplicationAdapter {
             pix.setColor(0);
             pix.fill();
             int[][] indices;
-            if(tiny && !large)
-            {
-                indices = mr.renderIso24x32(animatedVoxels[f], dir);
-            }
-            else
             {
                 switch (angle)
                 {
@@ -361,9 +312,10 @@ public class TestDisplay extends ApplicationAdapter {
             }
             for (int x = 0; x < indices.length; x++) {
                 for (int y = 0; y < indices[0].length; y++) {
-                    pix.drawPixel(x, y, palette[indices[x][y]]);
+                    pix.drawPixel(x, y, indices[x][y]);
                 }
             }
+            reducer.reduceSolid(pix);
         }
     }
 
@@ -382,8 +334,6 @@ public class TestDisplay extends ApplicationAdapter {
         
         for (int f = 0; f < frames; f++) {
             int[][] indices;
-            if(tiny && !large) indices = mr.renderIso24x32(animatedVoxels[f], dir);
-            else
             {
                 switch (angle)
                 {
@@ -405,16 +355,17 @@ public class TestDisplay extends ApplicationAdapter {
             pix.fill();
             for (int x = 0; x < indices.length; x++) {
                 for (int y = 0; y < indices[0].length; y++) {
-                    pix.drawPixel(x, y, palette[indices[x][y]]);
+                    pix.drawPixel(x, y, indices[x][y]);
                 }
             }
+            reducer.reduceSolid(pix);
         }
         tex = new Texture(width, height, Pixmap.Format.RGBA8888);
     }
 
     @Override
     public void render() {
-        int time = (playing ? ++counter : counter) % ((frames << (tiny && !large ? 0 : 1)) * 6), tempDir;
+        int time = (playing ? ++counter : counter) % (frames * 12), tempDir;
         if(time == 0 && rotating)
         {
             ++dir;
@@ -446,7 +397,7 @@ public class TestDisplay extends ApplicationAdapter {
         config.setTitle( "Display Test");
         config.setWindowedMode(1000, 600);
         config.setIdleFPS(10);
-        final TestDisplay testDisplay = new TestDisplay();
+        final TestDetailedDisplay testDisplay = new TestDetailedDisplay();
         config.setWindowListener(new Lwjgl3WindowAdapter() {
             @Override
             public void filesDropped(String[] files) {

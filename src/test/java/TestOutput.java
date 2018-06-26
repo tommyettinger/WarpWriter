@@ -7,19 +7,20 @@ import com.badlogic.gdx.graphics.PixmapIO;
 import squidpony.FakeLanguageGen;
 import squidpony.StringKit;
 import squidpony.squidmath.StatefulRNG;
-import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.UnorderedSet;
 import warpwriter.Coloring;
 import warpwriter.ModelMaker;
 import warpwriter.ModelRenderer;
 
+import static squidpony.squidmath.LinnormRNG.determine;
+
 /**
  * Created by Tommy Ettinger on 1/19/2018.
  */
 public class TestOutput extends ApplicationAdapter {
-    private static final int LIMIT = 100;
+    private static final int LIMIT = 175;
     private Pixmap pix;
-    private static long initialSeed = LightRNG.determine(System.nanoTime());
+    private static long initialSeed = determine(System.nanoTime());
     private long seed = initialSeed;
     private ModelMaker mm = new ModelMaker(seed);
     private ModelRenderer mr = new ModelRenderer();
@@ -61,7 +62,7 @@ public class TestOutput extends ApplicationAdapter {
 
     public void remakeModel(long newModel) {
         if (newModel != 0){
-            mm.light.state = LightRNG.determine(newModel);
+            mm.rng.setState(determine(newModel));
             voxels = mm.shipRandom();
             animatedVoxels = mm.animateShip(voxels, frames);
         }
@@ -82,7 +83,7 @@ public class TestOutput extends ApplicationAdapter {
 
     public void remakeShip(long newModel) {
         if (newModel != 0) {
-            mm.light.state = LightRNG.determine(newModel);
+            mm.rng.setState(determine(newModel));
             voxels = mm.shipLargeRandom();
             //animatedVoxels = mm.animateShip(voxels, frames);
         }
