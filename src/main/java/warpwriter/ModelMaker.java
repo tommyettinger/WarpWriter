@@ -7,7 +7,7 @@ import squidpony.squidmath.StatefulRNG;
 import java.io.InputStream;
 
 import static squidpony.squidmath.LinnormRNG.determineBounded;
-import static squidpony.squidmath.Noise.PointHash.hashAll;
+//import static squidpony.squidmath.Noise.PointHash.hashAll;
 
 /**
  * Created by Tommy Ettinger on 11/4/2017.
@@ -18,7 +18,42 @@ public class ModelMaker {
     private byte[][][] ship, shipLarge, warriorMale, sword0, spear0, shield0, shield1;
     private byte[][][][] rightHand, leftHand;
     private int xSize, ySize, zSize;
+    /**
+     *
+     * @param x
+     * @param y
+     * @param z
+     * @param state
+     * @return 64-bit hash of the x,y,z point with the given state
+     */
+    public static long hashAll(long x, long y, long z, long state) {
+//        return TangleRNG.determine(x, TangleRNG.determine(y, TangleRNG.determine(z, state)));
+        return ((x = ((x *= 0x734C283B73FE6A6DL) ^ x >>> 26) * (0x64F31432B4AA049BL ^
+                ((y = ((y *= 0x5FCBBDE92C96E11DL) ^ y >>> 26) * (0x4E34944613628E73L ^
+                        ((z = ((z *= 0x6C8E9CF570932BD5L) ^ z >>> 26) * (state * 0x9E3779B97F4A7C15L | 1L)) ^ z >>> 24)
+                                | 1L)) ^ y >>> 24)
+                | 1L)) ^ x >>> 24);
 
+    }
+    /**
+     *
+     * @param x
+     * @param y
+     * @param z
+     * @param state
+     * @return 64-bit hash of the x,y,z point with the given state
+     */
+    public static long hashAll(long x, long y, long z, long w, long state) {
+//        return TangleRNG.determine(x, TangleRNG.determine(y, TangleRNG.determine(z, TangleRNG.determine(w, state))));
+        return ((x = ((x *= 0x734C283B73FE6A6DL) ^ x >>> 26) * (0x64F31432B4AA049BL ^
+                ((y = ((y *= 0x5FCBBDE92C96E11DL) ^ y >>> 26) * (0x4E34944613628E73L ^ 
+                        ((z = ((z *= 0x6C8E9CF570932BD5L) ^ z >>> 26) * (0x7F91620098C41B2BL ^
+                                ((w = ((w *= 0x4DC7BD448464FE2DL) ^ w >>> 26) * (state * 0x9E3779B97F4A7C15L | 1L)) ^ w >>> 24)
+                                        | 1L)) ^ z >>> 24)
+                                | 1L)) ^ y >>> 24)
+                        | 1L)) ^ x >>> 24);
+
+    }
     public ModelMaker()
     {
         this((long)((Math.random() - 0.5) * 4.503599627370496E15) ^ (long)((Math.random() - 0.5) * 2.0 * -9.223372036854776E18));

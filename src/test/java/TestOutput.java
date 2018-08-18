@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
 import squidpony.FakeLanguageGen;
 import squidpony.StringKit;
+import squidpony.Thesaurus;
+import squidpony.squidmath.OrderedSet;
 import squidpony.squidmath.StatefulRNG;
 import squidpony.squidmath.UnorderedSet;
 import warpwriter.Coloring;
@@ -32,6 +34,22 @@ public class TestOutput extends ApplicationAdapter {
     private String pathName, modelName;
     StatefulRNG srng = new StatefulRNG(initialSeed);
     int[] palette = Coloring.ALT_PALETTE;
+    private String makeName(OrderedSet<String> alpha, OrderedSet<String> beta)
+    {
+        String a = alpha.randomItem(srng);
+        while (a.contains("'"))
+            a = alpha.randomItem(srng);
+        String b = beta.randomItem(srng);
+        while (b.contains("'"))
+            b = beta.randomItem(srng);
+        final int al = a.length(), bl = b.length();
+        final char[] ch = new char[al + bl];
+        a.getChars(1, al, ch, 1);
+        b.getChars(1, bl, ch, al+1);
+        ch[0] = Character.toUpperCase(a.charAt(0));
+        ch[al] = Character.toUpperCase(b.charAt(0));
+        return String.valueOf(ch);
+    }
     @Override
     public void create() {
         int[][] rendered = mr.renderIso(mm.shipLargeRandom(), 0);
@@ -44,12 +62,19 @@ public class TestOutput extends ApplicationAdapter {
         pathName = "target/out/" + StringKit.hex(seed);
         Gdx.files.local(pathName).mkdirs();
         FakeLanguageGen language = FakeLanguageGen.randomLanguage(initialSeed).removeAccents();
+        OrderedSet<String> adjective = new OrderedSet<>(256), noun = new OrderedSet<>(256);
+        for (int i = 0; i < Thesaurus.adjective.size(); i++) {
+            adjective.addAll(Thesaurus.adjective.getAt(i));
+        }
+        for (int i = 0; i < Thesaurus.noun.size(); i++) {
+            noun.addAll(Thesaurus.noun.getAt(i));
+        }
         UnorderedSet<String> names = new UnorderedSet<>(LIMIT);
         for (int i = 0; i < LIMIT; i++) {
             dir = 0;
-            modelName = language.word(srng, true);
+            modelName = makeName(adjective, noun);
             while (names.contains(modelName))
-                modelName = language.word(srng, true);
+                modelName = makeName(adjective, noun);
             names.add(modelName);
             Gdx.files.local(pathName + "/" + modelName).mkdirs();
             remakeShip(++seed);
