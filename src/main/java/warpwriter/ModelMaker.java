@@ -28,12 +28,32 @@ public class ModelMaker {
      */
     public static long hashAll(long x, long y, long z, long state) {
 //        return TangleRNG.determine(x, TangleRNG.determine(y, TangleRNG.determine(z, state)));
-        return ((x = ((x *= 0x734C283B73FE6A6DL) ^ x >>> 26) * (0x64F31432B4AA049BL ^
-                ((y = ((y *= 0x5FCBBDE92C96E11DL) ^ y >>> 26) * (0x4E34944613628E73L ^
-                        ((z = ((z *= 0x6C8E9CF570932BD5L) ^ z >>> 26) * (state * 0x9E3779B97F4A7C15L | 1L)) ^ z >>> 24)
-                                | 1L)) ^ y >>> 24)
-                | 1L)) ^ x >>> 24);
 
+        state *= 0x9E3779B97F4A7C15L;
+        long other = 0x60642E2A34326F15L;
+        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+        state = (state << 54 | state >>> 10);
+        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+        state = (state << 54 | state >>> 10);
+        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+        state = (state << 54 | state >>> 10);
+        return state + (other ^ other >>> 26) * 0x632BE59BD9B4E019L;
+
+//        return ((x = ((x *= 0x6C8E9CF570932BD5L) ^ x >>> 26 ^ 0x9183A1F4F348E683L) * (
+//                ((y = ((y *= 0x6C8E9CF570932BD5L) ^ y >>> 26 ^ 0x9183A1F4F348E683L) * (
+//                        ((z = ((z *= 0x6C8E9CF570932BD5L) ^ z >>> 26 ^ 0x9183A1F4F348E683L) * (
+//                                state * 0x9E3779B97F4A7C15L
+//                                        | 1L)) ^ z >>> 24)
+//                                | 1L)) ^ y >>> 24) 
+//                        | 1L)) ^ x >>> 24);
+
+//        x *= (0xF34C283B73FE6A6DL);
+//        state += (x << 45 | x >>> 19);
+//        y *= (0x9183A1F4F348E683L);
+//        state += (y << 3 | y >>> 61);
+//        z *= (0xAFBB1BAE72936299L);
+//        state += (z << 25 | z >>> 39);
+//        return state ^ x + y + z;
     }
     /**
      *
@@ -45,14 +65,50 @@ public class ModelMaker {
      */
     public static long hashAll(long x, long y, long z, long w, long state) {
 //        return TangleRNG.determine(x, TangleRNG.determine(y, TangleRNG.determine(z, TangleRNG.determine(w, state))));
-        return ((x = ((x *= 0x734C283B73FE6A6DL) ^ x >>> 26) * (0x64F31432B4AA049BL ^
-                ((y = ((y *= 0x5FCBBDE92C96E11DL) ^ y >>> 26) * (0x4E34944613628E73L ^ 
-                        ((z = ((z *= 0x6C8E9CF570932BD5L) ^ z >>> 26) * (0x7F91620098C41B2BL ^
-                                ((w = ((w *= 0x4DC7BD448464FE2DL) ^ w >>> 26) * (state * 0x9E3779B97F4A7C15L | 1L)) ^ w >>> 24)
-                                        | 1L)) ^ z >>> 24)
-                                | 1L)) ^ y >>> 24)
-                        | 1L)) ^ x >>> 24);
+        state *= 0x9E3779B97F4A7C15L;
+        long other = 0x60642E2A34326F15L;
+        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+        state = (state << 54 | state >>> 10);
+        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+        state = (state << 54 | state >>> 10);
+        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+        state = (state << 54 | state >>> 10);
+        state ^= (other += (w ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+        state = (state << 54 | state >>> 10);
+        return state + (other ^ other >>> 26) * 0x632BE59BD9B4E019L;
 
+//        return ((x = ((x *= 0x6C8E9CF570932BD5L) ^ x >>> 26 ^ 0x9183A1F4F348E683L) * (
+//                ((y = ((y *= 0x6C8E9CF570932BD5L) ^ y >>> 26 ^ 0x9183A1F4F348E683L) * (
+//                        ((z = ((z *= 0x6C8E9CF570932BD5L) ^ z >>> 26 ^ 0x9183A1F4F348E683L) * (
+//                                ((w = ((w *= 0x6C8E9CF570932BD5L) ^ w >>> 26 ^ 0x9183A1F4F348E683L) * (
+//                                        state * 0x9E3779B97F4A7C15L
+//                                                | 1L)) ^ w >>> 24)
+//                                        | 1L)) ^ z >>> 24)
+//                                | 1L)) ^ y >>> 24)
+//                        | 1L)) ^ x >>> 24);
+
+//        return ((x = ((x *= 0x734C283B73FE6A6DL) ^ x >>> 26 ^ 0x64F31432B4AA049BL) * (
+//                ((y = ((y *= 0x5FCBBDE92C96E11DL) ^ y >>> 26 ^ 0x4E34944613628E73L) * (
+//                        ((z = ((z *= 0x6C8E9CF570932BD5L) ^ z >>> 26 ^ 0x7F91620098C41B2BL) * (
+//                                ((w = ((w *= 0x4DC7BD448464FE2DL) ^ w >>> 26 ^ 0x571DD04A962AC4A3L) * (
+//                                        state * 0x9E3779B97F4A7C15L
+//                                                | 1L)) ^ w >>> 24)
+//                                        | 1L)) ^ z >>> 24)
+//                                | 1L)) ^ y >>> 24)
+//                        | 1L)) ^ x >>> 24);
+
+        // 0x9E3779B97F4A7C16L
+        // (0x734C283B73FE6A6DL + 0x9E3779B97F4A7C16L * 1L)
+//        x *= (0xF34C283B73FE6A6DL);
+//        state += (x << 45 | x >>> 19);
+//        y *= (0x9183A1F4F348E683L);
+//        state += (y << 3 | y >>> 61);
+//        z *= (0xAFBB1BAE72936299L);
+//        state += (z << 25 | z >>> 39);
+//        w *= (0xCDF29567F1DDDEAFL);
+//        state += (w << 47 | w >>> 17);
+//        return state ^ x + y + z + w;
+        
     }
     public ModelMaker()
     {
