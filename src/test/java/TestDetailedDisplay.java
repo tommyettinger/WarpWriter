@@ -284,7 +284,7 @@ public class TestDetailedDisplay extends ApplicationAdapter {
     public void remakeFull(long newModel) {
 
         mm.rng.setState(determine(newModel));
-        voxels = mm.fullyRandom();
+        voxels = mm.fullyRandom(large);
         palette = Coloring.ALT_PALETTE;
         Arrays.fill(animatedVoxels, voxels);
 

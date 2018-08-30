@@ -28,7 +28,6 @@ public class ModelMaker {
      */
     public static long hashAll(long x, long y, long z, long state) {
 //        return TangleRNG.determine(x, TangleRNG.determine(y, TangleRNG.determine(z, state)));
-
         state *= 0x9E3779B97F4A7C15L;
         long other = 0x60642E2A34326F15L;
         state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
@@ -36,8 +35,7 @@ public class ModelMaker {
         state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
         state = (state << 54 | state >>> 10);
         state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-        state = (state << 54 | state >>> 10);
-        return state + (other ^ other >>> 26) * 0x632BE59BD9B4E019L;
+        return ((state << 54 | state >>> 10) + (other ^ other >>> 29) ^ 0x9E3779B97F4A7C15L) * 0x94D049BB133111EBL;
 
 //        return ((x = ((x *= 0x6C8E9CF570932BD5L) ^ x >>> 26 ^ 0x9183A1F4F348E683L) * (
 //                ((y = ((y *= 0x6C8E9CF570932BD5L) ^ y >>> 26 ^ 0x9183A1F4F348E683L) * (
@@ -61,7 +59,7 @@ public class ModelMaker {
      * @param y
      * @param z
      * @param state
-     * @return 64-bit hash of the x,y,z point with the given state
+     * @return 64-bit hash of the x,y,z,w point with the given state
      */
     public static long hashAll(long x, long y, long z, long w, long state) {
 //        return TangleRNG.determine(x, TangleRNG.determine(y, TangleRNG.determine(z, TangleRNG.determine(w, state))));
@@ -74,8 +72,7 @@ public class ModelMaker {
         state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
         state = (state << 54 | state >>> 10);
         state ^= (other += (w ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-        state = (state << 54 | state >>> 10);
-        return state + (other ^ other >>> 26) * 0x632BE59BD9B4E019L;
+        return ((state << 54 | state >>> 10) + (other ^ other >>> 29) ^ 0x9E3779B97F4A7C15L) * 0x94D049BB133111EBL;
 
 //        return ((x = ((x *= 0x6C8E9CF570932BD5L) ^ x >>> 26 ^ 0x9183A1F4F348E683L) * (
 //                ((y = ((y *= 0x6C8E9CF570932BD5L) ^ y >>> 26 ^ 0x9183A1F4F348E683L) * (
@@ -185,14 +182,16 @@ public class ModelMaker {
         return next;
     }
     
-    public byte[][][] fullyRandom()
+    public byte[][][] fullyRandom(boolean large)
     {
-        byte[][][] voxels = new byte[12][12][8];
+        final int side = large ? shipLarge.length : ship.length,
+                high = large ? shipLarge[0][0].length : ship[0][0].length;
+        byte[][][] voxels = new byte[side][side][high];
         byte mainColor = (byte)((rng.nextIntHasty(18) * 6) + rng.between(22, 25)),
                 highlightColor = (byte)((rng.nextIntHasty(18) * 6) + rng.between(21, 24));
-        for (int x = 0; x < 12; x++) {
-            for (int y = 0; y < 12; y++) {
-                for (int z = 0; z < 8; z++) {
+        for (int x = 0; x < side; x++) {
+            for (int y = 0; y < side; y++) {
+                for (int z = 0; z < high; z++) {
                     voxels[x][y][z] = (rng.next(5) == 0) ? highlightColor : mainColor; //(rng.next(4) < 7) ? 0 :
                 }
             }

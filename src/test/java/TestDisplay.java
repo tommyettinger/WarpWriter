@@ -179,8 +179,8 @@ public class TestDisplay extends ApplicationAdapter {
             pix.setColor(0);
             pix.fill();
             int[][] indices;
-            if(tiny && !large) indices = mr.renderIso24x32(animatedVoxels[f], dir);
-            else
+//            if(tiny && !large) indices = mr.renderIso24x32(animatedVoxels[f], dir);
+//            else
             {
                 switch (angle)
                 {
@@ -217,8 +217,8 @@ public class TestDisplay extends ApplicationAdapter {
             pix.setColor(0);
             pix.fill();
             int[][] indices;
-            if(tiny && !large) indices = mr.renderIso24x32(animatedVoxels[f], dir);
-            else
+//            if(tiny && !large) indices = mr.renderIso24x32(animatedVoxels[f], dir);
+//            else
             {
                 switch (angle)
                 {
@@ -256,8 +256,8 @@ public class TestDisplay extends ApplicationAdapter {
             pix.setColor(0);
             pix.fill();
             int[][] indices;
-            if(tiny && !large) indices = mr.renderIso24x32(animatedVoxels[f], dir);
-            else
+//            if(tiny && !large) indices = mr.renderIso24x32(animatedVoxels[f], dir);
+//            else
             {
                 switch (angle)
                 {
@@ -292,8 +292,8 @@ public class TestDisplay extends ApplicationAdapter {
         }
         for (int f = 0; f < frames; f++) {
             int[][] indices;
-            if(tiny && !large) indices = mr.renderIso24x32(animatedVoxels[f], dir);
-            else
+//            if(tiny && !large) indices = mr.renderIso24x32(animatedVoxels[f], dir);
+//            else
             {
                 switch (angle)
                 {
@@ -328,7 +328,7 @@ public class TestDisplay extends ApplicationAdapter {
     public void remakeFull(long newModel) {
 
         mm.rng.setState(determine(newModel));
-        voxels = mm.fullyRandom();
+        voxels = mm.fullyRandom(large);
         palette = Coloring.ALT_PALETTE;
         Arrays.fill(animatedVoxels, voxels);
 
@@ -337,11 +337,9 @@ public class TestDisplay extends ApplicationAdapter {
             pix.setColor(0);
             pix.fill();
             int[][] indices;
-            if(tiny && !large)
-            {
-                indices = mr.renderIso24x32(animatedVoxels[f], dir);
-            }
-            else
+//            if(tiny && !large)
+//                indices = mr.renderIso24x32(animatedVoxels[f], dir);
+//            else
             {
                 switch (angle)
                 {
@@ -414,7 +412,7 @@ public class TestDisplay extends ApplicationAdapter {
 
     @Override
     public void render() {
-        int time = (playing ? ++counter : counter) % ((frames << (tiny && !large ? 0 : 1)) * 6), tempDir;
+        int time = (playing ? ++counter : counter) % ((frames << 1) * 6), tempDir; //(tiny && !large ? 0 : 1)
         if(time == 0 && rotating)
         {
             ++dir;

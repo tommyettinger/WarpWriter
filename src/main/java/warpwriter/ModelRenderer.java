@@ -1769,7 +1769,7 @@ public class ModelRenderer {
             new VariableConverter() {
                 @Override
                 public int voxelToPixelX(int vx, int vy, int vz, int xs, int ys, int zs) {
-                    return vy * 3 + 4;
+                    return vy * 3 + (ys-1>>1);
                 }
 
                 @Override
@@ -1781,7 +1781,7 @@ public class ModelRenderer {
             new VariableConverter() {
                 @Override
                 public int voxelToPixelX(int vx, int vy, int vz, int xs, int ys, int zs) {
-                    return 7 + (xs - vx) * 3;
+                    return 3 + (xs - vx) * 3 + (xs-1>>1);
                 }
 
                 @Override
@@ -1793,7 +1793,7 @@ public class ModelRenderer {
             new VariableConverter() {
                 @Override
                 public int voxelToPixelX(int vx, int vy, int vz, int xs, int ys, int zs) {
-                    return 7 + (ys - vy) * 3;
+                    return 3 + (ys - vy) * 3 + (ys-1>>1);
                 }
 
                 @Override
@@ -1805,7 +1805,7 @@ public class ModelRenderer {
             new VariableConverter() {
                 @Override
                 public int voxelToPixelX(int vx, int vy, int vz, int xs, int ys, int zs) {
-                    return vx * 3 + 4;
+                    return 3 + (ys - vy) * 3 + (ys-1>>1);
                 }
 
                 @Override
