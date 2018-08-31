@@ -35,7 +35,7 @@ public class TestDisplay extends ApplicationAdapter {
     private byte[][][] voxels;
     private byte[][][][] animatedVoxels;
     private int dir = 1, counter = 1;
-    private static final int background = Coloring.DB8[0];
+    private static final int background = 0;
     /**
      * The height of the viewing angle, with 0 being directly below (bottom), 1 being at a 45 degree angle from below
      * (below), 2 being at the same height (side), 3 being a sorta-isometric view at a 45 degree angle from above (this
@@ -48,7 +48,8 @@ public class TestDisplay extends ApplicationAdapter {
     private int[] palette = Coloring.ALT_PALETTE;
     @Override
     public void create() {
-        reducer = new PaletteReducer(Coloring.FADED16);
+        reducer = new PaletteReducer(Coloring.GB);
+        reducer.setDitherStrength(0.2f);
         batch = new SpriteBatch();
 //        pix = new Pixmap(16, 16, Pixmap.Format.RGBA8888);
 //        tex = new Texture(16, 16, Pixmap.Format.RGBA8888);
@@ -77,6 +78,10 @@ public class TestDisplay extends ApplicationAdapter {
                         return true;
                     case Input.Keys.L:
                         large = !large;
+                        return true;
+                    case Input.Keys.E: // edge, affects outline
+                        mr.hardOutline = !mr.hardOutline;
+                        remakeShip(0);
                         return true;
                     case Input.Keys.T:
                         tiny = !tiny;
@@ -125,7 +130,6 @@ public class TestDisplay extends ApplicationAdapter {
                         dir = 1;
                         remakeShip(0);
                         return true;
-
                     case Input.Keys.NUMPAD_7:
                     case Input.Keys.NUM_7:
                         dir = 6;
@@ -296,6 +300,7 @@ public class TestDisplay extends ApplicationAdapter {
             palette = Coloring.ALT_PALETTE;
             animatedVoxels = mm.animateShip(voxels, frames);
         }
+        int oldWidth = width, oldHeight = height;
         for (int f = 0; f < frames; f++) {
             int[][] indices;
 //            if(tiny && !large) indices = mr.renderIso24x32(animatedVoxels[f], dir);
@@ -329,7 +334,8 @@ public class TestDisplay extends ApplicationAdapter {
             }
             reducer.reduce(pix);
         }
-        tex = new Texture(width, height, Pixmap.Format.RGBA8888);
+        if(oldWidth != width || oldHeight != height) 
+            tex = new Texture(width, height, Pixmap.Format.RGBA8888);
     }
 
     public void remakeFull(long newModel) {
@@ -338,7 +344,7 @@ public class TestDisplay extends ApplicationAdapter {
         voxels = mm.fullyRandom(large);
         palette = Coloring.ALT_PALETTE;
         Arrays.fill(animatedVoxels, voxels);
-
+        int oldWidth = width, oldHeight = height;
         for (int f = 0; f < frames; f++) {
             pix = pixes[f];
             pix.setColor(background);
@@ -371,6 +377,8 @@ public class TestDisplay extends ApplicationAdapter {
             }
             reducer.reduce(pix);
         }
+        if(oldWidth != width || oldHeight != height)
+            tex = new Texture(width, height, Pixmap.Format.RGBA8888);
     }
 
 
@@ -385,7 +393,7 @@ public class TestDisplay extends ApplicationAdapter {
             return;
         }
         Arrays.fill(animatedVoxels, voxels);
-        
+        int oldWidth = width, oldHeight = height;
         for (int f = 0; f < frames; f++) {
             int[][] indices;
             if(tiny && !large) indices = mr.renderIso24x32(animatedVoxels[f], dir);
@@ -416,7 +424,8 @@ public class TestDisplay extends ApplicationAdapter {
             }
             reducer.reduce(pix);
         }
-        tex = new Texture(width, height, Pixmap.Format.RGBA8888);
+        if(oldWidth != width || oldHeight != height)
+            tex = new Texture(width, height, Pixmap.Format.RGBA8888);
     }
 
     @Override
@@ -433,11 +442,18 @@ public class TestDisplay extends ApplicationAdapter {
         tex.draw(pixes[(time / 6) % frames], 0, 0);
         
         // standard clear the background routine for libGDX
-//        Gdx.gl.glClearColor(0.13f, 0.11f, 0.18f, 1.0f);
-        Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
+//        Gdx.gl.glClearColor(0x6Fp-10f, 0x25p-8f, 0x25p-9f, 1.0f);
+        Gdx.gl.glClearColor(0.75f, 1f, 0.5f, 1.0f);
+//        Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
 //        Gdx.gl.glClearColor(0.63f, 0.91f, 0.55f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
+//        batch.setColor(
+//                Float.intBitsToFloat(0xFE404040 | Integer.reverseBytes(
+//                        Coloring.ALT_PALETTE[determineBounded(CrossHash.hash64(voxels[5][voxels[0].length >> 1]), 112)+16]))
+//        );
+        // GB
+        batch.setColor(0.75f, 1f, 0.5f, 1f);
         batch.draw(tex, width >> 1, 250 - (width >> 1), width, height);
         batch.draw(tex, width * 5 >> 1, 250 - (width), width << 1, height << 1);
         batch.draw(tex, width * 10 >> 1, 250 - (width << 1), width << 2,  height << 2);

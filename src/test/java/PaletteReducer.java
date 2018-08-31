@@ -19,7 +19,7 @@ public class PaletteReducer {
     public final byte[] paletteMapping = new byte[0x8000];
     public final int[] paletteArray = new int[256];
     ByteArray curErrorRedBytes, nextErrorRedBytes, curErrorGreenBytes, nextErrorGreenBytes, curErrorBlueBytes, nextErrorBlueBytes;
-
+    private float ditherStrength = 0.5f, halfDitherStrength = 0.25f;
     /**
      * DawnBringer's 256-color Aurora palette, modified slightly to fit one transparent color by removing one gray.
      * Aurora is available in <a href="http://pixeljoint.com/forum/forum_posts.asp?TID=26080&KW=">this set of tools</a>
@@ -206,7 +206,7 @@ public class PaletteReducer {
                     c2 = r << 10 | g << 5 | b;
                     if (paletteMapping[c2] == 0) {
                         dist = 0x7FFFFFFF;
-                        for (int i = 1; i < 256; i++) {
+                        for (int i = 1; i < plen; i++) {
                             if (dist > (dist = Math.min(dist, difference(paletteArray[i], r, g, b))))
                                 paletteMapping[c2] = (byte) i;
                         }
@@ -260,7 +260,7 @@ public class PaletteReducer {
                     c2 = r << 10 | g << 5 | b;
                     if (paletteMapping[c2] == 0) {
                         dist = 0x7FFFFFFF;
-                        for (int i = 1; i < 256; i++) {
+                        for (int i = 1; i < plen; i++) {
                             if (dist > (dist = Math.min(dist, difference(paletteArray[i], r, g, b))))
                                 paletteMapping[c2] = (byte) i;
                         }
@@ -383,6 +383,17 @@ public class PaletteReducer {
     }
 
     /**
+     * Changes the "strength" of the dither effect applied during {@link #reduce(Pixmap)} calls. The default is 1f,
+     * and while both values higher than 1f and lower than 1f are valid, they should not be negative. If you want dither
+     * to be eliminated, don't set dither strength to 0; use {@link #reduceSolid(Pixmap)} instead of reduce().
+     * @param ditherStrength dither strength as a non-negative float that should be close to 1f
+     */
+    public void setDitherStrength(float ditherStrength) {
+        this.ditherStrength = 0.5f * ditherStrength;
+        this.halfDitherStrength = 0.25f * ditherStrength;
+    }
+
+    /**
      * Modifies the given Pixmap so it only uses colors present in this PaletteReducer, dithering when it can.
      * If you want to reduce the colors in a Pixmap based on what it currently contains, call
      * {@link #analyze(Pixmap)} with {@code pixmap} as its argument, then call this method with the same
@@ -456,21 +467,21 @@ public class PaletteReducer {
                     bdiff = (color>>>8&255)- (used>>>8&255);
                     if(px < lineLen - 1)
                     {
-                        curErrorRed[px+1]   += rdiff >> 1;
-                        curErrorGreen[px+1] += gdiff >> 1;
-                        curErrorBlue[px+1]  += bdiff >> 1;
+                        curErrorRed[px+1]   += rdiff * ditherStrength;
+                        curErrorGreen[px+1] += gdiff * ditherStrength;
+                        curErrorBlue[px+1]  += bdiff * ditherStrength;
                     }
                     if(ny < h)
                     {
                         if(px > 0)
                         {
-                            nextErrorRed[px-1]   += rdiff >> 2;
-                            nextErrorGreen[px-1] += gdiff >> 2;
-                            nextErrorBlue[px-1]  += bdiff >> 2;
+                            nextErrorRed[px-1]   += rdiff * halfDitherStrength;
+                            nextErrorGreen[px-1] += gdiff * halfDitherStrength;
+                            nextErrorBlue[px-1]  += bdiff * halfDitherStrength;
                         }
-                        nextErrorRed[px]   += rdiff >> 2;
-                        nextErrorGreen[px] += gdiff >> 2;
-                        nextErrorBlue[px]  += bdiff >> 2;
+                        nextErrorRed[px]   += rdiff * halfDitherStrength;
+                        nextErrorGreen[px] += gdiff * halfDitherStrength;
+                        nextErrorBlue[px]  += bdiff * halfDitherStrength;
                     }
                 }
             }
@@ -508,7 +519,7 @@ public class PaletteReducer {
                     pixmap.drawPixel(px, y, paletteArray[
                             paletteMapping[((rr << 7) & 0x7C00)
                             | ((gg << 2) & 0x3E0)
-                            | ((bb >>> 3))] & 0xFF]);
+                            | ((bb >>> 3))] & 0x1F]);
                 }
             }
 
