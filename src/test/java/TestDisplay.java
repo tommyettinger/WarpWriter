@@ -31,9 +31,11 @@ public class TestDisplay extends ApplicationAdapter {
     private long seed = 0x1337BEEFD00DL;
     private ModelMaker mm = new ModelMaker(seed);
     private ModelRenderer mr = new ModelRenderer();
+    private PaletteReducer reducer;
     private byte[][][] voxels;
     private byte[][][][] animatedVoxels;
     private int dir = 1, counter = 1;
+    private static final int background = Coloring.DB8[0];
     /**
      * The height of the viewing angle, with 0 being directly below (bottom), 1 being at a 45 degree angle from below
      * (below), 2 being at the same height (side), 3 being a sorta-isometric view at a 45 degree angle from above (this
@@ -46,6 +48,7 @@ public class TestDisplay extends ApplicationAdapter {
     private int[] palette = Coloring.ALT_PALETTE;
     @Override
     public void create() {
+        reducer = new PaletteReducer(Coloring.FADED16);
         batch = new SpriteBatch();
 //        pix = new Pixmap(16, 16, Pixmap.Format.RGBA8888);
 //        tex = new Texture(16, 16, Pixmap.Format.RGBA8888);
@@ -176,7 +179,7 @@ public class TestDisplay extends ApplicationAdapter {
 
         for (int f = 0; f < frames; f++) {
             pix = pixes[f];
-            pix.setColor(0);
+            pix.setColor(background);
             pix.fill();
             int[][] indices;
 //            if(tiny && !large) indices = mr.renderIso24x32(animatedVoxels[f], dir);
@@ -203,6 +206,7 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
+            reducer.reduce(pix);
         }
     }
 
@@ -214,7 +218,7 @@ public class TestDisplay extends ApplicationAdapter {
 
         for (int f = 0; f < frames; f++) {
             pix = pixes[f];
-            pix.setColor(0);
+            pix.setColor(background);
             pix.fill();
             int[][] indices;
 //            if(tiny && !large) indices = mr.renderIso24x32(animatedVoxels[f], dir);
@@ -241,6 +245,7 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
+            reducer.reduce(pix);
         }
     }
 
@@ -253,7 +258,7 @@ public class TestDisplay extends ApplicationAdapter {
         }
         for (int f = 0; f < frames; f++) {
             pix = pixes[f];
-            pix.setColor(0);
+            pix.setColor(background);
             pix.fill();
             int[][] indices;
 //            if(tiny && !large) indices = mr.renderIso24x32(animatedVoxels[f], dir);
@@ -280,6 +285,7 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
+            reducer.reduce(pix);
         }
     }
 
@@ -314,13 +320,14 @@ public class TestDisplay extends ApplicationAdapter {
             width = indices.length;
             height = indices[0].length;
             pix = pixes[f] = new Pixmap(width, height, Pixmap.Format.RGBA8888);
-            pix.setColor(0);
+            pix.setColor(background);
             pix.fill();
             for (int x = 0; x < indices.length; x++) {
                 for (int y = 0; y < indices[0].length; y++) {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
+            reducer.reduce(pix);
         }
         tex = new Texture(width, height, Pixmap.Format.RGBA8888);
     }
@@ -334,7 +341,7 @@ public class TestDisplay extends ApplicationAdapter {
 
         for (int f = 0; f < frames; f++) {
             pix = pixes[f];
-            pix.setColor(0);
+            pix.setColor(background);
             pix.fill();
             int[][] indices;
 //            if(tiny && !large)
@@ -362,6 +369,7 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
+            reducer.reduce(pix);
         }
     }
 
@@ -399,13 +407,14 @@ public class TestDisplay extends ApplicationAdapter {
             width = indices.length;
             height = indices[0].length;
             pix = pixes[f] = new Pixmap(width, height, Pixmap.Format.RGBA8888);
-            pix.setColor(0);
+            pix.setColor(background);
             pix.fill();
             for (int x = 0; x < indices.length; x++) {
                 for (int y = 0; y < indices[0].length; y++) {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
+            reducer.reduce(pix);
         }
         tex = new Texture(width, height, Pixmap.Format.RGBA8888);
     }
@@ -424,7 +433,8 @@ public class TestDisplay extends ApplicationAdapter {
         tex.draw(pixes[(time / 6) % frames], 0, 0);
         
         // standard clear the background routine for libGDX
-        Gdx.gl.glClearColor(0.13f, 0.11f, 0.18f, 1.0f);
+//        Gdx.gl.glClearColor(0.13f, 0.11f, 0.18f, 1.0f);
+        Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
 //        Gdx.gl.glClearColor(0.63f, 0.91f, 0.55f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
