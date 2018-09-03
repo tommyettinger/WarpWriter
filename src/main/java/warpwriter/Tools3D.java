@@ -382,4 +382,117 @@ public class Tools3D {
             }
         }
     }
+
+    private static long hash64(final byte[] data) {
+        long result = 0x1A976FDF6BF60B8EL, z = 0x60642E2A34326F15L;
+        final int len = data.length;
+        for (int i = 0; i < len; i++) {
+            result ^= (z += (data[i] ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L);
+        }
+        result += (z ^ z >>> 26) * 0x632BE59BD9B4E019L;
+        result ^= result >>> 25 ^ z ^ z >>> 29;
+//        result = (result ^ result >>> 33) * 0xFF51AFD7ED558CCDL;
+//        result = (result ^ result >>> 33) * 0xC4CEB9FE1A85EC53L;
+        return (result ^ result >>> 33);
+    }
+
+    private static long hash64(final byte[][] data) {
+        long result = 0x9E3779B97F4A7C15L, z = 0xC6BC279692B5CC83L;
+        final int len = data.length;
+        for (int i = 0; i < len; i++) {
+            result ^= (z += hash64(data[i]) + i);
+        }
+        result += (z ^ z >>> 26) * 0x632BE59BD9B4E019L;
+        result ^= result >>> 25 ^ z ^ z >>> 29;
+//        result = (result ^ result >>> 33) * 0xFF51AFD7ED558CCDL;
+//        result = (result ^ result >>> 33) * 0xC4CEB9FE1A85EC53L;
+        return (result ^ result >>> 33);
+    }
+    /**
+     * Gets a 64-bit high-quality hash of the given 3D byte array. When GWT is a possible target, you should prefer
+     * {@link #hash(byte[][][])} if possible, since it's quite a lot faster to work with ints there.
+     * @param data a 3D byte array; if null this returns 0, but if any sub-arrays are null this will throw an exception
+     * @return a 64-bit hash of the given data, with all bits approximately equally likely to be set
+     */
+    public static long hash64(byte[][][] data)
+    {
+        if (data == null)
+            return 0L;
+        long result = 0x60642E2A34326F1EL, z = 0x1A976FDF6BF60B85L;
+        final int len = data.length;
+        for (int i = 0; i < len; i++) {
+            result ^= (z += hash64(data[i]) ^ i);
+        }
+        result += (z ^ z >>> 26) * 0x632BE59BD9B4E019L;
+        result ^= result >>> 25 ^ z ^ z >>> 29;
+        result = (result ^ result >>> 33) * 0xFF51AFD7ED558CCDL;
+        result = (result ^ result >>> 33) * 0xC4CEB9FE1A85EC53L;
+        return (result ^ result >>> 33);
+    }
+    private static int hash(final byte[] data) {
+        int result = 0x1A976FDF, z = 0x60642E25;
+        final int len = data.length;
+        for (int i = 0; i < len; i++) {
+            result ^= (z += (data[i] ^ 0xC3564E95) * 0x9E375);
+            z ^= (result = (result << 20 | result >>> 12));
+        }
+        result += (z ^ z >>> 15 ^ 0xAE932BD5) * 0x632B9;
+//        result = (result ^ result >>> 15) * 0xFF51D;
+//        result = (result ^ result >>> 15) * 0xC4CEB;
+        return result ^ result >>> 15;
+    }
+    private static int hash(final byte[][] data) {
+        int result = 0xC3564E9F, z = 0x1A976FD5;
+        final int len = data.length;
+        for (int i = 0; i < len; i++) {
+            result ^= (z += hash(data[i]) + i);
+            z ^= (result = (result << 20 | result >>> 12));
+        }
+        result += (z ^ z >>> 15 ^ 0xAE932BD5) * 0x632B9;
+//        result = (result ^ result >>> 15) * 0xFF51D;
+//        result = (result ^ result >>> 15) * 0xC4CEB;
+        return result ^ result >>> 15;
+    }
+
+    /**
+     * Gets a 32-bit high-quality hash of the given 3D byte array. This should be preferred over
+     * {@link #hash64(byte[][][])} when GWT is a possible target, since it's quite a lot faster to work with ints there.
+     * @param data a 3D byte array; if null this returns 0, but if any sub-arrays are null this will throw an exception
+     * @return a 32-bit hash of the given data, with all bits approximately equally likely to be set
+     */
+    public static int hash(final byte[][][] data) {
+        if (data == null)
+            return 0;
+        int result = 0x60642E2F, z = 0xC3564E95;
+        final int len = data.length;
+        for (int i = 0; i < len; i++) {
+            result ^= (z += hash(data[i]) ^ i);
+            z ^= (result = (result << 20 | result >>> 12));
+        }
+        result += (z ^ z >>> 15 ^ 0xAE932BD5) * 0x632B9;
+        result = (result ^ result >>> 15) * 0xFF51D;
+        result = (result ^ result >>> 15) * 0xC4CEB;
+        return result ^ result >>> 15;
+    }
+
+    /**
+     * A helper method for taking already-random input states and getting random values inside a small range.
+     * The state can be any int, though only the least-significant 16 bits will be used, and the bound can be positive
+     * or negative but should be limited to between -65536 to 65536 (precision will be lost past positive or negative
+     * 65536). The result will be between 0, inclusive, and bound, exclusive. This method is safe for GWT and does not
+     * use long math. If you give this values for state that aren't especially random, this may have noticeable patterns
+     * in its output, but if you use {@link #hash(byte[][][])} to get state, you should be fine. If you need to make
+     * multiple calls to this but have only one very-random input state, consider calling this with
+     * {@code determineSmallBounded((state = (state ^ 0x9E3779B9) * 0x9E377) ^ state >>> 16, bound)}; this will change
+     * state in a not-terribly random way (an XLCG; using XOR instead of addition makes it GWT-friendly) but then uses
+     * a common xorshift operation to conceal issues with the lower bits (without changing state again).
+     * @param state any int, but only the bottom 16 bits will be used; should already be random (e.g. from a hash)
+     * @param bound an int that is at least -65536 and no more than 65536; will be used as the exclusive outer bound
+     * @return an int between 0, inclusive, and bound, exclusive
+     */
+    public static int determineSmallBounded(final int state, final int bound)
+    {
+        return ((bound * (state & 0xFFFF)) >> 16);
+    }
+
 }

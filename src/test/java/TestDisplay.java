@@ -17,6 +17,7 @@ import java.io.FileNotFoundException;
 import java.util.Arrays;
 
 import static squidpony.squidmath.LinnormRNG.determine;
+import static warpwriter.Tools3D.determineSmallBounded;
 
 /**
  * Displays pseudo-random spaceships, currently, with the sequence advancing when you press space, and rotating when you
@@ -180,7 +181,13 @@ public class TestDisplay extends ApplicationAdapter {
         voxels = mm.fishRandom();
         palette = Coloring.ALT_PALETTE;
         animatedVoxels = mm.animateFish(voxels, frames);
-
+        int state = Tools3D.hash(voxels);
+        batch.setColor(
+                Float.intBitsToFloat(0xFE000000
+                        | (determineSmallBounded((state = (state ^ 0x9E3779B9) * 0x9E377) ^ state >>> 16, 5) * 17 + 59) << 17
+                        | (determineSmallBounded((state = (state ^ 0x9E3779B9) * 0x9E377) ^ state >>> 16, 5) * 17 + 59) << 9
+                        | (determineSmallBounded((state = (state ^ 0x9E3779B9) * 0x9E377) ^ state >>> 16, 5) * 17 + 59) << 1)
+        );
         for (int f = 0; f < frames; f++) {
             pix = pixes[f];
             pix.setColor(background);
@@ -219,7 +226,13 @@ public class TestDisplay extends ApplicationAdapter {
         voxels = mm.warriorRandom();
         palette = Coloring.ALT_PALETTE;
         Arrays.fill(animatedVoxels, voxels);
-
+        int state = Tools3D.hash(voxels);
+        batch.setColor(
+                Float.intBitsToFloat(0xFE000000
+                        | (determineSmallBounded((state = (state ^ 0x9E3779B9) * 0x9E377) ^ state >>> 16, 5) * 17 + 59) << 17
+                        | (determineSmallBounded((state = (state ^ 0x9E3779B9) * 0x9E377) ^ state >>> 16, 5) * 17 + 59) << 9
+                        | (determineSmallBounded((state = (state ^ 0x9E3779B9) * 0x9E377) ^ state >>> 16, 5) * 17 + 59) << 1)
+        );
         for (int f = 0; f < frames; f++) {
             pix = pixes[f];
             pix.setColor(background);
@@ -299,6 +312,13 @@ public class TestDisplay extends ApplicationAdapter {
             voxels = large ? mm.shipLargeRandom() : mm.shipRandom();
             palette = Coloring.ALT_PALETTE;
             animatedVoxels = mm.animateShip(voxels, frames);
+            int state = Tools3D.hash(voxels);
+            batch.setColor(
+                    Float.intBitsToFloat(0xFE000000
+                            | (determineSmallBounded((state = (state ^ 0x9E3779B9) * 0x9E377) ^ state >>> 16, 5) * 17 + 59) << 17
+                            | (determineSmallBounded((state = (state ^ 0x9E3779B9) * 0x9E377) ^ state >>> 16, 5) * 17 + 59) << 9
+                            | (determineSmallBounded((state = (state ^ 0x9E3779B9) * 0x9E377) ^ state >>> 16, 5) * 17 + 59) << 1)
+            );
         }
         int oldWidth = width, oldHeight = height;
         for (int f = 0; f < frames; f++) {
@@ -344,6 +364,13 @@ public class TestDisplay extends ApplicationAdapter {
         voxels = mm.fullyRandom(large);
         palette = Coloring.ALT_PALETTE;
         Arrays.fill(animatedVoxels, voxels);
+        int state = Tools3D.hash(voxels);
+        batch.setColor(
+                Float.intBitsToFloat(0xFE000000
+                        | (determineSmallBounded((state = (state ^ 0x9E3779B9) * 0x9E377) ^ state >>> 16, 5) * 17 + 59) << 17
+                        | (determineSmallBounded((state = (state ^ 0x9E3779B9) * 0x9E377) ^ state >>> 16, 5) * 17 + 59) << 9
+                        | (determineSmallBounded((state = (state ^ 0x9E3779B9) * 0x9E377) ^ state >>> 16, 5) * 17 + 59) << 1)
+        );
         int oldWidth = width, oldHeight = height;
         for (int f = 0; f < frames; f++) {
             pix = pixes[f];
@@ -448,12 +475,15 @@ public class TestDisplay extends ApplicationAdapter {
 //        Gdx.gl.glClearColor(0.63f, 0.91f, 0.55f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
+//        int state = Tools3D.hash(voxels);
 //        batch.setColor(
-//                Float.intBitsToFloat(0xFE404040 | Integer.reverseBytes(
-//                        Coloring.ALT_PALETTE[determineBounded(CrossHash.hash64(voxels[5][voxels[0].length >> 1]), 112)+16]))
+//                Float.intBitsToFloat(0xFE000000
+//                        | (determineSmallBounded((state = (state ^ 0x9E3779B9) * 0x9E377) ^ state >>> 16, 5) * 17 + 59) << 17
+//                        | (determineSmallBounded((state = (state ^ 0x9E3779B9) * 0x9E377) ^ state >>> 16, 5) * 17 + 59) << 9
+//                        | (determineSmallBounded((state = (state ^ 0x9E3779B9) * 0x9E377) ^ state >>> 16, 5) * 17 + 59) << 1)
 //        );
         // GB
-        batch.setColor(0.75f, 1f, 0.5f, 1f);
+        //batch.setColor(0.75f, 1f, 0.5f, 1f);
         batch.draw(tex, width >> 1, 250 - (width >> 1), width, height);
         batch.draw(tex, width * 5 >> 1, 250 - (width), width << 1, height << 1);
         batch.draw(tex, width * 10 >> 1, 250 - (width << 1), width << 2,  height << 2);
