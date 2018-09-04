@@ -1,10 +1,7 @@
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ByteArray;
-import com.badlogic.gdx.utils.IntIntMap;
-import com.badlogic.gdx.utils.SortedIntList;
+import com.badlogic.gdx.utils.*;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -178,6 +175,28 @@ public class PaletteReducer {
         return (((512 + rmean) * r * r) >> 8) + g * g + (((767 - rmean) * b * b) >> 8);
     }
 
+    /**
+     * Gets a pseudo-random float between -0.375f and 0.625f, determined by the lower 23 bits and sign bit of seed.
+     * The average value this returns should typically be 0f, despite its upper bound being further from 0 than its
+     * lower bound, because values between 0.125f and 0.625f are a third as likely to appear as values less than 0.125f.
+     * @param seed any int, but only the least-significant 23 bits will be used
+     * @return a float between 0.75f and 1.25f
+     */
+    public static float randomXi(int seed)
+    {
+        return NumberUtils.intBitsToFloat((seed & 0x7FFFFF & (seed >>> 10 & 0x400000)) | 0x3f800000) - 1.375f;
+    }
+
+    /**
+     * Gets a pseudo-random float between -0.5f and 0.5f, determined by the lower 23 bits of seed. 
+     * @param seed any int, but only the least-significant 23 bits will be used
+     * @return a float between 0.75f and 1.25f
+     */
+    public static float randomCrossHatch(int seed)
+    {
+        return NumberUtils.intBitsToFloat((seed & 0x7FFFFF & (seed >>> 10 & 0x400000)) | 0x3f800000) - 1.5f;
+    }
+    
     /**
      * Builds the palette information this PNG8 stores from the RGBA8888 ints in {@code rgbaPalette}, up to 256 colors.
      * Alpha is not preserved except for the first item in rgbaPalette, and only if it is {@code 0} (fully transparent
@@ -656,6 +675,148 @@ public class PaletteReducer {
                                 nextErrorBlue[px+2]  += b1;
                             }
                         }
+                    }
+                }
+            }
+
+        }
+        pixmap.setBlending(blending);
+        return pixmap;
+    }
+
+    /**
+     * Modifies the given Pixmap so it only uses colors present in this PaletteReducer, dithering when it can using a
+     * modified version of the algorithm presented in "Simple gradient-based error-diffusion method" by Xaingyu Y. Hu in
+     * the Journal of Electronic Imaging, 2016. This algorithm uses pseudo-randomly-generated noise to adjust
+     * Floyd-Steinberg dithering, with input for the pseudo-random state obtained by the non-transparent color values as
+     * they are encountered. Very oddly, this tends to produce less random-seeming dither than
+     * {@link #reduceBurkes(Pixmap)}, with this method often returning regular checkerboards where Burkes may produce
+     * splotches of color. If you want to reduce the colors in a Pixmap based on what it currently contains, call
+     * {@link #analyze(Pixmap)} with {@code pixmap} as its argument, then call this method with the same
+     * Pixmap. You may instead want to use a known palette instead of one computed from a Pixmap;
+     * {@link #exact(int[])} is the tool for that job.
+     * <br>
+     * This method is not incredibly fast because of the extra calculations it has to do for dithering, but if you can
+     * compute the PaletteReducer once and reuse it, that will save some time. This method is probably slower than
+     * {@link #reduceBurkes(Pixmap)} even though Burkes propagates error to more pixels, because this method also has to
+     * generate two random values per non-transparent pixel. The random number "algorithm" this uses isn't very good
+     * because it doesn't have to be good, just fast and avoid clear artifacts; it's similar to one of
+     * <a href="http://www.drdobbs.com/tools/fast-high-quality-parallel-random-number/231000484?pgno=2">Mark Overton's
+     * subcycle generators</a> (which are usually paired, but that isn't the case here), but because it's
+     * constantly being adjusted by additional colors as input, it may be more comparable to a rolling hash. This uses
+     * {@link #randomXi(int)} to get the parameter in Hu's paper that's marked as {@code aξ}, but our randomXi() is
+     * adjusted so it has a higher range into positive values but produces them less frequently than negative ones. That
+     * quirk ends up getting rather high quality for this method.
+     * @param pixmap a Pixmap that will be modified in place
+     * @return the given Pixmap, for chaining
+     */
+    public Pixmap reduceWithNoise (Pixmap pixmap) {
+        boolean hasTransparent = (paletteArray[0] == 0);
+        final int lineLen = pixmap.getWidth(), h = pixmap.getHeight();
+        byte[] curErrorRed, nextErrorRed, curErrorGreen, nextErrorGreen, curErrorBlue, nextErrorBlue;
+        if (curErrorRedBytes == null) {
+            curErrorRed = (curErrorRedBytes = new ByteArray(lineLen)).items;
+            nextErrorRed = (nextErrorRedBytes = new ByteArray(lineLen)).items;
+            curErrorGreen = (curErrorGreenBytes = new ByteArray(lineLen)).items;
+            nextErrorGreen = (nextErrorGreenBytes = new ByteArray(lineLen)).items;
+            curErrorBlue = (curErrorBlueBytes = new ByteArray(lineLen)).items;
+            nextErrorBlue = (nextErrorBlueBytes = new ByteArray(lineLen)).items;
+        } else {
+            curErrorRed = curErrorRedBytes.ensureCapacity(lineLen);
+            nextErrorRed = nextErrorRedBytes.ensureCapacity(lineLen);
+            curErrorGreen = curErrorGreenBytes.ensureCapacity(lineLen);
+            nextErrorGreen = nextErrorGreenBytes.ensureCapacity(lineLen);
+            curErrorBlue = curErrorBlueBytes.ensureCapacity(lineLen);
+            nextErrorBlue = nextErrorBlueBytes.ensureCapacity(lineLen);
+            for (int i = 0; i < lineLen; i++) {
+                nextErrorRed[i] = 0;
+                nextErrorGreen[i] = 0;
+                nextErrorBlue[i] = 0;
+            }
+
+        }
+        Pixmap.Blending blending = pixmap.getBlending();
+        pixmap.setBlending(Pixmap.Blending.None);
+        int color, used, rdiff, gdiff, bdiff, state = 0xFEEDBEEF;
+        byte er, eg, eb, paletteIndex;
+        float //xir1, xir2, xig1, xig2, xib1, xib2, 
+                xi1, xi2,
+                w1 = ditherStrength * 0.125f, w3 = w1 * 3f, w5 = w1 * 5f, w7 = w1 * 7f;
+        for (int y = 0; y < h; y++) {
+            int ny = y + 1;
+            for (int i = 0; i < lineLen; i++) {
+                curErrorRed[i] = nextErrorRed[i];
+                curErrorGreen[i] = nextErrorGreen[i];
+                curErrorBlue[i] = nextErrorBlue[i];
+                nextErrorRed[i] = 0;
+                nextErrorGreen[i] = 0;
+                nextErrorBlue[i] = 0;
+            }
+            for (int px = 0; px < lineLen; px++) {
+                color = pixmap.getPixel(px, y) & 0xF8F8F880;
+                if ((color & 0x80) == 0 && hasTransparent)
+                    pixmap.drawPixel(px, y, 0);
+                else {
+                    er = curErrorRed[px];
+                    eg = curErrorGreen[px];
+                    eb = curErrorBlue[px];
+                    color |= (color >>> 5 & 0x07070700) | 0xFE;
+                    int rr = MathUtils.clamp(((color >>> 24)       ) + (er), 0, 0xFF);
+                    int gg = MathUtils.clamp(((color >>> 16) & 0xFF) + (eg), 0, 0xFF);
+                    int bb = MathUtils.clamp(((color >>> 8)  & 0xFF) + (eb), 0, 0xFF);
+                    paletteIndex =
+                            paletteMapping[((rr << 7) & 0x7C00)
+                                    | ((gg << 2) & 0x3E0)
+                                    | ((bb >>> 3))];
+                    used = paletteArray[paletteIndex & 0xFF];
+                    pixmap.drawPixel(px, y, used);
+                    rdiff = (color>>>24)-    (used>>>24);
+                    gdiff = (color>>>16&255)-(used>>>16&255);
+                    bdiff = (color>>>8&255)- (used>>>8&255);
+                    state += color ^ color >>> 9;
+                    state = (state << 21 | state >>> 11);
+                    xi1 = randomXi(state);
+                    state = (state << 15 | state >>> 17) ^ 0x9E3779B9;
+                    xi2 = randomXi(state);
+
+//                    state += rdiff ^ rdiff << 9;
+//                    state = (state << 21 | state >>> 11);
+//                    xir1 = randomXi(state);
+//                    state = (state << 21 | state >>> 11);
+//                    xir2 = randomXi(state);
+//                    state += gdiff ^ gdiff << 9;
+//                    state = (state << 21 | state >>> 11);
+//                    xig1 = randomXi(state);
+//                    state = (state << 21 | state >>> 11);
+//                    xig2 = randomXi(state);
+//                    state += bdiff ^ bdiff << 9;
+//                    state = (state << 21 | state >>> 11);
+//                    xib1 = randomXi(state);
+//                    state = (state << 21 | state >>> 11);
+//                    xib2 = randomXi(state);
+                    if(px < lineLen - 1)
+                    {
+                        curErrorRed[px+1]   += rdiff * w7 * (1f + xi1);
+                        curErrorGreen[px+1] += gdiff * w7 * (1f + xi1);
+                        curErrorBlue[px+1]  += bdiff * w7 * (1f + xi1);
+                    }
+                    if(ny < h)
+                    {
+                        if(px > 0)
+                        {
+                            nextErrorRed[px-1]   += rdiff * w3 * (1f + xi2);
+                            nextErrorGreen[px-1] += gdiff * w3 * (1f + xi2);
+                            nextErrorBlue[px-1]  += bdiff * w3 * (1f + xi2);
+                        }
+                        if(px < lineLen - 1)
+                        {
+                            nextErrorRed[px+1]   += rdiff * w1 * (1f - xi2);
+                            nextErrorGreen[px+1] += gdiff * w1 * (1f - xi2);
+                            nextErrorBlue[px+1]  += bdiff * w1 * (1f - xi2);
+                        }
+                        nextErrorRed[px]   += rdiff * w5 * (1f - xi1);
+                        nextErrorGreen[px] += gdiff * w5 * (1f - xi1);
+                        nextErrorBlue[px]  += bdiff * w5 * (1f - xi1);
                     }
                 }
             }

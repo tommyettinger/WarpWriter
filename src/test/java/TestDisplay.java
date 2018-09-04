@@ -17,7 +17,6 @@ import java.io.FileNotFoundException;
 import java.util.Arrays;
 
 import static squidpony.squidmath.LinnormRNG.determine;
-import static warpwriter.Tools3D.determineSmallBounded;
 
 /**
  * Displays pseudo-random spaceships, currently, with the sequence advancing when you press space, and rotating when you
@@ -43,7 +42,7 @@ public class TestDisplay extends ApplicationAdapter {
      * is the default and usually isn't mentioned in names), and 4 being directly above (top).
      */
     private int angle = 3;
-    private boolean playing = false, rotating = false, tiny = false, large = true, burkesDither = true;
+    private boolean playing = false, rotating = false, tiny = false, large = true, burkesDither = false;
     private int width = 52, height = 64, frames = 8;
     private Pixmap[] pixes = new Pixmap[frames];
     private int[] palette = Coloring.ALT_PALETTE;
@@ -188,9 +187,9 @@ public class TestDisplay extends ApplicationAdapter {
         int state = Tools3D.hash(voxels);
         batch.setColor(
                 Float.intBitsToFloat(0xFE000000
-                        | (determineSmallBounded((state = (state ^ 0x9E3779B9) * 0x9E377) ^ state >>> 16, 5) * 17 + 59) << 17
-                        | (determineSmallBounded((state = (state ^ 0x9E3779B9) * 0x9E377) ^ state >>> 16, 5) * 17 + 59) << 9
-                        | (determineSmallBounded((state = (state ^ 0x9E3779B9) * 0x9E377) ^ state >>> 16, 5) * 17 + 59) << 1)
+                        | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 17
+                        | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 9
+                        | ((          (state ^ 0x9E3779B9) * 0x9E377 >>> 30) * 17 + 76) << 1)
         );
         for (int f = 0; f < frames; f++) {
             pix = pixes[f];
@@ -221,7 +220,7 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if(burkesDither) reducer.reduceBurkes(pix); else reducer.reduce(pix);
+            if(burkesDither) reducer.reduceBurkes(pix); else reducer.reduceWithNoise(pix);
         }
     }
 
@@ -233,9 +232,9 @@ public class TestDisplay extends ApplicationAdapter {
         int state = Tools3D.hash(voxels);
         batch.setColor(
                 Float.intBitsToFloat(0xFE000000
-                        | (determineSmallBounded((state = (state ^ 0x9E3779B9) * 0x9E377) ^ state >>> 16, 5) * 17 + 59) << 17
-                        | (determineSmallBounded((state = (state ^ 0x9E3779B9) * 0x9E377) ^ state >>> 16, 5) * 17 + 59) << 9
-                        | (determineSmallBounded((state = (state ^ 0x9E3779B9) * 0x9E377) ^ state >>> 16, 5) * 17 + 59) << 1)
+                        | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 17
+                        | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 9
+                        | ((          (state ^ 0x9E3779B9) * 0x9E377 >>> 30) * 17 + 76) << 1)
         );
         for (int f = 0; f < frames; f++) {
             pix = pixes[f];
@@ -266,7 +265,7 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if(burkesDither) reducer.reduceBurkes(pix); else reducer.reduce(pix);
+            if(burkesDither) reducer.reduceBurkes(pix); else reducer.reduceWithNoise(pix);
         }
     }
 
@@ -306,7 +305,7 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if(burkesDither) reducer.reduceBurkes(pix); else reducer.reduce(pix);
+            if(burkesDither) reducer.reduceBurkes(pix); else reducer.reduceWithNoise(pix);
         }
     }
 
@@ -319,9 +318,9 @@ public class TestDisplay extends ApplicationAdapter {
             int state = Tools3D.hash(voxels);
             batch.setColor(
                     Float.intBitsToFloat(0xFE000000
-                            | (determineSmallBounded((state = (state ^ 0x9E3779B9) * 0x9E377) ^ state >>> 16, 5) * 17 + 59) << 17
-                            | (determineSmallBounded((state = (state ^ 0x9E3779B9) * 0x9E377) ^ state >>> 16, 5) * 17 + 59) << 9
-                            | (determineSmallBounded((state = (state ^ 0x9E3779B9) * 0x9E377) ^ state >>> 16, 5) * 17 + 59) << 1)
+                            | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 17
+                            | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 9
+                            | ((          (state ^ 0x9E3779B9) * 0x9E377 >>> 30) * 17 + 76) << 1)
             );
         }
         int oldWidth = width, oldHeight = height;
@@ -356,7 +355,7 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if(burkesDither) reducer.reduceBurkes(pix); else reducer.reduce(pix);
+            if(burkesDither) reducer.reduceBurkes(pix); else reducer.reduceWithNoise(pix);
         }
         if(oldWidth != width || oldHeight != height) 
             tex = new Texture(width, height, Pixmap.Format.RGBA8888);
@@ -371,9 +370,9 @@ public class TestDisplay extends ApplicationAdapter {
         int state = Tools3D.hash(voxels);
         batch.setColor(
                 Float.intBitsToFloat(0xFE000000
-                        | (determineSmallBounded((state = (state ^ 0x9E3779B9) * 0x9E377) ^ state >>> 16, 5) * 17 + 59) << 17
-                        | (determineSmallBounded((state = (state ^ 0x9E3779B9) * 0x9E377) ^ state >>> 16, 5) * 17 + 59) << 9
-                        | (determineSmallBounded((state = (state ^ 0x9E3779B9) * 0x9E377) ^ state >>> 16, 5) * 17 + 59) << 1)
+                        | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 17
+                        | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 9
+                        | ((          (state ^ 0x9E3779B9) * 0x9E377 >>> 30) * 17 + 76) << 1)
         );
         int oldWidth = width, oldHeight = height;
         for (int f = 0; f < frames; f++) {
@@ -406,7 +405,7 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if(burkesDither) reducer.reduceBurkes(pix); else reducer.reduce(pix);
+            if(burkesDither) reducer.reduceBurkes(pix); else reducer.reduceWithNoise(pix);
         }
         if(oldWidth != width || oldHeight != height)
             tex = new Texture(width, height, Pixmap.Format.RGBA8888);
@@ -453,7 +452,7 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if(burkesDither) reducer.reduceBurkes(pix); else reducer.reduce(pix);
+            if(burkesDither) reducer.reduceBurkes(pix); else reducer.reduceWithNoise(pix);
         }
         if(oldWidth != width || oldHeight != height)
             tex = new Texture(width, height, Pixmap.Format.RGBA8888);
