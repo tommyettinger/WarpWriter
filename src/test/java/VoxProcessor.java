@@ -8,6 +8,8 @@ import warpwriter.VoxIO;
 import java.io.InputStream;
 
 /**
+ * Created as a one-off thing to generate Common Lisp code that holds the same info as a one-color .vox file.
+ * Unlikely to be useful for other purposes.
  * Created by Tommy Ettinger on 5/6/2018.
  */
 public class VoxProcessor extends ApplicationAdapter {

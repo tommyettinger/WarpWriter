@@ -4,6 +4,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import squidpony.FakeLanguageGen;
 import squidpony.StringKit;
 import squidpony.Thesaurus;
@@ -14,13 +15,15 @@ import warpwriter.Coloring;
 import warpwriter.ModelMaker;
 import warpwriter.ModelRenderer;
 
+import java.io.IOException;
+
 import static squidpony.squidmath.LinnormRNG.determine;
 
 /**
  * Created by Tommy Ettinger on 1/19/2018.
  */
 public class TestOutput extends ApplicationAdapter {
-    private static final int LIMIT = 175;
+    private static final int LIMIT = 160;
     private Pixmap pix;
     private static long initialSeed = determine(System.nanoTime());
     private long seed = initialSeed;
@@ -34,6 +37,7 @@ public class TestOutput extends ApplicationAdapter {
     private String pathName, modelName;
     StatefulRNG srng = new StatefulRNG(initialSeed);
     int[] palette = Coloring.ALT_PALETTE;
+    private PNG8 png;
     private String makeName(OrderedSet<String> alpha, OrderedSet<String> beta)
     {
         String a = alpha.randomItem(srng);
@@ -59,6 +63,11 @@ public class TestOutput extends ApplicationAdapter {
             pixes[i] = new Pixmap(width, height, Pixmap.Format.RGBA8888);
         }
         pix = pixes[0];
+        png = new PNG8(width * height * 3 >> 1);
+        png.setFlipY(false);
+        png.setCompression(6);
+        png.palette = new PaletteReducer(Coloring.GB_GREEN);
+        png.palette.setDitherStrength(0.5f);
         pathName = "target/out/" + StringKit.hex(seed);
         Gdx.files.local(pathName).mkdirs();
         FakeLanguageGen language = FakeLanguageGen.randomLanguage(initialSeed).removeAccents();
@@ -122,7 +131,12 @@ public class TestOutput extends ApplicationAdapter {
                 pix.drawPixel(x, y, palette[indices[x][y]]);
             }
         }
-        PixmapIO.writePNG(Gdx.files.local(pathName + "/" + modelName + "/" + modelName + "_dir" + dir + "_0.png"), pix);
+        try {
+            png.write(Gdx.files.local(pathName + "/" + modelName + "/" + modelName + "_dir" + dir + "_0.png"), pix, false, true);
+        } catch (IOException ex) {
+            throw new GdxRuntimeException("Error writing PNG: " + modelName + "_dir" + dir + "_0.png", ex);
+        }
+        //PixmapIO.writePNG(Gdx.files.local(pathName + "/" + modelName + "/" + modelName + "_dir" + dir + "_0.png"), pix);
     }
 
     @Override

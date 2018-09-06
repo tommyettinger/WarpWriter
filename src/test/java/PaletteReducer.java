@@ -1,10 +1,15 @@
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.utils.*;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ByteArray;
+import com.badlogic.gdx.utils.NumberUtils;
+import squidpony.squidmath.IntIntOrderedMap;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Data that can be used to limit the colors present in a Pixmap or other image, here with the goal of using 256 or less
@@ -16,7 +21,7 @@ public class PaletteReducer {
     public final byte[] paletteMapping = new byte[0x8000];
     public final int[] paletteArray = new int[256];
     ByteArray curErrorRedBytes, nextErrorRedBytes, curErrorGreenBytes, nextErrorGreenBytes, curErrorBlueBytes, nextErrorBlueBytes;
-    private float ditherStrength = 0.5f, halfDitherStrength = 0.25f;
+    float ditherStrength = 0.5f, halfDitherStrength = 0.25f;
     /**
      * DawnBringer's 256-color Aurora palette, modified slightly to fit one transparent color by removing one gray.
      * Aurora is available in <a href="http://pixeljoint.com/forum/forum_posts.asp?TID=26080&KW=">this set of tools</a>
@@ -129,9 +134,9 @@ public class PaletteReducer {
     public static int difference(final int color1, final int color2) {
         int rmean = ((color1 >>> 24) + (color2 >>> 24)) >> 1;
         int r = (color1 >>> 24) - (color2 >>> 24);
-        int g = (color1 >>> 16 & 0xFF) - (color2 >>> 16 & 0xFF);
+        int g = (color1 >>> 16 & 0xFF) - (color2 >>> 16 & 0xFF) << 1;
         int b = (color1 >>> 8 & 0xFF) - (color2 >>> 8 & 0xFF);
-        return (((512 + rmean) * r * r) >> 8) + 4 * g * g + (((767 - rmean) * b * b) >> 8);
+        return (((512 + rmean) * r * r) >> 8) + g * g + (((767 - rmean) * b * b) >> 8);
     }
 
     /**
@@ -145,9 +150,9 @@ public class PaletteReducer {
      * @return the difference between the given colors, as a positive int
      */
     public static int difference(final int color1, int r2, int g2, int b2) {
-        r2 = (r2 << 3 | r2 >>> 2);
-        g2 = (g2 << 3 | g2 >>> 2);
-        b2 = (b2 << 3 | b2 >>> 2);
+//        r2 = (r2 << 3 | r2 >>> 2);
+//        g2 = (g2 << 3 | g2 >>> 2);
+//        b2 = (b2 << 3 | b2 >>> 2);
         final int rmean = ((color1 >>> 24) + r2) >> 1,
                 r = (color1 >>> 24) - r2,
                 g = (color1 >>> 16 & 0xFF) - g2 << 1,
@@ -176,27 +181,19 @@ public class PaletteReducer {
     }
 
     /**
-     * Gets a pseudo-random float between -0.375f and 0.625f, determined by the lower 23 bits and sign bit of seed.
-     * The average value this returns should typically be 0f, despite its upper bound being further from 0 than its
-     * lower bound, because values between 0.125f and 0.625f are a third as likely to appear as values less than 0.125f.
+     * Gets a pseudo-random float between -0.3f and 0.7f, determined by the lower 23 bits and upper 2 bits of seed.
+     * The average value this returns will be less than 0f, despite its upper bound being further from 0 than its
+     * lower bound, because values between 0.2f and 0.7f are a third as likely to appear as values less than 0.125f,
+     * and even for values less than 0.2f, the range between -0.05f and 0.2f is a third as likely as the range from
+     * -0.3f to 0.05f. This introduced bias can be useful for adding some order to otherwise-random dithering.
      * @param seed any int, but only the least-significant 23 bits will be used
-     * @return a float between 0.75f and 1.25f
+     * @return a float between -0.3f and 0.7f, weighted toward the lower end of the range
      */
     public static float randomXi(int seed)
     {
-        return NumberUtils.intBitsToFloat((seed & 0x7FFFFF & (seed >>> 10 & 0x400000)) | 0x3f800000) - 1.375f;
+        return NumberUtils.intBitsToFloat((seed & 0x7FFFFF & ((seed >>> 11 & 0x600000)|0x1FFFFF)) | 0x3f800000) - 1.3f;
     }
 
-    /**
-     * Gets a pseudo-random float between -0.5f and 0.5f, determined by the lower 23 bits of seed. 
-     * @param seed any int, but only the least-significant 23 bits will be used
-     * @return a float between 0.75f and 1.25f
-     */
-    public static float randomCrossHatch(int seed)
-    {
-        return NumberUtils.intBitsToFloat((seed & 0x7FFFFF & (seed >>> 10 & 0x400000)) | 0x3f800000) - 1.5f;
-    }
-    
     /**
      * Builds the palette information this PNG8 stores from the RGBA8888 ints in {@code rgbaPalette}, up to 256 colors.
      * Alpha is not preserved except for the first item in rgbaPalette, and only if it is {@code 0} (fully transparent
@@ -219,14 +216,18 @@ public class PaletteReducer {
             paletteArray[i] = color;
             paletteMapping[(color >>> 17 & 0x7C00) | (color >>> 14 & 0x3E0) | (color >>> 11 & 0x1F)] = (byte) i;
         }
+        int rr, gg, bb;
         for (int r = 0; r < 32; r++) {
+            rr = (r << 3 | r >>> 2);
             for (int g = 0; g < 32; g++) {
+                gg = (g << 3 | g >>> 2);
                 for (int b = 0; b < 32; b++) {
                     c2 = r << 10 | g << 5 | b;
                     if (paletteMapping[c2] == 0) {
+                        bb = (b << 3 | b >>> 2);
                         dist = 0x7FFFFFFF;
                         for (int i = 1; i < plen; i++) {
-                            if (dist > (dist = Math.min(dist, difference(paletteArray[i], r, g, b))))
+                            if (dist > (dist = Math.min(dist, difference(paletteArray[i], rr, gg, bb))))
                                 paletteMapping[c2] = (byte) i;
                         }
                     }
@@ -273,14 +274,18 @@ public class PaletteReducer {
             paletteArray[i] = color;
             paletteMapping[(color >>> 17 & 0x7C00) | (color >>> 14 & 0x3E0) | (color >>> 11 & 0x1F)] = (byte) i;
         }
+        int rr, gg, bb;
         for (int r = 0; r < 32; r++) {
+            rr = (r << 3 | r >>> 2);
             for (int g = 0; g < 32; g++) {
+                gg = (g << 3 | g >>> 2);
                 for (int b = 0; b < 32; b++) {
                     c2 = r << 10 | g << 5 | b;
                     if (paletteMapping[c2] == 0) {
+                        bb = (b << 3 | b >>> 2);
                         dist = 0x7FFFFFFF;
                         for (int i = 1; i < plen; i++) {
-                            if (dist > (dist = Math.min(dist, difference(paletteArray[i], r, g, b))))
+                            if (dist > (dist = Math.min(dist, difference(paletteArray[i], rr, gg, bb))))
                                 paletteMapping[c2] = (byte) i;
                         }
                     }
@@ -288,7 +293,12 @@ public class PaletteReducer {
             }
         }
     }
-
+    private Comparator<IntIntOrderedMap.MapEntry> entryComparator = new Comparator<IntIntOrderedMap.MapEntry>() {
+        @Override
+        public int compare(IntIntOrderedMap.MapEntry o1, IntIntOrderedMap.MapEntry o2) {
+            return o2.getValue() - o1.getValue();
+        }
+    };
     /**
      * Analyzes {@code pixmap} for color count and frequency, building a palette with at most 256 colors if there are
      * too many colors to store in a PNG-8 palette. If there are 256 or less colors, this uses the exact colors
@@ -330,7 +340,8 @@ public class PaletteReducer {
         Arrays.fill(paletteMapping, (byte) 0);
         int color;
         final int width = pixmap.getWidth(), height = pixmap.getHeight();
-        IntIntMap counts = new IntIntMap(256);
+        IntIntOrderedMap counts = new IntIntOrderedMap(256);
+        counts.defaultReturnValue(0);
         int hasTransparent = 0;
         int[] reds = new int[256], greens = new int[256], blues = new int[256];
         for (int y = 0; y < height; y++) {
@@ -338,17 +349,17 @@ public class PaletteReducer {
                 color = pixmap.getPixel(x, y);
                 if ((color & 0x80) != 0) {
                     color |= (color >>> 5 & 0x07070700) | 0xFE;
-                    counts.getAndIncrement(color, 0, 1);
+                    counts.getAndIncrement(color, 1);
                 } else {
                     hasTransparent = 1;
                 }
             }
         }
-        if (counts.size + hasTransparent <= 256) {
+        final int cs = counts.size();
+        if (cs + hasTransparent <= 256) {
             int i = hasTransparent;
-            IntIntMap.Keys ks = counts.keys();
-            while (ks.hasNext()) {
-                color = ks.next();
+            for (int j = 0; j < cs; j++) {
+                color = counts.keyAt(j);
                 paletteArray[i] = color;
                 color = (color >>> 17 & 0x7C00) | (color >>> 14 & 0x3E0) | (color >>> 11 & 0x1F);
                 paletteMapping[color] = (byte) i;
@@ -359,18 +370,12 @@ public class PaletteReducer {
             }
         } else // reduce color count
         {
-            IntIntMap.Entries es = counts.entries();
-            SortedIntList<IntIntMap.Entry> sil = new SortedIntList<>();
-            while (es.hasNext()) {
-                IntIntMap.Entry ent = es.next(), ent2 = new IntIntMap.Entry();
-                ent2.key = ent.key;
-                ent2.value = ent.value;
-                sil.insert(-ent.value, ent2);
-            }
-            Iterator<SortedIntList.Node<IntIntMap.Entry>> it = sil.iterator();
+            ArrayList<IntIntOrderedMap.MapEntry> es = new ArrayList<>(counts.entrySet());
+            Collections.sort(es, entryComparator);
+            int i = 1, c = 0;
             PER_BEST:
-            for (int i = 1; i < 256 && it.hasNext(); ) {
-                color = it.next().value.key;
+            for (; i < 256 && i < cs;) {
+                color = es.get(c++).getKey();
                 for (int j = 1; j < i; j++) {
                     if (difference(color, paletteArray[j]) < threshold)
                         continue PER_BEST;
@@ -537,8 +542,8 @@ public class PaletteReducer {
                     int bb = ((color >>> 8)  & 0xFF);
                     pixmap.drawPixel(px, y, paletteArray[
                             paletteMapping[((rr << 7) & 0x7C00)
-                            | ((gg << 2) & 0x3E0)
-                            | ((bb >>> 3))] & 0x1F]);
+                                    | ((gg << 2) & 0x3E0)
+                                    | ((bb >>> 3))] & 0xFF]);
                 }
             }
 
@@ -700,7 +705,7 @@ public class PaletteReducer {
      * compute the PaletteReducer once and reuse it, that will save some time. This method is probably slower than
      * {@link #reduceBurkes(Pixmap)} even though Burkes propagates error to more pixels, because this method also has to
      * generate two random values per non-transparent pixel. The random number "algorithm" this uses isn't very good
-     * because it doesn't have to be good, just fast and avoid clear artifacts; it's similar to one of
+     * because it doesn't have to be good, it should just be fast and avoid clear artifacts; it's similar to one of
      * <a href="http://www.drdobbs.com/tools/fast-high-quality-parallel-random-number/231000484?pgno=2">Mark Overton's
      * subcycle generators</a> (which are usually paired, but that isn't the case here), but because it's
      * constantly being adjusted by additional colors as input, it may be more comparable to a rolling hash. This uses
@@ -739,9 +744,9 @@ public class PaletteReducer {
         pixmap.setBlending(Pixmap.Blending.None);
         int color, used, rdiff, gdiff, bdiff, state = 0xFEEDBEEF;
         byte er, eg, eb, paletteIndex;
-        float //xir1, xir2, xig1, xig2, xib1, xib2, 
-                xi1, xi2,
-                w1 = ditherStrength * 0.125f, w3 = w1 * 3f, w5 = w1 * 5f, w7 = w1 * 7f;
+        //float xir1, xir2, xig1, xig2, xib1, xib2, // would be used if random factors were per-channel
+        // used now, where random factors are determined by whole colors as ints
+        float xi1, xi2, w1 = ditherStrength * 0.125f, w3 = w1 * 3f, w5 = w1 * 5f, w7 = w1 * 7f;
         for (int y = 0; y < h; y++) {
             int ny = y + 1;
             for (int i = 0; i < lineLen; i++) {
@@ -773,7 +778,7 @@ public class PaletteReducer {
                     rdiff = (color>>>24)-    (used>>>24);
                     gdiff = (color>>>16&255)-(used>>>16&255);
                     bdiff = (color>>>8&255)- (used>>>8&255);
-                    state += color ^ color >>> 9;
+                    state += (color + 0x41C64E6D) ^ color >>> 7;
                     state = (state << 21 | state >>> 11);
                     xi1 = randomXi(state);
                     state = (state << 15 | state >>> 17) ^ 0x9E3779B9;

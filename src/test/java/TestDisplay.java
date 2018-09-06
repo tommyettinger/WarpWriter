@@ -49,7 +49,7 @@ public class TestDisplay extends ApplicationAdapter {
     @Override
     public void create() {
         reducer = new PaletteReducer(Coloring.GB);
-        reducer.setDitherStrength(0.75f);
+        reducer.setDitherStrength(0.5f);
         batch = new SpriteBatch();
 //        pix = new Pixmap(16, 16, Pixmap.Format.RGBA8888);
 //        tex = new Texture(16, 16, Pixmap.Format.RGBA8888);

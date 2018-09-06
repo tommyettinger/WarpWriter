@@ -40,7 +40,7 @@ public class TestDetailedOutput extends ApplicationAdapter {
         width = rendered.length;
         height = rendered[0].length;
         png8 = new PNG8(width * height);
-        png8.palette = new PaletteReducer(Coloring.ALT_PALETTE);
+        png8.palette = new PaletteReducer(Coloring.GB);
         png8.setFlipY(false);
         for (int i = 0; i < frames; i++) {
             pixes[i] = new Pixmap(width, height, Pixmap.Format.RGBA8888);

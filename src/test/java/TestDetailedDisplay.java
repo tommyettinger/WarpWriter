@@ -48,7 +48,7 @@ public class TestDetailedDisplay extends ApplicationAdapter {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        reducer = new PaletteReducer(Coloring.ALT_PALETTE);
+        reducer = new PaletteReducer(Coloring.DB8);
 //        pix = new Pixmap(16, 16, Pixmap.Format.RGBA8888);
 //        tex = new Texture(16, 16, Pixmap.Format.RGBA8888);
         for (int i = 0; i < frames; i++) {
@@ -199,7 +199,7 @@ public class TestDetailedDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, indices[x][y]);
                 }
             }
-            reducer.reduceSolid(pix);
+            reducer.reduceWithNoise(pix);
         }
     }
 
@@ -236,7 +236,7 @@ public class TestDetailedDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, indices[x][y]);
                 }
             }
-            reducer.reduceSolid(pix);
+            reducer.reduceWithNoise(pix);
         }
     }
     
@@ -276,7 +276,7 @@ public class TestDetailedDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, indices[x][y]);
                 }
             }
-            reducer.reduceSolid(pix);
+            reducer.reduceWithNoise(pix);
         }
         tex = new Texture(width, height, Pixmap.Format.RGBA8888);
     }
@@ -315,7 +315,7 @@ public class TestDetailedDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, indices[x][y]);
                 }
             }
-            reducer.reduceSolid(pix);
+            reducer.reduceWithNoise(pix);
         }
     }
 
@@ -358,7 +358,7 @@ public class TestDetailedDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, indices[x][y]);
                 }
             }
-            reducer.reduceSolid(pix);
+            reducer.reduceWithNoise(pix);
         }
         tex = new Texture(width, height, Pixmap.Format.RGBA8888);
     }
