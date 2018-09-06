@@ -7,7 +7,7 @@ import squidpony.squidmath.StatefulRNG;
 import java.io.InputStream;
 
 import static squidpony.squidmath.LinnormRNG.determineBounded;
-//import static squidpony.squidmath.Noise.PointHash.hashAll;
+import static squidpony.squidmath.Noise.PointHash.hashAll;
 
 /**
  * Created by Tommy Ettinger on 11/4/2017.
@@ -26,87 +26,87 @@ public class ModelMaker {
      * @param state
      * @return 64-bit hash of the x,y,z point with the given state
      */
-    public static long hashAll(long x, long y, long z, long state) {
-//        return TangleRNG.determine(x, TangleRNG.determine(y, TangleRNG.determine(z, state)));
-        state *= 0x9E3779B97F4A7C15L;
-        long other = 0x60642E2A34326F15L;
-        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-        state = (state << 54 | state >>> 10);
-        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-        state = (state << 54 | state >>> 10);
-        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-        return ((state << 54 | state >>> 10) + (other ^ other >>> 29) ^ 0x9E3779B97F4A7C15L) * 0x94D049BB133111EBL;
-
-//        return ((x = ((x *= 0x6C8E9CF570932BD5L) ^ x >>> 26 ^ 0x9183A1F4F348E683L) * (
-//                ((y = ((y *= 0x6C8E9CF570932BD5L) ^ y >>> 26 ^ 0x9183A1F4F348E683L) * (
-//                        ((z = ((z *= 0x6C8E9CF570932BD5L) ^ z >>> 26 ^ 0x9183A1F4F348E683L) * (
-//                                state * 0x9E3779B97F4A7C15L
-//                                        | 1L)) ^ z >>> 24)
-//                                | 1L)) ^ y >>> 24) 
-//                        | 1L)) ^ x >>> 24);
-
-//        x *= (0xF34C283B73FE6A6DL);
-//        state += (x << 45 | x >>> 19);
-//        y *= (0x9183A1F4F348E683L);
-//        state += (y << 3 | y >>> 61);
-//        z *= (0xAFBB1BAE72936299L);
-//        state += (z << 25 | z >>> 39);
-//        return state ^ x + y + z;
-    }
-    /**
-     *
-     * @param x
-     * @param y
-     * @param z
-     * @param state
-     * @return 64-bit hash of the x,y,z,w point with the given state
-     */
-    public static long hashAll(long x, long y, long z, long w, long state) {
-//        return TangleRNG.determine(x, TangleRNG.determine(y, TangleRNG.determine(z, TangleRNG.determine(w, state))));
-        state *= 0x9E3779B97F4A7C15L;
-        long other = 0x60642E2A34326F15L;
-        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-        state = (state << 54 | state >>> 10);
-        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-        state = (state << 54 | state >>> 10);
-        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-        state = (state << 54 | state >>> 10);
-        state ^= (other += (w ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-        return ((state << 54 | state >>> 10) + (other ^ other >>> 29) ^ 0x9E3779B97F4A7C15L) * 0x94D049BB133111EBL;
-
-//        return ((x = ((x *= 0x6C8E9CF570932BD5L) ^ x >>> 26 ^ 0x9183A1F4F348E683L) * (
-//                ((y = ((y *= 0x6C8E9CF570932BD5L) ^ y >>> 26 ^ 0x9183A1F4F348E683L) * (
-//                        ((z = ((z *= 0x6C8E9CF570932BD5L) ^ z >>> 26 ^ 0x9183A1F4F348E683L) * (
-//                                ((w = ((w *= 0x6C8E9CF570932BD5L) ^ w >>> 26 ^ 0x9183A1F4F348E683L) * (
-//                                        state * 0x9E3779B97F4A7C15L
-//                                                | 1L)) ^ w >>> 24)
-//                                        | 1L)) ^ z >>> 24)
-//                                | 1L)) ^ y >>> 24)
-//                        | 1L)) ^ x >>> 24);
-
-//        return ((x = ((x *= 0x734C283B73FE6A6DL) ^ x >>> 26 ^ 0x64F31432B4AA049BL) * (
-//                ((y = ((y *= 0x5FCBBDE92C96E11DL) ^ y >>> 26 ^ 0x4E34944613628E73L) * (
-//                        ((z = ((z *= 0x6C8E9CF570932BD5L) ^ z >>> 26 ^ 0x7F91620098C41B2BL) * (
-//                                ((w = ((w *= 0x4DC7BD448464FE2DL) ^ w >>> 26 ^ 0x571DD04A962AC4A3L) * (
-//                                        state * 0x9E3779B97F4A7C15L
-//                                                | 1L)) ^ w >>> 24)
-//                                        | 1L)) ^ z >>> 24)
-//                                | 1L)) ^ y >>> 24)
-//                        | 1L)) ^ x >>> 24);
-
-        // 0x9E3779B97F4A7C16L
-        // (0x734C283B73FE6A6DL + 0x9E3779B97F4A7C16L * 1L)
-//        x *= (0xF34C283B73FE6A6DL);
-//        state += (x << 45 | x >>> 19);
-//        y *= (0x9183A1F4F348E683L);
-//        state += (y << 3 | y >>> 61);
-//        z *= (0xAFBB1BAE72936299L);
-//        state += (z << 25 | z >>> 39);
-//        w *= (0xCDF29567F1DDDEAFL);
-//        state += (w << 47 | w >>> 17);
-//        return state ^ x + y + z + w;
-        
-    }
+//    public static long hashAll(long x, long y, long z, long state) {
+////        return TangleRNG.determine(x, TangleRNG.determine(y, TangleRNG.determine(z, state)));
+//        state *= 0x9E3779B97F4A7C15L;
+//        long other = 0x60642E2A34326F15L;
+//        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+//        state = (state << 54 | state >>> 10);
+//        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+//        state = (state << 54 | state >>> 10);
+//        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+//        return ((state << 54 | state >>> 10) + (other ^ other >>> 29) ^ 0x9E3779B97F4A7C15L) * 0x94D049BB133111EBL;
+//
+////        return ((x = ((x *= 0x6C8E9CF570932BD5L) ^ x >>> 26 ^ 0x9183A1F4F348E683L) * (
+////                ((y = ((y *= 0x6C8E9CF570932BD5L) ^ y >>> 26 ^ 0x9183A1F4F348E683L) * (
+////                        ((z = ((z *= 0x6C8E9CF570932BD5L) ^ z >>> 26 ^ 0x9183A1F4F348E683L) * (
+////                                state * 0x9E3779B97F4A7C15L
+////                                        | 1L)) ^ z >>> 24)
+////                                | 1L)) ^ y >>> 24) 
+////                        | 1L)) ^ x >>> 24);
+//
+////        x *= (0xF34C283B73FE6A6DL);
+////        state += (x << 45 | x >>> 19);
+////        y *= (0x9183A1F4F348E683L);
+////        state += (y << 3 | y >>> 61);
+////        z *= (0xAFBB1BAE72936299L);
+////        state += (z << 25 | z >>> 39);
+////        return state ^ x + y + z;
+//    }
+//    /**
+//     *
+//     * @param x
+//     * @param y
+//     * @param z
+//     * @param state
+//     * @return 64-bit hash of the x,y,z,w point with the given state
+//     */
+//    public static long hashAll(long x, long y, long z, long w, long state) {
+////        return TangleRNG.determine(x, TangleRNG.determine(y, TangleRNG.determine(z, TangleRNG.determine(w, state))));
+//        state *= 0x9E3779B97F4A7C15L;
+//        long other = 0x60642E2A34326F15L;
+//        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+//        state = (state << 54 | state >>> 10);
+//        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+//        state = (state << 54 | state >>> 10);
+//        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+//        state = (state << 54 | state >>> 10);
+//        state ^= (other += (w ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+//        return ((state << 54 | state >>> 10) + (other ^ other >>> 29) ^ 0x9E3779B97F4A7C15L) * 0x94D049BB133111EBL;
+//
+////        return ((x = ((x *= 0x6C8E9CF570932BD5L) ^ x >>> 26 ^ 0x9183A1F4F348E683L) * (
+////                ((y = ((y *= 0x6C8E9CF570932BD5L) ^ y >>> 26 ^ 0x9183A1F4F348E683L) * (
+////                        ((z = ((z *= 0x6C8E9CF570932BD5L) ^ z >>> 26 ^ 0x9183A1F4F348E683L) * (
+////                                ((w = ((w *= 0x6C8E9CF570932BD5L) ^ w >>> 26 ^ 0x9183A1F4F348E683L) * (
+////                                        state * 0x9E3779B97F4A7C15L
+////                                                | 1L)) ^ w >>> 24)
+////                                        | 1L)) ^ z >>> 24)
+////                                | 1L)) ^ y >>> 24)
+////                        | 1L)) ^ x >>> 24);
+//
+////        return ((x = ((x *= 0x734C283B73FE6A6DL) ^ x >>> 26 ^ 0x64F31432B4AA049BL) * (
+////                ((y = ((y *= 0x5FCBBDE92C96E11DL) ^ y >>> 26 ^ 0x4E34944613628E73L) * (
+////                        ((z = ((z *= 0x6C8E9CF570932BD5L) ^ z >>> 26 ^ 0x7F91620098C41B2BL) * (
+////                                ((w = ((w *= 0x4DC7BD448464FE2DL) ^ w >>> 26 ^ 0x571DD04A962AC4A3L) * (
+////                                        state * 0x9E3779B97F4A7C15L
+////                                                | 1L)) ^ w >>> 24)
+////                                        | 1L)) ^ z >>> 24)
+////                                | 1L)) ^ y >>> 24)
+////                        | 1L)) ^ x >>> 24);
+//
+//        // 0x9E3779B97F4A7C16L
+//        // (0x734C283B73FE6A6DL + 0x9E3779B97F4A7C16L * 1L)
+////        x *= (0xF34C283B73FE6A6DL);
+////        state += (x << 45 | x >>> 19);
+////        y *= (0x9183A1F4F348E683L);
+////        state += (y << 3 | y >>> 61);
+////        z *= (0xAFBB1BAE72936299L);
+////        state += (z << 25 | z >>> 39);
+////        w *= (0xCDF29567F1DDDEAFL);
+////        state += (w << 47 | w >>> 17);
+////        return state ^ x + y + z + w;
+//        
+//    }
     public ModelMaker()
     {
         this((long)((Math.random() - 0.5) * 4.503599627370496E15) ^ (long)((Math.random() - 0.5) * 2.0 * -9.223372036854776E18));
@@ -364,7 +364,7 @@ public class ModelMaker {
                         paint = hashAll((xx + (xx | z)) / 7, (yy + (yy | z)) / 5, z, color, seed);
                         if (color < 8) { // checks bottom 6 bits
                             if((current >>> 6 & 0x7L) != 0)
-                            nextShip[x][smallYSize - y][z] = nextShip[x][y][z] = (byte) (cockpitColor - (z + 6 >> 3));//9;
+                                nextShip[x][smallYSize - y][z] = nextShip[x][y][z] = (byte) (cockpitColor - (z + 6 >> 3));//9;
                         } else {
                             nextShip[x][smallYSize - y][z] = nextShip[x][y][z] =
                                     // checks another 6 bits, starting after discarding 6 bits from the bottom
@@ -408,6 +408,107 @@ public class ModelMaker {
             used[1] = rng.getRandomElement(leftHand);
         return combine(warriorMale, used);
     }
-    
+
+//    private static final long[] masks = {
+//            0x0000_0000_0000_0000L,
+//            0x2148_1824_4281_8412L,
+//            0x2148_1824_4281_8412L | 0x8412_2148_1824_4281L,
+//            0x2148_1824_4281_8412L | 0x8412_2148_1824_4281L | 0x4281_8412_2148_1824L,
+//    };
+
+    private static final long[] masks = {
+            0x0000_0000_0000_0000L,
+            0x0148_0804_0281_0402L,
+            0x2148_1824_4281_8412L | 0x8412_2148_1824_4281L,
+            0x2148_1824_4281_8412L | 0x8412_2148_1824_4281L | 0x4281_8412_2148_1824L | 0x1020_4000_8010_2000L,
+    };
+
+    /**
+     * Hamming-weight interpolation, like lerp but doesn't consistently change numerical closeness, instead changing
+     * similarity of bit patterns.
+     * @param start bit pattern to use when distance is 0
+     * @param end bit pattern to use when distance is 4 (should never happen, but it approaches this)
+     * @param distance 0, 1, 2, or 3; how far this is between start and end, with 3 at 3/4 between start and end
+     * @return a long with a bit pattern between start and end
+     */
+    private static long herp(long start, long end, int distance)
+    {
+        return start ^ ((start ^ end) & masks[distance]);
+    }
+    public byte[][][] blobLargeRandom()
+    {
+        long seed = rng.nextLong(), current;
+        xSize = 40;
+        ySize = 40;
+        zSize = 30;
+        byte[][][] blob = new byte[xSize][ySize][zSize];
+        final int halfY = ySize + 1 >> 1, // rounds up if odd
+                smallYSize = ySize - 1;
+        long[][][] hashes = new long[xSize][ySize][zSize];
+        int total = 0;
+        for (int x = 2; x < xSize; x+=4) {
+            for (int y = 2; y < halfY + 4; y+=4) {
+                for (int z = 0; z < zSize; z+=4) {
+                    hashes[x][smallYSize - y][z] |= hashes[x][y][z] |= hashAll(x, y, z, seed) | 1L;
+                }
+            }
+        }
+        System.out.println(total);
+        long x0y0z0, x1y0z0, x0y1z0, x1y1z0, x0y0z1, x1y0z1, x0y1z1, x1y1z1;
+        int x0, x1, y0, y1, z0, z1, dx, dy, dz;
+        for (int x = 2; x < xSize; x++) {
+            x0 = (x - 2 & -4) + 2;
+            x1 = x0 + 4 >= xSize ? 2 : x0 + 4;
+            dx = x - 2 & 3;
+            for (int y = 2; y < halfY; y++) {
+                y0 = (y - 2 & -4) + 2;
+                y1 = y0 + 4;
+                dy = y - 2 & 3;
+                for (int z = 0; z < zSize; z++) {
+                    z0 = z & -4;
+                    z1 = z0 + 4 >= zSize ? 0 : z0 + 4;
+                    dz = z & 3;
+                    if(hashes[x][y][z] == 0)
+                    {
+                        x0y0z0 = hashes[x0][y0][z0];
+                        x1y0z0 = hashes[x1][y0][z0];
+                        x0y1z0 = hashes[x0][y1][z0];
+                        x1y1z0 = hashes[x1][y1][z0];
+                        x0y0z1 = hashes[x0][y0][z1];
+                        x1y0z1 = hashes[x1][y0][z1];
+                        x0y1z1 = hashes[x0][y1][z1];
+                        x1y1z1 = hashes[x1][y1][z1];                         
+                        current =
+                                herp(
+                                        herp(
+                                                herp(x0y0z0, x1y0z0, dx),
+                                                herp(x0y1z0, x1y1z0, dx), dy),
+                                        herp(
+                                                herp(x0y0z1, x1y0z1, dx),
+                                                herp(x0y1z1, x1y1z1, dx), dy), dz)
+                        ;
+                        hashes[x][y][z] = current |
+                                (current & ~(-1L << ((y) + (zSize - z >> 1) + ((xSize >> 1) - Math.abs(x - (xSize >> 1)) >> 1)))) << 1;
+                    }
+                }
+            }
+        }
+        final byte mainColor = (byte)((determineBounded(seed + 1L, 18) * 6) + determineBounded(seed + 22L, 3) + 22),
+                highlightColor = (byte)((determineBounded(seed + 333L, 18) * 6) + determineBounded(seed + 4444L, 3) + 21);
+        for (int x = 0; x < xSize; x++) {
+            for (int y = 0; y < halfY; y++) {
+                for (int z = 0; z < zSize; z++) {
+                    current = hashes[x][y][z];
+                    if (Long.bitCount(current) > 42) {
+                            blob[x][smallYSize - y][z] = blob[x][y][z] =
+                                            ((current >>> 32 & 0x3FL) < 11L) ? highlightColor : mainColor;
+                    }
+                }
+            }
+        }
+        return Tools3D.largestPart(blob);
+        //return nextShip;
+        //return Tools3D.runCA(nextShip, 1);
+    }
 
 }

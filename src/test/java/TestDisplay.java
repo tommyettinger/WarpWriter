@@ -48,7 +48,7 @@ public class TestDisplay extends ApplicationAdapter {
     private int[] palette = Coloring.ALT_PALETTE;
     @Override
     public void create() {
-        reducer = new PaletteReducer(Coloring.GB);
+        reducer = new PaletteReducer(Coloring.ALT_PALETTE);
         reducer.setDitherStrength(0.5f);
         batch = new SpriteBatch();
 //        pix = new Pixmap(16, 16, Pixmap.Format.RGBA8888);
@@ -161,6 +161,9 @@ public class TestDisplay extends ApplicationAdapter {
                     case Input.Keys.K: // knight
                         remakeWarrior(++seed);
                         return true;
+                    case Input.Keys.PERIOD:
+                        remakeBlob(++seed);
+                        return true;
                     case Input.Keys.O: // output
                         name = FakeLanguageGen.SIMPLISH.word(true);
                         VoxIO.writeVOX(name + ".vox", voxels, palette);
@@ -169,7 +172,7 @@ public class TestDisplay extends ApplicationAdapter {
 //                            VoxIO.writeVOX(name + "_" + f + ".vox", animatedVoxels[f], palette);
 //                        }
                         return true;
-                    case Input.Keys.PERIOD:
+                    case Input.Keys.SLASH:
                         seed += determine(keycode);
                         return true;
                 }
@@ -227,6 +230,50 @@ public class TestDisplay extends ApplicationAdapter {
     public void remakeWarrior(long newModel) {
         mm.rng.setState(determine(newModel));
         voxels = mm.warriorRandom();
+        palette = Coloring.ALT_PALETTE;
+        Arrays.fill(animatedVoxels, voxels);
+        int state = Tools3D.hash(voxels);
+        batch.setColor(
+                Float.intBitsToFloat(0xFE000000
+                        | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 17
+                        | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 9
+                        | ((          (state ^ 0x9E3779B9) * 0x9E377 >>> 30) * 17 + 76) << 1)
+        );
+        for (int f = 0; f < frames; f++) {
+            pix = pixes[f];
+            pix.setColor(background);
+            pix.fill();
+            int[][] indices;
+//            if(tiny && !large) indices = mr.renderIso24x32(animatedVoxels[f], dir);
+//            else
+            {
+                switch (angle)
+                {
+                    case 1:
+                        if(dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
+                        else indices = mr.renderOrthoBelow(animatedVoxels[f], dir);
+                        break;
+                    case 3:
+                        if(dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
+                        else indices = mr.renderOrtho(animatedVoxels[f], dir);
+                        break;
+                    default:
+                        if(dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
+                        else indices = mr.renderOrthoSide(animatedVoxels[f], dir);
+                        break;
+                }
+            }
+            for (int x = 0; x < indices.length; x++) {
+                for (int y = 0; y < indices[0].length; y++) {
+                    pix.drawPixel(x, y, palette[indices[x][y]]);
+                }
+            }
+            if(burkesDither) reducer.reduceBurkes(pix); else reducer.reduceWithNoise(pix);
+        }
+    }
+    public void remakeBlob(long newModel) {
+        mm.rng.setState(determine(newModel));
+        voxels = mm.blobLargeRandom();
         palette = Coloring.ALT_PALETTE;
         Arrays.fill(animatedVoxels, voxels);
         int state = Tools3D.hash(voxels);
