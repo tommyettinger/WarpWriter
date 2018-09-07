@@ -48,7 +48,7 @@ public class TestDisplay extends ApplicationAdapter {
     private int[] palette = Coloring.ALT_PALETTE;
     @Override
     public void create() {
-        reducer = new PaletteReducer(Coloring.ALT_PALETTE);
+        reducer = new PaletteReducer(Coloring.GRAY);
         reducer.setDitherStrength(0.5f);
         batch = new SpriteBatch();
 //        pix = new Pixmap(16, 16, Pixmap.Format.RGBA8888);
@@ -273,9 +273,9 @@ public class TestDisplay extends ApplicationAdapter {
     }
     public void remakeBlob(long newModel) {
         mm.rng.setState(determine(newModel));
-        voxels = mm.blobLargeRandom();
+        animatedVoxels = mm.animateBlobLargeRandom(frames);
+        voxels = animatedVoxels[0];
         palette = Coloring.ALT_PALETTE;
-        Arrays.fill(animatedVoxels, voxels);
         int state = Tools3D.hash(voxels);
         batch.setColor(
                 Float.intBitsToFloat(0xFE000000

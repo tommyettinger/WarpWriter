@@ -7,6 +7,7 @@ import squidpony.squidmath.StatefulRNG;
 import java.io.InputStream;
 
 import static squidpony.squidmath.LinnormRNG.determineBounded;
+import static squidpony.squidmath.MathExtras.clamp;
 import static squidpony.squidmath.Noise.PointHash.hashAll;
 
 /**
@@ -18,14 +19,14 @@ public class ModelMaker {
     private byte[][][] ship, shipLarge, warriorMale, sword0, spear0, shield0, shield1;
     private byte[][][][] rightHand, leftHand;
     private int xSize, ySize, zSize;
-    /**
-     *
-     * @param x
-     * @param y
-     * @param z
-     * @param state
-     * @return 64-bit hash of the x,y,z point with the given state
-     */
+//    /**
+//     *
+//     * @param x
+//     * @param y
+//     * @param z
+//     * @param state
+//     * @return 64-bit hash of the x,y,z point with the given state
+//     */
 //    public static long hashAll(long x, long y, long z, long state) {
 ////        return TangleRNG.determine(x, TangleRNG.determine(y, TangleRNG.determine(z, state)));
 //        state *= 0x9E3779B97F4A7C15L;
@@ -277,7 +278,7 @@ public class ModelMaker {
         int adjustment;
         for (int f = 0; f < frameCount; f++) {
             for (int x = 0; x < xSize; x++) {
-                adjustment = (int) (NumberTools.sin(changeAmount * (f + x * 0.6f) * Math.PI) * 1.5f);
+                adjustment = (int) (NumberTools.sin(changeAmount * (f + x * 0.6f) * 3.141592653589793f) * 1.5f);
                 for (int y = 1; y < ySize - 1; y++) {
                     System.arraycopy(fish[x][y], 0, frames[f][x][y + adjustment], 0, zSize);
                 }
@@ -445,7 +446,6 @@ public class ModelMaker {
         final int halfY = ySize + 1 >> 1, // rounds up if odd
                 smallYSize = ySize - 1;
         long[][][] hashes = new long[xSize][ySize][zSize];
-        int total = 0;
         for (int x = 2; x < xSize; x+=4) {
             for (int y = 2; y < halfY + 4; y+=4) {
                 for (int z = 0; z < zSize; z+=4) {
@@ -453,7 +453,6 @@ public class ModelMaker {
                 }
             }
         }
-        System.out.println(total);
         long x0y0z0, x1y0z0, x0y1z0, x1y1z0, x0y0z1, x1y0z1, x0y1z1, x1y1z1;
         int x0, x1, y0, y1, z0, z1, dx, dy, dz;
         for (int x = 2; x < xSize; x++) {
@@ -507,7 +506,110 @@ public class ModelMaker {
             }
         }
         return Tools3D.largestPart(blob);
-        //return nextShip;
+        //return blob;
+        //return Tools3D.runCA(nextShip, 1);
+    }
+    public byte[][][][] animateBlobLargeRandom(int frames)
+    {
+        long seed = rng.nextLong(), current;
+        xSize = 40;
+        ySize = 40;
+        zSize = 30;
+        final float changeAmount = 2f / (frames);
+        byte[][][][] blob = new byte[frames][xSize][ySize][zSize];
+        byte[][][] blob0 = new byte[xSize][ySize][zSize];
+        final int halfY = ySize + 1 >> 1, // rounds up if odd
+                smallXSize = xSize - 1, smallYSize = ySize - 1, smallZSize = zSize - 1;
+        long[][][] hashes = new long[xSize][ySize][zSize];
+        for (int x = 2; x < xSize; x+=4) {
+            for (int y = 2; y < halfY + 4; y+=4) {
+                for (int z = 0; z < zSize; z+=4) {
+                    hashes[x][smallYSize - y][z] |= hashes[x][y][z] |= hashAll(x, y, z, seed) | 1L;
+                }
+            }
+        }
+        long x0y0z0, x1y0z0, x0y1z0, x1y1z0, x0y0z1, x1y0z1, x0y1z1, x1y1z1;
+        int x0, x1, y0, y1, z0, z1, dx, dy, dz, adj1, adj2, adj3, adj1_, adj2_, adj3_;
+        for (int x = 2; x < xSize; x++) {
+            x0 = (x - 2 & -4) + 2;
+            x1 = x0 + 4 >= xSize ? 2 : x0 + 4;
+            dx = x - 2 & 3;
+            for (int y = 2; y < halfY; y++) {
+                y0 = (y - 2 & -4) + 2;
+                y1 = y0 + 4;
+                dy = y - 2 & 3;
+                for (int z = 0; z < zSize; z++) {
+                    z0 = z & -4;
+                    z1 = z0 + 4 >= zSize ? 0 : z0 + 4;
+                    dz = z & 3;
+                    if(hashes[x][y][z] == 0)
+                    {
+                        x0y0z0 = hashes[x0][y0][z0];
+                        x1y0z0 = hashes[x1][y0][z0];
+                        x0y1z0 = hashes[x0][y1][z0];
+                        x1y1z0 = hashes[x1][y1][z0];
+                        x0y0z1 = hashes[x0][y0][z1];
+                        x1y0z1 = hashes[x1][y0][z1];
+                        x0y1z1 = hashes[x0][y1][z1];
+                        x1y1z1 = hashes[x1][y1][z1];
+                        current =
+                                herp(
+                                        herp(
+                                                herp(x0y0z0, x1y0z0, dx),
+                                                herp(x0y1z0, x1y1z0, dx), dy),
+                                        herp(
+                                                herp(x0y0z1, x1y0z1, dx),
+                                                herp(x0y1z1, x1y1z1, dx), dy), dz)
+                        ;
+                        hashes[x][y][z] = current |
+                                (current & ~(-1L << ((y) + (zSize - z >> 1) + ((xSize >> 1) - Math.abs(x - (xSize >> 1)) >> 1)))) << 1;
+                    }
+                }
+            }
+        }
+        final byte mainColor = (byte)((determineBounded(seed + 1L, 18) * 6) + determineBounded(seed + 22L, 3) + 22),
+                highlightColor = (byte)((determineBounded(seed + 333L, 18) * 6) + determineBounded(seed + 4444L, 3) + 21);
+        float edit = 0f;
+        byte color;
+        for (int x = 0; x < xSize; x++) {
+            for (int y = 0; y < halfY; y++) {
+                for (int z = 0; z < zSize; z++) {
+                    current = hashes[x][y][z];
+                    if (Long.bitCount(current) > 42) {
+                        blob0[x][smallYSize - y][z] = blob0[x][y][z] =
+                                ((current >>> 32 & 0x3FL) < 11L) ? highlightColor : mainColor;
+                    }
+                }
+            }
+        }
+        blob0 = Tools3D.largestPart(blob0);
+        for (int w = frames - 1; w >= 0; w--) {
+            for (int x = 0; x < xSize; x++) {
+                for (int y = 0; y < halfY; y++) {
+                    for (int z = 0; z < zSize; z++) {
+                        if ((color = blob0[x][y][z]) != 0) {
+                            edit = changeAmount * (w + (Math.abs(x - (xSize >> 1)) + halfY - y + (z >> 1)) * 0.1f)
+                                    * 3.141592653589793f;
+                            adj1 = (int) (NumberTools.sin(edit) * 1.625f);
+                            adj1_ = (int) (adj1 * 0.5f);
+                            adj2 = (int) (NumberTools.sin(edit+1f) * 1.625f);
+                            adj2_ = (int) (adj2 * 0.5f);
+                            adj3 = (int) (NumberTools.sin(edit+2f) * 1.625f);
+                            adj3_ = (int) (adj3 * 0.5f);
+                            blob[w][clamp(x+adj1, 0,smallXSize)][clamp(smallYSize - y-adj2, 0, smallYSize)][clamp(z+adj3,0,smallZSize)]
+                                    = blob[w][clamp(x+adj1, 0,smallXSize)][clamp(y+adj2, 0, smallYSize)][clamp(z+adj3,0,smallZSize)] =
+                                    color;
+                            if(blob[w][clamp(x+adj1_, 0,smallXSize)][clamp(smallYSize - y-adj2_, 0, smallYSize)][clamp(z+adj3_,0,smallZSize)] == 0)
+                                blob[w][clamp(x+adj1_, 0,smallXSize)][clamp(smallYSize - y-adj2_, 0, smallYSize)][clamp(z+adj3_,0,smallZSize)] = color;
+                            if(blob[w][clamp(x+adj1_, 0,smallXSize)][clamp(y+adj2_, 0, smallYSize)][clamp(z+adj3_,0,smallZSize)] == 0)
+                                blob[w][clamp(x+adj1_, 0,smallXSize)][clamp(y+adj2_, 0, smallYSize)][clamp(z+adj3_,0,smallZSize)] = color;
+                        }
+                    }
+                }
+            }
+        }
+        return blob;
+        //return blob;
         //return Tools3D.runCA(nextShip, 1);
     }
 
