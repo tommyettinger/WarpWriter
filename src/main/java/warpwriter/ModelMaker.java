@@ -7,6 +7,7 @@ import squidpony.squidmath.StatefulRNG;
 import java.io.InputStream;
 
 import static squidpony.squidmath.LinnormRNG.determineBounded;
+import static squidpony.squidmath.LinnormRNG.determineFloat;
 import static squidpony.squidmath.MathExtras.clamp;
 import static squidpony.squidmath.Noise.PointHash.hashAll;
 
@@ -487,10 +488,74 @@ public class ModelMaker {
                                                 herp(x0y1z1, x1y1z1, dx), dy), dz)
                         ;
                         hashes[x][y][z] = current |
-                                (current & ~(-1L << ((y) + (zSize - z >> 1) + ((xSize >> 1) - Math.abs(x - (xSize >> 1)) >> 1)))) << 1;
+                                (current & ~(-1L << ((y >> 1) + ((zSize - z) * 11 >> 4) + ((xSize >> 1) - Math.abs(x - (xSize >> 1)) >> 2)))) << 1;
                     }
                 }
             }
+        }
+        for (int i = 0; i < 30; i++) {
+            int rx = (int)((determineFloat(seed + 100L + i) + determineFloat(seed - 100L + i)) * xSize * 0.5f),
+                    rz = (int)(determineFloat(seed + 1000L + i) * determineFloat(seed - 1000L + i) * zSize);
+            hashes[rx][halfY-1][rz] |= 0xFFFFFFFFFFFFL | hashes[rx][halfY-1][rz] << 16;
+            hashes[rx][halfY-2][rz] |= 0xFFFFFFFFFFFFL | hashes[rx][halfY-2][rz] << 16;
+            hashes[rx][halfY-3][rz] |= 0xFFFFFFFFFFFFL | hashes[rx][halfY-3][rz] << 16;
+            hashes[rx][halfY-4][rz] |= 0xFFFFFFFFFFFFL | hashes[rx][halfY-4][rz] << 16;
+        }
+        for (int i = 0; i < 20; i++) {
+            int rx = (int)((determineFloat(seed + 100L + i) + determineFloat(seed - 100L + i)) * xSize * 0.5f),
+                    rz = (int)(determineFloat(seed + 1000L + i) * determineFloat(seed - 1000L + i) * zSize);
+            if(rx < xSize - 4) {
+                hashes[rx + 1][halfY - 1][rz] |= 0xFFFFFFFFFFFFL | hashes[rx + 1][halfY - 1][rz] << 16;
+                hashes[rx + 1][halfY - 2][rz] |= 0xFFFFFFFFFFFFL | hashes[rx + 1][halfY - 2][rz] << 16;
+                hashes[rx + 1][halfY - 3][rz] |= 0xFFFFFFFFFFFFL | hashes[rx + 1][halfY - 3][rz] << 16;
+                hashes[rx + 1][halfY - 4][rz] |= 0xFFFFFFFFFFFFL | hashes[rx + 1][halfY - 4][rz] << 16;
+
+                hashes[rx + 2][halfY - 1][rz] |= 0xFFFFFFFFFFFFL | hashes[rx + 2][halfY - 1][rz] << 16;
+                hashes[rx + 2][halfY - 2][rz] |= 0xFFFFFFFFFFFFL | hashes[rx + 2][halfY - 2][rz] << 16;
+                hashes[rx + 2][halfY - 3][rz] |= 0xFFFFFFFFFFFFL | hashes[rx + 2][halfY - 3][rz] << 16;
+                hashes[rx + 2][halfY - 4][rz] |= 0xFFFFFFFFFFFFL | hashes[rx + 2][halfY - 4][rz] << 16;
+
+                hashes[rx + 3][halfY - 1][rz] |= 0xFFFFFFFFFFFFL | hashes[rx + 3][halfY - 1][rz] << 16;
+                hashes[rx + 3][halfY - 2][rz] |= 0xFFFFFFFFFFFFL | hashes[rx + 3][halfY - 2][rz] << 16;
+                hashes[rx + 3][halfY - 3][rz] |= 0xFFFFFFFFFFFFL | hashes[rx + 3][halfY - 3][rz] << 16;
+                hashes[rx + 3][halfY - 4][rz] |= 0xFFFFFFFFFFFFL | hashes[rx + 3][halfY - 4][rz] << 16;
+
+                hashes[rx + 4][halfY - 1][rz] |= 0xFFFFFFFFFFFFL | hashes[rx + 4][halfY - 1][rz] << 16;
+                hashes[rx + 4][halfY - 2][rz] |= 0xFFFFFFFFFFFFL | hashes[rx + 4][halfY - 2][rz] << 16;
+                hashes[rx + 4][halfY - 3][rz] |= 0xFFFFFFFFFFFFL | hashes[rx + 4][halfY - 3][rz] << 16;
+                hashes[rx + 4][halfY - 4][rz] |= 0xFFFFFFFFFFFFL | hashes[rx + 4][halfY - 4][rz] << 16;
+            }
+            if(rx > 3) {
+                hashes[rx - 1][halfY - 1][rz] |= 0xFFFFFFFFFFFFL | hashes[rx - 1][halfY - 1][rz] << 16;
+                hashes[rx - 1][halfY - 2][rz] |= 0xFFFFFFFFFFFFL | hashes[rx - 1][halfY - 2][rz] << 16;
+                hashes[rx - 1][halfY - 3][rz] |= 0xFFFFFFFFFFFFL | hashes[rx - 1][halfY - 3][rz] << 16;
+                hashes[rx - 1][halfY - 4][rz] |= 0xFFFFFFFFFFFFL | hashes[rx - 1][halfY - 4][rz] << 16;
+
+                hashes[rx - 2][halfY - 1][rz] |= 0xFFFFFFFFFFFFL | hashes[rx - 2][halfY - 1][rz] << 16;
+                hashes[rx - 2][halfY - 2][rz] |= 0xFFFFFFFFFFFFL | hashes[rx - 2][halfY - 2][rz] << 16;
+                hashes[rx - 2][halfY - 3][rz] |= 0xFFFFFFFFFFFFL | hashes[rx - 2][halfY - 3][rz] << 16;
+                hashes[rx - 2][halfY - 4][rz] |= 0xFFFFFFFFFFFFL | hashes[rx - 2][halfY - 4][rz] << 16;
+
+                hashes[rx - 3][halfY - 1][rz] |= 0xFFFFFFFFFFFFL | hashes[rx - 3][halfY - 1][rz] << 16;
+                hashes[rx - 3][halfY - 2][rz] |= 0xFFFFFFFFFFFFL | hashes[rx - 3][halfY - 2][rz] << 16;
+                hashes[rx - 3][halfY - 3][rz] |= 0xFFFFFFFFFFFFL | hashes[rx - 3][halfY - 3][rz] << 16;
+                hashes[rx - 3][halfY - 4][rz] |= 0xFFFFFFFFFFFFL | hashes[rx - 3][halfY - 4][rz] << 16;
+
+                hashes[rx - 4][halfY - 1][rz] |= 0xFFFFFFFFFFFFL | hashes[rx - 4][halfY - 1][rz] << 16;
+                hashes[rx - 4][halfY - 2][rz] |= 0xFFFFFFFFFFFFL | hashes[rx - 4][halfY - 2][rz] << 16;
+                hashes[rx - 4][halfY - 3][rz] |= 0xFFFFFFFFFFFFL | hashes[rx - 4][halfY - 3][rz] << 16;
+                hashes[rx - 4][halfY - 4][rz] |= 0xFFFFFFFFFFFFL | hashes[rx - 4][halfY - 4][rz] << 16;
+            }
+            if(rz < zSize - 1) {
+                hashes[rx][halfY - 1][rz + 1] |= 0xFFFFFFFFFFFFL | hashes[rx][halfY - 1][rz + 1] << 16;
+                hashes[rx][halfY - 2][rz + 1] |= 0xFFFFFFFFFFFFL | hashes[rx][halfY - 2][rz + 1] << 16;
+                hashes[rx][halfY - 3][rz + 1] |= 0xFFFFFFFFFFFFL | hashes[rx][halfY - 3][rz + 1] << 16;
+                hashes[rx][halfY - 4][rz + 1] |= 0xFFFFFFFFFFFFL | hashes[rx][halfY - 4][rz + 1] << 16;
+            }
+            hashes[rx][halfY-5][rz] |= 0xFFFFFFFFFFFFL | hashes[rx][halfY-5][rz] << 16;
+            hashes[rx][halfY-6][rz] |= 0xFFFFFFFFFFFFL | hashes[rx][halfY-6][rz] << 16;
+            hashes[rx][halfY-7][rz] |= 0xFFFFFFFFFFFFL | hashes[rx][halfY-7][rz] << 16;
+            hashes[rx][halfY-8][rz] |= 0xFFFFFFFFFFFFL | hashes[rx][halfY-8][rz] << 16;
         }
         final byte mainColor = (byte)((determineBounded(seed + 1L, 18) * 6) + determineBounded(seed + 22L, 3) + 22),
                 highlightColor = (byte)((determineBounded(seed + 333L, 18) * 6) + determineBounded(seed + 4444L, 3) + 21);
@@ -562,10 +627,74 @@ public class ModelMaker {
                                                 herp(x0y1z1, x1y1z1, dx), dy), dz)
                         ;
                         hashes[x][y][z] = current |
-                                (current & ~(-1L << ((y) + (zSize - z >> 1) + ((xSize >> 1) - Math.abs(x - (xSize >> 1)) >> 1)))) << 1;
+                                (current & ~(-1L << ((y >> 1) + ((zSize - z) * 11 >> 4) + ((xSize >> 1) - Math.abs(x - (xSize >> 1)) >> 2)))) << 1;
                     }
                 }
             }
+        }
+        for (int i = 0; i < 30; i++) {
+            int rx = (int)((determineFloat(seed + 100L + i) + determineFloat(seed - 100L + i)) * xSize * 0.5f),
+                    rz = (int)(determineFloat(seed + 1000L + i) * determineFloat(seed - 1000L + i) * zSize);
+            hashes[rx][halfY-1][rz] |= 0xFFFFFFFFFFFFL | hashes[rx][halfY-1][rz] << 16;
+            hashes[rx][halfY-2][rz] |= 0xFFFFFFFFFFFFL | hashes[rx][halfY-2][rz] << 16;
+            hashes[rx][halfY-3][rz] |= 0xFFFFFFFFFFFFL | hashes[rx][halfY-3][rz] << 16;
+            hashes[rx][halfY-4][rz] |= 0xFFFFFFFFFFFFL | hashes[rx][halfY-4][rz] << 16;
+        }
+        for (int i = 0; i < 20; i++) {
+            int rx = (int)((determineFloat(seed + 100L + i) + determineFloat(seed - 100L + i)) * xSize * 0.5f),
+                    rz = (int)(determineFloat(seed + 1000L + i) * determineFloat(seed - 1000L + i) * zSize);
+            if(rx < xSize - 4) {
+                hashes[rx + 1][halfY - 1][rz] |= 0xFFFFFFFFFFFFL | hashes[rx + 1][halfY - 1][rz] << 16;
+                hashes[rx + 1][halfY - 2][rz] |= 0xFFFFFFFFFFFFL | hashes[rx + 1][halfY - 2][rz] << 16;
+                hashes[rx + 1][halfY - 3][rz] |= 0xFFFFFFFFFFFFL | hashes[rx + 1][halfY - 3][rz] << 16;
+                hashes[rx + 1][halfY - 4][rz] |= 0xFFFFFFFFFFFFL | hashes[rx + 1][halfY - 4][rz] << 16;
+
+                hashes[rx + 2][halfY - 1][rz] |= 0xFFFFFFFFFFFFL | hashes[rx + 2][halfY - 1][rz] << 16;
+                hashes[rx + 2][halfY - 2][rz] |= 0xFFFFFFFFFFFFL | hashes[rx + 2][halfY - 2][rz] << 16;
+                hashes[rx + 2][halfY - 3][rz] |= 0xFFFFFFFFFFFFL | hashes[rx + 2][halfY - 3][rz] << 16;
+                hashes[rx + 2][halfY - 4][rz] |= 0xFFFFFFFFFFFFL | hashes[rx + 2][halfY - 4][rz] << 16;
+
+                hashes[rx + 3][halfY - 1][rz] |= 0xFFFFFFFFFFFFL | hashes[rx + 3][halfY - 1][rz] << 16;
+                hashes[rx + 3][halfY - 2][rz] |= 0xFFFFFFFFFFFFL | hashes[rx + 3][halfY - 2][rz] << 16;
+                hashes[rx + 3][halfY - 3][rz] |= 0xFFFFFFFFFFFFL | hashes[rx + 3][halfY - 3][rz] << 16;
+                hashes[rx + 3][halfY - 4][rz] |= 0xFFFFFFFFFFFFL | hashes[rx + 3][halfY - 4][rz] << 16;
+
+                hashes[rx + 4][halfY - 1][rz] |= 0xFFFFFFFFFFFFL | hashes[rx + 4][halfY - 1][rz] << 16;
+                hashes[rx + 4][halfY - 2][rz] |= 0xFFFFFFFFFFFFL | hashes[rx + 4][halfY - 2][rz] << 16;
+                hashes[rx + 4][halfY - 3][rz] |= 0xFFFFFFFFFFFFL | hashes[rx + 4][halfY - 3][rz] << 16;
+                hashes[rx + 4][halfY - 4][rz] |= 0xFFFFFFFFFFFFL | hashes[rx + 4][halfY - 4][rz] << 16;
+            }
+            if(rx > 3) {
+                hashes[rx - 1][halfY - 1][rz] |= 0xFFFFFFFFFFFFL | hashes[rx - 1][halfY - 1][rz] << 16;
+                hashes[rx - 1][halfY - 2][rz] |= 0xFFFFFFFFFFFFL | hashes[rx - 1][halfY - 2][rz] << 16;
+                hashes[rx - 1][halfY - 3][rz] |= 0xFFFFFFFFFFFFL | hashes[rx - 1][halfY - 3][rz] << 16;
+                hashes[rx - 1][halfY - 4][rz] |= 0xFFFFFFFFFFFFL | hashes[rx - 1][halfY - 4][rz] << 16;
+
+                hashes[rx - 2][halfY - 1][rz] |= 0xFFFFFFFFFFFFL | hashes[rx - 2][halfY - 1][rz] << 16;
+                hashes[rx - 2][halfY - 2][rz] |= 0xFFFFFFFFFFFFL | hashes[rx - 2][halfY - 2][rz] << 16;
+                hashes[rx - 2][halfY - 3][rz] |= 0xFFFFFFFFFFFFL | hashes[rx - 2][halfY - 3][rz] << 16;
+                hashes[rx - 2][halfY - 4][rz] |= 0xFFFFFFFFFFFFL | hashes[rx - 2][halfY - 4][rz] << 16;
+
+                hashes[rx - 3][halfY - 1][rz] |= 0xFFFFFFFFFFFFL | hashes[rx - 3][halfY - 1][rz] << 16;
+                hashes[rx - 3][halfY - 2][rz] |= 0xFFFFFFFFFFFFL | hashes[rx - 3][halfY - 2][rz] << 16;
+                hashes[rx - 3][halfY - 3][rz] |= 0xFFFFFFFFFFFFL | hashes[rx - 3][halfY - 3][rz] << 16;
+                hashes[rx - 3][halfY - 4][rz] |= 0xFFFFFFFFFFFFL | hashes[rx - 3][halfY - 4][rz] << 16;
+
+                hashes[rx - 4][halfY - 1][rz] |= 0xFFFFFFFFFFFFL | hashes[rx - 4][halfY - 1][rz] << 16;
+                hashes[rx - 4][halfY - 2][rz] |= 0xFFFFFFFFFFFFL | hashes[rx - 4][halfY - 2][rz] << 16;
+                hashes[rx - 4][halfY - 3][rz] |= 0xFFFFFFFFFFFFL | hashes[rx - 4][halfY - 3][rz] << 16;
+                hashes[rx - 4][halfY - 4][rz] |= 0xFFFFFFFFFFFFL | hashes[rx - 4][halfY - 4][rz] << 16;
+            }
+            if(rz < zSize - 1) {
+                hashes[rx][halfY - 1][rz + 1] |= 0xFFFFFFFFFFFFL | hashes[rx][halfY - 1][rz + 1] << 16;
+                hashes[rx][halfY - 2][rz + 1] |= 0xFFFFFFFFFFFFL | hashes[rx][halfY - 2][rz + 1] << 16;
+                hashes[rx][halfY - 3][rz + 1] |= 0xFFFFFFFFFFFFL | hashes[rx][halfY - 3][rz + 1] << 16;
+                hashes[rx][halfY - 4][rz + 1] |= 0xFFFFFFFFFFFFL | hashes[rx][halfY - 4][rz + 1] << 16;
+            }
+            hashes[rx][halfY-5][rz] |= 0xFFFFFFFFFFFFL | hashes[rx][halfY-5][rz] << 16;
+            hashes[rx][halfY-6][rz] |= 0xFFFFFFFFFFFFL | hashes[rx][halfY-6][rz] << 16;
+            hashes[rx][halfY-7][rz] |= 0xFFFFFFFFFFFFL | hashes[rx][halfY-7][rz] << 16;
+            hashes[rx][halfY-8][rz] |= 0xFFFFFFFFFFFFL | hashes[rx][halfY-8][rz] << 16;
         }
         final byte mainColor = (byte)((determineBounded(seed + 1L, 18) * 6) + determineBounded(seed + 22L, 3) + 22),
                 highlightColor = (byte)((determineBounded(seed + 333L, 18) * 6) + determineBounded(seed + 4444L, 3) + 21);
