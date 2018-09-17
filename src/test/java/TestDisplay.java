@@ -9,7 +9,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import squidpony.FakeLanguageGen;
+import squidpony.StringKit;
 import warpwriter.*;
 
 import java.io.FileInputStream;
@@ -45,10 +47,11 @@ public class TestDisplay extends ApplicationAdapter {
     private boolean playing = false, rotating = false, tiny = false, large = true, burkesDither = false;
     private int width = 52, height = 64, frames = 8;
     private Pixmap[] pixes = new Pixmap[frames];
+    private int[][] indices;
     private int[] palette = Coloring.ALT_PALETTE;
     @Override
     public void create() {
-        reducer = new PaletteReducer(Coloring.GRAY);
+        reducer = new PaletteReducer(Coloring.ALT_PALETTE);
         reducer.setDitherStrength(0.5f);
         batch = new SpriteBatch();
 //        pix = new Pixmap(16, 16, Pixmap.Format.RGBA8888);
@@ -188,17 +191,16 @@ public class TestDisplay extends ApplicationAdapter {
         palette = Coloring.ALT_PALETTE;
         animatedVoxels = mm.animateFish(voxels, frames);
         int state = Tools3D.hash(voxels);
-        batch.setColor(
+        /* batch.setColor(
                 Float.intBitsToFloat(0xFE000000
                         | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 17
                         | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 9
                         | ((          (state ^ 0x9E3779B9) * 0x9E377 >>> 30) * 17 + 76) << 1)
-        );
+        );*/
         for (int f = 0; f < frames; f++) {
             pix = pixes[f];
             pix.setColor(background);
             pix.fill();
-            int[][] indices;
 //            if(tiny && !large) indices = mr.renderIso24x32(animatedVoxels[f], dir);
 //            else
             {
@@ -233,17 +235,16 @@ public class TestDisplay extends ApplicationAdapter {
         palette = Coloring.ALT_PALETTE;
         Arrays.fill(animatedVoxels, voxels);
         int state = Tools3D.hash(voxels);
-        batch.setColor(
+        /* batch.setColor(
                 Float.intBitsToFloat(0xFE000000
                         | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 17
                         | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 9
                         | ((          (state ^ 0x9E3779B9) * 0x9E377 >>> 30) * 17 + 76) << 1)
-        );
+        );*/
         for (int f = 0; f < frames; f++) {
             pix = pixes[f];
             pix.setColor(background);
             pix.fill();
-            int[][] indices;
 //            if(tiny && !large) indices = mr.renderIso24x32(animatedVoxels[f], dir);
 //            else
             {
@@ -277,17 +278,16 @@ public class TestDisplay extends ApplicationAdapter {
         voxels = animatedVoxels[0];
         palette = Coloring.ALT_PALETTE;
         int state = Tools3D.hash(voxels);
-        batch.setColor(
+        /* batch.setColor(
                 Float.intBitsToFloat(0xFE000000
                         | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 17
                         | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 9
                         | ((          (state ^ 0x9E3779B9) * 0x9E377 >>> 30) * 17 + 76) << 1)
-        );
+        );*/
         for (int f = 0; f < frames; f++) {
             pix = pixes[f];
             pix.setColor(background);
             pix.fill();
-            int[][] indices;
 //            if(tiny && !large) indices = mr.renderIso24x32(animatedVoxels[f], dir);
 //            else
             {
@@ -327,7 +327,6 @@ public class TestDisplay extends ApplicationAdapter {
             pix = pixes[f];
             pix.setColor(background);
             pix.fill();
-            int[][] indices;
 //            if(tiny && !large) indices = mr.renderIso24x32(animatedVoxels[f], dir);
 //            else
             {
@@ -363,16 +362,15 @@ public class TestDisplay extends ApplicationAdapter {
             palette = Coloring.ALT_PALETTE;
             animatedVoxels = mm.animateShip(voxels, frames);
             int state = Tools3D.hash(voxels);
-            batch.setColor(
+            /* batch.setColor(
                     Float.intBitsToFloat(0xFE000000
                             | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 17
                             | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 9
                             | ((          (state ^ 0x9E3779B9) * 0x9E377 >>> 30) * 17 + 76) << 1)
-            );
+            );*/
         }
         int oldWidth = width, oldHeight = height;
         for (int f = 0; f < frames; f++) {
-            int[][] indices;
 //            if(tiny && !large) indices = mr.renderIso24x32(animatedVoxels[f], dir);
 //            else
             {
@@ -415,18 +413,17 @@ public class TestDisplay extends ApplicationAdapter {
         palette = Coloring.ALT_PALETTE;
         Arrays.fill(animatedVoxels, voxels);
         int state = Tools3D.hash(voxels);
-        batch.setColor(
+        /* batch.setColor(
                 Float.intBitsToFloat(0xFE000000
                         | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 17
                         | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 9
                         | ((          (state ^ 0x9E3779B9) * 0x9E377 >>> 30) * 17 + 76) << 1)
-        );
+        );*/
         int oldWidth = width, oldHeight = height;
         for (int f = 0; f < frames; f++) {
             pix = pixes[f];
             pix.setColor(background);
             pix.fill();
-            int[][] indices;
 //            if(tiny && !large)
 //                indices = mr.renderIso24x32(animatedVoxels[f], dir);
 //            else
@@ -460,11 +457,12 @@ public class TestDisplay extends ApplicationAdapter {
 
 
     public void load(String name) {
-
         try {
+            System.out.println(name);
             voxels = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream(name)));
             /// this is commented out because it's pretty hard to make a working palette by hand; this uses the default
             //palette = VoxIO.lastPalette;
+            //reducer.exact(VoxIO.lastPalette);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return;
@@ -472,7 +470,6 @@ public class TestDisplay extends ApplicationAdapter {
         Arrays.fill(animatedVoxels, voxels);
         int oldWidth = width, oldHeight = height;
         for (int f = 0; f < frames; f++) {
-            int[][] indices;
             if(tiny && !large) indices = mr.renderIso24x32(animatedVoxels[f], dir);
             else
             {
@@ -503,6 +500,59 @@ public class TestDisplay extends ApplicationAdapter {
         }
         if(oldWidth != width || oldHeight != height)
             tex = new Texture(width, height, Pixmap.Format.RGBA8888);
+    }
+
+
+    public void loadPalette(String name) {
+        try {
+            String text = Gdx.files.absolute(name).readString();
+            int start = 0, end = 6, len = text.length();
+            int gap = (text.charAt(7) == '\n') ? 8 : 7;
+            int[] pal = new int[1 + ((len + 2) / gap)];
+            int sz = pal.length;
+            for (int i = 1; i < sz; i++) {
+                pal[i] = StringKit.intFromHex(text, start, end) << 8 | 0xFF;
+                start += gap;
+                end += gap;
+            }
+            reducer.exact(pal);
+        } catch (GdxRuntimeException e) {
+            e.printStackTrace();
+            return;
+        }
+        int oldWidth = width, oldHeight = height;
+        for (int f = 0; f < frames; f++) {
+//            if(tiny && !large) indices = mr.renderIso24x32(animatedVoxels[f], dir);
+//            else
+            {
+                switch (angle)
+                {
+                    case 1:
+                        if(dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
+                        else indices = mr.renderOrthoBelow(animatedVoxels[f], dir);
+                        break;
+                    case 3:
+                        if(dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
+                        else indices = mr.renderOrtho(animatedVoxels[f], dir);
+                        break;
+                    default:
+                        if(dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
+                        else indices = mr.renderOrthoSide(animatedVoxels[f], dir);
+                        break;
+                }
+            }
+            width = indices.length;
+            height = indices[0].length;
+            pix = pixes[f] = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+            pix.setColor(background);
+            pix.fill();
+            for (int x = 0; x < indices.length; x++) {
+                for (int y = 0; y < indices[0].length; y++) {
+                    pix.drawPixel(x, y, palette[indices[x][y]]);
+                }
+            }
+            if(burkesDither) reducer.reduceBurkes(pix); else reducer.reduceWithNoise(pix);
+        }
     }
 
     @Override
@@ -555,8 +605,11 @@ public class TestDisplay extends ApplicationAdapter {
         config.setWindowListener(new Lwjgl3WindowAdapter() {
             @Override
             public void filesDropped(String[] files) {
-                if (files != null && files.length > 0) { 
-                    testDisplay.load(files[0]);
+                if (files != null && files.length > 0) {
+                    if(files[0].endsWith(".vox")) 
+                        testDisplay.load(files[0]);
+                    else if(files[0].endsWith(".hex"))
+                        testDisplay.loadPalette(files[0]);
                 }
             }
         });
