@@ -51,8 +51,8 @@ public class TestDisplay extends ApplicationAdapter {
     private int[] palette = Coloring.ALT_PALETTE;
     @Override
     public void create() {
-        reducer = new PaletteReducer(Coloring.ALT_PALETTE);
-        reducer.setDitherStrength(0.5f);
+        reducer = new PaletteReducer(Coloring.GRAY8);
+        reducer.setDitherStrength(1f);
         batch = new SpriteBatch();
 //        pix = new Pixmap(16, 16, Pixmap.Format.RGBA8888);
 //        tex = new Texture(16, 16, Pixmap.Format.RGBA8888);
@@ -86,7 +86,7 @@ public class TestDisplay extends ApplicationAdapter {
                         mr.hardOutline = !mr.hardOutline;
                         remakeShip(0);
                         return true;
-                    case Input.Keys.D: // dither, toggles between Sierra Lite and Burkes dithering 
+                    case Input.Keys.D: // dither, toggles between Hu or Burkes dithering 
                         burkesDither = !burkesDither;
                         remakeShip(0);
                         return true;
@@ -191,12 +191,12 @@ public class TestDisplay extends ApplicationAdapter {
         palette = Coloring.ALT_PALETTE;
         animatedVoxels = mm.animateFish(voxels, frames);
         int state = Tools3D.hash(voxels);
-        /* batch.setColor(
+        batch.setColor(
                 Float.intBitsToFloat(0xFE000000
                         | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 17
                         | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 9
                         | ((          (state ^ 0x9E3779B9) * 0x9E377 >>> 30) * 17 + 76) << 1)
-        );*/
+        );
         for (int f = 0; f < frames; f++) {
             pix = pixes[f];
             pix.setColor(background);
@@ -235,12 +235,12 @@ public class TestDisplay extends ApplicationAdapter {
         palette = Coloring.ALT_PALETTE;
         Arrays.fill(animatedVoxels, voxels);
         int state = Tools3D.hash(voxels);
-        /* batch.setColor(
+        batch.setColor(
                 Float.intBitsToFloat(0xFE000000
                         | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 17
                         | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 9
                         | ((          (state ^ 0x9E3779B9) * 0x9E377 >>> 30) * 17 + 76) << 1)
-        );*/
+        );
         for (int f = 0; f < frames; f++) {
             pix = pixes[f];
             pix.setColor(background);
@@ -278,12 +278,12 @@ public class TestDisplay extends ApplicationAdapter {
         voxels = animatedVoxels[0];
         palette = Coloring.ALT_PALETTE;
         int state = Tools3D.hash(voxels);
-        /* batch.setColor(
+        batch.setColor(
                 Float.intBitsToFloat(0xFE000000
                         | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 17
                         | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 9
                         | ((          (state ^ 0x9E3779B9) * 0x9E377 >>> 30) * 17 + 76) << 1)
-        );*/
+        );
         for (int f = 0; f < frames; f++) {
             pix = pixes[f];
             pix.setColor(background);
@@ -362,12 +362,12 @@ public class TestDisplay extends ApplicationAdapter {
             palette = Coloring.ALT_PALETTE;
             animatedVoxels = mm.animateShip(voxels, frames);
             int state = Tools3D.hash(voxels);
-            /* batch.setColor(
+            batch.setColor(
                     Float.intBitsToFloat(0xFE000000
                             | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 17
                             | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 9
                             | ((          (state ^ 0x9E3779B9) * 0x9E377 >>> 30) * 17 + 76) << 1)
-            );*/
+            );
         }
         int oldWidth = width, oldHeight = height;
         for (int f = 0; f < frames; f++) {
@@ -413,12 +413,12 @@ public class TestDisplay extends ApplicationAdapter {
         palette = Coloring.ALT_PALETTE;
         Arrays.fill(animatedVoxels, voxels);
         int state = Tools3D.hash(voxels);
-        /* batch.setColor(
+        batch.setColor(
                 Float.intBitsToFloat(0xFE000000
                         | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 17
                         | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 9
                         | ((          (state ^ 0x9E3779B9) * 0x9E377 >>> 30) * 17 + 76) << 1)
-        );*/
+        );
         int oldWidth = width, oldHeight = height;
         for (int f = 0; f < frames; f++) {
             pix = pixes[f];

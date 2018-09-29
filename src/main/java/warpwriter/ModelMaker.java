@@ -1,6 +1,5 @@
 package warpwriter;
 
-import squidpony.squidmath.LinnormRNG;
 import squidpony.squidmath.NumberTools;
 import squidpony.squidmath.StatefulRNG;
 
@@ -9,13 +8,12 @@ import java.io.InputStream;
 import static squidpony.squidmath.LinnormRNG.determineBounded;
 import static squidpony.squidmath.LinnormRNG.determineFloat;
 import static squidpony.squidmath.MathExtras.clamp;
-import static squidpony.squidmath.Noise.PointHash.hashAll;
+//import static squidpony.squidmath.Noise.PointHash.hashAll;
 
 /**
  * Created by Tommy Ettinger on 11/4/2017.
  */
 public class ModelMaker {
-    public LinnormRNG source;
     public StatefulRNG rng;
     private byte[][][] ship, shipLarge, warriorMale, sword0, spear0, shield0, shield1;
     private byte[][][][] rightHand, leftHand;
@@ -109,14 +107,63 @@ public class ModelMaker {
 ////        return state ^ x + y + z + w;
 //        
 //    }
+
+
+    public static long hashAll(long x, long y, long z, long state)
+    {
+        y *= ((state += 0xC6BC279692B5CC8BL - (x << 35 | x >>> 29)) | 1);
+        z *= ((state += 0xC6BC279692B5CC8BL - (y << 35 | y >>> 29)) | 1);
+        x *= ((state += 0xC6BC279692B5CC8BL - (z << 35 | z >>> 29)) | 1);
+        x += y + z;
+        return state ^ x ^ x >>> 28;
+//        long other = 0x60642E2A34326F15L;
+//        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+//        state = (state << 54 | state >>> 10);
+//        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+//        state = (state << 54 | state >>> 10);
+//        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+//        state -= ((state << 54 | state >>> 10) + (other ^ other >>> 29)) * 0x94D049BB133111EBL;
+//        return state ^ state >>> 31;
+    }
+
+    /**
+     *
+     * @param x
+     * @param y
+     * @param z
+     * @param w
+     * @param state
+     * @return 64-bit hash of the x,y,z,w point with the given state
+     */
+    public static long hashAll(long x, long y, long z, long w, long state)
+    {
+        y *= ((state += 0xC6BC279692B5CC8BL - (x << 35 | x >>> 29)) | 1);
+        z *= ((state += 0xC6BC279692B5CC8BL - (y << 35 | y >>> 29)) | 1);
+        w *= ((state += 0xC6BC279692B5CC8BL - (z << 35 | z >>> 29)) | 1);
+        x *= ((state += 0xC6BC279692B5CC8BL - (w << 35 | w >>> 29)) | 1);
+        x += y + z + w;
+        return state ^ x ^ x >>> 28;
+
+//        long other = 0x60642E2A34326F15L;
+//        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+//        state = (state << 54 | state >>> 10);
+//        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+//        state = (state << 54 | state >>> 10);
+//        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+//        state = (state << 54 | state >>> 10);
+//        state ^= (other += (w ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+//        state -= ((state << 54 | state >>> 10) + (other ^ other >>> 29)) * 0x94D049BB133111EBL;
+//        return state ^ state >>> 31;
+    }
+
+
     public ModelMaker()
     {
         this((long)((Math.random() - 0.5) * 4.503599627370496E15) ^ (long)((Math.random() - 0.5) * 2.0 * -9.223372036854776E18));
     }
     public ModelMaker(long seed)
     {
-        source = new LinnormRNG(seed);
-        rng = new StatefulRNG(source);
+        rng = new StatefulRNG(seed);
         InputStream is = this.getClass().getResourceAsStream("/ship.vox");
         ship = VoxIO.readVox(new LittleEndianDataInputStream(is));
         if(ship == null) ship = new byte[12][12][8];
