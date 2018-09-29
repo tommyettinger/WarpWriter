@@ -109,21 +109,72 @@ public class ModelMaker {
 //    }
 
 
+//    public static long hashAll(long x, long y, long z, long state)
+//    {
+//        y *= ((state += 0xC6BC279692B5CC8BL - (x << 35 | x >>> 29)) | 1);
+//        z *= ((state += 0xC6BC279692B5CC8BL - (y << 35 | y >>> 29)) | 1);
+//        x *= ((state += 0xC6BC279692B5CC8BL - (z << 35 | z >>> 29)) | 1);
+//        x += y + z;
+//        return state ^ x ^ x >>> 28;
+////        long other = 0x60642E2A34326F15L;
+////        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+////        state = (state << 54 | state >>> 10);
+////        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+////        state = (state << 54 | state >>> 10);
+////        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+////        state -= ((state << 54 | state >>> 10) + (other ^ other >>> 29)) * 0x94D049BB133111EBL;
+////        return state ^ state >>> 31;
+//    }
+//
+//    /**
+//     *
+//     * @param x
+//     * @param y
+//     * @param z
+//     * @param w
+//     * @param state
+//     * @return 64-bit hash of the x,y,z,w point with the given state
+//     */
+//    public static long hashAll(long x, long y, long z, long w, long state)
+//    {
+//        y *= ((state += 0xC6BC279692B5CC8BL - (x << 35 | x >>> 29)) | 1);
+//        z *= ((state += 0xC6BC279692B5CC8BL - (y << 35 | y >>> 29)) | 1);
+//        w *= ((state += 0xC6BC279692B5CC8BL - (z << 35 | z >>> 29)) | 1);
+//        x *= ((state += 0xC6BC279692B5CC8BL - (w << 35 | w >>> 29)) | 1);
+//        x += y + z + w;
+//        return state ^ x ^ x >>> 28;
+//
+////        long other = 0x60642E2A34326F15L;
+////        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+////        state = (state << 54 | state >>> 10);
+////        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+////        state = (state << 54 | state >>> 10);
+////        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+////        state = (state << 54 | state >>> 10);
+////        state ^= (other += (w ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+////        state -= ((state << 54 | state >>> 10) + (other ^ other >>> 29)) * 0x94D049BB133111EBL;
+////        return state ^ state >>> 31;
+//    }
+
+    /**
+     *
+     * @param x
+     * @param y
+     * @param z
+     * @param state
+     * @return 64-bit hash of the x,y,z point with the given state
+     */
     public static long hashAll(long x, long y, long z, long state)
     {
-        y *= ((state += 0xC6BC279692B5CC8BL - (x << 35 | x >>> 29)) | 1);
-        z *= ((state += 0xC6BC279692B5CC8BL - (y << 35 | y >>> 29)) | 1);
-        x *= ((state += 0xC6BC279692B5CC8BL - (z << 35 | z >>> 29)) | 1);
-        x += y + z;
-        return state ^ x ^ x >>> 28;
-//        long other = 0x60642E2A34326F15L;
-//        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-//        state = (state << 54 | state >>> 10);
-//        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-//        state = (state << 54 | state >>> 10);
-//        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-//        state -= ((state << 54 | state >>> 10) + (other ^ other >>> 29)) * 0x94D049BB133111EBL;
-//        return state ^ state >>> 31;
+        x += y += z += state += 0x9E3779B97F4A7C15L;
+        state *= ((y ^= 0xC6BC279692B5CC8BL + x - (x << 35 | x >>> 29))|1);
+        state ^= state >>> 31;
+        state *= ((z ^= 0xC6BC279692B5CC8BL + y - (y << 35 | y >>> 29))|1);
+        state ^= state >>> 31;
+        state *= ((x ^= 0xC6BC279692B5CC8BL + z - (z << 35 | z >>> 29))|1);
+        state ^= state >>> 31;
+        x ^= y ^ z ^ state;
+        return x ^ x >>> 25;
     }
 
     /**
@@ -137,25 +188,18 @@ public class ModelMaker {
      */
     public static long hashAll(long x, long y, long z, long w, long state)
     {
-        y *= ((state += 0xC6BC279692B5CC8BL - (x << 35 | x >>> 29)) | 1);
-        z *= ((state += 0xC6BC279692B5CC8BL - (y << 35 | y >>> 29)) | 1);
-        w *= ((state += 0xC6BC279692B5CC8BL - (z << 35 | z >>> 29)) | 1);
-        x *= ((state += 0xC6BC279692B5CC8BL - (w << 35 | w >>> 29)) | 1);
-        x += y + z + w;
-        return state ^ x ^ x >>> 28;
-
-//        long other = 0x60642E2A34326F15L;
-//        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-//        state = (state << 54 | state >>> 10);
-//        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-//        state = (state << 54 | state >>> 10);
-//        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-//        state = (state << 54 | state >>> 10);
-//        state ^= (other += (w ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-//        state -= ((state << 54 | state >>> 10) + (other ^ other >>> 29)) * 0x94D049BB133111EBL;
-//        return state ^ state >>> 31;
+        x += y += z += w += state += 0x9E3779B97F4A7C15L;
+        state *= ((y ^= 0xC6BC279692B5CC8BL + x - (x << 35 | x >>> 29))|1);
+        state ^= state >>> 31;
+        state *= ((z ^= 0xC6BC279692B5CC8BL + y - (y << 35 | y >>> 29))|1);
+        state ^= state >>> 31;
+        state *= ((w ^= 0xC6BC279692B5CC8BL + z - (z << 35 | z >>> 29))|1);
+        state ^= state >>> 31;
+        state *= ((x ^= 0xC6BC279692B5CC8BL + w - (w << 35 | w >>> 29))|1);
+        state ^= state >>> 31;
+        x ^= y ^ z ^ w ^ state;
+        return x ^ x >>> 25;
     }
-
 
     public ModelMaker()
     {

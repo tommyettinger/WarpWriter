@@ -51,8 +51,8 @@ public class TestDisplay extends ApplicationAdapter {
     private int[] palette = Coloring.ALT_PALETTE;
     @Override
     public void create() {
-        reducer = new PaletteReducer(Coloring.GRAY8);
-        reducer.setDitherStrength(1f);
+        reducer = new PaletteReducer(Coloring.ALT_PALETTE);
+        reducer.setDitherStrength(0.5f);
         batch = new SpriteBatch();
 //        pix = new Pixmap(16, 16, Pixmap.Format.RGBA8888);
 //        tex = new Texture(16, 16, Pixmap.Format.RGBA8888);
