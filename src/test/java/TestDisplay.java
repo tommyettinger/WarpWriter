@@ -48,10 +48,10 @@ public class TestDisplay extends ApplicationAdapter {
     private int width = 52, height = 64, frames = 8;
     private Pixmap[] pixes = new Pixmap[frames];
     private int[][] indices;
-    private int[] palette = Coloring.UNSEVEN;
+    private int[] palette = Coloring.RINSED;
     @Override
     public void create() {
-        reducer = new PaletteReducer(Coloring.UNSEVEN);
+        reducer = new PaletteReducer(Coloring.RINSED);
         reducer.setDitherStrength(0.5f);
         batch = new SpriteBatch();
 //        pix = new Pixmap(16, 16, Pixmap.Format.RGBA8888);
@@ -188,7 +188,7 @@ public class TestDisplay extends ApplicationAdapter {
     public void remakeFish(long newModel) {
         mm.rng.setState(determine(newModel));
         voxels = mm.fishRandom();
-        palette = Coloring.ALT_PALETTE;
+        //palette = Coloring.ALT_PALETTE;
         animatedVoxels = mm.animateFish(voxels, frames);
         /*int state = Tools3D.hash(voxels);
         batch.setColor(
@@ -232,7 +232,6 @@ public class TestDisplay extends ApplicationAdapter {
     public void remakeWarrior(long newModel) {
         mm.rng.setState(determine(newModel));
         voxels = mm.warriorRandom();
-        palette = Coloring.UNSEVEN;
         if(animatedVoxels == null)
             animatedVoxels = new byte[frames][][][];
         Arrays.fill(animatedVoxels, voxels);
@@ -278,7 +277,7 @@ public class TestDisplay extends ApplicationAdapter {
         mm.rng.setState(determine(newModel));
         animatedVoxels = mm.animateBlobLargeRandom(frames);
         voxels = animatedVoxels[0];
-        palette = Coloring.ALT_PALETTE;
+        //palette = Coloring.ALT_PALETTE;
         /*int state = Tools3D.hash(voxels);
         batch.setColor(
                 Float.intBitsToFloat(0xFE000000
@@ -322,7 +321,7 @@ public class TestDisplay extends ApplicationAdapter {
         if (newModel != 0){
             mm.rng.setState(determine(newModel));
             voxels = mm.shipRandom();
-            palette = Coloring.ALT_PALETTE;
+            //palette = Coloring.ALT_PALETTE;
             animatedVoxels = mm.animateShip(voxels, frames);
         }
         for (int f = 0; f < frames; f++) {
@@ -361,7 +360,7 @@ public class TestDisplay extends ApplicationAdapter {
         if (newModel != 0){
             mm.rng.setState(determine(newModel));
             voxels = large ? mm.shipLargeRandom() : mm.shipRandom();
-            palette = Coloring.ALT_PALETTE;
+            //palette = Coloring.ALT_PALETTE;
             animatedVoxels = mm.animateShip(voxels, frames);
             /*int state = Tools3D.hash(voxels);
             batch.setColor(
@@ -412,7 +411,7 @@ public class TestDisplay extends ApplicationAdapter {
 
         mm.rng.setState(determine(newModel));
         voxels = mm.fullyRandom(large);
-        palette = Coloring.ALT_PALETTE;
+        //palette = Coloring.ALT_PALETTE;
         Arrays.fill(animatedVoxels, voxels);
         /*int state = Tools3D.hash(voxels);
         batch.setColor(

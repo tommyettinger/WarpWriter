@@ -5,7 +5,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
 import squidpony.StringKit;
-import squidpony.squidmath.IntIntOrderedMap;
+import warpwriter.Coloring;
 
 /**
  * Created by Tommy Ettinger on 1/21/2018.
@@ -188,18 +188,19 @@ public class PaletteGenerator extends ApplicationAdapter {
                 0x62507EFF,
                 0x0A0B0FFF,
         };
-        int t;
-        for (int i = 0, e = initial.length - 1; i < e; i++, e--) {
-            t = initial[i];
-            initial[i] = initial[e];
-            initial[e] = t;
-        }
-        IntIntOrderedMap iiom = new IntIntOrderedMap(initial, initial);
-        initial = iiom.keysAsArray();
+//        int t;
+//        for (int i = 0, e = initial.length - 1; i < e; i++, e--) {
+//            t = initial[i];
+//            initial[i] = initial[e];
+//            initial[e] = t;
+//        }
+//        IntIntOrderedMap iiom = new IntIntOrderedMap(initial, initial);
+//        initial = iiom.keysAsArray();
         //uncomment next line to actually use unseven full, with more colors
 //        System.arraycopy(initial, 0, PALETTE, 16, initial.length);
 
         //System.arraycopy(initial, 0, PALETTE, 128, 128);
+        System.arraycopy(Coloring.RINSED, 0, PALETTE, 0, 256);
 //        Color temp = Color.WHITE.cpy();
 //        float[] hsv = new float[3];
 //        for (int i = 0; i < 9; i++) {
@@ -260,7 +261,7 @@ public class PaletteGenerator extends ApplicationAdapter {
             pix.drawPixel(i, 0, PALETTE[i+1]);
         }
         pix.drawPixel(255, 0, 0);
-        PixmapIO.writePNG(Gdx.files.local("Unseven.png"), pix);
+        PixmapIO.writePNG(Gdx.files.local("Rinsed.png"), pix);
         Gdx.app.exit();
     }
 

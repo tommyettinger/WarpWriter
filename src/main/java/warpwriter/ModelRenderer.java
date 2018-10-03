@@ -7,8 +7,8 @@ import java.util.Arrays;
  * Created by Tommy Ettinger on 11/4/2017.
  */
 public class ModelRenderer {
-    public final boolean UNSEVEN = true;
-    public final int EYE_DARK = UNSEVEN ? 21 : 30;
+    public final boolean RINSED_PALETTE = true;
+    public final int EYE_DARK = RINSED_PALETTE ? 22 : 30;
     public final int EYE_LIGHT = 17;
     private transient int[] tempPalette;
     public boolean hardOutline = true;
@@ -76,7 +76,7 @@ public class ModelRenderer {
                         px = con.voxelToPixelX(c, a, b);
                         py = con.voxelToPixelY(c, a, b);
                         current = voxels[c][a][b] & 255;
-                        if (current != 0 && !((current >= 8 && current < 16) || (current >= 136 && current < 144))) {
+                        if (current != 0 && !((current >= 8 && current < 16) || (!RINSED_PALETTE && current >= 136 && current < 144))) {
                             if (current <= 2) {
                                 working[px][py] = current;
                             } else if(current == 3) {
@@ -105,7 +105,7 @@ public class ModelRenderer {
                         px = con.voxelToPixelX(a, c, b);
                         py = con.voxelToPixelY(a, c, b);
                         current = voxels[a][c][b] & 255;
-                        if(current != 0 && !((current >= 8 && current < 16) || (current >= 136 && current < 144)))
+                        if(current != 0 && !((current >= 8 && current < 16) || (!RINSED_PALETTE && current >= 136 && current < 144)))
                         {
                             if(current <= 2) {
                                 working[px][py] = current;
@@ -201,7 +201,7 @@ public class ModelRenderer {
                         px = con.voxelToPixelX(c+1, a+1, b, xs, ys, zs);
                         py = con.voxelToPixelY(c+1, a+1, b, xs, ys, zs);
                         current = voxels[c][a][b] & 255;
-                        if (current != 0 && !((current >= 8 && current < 16) || (current >= 136 && current < 144))) {
+                        if (current != 0 && !((current >= 8 && current < 16) || (!RINSED_PALETTE && current >= 136 && current < 144))) {
                             if (current <= 2) {
                                 for (int sx = 0; sx < 3; sx++) {
                                     for (int sy = 0; sy < 5; sy++) {
@@ -257,7 +257,7 @@ public class ModelRenderer {
                         px = con.voxelToPixelX(a+1, c+1, b, xs, ys, zs);
                         py = con.voxelToPixelY(a+1, c+1, b, xs, ys, zs);
                         current = voxels[a][c][b] & 255;
-                        if(current != 0 && !((current >= 8 && current < 16) || (current >= 136 && current < 144)))
+                        if(current != 0 && !((current >= 8 && current < 16) || (!RINSED_PALETTE && current >= 136 && current < 144)))
                         {
                             if (current <= 2) {
                                 for (int sx = 0; sx < 3; sx++) {
@@ -338,12 +338,12 @@ public class ModelRenderer {
     }
     
     public int clampDown(int color) {
-        if (UNSEVEN) {
+        if (RINSED_PALETTE) {
             if(color < 16)
                 return color;
             color -= 16;
-            int m = color & 3;
-            return (color - m) + clamp(m+1, 1, 3) + 16;
+            int m = color & 7;
+            return (color - m) + clamp(m+1, 1, 7) + 16;
         } else {
             final int off = color & 128;
             color -= off;
@@ -387,7 +387,7 @@ public class ModelRenderer {
                     //px = px - 1 << 1;
                     //py = (py - 2 << 1) + 1;
                     current = voxels[c][a][b] & 255;
-                    if (current != 0 && !((current >= 8 && current < 16) || (current >= 136 && current < 144))) {
+                    if (current != 0 && !((current >= 8 && current < 16) || (!RINSED_PALETTE && current >= 136 && current < 144))) {
                         d = 3 * (b + (c * cChange - a)) + 256;
                         if (current <= 2) {
                             working[px][py] = current;
@@ -510,7 +510,7 @@ public class ModelRenderer {
                     px = px - 1 << 1;
                     py = (py - 2 << 1) + 1;
                     current = voxels[c][a][b] & 255;
-                    if (current != 0 && !((current >= 8 && current < 16) || (current >= 136 && current < 144))) {
+                    if (current != 0 && !((current >= 8 && current < 16) || (!RINSED_PALETTE && current >= 136 && current < 144))) {
                         d = 3 * (b + (c * cChange - a)) + 256;
                         if (current <= 2) {
                             working[px][py] = current;
@@ -730,7 +730,7 @@ public class ModelRenderer {
                         px = con.voxelToPixelX(c + 1, a + 1, b, xs, ys, zs);
                         py = con.voxelToPixelY(c + 1, a + 1, b, xs, ys, zs);
                         current = voxels[xs - 1 - c][a][b] & 255;
-                        if (current != 0 && !((current >= 8 && current < 16) || (current >= 136 && current < 144))) {
+                        if (current != 0 && !((current >= 8 && current < 16) || (!RINSED_PALETTE && current >= 136 && current < 144))) {
                             if (current <= 2) {
                                 for (int sx = 0; sx < 3; sx++) {
                                     for (int sy = 0; sy < 5; sy++) {
@@ -784,7 +784,7 @@ public class ModelRenderer {
                         px = con.voxelToPixelX(a + 1, c + 1, b, xs, ys, zs);
                         py = con.voxelToPixelY(a + 1, c + 1, b, xs, ys, zs);
                         current = voxels[a][ys - 1 - c][b] & 255;
-                        if(current != 0 && !((current >= 8 && current < 16) || (current >= 136 && current < 144)))
+                        if(current != 0 && !((current >= 8 && current < 16) || (!RINSED_PALETTE && current >= 136 && current < 144)))
                         {
                             if (current <= 2) {
                                 for (int sx = 0; sx < 3; sx++) {
@@ -887,7 +887,7 @@ public class ModelRenderer {
 //                    px = px - 1 << 1;
 //                    py = (py - 2 << 1) + 1;
                     current = voxels[c][a][b] & 255;
-                    if (current != 0 && !((current >= 8 && current < 16) || (current >= 136 && current < 144))) {
+                    if (current != 0 && !((current >= 8 && current < 16) || (!RINSED_PALETTE && current >= 136 && current < 144))) {
                         d = 3 * (b + (c * cChange - a)) + 256;
                         if (current <= 2) {
                             working[px][py] = current;
@@ -1039,11 +1039,11 @@ public class ModelRenderer {
                         px = con.voxelToPixelX(c + 1, a + 1, b, xs, ys, zs);
                         py = con.voxelToPixelY(c + 1, a + 1, b, xs, ys, zs);
                         current = voxels[c][a][b] & 255;
-//                        if((current >= 8 && current < 16) || (current >= 136 && current < 144))
+//                        if((current >= 8 && current < 16) || (!RINSED_PALETTE && current >= 136 && current < 144))
 //                        {
 //                            System.out.println("in a connector");
 //                        }
-                        if (current != 0 && !((current >= 8 && current < 16) || (current >= 136 && current < 144))) {
+                        if (current != 0 && !((current >= 8 && current < 16) || (!RINSED_PALETTE && current >= 136 && current < 144))) {
                             if (current <= 2) {
                                 for (int sx = 0; sx < 3; sx++) {
                                     for (int sy = 0; sy < 4; sy++) {
@@ -1094,7 +1094,7 @@ public class ModelRenderer {
                         px = con.voxelToPixelX(a + 1, c + 1, b, xs, ys, zs);
                         py = con.voxelToPixelY(a + 1, c + 1, b, xs, ys, zs);
                         current = voxels[a][c][b] & 255;
-                        if(current != 0 && !((current >= 8 && current < 16) || (current >= 136 && current < 144)))
+                        if(current != 0 && !((current >= 8 && current < 16) || (!RINSED_PALETTE && current >= 136 && current < 144)))
                         {
                             if (current <= 2) {
                                 for (int sx = 0; sx < 3; sx++) {
@@ -1185,7 +1185,7 @@ public class ModelRenderer {
 //                    px = px - 1 << 1;
 //                    py = (py - 2 << 1) + 1;
                     current = voxels[c][a][b] & 255;
-                    if (current != 0 && !((current >= 8 && current < 16) || (current >= 136 && current < 144))) {
+                    if (current != 0 && !((current >= 8 && current < 16) || (!RINSED_PALETTE && current >= 136 && current < 144))) {
                         d = 3 * (c * cChange - a) + 256;
                         if (current <= 2) {
                             working[px][py] = current;

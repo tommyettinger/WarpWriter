@@ -14,6 +14,9 @@ import static squidpony.squidmath.MathExtras.clamp;
  * Created by Tommy Ettinger on 11/4/2017.
  */
 public class ModelMaker {
+    public final boolean RINSED_PALETTE = true;
+    public final byte EYE_DARK = RINSED_PALETTE ? 22 : 30;
+    public final byte EYE_LIGHT = 17;
     public StatefulRNG rng;
     private byte[][][] ship, shipLarge, warriorMale, sword0, spear0, shield0, shield1;
     private byte[][][][] rightHand, leftHand;
@@ -217,19 +220,19 @@ public class ModelMaker {
         xSize = ship.length;
         ySize = ship[0].length;
         zSize = ship[0][0].length;
-        is = this.getClass().getResourceAsStream("/Unseven_Warrior_Male_Attach.vox");
+        is = this.getClass().getResourceAsStream((RINSED_PALETTE ? "/Rinsed_" : "/")  + "Warrior_Male_Attach.vox");
         warriorMale = VoxIO.readVox(new LittleEndianDataInputStream(is));
         if(warriorMale == null) warriorMale = new byte[12][12][8];
-        is = this.getClass().getResourceAsStream("/Unseven_Sword_1H_Attach.vox");
+        is = this.getClass().getResourceAsStream((RINSED_PALETTE ? "/Rinsed_" : "/")  + "Sword_1H_Attach.vox");
         sword0 = VoxIO.readVox(new LittleEndianDataInputStream(is));
         if(sword0 == null) sword0 = new byte[12][12][8];
-        is = this.getClass().getResourceAsStream("/Unseven_Spear_1H_Attach.vox");
+        is = this.getClass().getResourceAsStream((RINSED_PALETTE ? "/Rinsed_" : "/")  + "Spear_1H_Attach.vox");
         spear0 = VoxIO.readVox(new LittleEndianDataInputStream(is));
         if(spear0 == null) spear0 = new byte[12][12][8];
-        is = this.getClass().getResourceAsStream("/Unseven_Board_Shield_1H_Attach.vox");
+        is = this.getClass().getResourceAsStream((RINSED_PALETTE ? "/Rinsed_" : "/")  + "Board_Shield_1H_Attach.vox");
         shield0 = VoxIO.readVox(new LittleEndianDataInputStream(is));
         if(shield0 == null) shield0 = new byte[12][12][8];
-        is = this.getClass().getResourceAsStream("/Unseven_Round_Shield_1H_Attach.vox");
+        is = this.getClass().getResourceAsStream((RINSED_PALETTE ? "/Rinsed_" : "/")  + "Round_Shield_1H_Attach.vox");
         shield1 = VoxIO.readVox(new LittleEndianDataInputStream(is));
         if(shield1 == null) shield1 = new byte[12][12][8];
         
@@ -280,8 +283,8 @@ public class ModelMaker {
         final int side = large ? shipLarge.length : ship.length,
                 high = large ? shipLarge[0][0].length : ship[0][0].length;
         byte[][][] voxels = new byte[side][side][high];
-        byte mainColor = (byte)((rng.nextIntHasty(18) * 6) + rng.between(22, 25)),
-                highlightColor = (byte)((rng.nextIntHasty(18) * 6) + rng.between(21, 24));
+        byte mainColor = (byte)(RINSED_PALETTE ? rng.nextIntHasty(30) * 8 + rng.between(17, 20) : rng.nextIntHasty(18) * 6 + rng.between(22, 25)),
+                highlightColor = (byte)(RINSED_PALETTE ? rng.nextIntHasty(30) * 8 + rng.between(18, 21) : rng.nextIntHasty(18) * 6 + rng.between(21, 24));
         for (int x = 0; x < side; x++) {
             for (int y = 0; y < side; y++) {
                 for (int z = 0; z < high; z++) {
@@ -295,9 +298,14 @@ public class ModelMaker {
     {
         byte[][][] voxels = new byte[12][12][8];
         int ctr;
-        long state = rng.getState(), current = determineBounded(state + 1L, 18);
-        final byte mainColor = (byte)((current * 6) + determineBounded(state + 22L, 3) + 22),
-                highlightColor = (byte)(((current + 4 + determineBounded(state + 333L, 10)) % 18) * 6 + determineBounded(state + 4444L, 3) + 21);
+        long state = rng.getState();
+        long current = (RINSED_PALETTE) ? determineBounded(state+1L, 30):  determineBounded(state + 1L, 18);
+        final byte mainColor = (byte)((RINSED_PALETTE) 
+                ? (current * 8) + determineBounded(state + 22L, 4) + 18 
+                : (current * 6) + determineBounded(state + 22L, 3) + 22),
+                highlightColor = (byte)((RINSED_PALETTE)
+                        ? ((current + 4 + determineBounded(state + 333L, 10)) % 30) * 8 + determineBounded(state + 4444L, 4) + 18
+                        : ((current + 4 + determineBounded(state + 333L, 10)) % 18) * 6 + determineBounded(state + 4444L, 3) + 21);
         do {
             final long seed = rng.nextLong();
             ctr = 0;
@@ -328,9 +336,9 @@ public class ModelMaker {
                 for (int y = 1; y < 5; y++) {
                     if(y != 0 && voxels[x][y - 1][z] != 0) break;
                     if (voxels[x][y][z] != 0) {
-                        voxels[x][12 - y][z] = voxels[x][y - 1][z] = 30;
-                        voxels[x][11 - y][z] = voxels[x][y    ][z] = 30;
-                        voxels[x + 1][12 - y][z] = voxels[x + 1][y    ][z] = 30;     // intentionally asymmetrical
+                        voxels[x][12 - y][z] = voxels[x][y - 1][z] = EYE_DARK;
+                        voxels[x][11 - y][z] = voxels[x][y    ][z] = EYE_DARK;
+                        voxels[x + 1][12 - y][z] = voxels[x + 1][y    ][z] = EYE_DARK;     // intentionally asymmetrical
                         voxels[x + 1][11 - y][z] = voxels[x + 1][y - 1][z] = 4; // intentionally asymmetrical
                         if(x <= 9) {
                             voxels[x + 2][12 - y][z] = voxels[x + 2][y - 1][z] = 0;
@@ -378,19 +386,28 @@ public class ModelMaker {
         }
         return frames;
     }
-
+    private static final int[] RINSED_COCKPIT_COLORS = {3, 7, 12, 24, 26, 27};
     public byte[][][] shipRandom()
     {
-        long seed = rng.nextLong(), current;
         xSize = ship.length;
         ySize = ship[0].length;
         zSize = ship[0][0].length;
         byte[][][] nextShip = new byte[xSize][ySize][zSize];
         final int halfY = ySize >> 1, smallYSize = ySize - 1;
+        long seed = rng.nextLong(), current;
+        final byte mainColor = (byte)((RINSED_PALETTE)
+                ? determineBounded(seed + 1L, 30) * 8 + determineBounded(seed + 22L, 4) + 18
+                : determineBounded(seed + 1L, 18) * 6 +  + determineBounded(seed + 22L, 3) + 22),
+                highlightColor = (byte)((RINSED_PALETTE)
+                        ? ((determineBounded(seed + 333L, 30))) * 8 + determineBounded(seed + 4444L, 4) + 17
+                        : ((determineBounded(seed + 333L, 18))) * 6 + determineBounded(seed + 4444L, 3) + 21),
+                cockpitColor = (byte)((RINSED_PALETTE) 
+                        ? RINSED_COCKPIT_COLORS[determineBounded(seed + 55555L, 6)] * 8 + 19 
+                        : 84 + (determineBounded(seed + 55555L, 6) * 6));
         byte color;
-        final byte mainColor = (byte)((determineBounded(seed + 1L, 18) * 6) + determineBounded(seed + 22L, 3) + 22),
-                highlightColor = (byte)((determineBounded(seed + 333L, 18) * 6) + determineBounded(seed + 4444L, 3) + 21),
-                cockpitColor = (byte)(84 + (determineBounded(seed + 55555L, 6) * 6));
+//        final byte mainColor = (byte)((determineBounded(seed + 1L, 18) * 6) + determineBounded(seed + 22L, 3) + 22),
+//                highlightColor = (byte)((determineBounded(seed + 333L, 18) * 6) + determineBounded(seed + 4444L, 3) + 21),
+//                cockpitColor = (byte)(84 + (determineBounded(seed + 55555L, 6) * 6));
         int xx, yy;
         for (int x = 0; x < xSize; x++) {
             for (int y = 0; y < halfY; y++) {
@@ -414,7 +431,8 @@ public class ModelMaker {
                                     ((current >>> 6 & 0x3FL) < 45L)
                                             ? 0
                                             // checks another 6 bits, starting after discarding 12 bits from the bottom
-                                            : ((current >>> 12 & 0x3FL) < 40L) ? (byte)(18 + (current & 7))
+                                            : ((current >>> 12 & 0x3FL) < 40L) ? (byte)(
+                                            (RINSED_PALETTE) ? 18 + (current & 3) : 18 + (current & 7))
                                             // checks another 6 bits, starting after discarding 18 bits from the bottom
                                             : ((current >>> 18 & 0x3FL) < 8L) ? highlightColor : mainColor;
                         }
@@ -428,16 +446,22 @@ public class ModelMaker {
 
     public byte[][][] shipLargeRandom()
     {
-        long seed = rng.nextLong(), current, paint;
         xSize = shipLarge.length;
         ySize = shipLarge[0].length;
         zSize = shipLarge[0][0].length;
         byte[][][] nextShip = new byte[xSize][ySize][zSize];
         final int halfY = ySize >> 1, smallYSize = ySize - 1;
         int color;
-        final byte mainColor = (byte)((determineBounded(seed + 1L, 18) * 6) + determineBounded(seed + 22L, 3) + 22),
-                highlightColor = (byte)((determineBounded(seed + 333L, 18) * 6) + determineBounded(seed + 4444L, 3) + 21),
-                cockpitColor = (byte)(84 + (determineBounded(seed + 55555L, 6) * 6));
+        long seed = rng.nextLong(), current, paint;
+        final byte mainColor = (byte)((RINSED_PALETTE)
+                ? determineBounded(seed + 1L, 30) * 8 + determineBounded(seed + 22L, 4) + 20
+                : determineBounded(seed + 1L, 18) * 6 +  + determineBounded(seed + 22L, 3) + 22),
+                highlightColor = (byte)((RINSED_PALETTE)
+                        ? ((determineBounded(seed + 333L, 30))) * 8 + determineBounded(seed + 4444L, 4) + 19
+                        : ((determineBounded(seed + 333L, 18))) * 6 + determineBounded(seed + 4444L, 3) + 21),
+                cockpitColor = (byte)((RINSED_PALETTE)
+                        ? RINSED_COCKPIT_COLORS[determineBounded(seed + 55555L, 6)] * 8 + 22
+                        : 84 + (determineBounded(seed + 55555L, 6) * 6));
         int xx, yy, zz;
         for (int x = 0; x < xSize; x++) {
             for (int y = 0; y < halfY; y++) {
@@ -464,7 +488,8 @@ public class ModelMaker {
                                     ((current >>> 6 & 0x1FFL) < color * 6)
                                             ? 0
                                             // checks another 6 bits, starting after discarding 12 bits from the bottom
-                                            : ((paint >>> 12 & 0x3FL) < 40L) ? (byte)(18 + (paint & 7))
+                                            : ((paint >>> 12 & 0x3FL) < 40L) ? (byte)(
+                                                    (RINSED_PALETTE) ? 18 + (paint & 3) : 18 + (paint & 7))
                                             // checks another 6 bits, starting after discarding 18 bits from the bottom
                                             : ((paint >>> 18 & 0x3FL) < 8L) ? highlightColor : mainColor;
                         }
@@ -648,8 +673,12 @@ public class ModelMaker {
             hashes[rx][halfY-7][rz] |= 0xFFFFFFFFFFFFL | hashes[rx][halfY-7][rz] << 16;
             hashes[rx][halfY-8][rz] |= 0xFFFFFFFFFFFFL | hashes[rx][halfY-8][rz] << 16;
         }
-        final byte mainColor = (byte)((determineBounded(seed + 1L, 18) * 6) + determineBounded(seed + 22L, 3) + 22),
-                highlightColor = (byte)((determineBounded(seed + 333L, 18) * 6) + determineBounded(seed + 4444L, 3) + 21);
+        final byte mainColor = (byte)((RINSED_PALETTE)
+                ? determineBounded(seed + 1L, 30) * 8 + determineBounded(seed + 22L, 4) + 18
+                : determineBounded(seed + 1L, 18) * 6 +  + determineBounded(seed + 22L, 3) + 22),
+                highlightColor = (byte)((RINSED_PALETTE)
+                        ? ((determineBounded(seed + 333L, 30))) * 8 + determineBounded(seed + 4444L, 4) + 17
+                        : ((determineBounded(seed + 333L, 18))) * 6 + determineBounded(seed + 4444L, 3) + 21);
         for (int x = 0; x < xSize; x++) {
             for (int y = 0; y < halfY; y++) {
                 for (int z = 0; z < zSize; z++) {
@@ -787,8 +816,12 @@ public class ModelMaker {
             hashes[rx][halfY-7][rz] |= 0xFFFFFFFFFFFFL | hashes[rx][halfY-7][rz] << 16;
             hashes[rx][halfY-8][rz] |= 0xFFFFFFFFFFFFL | hashes[rx][halfY-8][rz] << 16;
         }
-        final byte mainColor = (byte)((determineBounded(seed + 1L, 18) * 6) + determineBounded(seed + 22L, 3) + 22),
-                highlightColor = (byte)((determineBounded(seed + 333L, 18) * 6) + determineBounded(seed + 4444L, 3) + 21);
+        final byte mainColor = (byte)((RINSED_PALETTE)
+                ? determineBounded(seed + 1L, 30) * 8 + determineBounded(seed + 22L, 4) + 18
+                : determineBounded(seed + 1L, 18) * 6 +  + determineBounded(seed + 22L, 3) + 22),
+                highlightColor = (byte)((RINSED_PALETTE)
+                        ? ((determineBounded(seed + 333L, 30))) * 8 + determineBounded(seed + 4444L, 4) + 17
+                        : ((determineBounded(seed + 333L, 18))) * 6 + determineBounded(seed + 4444L, 3) + 21);
         float edit = 0f;
         byte color;
         for (int x = 0; x < xSize; x++) {
