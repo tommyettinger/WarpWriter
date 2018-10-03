@@ -217,19 +217,19 @@ public class ModelMaker {
         xSize = ship.length;
         ySize = ship[0].length;
         zSize = ship[0][0].length;
-        is = this.getClass().getResourceAsStream("/Warrior_Male_Attach.vox");
+        is = this.getClass().getResourceAsStream("/Unseven_Warrior_Male_Attach.vox");
         warriorMale = VoxIO.readVox(new LittleEndianDataInputStream(is));
         if(warriorMale == null) warriorMale = new byte[12][12][8];
-        is = this.getClass().getResourceAsStream("/Sword_1H_Attach.vox");
+        is = this.getClass().getResourceAsStream("/Unseven_Sword_1H_Attach.vox");
         sword0 = VoxIO.readVox(new LittleEndianDataInputStream(is));
         if(sword0 == null) sword0 = new byte[12][12][8];
-        is = this.getClass().getResourceAsStream("/Spear_1H_Attach.vox");
+        is = this.getClass().getResourceAsStream("/Unseven_Spear_1H_Attach.vox");
         spear0 = VoxIO.readVox(new LittleEndianDataInputStream(is));
         if(spear0 == null) spear0 = new byte[12][12][8];
-        is = this.getClass().getResourceAsStream("/Board_Shield_1H_Attach.vox");
+        is = this.getClass().getResourceAsStream("/Unseven_Board_Shield_1H_Attach.vox");
         shield0 = VoxIO.readVox(new LittleEndianDataInputStream(is));
         if(shield0 == null) shield0 = new byte[12][12][8];
-        is = this.getClass().getResourceAsStream("/Round_Shield_1H_Attach.vox");
+        is = this.getClass().getResourceAsStream("/Unseven_Round_Shield_1H_Attach.vox");
         shield1 = VoxIO.readVox(new LittleEndianDataInputStream(is));
         if(shield1 == null) shield1 = new byte[12][12][8];
         

@@ -7,6 +7,9 @@ import java.util.Arrays;
  * Created by Tommy Ettinger on 11/4/2017.
  */
 public class ModelRenderer {
+    public final boolean UNSEVEN = true;
+    public final int EYE_DARK = UNSEVEN ? 21 : 30;
+    public final int EYE_LIGHT = 17;
     private transient int[] tempPalette;
     public boolean hardOutline = true;
     public ModelRenderer()
@@ -214,18 +217,18 @@ public class ModelRenderer {
                             } else if(current == 4) {
                                 for (int sx = 0; sx < 3; sx++) {
                                     for (int sy = 0; sy < 3; sy++) {
-                                        working[px+sx][py+sy] = 30;
+                                        working[px+sx][py+sy] = EYE_DARK;
                                         depths[px+sx][py+sy] = 256 + b * 7 - d * 4 + sy; // used c
                                     }
                                     for (int sy = 3; sy < 5; sy++) {
-                                        working[px+sx][py+sy] = 30;
+                                        working[px+sx][py+sy] = EYE_DARK;
                                         depths[px+sx][py+sy] = 256 + b * 7 - d * 4 + sy; // used c
                                     }
                                 }
-                                working[px][py] = 17;
-                                working[px+1][py] = 17;
-                                working[px][py+1] = 17;
-                                working[px+1][py+1] = 17;
+                                working[px][py] = EYE_LIGHT;
+                                working[px+1][py] = EYE_LIGHT;
+                                working[px][py+1] = EYE_LIGHT;
+                                working[px+1][py+1] = EYE_LIGHT;
 //                                working[px][py+2] = 14;
 //                                working[px+1][py+2] = 14;
                             }
@@ -271,18 +274,18 @@ public class ModelRenderer {
                             } else if(current == 4) {
                                 for (int sx = 0; sx < 3; sx++) {
                                     for (int sy = 0; sy < 3; sy++) {
-                                        working[px+sx][py+sy] = 30;
+                                        working[px+sx][py+sy] = EYE_DARK;
                                         depths[px+sx][py+sy] = 256 + b * 7 - d * 4 + sy; // used a
                                     }
                                     for (int sy = 3; sy < 5; sy++) {
-                                        working[px+sx][py+sy] = 30;
+                                        working[px+sx][py+sy] = EYE_DARK;
                                         depths[px+sx][py+sy] = 256 + b * 7 - d * 4 + sy; // used a
                                     }
                                 }
-                                working[px][py] = 17;
-                                working[px+1][py] = 17;
-                                working[px][py+1] = 17;
-                                working[px+1][py+1] = 17;
+                                working[px][py] = EYE_LIGHT;
+                                working[px+1][py] = EYE_LIGHT;
+                                working[px][py+1] = EYE_LIGHT;
+                                working[px+1][py+1] = EYE_LIGHT;
 //                                working[px][py+2] = 14;
 //                                working[px+1][py+2] = 14;
                             }
@@ -334,15 +337,22 @@ public class ModelRenderer {
         return value;
     }
     
-    public static int clampDown(int color)
-    {
-        final int off = color & 128;
-        color -= off;
-        if(color < 16) return color + off;
-        if(color < 32) return clamp(color + 1, 17, 31) + off;
-        color -= 32;
-        int m = (color % 6);
-        return (color - m) + clamp(m + 1, 1, 5) + 32 + off;
+    public int clampDown(int color) {
+        if (UNSEVEN) {
+            if(color < 16)
+                return color;
+            color -= 16;
+            int m = color & 3;
+            return (color - m) + clamp(m+1, 1, 3) + 16;
+        } else {
+            final int off = color & 128;
+            color -= off;
+            if (color < 16) return color + off;
+            if (color < 32) return clamp(color + 1, 17, 31) + off;
+            color -= 32;
+            int m = (color % 6);
+            return (color - m) + clamp(m + 1, 1, 5) + 32 + off;
+        }
     }
 
     /**

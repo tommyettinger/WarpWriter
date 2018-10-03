@@ -44,14 +44,14 @@ public class TestDisplay extends ApplicationAdapter {
      * is the default and usually isn't mentioned in names), and 4 being directly above (top).
      */
     private int angle = 3;
-    private boolean playing = false, rotating = false, tiny = false, large = true, burkesDither = false;
+    private boolean playing = false, rotating = false, tiny = false, large = true, dither = false;
     private int width = 52, height = 64, frames = 8;
     private Pixmap[] pixes = new Pixmap[frames];
     private int[][] indices;
-    private int[] palette = Coloring.ALT_PALETTE;
+    private int[] palette = Coloring.UNSEVEN;
     @Override
     public void create() {
-        reducer = new PaletteReducer(Coloring.ALT_PALETTE);
+        reducer = new PaletteReducer(Coloring.UNSEVEN);
         reducer.setDitherStrength(0.5f);
         batch = new SpriteBatch();
 //        pix = new Pixmap(16, 16, Pixmap.Format.RGBA8888);
@@ -61,7 +61,7 @@ public class TestDisplay extends ApplicationAdapter {
         }
         pix = pixes[0];
         tex = new Texture(width, height, Pixmap.Format.RGBA8888);
-        remakeShip(seed);
+        remakeWarrior(seed);
         InputAdapter input = new InputAdapter() {
             String name = "Wriggler";
             @Override
@@ -87,7 +87,7 @@ public class TestDisplay extends ApplicationAdapter {
                         remakeShip(0);
                         return true;
                     case Input.Keys.D: // dither, toggles between Hu or Burkes dithering 
-                        burkesDither = !burkesDither;
+                        dither = !dither;
                         remakeShip(0);
                         return true;
                     case Input.Keys.T:
@@ -225,14 +225,16 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if(burkesDither) reducer.reduceBurkes(pix); else reducer.reduceWithNoise(pix);
+            if(dither) reducer.reduceWithNoise(pix);
         }
     }
 
     public void remakeWarrior(long newModel) {
         mm.rng.setState(determine(newModel));
         voxels = mm.warriorRandom();
-        palette = Coloring.ALT_PALETTE;
+        palette = Coloring.UNSEVEN;
+        if(animatedVoxels == null)
+            animatedVoxels = new byte[frames][][][];
         Arrays.fill(animatedVoxels, voxels);
         /*int state = Tools3D.hash(voxels);
         batch.setColor(
@@ -269,7 +271,7 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if(burkesDither) reducer.reduceBurkes(pix); else reducer.reduceWithNoise(pix);
+            if(dither) reducer.reduceWithNoise(pix);
         }
     }
     public void remakeBlob(long newModel) {
@@ -312,7 +314,7 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if(burkesDither) reducer.reduceBurkes(pix); else reducer.reduceWithNoise(pix);
+            if(dither) reducer.reduceWithNoise(pix);
         }
     }
 
@@ -351,7 +353,7 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if(burkesDither) reducer.reduceBurkes(pix); else reducer.reduceWithNoise(pix);
+            if(dither) reducer.reduceWithNoise(pix);
         }
     }
 
@@ -400,7 +402,7 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if(burkesDither) reducer.reduceBurkes(pix); else reducer.reduceWithNoise(pix);
+            if(dither) reducer.reduceWithNoise(pix);
         }
         if(oldWidth != width || oldHeight != height) 
             tex = new Texture(width, height, Pixmap.Format.RGBA8888);
@@ -449,7 +451,7 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if(burkesDither) reducer.reduceBurkes(pix); else reducer.reduceWithNoise(pix);
+            if(dither) reducer.reduceWithNoise(pix);
         }
         if(oldWidth != width || oldHeight != height)
             tex = new Texture(width, height, Pixmap.Format.RGBA8888);
@@ -496,7 +498,7 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if(burkesDither) reducer.reduceBurkes(pix); else reducer.reduceWithNoise(pix);
+            if(dither) reducer.reduceWithNoise(pix);
         }
         if(oldWidth != width || oldHeight != height)
             tex = new Texture(width, height, Pixmap.Format.RGBA8888);
@@ -551,7 +553,7 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if(burkesDither) reducer.reduceBurkes(pix); else reducer.reduceWithNoise(pix);
+            if(dither) reducer.reduceWithNoise(pix);
         }
     }
 
