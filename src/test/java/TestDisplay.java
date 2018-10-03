@@ -190,13 +190,13 @@ public class TestDisplay extends ApplicationAdapter {
         voxels = mm.fishRandom();
         palette = Coloring.ALT_PALETTE;
         animatedVoxels = mm.animateFish(voxels, frames);
-        int state = Tools3D.hash(voxels);
+        /*int state = Tools3D.hash(voxels);
         batch.setColor(
                 Float.intBitsToFloat(0xFE000000
                         | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 17
                         | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 9
                         | ((          (state ^ 0x9E3779B9) * 0x9E377 >>> 30) * 17 + 76) << 1)
-        );
+        );*/
         for (int f = 0; f < frames; f++) {
             pix = pixes[f];
             pix.setColor(background);
@@ -234,13 +234,13 @@ public class TestDisplay extends ApplicationAdapter {
         voxels = mm.warriorRandom();
         palette = Coloring.ALT_PALETTE;
         Arrays.fill(animatedVoxels, voxels);
-        int state = Tools3D.hash(voxels);
+        /*int state = Tools3D.hash(voxels);
         batch.setColor(
                 Float.intBitsToFloat(0xFE000000
                         | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 17
                         | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 9
                         | ((          (state ^ 0x9E3779B9) * 0x9E377 >>> 30) * 17 + 76) << 1)
-        );
+        );*/
         for (int f = 0; f < frames; f++) {
             pix = pixes[f];
             pix.setColor(background);
@@ -277,13 +277,13 @@ public class TestDisplay extends ApplicationAdapter {
         animatedVoxels = mm.animateBlobLargeRandom(frames);
         voxels = animatedVoxels[0];
         palette = Coloring.ALT_PALETTE;
-        int state = Tools3D.hash(voxels);
+        /*int state = Tools3D.hash(voxels);
         batch.setColor(
                 Float.intBitsToFloat(0xFE000000
                         | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 17
                         | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 9
                         | ((          (state ^ 0x9E3779B9) * 0x9E377 >>> 30) * 17 + 76) << 1)
-        );
+        );*/
         for (int f = 0; f < frames; f++) {
             pix = pixes[f];
             pix.setColor(background);
@@ -361,13 +361,13 @@ public class TestDisplay extends ApplicationAdapter {
             voxels = large ? mm.shipLargeRandom() : mm.shipRandom();
             palette = Coloring.ALT_PALETTE;
             animatedVoxels = mm.animateShip(voxels, frames);
-            int state = Tools3D.hash(voxels);
+            /*int state = Tools3D.hash(voxels);
             batch.setColor(
                     Float.intBitsToFloat(0xFE000000
                             | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 17
                             | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 9
                             | ((          (state ^ 0x9E3779B9) * 0x9E377 >>> 30) * 17 + 76) << 1)
-            );
+            );*/
         }
         int oldWidth = width, oldHeight = height;
         for (int f = 0; f < frames; f++) {
@@ -412,13 +412,13 @@ public class TestDisplay extends ApplicationAdapter {
         voxels = mm.fullyRandom(large);
         palette = Coloring.ALT_PALETTE;
         Arrays.fill(animatedVoxels, voxels);
-        int state = Tools3D.hash(voxels);
+        /*int state = Tools3D.hash(voxels);
         batch.setColor(
                 Float.intBitsToFloat(0xFE000000
                         | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 17
                         | (((state = (state ^ 0x9E3779B9) * 0x9E377) >>> 30) * 17 + 76) << 9
                         | ((          (state ^ 0x9E3779B9) * 0x9E377 >>> 30) * 17 + 76) << 1)
-        );
+        );*/
         int oldWidth = width, oldHeight = height;
         for (int f = 0; f < frames; f++) {
             pix = pixes[f];

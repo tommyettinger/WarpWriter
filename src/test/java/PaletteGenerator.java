@@ -5,6 +5,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
 import squidpony.StringKit;
+import squidpony.squidmath.IntIntOrderedMap;
 
 /**
  * Created by Tommy Ettinger on 1/21/2018.
@@ -28,30 +29,177 @@ public class PaletteGenerator extends ApplicationAdapter {
                         0.47698745f, 0.38f, 0.8846154f, 0.86624205f, 0.25777775f, 0.9575472f, 0.81385285f, 0.6453901f,
                         0.746888f, 0.46153846f, 0.48863637f, 0.9395605f};
         int[] PALETTE = new int[256];
-        int[] initial = {
+        System.arraycopy(new int[]{
                 0x00000000, 0x444444ff, 0x000000ff, 0x88ffff00, 0x212121ff, 0x00ff00ff, 0x0000ffff, 0x080808ff,
                 0xff574600, 0xffb14600, 0xfffd4600, 0x4bff4600, 0x51bf6c00, 0x4697ff00, 0x9146ff00, 0xff46ae00,
-                0xffffffff, 0xeeeeeeff, 0xddddddff, 0xccccccff, 0xbbbbbbff, 0xaaaaaaff, 0x999999ff, 0x888888ff,
-                0x777777ff, 0x666666ff, 0x555555ff, 0x444444ff, 0x333333ff, 0x222222ff, 0x111111ff, 0x000000ff,
-                0xff8b7fff, 0xff5746ff, 0xeb3623ff, 0xcc1c0aff, 0xa50f00ff, 0x720a00ff,
-                0xffcbb2ff, 0xebb093ff, 0xcc8a6bff, 0xa5684aff, 0x79462dff, 0x4c2816ff,
-                0xffc87fff, 0xffaf46ff, 0xeb9623ff, 0xcc790aff, 0xa55e00ff, 0x724100ff,
-                0xffe3bfff, 0xebcb9fff, 0xcca675ff, 0xa58252ff, 0x795b33ff, 0x4c371aff,
-                0xfffeacff, 0xfffd59ff, 0xf2f136ff, 0xdfdd1bff, 0xc5c409ff, 0xacab00ff,
-                0xf8e7cdff, 0xf2d09dff, 0xdfb26fff, 0xbf8f47ff, 0x996c2aff, 0x6c4915ff,
-                0x83ff7fff, 0x4bff46ff, 0x29eb23ff, 0x10cc0aff, 0x05a500ff, 0x037200ff,
-                0xc1ffbfff, 0xa1eb9fff, 0x78cc75ff, 0x55a552ff, 0x357933ff, 0x1c4c1aff,
-                0x8ecc9eff, 0x51bf6cff, 0x33ac51ff, 0x1d923aff, 0x0f7929ff, 0x06591bff,
-                0xbffffdff, 0x9febe9ff, 0x75ccc9ff, 0x52a5a3ff, 0x337977ff, 0x1a4c4bff,
-                0x7fb7ffff, 0x4697ffff, 0x237bebff, 0x0a5eccff, 0x0048a5ff, 0x003272ff,
-                0xbfdbffff, 0x9fc0ebff, 0x759bccff, 0x5277a5ff, 0x335179ff, 0x1a304cff,
-                0xb37fffff, 0x9146ffff, 0x7423ebff, 0x580accff, 0x4300a5ff, 0x2e0072ff,
-                0xd9bfffff, 0xbe9febff, 0x9875ccff, 0x7452a5ff, 0x4f3379ff, 0x2e1a4cff,
-                0xff7fc7ff, 0xff46aeff, 0xeb2394ff, 0xcc0a77ff, 0xa5005dff, 0x720040ff,
-                0xffbfe3ff, 0xeb9fcaff, 0xcc75a6ff, 0xa55281ff, 0x79335aff, 0x4c1a36ff,
+                // unseven regular after this
+                0xFCFCFCFF, 0xC3CBDBFF, 0xA096D1FF, 0x62507EFF, 0x424556FF, 0x252A32FF, 0x14161FFF, 0x0A0B0FFF,
+                0x888C78FF, 0x585651FF, 0x453C3CFF, 0x32222EFF, 0xFF8F8FFF, 0xFF2245FF, 0xD50964FF, 0x9C0565FF,
+                0xFFD800FF, 0xFF9000FF, 0xE93100FF, 0xBF0000FF, 0xE5FF05FF, 0xA7ED00FF, 0x4AB907FF, 0x0A5D45FF,
+                0x00FFF0FF, 0x00B9FFFF, 0x008DF0FF, 0x1664C5FF, 0xFFE822FF, 0xFFA939FF, 0xE56335FF, 0xE5233EFF,
+                0xFFFC00FF, 0xEBB70AFF, 0xBE8420FF, 0x915816FF, 0xFFB35BFF, 0xD77E4BFF, 0xB15C51FF, 0x793D4EFF,
+                0xFF70DFFF, 0xFF22A9FF, 0x611381FF, 0x45064BFF, 0xCCFFF5FF, 0x6DF7B1FF, 0x00C19AFF, 0x017687FF,
+                0x7BD5F3FF, 0x6C88FFFF, 0x6440D8FF, 0x3D2E93FF, 0x85A3C7FF, 0x676CADFF, 0x683395FF, 0x323751FF,
+                0xFF59BEFF, 0xC51AEAFF, 0x6E10ABFF, 0x331685FF, 0xFB9585FF, 0xE97461FF, 0xB53772FF, 0x93278FFF,
+        }, 0, PALETTE, 0, 80);
+//        int[] initial = {
+//                0x00000000, 0x444444ff, 0x000000ff, 0x88ffff00, 0x212121ff, 0x00ff00ff, 0x0000ffff, 0x080808ff,
+//                0xff574600, 0xffb14600, 0xfffd4600, 0x4bff4600, 0x51bf6c00, 0x4697ff00, 0x9146ff00, 0xff46ae00,
+//                0xffffffff, 0xeeeeeeff, 0xddddddff, 0xccccccff, 0xbbbbbbff, 0xaaaaaaff, 0x999999ff, 0x888888ff,
+//                0x777777ff, 0x666666ff, 0x555555ff, 0x444444ff, 0x333333ff, 0x222222ff, 0x111111ff, 0x000000ff,
+//                0xff8b7fff, 0xff5746ff, 0xeb3623ff, 0xcc1c0aff, 0xa50f00ff, 0x720a00ff,
+//                0xffcbb2ff, 0xebb093ff, 0xcc8a6bff, 0xa5684aff, 0x79462dff, 0x4c2816ff,
+//                0xffc87fff, 0xffaf46ff, 0xeb9623ff, 0xcc790aff, 0xa55e00ff, 0x724100ff,
+//                0xffe3bfff, 0xebcb9fff, 0xcca675ff, 0xa58252ff, 0x795b33ff, 0x4c371aff,
+//                0xfffeacff, 0xfffd59ff, 0xf2f136ff, 0xdfdd1bff, 0xc5c409ff, 0xacab00ff,
+//                0xf8e7cdff, 0xf2d09dff, 0xdfb26fff, 0xbf8f47ff, 0x996c2aff, 0x6c4915ff,
+//                0x83ff7fff, 0x4bff46ff, 0x29eb23ff, 0x10cc0aff, 0x05a500ff, 0x037200ff,
+//                0xc1ffbfff, 0xa1eb9fff, 0x78cc75ff, 0x55a552ff, 0x357933ff, 0x1c4c1aff,
+//                0x8ecc9eff, 0x51bf6cff, 0x33ac51ff, 0x1d923aff, 0x0f7929ff, 0x06591bff,
+//                0xbffffdff, 0x9febe9ff, 0x75ccc9ff, 0x52a5a3ff, 0x337977ff, 0x1a4c4bff,
+//                0x7fb7ffff, 0x4697ffff, 0x237bebff, 0x0a5eccff, 0x0048a5ff, 0x003272ff,
+//                0xbfdbffff, 0x9fc0ebff, 0x759bccff, 0x5277a5ff, 0x335179ff, 0x1a304cff,
+//                0xb37fffff, 0x9146ffff, 0x7423ebff, 0x580accff, 0x4300a5ff, 0x2e0072ff,
+//                0xd9bfffff, 0xbe9febff, 0x9875ccff, 0x7452a5ff, 0x4f3379ff, 0x2e1a4cff,
+//                0xff7fc7ff, 0xff46aeff, 0xeb2394ff, 0xcc0a77ff, 0xa5005dff, 0x720040ff,
+//                0xffbfe3ff, 0xeb9fcaff, 0xcc75a6ff, 0xa55281ff, 0x79335aff, 0x4c1a36ff,
+//        };
+        int[] initial = {
+                0x62507EFF,
+                0xA096D1FF,
+                0xC3CBDBFF,
+                0xFCFCFCFF,
+                0x0A0B0FFF,
+                0x14161FFF,
+                0x252A32FF,
+                0x424556FF,
+                0x32222EFF,
+                0x453C3CFF,
+                0x585651FF,
+                0x888C78FF,
+                0x9C0565FF,
+                0xD50964FF,
+                0xFF2245FF,
+                0xFF8F8FFF,
+                0xBF0000FF,
+                0xE93100FF,
+                0xFF9000FF,
+                0xFFD800FF,
+                0x0A5D45FF,
+                0x4AB907FF,
+                0xA7ED00FF,
+                0xE5FF05FF,
+                0x1664C5FF,
+                0x008DF0FF,
+                0x00B9FFFF,
+                0x00FFF0FF,
+                0xE5233EFF,
+                0xE56335FF,
+                0xFFA939FF,
+                0xFFE822FF,
+                0x915816FF,
+                0xBE8420FF,
+                0xEBB70AFF,
+                0xFFFC00FF,
+                0x793D4EFF,
+                0xB15C51FF,
+                0xD77E4BFF,
+                0xFFB35BFF,
+                0x45064BFF,
+                0x611381FF,
+                0xFF22A9FF,
+                0xFF70DFFF,
+                0x017687FF,
+                0x00C19AFF,
+                0x6DF7B1FF,
+                0xCCFFF5FF,
+                0x3D2E93FF,
+                0x6440D8FF,
+                0x6C88FFFF,
+                0x7BD5F3FF,
+                0x323751FF,
+                0x683395FF,
+                0x676CADFF,
+                0x85A3C7FF,
+                0x331685FF,
+                0x6E10ABFF,
+                0xC51AEAFF,
+                0xFF59BEFF,
+                0x93278FFF,
+                0xB53772FF,
+                0xE97461FF,
+                0xFB9585FF,
+                0xFFFC2EFF,
+                0xFFD800FF,
+                0xFF9000FF,
+                0xE93100FF,
+                0xBF0000FF,
+                0xFFA939FF,
+                0xFCE945FF,
+                0xDAAF1CFF,
+                0xBE8420FF,
+                0x915816FF,
+                0x79390AFF,
+                0xE56335FF,
+                0xCEAF47FF,
+                0xE5FF05FF,
+                0xA7ED00FF,
+                0x4AB907FF,
+                0x01933FFF,
+                0x0A5D45FF,
+                0xCE2038FF,
+                0x957757FF,
+                0xC0B10AFF,
+                0x00FFF0FF,
+                0x00B9FFFF,
+                0x008DF0FF,
+                0x1664C5FF,
+                0x1F2E8EFF,
+                0x8A0B41FF,
+                0x5C3747FF,
+                0x5B6731FF,
+                0x6C88FFFF,
+                0xFF8F8FFF,
+                0xFF2245FF,
+                0xD50964FF,
+                0x9C0565FF,
+                0x69086AFF,
+                0x3C1E2BFF,
+                0x323751FF,
+                0x6440D8FF,
+                0xFF22A9FF,
+                0xFFB164FF,
+                0xD77E4BFF,
+                0xB15C51FF,
+                0x793D4EFF,
+                0x522D4BFF,
+                0x45064BFF,
+                0x6E10ABFF,
+                0xB53772FF,
+                0xC3CBDBFF,
+                0x424556FF,
+                0x331685FF,
+                0x93278FFF,
+                0xA096D1FF,
+                0x252A32FF,
+                0x442B61FF,
+                0x81709AFF,
+                0x14161FFF,
+                0x62507EFF,
+                0x0A0B0FFF,
         };
-        System.arraycopy(initial, 0, PALETTE, 0, 128);
-        System.arraycopy(initial, 0, PALETTE, 128, 128);
+        int t;
+        for (int i = 0, e = initial.length - 1; i < e; i++, e--) {
+            t = initial[i];
+            initial[i] = initial[e];
+            initial[e] = t;
+        }
+        IntIntOrderedMap iiom = new IntIntOrderedMap(initial, initial);
+        initial = iiom.keysAsArray();
+        //uncomment next line to actually use unseven full, with more colors
+//        System.arraycopy(initial, 0, PALETTE, 16, initial.length);
+
+        //System.arraycopy(initial, 0, PALETTE, 128, 128);
 //        Color temp = Color.WHITE.cpy();
 //        float[] hsv = new float[3];
 //        for (int i = 0; i < 9; i++) {
@@ -111,8 +259,8 @@ public class PaletteGenerator extends ApplicationAdapter {
         for (int i = 0; i < 255; i++) {
             pix.drawPixel(i, 0, PALETTE[i+1]);
         }
-        pix.drawPixel(255, 1, 0);
-        PixmapIO.writePNG(Gdx.files.local("WarpWriterPalette2.png"), pix);
+        pix.drawPixel(255, 0, 0);
+        PixmapIO.writePNG(Gdx.files.local("Unseven.png"), pix);
         Gdx.app.exit();
     }
 
