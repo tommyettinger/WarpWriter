@@ -113,11 +113,11 @@ public class VoxelText implements Disposable {
         return result;
     }
 
-    public byte[][][] voxelsFromText(BitmapFont font, String string, byte color) {
-        return voxels2D(pixmapToBytes(textToPixmap(font, string), color), 1);
+    public byte[][][] textToVoxels(BitmapFont font, String string, byte color) {
+        return textToVoxels(font, string, color, 1);
     }
 
-    public byte[][][] voxelsFromText(BitmapFont font, String string, byte color, int depth) {
+    public byte[][][] textToVoxels(BitmapFont font, String string, byte color, int depth) {
         return voxels2D(
                 pixmapToBytes(
                         textToPixmap(font, string),

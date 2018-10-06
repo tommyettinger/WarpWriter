@@ -327,7 +327,7 @@ public class TestDisplay extends ApplicationAdapter {
     {
         mm.rng.setState(determine(newModel));
         if (font == null) font = new BitmapFont(Gdx.files.internal("Roguelike.fnt"));
-        voxels = voxelText.voxelsFromText(
+        voxels = voxelText.textToVoxels(
                 font,
                 FakeLanguageGen.SIMPLISH.word(newModel, true),
                 (byte)(mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8),
