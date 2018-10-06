@@ -210,6 +210,21 @@ public class ByteFill {
         };
     }
 
+    /**
+     * @return color
+     */
+    public static Fill Fill(final byte color) {
+        return new Fill() {
+            @Override
+            public byte fill (int x) {
+                return color;
+            }
+        };
+    }
+    
+    /**
+     * @return color
+     */
     public static Fill3D Fill3D(final byte color) {
         return new Fill3D() {
             @Override
