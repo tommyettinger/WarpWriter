@@ -327,6 +327,10 @@ public class TestDisplay extends ApplicationAdapter {
     public void remakeTerrain(long newModel) {
         mm.rng.setState(determine(newModel));
         int size = 16;
+        int color0 = mm.rng.nextInt(30) * 8 + 18,
+                color1 = mm.rng.nextInt(30) * 8 + 18,
+                color2 = mm.rng.nextInt(30) * 8 + 18,
+                color3 = mm.rng.nextInt(30) * 8 + 18;
         voxels = TerrainCube.terrainCube(
                 size,
                 mm.rng.nextInt(size - 1) + 1,
@@ -334,10 +338,10 @@ public class TestDisplay extends ApplicationAdapter {
                 mm.rng.nextInt(size - 1) + 1,
                 mm.rng.nextInt(size - 1) + 1,
                 mm.rng.nextInt(size - 1) + 1,
-                ByteFill.fill3D((byte)(mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
-                ByteFill.fill3D((byte)(mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
-                ByteFill.fill3D((byte)(mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
-                ByteFill.fill3D((byte)(mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8))
+                ByteFill.fill3D(mm.rng, (byte)(color0), (byte)(color0+1), (byte)(color0+1), (byte)(color0+2), (byte)(color0+2), (byte)(color0+2), (byte)(color0+3)),
+                ByteFill.fill3D(mm.rng, (byte)(color1), (byte)(color1+1), (byte)(color1+1), (byte)(color1+2), (byte)(color1+2), (byte)(color1+2), (byte)(color1+3)),
+                ByteFill.fill3D(mm.rng, (byte)(color2), (byte)(color2+1), (byte)(color2+1), (byte)(color2+2), (byte)(color2+2), (byte)(color2+2), (byte)(color2+3)),
+                ByteFill.fill3D(mm.rng, (byte)(color3), (byte)(color3+1), (byte)(color3+1), (byte)(color3+2), (byte)(color3+2), (byte)(color3+2), (byte)(color3+3))
         );
         if (animatedVoxels == null)
             animatedVoxels = new byte[frames][][][];

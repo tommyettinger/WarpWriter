@@ -1,4 +1,5 @@
 import com.badlogic.gdx.graphics.Pixmap;
+import squidpony.squidmath.IRNG;
 
 import java.util.Arrays;
 
@@ -297,6 +298,19 @@ public class ByteFill {
             @Override
             public byte fill(int x, int y, int z) {
                 return color;
+            }
+        };
+    }
+
+    /**
+     * @return color
+     */
+    public static Fill3D fill3D(final IRNG random, final byte... colors) {
+        return new Fill3D() {
+            @Override
+            public byte fill(int x, int y, int z) {
+                // nextSignedInt() is just a bit faster than nextInt(), they act the same here
+                return colors[random.nextSignedInt(colors.length)];
             }
         };
     }
