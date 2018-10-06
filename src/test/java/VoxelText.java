@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import java.util.Arrays;
 
+/** @author Ben McLean */
 public class VoxelText implements Disposable {
     protected FrameBuffer buffer;
     protected SpriteBatch batch;

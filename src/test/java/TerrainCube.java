@@ -1,3 +1,4 @@
+/** @author Ben McLean */
 public class TerrainCube {
     public static byte[][][] terrainCube(int size, int heightNE, int heightSE, int heightSW, int heightNW, int heightCenter, byte color) {
         return terrainCube(size, heightNE, heightSE, heightSW, heightNW, heightCenter, color, color, color, color);
