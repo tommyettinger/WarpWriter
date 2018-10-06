@@ -102,7 +102,7 @@ public class VoxelText {
         batch.setProjectionMatrix(view.getCamera().combined);
         batch.begin();
         font.setColor(color);
-        font.draw(batch, string, 0, height / 2);
+        font.draw(batch, string, 0, height);
         batch.end();
         Pixmap result = ScreenUtils.getFrameBufferPixmap(0, 0, width, height);
         buffer.end();
@@ -120,11 +120,15 @@ public class VoxelText {
     }
 
     public byte[][][] voxelsFromText(String string, BitmapFont font, byte color) {
-        return voxels2D(pixmapToBytes(textToPixmap(string, font)));
+        return voxels2D(pixmapToBytes(textToPixmap(string, font)), 1);
     }
 
-    public byte[][][] voxelsFromText(String string, BitmapFont font, byte color, int width, int height) {
-        return voxelsFromText(string, font, color, width, height, 1);
+    public byte[][][] voxelsFromText(String string, BitmapFont font, byte color, int depth) {
+        return voxels2D(pixmapToBytes(textToPixmap(string, font)), depth);
+    }
+
+    public byte[][][] voxelsFromText(String string, BitmapFont font, byte color, int width, int depth) {
+        return voxelsFromText(string, font, color, width, (int)font.getLineHeight(), 1);
     }
 
     public byte[][][] voxelsFromText(String string, BitmapFont font, byte color, int width, int height, int depth) {
