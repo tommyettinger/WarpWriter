@@ -52,7 +52,7 @@ public class ByteFill {
     /**
      * @return yesFill if transparency is greater than threshold, otherwise noFill
      */
-    public static Fill2D transparent2D(final Pixmap pixmap, final Fill2D yesFill, final Fill2D noFill, final int threshold) {
+    public static Fill2D transparent2D(final Pixmap pixmap, final Fill2D yesFill, final Fill2D noFill, final byte threshold) {
         return new Fill2D() {
             @Override
             public byte fill(int x, int y) {
