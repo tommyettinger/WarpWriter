@@ -91,14 +91,15 @@ public class VoxelText implements Disposable {
         GlyphLayout layout = new GlyphLayout();
         layout.setText(font, string);
         int width = (int) layout.width;
-        int height = (int) layout.height;
+        int height = (int) (layout.height - font.getDescent() + 0.5f);
         if (batch == null) batch = new SpriteBatch();
         if (buffer == null || buffer.getWidth() != width || buffer.getHeight() != height) {
             if (buffer != null) buffer.dispose();
             buffer = new FrameBuffer(Pixmap.Format.RGBA8888, width, height, false, false);
         }
         FitViewport view = new FitViewport(width, height);
-        view.getCamera().position.set(width / 2, height / 2, 0);
+        view.apply(true);
+//        view.getCamera().position.set(width / 2, height / 2, 0);
         view.update(width, height);
         buffer.begin();
         Gdx.gl.glClearColor(0, 0, 0, 0);
@@ -106,7 +107,7 @@ public class VoxelText implements Disposable {
         batch.setProjectionMatrix(view.getCamera().combined);
         batch.begin();
         font.setColor(color);
-        font.draw(batch, string, 0, height - font.getDescent());
+        font.draw(batch, string, 0, height);
         batch.end();
         Pixmap result = ScreenUtils.getFrameBufferPixmap(0, 0, width, height);
         buffer.end();
