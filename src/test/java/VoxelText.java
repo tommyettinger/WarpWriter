@@ -9,6 +9,8 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import java.util.Arrays;
+
 public class VoxelText {
     public interface FillRule {
         boolean fill(int color);
@@ -77,7 +79,14 @@ public class VoxelText {
     }
 
     public Pixmap textToPixmap(String string, BitmapFont font, Color color, int width) {
-        int height = (int) (font.getLineHeight() * Gdx.graphics.getDensity());
+        return textToPixmap(string, font, color, width, (int) (font.getLineHeight() * Gdx.graphics.getDensity()));
+    }
+
+    public Pixmap textToPixmap(String string, BitmapFont font, int width, int height) {
+        return textToPixmap(string, font, Color.WHITE, width, height);
+    }
+
+    public Pixmap textToPixmap(String string, BitmapFont font, Color color, int width, int height) {
         if (batch == null) batch = new SpriteBatch();
         if (buffer == null || buffer.getWidth() != width || buffer.getHeight() != height) {
             if (buffer != null) buffer.dispose();
@@ -100,18 +109,31 @@ public class VoxelText {
         return result;
     }
 
-    public static byte[][][] voxels2D (byte[][] bytes) {
+    public static byte[][][] voxels2D(byte[][] bytes) {
         return voxels2D(bytes, 1);
     }
 
-    public static byte[][][] voxels2D (byte[][] bytes, int depth) {
-        byte[][][] voxels = new byte[1][bytes.length][bytes[0].length];
-        for (int z=0; z<depth; z++)
-            voxels[z] = bytes;
+    public static byte[][][] voxels2D(byte[][] bytes, int depth) {
+        byte[][][] voxels = new byte[depth][bytes.length][bytes[0].length];
+        Arrays.fill(voxels, bytes);
         return voxels;
     }
 
-    public byte[][][] voxelsFromText (String string, BitmapFont font, Color color) {
-        return voxels2D(pixmapToBytes(textToPixmap(string, font, color)));
+    public byte[][][] voxelsFromText(String string, BitmapFont font, byte color) {
+        return voxels2D(pixmapToBytes(textToPixmap(string, font)));
+    }
+
+    public byte[][][] voxelsFromText(String string, BitmapFont font, byte color, int width, int height) {
+        return voxelsFromText(string, font, color, width, height, 1);
+    }
+
+    public byte[][][] voxelsFromText(String string, BitmapFont font, byte color, int width, int height, int depth) {
+        return voxels2D(
+                pixmapToBytes(
+                        textToPixmap(string, font, width, height),
+                        color
+                ),
+                depth
+        );
     }
 }
