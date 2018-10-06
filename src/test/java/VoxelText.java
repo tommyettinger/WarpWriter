@@ -9,9 +9,10 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import java.util.Arrays;
 
-/** @author Ben McLean */
+/**
+ * @author Ben McLean
+ */
 public class VoxelText implements Disposable {
     protected FrameBuffer buffer;
     protected SpriteBatch batch;
@@ -20,68 +21,6 @@ public class VoxelText implements Disposable {
     public void dispose() {
         buffer.dispose();
         batch.dispose();
-    }
-
-    public interface FillRule {
-        boolean fill(int color);
-    }
-
-    public static FillRule FillRuleColor(final int testColor) {
-        return new FillRule() {
-            @Override
-            public boolean fill(int color) {
-                return color == testColor;
-            }
-        };
-    }
-
-    public static FillRule FillRuleTransparent() {
-        return FillRuleTransparent(0.5f);
-    }
-
-    public static FillRule FillRuleTransparent(final float threshold) {
-        return new FillRule() {
-            @Override
-            public boolean fill(int color) {
-                return (color & 0xFF) / 255f > threshold;
-            }
-        };
-    }
-
-    public static FillRule FillRuleTransparent(final int threshold) {
-        return new FillRule() {
-            @Override
-            public boolean fill(int color) {
-                return (color & 0xFF) > threshold;
-            }
-        };
-    }
-
-    public static byte[][] pixmapToBytes(Pixmap pixmap) {
-        return pixmapToBytes(pixmap, (byte) 255);
-    }
-
-    public static byte[][] pixmapToBytes(Pixmap pixmap, byte fill) {
-        return pixmapToBytes(pixmap, fill, FillRuleTransparent());
-    }
-
-    public static byte[][] pixmapToBytes(Pixmap pixmap, byte fill, FillRule fillRule) {
-        byte[][] result = new byte[pixmap.getWidth()][pixmap.getHeight()];
-        for (int x = 0; x < pixmap.getWidth(); x++)
-            for (int y = 0; y < pixmap.getHeight(); y++)
-                if (fillRule.fill(pixmap.getPixel(x, y)))
-                    result[x][y] = fill;
-        return result;
-    }
-
-    public static byte[][][] voxels2D(byte[][] bytes) {
-        return voxels2D(bytes, 1);
-    }
-
-    public static byte[][][] voxels2D(byte[][] bytes, int depth) {
-        byte[][][] voxels = new byte[depth][bytes.length][bytes[0].length];
-        Arrays.fill(voxels, bytes);
-        return voxels;
     }
 
     public Pixmap textToPixmap(BitmapFont font, String string) {
@@ -115,17 +54,24 @@ public class VoxelText implements Disposable {
         return result;
     }
 
-    public byte[][][] textToVoxels(BitmapFont font, String string, byte color) {
-        return textToVoxels(font, string, color, 1);
+    public byte[][] text2D(BitmapFont font, String string, ByteFill.Fill2D fill) {
+        Pixmap pixmap = textToPixmap(font, string);
+        return ByteFill.fill2D(
+                ByteFill.transparent2D(
+                        pixmap,
+                        ByteFill.Fill2D((byte) 0),
+                        fill
+                ),
+                pixmap.getWidth(),
+                pixmap.getHeight()
+        );
     }
 
-    public byte[][][] textToVoxels(BitmapFont font, String string, byte color, int depth) {
-        return voxels2D(
-                pixmapToBytes(
-                        textToPixmap(font, string),
-                        color
-                ),
-                depth
-        );
+    public byte[][][] textToVoxels(BitmapFont font, String string, ByteFill.Fill2D fill) {
+        return textToVoxels(font, string, fill, 1);
+    }
+
+    public byte[][][] textToVoxels(BitmapFont font, String string, ByteFill.Fill2D fill, int depth) {
+        return ByteFill.voxels2D(text2D(font, string, fill), depth);
     }
 }

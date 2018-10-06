@@ -334,10 +334,10 @@ public class TestDisplay extends ApplicationAdapter {
                 mm.rng.nextInt(size-1)+1,
                 mm.rng.nextInt(size-1)+1,
                 mm.rng.nextInt(size-1)+1,
-                (byte)(mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8),
-                (byte)(mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8),
-                (byte)(mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8),
-                (byte)(mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)
+                ByteFill.Fill2D((byte)(mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
+                ByteFill.Fill2D((byte)(mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
+                ByteFill.Fill2D((byte)(mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
+                ByteFill.Fill2D((byte)(mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8))
         );
         if(animatedVoxels == null)
             animatedVoxels = new byte[frames][][][];
@@ -392,7 +392,7 @@ public class TestDisplay extends ApplicationAdapter {
         voxels = voxelText.textToVoxels(
                 font,
                 FakeLanguageGen.SIMPLISH.word(mm.rng.nextLong(), true),
-                (byte)(mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8),
+                ByteFill.Fill2D((byte)(mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
                 1
         );
         if(animatedVoxels == null)

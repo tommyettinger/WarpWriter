@@ -2,37 +2,38 @@
  * @author Ben McLean
  */
 public class TerrainCube {
-    public static byte[][][] terrainCube(int size, int heightNE, int heightSE, int heightSW, int heightNW, byte color) {
-        return terrainCube(size, heightNE, heightSE, heightSW, heightNW, color, color, color, color);
+    public static byte[][][] terrainCube(int size, int heightNE, int heightSE, int heightSW, int heightNW, ByteFill.Fill2D fill) {
+        return terrainCube(size, heightNE, heightSE, heightSW, heightNW, fill, fill, fill, fill);
     }
 
-    public static byte[][][] terrainCube(int size, int heightNE, int heightSE, int heightSW, int heightNW, byte colorNorth, byte colorEast, byte colorSouth, byte colorWest) {
+    public static byte[][][] terrainCube(int size, int heightNE, int heightSE, int heightSW, int heightNW, ByteFill.Fill2D fillNorth, ByteFill.Fill2D fillEast, ByteFill.Fill2D fillSouth, ByteFill.Fill2D fillWest) {
         return terrainCube(size, heightNE, heightSE, heightSW, heightNW,
                 (heightNE + heightSE + heightSW + heightNW) / 4,
-                colorNorth, colorEast, colorSouth, colorWest);
+                fillNorth, fillEast, fillSouth, fillWest);
     }
 
-    public static byte[][][] terrainCube(int size, int heightNE, int heightSE, int heightSW, int heightNW, int heightCenter, byte color) {
-        return terrainCube(size, heightNE, heightSE, heightSW, heightNW, heightCenter, color, color, color, color);
+    public static byte[][][] terrainCube(int size, int heightNE, int heightSE, int heightSW, int heightNW, int heightCenter, ByteFill.Fill2D fill) {
+        return terrainCube(size, heightNE, heightSE, heightSW, heightNW, heightCenter, fill, fill, fill, fill);
     }
 
-    public static byte[][][] terrainCube(int size, int heightNE, int heightSE, int heightSW, int heightNW, int heightCenter, byte colorNorth, byte colorEast, byte colorSouth, byte colorWest) {
+    public static byte[][][] terrainCube(int size, int heightNE, int heightSE, int heightSW, int heightNW, int heightCenter, ByteFill.Fill2D fillNorth, ByteFill.Fill2D fillEast, ByteFill.Fill2D fillSouth, ByteFill.Fill2D fillWest) {
         byte[][][] voxels = new byte[size][size][size];
         int center = size / 2;
-        voxels = fillBeneathTriangle(voxels, 0, 0, heightSW, size, 0, heightSE, center, center, heightCenter, colorSouth);
-        voxels = fillBeneathTriangle(voxels, center, center, heightCenter, size, 0, heightSE, size, size, heightNE, colorEast);
-        voxels = fillBeneathTriangle(voxels, center, center, heightCenter, 0, size, heightNW, size, size, heightNE, colorNorth);
-        voxels = fillBeneathTriangle(voxels, 0, 0, heightSW, center, center, heightCenter, 0, size, heightNW, colorWest);
+        voxels = fillBeneathTriangle(voxels, 0, 0, heightSW, size, 0, heightSE, center, center, heightCenter, fillSouth);
+        voxels = fillBeneathTriangle(voxels, center, center, heightCenter, size, 0, heightSE, size, size, heightNE, fillEast);
+        voxels = fillBeneathTriangle(voxels, center, center, heightCenter, 0, size, heightNW, size, size, heightNE, fillNorth);
+        voxels = fillBeneathTriangle(voxels, 0, 0, heightSW, center, center, heightCenter, 0, size, heightNW, fillWest);
         return voxels;
     }
 
-    public static byte[][][] fillBeneathTriangle(byte[][][] voxels, int x1, int y1, int z1, int x2, int y2, int z2, int x3, int y3, int z3, byte fill) {
+    public static byte[][][] fillBeneathTriangle(byte[][][] voxels, int x1, int y1, int z1, int x2, int y2, int z2, int x3, int y3, int z3,
+ByteFill.Fill2D voxelFill) {
         for (int x = smallest(x1, x2, x3); x < largest(x1, x2, x3); x++)
             for (int y = smallest(y1, y2, y3); y < largest(y1, y2, y3); y++) {
                 if (isInside(x, y, x1, y1, x2, y2, x3, y3)) {
                     int height = (z3 * (x - x1) * (y - y2) + z1 * (x - x2) * (y - y3) + z2 * (x - x3) * (y - y1) - z2 * (x - x1) * (y - y3) - z3 * (x - x2) * (y - y1) - z1 * (x - x3) * (y - y2)) / ((x - x1) * (y - y2) + (x - x2) * (y - y3) + (x - x3) * (y - y1) - (x - x1) * (y - y3) - (x - x2) * (y - y1) - (x - x3) * (y - y2));
                     for (int z = 0; z < height; z++)
-                        voxels[x][y][z] = fill;
+                        voxels[x][y][z] = voxelFill.fill(x, y);
                 }
             }
         return voxels;
