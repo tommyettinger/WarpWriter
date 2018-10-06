@@ -38,6 +38,13 @@ public class ByteFill {
     }
 
     /**
+     * @return yesFill if transparency is greater than 50%, otherwise noFill
+     */
+    public static Fill3D transparent(final Pixmap pixmap, final Fill3D yesFill, final Fill3D noFill) {
+        return transparent(pixmap, yesFill, noFill, 0.5f);
+    }
+
+    /**
      * @return yesFill if transparency is greater than threshold, otherwise noFill
      */
     public static Fill2D transparent(final Pixmap pixmap, final Fill2D yesFill, final Fill2D noFill, final float threshold) {
@@ -45,6 +52,42 @@ public class ByteFill {
             @Override
             public byte fill(int x, int y) {
                 return (pixmap.getPixel(x, y) & 0xFF) / 255f < threshold ? yesFill.fill(x, y) : noFill.fill(x, y);
+            }
+        };
+    }
+
+    /**
+     * @return yesFill if transparency is greater than threshold, otherwise noFill
+     */
+    public static Fill3D transparent(final Pixmap pixmap, final Fill3D yesFill, final Fill3D noFill, final float threshold) {
+        return new Fill3D() {
+            @Override
+            public byte fill(int x, int y, int z) {
+                return (pixmap.getPixel(x, y) & 0xFF) / 255f < threshold ? yesFill.fill(x, y, z) : noFill.fill(x, y, z);
+            }
+        };
+    }
+
+    /**
+     * @return yesFill if transparency is greater than threshold, otherwise noFill
+     */
+    public static Fill2D transparent(final Pixmap pixmap, final Fill2D yesFill, final Fill2D noFill, final byte threshold) {
+        return new Fill2D() {
+            @Override
+            public byte fill(int x, int y) {
+                return (pixmap.getPixel(x, y) & 0xFF) < threshold ? yesFill.fill(x, y) : noFill.fill(x, y);
+            }
+        };
+    }
+
+    /**
+     * @return yesFill if transparency is greater than threshold, otherwise noFill
+     */
+    public static Fill3D transparent(final Pixmap pixmap, final Fill3D yesFill, final Fill3D noFill, final byte threshold) {
+        return new Fill3D() {
+            @Override
+            public byte fill(int x, int y, int z) {
+                return (pixmap.getPixel(x, y) & 0xFF) < threshold ? yesFill.fill(x, y, z) : noFill.fill(x, y, z);
             }
         };
     }
@@ -103,14 +146,38 @@ public class ByteFill {
         };
     }
 
-    /**
-     * @return yesFill if transparency is greater than threshold, otherwise noFill
-     */
-    public static Fill2D transparent(final Pixmap pixmap, final Fill2D yesFill, final Fill2D noFill, final byte threshold) {
+    public static Fill2D Fill2D(final Fill fill) {
         return new Fill2D() {
             @Override
             public byte fill(int x, int y) {
-                return (pixmap.getPixel(x, y) & 0xFF) < threshold ? yesFill.fill(x, y) : noFill.fill(x, y);
+                return fill.fill(x);
+            }
+        };
+    }
+
+    public static Fill Fill(final Fill2D fill) {
+        return new Fill() {
+            @Override
+            public byte fill(int x) {
+                return fill.fill(x, 0);
+            }
+        };
+    }
+
+    public static Fill2D Fill2D(final Fill3D fill) {
+        return new Fill2D() {
+            @Override
+            public byte fill(int x, int y) {
+                return fill.fill(x, y, 0);
+            }
+        };
+    }
+
+    public static Fill3D Fill3D(final Fill2D fill) {
+        return new Fill3D() {
+            @Override
+            public byte fill(int x, int y, int z) {
+                return fill.fill(x, y);
             }
         };
     }
@@ -160,7 +227,7 @@ public class ByteFill {
     }
 
     public static byte[][] fill2D(byte[] bytes, int height) {
-        byte[][] result = new byte[bytes.length][height];
+        byte[][] result = new byte[height][bytes.length];
         Arrays.fill(result, bytes);
         return result;
     }
@@ -216,12 +283,12 @@ public class ByteFill {
     public static Fill Fill(final byte color) {
         return new Fill() {
             @Override
-            public byte fill (int x) {
+            public byte fill(int x) {
                 return color;
             }
         };
     }
-    
+
     /**
      * @return color
      */
@@ -234,7 +301,7 @@ public class ByteFill {
         };
     }
 
-    public byte[][][] fill3D(Fill3D fill, int width, int height, int depth) {
+    public static byte[][][] fill3D(Fill3D fill, int width, int height, int depth) {
         byte[][][] result = new byte[width][height][depth];
         for (int x = 0; x < width; x++)
             for (int y = 0; y < height; y++)

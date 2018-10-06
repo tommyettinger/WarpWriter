@@ -50,6 +50,7 @@ public class TestDisplay extends ApplicationAdapter {
     private Pixmap[] pixes = new Pixmap[frames];
     private int[][] indices;
     private int[] palette = Coloring.RINSED;
+
     @Override
     public void create() {
         reducer = new PaletteReducer(Coloring.RINSED);
@@ -65,6 +66,7 @@ public class TestDisplay extends ApplicationAdapter {
         remakeWarrior(seed);
         InputAdapter input = new InputAdapter() {
             String name = "Wriggler";
+
             @Override
             public boolean keyDown(int keycode) {
                 switch (keycode) {
@@ -211,18 +213,17 @@ public class TestDisplay extends ApplicationAdapter {
 //            if(tiny && !large) indices = mr.renderIso24x32(animatedVoxels[f], dir);
 //            else
             {
-                switch (angle)
-                {
+                switch (angle) {
                     case 1:
-                        if(dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
+                        if (dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
                         else indices = mr.renderOrthoBelow(animatedVoxels[f], dir);
                         break;
                     case 3:
-                        if(dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
+                        if (dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
                         else indices = mr.renderOrtho(animatedVoxels[f], dir);
                         break;
                     default:
-                        if(dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
+                        if (dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
                         else indices = mr.renderOrthoSide(animatedVoxels[f], dir);
                         break;
                 }
@@ -232,14 +233,14 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if(dither) reducer.reduceWithNoise(pix);
+            if (dither) reducer.reduceWithNoise(pix);
         }
     }
 
     public void remakeWarrior(long newModel) {
         mm.rng.setState(determine(newModel));
         voxels = mm.warriorRandom();
-        if(animatedVoxels == null)
+        if (animatedVoxels == null)
             animatedVoxels = new byte[frames][][][];
         Arrays.fill(animatedVoxels, voxels);
         /*int state = Tools3D.hash(voxels);
@@ -256,18 +257,17 @@ public class TestDisplay extends ApplicationAdapter {
 //            if(tiny && !large) indices = mr.renderIso24x32(animatedVoxels[f], dir);
 //            else
             {
-                switch (angle)
-                {
+                switch (angle) {
                     case 1:
-                        if(dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
+                        if (dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
                         else indices = mr.renderOrthoBelow(animatedVoxels[f], dir);
                         break;
                     case 3:
-                        if(dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
+                        if (dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
                         else indices = mr.renderOrtho(animatedVoxels[f], dir);
                         break;
                     default:
-                        if(dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
+                        if (dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
                         else indices = mr.renderOrthoSide(animatedVoxels[f], dir);
                         break;
                 }
@@ -277,9 +277,10 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if(dither) reducer.reduceWithNoise(pix);
+            if (dither) reducer.reduceWithNoise(pix);
         }
     }
+
     public void remakeBlob(long newModel) {
         mm.rng.setState(determine(newModel));
         animatedVoxels = mm.animateBlobLargeRandom(frames);
@@ -299,18 +300,17 @@ public class TestDisplay extends ApplicationAdapter {
 //            if(tiny && !large) indices = mr.renderIso24x32(animatedVoxels[f], dir);
 //            else
             {
-                switch (angle)
-                {
+                switch (angle) {
                     case 1:
-                        if(dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
+                        if (dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
                         else indices = mr.renderOrthoBelow(animatedVoxels[f], dir);
                         break;
                     case 3:
-                        if(dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
+                        if (dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
                         else indices = mr.renderOrtho(animatedVoxels[f], dir);
                         break;
                     default:
-                        if(dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
+                        if (dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
                         else indices = mr.renderOrthoSide(animatedVoxels[f], dir);
                         break;
                 }
@@ -320,50 +320,49 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if(dither) reducer.reduceWithNoise(pix);
+            if (dither) reducer.reduceWithNoise(pix);
         }
     }
 
     public void remakeTerrain(long newModel) {
         mm.rng.setState(determine(newModel));
-        int size=16;
+        int size = 16;
         voxels = TerrainCube.terrainCube(
                 size,
-                mm.rng.nextInt(size-1)+1,
-                mm.rng.nextInt(size-1)+1,
-                mm.rng.nextInt(size-1)+1,
-                mm.rng.nextInt(size-1)+1,
-                mm.rng.nextInt(size-1)+1,
-                ByteFill.Fill2D((byte)(mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
-                ByteFill.Fill2D((byte)(mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
-                ByteFill.Fill2D((byte)(mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
-                ByteFill.Fill2D((byte)(mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8))
+                mm.rng.nextInt(size - 1) + 1,
+                mm.rng.nextInt(size - 1) + 1,
+                mm.rng.nextInt(size - 1) + 1,
+                mm.rng.nextInt(size - 1) + 1,
+                mm.rng.nextInt(size - 1) + 1,
+                ByteFill.Fill3D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
+                ByteFill.Fill3D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
+                ByteFill.Fill3D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
+                ByteFill.Fill3D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8))
         );
-        if(animatedVoxels == null)
+        if (animatedVoxels == null)
             animatedVoxels = new byte[frames][][][];
         Arrays.fill(animatedVoxels, voxels);
         int oldWidth = width, oldHeight = height;
         for (int f = 0; f < frames; f++) {
             {
-                switch (angle)
-                {
+                switch (angle) {
                     case 1:
-                        if(dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
+                        if (dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
                         else indices = mr.renderOrthoBelow(animatedVoxels[f], dir);
                         break;
                     case 3:
-                        if(dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
+                        if (dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
                         else indices = mr.renderOrtho(animatedVoxels[f], dir);
                         break;
                     default:
-                        if(dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
+                        if (dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
                         else indices = mr.renderOrthoSide(animatedVoxels[f], dir);
                         break;
                 }
             }
             width = indices.length;
             height = indices[0].length;
-            if(oldWidth != width || oldHeight != height)
+            if (oldWidth != width || oldHeight != height)
                 pixes[f] = new Pixmap(width, height, Pixmap.Format.RGBA8888);
             pix = pixes[f];
             pix.setColor(background);
@@ -373,53 +372,64 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if(dither) reducer.reduceWithNoise(pix);
+            if (dither) reducer.reduceWithNoise(pix);
         }
-        if(oldWidth != width || oldHeight != height)
+        if (oldWidth != width || oldHeight != height)
             tex = new Texture(width, height, Pixmap.Format.RGBA8888);
     }
 
     private VoxelText voxelText = new VoxelText();
     private BitmapFont font;
-    public void remakeText(long newModel)
-    {
+
+    public void remakeText(long newModel) {
         mm.rng.setState(determine(newModel));
-        if (font == null)
-        {
+        if (font == null) {
             font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
             //font = new BitmapFont(Gdx.files.internal("tiny.fnt"));
         }
-        voxels = voxelText.textToVoxels(
+
+        /*
+        // Text3D is sideways!
+        voxels = voxelText.text3D(
                 font,
                 FakeLanguageGen.SIMPLISH.word(mm.rng.nextLong(), true),
-                ByteFill.Fill2D((byte)(mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
-                1
+                ByteFill.Fill3D((byte)(mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
+                2
         );
-        if(animatedVoxels == null)
+        */
+
+        voxels = ByteFill.fill3D(voxelText.text2D(
+                font,
+                FakeLanguageGen.SIMPLISH.word(mm.rng.nextLong(), true),
+                ByteFill.Fill2D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8))
+                ),
+                2
+        );
+
+        if (animatedVoxels == null)
             animatedVoxels = new byte[frames][][][];
         Arrays.fill(animatedVoxels, voxels);
         int oldWidth = width, oldHeight = height;
         for (int f = 0; f < frames; f++) {
             {
-                switch (angle)
-                {
+                switch (angle) {
                     case 1:
-                        if(dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
+                        if (dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
                         else indices = mr.renderOrthoBelow(animatedVoxels[f], dir);
                         break;
                     case 3:
-                        if(dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
+                        if (dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
                         else indices = mr.renderOrtho(animatedVoxels[f], dir);
                         break;
                     default:
-                        if(dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
+                        if (dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
                         else indices = mr.renderOrthoSide(animatedVoxels[f], dir);
                         break;
                 }
             }
             width = indices.length;
             height = indices[0].length;
-            if(oldWidth != width || oldHeight != height)
+            if (oldWidth != width || oldHeight != height)
                 pixes[f] = new Pixmap(width, height, Pixmap.Format.RGBA8888);
             pix = pixes[f];
             pix.setColor(background);
@@ -429,14 +439,14 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if(dither) reducer.reduceWithNoise(pix);
+            if (dither) reducer.reduceWithNoise(pix);
         }
-        if(oldWidth != width || oldHeight != height)
+        if (oldWidth != width || oldHeight != height)
             tex = new Texture(width, height, Pixmap.Format.RGBA8888);
     }
 
     public void remakeShipSmall(long newModel) {
-        if (newModel != 0){
+        if (newModel != 0) {
             mm.rng.setState(determine(newModel));
             voxels = mm.shipRandom();
             //palette = Coloring.ALT_PALETTE;
@@ -449,18 +459,17 @@ public class TestDisplay extends ApplicationAdapter {
 //            if(tiny && !large) indices = mr.renderIso24x32(animatedVoxels[f], dir);
 //            else
             {
-                switch (angle)
-                {
+                switch (angle) {
                     case 1:
-                        if(dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
+                        if (dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
                         else indices = mr.renderOrthoBelow(animatedVoxels[f], dir);
                         break;
                     case 3:
-                        if(dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
+                        if (dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
                         else indices = mr.renderOrtho(animatedVoxels[f], dir);
                         break;
                     default:
-                        if(dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
+                        if (dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
                         else indices = mr.renderOrthoSide(animatedVoxels[f], dir);
                         break;
                 }
@@ -470,12 +479,12 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if(dither) reducer.reduceWithNoise(pix);
+            if (dither) reducer.reduceWithNoise(pix);
         }
     }
 
     public void remakeShip(long newModel) {
-        if (newModel != 0){
+        if (newModel != 0) {
             mm.rng.setState(determine(newModel));
             voxels = large ? mm.shipLargeRandom() : mm.shipRandom();
             //palette = Coloring.ALT_PALETTE;
@@ -493,18 +502,17 @@ public class TestDisplay extends ApplicationAdapter {
 //            if(tiny && !large) indices = mr.renderIso24x32(animatedVoxels[f], dir);
 //            else
             {
-                switch (angle)
-                {
+                switch (angle) {
                     case 1:
-                        if(dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
+                        if (dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
                         else indices = mr.renderOrthoBelow(animatedVoxels[f], dir);
                         break;
                     case 3:
-                        if(dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
+                        if (dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
                         else indices = mr.renderOrtho(animatedVoxels[f], dir);
                         break;
                     default:
-                        if(dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
+                        if (dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
                         else indices = mr.renderOrthoSide(animatedVoxels[f], dir);
                         break;
                 }
@@ -519,9 +527,9 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if(dither) reducer.reduceWithNoise(pix);
+            if (dither) reducer.reduceWithNoise(pix);
         }
-        if(oldWidth != width || oldHeight != height) 
+        if (oldWidth != width || oldHeight != height)
             tex = new Texture(width, height, Pixmap.Format.RGBA8888);
     }
 
@@ -547,18 +555,17 @@ public class TestDisplay extends ApplicationAdapter {
 //                indices = mr.renderIso24x32(animatedVoxels[f], dir);
 //            else
             {
-                switch (angle)
-                {
+                switch (angle) {
                     case 1:
-                        if(dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
+                        if (dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
                         else indices = mr.renderOrthoBelow(animatedVoxels[f], dir);
                         break;
                     case 3:
-                        if(dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
+                        if (dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
                         else indices = mr.renderOrtho(animatedVoxels[f], dir);
                         break;
                     default:
-                        if(dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
+                        if (dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
                         else indices = mr.renderOrthoSide(animatedVoxels[f], dir);
                         break;
                 }
@@ -568,9 +575,9 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if(dither) reducer.reduceWithNoise(pix);
+            if (dither) reducer.reduceWithNoise(pix);
         }
-        if(oldWidth != width || oldHeight != height)
+        if (oldWidth != width || oldHeight != height)
             tex = new Texture(width, height, Pixmap.Format.RGBA8888);
     }
 
@@ -589,19 +596,20 @@ public class TestDisplay extends ApplicationAdapter {
         Arrays.fill(animatedVoxels, voxels);
         int oldWidth = width, oldHeight = height;
         for (int f = 0; f < frames; f++) {
-            if(tiny && !large) indices = mr.renderIso24x32(animatedVoxels[f], dir);
-            else
-            {
-                switch (angle)
-                {
-                    case 1: if(dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
-                    else indices = mr.renderOrthoBelow(animatedVoxels[f], dir);
+            if (tiny && !large) indices = mr.renderIso24x32(animatedVoxels[f], dir);
+            else {
+                switch (angle) {
+                    case 1:
+                        if (dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
+                        else indices = mr.renderOrthoBelow(animatedVoxels[f], dir);
                         break;
-                    case 2: if(dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
-                    else indices = mr.renderOrthoSide(animatedVoxels[f], dir);
+                    case 2:
+                        if (dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
+                        else indices = mr.renderOrthoSide(animatedVoxels[f], dir);
                         break;
-                    default: if(dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
-                    else indices = mr.renderOrtho(animatedVoxels[f], dir);
+                    default:
+                        if (dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
+                        else indices = mr.renderOrtho(animatedVoxels[f], dir);
                         break;
                 }
             }
@@ -615,9 +623,9 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if(dither) reducer.reduceWithNoise(pix);
+            if (dither) reducer.reduceWithNoise(pix);
         }
-        if(oldWidth != width || oldHeight != height)
+        if (oldWidth != width || oldHeight != height)
             tex = new Texture(width, height, Pixmap.Format.RGBA8888);
     }
 
@@ -644,18 +652,17 @@ public class TestDisplay extends ApplicationAdapter {
 //            if(tiny && !large) indices = mr.renderIso24x32(animatedVoxels[f], dir);
 //            else
             {
-                switch (angle)
-                {
+                switch (angle) {
                     case 1:
-                        if(dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
+                        if (dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
                         else indices = mr.renderOrthoBelow(animatedVoxels[f], dir);
                         break;
                     case 3:
-                        if(dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
+                        if (dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
                         else indices = mr.renderOrtho(animatedVoxels[f], dir);
                         break;
                     default:
-                        if(dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
+                        if (dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
                         else indices = mr.renderOrthoSide(animatedVoxels[f], dir);
                         break;
                 }
@@ -670,15 +677,14 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if(dither) reducer.reduceWithNoise(pix);
+            if (dither) reducer.reduceWithNoise(pix);
         }
     }
 
     @Override
     public void render() {
         int time = (playing ? ++counter : counter) % ((frames << 1) * 6), tempDir; //(tiny && !large ? 0 : 1)
-        if(time == 0 && rotating)
-        {
+        if (time == 0 && rotating) {
             ++dir;
             tempDir = (dir &= 7);
             dir = (dir << 2 & 4) | ((dir >> 1) + (dir & 1) & 3);
@@ -686,7 +692,7 @@ public class TestDisplay extends ApplicationAdapter {
             dir = tempDir;
         }
         tex.draw(pixes[(time / 6) % frames], 0, 0);
-        
+
         // standard clear the background routine for libGDX
 //        Gdx.gl.glClearColor(0x6Fp-10f, 0x25p-8f, 0x25p-9f, 1.0f);
         Gdx.gl.glClearColor(0.75f, 1f, 0.5f, 1.0f);
@@ -705,7 +711,7 @@ public class TestDisplay extends ApplicationAdapter {
         //batch.setColor(0.75f, 1f, 0.5f, 1f);
         batch.draw(tex, width >> 1, 250 - (width >> 1), width, height);
         batch.draw(tex, width * 5 >> 1, 250 - (width), width << 1, height << 1);
-        batch.draw(tex, width * 10 >> 1, 250 - (width << 1), width << 2,  height << 2);
+        batch.draw(tex, width * 10 >> 1, 250 - (width << 1), width << 2, height << 2);
         batch.draw(tex, width * 19 >> 1, 250 - (width << 2), width << 3, height << 3);
 
 //        batch.draw(tex, 64 - 8, 240 - 8, 16, 16);
@@ -717,7 +723,7 @@ public class TestDisplay extends ApplicationAdapter {
 
     public static void main(String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-        config.setTitle( "Display Test");
+        config.setTitle("Display Test");
         config.setWindowedMode(1000, 600);
         config.setIdleFPS(10);
         final TestDisplay testDisplay = new TestDisplay();
@@ -725,14 +731,14 @@ public class TestDisplay extends ApplicationAdapter {
             @Override
             public void filesDropped(String[] files) {
                 if (files != null && files.length > 0) {
-                    if(files[0].endsWith(".vox")) 
+                    if (files[0].endsWith(".vox"))
                         testDisplay.load(files[0]);
-                    else if(files[0].endsWith(".hex"))
+                    else if (files[0].endsWith(".hex"))
                         testDisplay.loadPalette(files[0]);
                 }
             }
         });
-			
+
         new Lwjgl3Application(testDisplay, config);
     }
 }

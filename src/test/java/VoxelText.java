@@ -10,8 +10,6 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
-import java.util.Arrays;
-
 /**
  * @author Ben McLean
  */
@@ -57,39 +55,45 @@ public class VoxelText implements Disposable {
     }
 
     public byte[][] text2D(BitmapFont font, String string, ByteFill.Fill2D fill) {
+        return text2D(font, string, fill, ByteFill.Fill2D((byte) 0));
+    }
+
+    public byte[][] text2D(BitmapFont font, String string, ByteFill.Fill2D fillYes, ByteFill.Fill2D fillNo) {
         Pixmap pixmap = textToPixmap(font, string);
-        return ByteFill.fill2D(
+        byte[][] result = ByteFill.fill2D(
                 ByteFill.transparent(
                         pixmap,
-                        ByteFill.Fill2D((byte) 0),
-                        fill
+                        fillNo,
+                        fillYes
                 ),
                 pixmap.getWidth(),
                 pixmap.getHeight()
         );
+        pixmap.dispose();
+        return result;
     }
 
-    public byte[][][] textToVoxels(BitmapFont font, String string, ByteFill.Fill2D fill) {
-        return textToVoxels(font, string, fill, 1);
+    public byte[][][] text3D(BitmapFont font, String string, ByteFill.Fill3D fill) {
+        return text3D(font, string, fill, 1);
     }
 
-    public byte[][][] textToVoxels(BitmapFont font, String string, ByteFill.Fill2D fill, int depth) {
-        return ByteFill.fill3D(text2D(font, string, fill), depth);
+    public byte[][][] text3D(BitmapFont font, String string, ByteFill.Fill3D fill, int depth) {
+        return text3D(font, string, fill, ByteFill.Fill3D((byte) 0), depth);
     }
 
-    public byte[][][] textToVoxels(BitmapFont font, String string, ByteFill.Fill3D fill, int depth) {
+    public byte[][][] text3D(BitmapFont font, String string, ByteFill.Fill3D fillYes, ByteFill.Fill3D fillNo, int depth) {
         Pixmap pixmap = textToPixmap(font, string);
-        byte[][][] result = new byte[depth][pixmap.getWidth()][pixmap.getHeight()];
-        for (int z = 0; z < depth; z++)
-            Arrays.fill(result[z], ByteFill.fill2D(
-                    ByteFill.transparent(
-                            pixmap,
-                            ByteFill.Fill2D((byte) 0),
-                            ByteFill.Fill2D(fill, z)
-                    ),
-                    pixmap.getWidth(),
-                    pixmap.getHeight()
-            ));
+        byte[][][] result = ByteFill.fill3D(
+                ByteFill.transparent(
+                        pixmap,
+                        fillNo,
+                        fillYes
+                ),
+                pixmap.getWidth(),
+                pixmap.getHeight(),
+                depth
+        );
+        pixmap.dispose();
         return result;
     }
 }
