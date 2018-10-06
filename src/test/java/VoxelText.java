@@ -74,12 +74,12 @@ public class VoxelText {
 
     public Pixmap textToPixmap(String string, BitmapFont font, Color color) {
         return textToPixmap(string, font, color,
-                (int) (font.getSpaceWidth() * Gdx.graphics.getDensity()) * string.length()
+                (int) font.getSpaceWidth() * string.length()
         );
     }
 
     public Pixmap textToPixmap(String string, BitmapFont font, Color color, int width) {
-        return textToPixmap(string, font, color, width, (int) (font.getLineHeight() * Gdx.graphics.getDensity()));
+        return textToPixmap(string, font, color, width, (int)font.getLineHeight());
     }
 
     public Pixmap textToPixmap(String string, BitmapFont font, int width, int height) {
@@ -92,8 +92,8 @@ public class VoxelText {
             if (buffer != null) buffer.dispose();
             buffer = new FrameBuffer(Pixmap.Format.RGBA8888, width, height, false, false);
         }
-        if (view == null || view.getScreenWidth() != width || view.getScreenHeight() != height)
-            view = new FitViewport(width, height);
+        if (view == null || view.getScreenWidth() != buffer.getWidth() || view.getScreenHeight() != buffer.getHeight())
+            view = new FitViewport(buffer.getWidth(), buffer.getHeight());
         view.getCamera().position.set(width / 2, height / 2, 0);
         view.update(width, height);
         buffer.begin();
@@ -102,7 +102,7 @@ public class VoxelText {
         batch.setProjectionMatrix(view.getCamera().combined);
         batch.begin();
         font.setColor(color);
-        font.draw(batch, string, 0, 0);
+        font.draw(batch, string, 0, height / 2);
         batch.end();
         Pixmap result = ScreenUtils.getFrameBufferPixmap(0, 0, width, height);
         buffer.end();

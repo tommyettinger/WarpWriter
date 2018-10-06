@@ -328,7 +328,7 @@ public class TestDisplay extends ApplicationAdapter {
         mm.rng.setState(determine(newModel));
         if (font == null) font = new BitmapFont();
         voxels = voxelText.voxelsFromText(FakeLanguageGen.SIMPLISH.word(newModel, true),
-                font, (byte)255, 12, 12, 8);
+                font, (byte)mm.rng.between(17, 22), 100, 100, 8);
         if(animatedVoxels == null)
             animatedVoxels = new byte[frames][][][];
         Arrays.fill(animatedVoxels, voxels);
