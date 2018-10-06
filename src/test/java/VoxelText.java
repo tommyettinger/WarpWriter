@@ -86,8 +86,8 @@ public class VoxelText implements Disposable {
         byte[][][] result = ByteFill.fill3D(
                 ByteFill.transparent(
                         pixmap,
-                        fillYes,
-                        fillNo
+                        fillNo,
+                        fillYes
                 ),
                 pixmap.getWidth(),
                 pixmap.getHeight(),
