@@ -1,5 +1,17 @@
-/** @author Ben McLean */
+/**
+ * @author Ben McLean
+ */
 public class TerrainCube {
+    public static byte[][][] terrainCube(int size, int heightNE, int heightSE, int heightSW, int heightNW, byte color) {
+        return terrainCube(size, heightNE, heightSE, heightSW, heightNW, color, color, color, color);
+    }
+
+    public static byte[][][] terrainCube(int size, int heightNE, int heightSE, int heightSW, int heightNW, byte colorNorth, byte colorEast, byte colorSouth, byte colorWest) {
+        return terrainCube(size, heightNE, heightSE, heightSW, heightNW,
+                (heightNE + heightSE + heightSW + heightNW) / 4,
+                colorNorth, colorEast, colorSouth, colorWest);
+    }
+
     public static byte[][][] terrainCube(int size, int heightNE, int heightSE, int heightSW, int heightNW, int heightCenter, byte color) {
         return terrainCube(size, heightNE, heightSE, heightSW, heightNW, heightCenter, color, color, color, color);
     }
