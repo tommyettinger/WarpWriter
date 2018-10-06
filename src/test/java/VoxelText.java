@@ -103,7 +103,7 @@ public class VoxelText {
         batch.setProjectionMatrix(view.getCamera().combined);
         batch.begin();
         font.setColor(color);
-        font.draw(batch, string, 0, height);
+        font.draw(batch, string, 0, height - font.getDescent());
         batch.end();
         Pixmap result = ScreenUtils.getFrameBufferPixmap(0, 0, width, height);
         buffer.end();
