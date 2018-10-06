@@ -97,7 +97,7 @@ public class VoxelText implements Disposable {
             if (buffer != null) buffer.dispose();
             buffer = new FrameBuffer(Pixmap.Format.RGBA8888, width, height, false, false);
         }
-        FitViewport view = new FitViewport(buffer.getWidth(), buffer.getHeight());
+        FitViewport view = new FitViewport(width, height);
         view.getCamera().position.set(width / 2, height / 2, 0);
         view.update(width, height);
         buffer.begin();
