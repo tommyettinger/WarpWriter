@@ -171,6 +171,9 @@ public class TestDisplay extends ApplicationAdapter {
                     case Input.Keys.N:
                         remakeText(++seed);
                         return true;
+                    case Input.Keys.C:
+                        remakeTerrain(++seed);
+                        return true;
                     case Input.Keys.O: // output
                         name = FakeLanguageGen.SIMPLISH.word(true);
                         VoxIO.writeVOX(name + ".vox", voxels, palette);
@@ -319,6 +322,58 @@ public class TestDisplay extends ApplicationAdapter {
             }
             if(dither) reducer.reduceWithNoise(pix);
         }
+    }
+
+    public void remakeTerrain(long newModel) {
+        mm.rng.setState(determine(newModel));
+        int size=16;
+        voxels = TerrainCube.terrainCube(
+                size,
+                mm.rng.nextInt(size-1)+1,
+                mm.rng.nextInt(size-1)+1,
+                mm.rng.nextInt(size-1)+1,
+                mm.rng.nextInt(size-1)+1,
+                mm.rng.nextInt(size-1)+1,
+                (byte)(mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)
+        );
+        if(animatedVoxels == null)
+            animatedVoxels = new byte[frames][][][];
+        Arrays.fill(animatedVoxels, voxels);
+        int oldWidth = width, oldHeight = height;
+        for (int f = 0; f < frames; f++) {
+            {
+                switch (angle)
+                {
+                    case 1:
+                        if(dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
+                        else indices = mr.renderOrthoBelow(animatedVoxels[f], dir);
+                        break;
+                    case 3:
+                        if(dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
+                        else indices = mr.renderOrtho(animatedVoxels[f], dir);
+                        break;
+                    default:
+                        if(dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
+                        else indices = mr.renderOrthoSide(animatedVoxels[f], dir);
+                        break;
+                }
+            }
+            width = indices.length;
+            height = indices[0].length;
+            if(oldWidth != width || oldHeight != height)
+                pixes[f] = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+            pix = pixes[f];
+            pix.setColor(background);
+            pix.fill();
+            for (int x = 0; x < indices.length; x++) {
+                for (int y = 0; y < indices[0].length; y++) {
+                    pix.drawPixel(x, y, palette[indices[x][y]]);
+                }
+            }
+            if(dither) reducer.reduceWithNoise(pix);
+        }
+        if(oldWidth != width || oldHeight != height)
+            tex = new Texture(width, height, Pixmap.Format.RGBA8888);
     }
 
     private VoxelText voxelText = new VoxelText();
