@@ -334,6 +334,9 @@ public class TestDisplay extends ApplicationAdapter {
                 mm.rng.nextInt(size-1)+1,
                 mm.rng.nextInt(size-1)+1,
                 mm.rng.nextInt(size-1)+1,
+                (byte)(mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8),
+                (byte)(mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8),
+                (byte)(mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8),
                 (byte)(mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)
         );
         if(animatedVoxels == null)
