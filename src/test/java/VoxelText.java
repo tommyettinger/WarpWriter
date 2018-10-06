@@ -10,6 +10,8 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
+import java.util.Arrays;
+
 /**
  * @author Ben McLean
  */
@@ -57,7 +59,7 @@ public class VoxelText implements Disposable {
     public byte[][] text2D(BitmapFont font, String string, ByteFill.Fill2D fill) {
         Pixmap pixmap = textToPixmap(font, string);
         return ByteFill.fill2D(
-                ByteFill.transparent2D(
+                ByteFill.transparent(
                         pixmap,
                         ByteFill.Fill2D((byte) 0),
                         fill
@@ -72,6 +74,22 @@ public class VoxelText implements Disposable {
     }
 
     public byte[][][] textToVoxels(BitmapFont font, String string, ByteFill.Fill2D fill, int depth) {
-        return ByteFill.voxels2D(text2D(font, string, fill), depth);
+        return ByteFill.fill3D(text2D(font, string, fill), depth);
+    }
+
+    public byte[][][] textToVoxels(BitmapFont font, String string, ByteFill.Fill3D fill, int depth) {
+        Pixmap pixmap = textToPixmap(font, string);
+        byte[][][] result = new byte[depth][pixmap.getWidth()][pixmap.getHeight()];
+        for (int z = 0; z < depth; z++)
+            Arrays.fill(result[z], ByteFill.fill2D(
+                    ByteFill.transparent(
+                            pixmap,
+                            ByteFill.Fill2D((byte) 0),
+                            ByteFill.Fill2D(fill, z)
+                    ),
+                    pixmap.getWidth(),
+                    pixmap.getHeight()
+            ));
+        return result;
     }
 }
