@@ -331,7 +331,7 @@ public class TestDisplay extends ApplicationAdapter {
                 font,
                 FakeLanguageGen.SIMPLISH.word(newModel, true),
                 (byte)(mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8),
-                4
+                2
         );
         if(animatedVoxels == null)
             animatedVoxels = new byte[frames][][][];

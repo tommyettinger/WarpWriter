@@ -9,14 +9,11 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
-
 import java.util.Arrays;
 
 public class VoxelText implements Disposable {
     protected FrameBuffer buffer;
     protected SpriteBatch batch;
-    protected Viewport view;
 
     @Override
     public void dispose() {
@@ -100,8 +97,7 @@ public class VoxelText implements Disposable {
             if (buffer != null) buffer.dispose();
             buffer = new FrameBuffer(Pixmap.Format.RGBA8888, width, height, false, false);
         }
-        if (view == null || view.getScreenWidth() != buffer.getWidth() || view.getScreenHeight() != buffer.getHeight())
-            view = new FitViewport(buffer.getWidth(), buffer.getHeight());
+        FitViewport view = new FitViewport(buffer.getWidth(), buffer.getHeight());
         view.getCamera().position.set(width / 2, height / 2, 0);
         view.update(width, height);
         buffer.begin();
