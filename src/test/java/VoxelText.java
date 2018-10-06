@@ -26,7 +26,7 @@ public class VoxelText {
     }
 
     public static FillRule FillRuleTransparent() {
-        return FillRuleTransparent(0.5f);
+        return FillRuleTransparent(90);
     }
 
     public static FillRule FillRuleTransparent(final float threshold) {
@@ -94,7 +94,7 @@ public class VoxelText {
         }
         if (view == null || view.getScreenWidth() != buffer.getWidth() || view.getScreenHeight() != buffer.getHeight())
             view = new FitViewport(buffer.getWidth(), buffer.getHeight());
-        view.getCamera().position.set(width / 2, height / 2, 0);
+        view.getCamera().position.set(width * 0.5f, height * 0.5f, 0);
         view.update(width, height);
         buffer.begin();
         Gdx.gl.glClearColor(0, 0, 0, 0);
@@ -102,7 +102,7 @@ public class VoxelText {
         batch.setProjectionMatrix(view.getCamera().combined);
         batch.begin();
         font.setColor(color);
-        font.draw(batch, string, 0, height / 2);
+        font.draw(batch, string, 0, height * 0.5f);
         batch.end();
         Pixmap result = ScreenUtils.getFrameBufferPixmap(0, 0, width, height);
         buffer.end();
