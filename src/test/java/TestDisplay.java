@@ -331,7 +331,7 @@ public class TestDisplay extends ApplicationAdapter {
             font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
             //font = new BitmapFont(Gdx.files.internal("tiny.fnt"));
         }
-        voxels = voxelText.voxelsFromText(
+        voxels = voxelText.textToVoxels(
                 font,
                 FakeLanguageGen.SIMPLISH.word(mm.rng.nextLong(), true),
                 (byte)(mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8),

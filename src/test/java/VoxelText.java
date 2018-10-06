@@ -6,16 +6,20 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
-
 import java.util.Arrays;
 
-public class VoxelText {
+public class VoxelText implements Disposable {
     protected FrameBuffer buffer;
     protected SpriteBatch batch;
-    protected Viewport view;
+
+    @Override
+    public void dispose() {
+        buffer.dispose();
+        batch.dispose();
+    }
 
     public interface FillRule {
         boolean fill(int color);
@@ -93,10 +97,9 @@ public class VoxelText {
             if (buffer != null) buffer.dispose();
             buffer = new FrameBuffer(Pixmap.Format.RGBA8888, width, height, false, false);
         }
-        if (view == null || view.getScreenWidth() != buffer.getWidth() || view.getScreenHeight() != buffer.getHeight())
-            view = new FitViewport(buffer.getWidth(), buffer.getHeight());
-        //view.getCamera().position.set(width / 2, height / 2, 0);
+        FitViewport view = new FitViewport(width, height);
         view.apply(true);
+//        view.getCamera().position.set(width / 2, height / 2, 0);
         view.update(width, height);
         buffer.begin();
         Gdx.gl.glClearColor(0, 0, 0, 0);
@@ -111,11 +114,11 @@ public class VoxelText {
         return result;
     }
 
-    public byte[][][] voxelsFromText(BitmapFont font, String string, byte color) {
-        return voxels2D(pixmapToBytes(textToPixmap(font, string), color), 1);
+    public byte[][][] textToVoxels(BitmapFont font, String string, byte color) {
+        return textToVoxels(font, string, color, 1);
     }
 
-    public byte[][][] voxelsFromText(BitmapFont font, String string, byte color, int depth) {
+    public byte[][][] textToVoxels(BitmapFont font, String string, byte color, int depth) {
         return voxels2D(
                 pixmapToBytes(
                         textToPixmap(font, string),
