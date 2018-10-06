@@ -203,6 +203,52 @@ public class ModelMaker {
         x ^= y ^ z ^ w ^ state;
         return x ^ x >>> 25;
     }
+    /**
+     *
+     * @param x
+     * @param y
+     * @param z
+     * @param state
+     * @param bound outer exclusive bound; may be negative
+     * @return an int between 0 (inclusive) and bound (exclusive) dependent on the position and state
+     */
+    public static int hashBounded(long x, long y, long z, long state, int bound)
+    {
+        x += y += z += state += 0x9E3779B97F4A7C15L;
+        state *= ((y ^= 0xC6BC279692B5CC8BL + x - (x << 35 | x >>> 29))|1);
+        state ^= state >>> 31;
+        state *= ((z ^= 0xC6BC279692B5CC8BL + y - (y << 35 | y >>> 29))|1);
+        state ^= state >>> 31;
+        state *= ((x ^= 0xC6BC279692B5CC8BL + z - (z << 35 | z >>> 29))|1);
+        state ^= state >>> 31;
+        x ^= y ^ z ^ state;
+        return (int)((bound * ((x ^ x >>> 25) & 0xFFFFFFFFL)) >> 32);
+    }
+
+    /**
+     *
+     * @param x
+     * @param y
+     * @param z
+     * @param w
+     * @param state
+     * @param bound outer exclusive bound; may be negative
+     * @return an int between 0 (inclusive) and bound (exclusive) dependent on the position and state
+     */
+    public static int hashBounded(long x, long y, long z, long w, long state, int bound)
+    {
+        x += y += z += w += state += 0x9E3779B97F4A7C15L;
+        state *= ((y ^= 0xC6BC279692B5CC8BL + x - (x << 35 | x >>> 29))|1);
+        state ^= state >>> 31;
+        state *= ((z ^= 0xC6BC279692B5CC8BL + y - (y << 35 | y >>> 29))|1);
+        state ^= state >>> 31;
+        state *= ((w ^= 0xC6BC279692B5CC8BL + z - (z << 35 | z >>> 29))|1);
+        state ^= state >>> 31;
+        state *= ((x ^= 0xC6BC279692B5CC8BL + w - (w << 35 | w >>> 29))|1);
+        state ^= state >>> 31;
+        x ^= y ^ z ^ w ^ state;
+        return (int)((bound * ((x ^ x >>> 25) & 0xFFFFFFFFL)) >> 32);
+    }
 
     public ModelMaker()
     {

@@ -1,5 +1,5 @@
 import com.badlogic.gdx.graphics.Pixmap;
-import squidpony.squidmath.IRNG;
+import warpwriter.ModelMaker;
 
 import java.util.Arrays;
 
@@ -305,12 +305,11 @@ public class ByteFill {
     /**
      * @return color
      */
-    public static Fill3D fill3D(final IRNG random, final byte... colors) {
+    public static Fill3D fill3D(final long seed, final byte... colors) {
         return new Fill3D() {
             @Override
             public byte fill(int x, int y, int z) {
-                // nextSignedInt() is just a bit faster than nextInt(), they act the same here
-                return colors[random.nextSignedInt(colors.length)];
+                return colors[ModelMaker.hashBounded(x, y, z, seed, colors.length)];
             }
         };
     }

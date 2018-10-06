@@ -338,10 +338,10 @@ public class TestDisplay extends ApplicationAdapter {
                 mm.rng.nextInt(size - 1) + 1,
                 mm.rng.nextInt(size - 1) + 1,
                 mm.rng.nextInt(size - 1) + 1,
-                ByteFill.fill3D(mm.rng, (byte)(color0), (byte)(color0+1), (byte)(color0+1), (byte)(color0+2), (byte)(color0+2), (byte)(color0+2), (byte)(color0+3)),
-                ByteFill.fill3D(mm.rng, (byte)(color1), (byte)(color1+1), (byte)(color1+1), (byte)(color1+2), (byte)(color1+2), (byte)(color1+2), (byte)(color1+3)),
-                ByteFill.fill3D(mm.rng, (byte)(color2), (byte)(color2+1), (byte)(color2+1), (byte)(color2+2), (byte)(color2+2), (byte)(color2+2), (byte)(color2+3)),
-                ByteFill.fill3D(mm.rng, (byte)(color3), (byte)(color3+1), (byte)(color3+1), (byte)(color3+2), (byte)(color3+2), (byte)(color3+2), (byte)(color3+3))
+                ByteFill.fill3D(mm.rng.nextLong(), (byte)(color0), (byte)(color0+1), (byte)(color0+1), (byte)(color0+2), (byte)(color0+2), (byte)(color0+2), (byte)(color0+3)),
+                ByteFill.fill3D(mm.rng.nextLong(), (byte)(color1), (byte)(color1+1), (byte)(color1+1), (byte)(color1+2), (byte)(color1+2), (byte)(color1+2), (byte)(color1+3)),
+                ByteFill.fill3D(mm.rng.nextLong(), (byte)(color2), (byte)(color2+1), (byte)(color2+1), (byte)(color2+2), (byte)(color2+2), (byte)(color2+2), (byte)(color2+3)),
+                ByteFill.fill3D(mm.rng.nextLong(), (byte)(color3), (byte)(color3+1), (byte)(color3+1), (byte)(color3+2), (byte)(color3+2), (byte)(color3+2), (byte)(color3+3))
         );
         if (animatedVoxels == null)
             animatedVoxels = new byte[frames][][][];
