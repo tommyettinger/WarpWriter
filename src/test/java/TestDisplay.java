@@ -326,17 +326,17 @@ public class TestDisplay extends ApplicationAdapter {
     public void remakeText(long newModel)
     {
         mm.rng.setState(determine(newModel));
-        if (font == null) font = new BitmapFont();
+        if (font == null) font = new BitmapFont(Gdx.files.internal("Roguelike.fnt"));
         voxels = voxelText.voxelsFromText(
                 font,
                 FakeLanguageGen.SIMPLISH.word(newModel, true),
-                (byte)mm.rng.between(17, 22),
+                (byte)(mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8),
                 4
         );
         if(animatedVoxels == null)
             animatedVoxels = new byte[frames][][][];
         Arrays.fill(animatedVoxels, voxels);
-
+        int oldWidth = width, oldHeight = height;
         for (int f = 0; f < frames; f++) {
             pix = pixes[f];
             pix.setColor(background);
@@ -365,6 +365,8 @@ public class TestDisplay extends ApplicationAdapter {
             }
             if(dither) reducer.reduceWithNoise(pix);
         }
+        if(oldWidth != width || oldHeight != height)
+            tex = new Texture(width, height, Pixmap.Format.RGBA8888);
     }
 
     public void remakeShipSmall(long newModel) {
