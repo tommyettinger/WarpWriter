@@ -3,6 +3,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -12,6 +13,10 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import java.util.Arrays;
 
 public class VoxelText {
+    protected FrameBuffer buffer;
+    protected SpriteBatch batch;
+    protected Viewport view;
+
     public interface FillRule {
         boolean fill(int color);
     }
@@ -64,29 +69,25 @@ public class VoxelText {
         return result;
     }
 
-    protected FrameBuffer buffer;
-    protected SpriteBatch batch;
-    protected Viewport view;
-
-    public Pixmap textToPixmap(String string, BitmapFont font) {
-        return textToPixmap(string, font, Color.WHITE);
+    public static byte[][][] voxels2D(byte[][] bytes) {
+        return voxels2D(bytes, 1);
     }
 
-    public Pixmap textToPixmap(String string, BitmapFont font, Color color) {
-        return textToPixmap(string, font, color,
-                (int) font.getSpaceWidth() * string.length()
-        );
+    public static byte[][][] voxels2D(byte[][] bytes, int depth) {
+        byte[][][] voxels = new byte[depth][bytes.length][bytes[0].length];
+        Arrays.fill(voxels, bytes);
+        return voxels;
     }
 
-    public Pixmap textToPixmap(String string, BitmapFont font, Color color, int width) {
-        return textToPixmap(string, font, color, width, (int)font.getLineHeight());
+    public Pixmap textToPixmap(BitmapFont font, String string) {
+        return textToPixmap(font, string, Color.WHITE);
     }
 
-    public Pixmap textToPixmap(String string, BitmapFont font, int width, int height) {
-        return textToPixmap(string, font, Color.WHITE, width, height);
-    }
-
-    public Pixmap textToPixmap(String string, BitmapFont font, Color color, int width, int height) {
+    public Pixmap textToPixmap(BitmapFont font, String string, Color color) {
+        GlyphLayout layout = new GlyphLayout();
+        layout.setText(font, string);
+        int width = (int) layout.width;
+        int height = (int) layout.height;
         if (batch == null) batch = new SpriteBatch();
         if (buffer == null || buffer.getWidth() != width || buffer.getHeight() != height) {
             if (buffer != null) buffer.dispose();
@@ -109,32 +110,14 @@ public class VoxelText {
         return result;
     }
 
-    public static byte[][][] voxels2D(byte[][] bytes) {
-        return voxels2D(bytes, 1);
+    public byte[][][] voxelsFromText(BitmapFont font, String string, byte color) {
+        return voxels2D(pixmapToBytes(textToPixmap(font, string), color), 1);
     }
 
-    public static byte[][][] voxels2D(byte[][] bytes, int depth) {
-        byte[][][] voxels = new byte[depth][bytes.length][bytes[0].length];
-        Arrays.fill(voxels, bytes);
-        return voxels;
-    }
-
-    public byte[][][] voxelsFromText(String string, BitmapFont font, byte color) {
-        return voxels2D(pixmapToBytes(textToPixmap(string, font)), 1);
-    }
-
-    public byte[][][] voxelsFromText(String string, BitmapFont font, byte color, int depth) {
-        return voxels2D(pixmapToBytes(textToPixmap(string, font)), depth);
-    }
-
-    public byte[][][] voxelsFromText(String string, BitmapFont font, byte color, int width, int depth) {
-        return voxelsFromText(string, font, color, width, (int)font.getLineHeight(), 1);
-    }
-
-    public byte[][][] voxelsFromText(String string, BitmapFont font, byte color, int width, int height, int depth) {
+    public byte[][][] voxelsFromText(BitmapFont font, String string, byte color, int depth) {
         return voxels2D(
                 pixmapToBytes(
-                        textToPixmap(string, font, width, height),
+                        textToPixmap(font, string),
                         color
                 ),
                 depth
