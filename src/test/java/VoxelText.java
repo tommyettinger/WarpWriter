@@ -55,7 +55,7 @@ public class VoxelText implements Disposable {
     }
 
     public byte[][] text2D(BitmapFont font, String string, ByteFill.Fill2D fill) {
-        return text2D(font, string, fill, ByteFill.Fill2D((byte) 0));
+        return text2D(font, string, fill, ByteFill.fill2D((byte) 0));
     }
 
     public byte[][] text2D(BitmapFont font, String string, ByteFill.Fill2D fillYes, ByteFill.Fill2D fillNo) {
@@ -78,7 +78,7 @@ public class VoxelText implements Disposable {
     }
 
     public byte[][][] text3D(BitmapFont font, String string, ByteFill.Fill3D fill, int depth) {
-        return text3D(font, string, fill, ByteFill.Fill3D((byte) 0), depth);
+        return text3D(font, string, fill, ByteFill.fill3D((byte) 0), depth);
     }
 
     public byte[][][] text3D(BitmapFont font, String string, ByteFill.Fill3D fillYes, ByteFill.Fill3D fillNo, int depth) {
@@ -86,8 +86,8 @@ public class VoxelText implements Disposable {
         byte[][][] result = ByteFill.fill3D(
                 ByteFill.transparent(
                         pixmap,
-                            ByteFill.fill2D((byte) 0),
-                            ByteFill.fill2D(fill, z)
+                        fillYes,
+                        fillNo
                 ),
                 pixmap.getWidth(),
                 pixmap.getHeight(),
