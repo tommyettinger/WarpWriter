@@ -338,9 +338,6 @@ public class TestDisplay extends ApplicationAdapter {
         Arrays.fill(animatedVoxels, voxels);
         int oldWidth = width, oldHeight = height;
         for (int f = 0; f < frames; f++) {
-            pix = pixes[f];
-            pix.setColor(background);
-            pix.fill();
             {
                 switch (angle)
                 {
@@ -358,6 +355,13 @@ public class TestDisplay extends ApplicationAdapter {
                         break;
                 }
             }
+            width = indices.length;
+            height = indices[0].length;
+            if(oldWidth != width || oldHeight != height)
+                pixes[f] = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+            pix = pixes[f];
+            pix.setColor(background);
+            pix.fill();
             for (int x = 0; x < indices.length; x++) {
                 for (int y = 0; y < indices[0].length; y++) {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
