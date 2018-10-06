@@ -3,15 +3,24 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
-
 import java.util.Arrays;
 
-public class VoxelText {
+public class VoxelText implements Disposable {
+    protected FrameBuffer buffer;
+    protected SpriteBatch batch;
+
+    @Override
+    public void dispose() {
+        buffer.dispose();
+        batch.dispose();
+    }
+
     public interface FillRule {
         boolean fill(int color);
     }
@@ -26,7 +35,7 @@ public class VoxelText {
     }
 
     public static FillRule FillRuleTransparent() {
-        return FillRuleTransparent(90);
+        return FillRuleTransparent(0.5f);
     }
 
     public static FillRule FillRuleTransparent(final float threshold) {
@@ -64,51 +73,6 @@ public class VoxelText {
         return result;
     }
 
-    protected FrameBuffer buffer;
-    protected SpriteBatch batch;
-    protected Viewport view;
-
-    public Pixmap textToPixmap(String string, BitmapFont font) {
-        return textToPixmap(string, font, Color.WHITE);
-    }
-
-    public Pixmap textToPixmap(String string, BitmapFont font, Color color) {
-        return textToPixmap(string, font, color,
-                (int) font.getSpaceWidth() * string.length()
-        );
-    }
-
-    public Pixmap textToPixmap(String string, BitmapFont font, Color color, int width) {
-        return textToPixmap(string, font, color, width, (int)font.getLineHeight());
-    }
-
-    public Pixmap textToPixmap(String string, BitmapFont font, int width, int height) {
-        return textToPixmap(string, font, Color.WHITE, width, height);
-    }
-
-    public Pixmap textToPixmap(String string, BitmapFont font, Color color, int width, int height) {
-        if (batch == null) batch = new SpriteBatch();
-        if (buffer == null || buffer.getWidth() != width || buffer.getHeight() != height) {
-            if (buffer != null) buffer.dispose();
-            buffer = new FrameBuffer(Pixmap.Format.RGBA8888, width, height, false, false);
-        }
-        if (view == null || view.getScreenWidth() != buffer.getWidth() || view.getScreenHeight() != buffer.getHeight())
-            view = new FitViewport(buffer.getWidth(), buffer.getHeight());
-        view.getCamera().position.set(width * 0.5f, height * 0.5f, 0);
-        view.update(width, height);
-        buffer.begin();
-        Gdx.gl.glClearColor(0, 0, 0, 0);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        batch.setProjectionMatrix(view.getCamera().combined);
-        batch.begin();
-        font.setColor(color);
-        font.draw(batch, string, 0, height);
-        batch.end();
-        Pixmap result = ScreenUtils.getFrameBufferPixmap(0, 0, width, height);
-        buffer.end();
-        return result;
-    }
-
     public static byte[][][] voxels2D(byte[][] bytes) {
         return voxels2D(bytes, 1);
     }
@@ -119,22 +83,44 @@ public class VoxelText {
         return voxels;
     }
 
-    public byte[][][] voxelsFromText(String string, BitmapFont font, byte color) {
-        return voxels2D(pixmapToBytes(textToPixmap(string, font)), 1);
+    public Pixmap textToPixmap(BitmapFont font, String string) {
+        return textToPixmap(font, string, Color.WHITE);
     }
 
-    public byte[][][] voxelsFromText(String string, BitmapFont font, byte color, int depth) {
-        return voxels2D(pixmapToBytes(textToPixmap(string, font)), depth);
+    public Pixmap textToPixmap(BitmapFont font, String string, Color color) {
+        GlyphLayout layout = new GlyphLayout();
+        layout.setText(font, string);
+        int width = (int) layout.width;
+        int height = (int) layout.height;
+        if (batch == null) batch = new SpriteBatch();
+        if (buffer == null || buffer.getWidth() != width || buffer.getHeight() != height) {
+            if (buffer != null) buffer.dispose();
+            buffer = new FrameBuffer(Pixmap.Format.RGBA8888, width, height, false, false);
+        }
+        FitViewport view = new FitViewport(width, height);
+        view.getCamera().position.set(width / 2, height / 2, 0);
+        view.update(width, height);
+        buffer.begin();
+        Gdx.gl.glClearColor(0, 0, 0, 0);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        batch.setProjectionMatrix(view.getCamera().combined);
+        batch.begin();
+        font.setColor(color);
+        font.draw(batch, string, 0, height - font.getDescent());
+        batch.end();
+        Pixmap result = ScreenUtils.getFrameBufferPixmap(0, 0, width, height);
+        buffer.end();
+        return result;
     }
 
-    public byte[][][] voxelsFromText(String string, BitmapFont font, byte color, int width, int depth) {
-        return voxelsFromText(string, font, color, width, (int)font.getLineHeight(), 1);
+    public byte[][][] textToVoxels(BitmapFont font, String string, byte color) {
+        return textToVoxels(font, string, color, 1);
     }
 
-    public byte[][][] voxelsFromText(String string, BitmapFont font, byte color, int width, int height, int depth) {
+    public byte[][][] textToVoxels(BitmapFont font, String string, byte color, int depth) {
         return voxels2D(
                 pixmapToBytes(
-                        textToPixmap(string, font, width, height),
+                        textToPixmap(font, string),
                         color
                 ),
                 depth
