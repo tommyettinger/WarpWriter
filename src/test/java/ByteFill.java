@@ -9,7 +9,7 @@ public class ByteFill {
     /**
      * @return color
      */
-    public static Fill2D Fill2D(final byte color) {
+    public static Fill2D fill2D(final byte color) {
         return new Fill2D() {
             @Override
             public byte fill(int x, int y) {
@@ -52,7 +52,7 @@ public class ByteFill {
     /**
      * @param y will be treated as x
      */
-    public static Fill Fill(final int y, final Fill2D fill) {
+    public static Fill fill(final int y, final Fill2D fill) {
         return new Fill() {
             @Override
             public byte fill(int x) {
@@ -61,7 +61,7 @@ public class ByteFill {
         };
     }
 
-    public static Fill Fill(final Fill2D fill, final int y) {
+    public static Fill fill(final Fill2D fill, final int y) {
         return new Fill() {
             @Override
             public byte fill(int x) {
@@ -73,7 +73,7 @@ public class ByteFill {
     /**
      * @param z will be treated as y
      */
-    public static Fill2D Fill2Dy(final Fill3D fill, final int z) {
+    public static Fill2D fill2Dy(final Fill3D fill, final int z) {
         return new Fill2D() {
             @Override
             public byte fill(int x, int y) {
@@ -85,7 +85,7 @@ public class ByteFill {
     /**
      * @param z will be treated as x
      */
-    public static Fill2D Fill2D(final int z, final Fill3D fill) {
+    public static Fill2D fill2D(final int z, final Fill3D fill) {
         return new Fill2D() {
             @Override
             public byte fill(int x, int y) {
@@ -94,7 +94,7 @@ public class ByteFill {
         };
     }
 
-    public static Fill2D Fill2D(final Fill3D fill, final int z) {
+    public static Fill2D fill2D(final Fill3D fill, final int z) {
         return new Fill2D() {
             @Override
             public byte fill(int x, int y) {
@@ -106,7 +106,7 @@ public class ByteFill {
     /**
      * @return yesFill if transparency is greater than threshold, otherwise noFill
      */
-    public static Fill2D transparent(final Pixmap pixmap, final Fill2D yesFill, final Fill2D noFill, final byte threshold) {
+    public static Fill2D transparent(final Pixmap pixmap, final Fill2D yesFill, final Fill2D noFill, final int threshold) {
         return new Fill2D() {
             @Override
             public byte fill(int x, int y) {
@@ -174,7 +174,7 @@ public class ByteFill {
     /**
      * @return if preferred is zero then return backup, else return preferred
      */
-    public static Fill3D Fill3D(final Fill3D preferred, final Fill3D backup) {
+    public static Fill3D fill3D(final Fill3D preferred, final Fill3D backup) {
         return new Fill3D() {
             @Override
             public byte fill(int x, int y, int z) {
@@ -187,7 +187,7 @@ public class ByteFill {
     /**
      * @return if preferred is zero then return backup, else return preferred
      */
-    public static Fill2D Fill2D(final Fill2D preferred, final Fill2D backup) {
+    public static Fill2D fill2D(final Fill2D preferred, final Fill2D backup) {
         return new Fill2D() {
             @Override
             public byte fill(int x, int y) {
@@ -200,7 +200,7 @@ public class ByteFill {
     /**
      * @return if preferred is zero then return backup, else return preferred
      */
-    public static Fill Fill(final Fill preferred, final Fill backup) {
+    public static Fill fill(final Fill preferred, final Fill backup) {
         return new Fill() {
             @Override
             public byte fill(int x) {
@@ -213,7 +213,7 @@ public class ByteFill {
     /**
      * @return color
      */
-    public static Fill Fill(final byte color) {
+    public static Fill fill(final byte color) {
         return new Fill() {
             @Override
             public byte fill (int x) {
@@ -225,7 +225,7 @@ public class ByteFill {
     /**
      * @return color
      */
-    public static Fill3D Fill3D(final byte color) {
+    public static Fill3D fill3D(final byte color) {
         return new Fill3D() {
             @Override
             public byte fill(int x, int y, int z) {

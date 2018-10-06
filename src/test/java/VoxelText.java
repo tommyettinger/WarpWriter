@@ -61,7 +61,7 @@ public class VoxelText implements Disposable {
         return ByteFill.fill2D(
                 ByteFill.transparent(
                         pixmap,
-                        ByteFill.Fill2D((byte) 0),
+                        ByteFill.fill2D((byte) 0),
                         fill
                 ),
                 pixmap.getWidth(),
@@ -84,8 +84,8 @@ public class VoxelText implements Disposable {
             Arrays.fill(result[z], ByteFill.fill2D(
                     ByteFill.transparent(
                             pixmap,
-                            ByteFill.Fill2D((byte) 0),
-                            ByteFill.Fill2D(fill, z)
+                            ByteFill.fill2D((byte) 0),
+                            ByteFill.fill2D(fill, z)
                     ),
                     pixmap.getWidth(),
                     pixmap.getHeight()
