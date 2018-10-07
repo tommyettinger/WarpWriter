@@ -338,10 +338,10 @@ public class TestDisplay extends ApplicationAdapter {
                 mm.rng.nextInt(size - 1) + 1,
                 mm.rng.nextInt(size - 1) + 1,
                 mm.rng.nextInt(size - 1) + 1,
-                ByteFill.fill3D(mm.rng.nextLong(), (byte)(color0), (byte)(color0+1), (byte)(color0+1), (byte)(color0+2), (byte)(color0+2), (byte)(color0+2), (byte)(color0+3)),
-                ByteFill.fill3D(mm.rng.nextLong(), (byte)(color1), (byte)(color1+1), (byte)(color1+1), (byte)(color1+2), (byte)(color1+2), (byte)(color1+2), (byte)(color1+3)),
-                ByteFill.fill3D(mm.rng.nextLong(), (byte)(color2), (byte)(color2+1), (byte)(color2+1), (byte)(color2+2), (byte)(color2+2), (byte)(color2+2), (byte)(color2+3)),
-                ByteFill.fill3D(mm.rng.nextLong(), (byte)(color3), (byte)(color3+1), (byte)(color3+1), (byte)(color3+2), (byte)(color3+2), (byte)(color3+2), (byte)(color3+3))
+                ByteFill.noise3D(mm.rng.nextLong(), (byte)(color0), (byte)(color0+1), (byte)(color0+1), (byte)(color0+2), (byte)(color0+2), (byte)(color0+2), (byte)(color0+3)),
+                ByteFill.noise3D(mm.rng.nextLong(), (byte)(color1), (byte)(color1+1), (byte)(color1+1), (byte)(color1+2), (byte)(color1+2), (byte)(color1+2), (byte)(color1+3)),
+                ByteFill.noise3D(mm.rng.nextLong(), (byte)(color2), (byte)(color2+1), (byte)(color2+1), (byte)(color2+2), (byte)(color2+2), (byte)(color2+2), (byte)(color2+3)),
+                ByteFill.noise3D(mm.rng.nextLong(), (byte)(color3), (byte)(color3+1), (byte)(color3+1), (byte)(color3+2), (byte)(color3+2), (byte)(color3+2), (byte)(color3+3))
         );
         if (animatedVoxels == null)
             animatedVoxels = new byte[frames][][][];
@@ -402,13 +402,14 @@ public class TestDisplay extends ApplicationAdapter {
         );
         */
 
-        voxels = ByteFill.fill3D(voxelText.text2D(
+        voxels = ByteFill.fill(voxelText.text2D(
                 font,
                 FakeLanguageGen.SIMPLISH.word(mm.rng.nextLong(), true),
                 ByteFill.fill2D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8))
                 ),
-                2
+                8
         );
+        ByteFill.fill(voxels, ByteFill.wireframeBox(voxels, ByteFill.fill3D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8))));
 
         if (animatedVoxels == null)
             animatedVoxels = new byte[frames][][][];

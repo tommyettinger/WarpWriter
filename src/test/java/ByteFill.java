@@ -1,24 +1,10 @@
 import com.badlogic.gdx.graphics.Pixmap;
 import warpwriter.ModelMaker;
 
-import java.util.Arrays;
-
 /**
  * @author Ben McLean
  */
 public class ByteFill {
-    /**
-     * @return color
-     */
-    public static Fill2D fill2D(final byte color) {
-        return new Fill2D() {
-            @Override
-            public byte fill(int x, int y) {
-                return color;
-            }
-        };
-    }
-
     /**
      * @return nearest color in the PaletteReducer to the color from the pixmap
      */
@@ -117,7 +103,7 @@ public class ByteFill {
     /**
      * @param z will be treated as y
      */
-    public static Fill2D fill2Dy(final Fill3D fill, final int z) {
+    public static Fill2D filly(final Fill3D fill, final int z) {
         return new Fill2D() {
             @Override
             public byte fill(int x, int y) {
@@ -129,7 +115,7 @@ public class ByteFill {
     /**
      * @param z will be treated as x
      */
-    public static Fill2D fill2D(final int z, final Fill3D fill) {
+    public static Fill2D fill(final int z, final Fill3D fill) {
         return new Fill2D() {
             @Override
             public byte fill(int x, int y) {
@@ -138,7 +124,7 @@ public class ByteFill {
         };
     }
 
-    public static Fill2D fill2D(final Fill3D fill, final int z) {
+    public static Fill2D fill(final Fill3D fill, final int z) {
         return new Fill2D() {
             @Override
             public byte fill(int x, int y) {
@@ -156,7 +142,7 @@ public class ByteFill {
         };
     }
 
-    public static Fill Fill(final Fill2D fill) {
+    public static Fill fill(final Fill2D fill) {
         return new Fill() {
             @Override
             public byte fill(int x) {
@@ -165,7 +151,7 @@ public class ByteFill {
         };
     }
 
-    public static Fill2D Fill2D(final Fill3D fill) {
+    public static Fill2D fill2D(final Fill3D fill) {
         return new Fill2D() {
             @Override
             public byte fill(int x, int y) {
@@ -174,7 +160,7 @@ public class ByteFill {
         };
     }
 
-    public static Fill3D Fill3D(final Fill2D fill) {
+    public static Fill3D fill3D(final Fill2D fill) {
         return new Fill3D() {
             @Override
             public byte fill(int x, int y, int z) {
@@ -195,7 +181,7 @@ public class ByteFill {
         };
     }
 
-    public static byte[][] fill2D(ByteFill.Fill2D fill, int width, int height) {
+    public static byte[][] fill(ByteFill.Fill2D fill, int width, int height) {
         byte[][] result = new byte[width][height];
         for (int x = 0; x < width; x++)
             for (int y = 0; y < height; y++)
@@ -204,15 +190,15 @@ public class ByteFill {
     }
 
     public static byte[][][] fill3D(ByteFill.Fill2D fill, int width, int height) {
-        return fill3D(fill, width, height, 1);
+        return fill(fill, width, height, 1);
     }
 
-    public static byte[][][] fill3D(ByteFill.Fill2D fill, int width, int height, int depth) {
-        return fill3D(fill2D(fill, width, height), depth);
+    public static byte[][][] fill(ByteFill.Fill2D fill, int width, int height, int depth) {
+        return fill(fill(fill, width, height), depth);
     }
 
     public static byte[][] pixmap2D(Pixmap pixmap, PaletteReducer reducer) {
-        return fill2D(pixmap(pixmap, reducer), pixmap.getWidth(), pixmap.getHeight());
+        return fill(pixmap(pixmap, reducer), pixmap.getWidth(), pixmap.getHeight());
     }
 
     public static byte[][][] pixmap3D(Pixmap pixmap, PaletteReducer reducer) {
@@ -220,29 +206,124 @@ public class ByteFill {
     }
 
     public static byte[][][] pixmap3D(Pixmap pixmap, PaletteReducer reducer, int depth) {
-        return fill3D(pixmap2D(pixmap, reducer), depth);
+        return fill(pixmap2D(pixmap, reducer), depth);
     }
 
     public static byte[][][] fill3D(byte[][] bytes) {
-        return fill3D(bytes, 1);
+        return fill(bytes, 1);
     }
 
-    public static byte[][] fill2D(byte[] bytes, int height) {
+    public static byte[][] fill(byte[] bytes, int height) {
         byte[][] result = new byte[height][bytes.length];
-        Arrays.fill(result, bytes);
+        for (int x = 0; x < bytes.length; x++) {
+            System.arraycopy(bytes, 0, result[x], 0, bytes.length);
+        }
         return result;
     }
 
-    public static byte[][][] fill3D(byte[][] bytes, int depth) {
+    /**
+     * Copies the given 2D array of voxel bytes into each depth-slice of a new 3D array.
+     * <br>
+     * Note, MagicaVoxel uses an unusual convention where x is forward/back, y is left/right, and z is up/down.
+     * @param bytes a 2D array of bytes representing voxel palette indices
+     * @param depth the depth to copy the bytes
+     * @return a new 3D array containing copies of bytes, depth-thick
+     */
+    public static byte[][][] fill(byte[][] bytes, int depth) {
         byte[][][] voxels = new byte[depth][bytes.length][bytes[0].length];
-        Arrays.fill(voxels, bytes);
+        for (int x = 0; x < depth; x++) {
+            for (int y = 0; y < bytes.length; y++) {
+                System.arraycopy(bytes[y], 0, voxels[x][y], 0, bytes[y].length);
+            }
+        }
         return voxels;
+    }
+
+    public static byte[] fill(byte[] pixels, Fill fill) {
+        for (int x = 0; x < pixels.length; x++) {
+            byte pixel = fill.fill(x);
+            if (pixel != (byte) 0) pixels[x] = pixel;
+        }
+        return pixels;
+    }
+
+    public static byte[][] fill(byte[][] pixels, Fill2D fill) {
+        for (int x = 0; x < pixels.length; x++)
+            for (int y = 0; y < pixels[0].length; y++) {
+                byte pixel = fill.fill(x, y);
+                if (pixel != (byte) 0) pixels[x][y] = pixel;
+            }
+        return pixels;
+    }
+
+    public static byte[][][] fill(byte[][][] voxels, Fill3D fill) {
+        for (int x = 0; x < voxels.length; x++)
+            for (int y = 0; y < voxels[0].length; y++)
+                for (int z = 0; z < voxels[0][0].length; z++) {
+                    byte voxel = fill.fill(x, y, z);
+                    if (voxel != (byte) 0) voxels[x][y][z] = voxel;
+                }
+        return voxels;
+    }
+
+    public static Fill3D wireframeBox(final int width, final int height, final int depth, final Fill3D fill) {
+        return wireframeBox(width, height, depth, fill, fill3D((byte) 0));
+    }
+
+    public static Fill3D wireframeBox(final int width, final int height, final int depth, final Fill3D fillYes, final Fill3D fillNo) {
+        return new Fill3D() {
+            @Override
+            public byte fill(int x, int y, int z) {
+                boolean x0 = x == 0, x1 = x == width - 1, x2 = x0 || x1,
+                        y0 = y == 0, y1 = y == height - 1, y2 = y0 || y1,
+                        z0 = z == 0, z1 = z == depth - 1, z2 = z0 || z1;
+                if ((x2 && y2) || (x2 && z2) || (y2 && z2))
+                    return fillYes.fill(x, y, z);
+                else
+                    return fillNo.fill(x, y, z);
+            }
+        };
+    }
+
+    public static Fill3D wireframeBox(final byte[][][] model, final Fill3D fillYes, final Fill3D fillNo) {
+        return wireframeBox(model.length, model[0].length, model[0][0].length, fillYes, fillNo);
+    }
+
+    public static Fill3D wireframeBox(final byte[][][] model, final Fill3D fill) {
+        return wireframeBox(model, fill, fill3D((byte) 0));
+    }
+
+    public static Fill offset(final Fill fill, final int xOffset) {
+        return new Fill() {
+            @Override
+            public byte fill(int x) {
+                return fill.fill(x + xOffset);
+            }
+        };
+    }
+
+    public static Fill2D offset(final Fill2D fill, final int xOffset, final int yOffset) {
+        return new Fill2D() {
+            @Override
+            public byte fill(int x, int y) {
+                return fill.fill(x + xOffset, y + yOffset);
+            }
+        };
+    }
+
+    public static Fill3D offset(final Fill3D fill, final int xOffset, final int yOffset, final int zOffset) {
+        return new Fill3D() {
+            @Override
+            public byte fill(int x, int y, int z) {
+                return fill.fill(x + xOffset, y + yOffset, z + zOffset);
+            }
+        };
     }
 
     /**
      * @return if preferred is zero then return backup, else return preferred
      */
-    public static Fill3D fill3D(final Fill3D preferred, final Fill3D backup) {
+    public static Fill3D fill(final Fill3D preferred, final Fill3D backup) {
         return new Fill3D() {
             @Override
             public byte fill(int x, int y, int z) {
@@ -255,7 +336,7 @@ public class ByteFill {
     /**
      * @return if preferred is zero then return backup, else return preferred
      */
-    public static Fill2D fill2D(final Fill2D preferred, final Fill2D backup) {
+    public static Fill2D fill(final Fill2D preferred, final Fill2D backup) {
         return new Fill2D() {
             @Override
             public byte fill(int x, int y) {
@@ -293,6 +374,18 @@ public class ByteFill {
     /**
      * @return color
      */
+    public static Fill2D fill2D(final byte color) {
+        return new Fill2D() {
+            @Override
+            public byte fill(int x, int y) {
+                return color;
+            }
+        };
+    }
+
+    /**
+     * @return color
+     */
     public static Fill3D fill3D(final byte color) {
         return new Fill3D() {
             @Override
@@ -303,9 +396,9 @@ public class ByteFill {
     }
 
     /**
-     * @return color
+     * @return deterministic random noise
      */
-    public static Fill3D fill3D(final long seed, final byte... colors) {
+    public static Fill3D noise3D(final long seed, final byte... colors) {
         return new Fill3D() {
             @Override
             public byte fill(int x, int y, int z) {
@@ -314,7 +407,7 @@ public class ByteFill {
         };
     }
 
-    public static byte[][][] fill3D(Fill3D fill, int width, int height, int depth) {
+    public static byte[][][] fill(Fill3D fill, int width, int height, int depth) {
         byte[][][] result = new byte[width][height][depth];
         for (int x = 0; x < width; x++)
             for (int y = 0; y < height; y++)
