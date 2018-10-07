@@ -407,7 +407,14 @@ public class TestDisplay extends ApplicationAdapter {
                 FakeLanguageGen.SIMPLISH.word(mm.rng.nextLong(), true),
                 ByteFill.fill2D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8))
                 ),
-                2
+                8
+        );
+        voxels = ByteFill.fill3D(
+                voxels,
+                ByteFill.wireframeBox(
+                        voxels,
+                        ByteFill.fill3D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8))
+                )
         );
 
         if (animatedVoxels == null)

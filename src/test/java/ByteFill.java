@@ -239,6 +239,50 @@ public class ByteFill {
         return voxels;
     }
 
+    public static byte[][] fill2D(byte[][] pixels, Fill2D fill) {
+        for (int x = 0; x < pixels.length; x++)
+            for (int y = 0; y < pixels[0].length; y++) {
+                byte pixel = fill.fill(x, y);
+                if (pixel != (byte) 0) pixels[x][y] = pixel;
+            }
+        return pixels;
+    }
+
+    public static byte[][][] fill3D(byte[][][] voxels, Fill3D fill) {
+        for (int x = 0; x < voxels.length; x++)
+            for (int y = 0; y < voxels[0].length; y++)
+                for (int z = 0; z < voxels[0][0].length; z++) {
+                    byte voxel = fill.fill(x, y, z);
+                    if (voxel != (byte) 0) voxels[x][y][z] = voxel;
+                }
+        return voxels;
+    }
+
+    public static Fill3D wireframeBox(final int width, final int height, final int depth, final Fill3D fill) {
+        return wireframeBox(width, height, depth, fill, fill3D((byte) 0));
+    }
+
+    public static Fill3D wireframeBox(final int width, final int height, final int depth, final Fill3D fillYes, final Fill3D fillNo) {
+        return new Fill3D() {
+            @Override
+            public byte fill(int x, int y, int z) {
+                boolean x0 = x == 0, x1 = x == width-1, x2 = x0 || x1, y0 = y == 0, y1 = y == height-1, y2 = y0 || y1, z0 = z == 0, z1 = z == depth-1, z2 = z0 || z1;
+                if (x2 && y2 && z2)
+                    return fillYes.fill(x, y, z);
+                else
+                    return fillNo.fill(x, y, z);
+            }
+        };
+    }
+
+    public static Fill3D wireframeBox(final byte[][][] model, final Fill3D fillYes, final Fill3D fillNo) {
+        return wireframeBox(model.length, model[0].length, model[0][0].length, fillYes, fillNo);
+    }
+
+    public static Fill3D wireframeBox(final byte[][][] model, final Fill3D fill) {
+        return wireframeBox(model, fill, fill3D((byte) 0));
+    }
+
     /**
      * @return if preferred is zero then return backup, else return preferred
      */
