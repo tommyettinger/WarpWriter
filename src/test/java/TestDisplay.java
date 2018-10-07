@@ -416,6 +416,7 @@ public class TestDisplay extends ApplicationAdapter {
                         ByteFill.fill3D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8))
                 )
         );
+        ByteFill.fill(voxels, ByteFill.wireframeBox(voxels, ByteFill.fill3D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8))));
 
         if (animatedVoxels == null)
             animatedVoxels = new byte[frames][][][];
