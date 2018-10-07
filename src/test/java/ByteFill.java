@@ -239,6 +239,14 @@ public class ByteFill {
         return voxels;
     }
 
+    public static byte[] fill(byte[] pixels, Fill fill) {
+        for (int x = 0; x < pixels.length; x++) {
+            byte pixel = fill.fill(x);
+            if (pixel != (byte) 0) pixels[x] = pixel;
+        }
+        return pixels;
+    }
+
     public static byte[][] fill2D(byte[][] pixels, Fill2D fill) {
         for (int x = 0; x < pixels.length; x++)
             for (int y = 0; y < pixels[0].length; y++) {
@@ -266,7 +274,7 @@ public class ByteFill {
         return new Fill3D() {
             @Override
             public byte fill(int x, int y, int z) {
-                boolean x0 = x == 0, x1 = x == width-1, x2 = x0 || x1, y0 = y == 0, y1 = y == height-1, y2 = y0 || y1, z0 = z == 0, z1 = z == depth-1, z2 = z0 || z1;
+                boolean x0 = x == 0, x1 = x == width - 1, x2 = x0 || x1, y0 = y == 0, y1 = y == height - 1, y2 = y0 || y1, z0 = z == 0, z1 = z == depth - 1, z2 = z0 || z1;
                 if (x2 && y2 && z2)
                     return fillYes.fill(x, y, z);
                 else
