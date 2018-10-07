@@ -7,6 +7,89 @@ import java.util.Arrays;
  * @author Ben McLean
  */
 public class ByteFill {
+    public interface Fill {
+        byte fill(int x);
+    }
+
+    public interface Fill2D {
+        byte fill(int x, int y);
+    }
+
+    public interface Fill3D {
+        byte fill(int x, int y, int z);
+    }
+
+    public static byte[][] fill(ByteFill.Fill2D fill, int width, int height) {
+        byte[][] result = new byte[width][height];
+        for (int x = 0; x < width; x++)
+            for (int y = 0; y < height; y++)
+                result[x][y] = fill.fill(x, y);
+        return result;
+    }
+
+    public static byte[][][] fill3D(ByteFill.Fill2D fill, int width, int height) {
+        return fill(fill, width, height, 1);
+    }
+
+    public static byte[][][] fill(ByteFill.Fill2D fill, int width, int height, int depth) {
+        return fill(fill(fill, width, height), depth);
+    }
+
+    public static byte[][] pixmap2D(Pixmap pixmap, PaletteReducer reducer) {
+        return fill(pixmap(pixmap, reducer), pixmap.getWidth(), pixmap.getHeight());
+    }
+
+    public static byte[][][] pixmap3D(Pixmap pixmap, PaletteReducer reducer) {
+        return pixmap3D(pixmap, reducer, 1);
+    }
+
+    public static byte[][][] pixmap3D(Pixmap pixmap, PaletteReducer reducer, int depth) {
+        return fill(pixmap2D(pixmap, reducer), depth);
+    }
+
+    public static byte[][][] fill3D(byte[][] bytes) {
+        return fill(bytes, 1);
+    }
+
+    public static byte[][] fill(byte[] bytes, int height) {
+        byte[][] result = new byte[height][bytes.length];
+        Arrays.fill(result, bytes);
+        return result;
+    }
+
+    public static byte[][][] fill(byte[][] bytes, int depth) {
+        byte[][][] voxels = new byte[depth][bytes.length][bytes[0].length];
+        Arrays.fill(voxels, bytes);
+        return voxels;
+    }
+
+    public static byte[] fill(byte[] pixels, Fill fill) {
+        for (int x = 0; x < pixels.length; x++) {
+            byte pixel = fill.fill(x);
+            if (pixel != (byte) 0) pixels[x] = pixel;
+        }
+        return pixels;
+    }
+
+    public static byte[][] fill(byte[][] pixels, Fill2D fill) {
+        for (int x = 0; x < pixels.length; x++)
+            for (int y = 0; y < pixels[0].length; y++) {
+                byte pixel = fill.fill(x, y);
+                if (pixel != (byte) 0) pixels[x][y] = pixel;
+            }
+        return pixels;
+    }
+
+    public static byte[][][] fill(byte[][][] voxels, Fill3D fill) {
+        for (int x = 0; x < voxels.length; x++)
+            for (int y = 0; y < voxels[0].length; y++)
+                for (int z = 0; z < voxels[0][0].length; z++) {
+                    byte voxel = fill.fill(x, y, z);
+                    if (voxel != (byte) 0) voxels[x][y][z] = voxel;
+                }
+        return voxels;
+    }
+
     /**
      * @return nearest color in the PaletteReducer to the color from the pixmap
      */
@@ -81,6 +164,105 @@ public class ByteFill {
         };
     }
 
+    public static Fill mod(final Fill fill, final int divisor){
+        return new Fill() {
+            @Override
+            public byte fill(int x) {
+                return fill.fill(x % divisor);
+            }
+        };
+    }
+
+    public static Fill2D mod(final Fill2D fill, final int divisorX, final int divisorY){
+        return new Fill2D() {
+            @Override
+            public byte fill(int x, int y) {
+                return fill.fill(x % divisorX, y % divisorY);
+            }
+        };
+    }
+
+    public static Fill2D mod(final Fill2D fill, final int divisorY){
+        return new Fill2D() {
+            @Override
+            public byte fill(int x, int y) {
+                return fill.fill(x, y % divisorY);
+            }
+        };
+    }
+
+    public static Fill2D mod(final int divisorX, final Fill2D fill){
+        return new Fill2D() {
+            @Override
+            public byte fill(int x, int y) {
+                return fill.fill(x % divisorX, y);
+            }
+        };
+    }
+
+    public static Fill3D mod(final Fill3D fill, final int divisorX, final int divisorY, final int divisorZ){
+        return new Fill3D() {
+            @Override
+            public byte fill(int x, int y, int z) {
+                return fill.fill(x % divisorX, y % divisorY, z % divisorZ);
+            }
+        };
+    }
+
+    public static Fill3D mod(final int divisorX, final int divisorY, final Fill3D fill){
+        return new Fill3D() {
+            @Override
+            public byte fill(int x, int y, int z) {
+                return fill.fill(x % divisorX, y % divisorY, z);
+            }
+        };
+    }
+
+    public static Fill3D mod(final int divisorX, final Fill3D fill, final int divisorZ){
+        return new Fill3D() {
+            @Override
+            public byte fill(int x, int y, int z) {
+                return fill.fill(x % divisorX, y, z % divisorZ);
+            }
+        };
+    }
+
+    public static Fill3D mod(final Fill3D fill, final int divisorY, final int divisorZ){
+        return new Fill3D() {
+            @Override
+            public byte fill(int x, int y, int z) {
+                return fill.fill(x, y % divisorY, z % divisorZ);
+            }
+        };
+    }
+
+    public static Fill3D mod(final int divisorX, final Fill3D fill){
+        return new Fill3D() {
+            @Override
+            public byte fill(int x, int y, int z) {
+                return fill.fill(x % divisorX, y, z);
+            }
+        };
+    }
+
+    public static Fill3D mod(final Fill3D fill, final int divisorY){
+        return new Fill3D() {
+            @Override
+            public byte fill(int x, int y, int z) {
+                return fill.fill(x, y % divisorY, z);
+            }
+        };
+    }
+
+    public static Fill3D modZ(final Fill3D fill, final int divisorZ){
+        return new Fill3D() {
+            @Override
+            public byte fill(int x, int y, int z) {
+                return fill.fill(x, y, z % divisorZ);
+            }
+        };
+    }
+    
     /**
      * @param y will be treated as x
      */
@@ -181,77 +363,6 @@ public class ByteFill {
                 return pixmap.getPixel(x, y) == color ? yesFill.fill(x, y) : noFill.fill(x, y);
             }
         };
-    }
-
-    public static byte[][] fill(ByteFill.Fill2D fill, int width, int height) {
-        byte[][] result = new byte[width][height];
-        for (int x = 0; x < width; x++)
-            for (int y = 0; y < height; y++)
-                result[x][y] = fill.fill(x, y);
-        return result;
-    }
-
-    public static byte[][][] fill3D(ByteFill.Fill2D fill, int width, int height) {
-        return fill(fill, width, height, 1);
-    }
-
-    public static byte[][][] fill(ByteFill.Fill2D fill, int width, int height, int depth) {
-        return fill(fill(fill, width, height), depth);
-    }
-
-    public static byte[][] pixmap2D(Pixmap pixmap, PaletteReducer reducer) {
-        return fill(pixmap(pixmap, reducer), pixmap.getWidth(), pixmap.getHeight());
-    }
-
-    public static byte[][][] pixmap3D(Pixmap pixmap, PaletteReducer reducer) {
-        return pixmap3D(pixmap, reducer, 1);
-    }
-
-    public static byte[][][] pixmap3D(Pixmap pixmap, PaletteReducer reducer, int depth) {
-        return fill(pixmap2D(pixmap, reducer), depth);
-    }
-
-    public static byte[][][] fill3D(byte[][] bytes) {
-        return fill(bytes, 1);
-    }
-
-    public static byte[][] fill(byte[] bytes, int height) {
-        byte[][] result = new byte[height][bytes.length];
-        Arrays.fill(result, bytes);
-        return result;
-    }
-
-    public static byte[][][] fill(byte[][] bytes, int depth) {
-        byte[][][] voxels = new byte[depth][bytes.length][bytes[0].length];
-        Arrays.fill(voxels, bytes);
-        return voxels;
-    }
-
-    public static byte[] fill(byte[] pixels, Fill fill) {
-        for (int x = 0; x < pixels.length; x++) {
-            byte pixel = fill.fill(x);
-            if (pixel != (byte) 0) pixels[x] = pixel;
-        }
-        return pixels;
-    }
-
-    public static byte[][] fill(byte[][] pixels, Fill2D fill) {
-        for (int x = 0; x < pixels.length; x++)
-            for (int y = 0; y < pixels[0].length; y++) {
-                byte pixel = fill.fill(x, y);
-                if (pixel != (byte) 0) pixels[x][y] = pixel;
-            }
-        return pixels;
-    }
-
-    public static byte[][][] fill(byte[][][] voxels, Fill3D fill) {
-        for (int x = 0; x < voxels.length; x++)
-            for (int y = 0; y < voxels[0].length; y++)
-                for (int z = 0; z < voxels[0][0].length; z++) {
-                    byte voxel = fill.fill(x, y, z);
-                    if (voxel != (byte) 0) voxels[x][y][z] = voxel;
-                }
-        return voxels;
     }
 
     public static Fill3D wireframeBox(final int width, final int height, final int depth, final Fill3D fill) {
@@ -400,17 +511,5 @@ public class ByteFill {
                 for (int z = 0; z < depth; z++)
                     result[x][y][z] = fill.fill(x, y, z);
         return result;
-    }
-
-    public interface Fill3D {
-        byte fill(int x, int y, int z);
-    }
-
-    public interface Fill2D {
-        byte fill(int x, int y);
-    }
-
-    public interface Fill {
-        byte fill(int x);
     }
 }
