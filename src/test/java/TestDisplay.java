@@ -407,7 +407,7 @@ public class TestDisplay extends ApplicationAdapter {
                 ByteFill.fill((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
                 ByteFill.fill((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8))
         };
-        ByteFill.Fill2D stripes = ByteFill.fill(ByteFill.stripes(new int[] {2, 2}, randomFills));
+        ByteFill.Fill2D stripes = ByteFill.fill(ByteFill.stripes(new int[] {5, 5}, randomFills));
 
         voxels = ByteFill.fill(voxelText.text2D(
                 font,
@@ -417,7 +417,6 @@ public class TestDisplay extends ApplicationAdapter {
                 8
         );
         //ByteFill.fill(voxels, ByteFill.wireframeBox(voxels, ByteFill.fill3D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8))));
-
 
         if (animatedVoxels == null)
             animatedVoxels = new byte[frames][][][];
