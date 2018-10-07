@@ -5,6 +5,18 @@ import warpwriter.ModelMaker;
  * @author Ben McLean
  */
 public class ByteFill {
+    public interface Fill {
+        byte fill(int x);
+    }
+
+    public interface Fill2D {
+        byte fill(int x, int y);
+    }
+
+    public interface Fill3D {
+        byte fill(int x, int y, int z);
+    }
+
     /**
      * @return nearest color in the PaletteReducer to the color from the pixmap
      */
@@ -324,6 +336,7 @@ public class ByteFill {
      * Copies the given 2D array of voxel bytes into each depth-slice of a new 3D array.
      * <br>
      * Note, MagicaVoxel uses an unusual convention where x is forward/back, y is left/right, and z is up/down.
+     *
      * @param bytes a 2D array of bytes representing voxel palette indices
      * @param depth the depth to copy the bytes
      * @return a new 3D array containing copies of bytes, depth-thick
@@ -515,15 +528,28 @@ public class ByteFill {
         return result;
     }
 
-    public interface Fill3D {
-        byte fill(int x, int y, int z);
-    }
+    public static Fill stripes(final int[] stripes, final Fill[] fills) {
+        return new Fill() {
+            public int repeat = repeat();
 
-    public interface Fill2D {
-        byte fill(int x, int y);
-    }
+            public int repeat() {
+                int repeat=0;
+                for (int stripe : stripes)
+                    repeat += stripe;
+                return repeat;
+            }
 
-    public interface Fill {
-        byte fill(int x);
+            @Override
+            public byte fill(int x) {
+                x = x % repeat;
+                int step = 0;
+                for (int i = 0; i < stripes.length; i++)
+                    if (step > x)
+                        return fills[i].fill(x);
+                    else
+                        step += stripes[i];
+                return fills[fills.length - 1].fill(x);
+            }
+        };
     }
 }
