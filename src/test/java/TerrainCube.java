@@ -17,7 +17,7 @@ public class TerrainCube {
     }
 
     public static byte[][][] terrainCube(int size, int heightNE, int heightSE, int heightSW, int heightNW, int heightCenter, ByteFill.Fill3D fillNorth, ByteFill.Fill3D fillEast, ByteFill.Fill3D fillSouth, ByteFill.Fill3D fillWest) {
-        byte[][][] voxels = new byte[size][size][size];
+        byte[][][] voxels = new byte[size][size][largest(heightNE, heightSE, heightSW, heightNW, heightCenter)];
         int center = size / 2;
         fillBeneathTriangle(voxels, 0, 0, heightSW, size, 0, heightSE, center, center, heightCenter, fillSouth);
         fillBeneathTriangle(voxels, center, center, heightCenter, size, 0, heightSE, size, size, heightNE, fillEast);
@@ -45,6 +45,16 @@ public class TerrainCube {
 
     public static int smallest(int x1, int x2, int x3) {
         return x1 < x2 ? x1 < x3 ? x1 : x3 : x2 < x3 ? x2 : x3;
+    }
+
+    public static int largest(int x1, int x2, int x3, int x4) {
+        int largest = largest(x1, x2, x3);
+        return largest > x4 ? largest : x4;
+    }
+
+    public static int largest(int x1, int x2, int x3, int x4, int x5) {
+        int largest = largest(x1, x2, x3, x4);
+        return largest > x5 ? largest : x5;
     }
 
     /**
