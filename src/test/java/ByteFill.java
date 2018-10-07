@@ -1,8 +1,6 @@
 import com.badlogic.gdx.graphics.Pixmap;
 import warpwriter.ModelMaker;
 
-import java.util.Arrays;
-
 /**
  * @author Ben McLean
  */
@@ -51,15 +49,17 @@ public class ByteFill {
         return fill(bytes, 1);
     }
 
-    public static byte[][] fill(byte[] bytes, int height) {
-        byte[][] result = new byte[height][bytes.length];
-        Arrays.fill(result, bytes);
-        return result;
+    public static byte[][] fill(byte[] bytes, int width) {
+        byte[][] pixels = new byte[width][bytes.length];
+        for (int x = 0; x < width; x++)
+            System.arraycopy(bytes, 0, pixels[x], 0, bytes.length);
+        return pixels;
     }
 
-    public static byte[][][] fill(byte[][] bytes, int depth) {
-        byte[][][] voxels = new byte[depth][bytes.length][bytes[0].length];
-        Arrays.fill(voxels, bytes);
+    public static byte[][][] fill(byte[][] bytes, int width) {
+        byte[][][] voxels = new byte[width][bytes.length][bytes[0].length];
+        for (int x = 0; x < width; x++)
+            System.arraycopy(bytes, 0, voxels[x], 0, bytes.length);
         return voxels;
     }
 
@@ -164,7 +164,7 @@ public class ByteFill {
         };
     }
 
-    public static Fill mod(final Fill fill, final int divisor){
+    public static Fill mod(final Fill fill, final int divisor) {
         return new Fill() {
             @Override
             public byte fill(int x) {
@@ -173,7 +173,7 @@ public class ByteFill {
         };
     }
 
-    public static Fill2D mod(final Fill2D fill, final int divisorX, final int divisorY){
+    public static Fill2D mod(final Fill2D fill, final int divisorX, final int divisorY) {
         return new Fill2D() {
             @Override
             public byte fill(int x, int y) {
@@ -182,7 +182,7 @@ public class ByteFill {
         };
     }
 
-    public static Fill2D mod(final Fill2D fill, final int divisorY){
+    public static Fill2D mod(final Fill2D fill, final int divisorY) {
         return new Fill2D() {
             @Override
             public byte fill(int x, int y) {
@@ -191,7 +191,7 @@ public class ByteFill {
         };
     }
 
-    public static Fill2D mod(final int divisorX, final Fill2D fill){
+    public static Fill2D mod(final int divisorX, final Fill2D fill) {
         return new Fill2D() {
             @Override
             public byte fill(int x, int y) {
@@ -200,7 +200,7 @@ public class ByteFill {
         };
     }
 
-    public static Fill3D mod(final Fill3D fill, final int divisorX, final int divisorY, final int divisorZ){
+    public static Fill3D mod(final Fill3D fill, final int divisorX, final int divisorY, final int divisorZ) {
         return new Fill3D() {
             @Override
             public byte fill(int x, int y, int z) {
@@ -209,7 +209,7 @@ public class ByteFill {
         };
     }
 
-    public static Fill3D mod(final int divisorX, final int divisorY, final Fill3D fill){
+    public static Fill3D mod(final int divisorX, final int divisorY, final Fill3D fill) {
         return new Fill3D() {
             @Override
             public byte fill(int x, int y, int z) {
@@ -218,7 +218,7 @@ public class ByteFill {
         };
     }
 
-    public static Fill3D mod(final int divisorX, final Fill3D fill, final int divisorZ){
+    public static Fill3D mod(final int divisorX, final Fill3D fill, final int divisorZ) {
         return new Fill3D() {
             @Override
             public byte fill(int x, int y, int z) {
@@ -227,7 +227,7 @@ public class ByteFill {
         };
     }
 
-    public static Fill3D mod(final Fill3D fill, final int divisorY, final int divisorZ){
+    public static Fill3D mod(final Fill3D fill, final int divisorY, final int divisorZ) {
         return new Fill3D() {
             @Override
             public byte fill(int x, int y, int z) {
@@ -236,7 +236,7 @@ public class ByteFill {
         };
     }
 
-    public static Fill3D mod(final int divisorX, final Fill3D fill){
+    public static Fill3D mod(final int divisorX, final Fill3D fill) {
         return new Fill3D() {
             @Override
             public byte fill(int x, int y, int z) {
@@ -245,7 +245,7 @@ public class ByteFill {
         };
     }
 
-    public static Fill3D mod(final Fill3D fill, final int divisorY){
+    public static Fill3D mod(final Fill3D fill, final int divisorY) {
         return new Fill3D() {
             @Override
             public byte fill(int x, int y, int z) {
@@ -254,7 +254,7 @@ public class ByteFill {
         };
     }
 
-    public static Fill3D modZ(final Fill3D fill, final int divisorZ){
+    public static Fill3D modZ(final Fill3D fill, final int divisorZ) {
         return new Fill3D() {
             @Override
             public byte fill(int x, int y, int z) {
@@ -262,7 +262,7 @@ public class ByteFill {
             }
         };
     }
-    
+
     /**
      * @param y will be treated as x
      */
@@ -373,7 +373,9 @@ public class ByteFill {
         return new Fill3D() {
             @Override
             public byte fill(int x, int y, int z) {
-                boolean x0 = x == 0, x1 = x == width - 1, x2 = x0 || x1, y0 = y == 0, y1 = y == height - 1, y2 = y0 || y1, z0 = z == 0, z1 = z == depth - 1, z2 = z0 || z1;
+                boolean x0 = x == 0, x1 = x == width - 1, x2 = x0 || x1,
+                        y0 = y == 0, y1 = y == height - 1, y2 = y0 || y1,
+                        z0 = z == 0, z1 = z == depth - 1, z2 = z0 || z1;
                 if (x2 && y2 && z2)
                     return fillYes.fill(x, y, z);
                 else
