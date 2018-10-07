@@ -402,14 +402,14 @@ public class TestDisplay extends ApplicationAdapter {
         );
         */
 
-        voxels = ByteFill.fill3D(voxelText.text2D(
+        voxels = ByteFill.fill(voxelText.text2D(
                 font,
                 FakeLanguageGen.SIMPLISH.word(mm.rng.nextLong(), true),
                 ByteFill.fill2D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8))
                 ),
                 8
         );
-        voxels = ByteFill.fill3D(
+        voxels = ByteFill.fill(
                 voxels,
                 ByteFill.wireframeBox(
                         voxels,
