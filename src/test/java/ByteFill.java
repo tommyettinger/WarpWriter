@@ -528,12 +528,16 @@ public class ByteFill {
         return result;
     }
 
+    /**
+     * @param stripes The height of each stripe.
+     * @param fills   What to fill each stripe with. Is expected to be the same size as stripes
+     */
     public static Fill stripes(final int[] stripes, final Fill[] fills) {
         return new Fill() {
-            public int repeat = repeat();
+            int repeat = repeat();
 
-            public int repeat() {
-                int repeat=0;
+            int repeat() {
+                repeat = 0;
                 for (int stripe : stripes)
                     repeat += stripe;
                 return repeat;
@@ -541,13 +545,12 @@ public class ByteFill {
 
             @Override
             public byte fill(int x) {
-                x = x % repeat;
-                int step = 0;
+                int xStep = x % repeat, step = 0;
                 for (int i = 0; i < stripes.length; i++)
-                    if (step > x)
-                        return fills[i].fill(x);
-                    else
+                    if (step < xStep)
                         step += stripes[i];
+                    else
+                        return fills[i].fill(x);
                 return fills[fills.length - 1].fill(x);
             }
         };
