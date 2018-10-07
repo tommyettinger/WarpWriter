@@ -402,21 +402,22 @@ public class TestDisplay extends ApplicationAdapter {
         );
         */
 
+        ByteFill.Fill2D randomColor = ByteFill.fill2D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8));
+        ByteFill.Fill[] randomFills = {
+                ByteFill.fill((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
+                ByteFill.fill((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8))
+        };
+        ByteFill.Fill2D stripes = ByteFill.fill(ByteFill.stripes(new int[] {2, 2}, randomFills));
+
         voxels = ByteFill.fill(voxelText.text2D(
                 font,
                 FakeLanguageGen.SIMPLISH.word(mm.rng.nextLong(), true),
-                ByteFill.fill2D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8))
+                stripes
                 ),
                 8
         );
-        voxels = ByteFill.fill(
-                voxels,
-                ByteFill.wireframeBox(
-                        voxels,
-                        ByteFill.fill3D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8))
-                )
-        );
-        ByteFill.fill(voxels, ByteFill.wireframeBox(voxels, ByteFill.fill3D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8))));
+        //ByteFill.fill(voxels, ByteFill.wireframeBox(voxels, ByteFill.fill3D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8))));
+
 
         if (animatedVoxels == null)
             animatedVoxels = new byte[frames][][][];

@@ -244,7 +244,7 @@ public class ByteFill {
         };
     }
 
-    public static Fill2D Fill2D(final Fill fill) {
+    public static Fill2D fill(final Fill fill) {
         return new Fill2D() {
             @Override
             public byte fill(int x, int y) {
