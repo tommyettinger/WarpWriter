@@ -8,18 +8,6 @@ import java.util.Arrays;
  */
 public class ByteFill {
     /**
-     * @return color
-     */
-    public static Fill2D fill2D(final byte color) {
-        return new Fill2D() {
-            @Override
-            public byte fill(int x, int y) {
-                return color;
-            }
-        };
-    }
-
-    /**
      * @return nearest color in the PaletteReducer to the color from the pixmap
      */
     public static Fill2D pixmap(final Pixmap pixmap, final PaletteReducer reducer) {
@@ -165,7 +153,7 @@ public class ByteFill {
         };
     }
 
-    public static Fill2D Fill2D(final Fill3D fill) {
+    public static Fill2D fill2D(final Fill3D fill) {
         return new Fill2D() {
             @Override
             public byte fill(int x, int y) {
@@ -174,7 +162,7 @@ public class ByteFill {
         };
     }
 
-    public static Fill3D Fill3D(final Fill2D fill) {
+    public static Fill3D fill3D(final Fill2D fill) {
         return new Fill3D() {
             @Override
             public byte fill(int x, int y, int z) {
@@ -291,28 +279,28 @@ public class ByteFill {
         return wireframeBox(model, fill, fill3D((byte) 0));
     }
 
-    public static Fill offset (final Fill fill, final int xOffset) {
+    public static Fill offset(final Fill fill, final int xOffset) {
         return new Fill() {
             @Override
-            public byte fill (int x) {
+            public byte fill(int x) {
                 return fill.fill(x + xOffset);
             }
         };
     }
 
-    public static Fill2D offset (final Fill2D fill, final int xOffset, final int yOffset) {
+    public static Fill2D offset(final Fill2D fill, final int xOffset, final int yOffset) {
         return new Fill2D() {
             @Override
-            public byte fill (int x, int y) {
+            public byte fill(int x, int y) {
                 return fill.fill(x + xOffset, y + yOffset);
             }
         };
     }
 
-    public static Fill3D offset (final Fill3D fill, final int xOffset, final int yOffset, final int zOffset) {
+    public static Fill3D offset(final Fill3D fill, final int xOffset, final int yOffset, final int zOffset) {
         return new Fill3D() {
             @Override
-            public byte fill (int x, int y, int z) {
+            public byte fill(int x, int y, int z) {
                 return fill.fill(x + xOffset, y + yOffset, z + zOffset);
             }
         };
@@ -364,6 +352,18 @@ public class ByteFill {
         return new Fill() {
             @Override
             public byte fill(int x) {
+                return color;
+            }
+        };
+    }
+
+    /**
+     * @return color
+     */
+    public static Fill2D fill2D(final byte color) {
+        return new Fill2D() {
+            @Override
+            public byte fill(int x, int y) {
                 return color;
             }
         };
