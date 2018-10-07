@@ -384,7 +384,7 @@ public class ByteFill {
     /**
      * @return deterministic random noise
      */
-    public static Fill3D fill3D(final long seed, final byte... colors) {
+    public static Fill3D noise3D(final long seed, final byte... colors) {
         return new Fill3D() {
             @Override
             public byte fill(int x, int y, int z) {
