@@ -555,7 +555,8 @@ public class ByteFill {
 
             @Override
             public byte fill(int x) {
-                int xStep = x % repeat, step = 0;
+                int xStep = x < 0 ? repeat - Math.abs(x % repeat) : x % repeat;
+                int step = 0;
                 for (int i = 0; i < stripes.length; i++)
                     if (step <= xStep)
                         step += stripes[i];

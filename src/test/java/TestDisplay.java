@@ -408,8 +408,8 @@ public class TestDisplay extends ApplicationAdapter {
                 ByteFill.fill((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
                 ByteFill.fill((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8))
         };
-        ByteFill.Fill2D stripes = ByteFill.fill(ByteFill.stripes(new int[] {6, 3, 3}, randomFills));
-
+        ByteFill.Fill2D stripes = ByteFill.fill(ByteFill.stripes(new int[] {8, 8, 8}, randomFills));
+        stripes = ByteFill.offset(stripes, -20, 0);
         voxels = ByteFill.fill(voxelText.text2D(
                 font,
                 FakeLanguageGen.SIMPLISH.word(mm.rng.nextLong(), true),
