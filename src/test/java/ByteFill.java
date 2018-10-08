@@ -70,7 +70,7 @@ public class ByteFill {
     /**
      * @return yesFill if transparency is greater than threshold, otherwise noFill
      */
-    public static Fill2D transparent(final Pixmap pixmap, final Fill2D yesFill, final Fill2D noFill, final byte threshold) {
+    public static Fill2D transparent(final Pixmap pixmap, final Fill2D yesFill, final Fill2D noFill, final int threshold) {
         return new Fill2D() {
             @Override
             public byte fill(int x, int y) {
@@ -82,7 +82,7 @@ public class ByteFill {
     /**
      * @return yesFill if transparency is greater than threshold, otherwise noFill
      */
-    public static Fill3D transparent(final Pixmap pixmap, final Fill3D yesFill, final Fill3D noFill, final byte threshold) {
+    public static Fill3D transparent(final Pixmap pixmap, final Fill3D yesFill, final Fill3D noFill, final int threshold) {
         return new Fill3D() {
             @Override
             public byte fill(int x, int y, int z) {
@@ -288,6 +288,51 @@ public class ByteFill {
             @Override
             public byte fill(int x, int y) {
                 return fill.fill(y, x);
+            }
+        };
+    }
+
+    public static Fill3D fillXZY(final Fill3D fill) {
+        return new Fill3D() {
+            @Override
+            public byte fill(int x, int y, int z) {
+                return fill.fill(x, z, y);
+            }
+        };
+    }
+
+    public static Fill3D fillYXZ(final Fill3D fill) {
+        return new Fill3D() {
+            @Override
+            public byte fill(int x, int y, int z) {
+                return fill.fill(y, x, z);
+            }
+        };
+    }
+
+    public static Fill3D fillYZX(final Fill3D fill) {
+        return new Fill3D() {
+            @Override
+            public byte fill(int x, int y, int z) {
+                return fill.fill(y, z, x);
+            }
+        };
+    }
+
+    public static Fill3D fillZXY(final Fill3D fill) {
+        return new Fill3D() {
+            @Override
+            public byte fill(int x, int y, int z) {
+                return fill.fill(z, x, y);
+            }
+        };
+    }
+
+    public static Fill3D fillZYZ(final Fill3D fill) {
+        return new Fill3D() {
+            @Override
+            public byte fill(int x, int y, int z) {
+                return fill.fill(z, y, z);
             }
         };
     }
@@ -648,5 +693,53 @@ public class ByteFill {
                 fillY(stripes(y, new Fill2D[]{white, black})),
                 fillY(stripes(y, new Fill2D[]{black, white}))
         });
+    }
+
+    /**
+     * @param x Two positive width values for columns
+     * @param y Two positive height values for rows
+     */
+    public static Fill3D checkers(Fill3D white, Fill3D black, int[] x, int[] y) {
+        return checkers(new Fill3D[]{white, black}, new Fill3D[]{black, white}, x, y);
+    }
+
+    /**
+     * @param x Two positive width values for columns
+     * @param y Two positive height values for rows
+     */
+    public static Fill3D checkers(Fill3D[] a, Fill3D[] b, int[] x, int[] y) {
+        return stripes(x, new Fill3D[]{
+                fillYXZ(stripes(y, a)),
+                fillYXZ(stripes(y, b))
+        });
+    }
+
+    public static Fill3D checkers(Fill3D white, Fill3D black, int size) {
+        return checkers(white, black, size, size, size);
+    }
+
+    public static Fill3D checkers(Fill3D white, Fill3D black, int x, int y, int z) {
+        return checkers(white, black, x, x, y, y, z, z);
+    }
+
+    public static Fill3D checkers(Fill3D white, Fill3D black, int x1, int x2, int y1, int y2, int z1, int z2) {
+        return checkers(white, black, new int[]{x1, x2}, new int[]{y1, y2}, new int[]{z1, z2});
+    }
+
+    /**
+     * @param x Two positive width values for columns
+     * @param y Two positive height values for rows
+     * @param z Two positive depth values for layers
+     */
+    public static Fill3D checkers(Fill3D white, Fill3D black, int[] x, int[] y, int[] z) {
+        Fill3D[] a = new Fill3D[]{white, black};
+        Fill3D[] b = new Fill3D[]{black, white};
+        return stripes(
+                x,
+                new Fill3D[]{
+                        fillYXZ(checkers(a, b, y, z)),
+                        fillYXZ(checkers(b, a, y, z))
+                }
+        );
     }
 }

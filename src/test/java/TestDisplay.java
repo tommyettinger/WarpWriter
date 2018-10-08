@@ -392,16 +392,6 @@ public class TestDisplay extends ApplicationAdapter {
             //font = new BitmapFont(Gdx.files.internal("tiny.fnt"));
         }
 
-        /*
-        // Text3D is sideways!
-        voxels = voxelText.text3D(
-                font,
-                FakeLanguageGen.SIMPLISH.word(mm.rng.nextLong(), true),
-                ByteFill.fill2D((byte)(mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
-                2
-        );
-        */
-
         //ByteFill.Fill2D randomColor = ByteFill.fill2D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8));
         /*
         ByteFill.Fill[] randomFills = {
@@ -413,20 +403,27 @@ public class TestDisplay extends ApplicationAdapter {
         stripes = ByteFill.offset(stripes, -20, 0);
         */
 
-        ByteFill.Fill2D checkers = ByteFill.checkers(
-                ByteFill.fill2D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
-                ByteFill.fill2D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
-        4);
-        voxels = ByteFill.fill(voxelText.text2D(
+        /*ByteFill.Fill3D checkers = ByteFill.checkers(
+                ByteFill.fill3D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
+                ByteFill.fill3D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
+        4);*/
+        /*voxels = ByteFill.fill(voxelText.text2D(
                 font,
                 FakeLanguageGen.SIMPLISH.word(mm.rng.nextLong(), true),
                 checkers
                 ),
                 8
-        );
+        );*/
         //ByteFill.fill(voxels, ByteFill.wireframeBox(voxels, ByteFill.fill3D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8))));
 
-        ByteFill.fill(voxels, ByteFill.wireframeBox(voxels, ByteFill.fill3D(ByteFill.fillY(checkers))));
+        voxels = voxelText.text3D(
+                font,
+                FakeLanguageGen.SIMPLISH.word(mm.rng.nextLong(), true),
+                ByteFill.fill3D((byte)(mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
+                2
+        );
+
+        //ByteFill.fill(voxels, ByteFill.wireframeBox(voxels, ByteFill.fill3D(ByteFill.fillY(checkers))));
 
         if (animatedVoxels == null)
             animatedVoxels = new byte[frames][][][];
