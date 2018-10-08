@@ -280,6 +280,16 @@ public class ByteFill {
         };
     }
 
+    /** @return x and y are reversed */
+    public static Fill2D fillY(final Fill2D fill) {
+        return new Fill2D() {
+            @Override
+            public byte fill(int x, int y) {
+                return fill.fill(y, x);
+            }
+        };
+    }
+
     /**
      * @return yesFill if pixel from pixmap matches color, otherwise noFill
      */
@@ -551,7 +561,7 @@ public class ByteFill {
                         step += stripes[i];
                     else
                         return fills[i].fill(x);
-                return fills[fills.length - 1].fill(x);
+                return fills[0].fill(x);
             }
         };
     }
