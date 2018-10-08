@@ -328,11 +328,11 @@ public class ByteFill {
         };
     }
 
-    public static Fill3D fillZYZ(final Fill3D fill) {
+    public static Fill3D fillZYX(final Fill3D fill) {
         return new Fill3D() {
             @Override
             public byte fill(int x, int y, int z) {
-                return fill.fill(z, y, z);
+                return fill.fill(z, y, x);
             }
         };
     }
