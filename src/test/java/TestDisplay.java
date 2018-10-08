@@ -402,7 +402,7 @@ public class TestDisplay extends ApplicationAdapter {
         );
         */
 
-        ByteFill.Fill2D randomColor = ByteFill.fill2D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8));
+        //ByteFill.Fill2D randomColor = ByteFill.fill2D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8));
         ByteFill.Fill[] randomFills = {
                 ByteFill.fill((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
                 ByteFill.fill((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
