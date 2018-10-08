@@ -280,7 +280,9 @@ public class ByteFill {
         };
     }
 
-    /** @return x and y are reversed */
+    /**
+     * @return x and y are reversed
+     */
     public static Fill2D fillY(final Fill2D fill) {
         return new Fill2D() {
             @Override
@@ -569,7 +571,7 @@ public class ByteFill {
 
     /**
      * @param stripes The height of each stripe. All should be positive
-     * @param fills What to fill each stripe with. Is expected to be the same size as stripes
+     * @param fills   What to fill each stripe with. Is expected to be the same size as stripes
      */
     public static Fill2D stripes(final int[] stripes, final Fill2D[] fills) {
         return new Fill2D() {
@@ -598,7 +600,7 @@ public class ByteFill {
 
     /**
      * @param stripes The height of each stripe. All should be positive
-     * @param fills What to fill each stripe with. Is expected to be the same size as stripes
+     * @param fills   What to fill each stripe with. Is expected to be the same size as stripes
      */
     public static Fill3D stripes(final int[] stripes, final Fill3D[] fills) {
         return new Fill3D() {
@@ -623,5 +625,28 @@ public class ByteFill {
                 return fills[0].fill(x, y, z);
             }
         };
+    }
+
+    public static Fill2D checkers(Fill2D white, Fill2D black, int size) {
+        return checkers(white, black, size, size);
+    }
+
+    public static Fill2D checkers(Fill2D white, Fill2D black, int x, int y) {
+        return checkers(white, black, x, x, y, y);
+    }
+
+    public static Fill2D checkers(Fill2D white, Fill2D black, int x1, int x2, int y1, int y2) {
+        return checkers(white, black, new int[]{x1, x2}, new int[]{y1, y2});
+    }
+
+    /**
+     * @param x Two positive width values for columns
+     * @param y Two positive height values for rows
+     */
+    public static Fill2D checkers(Fill2D white, Fill2D black, int[] x, int[] y) {
+        return stripes(x, new Fill2D[]{
+                fillY(stripes(y, new Fill2D[]{white, black})),
+                fillY(stripes(y, new Fill2D[]{black, white}))
+        });
     }
 }
