@@ -566,4 +566,62 @@ public class ByteFill {
             }
         };
     }
+
+    /**
+     * @param stripes The height of each stripe. All should be positive
+     * @param fills What to fill each stripe with. Is expected to be the same size as stripes
+     */
+    public static Fill2D stripes(final int[] stripes, final Fill2D[] fills) {
+        return new Fill2D() {
+            int repeat = repeat();
+
+            int repeat() {
+                repeat = 0;
+                for (int stripe : stripes)
+                    repeat += stripe;
+                return repeat;
+            }
+
+            @Override
+            public byte fill(int x, int y) {
+                int xStep = x < 0 ? repeat - Math.abs(x % repeat) : x % repeat;
+                int step = 0;
+                for (int i = 0; i < stripes.length; i++)
+                    if (step <= xStep)
+                        step += stripes[i];
+                    else
+                        return fills[i].fill(x, y);
+                return fills[0].fill(x, y);
+            }
+        };
+    }
+
+    /**
+     * @param stripes The height of each stripe. All should be positive
+     * @param fills What to fill each stripe with. Is expected to be the same size as stripes
+     */
+    public static Fill3D stripes(final int[] stripes, final Fill3D[] fills) {
+        return new Fill3D() {
+            int repeat = repeat();
+
+            int repeat() {
+                repeat = 0;
+                for (int stripe : stripes)
+                    repeat += stripe;
+                return repeat;
+            }
+
+            @Override
+            public byte fill(int x, int y, int z) {
+                int xStep = x < 0 ? repeat - Math.abs(x % repeat) : x % repeat;
+                int step = 0;
+                for (int i = 0; i < stripes.length; i++)
+                    if (step <= xStep)
+                        step += stripes[i];
+                    else
+                        return fills[i].fill(x, y, z);
+                return fills[0].fill(x, y, z);
+            }
+        };
+    }
 }
