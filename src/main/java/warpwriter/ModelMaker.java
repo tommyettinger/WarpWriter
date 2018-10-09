@@ -912,4 +912,15 @@ public class ModelMaker {
         //return Tools3D.runCA(nextShip, 1);
     }
 
+    /**
+     * Gets a random color palette index, adapted for whether this uses {@link Coloring#RINSED} or
+     * {@link Coloring#ALT_PALETTE}. It will always be in the middle of the color range, but can lean towards darker
+     * colors more often than lighter ones.
+     * @return a byte representing a color palette index, randomly chosen
+     */
+    public byte randomMainColor() {
+        return (byte)(RINSED_PALETTE
+                ? rng.nextIntHasty(30) * 8 + rng.between(18, 22)
+                : rng.nextIntHasty(18) * 6 + rng.between(21, 24));
+    }
 }

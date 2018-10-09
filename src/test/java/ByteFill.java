@@ -62,7 +62,7 @@ public class ByteFill {
         return new Fill3D() {
             @Override
             public byte fill(int x, int y, int z) {
-                return (pixmap.getPixel(x, y) & 0xFF) / 255f < threshold ? yesFill.fill(x, y, z) : noFill.fill(x, y, z);
+                return (pixmap.getPixel(y, z) & 0xFF) / 255f < threshold ? yesFill.fill(x, y, z) : noFill.fill(x, y, z);
             }
         };
     }

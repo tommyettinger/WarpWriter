@@ -353,8 +353,8 @@ public class TestDisplay extends ApplicationAdapter {
                 mm.rng.nextInt(size - 1) + 1,
                 mm.rng.nextInt(size - 1) + 1,
                 ByteFill.checkers(
-                        ByteFill.fill3D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
-                        ByteFill.fill3D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
+                        ByteFill.fill3D(mm.randomMainColor()),
+                        ByteFill.fill3D(mm.randomMainColor()),
                         4, 4, 4
                 )
         );
@@ -409,19 +409,19 @@ public class TestDisplay extends ApplicationAdapter {
             //font = new BitmapFont(Gdx.files.internal("tiny.fnt"));
         }
 
-        //ByteFill.Fill2D randomColor = ByteFill.fill2D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8));
+        //ByteFill.Fill2D randomColor = ByteFill.fill2D(mm.randomMainColor());
 
         ByteFill.Fill[] randomFills = {
-                ByteFill.fill((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
-                ByteFill.fill((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
-                ByteFill.fill((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8))
+                ByteFill.fill(mm.randomMainColor()),
+                ByteFill.fill(mm.randomMainColor()),
+                ByteFill.fill(mm.randomMainColor())
         };
         ByteFill.Fill2D stripes = ByteFill.fill(ByteFill.stripes(new int[] {2, 2, 2}, randomFills));
         stripes = ByteFill.offset(stripes, -20, 0);
         /*
         ByteFill.Fill2D checkers = ByteFill.checkers(
-                ByteFill.fill2D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
-                ByteFill.fill2D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
+                ByteFill.fill2D(mm.randomMainColor()),
+                ByteFill.fill2D(mm.randomMainColor()),
                 3);
                 */
 
@@ -432,17 +432,15 @@ public class TestDisplay extends ApplicationAdapter {
                 ),
                 8
         );
-        //ByteFill.fill(voxels, ByteFill.wireframeBox(voxels, ByteFill.fill3D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8))));
+        //ByteFill.fill(voxels, ByteFill.wireframeBox(voxels, ByteFill.fill3D(mm.randomMainColor())));
 
-        /* //TODO: text3D is sideways! must fix :(
         voxels = voxelText.text3D(
                 font,
                 FakeLanguageGen.SIMPLISH.word(mm.rng.nextLong(), true),
-                ByteFill.fill3D((byte)(mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
+                ByteFill.fill3D(mm.randomMainColor()),
                 2
         );
-        */
-
+        
         //ByteFill.fill(voxels, ByteFill.wireframeBox(voxels, ByteFill.fill3D(ByteFill.fillY(checkers))));
 
         if (animatedVoxels == null)

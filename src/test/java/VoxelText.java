@@ -93,9 +93,9 @@ public class VoxelText implements Disposable {
                         fillNo,
                         fillYes
                 ),
+                depth,
                 pixmap.getWidth(),
-                pixmap.getHeight(),
-                depth
+                pixmap.getHeight()
         );
         pixmap.dispose();
         return result;
