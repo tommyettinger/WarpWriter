@@ -411,24 +411,24 @@ public class TestDisplay extends ApplicationAdapter {
 
         //ByteFill.Fill2D randomColor = ByteFill.fill2D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8));
 
-        /*
         ByteFill.Fill[] randomFills = {
                 ByteFill.fill((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
                 ByteFill.fill((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
                 ByteFill.fill((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8))
         };
-        ByteFill.Fill2D stripes = ByteFill.fill(ByteFill.stripes(new int[] {8, 8, 8}, randomFills));
+        ByteFill.Fill2D stripes = ByteFill.fill(ByteFill.stripes(new int[] {2, 2, 2}, randomFills));
         stripes = ByteFill.offset(stripes, -20, 0);
-*/
+        /*
         ByteFill.Fill2D checkers = ByteFill.checkers(
                 ByteFill.fill2D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
                 ByteFill.fill2D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
                 3);
+                */
 
         voxels = ByteFill.fill(voxelText.text2D(
                 font,
                 FakeLanguageGen.SIMPLISH.word(mm.rng.nextLong(), true),
-                checkers
+                ByteFill.skew(stripes, 1f, 0f)
                 ),
                 8
         );

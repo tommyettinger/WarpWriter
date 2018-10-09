@@ -742,4 +742,13 @@ public class ByteFill {
                 }
         );
     }
+
+    public static Fill2D skew(final Fill2D fill, final float skewX, final float skewY) {
+        return new Fill2D() {
+            @Override
+            public byte fill(int x, int y) {
+                return fill.fill(x + (int) (y * skewX), y + (int) (x * skewY));
+            }
+        };
+    }
 }
