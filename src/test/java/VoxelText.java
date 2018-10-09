@@ -19,8 +19,8 @@ public class VoxelText implements Disposable {
 
     @Override
     public void dispose() {
-        buffer.dispose();
-        batch.dispose();
+        if (buffer != null) buffer.dispose();
+        if (batch != null) batch.dispose();
     }
 
     public Pixmap textToPixmap(BitmapFont font, String string) {
@@ -46,11 +46,13 @@ public class VoxelText implements Disposable {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.setProjectionMatrix(view.getCamera().combined);
         batch.begin();
+        Color old = font.getColor();
         font.setColor(color);
         font.draw(batch, string, 0, height);
         batch.end();
         Pixmap result = ScreenUtils.getFrameBufferPixmap(0, 0, width, height);
         buffer.end();
+        font.setColor(old);
         return result;
     }
 
@@ -58,14 +60,10 @@ public class VoxelText implements Disposable {
         return text2D(font, string, fill, ByteFill.fill2D((byte) 0));
     }
 
-    public byte[][] text2D(BitmapFont font, String string, ByteFill.Fill2D fillYes, ByteFill.Fill2D fillNo) {
+    public byte[][] text2D(BitmapFont font, String string, ByteFill.Fill2D yes, ByteFill.Fill2D no) {
         Pixmap pixmap = textToPixmap(font, string);
         byte[][] result = ByteFill.fill(
-                ByteFill.transparent(
-                        pixmap,
-                        fillNo,
-                        fillYes
-                ),
+                ByteFill.transparent(pixmap, no, yes),
                 pixmap.getWidth(),
                 pixmap.getHeight()
         );
@@ -81,18 +79,14 @@ public class VoxelText implements Disposable {
         return text3D(font, string, fill, ByteFill.fill3D((byte) 0), depth);
     }
 
-    public byte[][][] text3D(BitmapFont font, String string, ByteFill.Fill3D fillYes, ByteFill.Fill3D fillNo) {
-        return text3D(font, string, fillYes, fillNo, 1);
+    public byte[][][] text3D(BitmapFont font, String string, ByteFill.Fill3D yes, ByteFill.Fill3D no) {
+        return text3D(font, string, yes, no, 1);
     }
 
-    public byte[][][] text3D(BitmapFont font, String string, ByteFill.Fill3D fillYes, ByteFill.Fill3D fillNo, int depth) {
+    public byte[][][] text3D(BitmapFont font, String string, ByteFill.Fill3D yes, ByteFill.Fill3D no, int depth) {
         Pixmap pixmap = textToPixmap(font, string);
         byte[][][] result = ByteFill.fill(
-                ByteFill.transparent(
-                        pixmap,
-                        fillNo,
-                        fillYes
-                ),
+                ByteFill.transparent(pixmap, no, yes),
                 depth,
                 pixmap.getWidth(),
                 pixmap.getHeight()
