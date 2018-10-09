@@ -352,9 +352,9 @@ public class TestDisplay extends ApplicationAdapter {
                 mm.rng.nextInt(size - 1) + 1,
                 mm.rng.nextInt(size - 1) + 1,
                 mm.rng.nextInt(size - 1) + 1,
-                ByteFill.checkers(
-                        ByteFill.fill3D(mm.randomMainColor()),
-                        ByteFill.fill3D(mm.randomMainColor()),
+                ByteFill.Fill3D.checkers(
+                        ByteFill.Fill3D.fill(mm.randomMainColor()),
+                        ByteFill.Fill3D.fill(mm.randomMainColor()),
                         4, 4, 4
                 )
         );
@@ -412,11 +412,11 @@ public class TestDisplay extends ApplicationAdapter {
         //ByteFill.Fill2D randomColor = ByteFill.fill2D(mm.randomMainColor());
 
         ByteFill.Fill[] randomFills = {
-                ByteFill.fill(mm.randomMainColor()),
-                ByteFill.fill(mm.randomMainColor()),
-                ByteFill.fill(mm.randomMainColor())
+                ByteFill.Fill.fill(mm.randomMainColor()),
+                ByteFill.Fill.fill(mm.randomMainColor()),
+                ByteFill.Fill.fill(mm.randomMainColor())
         };
-        ByteFill.Fill2D stripes = ByteFill.fill(ByteFill.stripes(new int[] {2, 2, 2}, randomFills));
+        ByteFill.Fill2D stripes = ByteFill.Fill2D.fill(ByteFill.Fill.stripes(new int[] {2, 2, 2}, randomFills));
         /*
         ByteFill.Fill2D checkers = ByteFill.checkers(
                 ByteFill.fill2D(mm.randomMainColor()),
@@ -424,10 +424,10 @@ public class TestDisplay extends ApplicationAdapter {
                 3);
                 */
 
-        voxels = ByteFill.fill(voxelText.text2D(
+        voxels = ByteFill.Fill3D.fill(voxelText.text2D(
                 font,
                 FakeLanguageGen.SIMPLISH.word(mm.rng.nextLong(), true),
-                ByteFill.skew(stripes, 1f)
+                ByteFill.Fill2D.skew(stripes, 1f)
                 ),
                 8
         );
@@ -436,7 +436,7 @@ public class TestDisplay extends ApplicationAdapter {
         voxels = voxelText.text3D(
                 font,
                 FakeLanguageGen.SIMPLISH.word(mm.rng.nextLong(), true),
-                ByteFill.fill3D(mm.randomMainColor()),
+                ByteFill.Fill3D.fill(mm.randomMainColor()),
                 2
         );
         
