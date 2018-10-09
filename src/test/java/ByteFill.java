@@ -30,71 +30,63 @@ public class ByteFill {
     }
 
     /**
-     * @return yesFill if transparency is greater than 50%, otherwise noFill
+     * @return yes if transparency is greater than 50%, otherwise no
      */
-    public static Fill2D transparent(final Pixmap pixmap, final Fill2D yesFill, final Fill2D noFill) {
-        return transparent(pixmap, yesFill, noFill, 0.5f);
+    public static Fill2D transparent(final Pixmap pixmap, final Fill2D yes, final Fill2D no) {
+        return transparent(pixmap, yes, no, 0.5f);
     }
 
     /**
-     * @return yesFill if transparency is greater than 50%, otherwise noFill
+     * @return yes if transparency is greater than 50%, otherwise no
      */
-    public static Fill3D transparent(final Pixmap pixmap, final Fill3D yesFill, final Fill3D noFill) {
-        return transparent(pixmap, yesFill, noFill, 0.5f);
+    public static Fill3D transparent(final Pixmap pixmap, final Fill3D yes, final Fill3D no) {
+        return transparent(pixmap, yes, no, 0.5f);
     }
 
     /**
-     * @return yesFill if transparency is greater than threshold, otherwise noFill
+     * @return yes if transparency is greater than threshold, otherwise no
      */
-    public static Fill2D transparent(final Pixmap pixmap, final Fill2D yesFill, final Fill2D noFill, final float threshold) {
+    public static Fill2D transparent(final Pixmap pixmap, final Fill2D yes, final Fill2D no, final float threshold) {
         return new Fill2D() {
             @Override
             public byte fill(int x, int y) {
-                int x2 = x < 0 ? pixmap.getWidth() - Math.abs(x % pixmap.getWidth()) : x % pixmap.getWidth();
-                int y2 = y < 0 ? pixmap.getHeight() - Math.abs(y % pixmap.getHeight()) : x % pixmap.getHeight();
-                return (pixmap.getPixel(x2, y2) & 0xFF) / 255f < threshold ? yesFill.fill(x, y) : noFill.fill(x, y);
+                return (pixmap.getPixel(loop(x, pixmap.getWidth()), loop(y, pixmap.getHeight())) & 0xFF) / 255f < threshold ? yes.fill(x, y) : no.fill(x, y);
             }
         };
     }
 
     /**
-     * @return yesFill if transparency is greater than threshold, otherwise noFill
+     * @return yes if transparency is greater than threshold, otherwise no
      */
-    public static Fill3D transparent(final Pixmap pixmap, final Fill3D yesFill, final Fill3D noFill, final float threshold) {
+    public static Fill3D transparent(final Pixmap pixmap, final Fill3D yes, final Fill3D no, final float threshold) {
         return new Fill3D() {
             @Override
             public byte fill(int x, int y, int z) {
-                int y2 = y < 0 ? pixmap.getWidth() - Math.abs(y % pixmap.getWidth()) : y % pixmap.getWidth();
-                int z2 = z < 0 ? pixmap.getHeight() - Math.abs(z % pixmap.getHeight()) : z % pixmap.getHeight();
-                return (pixmap.getPixel(y2, z2) & 0xFF) / 255f < threshold ? yesFill.fill(x, y, z) : noFill.fill(x, y, z);
+                return (pixmap.getPixel(loop(y, pixmap.getWidth()), loop(z, pixmap.getHeight())) & 0xFF) / 255f < threshold ? yes.fill(x, y, z) : no.fill(x, y, z);
             }
         };
     }
 
     /**
-     * @return yesFill if transparency is greater than threshold, otherwise noFill
+     * @return yes if transparency is greater than threshold, otherwise no
      */
-    public static Fill2D transparent(final Pixmap pixmap, final Fill2D yesFill, final Fill2D noFill, final int threshold) {
+    public static Fill2D transparent(final Pixmap pixmap, final Fill2D yes, final Fill2D no, final int threshold) {
         return new Fill2D() {
             @Override
             public byte fill(int x, int y) {
-                int x2 = x < 0 ? pixmap.getWidth() - Math.abs(x % pixmap.getWidth()) : x % pixmap.getWidth();
-                int y2 = y < 0 ? pixmap.getHeight() - Math.abs(y % pixmap.getHeight()) : x % pixmap.getHeight();
-                return (pixmap.getPixel(x2, y2) & 0xFF) < threshold ? yesFill.fill(x, y) : noFill.fill(x, y);
+                return (pixmap.getPixel(loop(x, pixmap.getWidth()), loop(y, pixmap.getHeight())) & 0xFF) < threshold ? yes.fill(x, y) : no.fill(x, y);
             }
         };
     }
 
     /**
-     * @return yesFill if transparency is greater than threshold, otherwise noFill
+     * @return yes if transparency is greater than threshold, otherwise no
      */
-    public static Fill3D transparent(final Pixmap pixmap, final Fill3D yesFill, final Fill3D noFill, final int threshold) {
+    public static Fill3D transparent(final Pixmap pixmap, final Fill3D yes, final Fill3D no, final int threshold) {
         return new Fill3D() {
             @Override
             public byte fill(int x, int y, int z) {
-                int y2 = y < 0 ? pixmap.getWidth() - Math.abs(y % pixmap.getWidth()) : y % pixmap.getWidth();
-                int z2 = z < 0 ? pixmap.getHeight() - Math.abs(z % pixmap.getHeight()) : z % pixmap.getHeight();
-                return (pixmap.getPixel(y2, z2) & 0xFF) < threshold ? yesFill.fill(x, y, z) : noFill.fill(x, y, z);
+                return (pixmap.getPixel(loop(y, pixmap.getWidth()), loop(z, pixmap.getHeight())) & 0xFF) < threshold ? yes.fill(x, y, z) : no.fill(x, y, z);
             }
         };
     }
@@ -346,13 +338,13 @@ public class ByteFill {
     }
 
     /**
-     * @return yesFill if pixel from pixmap matches color, otherwise noFill
+     * @return yes if pixel from pixmap matches color, otherwise no
      */
-    public static Fill2D colorMatch(final Pixmap pixmap, final int color, final Fill2D yesFill, final Fill2D noFill) {
+    public static Fill2D colorMatch(final Pixmap pixmap, final int color, final Fill2D yes, final Fill2D no) {
         return new Fill2D() {
             @Override
             public byte fill(int x, int y) {
-                return pixmap.getPixel(x, y) == color ? yesFill.fill(x, y) : noFill.fill(x, y);
+                return pixmap.getPixel(x, y) == color ? yes.fill(x, y) : no.fill(x, y);
             }
         };
     }
@@ -447,7 +439,7 @@ public class ByteFill {
         return wireframeBox(width, height, depth, fill, fill3D((byte) 0));
     }
 
-    public static Fill3D wireframeBox(final int width, final int height, final int depth, final Fill3D fillYes, final Fill3D fillNo) {
+    public static Fill3D wireframeBox(final int width, final int height, final int depth, final Fill3D yes, final Fill3D no) {
         return new Fill3D() {
             @Override
             public byte fill(int x, int y, int z) {
@@ -455,15 +447,15 @@ public class ByteFill {
                         y0 = y == 0, y1 = y == height - 1, y2 = y0 || y1,
                         z0 = z == 0, z1 = z == depth - 1, z2 = z0 || z1;
                 if ((x2 && y2) || (x2 && z2) || (y2 && z2))
-                    return fillYes.fill(x, y, z);
+                    return yes.fill(x, y, z);
                 else
-                    return fillNo.fill(x, y, z);
+                    return no.fill(x, y, z);
             }
         };
     }
 
-    public static Fill3D wireframeBox(final byte[][][] model, final Fill3D fillYes, final Fill3D fillNo) {
-        return wireframeBox(model.length, model[0].length, model[0][0].length, fillYes, fillNo);
+    public static Fill3D wireframeBox(final byte[][][] model, final Fill3D yes, final Fill3D no) {
+        return wireframeBox(model.length, model[0].length, model[0][0].length, yes, no);
     }
 
     public static Fill3D wireframeBox(final byte[][][] model, final Fill3D fill) {
@@ -610,7 +602,7 @@ public class ByteFill {
 
             @Override
             public byte fill(int x) {
-                int xStep = x < 0 ? repeat - Math.abs(x % repeat) : x % repeat;
+                int xStep = loop(x, repeat);
                 int step = 0;
                 for (int i = 0; i < stripes.length; i++)
                     if (step <= xStep)
@@ -639,7 +631,7 @@ public class ByteFill {
 
             @Override
             public byte fill(int x, int y) {
-                int xStep = x < 0 ? repeat - Math.abs(x % repeat) : x % repeat;
+                int xStep = loop(x, repeat);
                 int step = 0;
                 for (int i = 0; i < stripes.length; i++)
                     if (step <= xStep)
@@ -668,7 +660,7 @@ public class ByteFill {
 
             @Override
             public byte fill(int x, int y, int z) {
-                int xStep = x < 0 ? repeat - Math.abs(x % repeat) : x % repeat;
+                int xStep = loop(x, repeat);
                 int step = 0;
                 for (int i = 0; i < stripes.length; i++)
                     if (step <= xStep)
@@ -751,12 +743,54 @@ public class ByteFill {
         );
     }
 
-    public static Fill2D skew(final Fill2D fill, final float skewX, final float skewY) {
+    public static Fill2D skew(final Fill2D fill, final float skewX) {
         return new Fill2D() {
             @Override
             public byte fill(int x, int y) {
-                return fill.fill(x + (int) (y * skewX), y + (int) (x * skewY));
+                return fill.fill(x + (int) (y * skewX), y);
             }
         };
+    }
+
+    public static Fill3D skew(final Fill3D fill, final float skewX) {
+        return new Fill3D() {
+            @Override
+            public byte fill(int x, int y, int z) {
+                return fill.fill(x + (int) (y * skewX), y, z);
+            }
+        };
+    }
+
+    public static Fill fill(final byte[] src) {
+        return new Fill() {
+            @Override
+            public byte fill(int x) {
+                return src[loop(x, src.length)];
+            }
+        };
+    }
+
+    public static Fill2D fill(final byte[][] src) {
+        return new Fill2D() {
+            @Override
+            public byte fill(int x, int y) {
+                int x2 = loop(x, src.length);
+                return src[x2][loop(y, src[x2].length)];
+            }
+        };
+    }
+
+    public static Fill3D fill(final byte[][][] src) {
+        return new Fill3D() {
+            @Override
+            public byte fill(int x, int y, int z) {
+                int x2 = loop(x, src.length), y2 = loop(y, src[x2].length);
+                return src[x2][y2][loop(z, src[x2][y2].length)];
+            }
+        };
+    }
+
+    public static int loop (int dividend, int divisor) {
+        return dividend < 0 ? divisor - Math.abs(dividend % divisor) : dividend % divisor;
     }
 }

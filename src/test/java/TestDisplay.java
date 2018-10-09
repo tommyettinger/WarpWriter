@@ -417,7 +417,6 @@ public class TestDisplay extends ApplicationAdapter {
                 ByteFill.fill(mm.randomMainColor())
         };
         ByteFill.Fill2D stripes = ByteFill.fill(ByteFill.stripes(new int[] {2, 2, 2}, randomFills));
-        stripes = ByteFill.offset(stripes, -20, 0);
         /*
         ByteFill.Fill2D checkers = ByteFill.checkers(
                 ByteFill.fill2D(mm.randomMainColor()),
@@ -428,7 +427,7 @@ public class TestDisplay extends ApplicationAdapter {
         voxels = ByteFill.fill(voxelText.text2D(
                 font,
                 FakeLanguageGen.SIMPLISH.word(mm.rng.nextLong(), true),
-                ByteFill.skew(stripes, 1f, 0f)
+                ByteFill.skew(stripes, 1f)
                 ),
                 8
         );
