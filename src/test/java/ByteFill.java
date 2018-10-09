@@ -50,7 +50,9 @@ public class ByteFill {
         return new Fill2D() {
             @Override
             public byte fill(int x, int y) {
-                return (pixmap.getPixel(x, y) & 0xFF) / 255f < threshold ? yesFill.fill(x, y) : noFill.fill(x, y);
+                int x2 = x < 0 ? pixmap.getWidth() - Math.abs(x % pixmap.getWidth()) : x % pixmap.getWidth();
+                int y2 = y < 0 ? pixmap.getHeight() - Math.abs(y % pixmap.getHeight()) : x % pixmap.getHeight();
+                return (pixmap.getPixel(x2, y2) & 0xFF) / 255f < threshold ? yesFill.fill(x, y) : noFill.fill(x, y);
             }
         };
     }
@@ -62,7 +64,9 @@ public class ByteFill {
         return new Fill3D() {
             @Override
             public byte fill(int x, int y, int z) {
-                return (pixmap.getPixel(y, z) & 0xFF) / 255f < threshold ? yesFill.fill(x, y, z) : noFill.fill(x, y, z);
+                int y2 = y < 0 ? pixmap.getWidth() - Math.abs(y % pixmap.getWidth()) : y % pixmap.getWidth();
+                int z2 = z < 0 ? pixmap.getHeight() - Math.abs(z % pixmap.getHeight()) : z % pixmap.getHeight();
+                return (pixmap.getPixel(y2, z2) & 0xFF) / 255f < threshold ? yesFill.fill(x, y, z) : noFill.fill(x, y, z);
             }
         };
     }
@@ -74,7 +78,9 @@ public class ByteFill {
         return new Fill2D() {
             @Override
             public byte fill(int x, int y) {
-                return (pixmap.getPixel(x, y) & 0xFF) < threshold ? yesFill.fill(x, y) : noFill.fill(x, y);
+                int x2 = x < 0 ? pixmap.getWidth() - Math.abs(x % pixmap.getWidth()) : x % pixmap.getWidth();
+                int y2 = y < 0 ? pixmap.getHeight() - Math.abs(y % pixmap.getHeight()) : x % pixmap.getHeight();
+                return (pixmap.getPixel(x2, y2) & 0xFF) < threshold ? yesFill.fill(x, y) : noFill.fill(x, y);
             }
         };
     }
@@ -86,7 +92,9 @@ public class ByteFill {
         return new Fill3D() {
             @Override
             public byte fill(int x, int y, int z) {
-                return (pixmap.getPixel(x, y) & 0xFF) < threshold ? yesFill.fill(x, y, z) : noFill.fill(x, y, z);
+                int y2 = y < 0 ? pixmap.getWidth() - Math.abs(y % pixmap.getWidth()) : y % pixmap.getWidth();
+                int z2 = z < 0 ? pixmap.getHeight() - Math.abs(z % pixmap.getHeight()) : z % pixmap.getHeight();
+                return (pixmap.getPixel(y2, z2) & 0xFF) < threshold ? yesFill.fill(x, y, z) : noFill.fill(x, y, z);
             }
         };
     }
