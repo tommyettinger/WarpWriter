@@ -737,8 +737,8 @@ public class ByteFill {
         return stripes(
                 x,
                 new Fill3D[]{
-                        fillYXZ(checkers(a, b, y, z)),
-                        fillYXZ(checkers(b, a, y, z))
+                        fillYZX(checkers(a, b, y, z)),
+                        fillYZX(checkers(b, a, y, z))
                 }
         );
     }

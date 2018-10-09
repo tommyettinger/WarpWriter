@@ -327,6 +327,7 @@ public class TestDisplay extends ApplicationAdapter {
     public void remakeTerrain(long newModel) {
         mm.rng.setState(determine(newModel));
         int size = 16;
+        /*
         int color0 = mm.rng.nextInt(30) * 8 + 18,
                 color1 = mm.rng.nextInt(30) * 8 + 18,
                 color2 = mm.rng.nextInt(30) * 8 + 18,
@@ -343,6 +344,22 @@ public class TestDisplay extends ApplicationAdapter {
                 ByteFill.noise3D(mm.rng.nextLong(), (byte)(color2), (byte)(color2+1), (byte)(color2+1), (byte)(color2+2), (byte)(color2+2), (byte)(color2+2), (byte)(color2+3)),
                 ByteFill.noise3D(mm.rng.nextLong(), (byte)(color3), (byte)(color3+1), (byte)(color3+1), (byte)(color3+2), (byte)(color3+2), (byte)(color3+2), (byte)(color3+3))
         );
+        */
+        voxels = TerrainCube.terrainCube(
+                size,
+                mm.rng.nextInt(size - 1) + 1,
+                mm.rng.nextInt(size - 1) + 1,
+                mm.rng.nextInt(size - 1) + 1,
+                mm.rng.nextInt(size - 1) + 1,
+                mm.rng.nextInt(size - 1) + 1,
+                ByteFill.checkers(
+                        ByteFill.fill3D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
+                        ByteFill.fill3D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
+                        4, 4, 4
+                )
+        );
+
+
         if (animatedVoxels == null)
             animatedVoxels = new byte[frames][][][];
         Arrays.fill(animatedVoxels, voxels);
@@ -393,6 +410,7 @@ public class TestDisplay extends ApplicationAdapter {
         }
 
         //ByteFill.Fill2D randomColor = ByteFill.fill2D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8));
+
         /*
         ByteFill.Fill[] randomFills = {
                 ByteFill.fill((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
@@ -401,27 +419,29 @@ public class TestDisplay extends ApplicationAdapter {
         };
         ByteFill.Fill2D stripes = ByteFill.fill(ByteFill.stripes(new int[] {8, 8, 8}, randomFills));
         stripes = ByteFill.offset(stripes, -20, 0);
-        */
+*/
+        ByteFill.Fill2D checkers = ByteFill.checkers(
+                ByteFill.fill2D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
+                ByteFill.fill2D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
+                3);
 
-        /*ByteFill.Fill3D checkers = ByteFill.checkers(
-                ByteFill.fill3D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
-                ByteFill.fill3D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
-        4);*/
-        /*voxels = ByteFill.fill(voxelText.text2D(
+        voxels = ByteFill.fill(voxelText.text2D(
                 font,
                 FakeLanguageGen.SIMPLISH.word(mm.rng.nextLong(), true),
                 checkers
                 ),
                 8
-        );*/
+        );
         //ByteFill.fill(voxels, ByteFill.wireframeBox(voxels, ByteFill.fill3D((byte) (mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8))));
 
+        /* //TODO: text3D is sideways! must fix :(
         voxels = voxelText.text3D(
                 font,
                 FakeLanguageGen.SIMPLISH.word(mm.rng.nextLong(), true),
                 ByteFill.fill3D((byte)(mm.rng.between(18, 22) + mm.rng.nextInt(30) * 8)),
                 2
         );
+        */
 
         //ByteFill.fill(voxels, ByteFill.wireframeBox(voxels, ByteFill.fill3D(ByteFill.fillY(checkers))));
 
