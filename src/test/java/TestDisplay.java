@@ -433,18 +433,18 @@ public class TestDisplay extends ApplicationAdapter {
         voxels = ByteFill.Fill3D.fill(voxelText.text2D(
                 font,
                 FakeLanguageGen.SIMPLISH.word(mm.rng.nextLong(), true),
-                ByteFill.Fill2D.skew(stripes, 1f)
+                new ByteFill.Fill2D.Transformer(stripes).skew(-1f)
                 ),
                 8
         );
         //ByteFill.fill(voxels, ByteFill.wireframeBox(voxels, ByteFill.fill3D(mm.randomMainColor())));
 
-        voxels = voxelText.text3D(
+        /*voxels = voxelText.text3D(
                 font,
                 FakeLanguageGen.SIMPLISH.word(mm.rng.nextLong(), true),
                 new ByteFill.Fill3D.SolidColor(mm.randomMainColor()),
                 2
-        );
+        );*/
         
         //ByteFill.fill(voxels, ByteFill.wireframeBox(voxels, ByteFill.fill3D(ByteFill.fillY(checkers))));
 

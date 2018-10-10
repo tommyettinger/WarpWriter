@@ -200,20 +200,30 @@ public class ByteFill {
                 return this;
             }
 
-            public Transformer offset(final int inX) {
+            public Transformer offset(final int inX, final int inY) {
                 return add(new Transform() {
                     @Override
                     public void transform() {
                         this.x += inX;
+                        this.y += inY;
                     }
                 });
             }
 
-            public Transformer loop(final int divisor) {
+            public Transformer loopX(final int divisor) {
                 return add(new Transform() {
                     @Override
                     public void transform() {
-                        this.x = ByteFill.loop(this.x, divisor);
+                        x = ByteFill.loop(this.x, divisor);
+                    }
+                });
+            }
+
+            public Transformer loopY(final int divisor) {
+                return add(new Transform() {
+                    @Override
+                    public void transform() {
+                        y = ByteFill.loop(this.y, divisor);
                     }
                 });
             }
@@ -225,6 +235,15 @@ public class ByteFill {
                         int swap = x;
                         x = y;
                         y = swap;
+                    }
+                });
+            }
+
+            public Transformer skew(final float skewX) {
+                return add(new Transform() {
+                    @Override
+                    public void transform() {
+                        x = x + (int) (y * skewX);
                     }
                 });
             }
@@ -457,15 +476,6 @@ public class ByteFill {
                     new Transformer(stripes(y, new Fill2D[]{white, black})).yx(),
                     new Transformer(stripes(y, new Fill2D[]{black, white})).yx()
             });
-        }
-
-        public static Fill2D skew(final Fill2D fill, final float skewX) {
-            return new Fill2D() {
-                @Override
-                public byte fill(int x, int y) {
-                    return fill.fill(x + (int) (y * skewX), y);
-                }
-            };
         }
     }
 
