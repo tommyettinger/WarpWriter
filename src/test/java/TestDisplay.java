@@ -352,11 +352,17 @@ public class TestDisplay extends ApplicationAdapter {
                 mm.rng.nextInt(size - 1) + 1,
                 mm.rng.nextInt(size - 1) + 1,
                 mm.rng.nextInt(size - 1) + 1,
+                ByteFill.Fill3D.fill(ByteFill.Fill2D.checkers(
+                        new ByteFill.Fill2D.SolidColor(mm.randomMainColor()),
+                        new ByteFill.Fill2D.SolidColor(mm.randomMainColor()),
+                        4, 4
+                ))
+                /*
                 ByteFill.Fill3D.checkers(
-                        ByteFill.Fill3D.fill(mm.randomMainColor()),
-                        ByteFill.Fill3D.fill(mm.randomMainColor()),
+                        new ByteFill.Fill3D.SolidColor(mm.randomMainColor()),
+                        new ByteFill.Fill3D.SolidColor(mm.randomMainColor()),
                         4, 4, 4
-                )
+                )*/
         );
 
 
@@ -412,9 +418,9 @@ public class TestDisplay extends ApplicationAdapter {
         //ByteFill.Fill2D randomColor = ByteFill.fill2D(mm.randomMainColor());
 
         ByteFill.Fill[] randomFills = {
-                ByteFill.Fill.fill(mm.randomMainColor()),
-                ByteFill.Fill.fill(mm.randomMainColor()),
-                ByteFill.Fill.fill(mm.randomMainColor())
+                new ByteFill.Fill.SolidColor(mm.randomMainColor()),
+                new ByteFill.Fill.SolidColor(mm.randomMainColor()),
+                new ByteFill.Fill.SolidColor(mm.randomMainColor())
         };
         ByteFill.Fill2D stripes = ByteFill.Fill2D.fill(ByteFill.Fill.stripes(new int[] {2, 2, 2}, randomFills));
         /*
@@ -436,7 +442,7 @@ public class TestDisplay extends ApplicationAdapter {
         voxels = voxelText.text3D(
                 font,
                 FakeLanguageGen.SIMPLISH.word(mm.rng.nextLong(), true),
-                ByteFill.Fill3D.fill(mm.randomMainColor()),
+                new ByteFill.Fill3D.SolidColor(mm.randomMainColor()),
                 2
         );
         

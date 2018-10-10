@@ -1,6 +1,8 @@
 import com.badlogic.gdx.graphics.Pixmap;
 import warpwriter.ModelMaker;
 
+import java.util.LinkedList;
+
 /**
  * @author Ben McLean
  */
@@ -8,16 +10,51 @@ public class ByteFill {
     public static abstract class Fill {
         abstract byte fill(int x);
 
-        /**
-         * @return color
-         */
-        public static Fill fill(final byte color) {
-            return new Fill() {
-                @Override
-                public byte fill(int x) {
-                    return color;
+        public static class Transformer extends Fill {
+            Fill fill;
+            LinkedList<Transform> transforms = new LinkedList<Transform>();
+
+            public static abstract class Transform {
+                public int x;
+                public abstract void transform();
+            }
+
+            public Transformer (Fill fill) {
+                this.fill=fill;
+            }
+
+            @Override
+            public byte fill(int x) {
+                for (Transform transform : transforms) {
+                    transform.x = x;
+                    transform.transform();
+                    x = transform.x;
                 }
-            };
+                return fill.fill(x);
+            }
+
+            public Transformer add(Transform transform) {
+                transforms.add(transform);
+                return this;
+            }
+
+            public Transformer offset(final int inX) {
+                return add(new Transform() {
+                    @Override
+                    public void transform() {
+                        this.x += inX;
+                    }
+                });
+            }
+
+            public Transformer loop(final int divisor) {
+                return add(new Transform() {
+                    @Override
+                    public void transform() {
+                        this.x = ByteFill.loop(this.x, divisor);
+                    }
+                });
+            }
         }
 
         public static Fill fill(final byte[] src) {
@@ -29,17 +66,23 @@ public class ByteFill {
             };
         }
 
-        public static Fill transparent() {
-            return fill((byte)0);
-        }
+        public static class SolidColor extends Fill {
+            public final static SolidColor transparent = new SolidColor();
+            byte color;
 
-        public static Fill mod(final Fill fill, final int divisor) {
-            return new Fill() {
-                @Override
-                public byte fill(int x) {
-                    return fill.fill(x % divisor);
-                }
-            };
+            private SolidColor()
+            {
+                this((byte) 0);
+            }
+
+            public SolidColor(byte color) {
+                this.color = color;
+            }
+
+            @Override
+            public byte fill(int x) {
+                return color;
+            }
         }
 
         /**
@@ -78,15 +121,6 @@ public class ByteFill {
                 if (pixel != (byte) 0) pixels[x] = pixel;
             }
             return pixels;
-        }
-
-        public static Fill offset(final Fill fill, final int xOffset) {
-            return new Fill() {
-                @Override
-                public byte fill(int x) {
-                    return fill.fill(x + xOffset);
-                }
-            };
         }
 
         /**
@@ -136,16 +170,83 @@ public class ByteFill {
     public static abstract class Fill2D {
         abstract byte fill(int x, int y);
 
-        /**
-         * @return color
-         */
-        public static Fill2D fill(final byte color) {
-            return new Fill2D() {
-                @Override
-                public byte fill(int x, int y) {
-                    return color;
+        public static class Transformer extends Fill2D {
+            Fill2D fill;
+            LinkedList<Transform> transforms = new LinkedList<Transform>();
+
+            public static abstract class Transform {
+                public int x, y;
+                public abstract void transform();
+            }
+
+            public Transformer (Fill2D fill) {
+                this.fill=fill;
+            }
+
+            @Override
+            public byte fill(int x, int y) {
+                for (Transform transform : transforms) {
+                    transform.x = x;
+                    transform.y = y;
+                    transform.transform();
+                    x = transform.x;
+                    y = transform.y;
                 }
-            };
+                return fill.fill(x, y);
+            }
+
+            public Transformer add(Transform transform) {
+                transforms.add(transform);
+                return this;
+            }
+
+            public Transformer offset(final int inX) {
+                return add(new Transform() {
+                    @Override
+                    public void transform() {
+                        this.x += inX;
+                    }
+                });
+            }
+
+            public Transformer loop(final int divisor) {
+                return add(new Transform() {
+                    @Override
+                    public void transform() {
+                        this.x = ByteFill.loop(this.x, divisor);
+                    }
+                });
+            }
+
+            public Transformer yx() {
+                return add(new Transform() {
+                    @Override
+                    public void transform() {
+                        int swap = x;
+                        x = y;
+                        y = swap;
+                    }
+                });
+            }
+        }
+
+        public static class SolidColor extends Fill2D {
+            public final static SolidColor transparent = new SolidColor();
+            byte color;
+
+            private SolidColor()
+            {
+                this((byte) 0);
+            }
+
+            public SolidColor(byte color) {
+                this.color = color;
+            }
+
+            @Override
+            public byte fill(int x, int y) {
+                return color;
+            }
         }
 
         public static Fill2D fill(final byte[][] src) {
@@ -168,10 +269,6 @@ public class ByteFill {
                     return reducer.paletteMapping[pixmap.getPixel(x, y)];
                 }
             };
-        }
-
-        public static Fill2D transparent() {
-            return fill((byte)0);
         }
 
         /**
@@ -201,33 +298,6 @@ public class ByteFill {
                 @Override
                 public byte fill(int x, int y) {
                     return (pixmap.getPixel(loop(x, pixmap.getWidth()), loop(y, pixmap.getHeight())) & 0xFF) < threshold ? yes.fill(x, y) : no.fill(x, y);
-                }
-            };
-        }
-
-        public static Fill2D mod(final Fill2D fill, final int divisorX, final int divisorY) {
-            return new Fill2D() {
-                @Override
-                public byte fill(int x, int y) {
-                    return fill.fill(x % divisorX, y % divisorY);
-                }
-            };
-        }
-
-        public static Fill2D mod(final Fill2D fill, final int divisorY) {
-            return new Fill2D() {
-                @Override
-                public byte fill(int x, int y) {
-                    return fill.fill(x, y % divisorY);
-                }
-            };
-        }
-
-        public static Fill2D mod(final int divisorX, final Fill2D fill) {
-            return new Fill2D() {
-                @Override
-                public byte fill(int x, int y) {
-                    return fill.fill(x % divisorX, y);
                 }
             };
         }
@@ -274,23 +344,11 @@ public class ByteFill {
             };
         }
 
-        public static Fill2D fill2D(final Fill3D fill) {
+        public static Fill2D fill(final Fill3D fill) {
             return new Fill2D() {
                 @Override
                 public byte fill(int x, int y) {
                     return fill.fill(x, y, 0);
-                }
-            };
-        }
-
-        /**
-         * @return x and y are reversed
-         */
-        public static Fill2D fillY(final Fill2D fill) {
-            return new Fill2D() {
-                @Override
-                public byte fill(int x, int y) {
-                    return fill.fill(y, x);
                 }
             };
         }
@@ -334,15 +392,6 @@ public class ByteFill {
                     if (pixel != (byte) 0) pixels[x][y] = pixel;
                 }
             return pixels;
-        }
-
-        public static Fill2D offset(final Fill2D fill, final int xOffset, final int yOffset) {
-            return new Fill2D() {
-                @Override
-                public byte fill(int x, int y) {
-                    return fill.fill(x + xOffset, y + yOffset);
-                }
-            };
         }
 
         /**
@@ -405,8 +454,8 @@ public class ByteFill {
          */
         public static Fill2D checkers(Fill2D white, Fill2D black, int[] x, int[] y) {
             return stripes(x, new Fill2D[]{
-                    fillY(stripes(y, new Fill2D[]{white, black})),
-                    fillY(stripes(y, new Fill2D[]{black, white}))
+                    new Transformer(stripes(y, new Fill2D[]{white, black})).yx(),
+                    new Transformer(stripes(y, new Fill2D[]{black, white})).yx()
             });
         }
 
@@ -424,16 +473,23 @@ public class ByteFill {
     public static abstract class Fill3D {
         abstract byte fill(int x, int y, int z);
 
-        /**
-         * @return color
-         */
-        public static Fill3D fill(final byte color) {
-            return new Fill3D() {
-                @Override
-                public byte fill(int x, int y, int z) {
-                    return color;
-                }
-            };
+        public static class SolidColor extends Fill3D {
+            public final static SolidColor transparent = new SolidColor();
+            byte color;
+
+            private SolidColor()
+            {
+                this((byte) 0);
+            }
+
+            public SolidColor(byte color) {
+                this.color = color;
+            }
+
+            @Override
+            public byte fill(int x, int y, int z) {
+                return color;
+            }
         }
 
         public static Fill3D fill(final byte[][][] src) {
@@ -444,10 +500,6 @@ public class ByteFill {
                     return src[x2][y2][loop(z, src[x2][y2].length)];
                 }
             };
-        }
-
-        public static Fill3D transparent() {
-            return fill((byte)0);
         }
 
         /**
@@ -648,7 +700,7 @@ public class ByteFill {
         }
 
         public static Fill3D wireframeBox(final int width, final int height, final int depth, final Fill3D fill) {
-            return wireframeBox(width, height, depth, fill, transparent());
+            return wireframeBox(width, height, depth, fill, SolidColor.transparent);
         }
 
         public static Fill3D wireframeBox(final int width, final int height, final int depth, final Fill3D yes, final Fill3D no) {
@@ -671,7 +723,7 @@ public class ByteFill {
         }
 
         public static Fill3D wireframeBox(final byte[][][] model, final Fill3D fill) {
-            return wireframeBox(model, fill, transparent());
+            return wireframeBox(model, fill, SolidColor.transparent);
         }
 
         public static Fill3D offset(final Fill3D fill, final int xOffset, final int yOffset, final int zOffset) {
