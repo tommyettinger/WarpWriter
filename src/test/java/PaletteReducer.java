@@ -831,4 +831,24 @@ public class PaletteReducer {
         return pixmap;
     }
 
+    /**
+     * Looks up what color palette index (as a byte) matches the given RGBA8888 color most closely.
+     * If the color has less than 128 alpha out of 255, this will return 0; otherwise it looks up the color in a
+     * calculated palette mapping using the 5 most-significant bits of each color channel.
+     * <br>
+     * You should typically call {@link #analyze(Pixmap)}, {@link #exact(int[])}, or one of their overloads before you
+     * call this method; it will default to using the Aurora palette otherwise.
+     * @param color an RGBA8888 color (the format given to Pixmap for int colors, and the one used in Coloring)
+     * @return the byte index into the up-to-256-color palette this knows about 
+     */
+    public byte lookup(int color)
+    {
+        if((color & 0x80) == 0)
+            return 0;
+        color |= (color >>> 5 & 0x07070700) | 0xFE;
+        return paletteMapping[(color >>> 17 & 0x7C00) 
+                        | (color >>> 14 & 0x3E0)
+                        | (color >>> 11 & 0x1F)];
+    }
+
 }
