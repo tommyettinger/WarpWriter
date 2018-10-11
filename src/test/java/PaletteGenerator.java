@@ -5,7 +5,11 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
 import squidpony.StringKit;
+import squidpony.squidmath.IntIntOrderedMap;
 import warpwriter.Coloring;
+
+import java.util.Comparator;
+import java.util.TreeSet;
 
 /**
  * Created by Tommy Ettinger on 1/21/2018.
@@ -19,6 +23,29 @@ public class PaletteGenerator extends ApplicationAdapter {
         config.setIdleFPS(10);
         new Lwjgl3Application(new PaletteGenerator(), config);
     }
+    private static float hue(int rgba)
+    {
+        final float r = (rgba >>> 24 & 255) * 0.003921569f, g = (rgba >>> 16 & 255) * 0.003921569f,
+                b = (rgba >>> 8 & 255) * 0.003921569f;//, a = (e >>> 24 & 254) / 254f;
+        final float min = Math.min(Math.min(r, g), b);   //Min. value of RGB
+        final float max = Math.max(Math.max(r, g), b);   //Max value of RGB
+        final float delta = max - min;                           //Delta RGB value
+
+        if ( delta < 0.0001f )                     //This is a gray, no chroma...
+        {
+            return 0f;
+        }
+        else                                    //Chromatic data...
+        {
+            final float rDelta = (((max - r) / 6f) + (delta * 0.5f)) / delta;
+            final float gDelta = (((max - g) / 6f) + (delta * 0.5f)) / delta;
+            final float bDelta = (((max - b) / 6f) + (delta * 0.5f)) / delta;
+
+            if      (r == max) return (1f + bDelta - gDelta) % 1f;
+            else if (g == max) return ((4f / 3f) + rDelta - bDelta) % 1f;
+            else               return ((5f / 3f) + gDelta - rDelta) % 1f;
+        }
+    }
     public void create() {         
         final float[] hues = {0.0f, 0.07179487f, 0.07749468f, 0.098445594f, 0.09782606f, 0.14184391f, 0.16522992f,
                 0.20281118f, 0.20285714f, 0.21867621f, 0.25163394f, 0.3141666f, 0.3715499f, 0.37061405f, 0.44054055f,
@@ -29,19 +56,19 @@ public class PaletteGenerator extends ApplicationAdapter {
                         0.47698745f, 0.38f, 0.8846154f, 0.86624205f, 0.25777775f, 0.9575472f, 0.81385285f, 0.6453901f,
                         0.746888f, 0.46153846f, 0.48863637f, 0.9395605f};
         int[] PALETTE = new int[256];
-        System.arraycopy(new int[]{
-                0x00000000, 0x444444ff, 0x000000ff, 0x88ffff00, 0x212121ff, 0x00ff00ff, 0x0000ffff, 0x080808ff,
-                0xff574600, 0xffb14600, 0xfffd4600, 0x4bff4600, 0x51bf6c00, 0x4697ff00, 0x9146ff00, 0xff46ae00,
-                // unseven regular after this
-                0xFCFCFCFF, 0xC3CBDBFF, 0xA096D1FF, 0x62507EFF, 0x424556FF, 0x252A32FF, 0x14161FFF, 0x0A0B0FFF,
-                0x888C78FF, 0x585651FF, 0x453C3CFF, 0x32222EFF, 0xFF8F8FFF, 0xFF2245FF, 0xD50964FF, 0x9C0565FF,
-                0xFFD800FF, 0xFF9000FF, 0xE93100FF, 0xBF0000FF, 0xE5FF05FF, 0xA7ED00FF, 0x4AB907FF, 0x0A5D45FF,
-                0x00FFF0FF, 0x00B9FFFF, 0x008DF0FF, 0x1664C5FF, 0xFFE822FF, 0xFFA939FF, 0xE56335FF, 0xE5233EFF,
-                0xFFFC00FF, 0xEBB70AFF, 0xBE8420FF, 0x915816FF, 0xFFB35BFF, 0xD77E4BFF, 0xB15C51FF, 0x793D4EFF,
-                0xFF70DFFF, 0xFF22A9FF, 0x611381FF, 0x45064BFF, 0xCCFFF5FF, 0x6DF7B1FF, 0x00C19AFF, 0x017687FF,
-                0x7BD5F3FF, 0x6C88FFFF, 0x6440D8FF, 0x3D2E93FF, 0x85A3C7FF, 0x676CADFF, 0x683395FF, 0x323751FF,
-                0xFF59BEFF, 0xC51AEAFF, 0x6E10ABFF, 0x331685FF, 0xFB9585FF, 0xE97461FF, 0xB53772FF, 0x93278FFF,
-        }, 0, PALETTE, 0, 80);
+//        System.arraycopy(new int[]{
+//                0x00000000, 0x444444ff, 0x000000ff, 0x88ffff00, 0x212121ff, 0x00ff00ff, 0x0000ffff, 0x080808ff,
+//                0xff574600, 0xffb14600, 0xfffd4600, 0x4bff4600, 0x51bf6c00, 0x4697ff00, 0x9146ff00, 0xff46ae00,
+//                // unseven regular after this
+//                0xFCFCFCFF, 0xC3CBDBFF, 0xA096D1FF, 0x62507EFF, 0x424556FF, 0x252A32FF, 0x14161FFF, 0x0A0B0FFF,
+//                0x888C78FF, 0x585651FF, 0x453C3CFF, 0x32222EFF, 0xFF8F8FFF, 0xFF2245FF, 0xD50964FF, 0x9C0565FF,
+//                0xFFD800FF, 0xFF9000FF, 0xE93100FF, 0xBF0000FF, 0xE5FF05FF, 0xA7ED00FF, 0x4AB907FF, 0x0A5D45FF,
+//                0x00FFF0FF, 0x00B9FFFF, 0x008DF0FF, 0x1664C5FF, 0xFFE822FF, 0xFFA939FF, 0xE56335FF, 0xE5233EFF,
+//                0xFFFC00FF, 0xEBB70AFF, 0xBE8420FF, 0x915816FF, 0xFFB35BFF, 0xD77E4BFF, 0xB15C51FF, 0x793D4EFF,
+//                0xFF70DFFF, 0xFF22A9FF, 0x611381FF, 0x45064BFF, 0xCCFFF5FF, 0x6DF7B1FF, 0x00C19AFF, 0x017687FF,
+//                0x7BD5F3FF, 0x6C88FFFF, 0x6440D8FF, 0x3D2E93FF, 0x85A3C7FF, 0x676CADFF, 0x683395FF, 0x323751FF,
+//                0xFF59BEFF, 0xC51AEAFF, 0x6E10ABFF, 0x331685FF, 0xFB9585FF, 0xE97461FF, 0xB53772FF, 0x93278FFF,
+//        }, 0, PALETTE, 0, 80);
 //        int[] initial = {
 //                0x00000000, 0x444444ff, 0x000000ff, 0x88ffff00, 0x212121ff, 0x00ff00ff, 0x0000ffff, 0x080808ff,
 //                0xff574600, 0xffb14600, 0xfffd4600, 0x4bff4600, 0x51bf6c00, 0x4697ff00, 0x9146ff00, 0xff46ae00,
@@ -64,130 +91,130 @@ public class PaletteGenerator extends ApplicationAdapter {
 //                0xff7fc7ff, 0xff46aeff, 0xeb2394ff, 0xcc0a77ff, 0xa5005dff, 0x720040ff,
 //                0xffbfe3ff, 0xeb9fcaff, 0xcc75a6ff, 0xa55281ff, 0x79335aff, 0x4c1a36ff,
 //        };
-        int[] initial = {
-                0x62507EFF,
-                0xA096D1FF,
-                0xC3CBDBFF,
-                0xFCFCFCFF,
-                0x0A0B0FFF,
-                0x14161FFF,
-                0x252A32FF,
-                0x424556FF,
-                0x32222EFF,
-                0x453C3CFF,
-                0x585651FF,
-                0x888C78FF,
-                0x9C0565FF,
-                0xD50964FF,
-                0xFF2245FF,
-                0xFF8F8FFF,
-                0xBF0000FF,
-                0xE93100FF,
-                0xFF9000FF,
-                0xFFD800FF,
-                0x0A5D45FF,
-                0x4AB907FF,
-                0xA7ED00FF,
-                0xE5FF05FF,
-                0x1664C5FF,
-                0x008DF0FF,
-                0x00B9FFFF,
-                0x00FFF0FF,
-                0xE5233EFF,
-                0xE56335FF,
-                0xFFA939FF,
-                0xFFE822FF,
-                0x915816FF,
-                0xBE8420FF,
-                0xEBB70AFF,
-                0xFFFC00FF,
-                0x793D4EFF,
-                0xB15C51FF,
-                0xD77E4BFF,
-                0xFFB35BFF,
-                0x45064BFF,
-                0x611381FF,
-                0xFF22A9FF,
-                0xFF70DFFF,
-                0x017687FF,
-                0x00C19AFF,
-                0x6DF7B1FF,
-                0xCCFFF5FF,
-                0x3D2E93FF,
-                0x6440D8FF,
-                0x6C88FFFF,
-                0x7BD5F3FF,
-                0x323751FF,
-                0x683395FF,
-                0x676CADFF,
-                0x85A3C7FF,
-                0x331685FF,
-                0x6E10ABFF,
-                0xC51AEAFF,
-                0xFF59BEFF,
-                0x93278FFF,
-                0xB53772FF,
-                0xE97461FF,
-                0xFB9585FF,
-                0xFFFC2EFF,
-                0xFFD800FF,
-                0xFF9000FF,
-                0xE93100FF,
-                0xBF0000FF,
-                0xFFA939FF,
-                0xFCE945FF,
-                0xDAAF1CFF,
-                0xBE8420FF,
-                0x915816FF,
-                0x79390AFF,
-                0xE56335FF,
-                0xCEAF47FF,
-                0xE5FF05FF,
-                0xA7ED00FF,
-                0x4AB907FF,
-                0x01933FFF,
-                0x0A5D45FF,
-                0xCE2038FF,
-                0x957757FF,
-                0xC0B10AFF,
-                0x00FFF0FF,
-                0x00B9FFFF,
-                0x008DF0FF,
-                0x1664C5FF,
-                0x1F2E8EFF,
-                0x8A0B41FF,
-                0x5C3747FF,
-                0x5B6731FF,
-                0x6C88FFFF,
-                0xFF8F8FFF,
-                0xFF2245FF,
-                0xD50964FF,
-                0x9C0565FF,
-                0x69086AFF,
-                0x3C1E2BFF,
-                0x323751FF,
-                0x6440D8FF,
-                0xFF22A9FF,
-                0xFFB164FF,
-                0xD77E4BFF,
-                0xB15C51FF,
-                0x793D4EFF,
-                0x522D4BFF,
-                0x45064BFF,
-                0x6E10ABFF,
-                0xB53772FF,
-                0xC3CBDBFF,
-                0x424556FF,
-                0x331685FF,
-                0x93278FFF,
-                0xA096D1FF,
-                0x252A32FF,
-                0x442B61FF,
-                0x81709AFF,
-                0x14161FFF,
-                0x62507EFF,
-                0x0A0B0FFF,
-        };
+//        int[] initial = {
+//                0x62507EFF,
+//                0xA096D1FF,
+//                0xC3CBDBFF,
+//                0xFCFCFCFF,
+//                0x0A0B0FFF,
+//                0x14161FFF,
+//                0x252A32FF,
+//                0x424556FF,
+//                0x32222EFF,
+//                0x453C3CFF,
+//                0x585651FF,
+//                0x888C78FF,
+//                0x9C0565FF,
+//                0xD50964FF,
+//                0xFF2245FF,
+//                0xFF8F8FFF,
+//                0xBF0000FF,
+//                0xE93100FF,
+//                0xFF9000FF,
+//                0xFFD800FF,
+//                0x0A5D45FF,
+//                0x4AB907FF,
+//                0xA7ED00FF,
+//                0xE5FF05FF,
+//                0x1664C5FF,
+//                0x008DF0FF,
+//                0x00B9FFFF,
+//                0x00FFF0FF,
+//                0xE5233EFF,
+//                0xE56335FF,
+//                0xFFA939FF,
+//                0xFFE822FF,
+//                0x915816FF,
+//                0xBE8420FF,
+//                0xEBB70AFF,
+//                0xFFFC00FF,
+//                0x793D4EFF,
+//                0xB15C51FF,
+//                0xD77E4BFF,
+//                0xFFB35BFF,
+//                0x45064BFF,
+//                0x611381FF,
+//                0xFF22A9FF,
+//                0xFF70DFFF,
+//                0x017687FF,
+//                0x00C19AFF,
+//                0x6DF7B1FF,
+//                0xCCFFF5FF,
+//                0x3D2E93FF,
+//                0x6440D8FF,
+//                0x6C88FFFF,
+//                0x7BD5F3FF,
+//                0x323751FF,
+//                0x683395FF,
+//                0x676CADFF,
+//                0x85A3C7FF,
+//                0x331685FF,
+//                0x6E10ABFF,
+//                0xC51AEAFF,
+//                0xFF59BEFF,
+//                0x93278FFF,
+//                0xB53772FF,
+//                0xE97461FF,
+//                0xFB9585FF,
+//                0xFFFC2EFF,
+//                0xFFD800FF,
+//                0xFF9000FF,
+//                0xE93100FF,
+//                0xBF0000FF,
+//                0xFFA939FF,
+//                0xFCE945FF,
+//                0xDAAF1CFF,
+//                0xBE8420FF,
+//                0x915816FF,
+//                0x79390AFF,
+//                0xE56335FF,
+//                0xCEAF47FF,
+//                0xE5FF05FF,
+//                0xA7ED00FF,
+//                0x4AB907FF,
+//                0x01933FFF,
+//                0x0A5D45FF,
+//                0xCE2038FF,
+//                0x957757FF,
+//                0xC0B10AFF,
+//                0x00FFF0FF,
+//                0x00B9FFFF,
+//                0x008DF0FF,
+//                0x1664C5FF,
+//                0x1F2E8EFF,
+//                0x8A0B41FF,
+//                0x5C3747FF,
+//                0x5B6731FF,
+//                0x6C88FFFF,
+//                0xFF8F8FFF,
+//                0xFF2245FF,
+//                0xD50964FF,
+//                0x9C0565FF,
+//                0x69086AFF,
+//                0x3C1E2BFF,
+//                0x323751FF,
+//                0x6440D8FF,
+//                0xFF22A9FF,
+//                0xFFB164FF,
+//                0xD77E4BFF,
+//                0xB15C51FF,
+//                0x793D4EFF,
+//                0x522D4BFF,
+//                0x45064BFF,
+//                0x6E10ABFF,
+//                0xB53772FF,
+//                0xC3CBDBFF,
+//                0x424556FF,
+//                0x331685FF,
+//                0x93278FFF,
+//                0xA096D1FF,
+//                0x252A32FF,
+//                0x442B61FF,
+//                0x81709AFF,
+//                0x14161FFF,
+//                0x62507EFF,
+//                0x0A0B0FFF,
+//        };
 //        int t;
 //        for (int i = 0, e = initial.length - 1; i < e; i++, e--) {
 //            t = initial[i];
@@ -201,6 +228,28 @@ public class PaletteGenerator extends ApplicationAdapter {
 
         //System.arraycopy(initial, 0, PALETTE, 128, 128);
         System.arraycopy(Coloring.RINSED, 0, PALETTE, 0, 256);
+        IntIntOrderedMap hueToIndex = new IntIntOrderedMap(32);
+        for (int i = 18, s = 16; i < 256; i += 8, s += 8) {
+            hueToIndex.put((int)(hue(Coloring.RINSED[i]) * 1024), s);
+        }
+        TreeSet<IntIntOrderedMap.MapEntry> sorted = new TreeSet<>(new Comparator<IntIntOrderedMap.MapEntry>(){
+            /**
+             * Compares its two arguments for order.  Returns a negative integer,
+             * zero, or a positive integer as the first argument is less than, equal
+             * to, or greater than the second.<p>
+             */
+            @Override
+            public int compare(IntIntOrderedMap.MapEntry o1, IntIntOrderedMap.MapEntry o2) {
+                return o1.getKey() - o2.getKey();
+            }
+        });
+        sorted.addAll(hueToIndex.entrySet());
+        System.out.println(sorted);
+        int idx = 16;
+        for (IntIntOrderedMap.MapEntry ent : sorted) {
+            System.arraycopy(Coloring.RINSED, ent.getValue(), PALETTE, idx, 8);
+            idx += 8;
+        }
 //        Color temp = Color.WHITE.cpy();
 //        float[] hsv = new float[3];
 //        for (int i = 0; i < 9; i++) {
@@ -261,7 +310,7 @@ public class PaletteGenerator extends ApplicationAdapter {
             pix.drawPixel(i, 0, PALETTE[i+1]);
         }
         pix.drawPixel(255, 0, 0);
-        PixmapIO.writePNG(Gdx.files.local("Rinsed.png"), pix);
+        PixmapIO.writePNG(Gdx.files.local("RinsedHueSorted.png"), pix);
         Gdx.app.exit();
     }
 
