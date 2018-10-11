@@ -33,7 +33,7 @@ public class TestDisplay extends ApplicationAdapter {
     private Pixmap pix;
     private long seed = 0x1337BEEFD00DL;
     private ModelMaker mm = new ModelMaker(seed);
-    private ModelRenderer mr = new ModelRenderer();
+    private ModelRenderer mr = new ModelRenderer(true, true); // change to (false, true) to disable easing
     private PaletteReducer reducer;
     private byte[][][] voxels;
     private byte[][][][] animatedVoxels;

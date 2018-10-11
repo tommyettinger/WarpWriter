@@ -500,10 +500,10 @@ public class ModelMaker {
         int color;
         long seed = rng.nextLong(), current, paint;
         final byte mainColor = (byte)((RINSED_PALETTE)
-                ? determineBounded(seed + 1L, 30) * 8 + determineBounded(seed + 22L, 4) + 20
+                ? determineBounded(seed + 1L, 30) * 8 + determineBounded(seed + 22L, 4) + 18
                 : determineBounded(seed + 1L, 18) * 6 +  + determineBounded(seed + 22L, 3) + 22),
                 highlightColor = (byte)((RINSED_PALETTE)
-                        ? ((determineBounded(seed + 333L, 30))) * 8 + determineBounded(seed + 4444L, 4) + 19
+                        ? ((determineBounded(seed + 333L, 30))) * 8 + determineBounded(seed + 4444L, 4) + 17
                         : ((determineBounded(seed + 333L, 18))) * 6 + determineBounded(seed + 4444L, 3) + 21),
                 cockpitColor = (byte)((RINSED_PALETTE)
                         ? RINSED_COCKPIT_COLORS[determineBounded(seed + 55555L, 6)] * 8 + 22

@@ -7,14 +7,24 @@ import java.util.Arrays;
  * Created by Tommy Ettinger on 11/4/2017.
  */
 public class ModelRenderer {
-    public final boolean RINSED_PALETTE = true;
-    public final int EYE_DARK = RINSED_PALETTE ? 22 : 30;
-    public final int EYE_LIGHT = 17;
+    public final boolean RINSED_PALETTE;
+    public final int EYE_DARK;
+    public final int EYE_LIGHT;
     private transient int[] tempPalette;
     public boolean hardOutline = false;
+    public boolean easing;
     public ModelRenderer()
     {
+        this(true, true);
+    }
+    
+    public ModelRenderer(boolean easing, boolean rinsedPalette)
+    {
+        this.easing = easing;
         tempPalette = new int[256];
+        RINSED_PALETTE = rinsedPalette;
+        EYE_DARK = RINSED_PALETTE ? 22 : 30;
+        EYE_LIGHT = 17;
     }
 
     /**
@@ -1322,6 +1332,8 @@ public class ModelRenderer {
     }
 
     public int[][] easeSquares(int[][] original, int[][] out){
+        if(!easing)
+            return original;
         int xSize = original.length - 1, ySize = original[0].length - 1;
 //        for (int i = 0; i < original.length; i++) {
 //            System.arraycopy(original[i], 0, out[i], 0, original[0].length);
