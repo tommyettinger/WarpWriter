@@ -6,14 +6,14 @@ package warpwriter;
  * <br>
  * Created by Tommy Ettinger on 10/11/2018.
  */
-public class ByteModel implements IModel {
+public class ArrayModel implements IModel {
     public byte[][][] voxels;
     public int sizeX, sizeY, sizeZ;
-    public ByteModel()
+    public ArrayModel()
     {
         this(new byte[12][12][8]);
     }
-    public ByteModel(byte[][][] voxels)
+    public ArrayModel(byte[][][] voxels)
     {
         this.voxels = voxels;
         sizeX = voxels.length;
