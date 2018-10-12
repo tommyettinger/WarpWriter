@@ -1,6 +1,9 @@
 package warpwriter;
 
 /**
+ * A sparse IModel that can have sizeX, sizeY, and sizeZ each up to 256, and uses memory based on how many voxels are
+ * filled rather than the bounds of the model. For most models, {@link ByteModel} will be more efficient all around.
+ * <br>
  * Created by Tommy Ettinger on 10/11/2018.
  */
 public class VoxModel extends SparseVoxelSet implements IModel {
