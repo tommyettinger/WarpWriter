@@ -8,7 +8,6 @@ package warpwriter.model;
  */
 public class ArrayModel implements IModel {
     public byte[][][] voxels;
-    public int sizeX, sizeY, sizeZ;
     public ArrayModel()
     {
         this(new byte[12][12][8]);
@@ -16,9 +15,6 @@ public class ArrayModel implements IModel {
     public ArrayModel(byte[][][] voxels)
     {
         this.voxels = voxels;
-        sizeX = voxels.length;
-        sizeY = voxels[0].length;
-        sizeZ = voxels[0][0].length;
     }
 
     /**
@@ -28,7 +24,7 @@ public class ArrayModel implements IModel {
      */
     @Override
     public int xSize() {
-        return sizeX;
+        return voxels.length;
     }
 
     /**
@@ -38,7 +34,7 @@ public class ArrayModel implements IModel {
      */
     @Override
     public int ySize() {
-        return sizeY;
+        return voxels[0].length;
     }
 
     /**
@@ -48,7 +44,7 @@ public class ArrayModel implements IModel {
      */
     @Override
     public int zSize() {
-        return sizeX;
+        return voxels[0][0].length;
     }
 
     /**
@@ -62,7 +58,7 @@ public class ArrayModel implements IModel {
      */
     @Override
     public byte at(int x, int y, int z) {
-        if(x < 0 || y < 0 || z < 0 || x >= sizeX || y >= sizeY || z >= sizeZ) 
+        if(x < 0 || y < 0 || z < 0 || x >= xSize() || y >= ySize() || z >= zSize())
             return 0;
         return voxels[x][y][z];
     }
