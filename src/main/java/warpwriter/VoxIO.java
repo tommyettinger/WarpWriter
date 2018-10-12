@@ -106,7 +106,7 @@ public class VoxIO {
             FileOutputStream fos = new FileOutputStream(filename);
             DataOutputStream bin = new DataOutputStream(fos);
             ByteArrayOutputStream voxelsRaw = new ByteArrayOutputStream(0);
-            int voxelsCount = 0, cc;
+            int cc;
             for (int x = 0; x < xSize; x++) {
                 for (int y = 0; y < ySize; y++) {
                     for (int z = 0; z < zSize; z++) {
@@ -116,7 +116,6 @@ public class VoxIO {
                         voxelsRaw.write(y);
                         voxelsRaw.write(z);
                         voxelsRaw.write(cc);
-                        voxelsCount++;
                     }
                 }
             }
@@ -154,7 +153,7 @@ public class VoxIO {
             for (int i = 1; i < 4; i++) {
                 bin.writeInt(palette[i]);
             }
-            bin.writeInt(palette[14]); // special case for eye shine
+            bin.writeInt(palette[17]); // special case for eye shine
             for (int i = 5; i < 256; i++) {
                 bin.writeInt(palette[i]);
             }
@@ -164,8 +163,8 @@ public class VoxIO {
             bin.close();
             fos.flush();
             fos.close();
-        }catch (Exception ignored) {
-            ignored.printStackTrace();
+        }catch (Exception e) {
+            e.printStackTrace();
         }
     }
     public static void writeAnimatedVOX(String filename, byte[][][][] voxelData, int[] palette) {
@@ -229,7 +228,7 @@ public class VoxIO {
             for (int i = 1; i < 4; i++) {
                 bin.writeInt(palette[i]);
             }
-            bin.writeInt(palette[14]); // special case for eye shine
+            bin.writeInt(palette[17]); // special case for eye shine
             for (int i = 5; i < 256; i++) {
                 bin.writeInt(palette[i]);
             }
@@ -239,8 +238,8 @@ public class VoxIO {
             bin.close();
             fos.flush();
             fos.close();
-        }catch (Exception ignored) {
-            ignored.printStackTrace();
+        }catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
