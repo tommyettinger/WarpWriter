@@ -1,4 +1,4 @@
-package warpwriter;
+package warpwriter.fetch;
 
 /**
  * An abstraction for any types that allow querying a 3D position to get a color index (as a byte).

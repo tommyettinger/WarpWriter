@@ -1,4 +1,4 @@
-package warpwriter;
+package warpwriter.fetch;
 
 /**
  * A simple IModel that wraps a 3D byte array, using its bounds to implement {@link #xSize()} and its related methods

@@ -1,6 +1,7 @@
 package warpwriter;
 
 import squidpony.ArrayTools;
+import warpwriter.fetch.IModel;
 
 import java.util.Arrays;
 /**
