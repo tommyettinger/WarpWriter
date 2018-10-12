@@ -1,4 +1,4 @@
-package warpwriter.fetch;
+package warpwriter.model;
 
 /**
  * An abstraction for IFetch types that also have limits on their 3D bounds, limiting what values can be passed to

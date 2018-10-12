@@ -1,4 +1,4 @@
-package warpwriter.fetch;
+package warpwriter.model;
 
 /**
  * A sparse IModel that can have sizeX, sizeY, and sizeZ each up to 256, and uses memory based on how many voxels are

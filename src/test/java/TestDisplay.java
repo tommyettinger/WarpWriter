@@ -14,8 +14,8 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import squidpony.FakeLanguageGen;
 import squidpony.StringKit;
 import warpwriter.*;
-import warpwriter.fetch.ArrayModel;
-import warpwriter.fetch.IModel;
+import warpwriter.model.ArrayModel;
+import warpwriter.model.IModel;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

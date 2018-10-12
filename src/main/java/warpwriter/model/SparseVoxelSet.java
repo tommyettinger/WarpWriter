@@ -15,7 +15,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package warpwriter.fetch;
+package warpwriter.model;
 
 import squidpony.squidmath.*;
 

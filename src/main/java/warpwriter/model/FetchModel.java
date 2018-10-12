@@ -1,4 +1,4 @@
-package warpwriter.fetch;
+package warpwriter.model;
 
 /** Converts any IFetch to an IModel
  * @author Ben McLean
