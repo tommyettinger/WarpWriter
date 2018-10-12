@@ -1,7 +1,7 @@
 package warpwriter.model;
 
 /**
- * Infinitely loop any fetch in any or all of the three dimensions.
+ * Infinitely loop any IFetch in any or all of the three dimensions.
  *
  * @author Ben McLean
  */
