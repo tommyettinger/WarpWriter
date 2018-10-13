@@ -65,7 +65,7 @@ public class ArrayModel extends Fetch implements IModel {
 
     @Override
     public byte bite(int x, int y, int z) {
-        return zeroByte(inside(x, y, z) ? voxels[x][y][z] : (byte) 0, x, y, z);
+        return deferByte(inside(x, y, z) ? voxels[x][y][z] : (byte) 0, x, y, z);
     }
 
     public boolean outside(int x, int y, int z) {

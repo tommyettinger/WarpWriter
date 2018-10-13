@@ -9,7 +9,7 @@ package warpwriter.model;
  * <p>
  * 1. Override Fetch fetch(int x, int y, int z) to defer to another Fetch. This will be tried first, and if the result is null then bite(int x, int y, int z) will be called instead.
  * <p>
- * 2. Override byte bite(int x, int y, int z) to decide what byte to use at the end of a chain. It is recommended to wrap return statements in zeroByte(byte result, int x, int y, int z) to guarantee smart transparency in the event of a broken chain or if the bite method is accidentally called at the wrong time.
+ * 2. Override byte bite(int x, int y, int z) to decide what byte to use at the end of a chain. It is recommended to wrap return statements in deferByte(byte result, int x, int y, int z) to guarantee smart transparency in the event of a broken chain or if the bite method is accidentally called at the wrong time.
  * <p>
  * If both methods are overridden then a Fetch can be used both as a filter for other Fetches and as a final fetch, depending on whether or not it is on the end of it's chain.
  * <p>
@@ -33,10 +33,10 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
     /**
      * This method is intended to be overridden with a final decision about which byte to return for a given coordinate.
      *
-     * @return A final answer, except that it is recommended to wrap results in zeroByte(byte result, int x, int y, int z) to ensure smart transparency in the event of a broken chain or if someone screws up and calls this method in the wrong order.
+     * @return A final answer, except that it is recommended to wrap results in deferByte(byte result, int x, int y, int z) to ensure smart transparency in the event of a broken chain or if someone screws up and calls this method in the wrong order.
      */
     public byte bite(int x, int y, int z) {
-        return zeroByte(x, y, z);
+        return deferByte(x, y, z);
     }
 
     public byte bite(int x, int z) {
@@ -157,16 +157,16 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
         return add(new BoxModel(convenience, color));
     }
 
-    public Fetch zeroFetch(int x, int y, int z) {
+    public Fetch fetchFetch(IFetch iFetch) {
+        return add(new FetchFetch(iFetch));
+    }
+
+    public Fetch deferFetch(int x, int y, int z) {
         return getNextFetch() == null ? ColorFetch.transparent : getNextFetch();
     }
 
-    public Fetch zeroFetch(byte result, int x, int y, int z) {
-        return result == 0 ? zeroFetch(x, y, z) : ColorFetch.color(result);
-    }
-
-    public Fetch fetchFetch(IFetch iFetch) {
-        return add(new FetchFetch(iFetch));
+    public Fetch deferFetch(byte result, int x, int y, int z) {
+        return result == 0 ? deferFetch(x, y, z) : ColorFetch.color(result);
     }
 
     /**
@@ -176,11 +176,11 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
      * <p>
      * This should be the method which ensures that, when no next method is specified in the chain, the background is always transparent.
      */
-    public byte zeroByte(byte result, int x, int y, int z) {
-        return result == (byte) 0 ? zeroFetch(x, y, z).at(x, y, z) : result;
+    public byte deferByte(byte result, int x, int y, int z) {
+        return result == (byte) 0 ? deferFetch(x, y, z).at(x, y, z) : result;
     }
 
-    public byte zeroByte(int x, int y, int z) {
-        return zeroByte((byte) 0, x, y, z);
+    public byte deferByte(int x, int y, int z) {
+        return deferByte((byte) 0, x, y, z);
     }
 }

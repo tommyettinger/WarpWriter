@@ -13,10 +13,10 @@ public class FetchFetch extends Fetch {
     }
 
     public Fetch fetch(int x, int y, int z) {
-        return zeroFetch(iFetch.at(x, y, z), x, y, z);
+        return deferFetch(iFetch.at(x, y, z), x, y, z);
     }
 
     public byte bite(int x, int y, int z) {
-        return zeroByte(iFetch.at(x, y, z), x, y, z);
+        return deferByte(iFetch.at(x, y, z), x, y, z);
     }
 }
