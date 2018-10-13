@@ -14,7 +14,7 @@ public class ColorFetch extends Fetch {
      * @return A ColorFetch of color
      */
     public static ColorFetch colorFetch(byte color) {
-        if (colors[color] == null) {
+        if (colors[color  & 255] == null) {
             colors[color] = new ColorFetch(color);
         }
         return colors[color];
