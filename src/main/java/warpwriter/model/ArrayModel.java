@@ -6,7 +6,7 @@ package warpwriter.model;
  * <br>
  * Created by Tommy Ettinger on 10/11/2018.
  */
-public class ArrayModel implements IModel {
+public class ArrayModel extends Fetch implements IModel {
     public byte[][][] voxels;
     public ArrayModel()
     {
