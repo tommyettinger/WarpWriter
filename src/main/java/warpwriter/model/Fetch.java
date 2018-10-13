@@ -1,7 +1,16 @@
 package warpwriter.model;
 
 /**
- * This abstract class allows for IFetch implementations to defer to other IFetch instances for different coordinates instead of needing to return a byte.
+ * This abstract class allows for IFetch implementations to defer to other IFetch instances for different coordinates instead of always needing to return a byte themselves.
+ *
+ * DO NOT override byte at(int x, int y, int z).
+ * Instead, implementing classes are expected to use at least one of the following two options:
+ * 1. Override Fetch fetch(int x, int y, int z) to defer to another Fetch
+ * 2. Override byte bite(int x, int y, int z) to stop deferring and return the final answer
+ *
+ * Failure to comply with the above requirement may result in infinite recursion.
+ *
+ * To defer to the next method in a method chain, use getNextFetch()
  *
  * @author Ben McLean
  */
@@ -33,8 +42,7 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
      * Override bite(int x, int y, int z) instead!
      */
     public byte at(int x, int y, int z) {
-        Fetch current = getFirstFetch();
-        Fetch next = current;
+        Fetch current = getFirstFetch(), next = current;
         do {
             current = next;
             current.xChain = x;

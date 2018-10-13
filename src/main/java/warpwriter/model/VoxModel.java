@@ -75,4 +75,12 @@ public class VoxModel extends SparseVoxelSet implements IModel {
     public int zSize() {
         return sizeZ;
     }
+
+    public boolean outside(int x, int y, int z) {
+        return x < 0 || y < 0 || z < 0 || x >= xSize() || y >= ySize() || z >= zSize();
+    }
+
+    public boolean inside(int x, int y, int z) {
+        return !outside(x, y, z);
+    }
 }

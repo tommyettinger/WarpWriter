@@ -5,46 +5,9 @@ package warpwriter.model;
  *
  * @author Ben McLean
  */
-public class Loop extends Fetch implements IModel {
-    int xSize, ySize, zSize;
-
-    public Loop(Fetch fetch, int xSize, int ySize, int zSize) {
-        this(xSize, ySize, zSize);
-        add(fetch);
-    }
-
-    public Loop(int xSize, int ySize, int zSize, Fetch fetch) {
-        this(xSize, ySize, zSize);
-        add(fetch);
-    }
-
+public class Loop extends FetchModel implements IModel {
     public Loop(int xSize, int ySize, int zSize) {
-        this.xSize = xSize;
-        this.ySize = ySize;
-        this.zSize = zSize;
-    }
-
-    public Loop(byte[][][] convenience, Fetch fetch) {
-        this(convenience.length, convenience[0].length, convenience[0][0].length, fetch);
-    }
-
-    public Loop(Fetch fetch, byte[][][] convenience) {
-        this(convenience, fetch);
-    }
-
-    @Override
-    public int xSize() {
-        return xSize;
-    }
-
-    @Override
-    public int ySize() {
-        return ySize;
-    }
-
-    @Override
-    public int zSize() {
-        return zSize;
+        super(xSize, ySize, zSize);
     }
 
     @Override

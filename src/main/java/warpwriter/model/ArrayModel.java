@@ -2,19 +2,18 @@ package warpwriter.model;
 
 /**
  * A simple IModel that wraps a 3D byte array, using its bounds to implement {@link #xSize()} and its related methods
- * and using its contents to implement {@link #at(int, int, int)} (out-of-bounds requests are handled by returning 0).
+ * and using its contents to implement {@link #bite(int, int, int)} (out-of-bounds requests are handled by returning 0).
  * <br>
  * Created by Tommy Ettinger on 10/11/2018.
  */
 public class ArrayModel extends Fetch implements IModel {
     public byte[][][] voxels;
-    public ArrayModel()
-    {
+
+    public ArrayModel() {
         this(new byte[12][12][8]);
     }
 
-    public ArrayModel(byte[][][] voxels)
-    {
+    public ArrayModel(byte[][][] voxels) {
         this.voxels = voxels;
     }
 
@@ -59,15 +58,23 @@ public class ArrayModel extends Fetch implements IModel {
      */
     @Override
     public Fetch fetch(int x, int y, int z) {
-        if(x < 0 || y < 0 || z < 0 || x >= xSize() || y >= ySize() || z >= zSize() || voxels[x][y][z] == 0)
+        if (x < 0 || y < 0 || z < 0 || x >= xSize() || y >= ySize() || z >= zSize() || voxels[x][y][z] == 0)
             return getNextFetch();
         return ColorFetch.color(voxels[x][y][z]);
     }
 
     @Override
     public byte bite(int x, int y, int z) {
-        if(x < 0 || y < 0 || z < 0 || x >= xSize() || y >= ySize() || z >= zSize() || voxels[x][y][z] == 0)
+        if (outside(x, y, z) || voxels[x][y][z] == 0)
             return zeroByte(x, y, z);
         return voxels[x][y][z];
+    }
+
+    public boolean outside(int x, int y, int z) {
+        return x < 0 || y < 0 || z < 0 || x >= xSize() || y >= ySize() || z >= zSize();
+    }
+
+    public boolean inside(int x, int y, int z) {
+        return !outside(x, y, z);
     }
 }
