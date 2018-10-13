@@ -7,7 +7,7 @@ package warpwriter.model;
  *
  * @author Ben McLean
  */
-public abstract class Fetch implements IFetch {
+public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
     /**
      * This method is intended to be overridden with logic to determine which fill to return for the provided coordinate.
      * <p>
@@ -27,7 +27,6 @@ public abstract class Fetch implements IFetch {
         return fetch(x, 0);
     }
 
-    @Override
     public byte at(int x, int y, int z) {
         return fetch(x, y, z).at(x, y, z);
     }
