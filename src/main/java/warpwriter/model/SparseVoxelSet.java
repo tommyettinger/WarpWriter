@@ -34,7 +34,7 @@ import java.util.NoSuchElementException;
  * Ported from libGDX by Tommy Ettinger on 10/19/2015.
  * Ported again from SquidLib by Tommy Ettinger on 10/11/2018
  */
-public class SparseVoxelSet implements Serializable, IFetch {
+public class SparseVoxelSet extends Fetch implements Serializable {
     private static final long serialVersionUID = 2L;
 
     private static final int PRIME2 = 0xB7659;//0xb4b82e39;
