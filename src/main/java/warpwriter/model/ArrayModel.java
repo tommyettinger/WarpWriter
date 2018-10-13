@@ -60,7 +60,14 @@ public class ArrayModel extends Fetch implements IModel {
     @Override
     public Fetch fetch(int x, int y, int z) {
         if(x < 0 || y < 0 || z < 0 || x >= xSize() || y >= ySize() || z >= zSize() || voxels[x][y][z] == 0)
-            return zeroFetch(x, y, z);
-        return ColorFetch.colorFetch(voxels[x][y][z]);
+            return getNextFetch();
+        return ColorFetch.color(voxels[x][y][z]);
+    }
+
+    @Override
+    public byte bite(int x, int y, int z) {
+        if(x < 0 || y < 0 || z < 0 || x >= xSize() || y >= ySize() || z >= zSize() || voxels[x][y][z] == 0)
+            return zeroByte(x, y, z);
+        return voxels[x][y][z];
     }
 }

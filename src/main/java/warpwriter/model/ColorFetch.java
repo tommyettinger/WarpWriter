@@ -7,13 +7,12 @@ package warpwriter.model;
  */
 public class ColorFetch extends Fetch {
     private static final ColorFetch[] colors = new ColorFetch[256];
-    public static final ColorFetch transparent = colorFetch((byte) 0);
+    public static final ColorFetch transparent = color((byte) 0);
 
     /**
      * Use this method instead of the constructor.
-     * @return A ColorFetch of color
      */
-    public static ColorFetch colorFetch(byte color) {
+    public static ColorFetch color(byte color) {
         if (colors[color & 255] == null) {
             colors[color & 255] = new ColorFetch(color);
         }
