@@ -23,80 +23,109 @@ public class ModelMaker {
     private int xSize, ySize, zSize;
 
     /**
-     * Gets a 64-bit point hash of a 3D point (x, y, and z are all longs) and a state/seed as a long.
-     * This uses a 3D variant of Matthew Szudzik's function for perfect hashing in 2D, then feeds that (very non-random)
-     * perfect hash through a simple RNG-like unary hash (it is close to SquidLib's old ThrustRNG).
-     * @see <a href="https://stackoverflow.com/a/13871379/786740">Szudzik's function described on StackOverflow</a>
-     * @param x x position, as a non-negative long (it may work for negative longs, but no guarantees)
-     * @param y y position, as a non-negative long (it may work for negative longs, but no guarantees)
-     * @param z z position, as a non-negative long (it may work for negative longs, but no guarantees)
-     * @param state any long
+     * Gets a 64-bit point hash of a 3D point (x, y, and z are all longs) and a state/seed as a long. This point hash
+     * has just about the best speed of any algorithms tested, and though its quality is almost certainly bad for
+     * traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
+     * <br>
+     * This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random sequences,
+     * where each axis is multiplied by a different constant, and the choice of constants depends on the number of axes
+     * but is always related to a generalized form of golden ratios, repeatedly dividing 1.0 by the generalized ratio.
+     * See <a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/">Roberts' article</a>
+     * for some more information on how he uses this, but we do things differently because we want random-seeming
+     * results instead of separated sub-random results.
+     * @param x x position; any long
+     * @param y y position; any long
+     * @param z z position; any long
+     * @param s the state; any long
      * @return 64-bit hash of the x,y,z point with the given state
      */
-    public static long hashAll(long x, long y, long z, long state)
-    {
-        y = (y >= z ? y * y + y + z : y + z * z);
-        x = ((x >= y ? x * x + x + y : x + y * y) ^ state) * 0xC6BC279692B5CC8BL;
-        return (x = (x ^ x >>> 25) * 0x9E3779B97F4A7C15L) ^ (x >>> 22);
+    public static long hashAll(long x, long y, long z, long s) {
+        z += s ^ 0xDB4F0B9175AE2165L;
+        y += z * 0xBBE0563303A4615FL;
+        x += y * 0xA0F2EC75A1FE1575L;
+        s += x * 0x89E182857D9ED688L;
+        return ((s = (s ^ s >> 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ s >>> 25);
     }
-
     /**
-     * Gets a 64-bit point hash of a 4D point (x, y, z, and w are all longs) and a state/seed as a long.
-     * This uses a 4D variant of Matthew Szudzik's function for perfect hashing in 2D, then feeds that (very non-random)
-     * perfect hash through a simple RNG-like unary hash (it is close to SquidLib's old ThrustRNG).
-     * @see <a href="https://stackoverflow.com/a/13871379/786740">Szudzik's function described on StackOverflow</a>
-     * @param x x position, as a non-negative long (it may work for negative longs, but no guarantees)
-     * @param y y position, as a non-negative long (it may work for negative longs, but no guarantees)
-     * @param z z position, as a non-negative long (it may work for negative longs, but no guarantees)
-     * @param w w position, as a non-negative long (it may work for negative longs, but no guarantees)
-     * @param state any long
+     * Gets a 64-bit point hash of a 4D point (x, y, z, and w are all longs) and a state/seed as a long. This point
+     * hash has just about the best speed of any algorithms tested, and though its quality is almost certainly bad for
+     * traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
+     * <br>
+     * This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random sequences,
+     * where each axis is multiplied by a different constant, and the choice of constants depends on the number of axes
+     * but is always related to a generalized form of golden ratios, repeatedly dividing 1.0 by the generalized ratio.
+     * See <a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/">Roberts' article</a>
+     * for some more information on how he uses this, but we do things differently because we want random-seeming
+     * results instead of separated sub-random results.
+     * @param x x position; any long
+     * @param y y position; any long
+     * @param z z position; any long
+     * @param w w position (often time); any long
+     * @param s the state; any long
      * @return 64-bit hash of the x,y,z,w point with the given state
      */
-    public static long hashAll(long x, long y, long z, long w, long state)
-    {
-        z = (z >= w ? z * z + z + w : z + w * w);
-        y = (y >= z ? y * y + y + z : y + z * z);
-        x = ((x >= y ? x * x + x + y : x + y * y) ^ state) * 0xC6BC279692B5CC8BL;
-        return (x = (x ^ x >>> 25) * 0x9E3779B97F4A7C15L) ^ (x >>> 22);
+    public static long hashAll(long x, long y, long z, long w, long s) {
+        w += s * 0xE19B01AA9D42C633L;
+        z += w * 0xC6D1D6C8ED0C9631L;
+        y += z * 0xAF36D01EF7518DBBL;
+        x += y * 0x9A69443F36F710E6L;
+        s += x * 0x881403B9339BD42DL;
+        return ((s = (s ^ s >> 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ s >>> 25);
     }
     /**
-     * Gets a bounded int point hash of a 3D point (x, y, and z are all longs) and a state/seed as a long.
-     * This uses a 3D variant of Matthew Szudzik's function for perfect hashing in 2D, then feeds that (very non-random)
-     * perfect hash through a simple RNG-like unary hash (it is close to SquidLib's old ThrustRNG).
-     * @see <a href="https://stackoverflow.com/a/13871379/786740">Szudzik's function described on StackOverflow</a>
-     * @param x x position, as a non-negative long (it may work for negative longs, but no guarantees)
-     * @param y y position, as a non-negative long (it may work for negative longs, but no guarantees)
-     * @param z z position, as a non-negative long (it may work for negative longs, but no guarantees)
-     * @param state any long
+     * Gets a bounded int point hash of a 3D point (x, y, and z are all longs) and a state/seed as a long. This point
+     * hash has just about the best speed of any algorithms tested, and though its quality is almost certainly bad for
+     * traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
+     * <br>
+     * This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random sequences,
+     * where each axis is multiplied by a different constant, and the choice of constants depends on the number of axes
+     * but is always related to a generalized form of golden ratios, repeatedly dividing 1.0 by the generalized ratio.
+     * See <a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/">Roberts' article</a>
+     * for some more information on how he uses this, but we do things differently because we want random-seeming
+     * results instead of separated sub-random results.
+     * @param x x position; any long
+     * @param y y position; any long
+     * @param z z position; any long
+     * @param s the state; any long
      * @param bound outer exclusive bound; may be negative
      * @return an int between 0 (inclusive) and bound (exclusive) dependent on the position and state
      */
-    public static int hashBounded(long x, long y, long z, long state, int bound)
+    public static int hashBounded(long x, long y, long z, long s, int bound)
     {
-        y = (y >= z ? y * y + y + z : y + z * z);
-        x = ((x >= y ? x * x + x + y : x + y * y) ^ state) * 0xC6BC279692B5CC8BL;
-        return (int)((bound * (((x = (x ^ x >>> 25) * 0x9E3779B97F4A7C15L) ^ (x >>> 22)) & 0xFFFFFFFFL)) >> 32);
+        z += s * 0xDB4F0B9175AE2165L;
+        y += z * 0xBBE0563303A4615FL;
+        x += y * 0xA0F2EC75A1FE1575L;
+        s += x * 0x89E182857D9ED688L;
+        return (int)((bound * (((s = (s ^ s >> 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ s >>> 25) & 0xFFFFFFFFL)) >> 32);
     }
 
     /**
-     * Gets a bounded int point hash of a 4D point (x, y, z, and w are all longs) and a state/seed as a long.
-     * This uses a 4D variant of Matthew Szudzik's function for perfect hashing in 2D, then feeds that (very non-random)
-     * perfect hash through a simple RNG-like unary hash (it is close to SquidLib's old ThrustRNG).
-     * @see <a href="https://stackoverflow.com/a/13871379/786740">Szudzik's function described on StackOverflow</a>
-     * @param x x position, as a non-negative long (it may work for negative longs, but no guarantees)
-     * @param y y position, as a non-negative long (it may work for negative longs, but no guarantees)
-     * @param z z position, as a non-negative long (it may work for negative longs, but no guarantees)
-     * @param w w position, as a non-negative long (it may work for negative longs, but no guarantees)
-     * @param state any long
+     * Gets a bounded int point hash of a 4D point (x, y, z, and w are all longs) and a state/seed as a long. This point
+     * hash has just about the best speed of any algorithms tested, and though its quality is almost certainly bad for
+     * traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
+     * <br>
+     * This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random sequences,
+     * where each axis is multiplied by a different constant, and the choice of constants depends on the number of axes
+     * but is always related to a generalized form of golden ratios, repeatedly dividing 1.0 by the generalized ratio.
+     * See <a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/">Roberts' article</a>
+     * for some more information on how he uses this, but we do things differently because we want random-seeming
+     * results instead of separated sub-random results.
+     * @param x x position; any long
+     * @param y y position; any long
+     * @param z z position; any long
+     * @param w w position (often time); any long
+     * @param s the state; any long
      * @param bound outer exclusive bound; may be negative
      * @return an int between 0 (inclusive) and bound (exclusive) dependent on the position and state
      */
-    public static int hashBounded(long x, long y, long z, long w, long state, int bound)
+    public static int hashBounded(long x, long y, long z, long w, long s, int bound)
     {
-        z = (z >= w ? z * z + z + w : z + w * w);
-        y = (y >= z ? y * y + y + z : y + z * z);
-        x = ((x >= y ? x * x + x + y : x + y * y) ^ state) * 0xC6BC279692B5CC8BL;
-        return (int)((bound * (((x = (x ^ x >>> 25) * 0x9E3779B97F4A7C15L) ^ (x >>> 22)) & 0xFFFFFFFFL)) >> 32);
+        w += s * 0xE19B01AA9D42C633L;
+        z += w * 0xC6D1D6C8ED0C9631L;
+        y += z * 0xAF36D01EF7518DBBL;
+        x += y * 0x9A69443F36F710E6L;
+        s += x * 0x881403B9339BD42DL;
+        return (int)((bound * (((s = (s ^ s >> 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ s >>> 25) & 0xFFFFFFFFL)) >> 32);
     }
 //
 //    /**
