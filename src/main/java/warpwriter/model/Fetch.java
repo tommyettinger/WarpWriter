@@ -165,6 +165,10 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
         return result == 0 ? zeroFetch( x,  y,  z) : ColorFetch.color(result);
     }
 
+    public Fetch fetchFetch(IFetch iFetch) {
+        return add(new FetchFetch(iFetch));
+    }
+
     /**
      * bite(int x, int y, int z) is only supposed to be called when there is no next fetch.
      *
