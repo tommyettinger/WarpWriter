@@ -27,8 +27,25 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
         return fetch(x, 0);
     }
 
+    public int xChain, yChain, zChain;
+
     public byte at(int x, int y, int z) {
-        return fetch(x, y, z).at(x, y, z);
+        Fetch current = this;
+        while (current.getPreviousFetch() != null) {
+            current = current.getPreviousFetch();
+        }
+        Fetch next = current;
+        do {
+            current = next;
+            current.xChain = x;
+            current.yChain = y;
+            current.zChain = z;
+            next = current.fetch(x, y, z);
+            x=current.xChain;
+            y=current.yChain;
+            z=current.zChain;
+        } while (next != null);
+        return current.at(x, y, z);
     }
 
     public byte at(int x, int z) {
@@ -37,5 +54,35 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
 
     public byte at(int x) {
         return fetch(x).at(x);
+    }
+
+    private Fetch nextFetch;
+
+    public Fetch getNextFetch() {
+        return nextFetch;
+    }
+
+    public Fetch setNextFetch(Fetch nextFetch) {
+        this.nextFetch = nextFetch;
+        return this;
+    }
+
+    private Fetch previousFetch;
+
+    public Fetch getPreviousFetch() {
+        return previousFetch;
+    }
+
+    public Fetch setPreviousFetch(Fetch previousFetch) {
+        this.previousFetch = previousFetch;
+        return this;
+    }
+
+    public Fetch add(Fetch fetch) {
+        return setNextFetch(fetch).getNextFetch().setPreviousFetch(this);
+    }
+
+    public Fetch loop(int xSize, int ySize, int zSize) {
+        return add(new Loop(xSize, ySize, zSize));
     }
 }

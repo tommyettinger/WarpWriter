@@ -5,18 +5,20 @@ package warpwriter.model;
  *
  * @author Ben McLean
  */
-public class LoopModel extends Fetch implements IModel {
-    IFetch fetch;
+public class Loop extends Fetch implements IModel {
     int xSize, ySize, zSize;
 
-    /**
-     * @param fetch What to loop
-     * @param xSize Size to loop in x dimension, (from 0 inclusive to that size exclusive) or 0 to not loop in that dimension
-     * @param ySize Size to loop in y dimension, (from 0 inclusive to that size exclusive) or 0 to not loop in that dimension
-     * @param zSize Size to loop in z dimension, (from 0 inclusive to that size exclusive) or 0 to not loop in that dimension
-     */
-    public LoopModel(IFetch fetch, int xSize, int ySize, int zSize) {
-        this.fetch = fetch;
+    public Loop(Fetch fetch, int xSize, int ySize, int zSize) {
+        this(xSize, ySize, zSize);
+        add(fetch);
+    }
+
+    public Loop(int xSize, int ySize, int zSize, Fetch fetch) {
+        this(xSize, ySize, zSize);
+        add(fetch);
+    }
+
+    public Loop(int xSize, int ySize, int zSize) {
         this.xSize = xSize;
         this.ySize = ySize;
         this.zSize = zSize;
@@ -38,8 +40,11 @@ public class LoopModel extends Fetch implements IModel {
     }
 
     @Override
-    public byte at(int x, int y, int z) {
-        return fetch.at(loop(x, xSize()), loop(y, ySize()), loop(z, zSize()));
+    public Fetch fetch(int x, int y, int z) {
+        xChain = loop(x, xSize());
+        yChain = loop(y, ySize());
+        zChain = loop(z, zSize());
+        return getNextFetch();
     }
 
     /**
