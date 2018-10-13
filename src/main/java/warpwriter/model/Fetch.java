@@ -33,10 +33,7 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
      * Override bite(int x, int y, int z) instead!
      */
     public byte at(int x, int y, int z) {
-        Fetch current = this;
-        while (current.getPreviousFetch() != null) {
-            current = current.getPreviousFetch();
-        }
+        Fetch current = getFirstFetch();
         Fetch next = current;
         do {
             current = next;
@@ -79,25 +76,29 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
         return this;
     }
 
-    private Fetch previousFetch;
+    private Fetch firstFetch=this;
 
-    public Fetch getPreviousFetch() {
-        return previousFetch;
+    public Fetch getFirstFetch() {
+        return firstFetch;
     }
 
-    public Fetch setPreviousFetch(Fetch previousFetch) {
-        this.previousFetch = previousFetch;
+    public Fetch setFirstFetch(Fetch firstFetch) {
+        this.firstFetch = firstFetch;
         return this;
     }
 
     public Fetch add(Fetch fetch) {
         setNextFetch(fetch);
-        fetch.setPreviousFetch(this);
+        fetch.setFirstFetch(getFirstFetch());
         return this;
     }
 
-    public FetchModel fetchModel(int xSize, int ySize, int zSize) {
+    public FetchModel model(int xSize, int ySize, int zSize) {
         return new FetchModel(this, xSize, ySize, zSize);
+    }
+
+    public FetchModel model(byte[][][] convenience) {
+        return new FetchModel(this, convenience);
     }
 
     public Fetch offset(int xSize, int ySize, int zSize) {
