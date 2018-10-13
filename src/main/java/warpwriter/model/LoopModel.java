@@ -39,7 +39,7 @@ public class LoopModel extends Fetch implements IModel {
 
     @Override
     public byte at(int x, int y, int z) {
-        return fetch.at(loop(x, xSize), loop(y, ySize), loop(z, zSize));
+        return fetch.at(loop(x, xSize()), loop(y, ySize()), loop(z, zSize()));
     }
 
     /**
