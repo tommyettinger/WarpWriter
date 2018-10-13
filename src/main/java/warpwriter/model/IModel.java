@@ -5,6 +5,8 @@ package warpwriter.model;
  * {@link #at(int, int, int)} to between 0 (inclusive) and the xSize(), ySize(), and zSize() methods here (exclusive).
  * <br>
  * Created by Tommy Ettinger on 10/11/2018.
+ *
+ * @author Tommy Ettinger
  */
 public interface IModel extends IFetch {
     /**

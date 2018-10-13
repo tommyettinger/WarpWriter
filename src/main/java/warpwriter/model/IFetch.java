@@ -4,11 +4,14 @@ package warpwriter.model;
  * An abstraction for any types that allow querying a 3D position to get a color index (as a byte).
  * <br>
  * Created by Tommy Ettinger on 10/11/2018.
+ *
+ * @author Tommy Ettinger
  */
 public interface IFetch {
     /**
      * Looks up a color index (a byte) from a 3D position as x,y,z int parameters. Index 0 is used to mean an
      * empty position with no color.
+     *
      * @param x x position to look up; depending on angle, can be forward/back or left/right
      * @param y y position to look up; depending on angle, can be left/right or forward/back
      * @param z z position to look up; almost always up/down

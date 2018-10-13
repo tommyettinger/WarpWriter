@@ -1,25 +1,27 @@
 package warpwriter.model;
 
 /**
+ * Draws a wireframe box!
+ *
  * @author Ben McLean
  */
 public class BoxModel extends FetchModel {
     public Fetch color;
 
-    public BoxModel (int xSize, int ySize, int zSize, Fetch color) {
+    public BoxModel(int xSize, int ySize, int zSize, Fetch color) {
         super(xSize, ySize, zSize);
         this.color = color;
     }
 
-    public BoxModel (Fetch color, int xSize, int ySize, int zSize) {
+    public BoxModel(Fetch color, int xSize, int ySize, int zSize) {
         this(xSize, ySize, zSize, color);
     }
 
-    public BoxModel (byte[][][] convenience, Fetch color) {
+    public BoxModel(byte[][][] convenience, Fetch color) {
         this(convenience.length, convenience[0].length, convenience[0][0].length, color);
     }
 
-    public BoxModel (Fetch color, byte[][][] convenience) {
+    public BoxModel(Fetch color, byte[][][] convenience) {
         this(convenience, color);
     }
 

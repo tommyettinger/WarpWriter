@@ -5,22 +5,24 @@ package warpwriter.model;
  * filled rather than the bounds of the model. For most models, {@link ArrayModel} will be more efficient all around.
  * <br>
  * Created by Tommy Ettinger on 10/11/2018.
+ *
+ * @author Tommy Ettinger
  */
 public class VoxModel extends SparseVoxelSet implements IModel {
     public int sizeX, sizeY, sizeZ;
-    public VoxModel()
-    {
+
+    public VoxModel() {
         this(12, 12, 8);
     }
-    public VoxModel(int xSize, int ySize, int zSize)
-    {
+
+    public VoxModel(int xSize, int ySize, int zSize) {
         super(xSize * ySize * zSize >> 3);
         sizeX = xSize;
         sizeY = ySize;
         sizeZ = zSize;
     }
-    public VoxModel(int xSize, int ySize, int zSize, int[] voxels)
-    {
+
+    public VoxModel(int xSize, int ySize, int zSize, int[] voxels) {
         super(voxels.length);
         sizeX = xSize;
         sizeY = ySize;
@@ -29,9 +31,8 @@ public class VoxModel extends SparseVoxelSet implements IModel {
             add(voxels[i]);
         }
     }
-    
-    public VoxModel(byte[][][] voxels)
-    {
+
+    public VoxModel(byte[][][] voxels) {
         super(voxels.length * voxels[0].length * voxels[0][0].length >> 3);
         sizeX = voxels.length;
         sizeY = voxels[0].length;
@@ -39,13 +40,13 @@ public class VoxModel extends SparseVoxelSet implements IModel {
         for (int x = 0; x < sizeX; x++) {
             for (int y = 0; y < sizeY; y++) {
                 for (int z = 0; z < sizeZ; z++) {
-                    if(voxels[x][y][z] != 0)
+                    if (voxels[x][y][z] != 0)
                         add(x, y, z, voxels[x][y][z]);
                 }
             }
         }
     }
-    
+
     /**
      * Gets the x size of the IModel, with requests for x limited between 0 (inclusive) to xSize() (exclusive).
      *

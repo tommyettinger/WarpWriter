@@ -1,6 +1,8 @@
 package warpwriter.model;
 
-/** Converts a Fetch to a Model with sizes stored in public ints
+/**
+ * Converts a Fetch to a Model with sizes stored in public ints
+ *
  * @author Ben McLean
  */
 public class FetchModel extends Fetch implements IModel {

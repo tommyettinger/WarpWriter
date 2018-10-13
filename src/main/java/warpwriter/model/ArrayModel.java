@@ -5,6 +5,8 @@ package warpwriter.model;
  * and using its contents to implement {@link #bite(int, int, int)} (out-of-bounds requests are handled by returning 0).
  * <br>
  * Created by Tommy Ettinger on 10/11/2018.
+ *
+ * @author Tommy Ettinger
  */
 public class ArrayModel extends Fetch implements IModel {
     public byte[][][] voxels;
