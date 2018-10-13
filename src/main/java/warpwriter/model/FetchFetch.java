@@ -12,12 +12,10 @@ public class FetchFetch extends Fetch {
         this.iFetch = iFetch;
     }
 
-    @Override
     public Fetch fetch(int x, int y, int z) {
         return deferFetch(iFetch.at(x, y, z), x, y, z);
     }
 
-    @Override
     public byte bite(int x, int y, int z) {
         return deferByte(iFetch.at(x, y, z), x, y, z);
     }
