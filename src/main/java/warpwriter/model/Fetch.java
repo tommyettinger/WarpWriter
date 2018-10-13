@@ -83,7 +83,13 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
     }
 
     public Fetch setNextFetch(Fetch nextFetch) {
-        this.nextFetch = nextFetch;
+        Fetch current, next = this;
+        do {
+            current = next;
+            next = current.getNextFetch();
+        } while (next != null);
+        current.nextFetch = nextFetch;
+        nextFetch.setFirstFetch(getFirstFetch());
         return this;
     }
 
@@ -104,7 +110,7 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
     public Fetch add(Fetch fetch) {
         setNextFetch(fetch);
         fetch.setFirstFetch(getFirstFetch());
-        return this; // TODO: Should this return fetch?
+        return this;
     }
 
     /**

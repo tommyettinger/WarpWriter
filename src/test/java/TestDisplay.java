@@ -437,7 +437,7 @@ public class TestDisplay extends ApplicationAdapter {
 
         voxels = new OffsetModel(2, 2, 2)
                 .boxModel(bytes, ColorFetch.color(mm.randomMainColor()))
-                //.arrayModel(bytes)
+                .arrayModel(bytes)
                 .model(bytes);
 
         //ByteFill.fill(bytes, ByteFill.wireframeBox(bytes, ByteFill.fill3D(mm.randomMainColor())));
