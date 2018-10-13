@@ -91,7 +91,9 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
     }
 
     public Fetch add(Fetch fetch) {
-        return setNextFetch(fetch).getNextFetch().setPreviousFetch(this);
+        setPreviousFetch(fetch);
+        fetch.setNextFetch(this);
+        return this;
     }
 
     public FetchModel fetchModel(int xSize, int ySize, int zSize) {
