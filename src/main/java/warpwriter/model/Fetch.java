@@ -119,4 +119,16 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
     public Fetch boxModel(byte[][][] convenience, Fetch no) {
         return add(new BoxModel(convenience, no));
     }
+
+    public Fetch zeroFetch(int x, int y, int z) {
+        if (getNextFetch() == null)
+            return ColorFetch.transparent;
+        return getNextFetch();
+    }
+
+    public byte zeroByte(int x, int y, int z) {
+        if (getNextFetch() == null)
+            return (byte) 0;
+        return getNextFetch().at(x, y, z);
+    }
 }

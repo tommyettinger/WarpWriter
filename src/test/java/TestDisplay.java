@@ -435,7 +435,7 @@ public class TestDisplay extends ApplicationAdapter {
                 8
         );
 
-        Fetch fetch = new BoxModel(bytes, ColorFetch.colorFetch(mm.randomMainColor())).arrayModel(bytes);
+        Fetch fetch = new ArrayModel(bytes).boxModel(bytes, ColorFetch.colorFetch(mm.randomMainColor()));
 
         voxels = new FetchModel(bytes, fetch);
 
