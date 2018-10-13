@@ -1,11 +1,11 @@
 package warpwriter.model;
 
 /**
- * Infinitely loop any IFetch in any or all of the three dimensions.
+ * Infinitely loop any Fetch in any or all of the three dimensions.
  *
  * @author Ben McLean
  */
-public class Loop extends FetchModel implements IModel {
+public class Loop extends FetchModel {
     public Loop(int xSize, int ySize, int zSize) {
         super(xSize, ySize, zSize);
     }
