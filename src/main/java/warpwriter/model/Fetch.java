@@ -16,6 +16,7 @@ package warpwriter.model;
  * Failure to implement the required overrides may result in infinite recursion.
  *
  * To defer to the next method in the chain, use getNextFetch()
+ * Coordinates sent to the next Fetch in the chain be manipulated through xChain, yChain and zChain
  *
  * @author Ben McLean
  */
@@ -36,6 +37,14 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
      */
     public byte bite(int x, int y, int z) {
         return zeroByte(x, y, z);
+    }
+
+    public byte bite(int x, int z) {
+        return bite(x, 0, z);
+    }
+
+    public byte bite(int x) {
+        return bite(x, 0);
     }
 
     public Fetch fetch(int x, int z) {
@@ -68,11 +77,11 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
         return current.bite(x, y, z);
     }
 
-    public byte at(int x, int z) {
+    public final byte at(int x, int z) {
         return fetch(x, z).at(x, z);
     }
 
-    public byte at(int x) {
+    public final byte at(int x) {
         return fetch(x).at(x);
     }
 
