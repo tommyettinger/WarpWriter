@@ -1,12 +1,12 @@
 package warpwriter.model;
 
 /**
- * Allows offsetting the coordinates of any IFetch
+ * Allows offsetting the coordinates of any Fetch
  *
  * @author Ben McLean
  */
-public class Offset extends FetchModel {
-    public Offset(int xSize, int ySize, int zSize) {
+public class OffsetModel extends FetchModel {
+    public OffsetModel(int xSize, int ySize, int zSize) {
         super(xSize, ySize, zSize);
     }
 
