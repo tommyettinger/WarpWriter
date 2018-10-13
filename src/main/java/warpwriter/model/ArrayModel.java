@@ -12,6 +12,7 @@ public class ArrayModel extends Fetch implements IModel {
     {
         this(new byte[12][12][8]);
     }
+
     public ArrayModel(byte[][][] voxels)
     {
         this.voxels = voxels;
@@ -57,7 +58,7 @@ public class ArrayModel extends Fetch implements IModel {
      * @return a color index as a byte; 0 is empty, and this should usually be masked with {@code & 255} to get an index
      */
     @Override
-    public byte at(int x, int y, int z) {
+    public byte bite(int x, int y, int z) {
         if(x < 0 || y < 0 || z < 0 || x >= xSize() || y >= ySize() || z >= zSize())
             return 0;
         return voxels[x][y][z];

@@ -2,8 +2,6 @@ package warpwriter.model;
 
 /**
  * This abstract class allows for IFetch implementations to defer to other IFetch instances for different coordinates instead of needing to return a byte.
- * <p>
- * The point of this class is that, to be useful, child classes must override either fetch(x, y, z) or at(x, y, z) or both. Methods which deal with this class will call fetch(x, y, z) first and if that is null, then call at(x, y, z) to get the answer.
  *
  * @author Ben McLean
  */
@@ -29,6 +27,11 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
 
     public int xChain, yChain, zChain;
 
+    /**
+     * Don't override this method or else you'll break the method chaining!
+     *
+     * Override bite(int x, int y, int z) instead!
+     */
     public byte at(int x, int y, int z) {
         Fetch current = this;
         while (current.getPreviousFetch() != null) {
@@ -41,11 +44,20 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
             current.yChain = y;
             current.zChain = z;
             next = current.fetch(x, y, z);
-            x=current.xChain;
-            y=current.yChain;
-            z=current.zChain;
+            x = current.xChain;
+            y = current.yChain;
+            z = current.zChain;
         } while (next != null);
-        return current.at(x, y, z);
+        return current.bite(x, y, z);
+    }
+
+    /**
+     * Override this method
+     *
+     * @return A final answer, with no method chaining
+     */
+    public byte bite(int x, int y, int z) {
+        return 0;
     }
 
     public byte at(int x, int z) {
@@ -82,7 +94,27 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
         return setNextFetch(fetch).getNextFetch().setPreviousFetch(this);
     }
 
+    public FetchModel fetchModel(int xSize, int ySize, int zSize) {
+        return new FetchModel(this, xSize, ySize, zSize);
+    }
+
+    public Fetch offset(int xSize, int ySize, int zSize) {
+        return add(new Offset(xSize, ySize, zSize));
+    }
+
     public Fetch loop(int xSize, int ySize, int zSize) {
         return add(new Loop(xSize, ySize, zSize));
+    }
+
+    public Fetch arrayModel(byte[][][] bytes) {
+        return add(new ArrayModel(bytes));
+    }
+
+    public Fetch boxModel(int xSize, int ySize, int zSize, Fetch no) {
+        return add(new BoxModel(xSize, ySize, zSize, no));
+    }
+
+    public Fetch boxModel(byte[][][] convenience, Fetch no) {
+        return add(new BoxModel(convenience, no));
     }
 }

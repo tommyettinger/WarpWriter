@@ -1,36 +1,47 @@
 package warpwriter.model;
 
-/** Converts any IFetch to an IModel
+/** Converts any Fetch to an IModel
  * @author Ben McLean
  */
 public class FetchModel extends Fetch implements IModel {
-    public IFetch fetch;
     public int xSize, ySize, zSize;
 
-    public FetchModel(IFetch fetch, int xSize, int ySize, int zSize) {
-        this.fetch = fetch;
+    public FetchModel(int xSize, int ySize, int zSize) {
         this.xSize = xSize;
         this.ySize = ySize;
         this.zSize = zSize;
     }
 
-    @Override
+    public FetchModel(Fetch fetch, int xSize, int ySize, int zSize) {
+        this(xSize, ySize, zSize);
+        add(fetch);
+    }
+
+    public FetchModel(int xSize, int ySize, int zSize, Fetch fetch) {
+        this(fetch, xSize, ySize, zSize);
+    }
+
+    public FetchModel(byte[][][] convenience, Fetch fetch) {
+        this(convenience.length, convenience[0].length, convenience[0][0].length, fetch);
+    }
+
+    public FetchModel(Fetch fetch, byte[][][] convenience) {
+        this(convenience, fetch);
+    }
+
     public int xSize() {
         return xSize;
     }
 
-    @Override
     public int ySize() {
         return ySize;
     }
 
-    @Override
     public int zSize() {
         return zSize;
     }
 
-    @Override
-    public byte at(int x, int y, int z) {
-        return fetch.at(x, y, z);
+    public Fetch fetch(int x, int y, int z) {
+        return getNextFetch();
     }
 }

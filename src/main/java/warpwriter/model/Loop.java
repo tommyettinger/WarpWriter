@@ -24,6 +24,14 @@ public class Loop extends Fetch implements IModel {
         this.zSize = zSize;
     }
 
+    public Loop(byte[][][] convenience, Fetch fetch) {
+        this(convenience.length, convenience[0].length, convenience[0][0].length, fetch);
+    }
+
+    public Loop(Fetch fetch, byte[][][] convenience) {
+        this(convenience, fetch);
+    }
+
     @Override
     public int xSize() {
         return xSize;

@@ -388,7 +388,7 @@ public class SparseVoxelSet extends Fetch implements Serializable {
         }
         return true;
     }
-    public byte at(int x, int y, int z)
+    public byte bite(int x, int y, int z)
     {
         int key = ((x & 0xFF) | (y & 0xFF) << 8 | (z & 0xFF) << 16),
                 index = key & mask;

@@ -14,8 +14,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import squidpony.FakeLanguageGen;
 import squidpony.StringKit;
 import warpwriter.*;
-import warpwriter.model.ArrayModel;
-import warpwriter.model.IModel;
+import warpwriter.model.*;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -428,14 +427,19 @@ public class TestDisplay extends ApplicationAdapter {
                 3);
                 */
 
-        voxels = new ArrayModel(ByteFill.Fill3D.fill(voxelText.text2D(
+        byte[][][] bytes = ByteFill.Fill3D.fill(voxelText.text2D(
                 font,
                 FakeLanguageGen.SIMPLISH.word(mm.rng.nextLong(), true),
                 new ByteFill.Fill2D.Transformer(stripes).skew(-1f)
                 ),
                 8
-        ));
-        //ByteFill.fill(voxels, ByteFill.wireframeBox(voxels, ByteFill.fill3D(mm.randomMainColor())));
+        );
+
+        Fetch fetch = new ArrayModel(bytes).boxModel(bytes, ColorFetch.colorFetch(mm.randomMainColor()));
+
+        voxels = new FetchModel(bytes, fetch);
+
+        //ByteFill.fill(bytes, ByteFill.wireframeBox(bytes, ByteFill.fill3D(mm.randomMainColor())));
 
         /*voxels = voxelText.text3D(
                 font,
