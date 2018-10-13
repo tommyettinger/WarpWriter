@@ -5,7 +5,7 @@ package warpwriter.model;
  *
  * @author Ben McLean
  */
-public class LoopModel implements IModel {
+public class LoopModel extends Fetch implements IModel {
     IFetch fetch;
     int xSize, ySize, zSize;
 

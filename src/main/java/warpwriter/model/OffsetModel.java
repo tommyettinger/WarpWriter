@@ -5,7 +5,7 @@ package warpwriter.model;
  *
  * @author Ben McLean
  */
-public class OffsetModel implements IModel {
+public class OffsetModel extends Fetch implements IModel {
     IFetch fetch;
     int xOffset, yOffset, zOffset;
 

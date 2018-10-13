@@ -3,7 +3,7 @@ package warpwriter.model;
 /** Converts any IFetch to an IModel
  * @author Ben McLean
  */
-public class FetchModel implements IModel {
+public class FetchModel extends Fetch implements IModel {
     public IFetch fetch;
     public int xSize, ySize, zSize;
 
