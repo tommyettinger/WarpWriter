@@ -39,26 +39,32 @@ public class FetchModel extends Fetch implements IModel {
         this(convenience, fetch);
     }
 
+    @Override
     public int xSize() {
         return xSize;
     }
 
+    @Override
     public int ySize() {
         return ySize;
     }
 
+    @Override
     public int zSize() {
         return zSize;
     }
 
+    @Override
     public Fetch fetch(int x, int y, int z) {
         return getNextFetch();
     }
 
+    @Override
     public boolean outside(int x, int y, int z) {
         return x < 0 || y < 0 || z < 0 || x >= xSize() || y >= ySize() || z >= zSize();
     }
 
+    @Override
     public boolean inside(int x, int y, int z) {
         return !outside(x, y, z);
     }

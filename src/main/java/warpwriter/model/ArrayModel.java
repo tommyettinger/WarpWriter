@@ -68,10 +68,12 @@ public class ArrayModel extends Fetch implements IModel {
         return deferByte(inside(x, y, z) ? voxels[x][y][z] : (byte) 0, x, y, z);
     }
 
+    @Override
     public boolean outside(int x, int y, int z) {
         return x < 0 || y < 0 || z < 0 || x >= xSize() || y >= ySize() || z >= zSize();
     }
 
+    @Override
     public boolean inside(int x, int y, int z) {
         return !outside(x, y, z);
     }

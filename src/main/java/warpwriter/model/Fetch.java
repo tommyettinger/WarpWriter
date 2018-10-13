@@ -62,6 +62,7 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
      * <p>
      * Override bite(int x, int y, int z) instead!
      */
+    @Override
     public final byte at(int x, int y, int z) {
         Fetch current, next = getFirstFetch();
         do {
