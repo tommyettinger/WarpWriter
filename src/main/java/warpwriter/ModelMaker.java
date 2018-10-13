@@ -21,6 +21,84 @@ public class ModelMaker {
     private byte[][][] ship, shipLarge, warriorMale, sword0, spear0, shield0, shield1;
     private byte[][][][] rightHand, leftHand;
     private int xSize, ySize, zSize;
+
+    /**
+     * Gets a 64-bit point hash of a 3D point (x, y, and z are all longs) and a state/seed as a long.
+     * This uses a 3D variant of Matthew Szudzik's function for perfect hashing in 2D, then feeds that (very non-random)
+     * perfect hash through a simple RNG-like unary hash (it is close to SquidLib's old ThrustRNG).
+     * @see <a href="https://stackoverflow.com/a/13871379/786740">Szudzik's function described on StackOverflow</a>
+     * @param x x position, as a non-negative long (it may work for negative longs, but no guarantees)
+     * @param y y position, as a non-negative long (it may work for negative longs, but no guarantees)
+     * @param z z position, as a non-negative long (it may work for negative longs, but no guarantees)
+     * @param state any long
+     * @return 64-bit hash of the x,y,z point with the given state
+     */
+    public static long hashAll(long x, long y, long z, long state)
+    {
+        y = (y >= z ? y * y + y + z : y + z * z);
+        x = ((x >= y ? x * x + x + y : x + y * y) ^ state) * 0xC6BC279692B5CC8BL;
+        return (x = (x ^ x >>> 25) * 0x9E3779B97F4A7C15L) ^ (x >>> 22);
+    }
+
+    /**
+     * Gets a 64-bit point hash of a 4D point (x, y, z, and w are all longs) and a state/seed as a long.
+     * This uses a 4D variant of Matthew Szudzik's function for perfect hashing in 2D, then feeds that (very non-random)
+     * perfect hash through a simple RNG-like unary hash (it is close to SquidLib's old ThrustRNG).
+     * @see <a href="https://stackoverflow.com/a/13871379/786740">Szudzik's function described on StackOverflow</a>
+     * @param x x position, as a non-negative long (it may work for negative longs, but no guarantees)
+     * @param y y position, as a non-negative long (it may work for negative longs, but no guarantees)
+     * @param z z position, as a non-negative long (it may work for negative longs, but no guarantees)
+     * @param w w position, as a non-negative long (it may work for negative longs, but no guarantees)
+     * @param state any long
+     * @return 64-bit hash of the x,y,z,w point with the given state
+     */
+    public static long hashAll(long x, long y, long z, long w, long state)
+    {
+        z = (z >= w ? z * z + z + w : z + w * w);
+        y = (y >= z ? y * y + y + z : y + z * z);
+        x = ((x >= y ? x * x + x + y : x + y * y) ^ state) * 0xC6BC279692B5CC8BL;
+        return (x = (x ^ x >>> 25) * 0x9E3779B97F4A7C15L) ^ (x >>> 22);
+    }
+    /**
+     * Gets a bounded int point hash of a 3D point (x, y, and z are all longs) and a state/seed as a long.
+     * This uses a 3D variant of Matthew Szudzik's function for perfect hashing in 2D, then feeds that (very non-random)
+     * perfect hash through a simple RNG-like unary hash (it is close to SquidLib's old ThrustRNG).
+     * @see <a href="https://stackoverflow.com/a/13871379/786740">Szudzik's function described on StackOverflow</a>
+     * @param x x position, as a non-negative long (it may work for negative longs, but no guarantees)
+     * @param y y position, as a non-negative long (it may work for negative longs, but no guarantees)
+     * @param z z position, as a non-negative long (it may work for negative longs, but no guarantees)
+     * @param state any long
+     * @param bound outer exclusive bound; may be negative
+     * @return an int between 0 (inclusive) and bound (exclusive) dependent on the position and state
+     */
+    public static int hashBounded(long x, long y, long z, long state, int bound)
+    {
+        y = (y >= z ? y * y + y + z : y + z * z);
+        x = ((x >= y ? x * x + x + y : x + y * y) ^ state) * 0xC6BC279692B5CC8BL;
+        return (int)((bound * (((x = (x ^ x >>> 25) * 0x9E3779B97F4A7C15L) ^ (x >>> 22)) & 0xFFFFFFFFL)) >> 32);
+    }
+
+    /**
+     * Gets a bounded int point hash of a 4D point (x, y, z, and w are all longs) and a state/seed as a long.
+     * This uses a 4D variant of Matthew Szudzik's function for perfect hashing in 2D, then feeds that (very non-random)
+     * perfect hash through a simple RNG-like unary hash (it is close to SquidLib's old ThrustRNG).
+     * @see <a href="https://stackoverflow.com/a/13871379/786740">Szudzik's function described on StackOverflow</a>
+     * @param x x position, as a non-negative long (it may work for negative longs, but no guarantees)
+     * @param y y position, as a non-negative long (it may work for negative longs, but no guarantees)
+     * @param z z position, as a non-negative long (it may work for negative longs, but no guarantees)
+     * @param w w position, as a non-negative long (it may work for negative longs, but no guarantees)
+     * @param state any long
+     * @param bound outer exclusive bound; may be negative
+     * @return an int between 0 (inclusive) and bound (exclusive) dependent on the position and state
+     */
+    public static int hashBounded(long x, long y, long z, long w, long state, int bound)
+    {
+        z = (z >= w ? z * z + z + w : z + w * w);
+        y = (y >= z ? y * y + y + z : y + z * z);
+        x = ((x >= y ? x * x + x + y : x + y * y) ^ state) * 0xC6BC279692B5CC8BL;
+        return (int)((bound * (((x = (x ^ x >>> 25) * 0x9E3779B97F4A7C15L) ^ (x >>> 22)) & 0xFFFFFFFFL)) >> 32);
+    }
+//
 //    /**
 //     *
 //     * @param x
@@ -29,104 +107,17 @@ public class ModelMaker {
 //     * @param state
 //     * @return 64-bit hash of the x,y,z point with the given state
 //     */
-//    public static long hashAll(long x, long y, long z, long state) {
-////        return TangleRNG.determine(x, TangleRNG.determine(y, TangleRNG.determine(z, state)));
-//        state *= 0x9E3779B97F4A7C15L;
-//        long other = 0x60642E2A34326F15L;
-//        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-//        state = (state << 54 | state >>> 10);
-//        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-//        state = (state << 54 | state >>> 10);
-//        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-//        return ((state << 54 | state >>> 10) + (other ^ other >>> 29) ^ 0x9E3779B97F4A7C15L) * 0x94D049BB133111EBL;
-//
-////        return ((x = ((x *= 0x6C8E9CF570932BD5L) ^ x >>> 26 ^ 0x9183A1F4F348E683L) * (
-////                ((y = ((y *= 0x6C8E9CF570932BD5L) ^ y >>> 26 ^ 0x9183A1F4F348E683L) * (
-////                        ((z = ((z *= 0x6C8E9CF570932BD5L) ^ z >>> 26 ^ 0x9183A1F4F348E683L) * (
-////                                state * 0x9E3779B97F4A7C15L
-////                                        | 1L)) ^ z >>> 24)
-////                                | 1L)) ^ y >>> 24) 
-////                        | 1L)) ^ x >>> 24);
-//
-////        x *= (0xF34C283B73FE6A6DL);
-////        state += (x << 45 | x >>> 19);
-////        y *= (0x9183A1F4F348E683L);
-////        state += (y << 3 | y >>> 61);
-////        z *= (0xAFBB1BAE72936299L);
-////        state += (z << 25 | z >>> 39);
-////        return state ^ x + y + z;
-//    }
-//    /**
-//     *
-//     * @param x
-//     * @param y
-//     * @param z
-//     * @param state
-//     * @return 64-bit hash of the x,y,z,w point with the given state
-//     */
-//    public static long hashAll(long x, long y, long z, long w, long state) {
-////        return TangleRNG.determine(x, TangleRNG.determine(y, TangleRNG.determine(z, TangleRNG.determine(w, state))));
-//        state *= 0x9E3779B97F4A7C15L;
-//        long other = 0x60642E2A34326F15L;
-//        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-//        state = (state << 54 | state >>> 10);
-//        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-//        state = (state << 54 | state >>> 10);
-//        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-//        state = (state << 54 | state >>> 10);
-//        state ^= (other += (w ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-//        return ((state << 54 | state >>> 10) + (other ^ other >>> 29) ^ 0x9E3779B97F4A7C15L) * 0x94D049BB133111EBL;
-//
-////        return ((x = ((x *= 0x6C8E9CF570932BD5L) ^ x >>> 26 ^ 0x9183A1F4F348E683L) * (
-////                ((y = ((y *= 0x6C8E9CF570932BD5L) ^ y >>> 26 ^ 0x9183A1F4F348E683L) * (
-////                        ((z = ((z *= 0x6C8E9CF570932BD5L) ^ z >>> 26 ^ 0x9183A1F4F348E683L) * (
-////                                ((w = ((w *= 0x6C8E9CF570932BD5L) ^ w >>> 26 ^ 0x9183A1F4F348E683L) * (
-////                                        state * 0x9E3779B97F4A7C15L
-////                                                | 1L)) ^ w >>> 24)
-////                                        | 1L)) ^ z >>> 24)
-////                                | 1L)) ^ y >>> 24)
-////                        | 1L)) ^ x >>> 24);
-//
-////        return ((x = ((x *= 0x734C283B73FE6A6DL) ^ x >>> 26 ^ 0x64F31432B4AA049BL) * (
-////                ((y = ((y *= 0x5FCBBDE92C96E11DL) ^ y >>> 26 ^ 0x4E34944613628E73L) * (
-////                        ((z = ((z *= 0x6C8E9CF570932BD5L) ^ z >>> 26 ^ 0x7F91620098C41B2BL) * (
-////                                ((w = ((w *= 0x4DC7BD448464FE2DL) ^ w >>> 26 ^ 0x571DD04A962AC4A3L) * (
-////                                        state * 0x9E3779B97F4A7C15L
-////                                                | 1L)) ^ w >>> 24)
-////                                        | 1L)) ^ z >>> 24)
-////                                | 1L)) ^ y >>> 24)
-////                        | 1L)) ^ x >>> 24);
-//
-//        // 0x9E3779B97F4A7C16L
-//        // (0x734C283B73FE6A6DL + 0x9E3779B97F4A7C16L * 1L)
-////        x *= (0xF34C283B73FE6A6DL);
-////        state += (x << 45 | x >>> 19);
-////        y *= (0x9183A1F4F348E683L);
-////        state += (y << 3 | y >>> 61);
-////        z *= (0xAFBB1BAE72936299L);
-////        state += (z << 25 | z >>> 39);
-////        w *= (0xCDF29567F1DDDEAFL);
-////        state += (w << 47 | w >>> 17);
-////        return state ^ x + y + z + w;
-//        
-//    }
-
-
 //    public static long hashAll(long x, long y, long z, long state)
 //    {
-//        y *= ((state += 0xC6BC279692B5CC8BL - (x << 35 | x >>> 29)) | 1);
-//        z *= ((state += 0xC6BC279692B5CC8BL - (y << 35 | y >>> 29)) | 1);
-//        x *= ((state += 0xC6BC279692B5CC8BL - (z << 35 | z >>> 29)) | 1);
-//        x += y + z;
-//        return state ^ x ^ x >>> 28;
-////        long other = 0x60642E2A34326F15L;
-////        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-////        state = (state << 54 | state >>> 10);
-////        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-////        state = (state << 54 | state >>> 10);
-////        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-////        state -= ((state << 54 | state >>> 10) + (other ^ other >>> 29)) * 0x94D049BB133111EBL;
-////        return state ^ state >>> 31;
+//        x += y += z += state += 0x9E3779B97F4A7C15L;
+//        state *= ((y ^= 0xC6BC279692B5CC8BL + x - (x << 35 | x >>> 29))|1);
+//        state ^= state >>> 31;
+//        state *= ((z ^= 0xC6BC279692B5CC8BL + y - (y << 35 | y >>> 29))|1);
+//        state ^= state >>> 31;
+//        state *= ((x ^= 0xC6BC279692B5CC8BL + z - (z << 35 | z >>> 29))|1);
+//        state ^= state >>> 31;
+//        x ^= y ^ z ^ state;
+//        return x ^ x >>> 25;
 //    }
 //
 //    /**
@@ -140,115 +131,64 @@ public class ModelMaker {
 //     */
 //    public static long hashAll(long x, long y, long z, long w, long state)
 //    {
-//        y *= ((state += 0xC6BC279692B5CC8BL - (x << 35 | x >>> 29)) | 1);
-//        z *= ((state += 0xC6BC279692B5CC8BL - (y << 35 | y >>> 29)) | 1);
-//        w *= ((state += 0xC6BC279692B5CC8BL - (z << 35 | z >>> 29)) | 1);
-//        x *= ((state += 0xC6BC279692B5CC8BL - (w << 35 | w >>> 29)) | 1);
-//        x += y + z + w;
-//        return state ^ x ^ x >>> 28;
-//
-////        long other = 0x60642E2A34326F15L;
-////        state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-////        state = (state << 54 | state >>> 10);
-////        state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-////        state = (state << 54 | state >>> 10);
-////        state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-////        state = (state << 54 | state >>> 10);
-////        state ^= (other += (w ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-////        state -= ((state << 54 | state >>> 10) + (other ^ other >>> 29)) * 0x94D049BB133111EBL;
-////        return state ^ state >>> 31;
+//        x += y += z += w += state += 0x9E3779B97F4A7C15L;
+//        state *= ((y ^= 0xC6BC279692B5CC8BL + x - (x << 35 | x >>> 29))|1);
+//        state ^= state >>> 31;
+//        state *= ((z ^= 0xC6BC279692B5CC8BL + y - (y << 35 | y >>> 29))|1);
+//        state ^= state >>> 31;
+//        state *= ((w ^= 0xC6BC279692B5CC8BL + z - (z << 35 | z >>> 29))|1);
+//        state ^= state >>> 31;
+//        state *= ((x ^= 0xC6BC279692B5CC8BL + w - (w << 35 | w >>> 29))|1);
+//        state ^= state >>> 31;
+//        x ^= y ^ z ^ w ^ state;
+//        return x ^ x >>> 25;
 //    }
-
-    /**
-     *
-     * @param x
-     * @param y
-     * @param z
-     * @param state
-     * @return 64-bit hash of the x,y,z point with the given state
-     */
-    public static long hashAll(long x, long y, long z, long state)
-    {
-        x += y += z += state += 0x9E3779B97F4A7C15L;
-        state *= ((y ^= 0xC6BC279692B5CC8BL + x - (x << 35 | x >>> 29))|1);
-        state ^= state >>> 31;
-        state *= ((z ^= 0xC6BC279692B5CC8BL + y - (y << 35 | y >>> 29))|1);
-        state ^= state >>> 31;
-        state *= ((x ^= 0xC6BC279692B5CC8BL + z - (z << 35 | z >>> 29))|1);
-        state ^= state >>> 31;
-        x ^= y ^ z ^ state;
-        return x ^ x >>> 25;
-    }
-
-    /**
-     *
-     * @param x
-     * @param y
-     * @param z
-     * @param w
-     * @param state
-     * @return 64-bit hash of the x,y,z,w point with the given state
-     */
-    public static long hashAll(long x, long y, long z, long w, long state)
-    {
-        x += y += z += w += state += 0x9E3779B97F4A7C15L;
-        state *= ((y ^= 0xC6BC279692B5CC8BL + x - (x << 35 | x >>> 29))|1);
-        state ^= state >>> 31;
-        state *= ((z ^= 0xC6BC279692B5CC8BL + y - (y << 35 | y >>> 29))|1);
-        state ^= state >>> 31;
-        state *= ((w ^= 0xC6BC279692B5CC8BL + z - (z << 35 | z >>> 29))|1);
-        state ^= state >>> 31;
-        state *= ((x ^= 0xC6BC279692B5CC8BL + w - (w << 35 | w >>> 29))|1);
-        state ^= state >>> 31;
-        x ^= y ^ z ^ w ^ state;
-        return x ^ x >>> 25;
-    }
-    /**
-     *
-     * @param x
-     * @param y
-     * @param z
-     * @param state
-     * @param bound outer exclusive bound; may be negative
-     * @return an int between 0 (inclusive) and bound (exclusive) dependent on the position and state
-     */
-    public static int hashBounded(long x, long y, long z, long state, int bound)
-    {
-        x += y += z += state += 0x9E3779B97F4A7C15L;
-        state *= ((y ^= 0xC6BC279692B5CC8BL + x - (x << 35 | x >>> 29))|1);
-        state ^= state >>> 31;
-        state *= ((z ^= 0xC6BC279692B5CC8BL + y - (y << 35 | y >>> 29))|1);
-        state ^= state >>> 31;
-        state *= ((x ^= 0xC6BC279692B5CC8BL + z - (z << 35 | z >>> 29))|1);
-        state ^= state >>> 31;
-        x ^= y ^ z ^ state;
-        return (int)((bound * ((x ^ x >>> 25) & 0xFFFFFFFFL)) >> 32);
-    }
-
-    /**
-     *
-     * @param x
-     * @param y
-     * @param z
-     * @param w
-     * @param state
-     * @param bound outer exclusive bound; may be negative
-     * @return an int between 0 (inclusive) and bound (exclusive) dependent on the position and state
-     */
-    public static int hashBounded(long x, long y, long z, long w, long state, int bound)
-    {
-        x += y += z += w += state += 0x9E3779B97F4A7C15L;
-        state *= ((y ^= 0xC6BC279692B5CC8BL + x - (x << 35 | x >>> 29))|1);
-        state ^= state >>> 31;
-        state *= ((z ^= 0xC6BC279692B5CC8BL + y - (y << 35 | y >>> 29))|1);
-        state ^= state >>> 31;
-        state *= ((w ^= 0xC6BC279692B5CC8BL + z - (z << 35 | z >>> 29))|1);
-        state ^= state >>> 31;
-        state *= ((x ^= 0xC6BC279692B5CC8BL + w - (w << 35 | w >>> 29))|1);
-        state ^= state >>> 31;
-        x ^= y ^ z ^ w ^ state;
-        return (int)((bound * ((x ^ x >>> 25) & 0xFFFFFFFFL)) >> 32);
-    }
+//    /**
+//     *
+//     * @param x
+//     * @param y
+//     * @param z
+//     * @param state
+//     * @param bound outer exclusive bound; may be negative
+//     * @return an int between 0 (inclusive) and bound (exclusive) dependent on the position and state
+//     */
+//    public static int hashBounded(long x, long y, long z, long state, int bound)
+//    {
+//        x += y += z += state += 0x9E3779B97F4A7C15L;
+//        state *= ((y ^= 0xC6BC279692B5CC8BL + x - (x << 35 | x >>> 29))|1);
+//        state ^= state >>> 31;
+//        state *= ((z ^= 0xC6BC279692B5CC8BL + y - (y << 35 | y >>> 29))|1);
+//        state ^= state >>> 31;
+//        state *= ((x ^= 0xC6BC279692B5CC8BL + z - (z << 35 | z >>> 29))|1);
+//        state ^= state >>> 31;
+//        x ^= y ^ z ^ state;
+//        return (int)((bound * ((x ^ x >>> 25) & 0xFFFFFFFFL)) >> 32);
+//    }
+//
+//    /**
+//     *
+//     * @param x
+//     * @param y
+//     * @param z
+//     * @param w
+//     * @param state
+//     * @param bound outer exclusive bound; may be negative
+//     * @return an int between 0 (inclusive) and bound (exclusive) dependent on the position and state
+//     */
+//    public static int hashBounded(long x, long y, long z, long w, long state, int bound)
+//    {
+//        x += y += z += w += state += 0x9E3779B97F4A7C15L;
+//        state *= ((y ^= 0xC6BC279692B5CC8BL + x - (x << 35 | x >>> 29))|1);
+//        state ^= state >>> 31;
+//        state *= ((z ^= 0xC6BC279692B5CC8BL + y - (y << 35 | y >>> 29))|1);
+//        state ^= state >>> 31;
+//        state *= ((w ^= 0xC6BC279692B5CC8BL + z - (z << 35 | z >>> 29))|1);
+//        state ^= state >>> 31;
+//        state *= ((x ^= 0xC6BC279692B5CC8BL + w - (w << 35 | w >>> 29))|1);
+//        state ^= state >>> 31;
+//        x ^= y ^ z ^ w ^ state;
+//        return (int)((bound * ((x ^ x >>> 25) & 0xFFFFFFFFL)) >> 32);
+//    }
 
     public ModelMaker()
     {
