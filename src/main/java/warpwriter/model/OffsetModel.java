@@ -33,6 +33,6 @@ public class OffsetModel extends Fetch implements IModel {
 
     @Override
     public byte at(int x, int y, int z) {
-        return fetch.at(x + xOffset, y + yOffset, z + zOffset);
+        return fetch.at(x + xSize(), y + ySize(), z + zSize());
     }
 }
