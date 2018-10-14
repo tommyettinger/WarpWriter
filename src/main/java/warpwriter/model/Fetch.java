@@ -24,7 +24,7 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
     /**
      * This method is intended to be overridden with a decision about which Fetch to use for the provided coordinate.
      * <p>
-     * Returning null indicates to outside code that at(x, y, z) should be called instead. Hardcoding return null; would override the chained transparency provided by the default implementation.
+     * Returning null indicates to outside code that bite(x, y, z) should be called instead.
      */
     public Fetch fetch(int x, int y, int z) {
         return getNextFetch();
