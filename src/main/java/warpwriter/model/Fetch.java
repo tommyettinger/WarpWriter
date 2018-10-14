@@ -113,15 +113,6 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
     }
 
     /**
-     * @param fetch Add this fetch to the chain
-     */
-    public Fetch add(Fetch fetch) {
-        setNextFetch(fetch);
-        fetch.setFirstFetch(getFirstFetch());
-        return this;
-    }
-
-    /**
      * This method does not chain. It goes on the end, to transform the results of a chain into an IModel
      */
     public FetchModel model(int xSize, int ySize, int zSize) {
@@ -141,31 +132,31 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
     }
 
     public Fetch offsetModel(int xSize, int ySize, int zSize) {
-        return add(new OffsetModel(xSize, ySize, zSize));
+        return setNextFetch(new OffsetModel(xSize, ySize, zSize));
     }
 
     public Fetch loop(int xSize, int ySize, int zSize) {
-        return add(new Loop(xSize, ySize, zSize));
+        return setNextFetch(new Loop(xSize, ySize, zSize));
     }
 
     public Fetch arrayModel(byte[][][] bytes) {
-        return add(new ArrayModel(bytes));
+        return setNextFetch(new ArrayModel(bytes));
     }
 
     public Fetch boxModel(int xSize, int ySize, int zSize, Fetch color) {
-        return add(new BoxModel(xSize, ySize, zSize, color));
+        return setNextFetch(new BoxModel(xSize, ySize, zSize, color));
     }
 
     public Fetch boxModel(byte[][][] convenience, Fetch color) {
-        return add(new BoxModel(convenience, color));
+        return setNextFetch(new BoxModel(convenience, color));
     }
 
     public Fetch fetchFetch(IFetch iFetch) {
-        return add(new FetchFetch(iFetch));
+        return setNextFetch(new FetchFetch(iFetch));
     }
 
     public Fetch skew(float xSkew, float zSkew) {
-        return add(new Skew(xSkew, zSkew));
+        return setNextFetch(new Skew(xSkew, zSkew));
     }
 
     public Fetch skew(float xSkew) {
@@ -173,11 +164,11 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
     }
 
     public Fetch swapper(Swapper.Swap swap) {
-        return add(new Swapper(swap));
+        return setNextFetch(new Swapper(swap));
     }
 
     public Fetch stripes(int[] widths, Fetch[] stripes) {
-        return add(new Stripes(widths, stripes));
+        return setNextFetch(new Stripes(widths, stripes));
     }
 
     public Fetch stripes(Fetch[] stripes, int[] widths) {
