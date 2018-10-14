@@ -452,7 +452,7 @@ public class TestDisplay extends ApplicationAdapter {
                 .model(bytes);
                 */
 
-        voxels = Checkers.checkers(
+        voxels = Stripes.checkers(
                 ColorFetch.color(mm.randomMainColor()),
                 ColorFetch.color(mm.randomMainColor()),
                 new int[] {2, 2},

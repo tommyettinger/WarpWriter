@@ -113,15 +113,16 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
     }
 
     /**
-     * This method does not chain. It goes on the end, to transform the results of a chain into an IModel
+     * This method does not chain!
+     * It goes on the end, to transform the results of a chain into an IModel
      */
     public FetchModel model(int xSize, int ySize, int zSize) {
         return new FetchModel(this, xSize, ySize, zSize);
     }
 
-    /**
+    /** This method does not chain!
      * @param convenience This array is used only to get the size of the model.
-     * @return A model version of the current Fetch with the size of the convenience array. The actual contents of the convenience array are not touched.
+     * @return A model version of the current Fetch with the size of the convenience array. The actual contents of the convenience array are not touched past [0][0].length
      */
     public FetchModel model(byte[][][] convenience) {
         return new FetchModel(this, convenience);
