@@ -67,9 +67,7 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
         Fetch current, next = getFirstFetch();
         do {
             current = next;
-            current.xChain = x;
-            current.yChain = y;
-            current.zChain = z;
+            current.setChains(x, y, z);
             next = current.fetch(x, y, z);
             x = current.xChain;
             y = current.yChain;
@@ -162,6 +160,18 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
         return add(new FetchFetch(iFetch));
     }
 
+    public Fetch skew(float xSkew, float zSkew) {
+        return add(new Skew(xSkew, zSkew));
+    }
+
+    public Fetch skew(float xSkew) {
+        return skew(xSkew, 0f);
+    }
+
+    public Fetch stripes(int[] widths, Fetch[] stripes) {
+        return add(new Stripes(widths, stripes));
+    }
+
     public Fetch deferFetch(int x, int y, int z) {
         return getNextFetch() == null ? ColorFetch.transparent : getNextFetch();
     }
@@ -183,5 +193,12 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
 
     public byte deferByte(int x, int y, int z) {
         return deferByte((byte) 0, x, y, z);
+    }
+
+    public Fetch setChains(int x, int y, int z) {
+        xChain = x;
+        yChain = y;
+        zChain = z;
+        return this;
     }
 }

@@ -12,9 +12,7 @@ public class OffsetModel extends FetchModel {
 
     @Override
     public Fetch fetch(int x, int y, int z) {
-        xChain = x + xSize();
-        yChain = y + ySize();
-        zChain = z + zSize();
+        setChains(x + xSize(), y + ySize(), z + zSize());
         return getNextFetch();
     }
 }
