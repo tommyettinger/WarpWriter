@@ -90,7 +90,7 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
         return nextFetch;
     }
 
-    public Fetch setNextFetch(Fetch nextFetch) {
+    public Fetch add(Fetch nextFetch) {
         Fetch current, next = this;
         do {
             current = next;
@@ -132,31 +132,31 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
     }
 
     public Fetch offsetModel(int xSize, int ySize, int zSize) {
-        return setNextFetch(new OffsetModel(xSize, ySize, zSize));
+        return add(new OffsetModel(xSize, ySize, zSize));
     }
 
     public Fetch loop(int xSize, int ySize, int zSize) {
-        return setNextFetch(new Loop(xSize, ySize, zSize));
+        return add(new Loop(xSize, ySize, zSize));
     }
 
     public Fetch arrayModel(byte[][][] bytes) {
-        return setNextFetch(new ArrayModel(bytes));
+        return add(new ArrayModel(bytes));
     }
 
     public Fetch boxModel(int xSize, int ySize, int zSize, Fetch color) {
-        return setNextFetch(new BoxModel(xSize, ySize, zSize, color));
+        return add(new BoxModel(xSize, ySize, zSize, color));
     }
 
     public Fetch boxModel(byte[][][] convenience, Fetch color) {
-        return setNextFetch(new BoxModel(convenience, color));
+        return add(new BoxModel(convenience, color));
     }
 
     public Fetch fetchFetch(IFetch iFetch) {
-        return setNextFetch(new FetchFetch(iFetch));
+        return add(new FetchFetch(iFetch));
     }
 
     public Fetch skew(float xSkew, float zSkew) {
-        return setNextFetch(new Skew(xSkew, zSkew));
+        return add(new Skew(xSkew, zSkew));
     }
 
     public Fetch skew(float xSkew) {
@@ -164,11 +164,11 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
     }
 
     public Fetch swapper(Swapper.Swap swap) {
-        return setNextFetch(new Swapper(swap));
+        return add(new Swapper(swap));
     }
 
     public Fetch stripes(int[] widths, Fetch[] stripes) {
-        return setNextFetch(new Stripes(widths, stripes));
+        return add(new Stripes(widths, stripes));
     }
 
     public Fetch stripes(Fetch[] stripes, int[] widths) {
