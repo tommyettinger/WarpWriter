@@ -46,8 +46,8 @@ public class Checkers {
         return new Stripes(
                 x,
                 new Fetch[]{
-                        new Swapper(Swapper.Swap.yzx).add(checkers(a, b, y, z)),
-                        new Swapper(Swapper.Swap.yzx).add(checkers(b, a, y, z))
+                        new Swapper(Swapper.Swap.yxz).add(checkers(a, b, y, z)),
+                        new Swapper(Swapper.Swap.yxz).add(checkers(b, a, y, z))
                 }
         );
     }

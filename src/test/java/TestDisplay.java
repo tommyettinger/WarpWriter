@@ -441,21 +441,24 @@ public class TestDisplay extends ApplicationAdapter {
                 8
         );
 
+        /*
         voxels = //new BoxModel(bytes,
-                new Swapper(Swapper.Swap.zyx)
+                //new Swapper(Swapper.Swap.zyx)
                         //.skew(1f)
-                        .add(Checkers.checkers(
-                                ColorFetch.color(mm.randomMainColor()),
-                                ColorFetch.color(mm.randomMainColor()),
-                                new int[] {2, 2},
-                                new int[] {2, 2},
-                                new int[] {2, 2}
-                        ))
                         //.stripes(new int[] {2, 2, 2}, fetches)
         //)
                 .offsetModel(5, 5, 5)
                 .arrayModel(bytes)
                 .model(bytes);
+                */
+
+        voxels = Checkers.checkers(
+                ColorFetch.color(mm.randomMainColor()),
+                ColorFetch.color(mm.randomMainColor()),
+                new int[] {2, 2},
+                new int[] {2, 2},
+                new int[] {2, 2}
+        ).model(bytes);
 
         //ByteFill.fill(bytes, ByteFill.wireframeBox(bytes, ByteFill.fill3D(mm.randomMainColor())));
 
