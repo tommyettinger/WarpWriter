@@ -16,7 +16,7 @@ public class Skew extends Fetch {
     }
 
     public Fetch fetch(int x, int y, int z) {
-        setChains(x + (int) (y * xSkew), y + (int) (x * ySkew), z);
+        setChains(x + (int) (y * xSkew), y + (int) (z * ySkew), z);
         return getNextFetch();
     }
 }

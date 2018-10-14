@@ -168,8 +168,16 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
         return skew(xSkew, 0f);
     }
 
+    public Fetch swapper(Swapper.Swap swap) {
+        return add(new Swapper(swap));
+    }
+
     public Fetch stripes(int[] widths, Fetch[] stripes) {
         return add(new Stripes(widths, stripes));
+    }
+
+    public Fetch stripes(Fetch[] stripes, int[] widths) {
+        return stripes(widths, stripes);
     }
 
     public Fetch deferFetch(int x, int y, int z) {

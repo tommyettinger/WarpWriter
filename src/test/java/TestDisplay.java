@@ -92,7 +92,7 @@ public class TestDisplay extends ApplicationAdapter {
                         mr.hardOutline = !mr.hardOutline;
                         remakeShip(0);
                         return true;
-                    case Input.Keys.D: // dither, toggles between Hu or Burkes dithering 
+                    case Input.Keys.D: // dither, toggles between Hu or Burkes dithering
                         dither = !dither;
                         remakeShip(0);
                         return true;
@@ -419,7 +419,13 @@ public class TestDisplay extends ApplicationAdapter {
                 new ByteFill.Fill.SolidColor(mm.randomMainColor()),
                 new ByteFill.Fill.SolidColor(mm.randomMainColor())
         };
-        ByteFill.Fill2D stripes = ByteFill.Fill2D.fill(ByteFill.Fill.stripes(new int[] {2, 2, 2}, randomFills));
+        Fetch[] fetches = {
+                ColorFetch.color(mm.randomMainColor()),
+                ColorFetch.color(mm.randomMainColor()),
+                ColorFetch.color(mm.randomMainColor())
+        };
+        ByteFill.Fill2D stripes2D = ByteFill.Fill2D.fill(ByteFill.Fill.stripes(new int[] {2, 2, 2}, randomFills));
+        Stripes stripes = new Stripes(fetches, new int[]{2, 2, 2});
         /*
         ByteFill.Fill2D checkers = ByteFill.checkers(
                 ByteFill.fill2D(mm.randomMainColor()),
@@ -430,12 +436,16 @@ public class TestDisplay extends ApplicationAdapter {
         byte[][][] bytes = ByteFill.Fill3D.fill(voxelText.text2D(
                 font,
                 FakeLanguageGen.SIMPLISH.word(mm.rng.nextLong(), true),
-                new ByteFill.Fill2D.Transformer(stripes).skew(-1f)
+                new ByteFill.Fill2D.Transformer(stripes2D).skew(-1f)
                 ),
                 8
         );
 
-        voxels = new BoxModel(bytes, ColorFetch.color(mm.randomMainColor()))
+        voxels = new BoxModel(bytes,
+                new Swapper(Swapper.Swap.zyx)
+                        .skew(1f)
+                        .stripes(new int[] {2, 2, 2}, fetches)
+        )
                 .offsetModel(5, 5, 5)
                 .arrayModel(bytes)
                 .model(bytes);
@@ -448,7 +458,7 @@ public class TestDisplay extends ApplicationAdapter {
                 new ByteFill.Fill3D.SolidColor(mm.randomMainColor()),
                 2
         );*/
-        
+
         //ByteFill.fill(voxels, ByteFill.wireframeBox(voxels, ByteFill.fill3D(ByteFill.fillY(checkers))));
 
         Arrays.fill(animatedVoxels, voxels);
@@ -629,7 +639,7 @@ public class TestDisplay extends ApplicationAdapter {
         try {
             System.out.println(name);
             byte[][][] arr = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream(name)));
-            if(arr != null) 
+            if(arr != null)
                 voxels = new ArrayModel(arr);
             /// this is commented out because it's pretty hard to make a working palette by hand; this uses the default
             //palette = VoxIO.lastPalette;
