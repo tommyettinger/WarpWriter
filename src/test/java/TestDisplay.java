@@ -441,11 +441,17 @@ public class TestDisplay extends ApplicationAdapter {
                 8
         );
 
-        voxels = new BoxModel(bytes,
+        voxels = //new BoxModel(bytes,
                 new Swapper(Swapper.Swap.zyx)
-                        .skew(1f)
-                        .stripes(new int[] {2, 2, 2}, fetches)
-        )
+                        //.skew(1f)
+                        .add(Stripes.checkers2D(
+                                ColorFetch.color(mm.randomMainColor()),
+                                ColorFetch.color(mm.randomMainColor()),
+                                new int[] {2, 2},
+                                new int[] {2, 2}
+                        ))
+                        //.stripes(new int[] {2, 2, 2}, fetches)
+        //)
                 .offsetModel(5, 5, 5)
                 .arrayModel(bytes)
                 .model(bytes);

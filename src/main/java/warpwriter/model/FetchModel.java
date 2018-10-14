@@ -8,6 +8,10 @@ package warpwriter.model;
 public class FetchModel extends Fetch implements IModel {
     public int xSize, ySize, zSize;
 
+    public FetchModel() {
+        this(12, 12, 8);
+    }
+
     public FetchModel(int xSize, int ySize, int zSize) {
         this(xSize, ySize, zSize, null);
     }

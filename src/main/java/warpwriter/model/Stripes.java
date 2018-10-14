@@ -48,4 +48,11 @@ public class Stripes extends Fetch {
     public Fetch deferFetch(Fetch fetch) {
         return fetch == null ? getNextFetch() : fetch;
     }
+
+    public static Fetch checkers2D(Fetch white, Fetch black, int[] x, int[] z) {
+        return new Stripes(x, new Fetch[]{
+                new Swapper(Swapper.Swap.zyx).stripes(z, new Fetch[]{white, black}),
+                new Swapper(Swapper.Swap.zyx).stripes(z, new Fetch[]{black, white})
+        });
+    }
 }

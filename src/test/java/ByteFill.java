@@ -479,7 +479,6 @@ public class ByteFill {
         }
     }
 
-
     public static abstract class Fill3D {
         abstract byte fill(int x, int y, int z);
 

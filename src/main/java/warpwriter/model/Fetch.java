@@ -136,6 +136,10 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
         return new FetchModel(this, convenience);
     }
 
+    public FetchModel model() {
+        return new FetchModel();
+    }
+
     public Fetch offsetModel(int xSize, int ySize, int zSize) {
         return add(new OffsetModel(xSize, ySize, zSize));
     }
