@@ -96,6 +96,10 @@ public class TestDisplay extends ApplicationAdapter {
                         dither = !dither;
                         remakeShip(0);
                         return true;
+                    case Input.Keys.M: // smoothing, affects outline
+                        mr.easing = !mr.easing;
+                        remakeShip(0);
+                        return true;
                     case Input.Keys.T:
                         tiny = !tiny;
                         remakeShip(0);

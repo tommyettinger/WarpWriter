@@ -44,7 +44,7 @@ public class ModelMaker {
         y += z * 0xBBE0563303A4615FL;
         x += y * 0xA0F2EC75A1FE1575L;
         s += x * 0x89E182857D9ED688L;
-        return ((s = (s ^ s >> 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ s >>> 25);
+        return ((s = (s ^ s >>> 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ s >>> 25);
     }
     /**
      * Gets a 64-bit point hash of a 4D point (x, y, z, and w are all longs) and a state/seed as a long. This point
@@ -70,7 +70,7 @@ public class ModelMaker {
         y += z * 0xAF36D01EF7518DBBL;
         x += y * 0x9A69443F36F710E6L;
         s += x * 0x881403B9339BD42DL;
-        return ((s = (s ^ s >> 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ s >>> 25);
+        return ((s = (s ^ s >>> 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ s >>> 25);
     }
     /**
      * Gets a bounded int point hash of a 3D point (x, y, and z are all longs) and a state/seed as a long. This point
@@ -96,7 +96,7 @@ public class ModelMaker {
         y += z * 0xBBE0563303A4615FL;
         x += y * 0xA0F2EC75A1FE1575L;
         s += x * 0x89E182857D9ED688L;
-        return (int)((bound * (((s = (s ^ s >> 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ s >>> 25) & 0xFFFFFFFFL)) >> 32);
+        return (int)((bound * (((s = (s ^ s >>> 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ s >>> 25) & 0xFFFFFFFFL)) >> 32);
     }
 
     /**
@@ -125,7 +125,7 @@ public class ModelMaker {
         y += z * 0xAF36D01EF7518DBBL;
         x += y * 0x9A69443F36F710E6L;
         s += x * 0x881403B9339BD42DL;
-        return (int)((bound * (((s = (s ^ s >> 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ s >>> 25) & 0xFFFFFFFFL)) >> 32);
+        return (int)((bound * (((s = (s ^ s >>> 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ s >>> 25) & 0xFFFFFFFFL)) >> 32);
     }
 //
 //    /**

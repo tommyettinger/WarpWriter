@@ -125,11 +125,11 @@ public class ModelRenderer {
                                 for (int sx = 0; sx < 3; sx++) {
                                     for (int sy = 0; sy < 3; sy++) {
                                         working[px+sx][py+sy] = EYE_DARK;
-                                        depths[px+sx][py+sy] = 256 + b * 7 - d * 4 + sy; // used c
+                                        depths[px+sx][py+sy] = 256 + b * 8 - d * 4 + sy; // used c
                                     }
                                     for (int sy = 3; sy < 5; sy++) {
                                         working[px+sx][py+sy] = EYE_DARK;
-                                        depths[px+sx][py+sy] = 256 + b * 7 - d * 4 + sy; // used c
+                                        depths[px+sx][py+sy] = 255 + b * 8 - d * 4 + sy; // used c
                                     }
                                 }
                                 working[px][py] = EYE_LIGHT;
@@ -144,11 +144,11 @@ public class ModelRenderer {
                                 for (int sx = 0; sx < 3; sx++) {
                                     for (int sy = 0; sy < 3; sy++) {
                                         working[px+sx][py+sy] = current - 1;
-                                        depths[px+sx][py+sy] = 256 + b * 7 - d * 4 + sy;
+                                        depths[px+sx][py+sy] = 256 + b * 8 - d * 4 + sy;
                                     }
                                     for (int sy = 3; sy < 5; sy++) {
                                         working[px+sx][py+sy] = current;
-                                        depths[px+sx][py+sy] = 256 + b * 7 - d * 4 + sy;
+                                        depths[px+sx][py+sy] = 255 + b * 8 - d * 4 + sy;
                                     }
                                 }
                             }
@@ -182,11 +182,11 @@ public class ModelRenderer {
                                 for (int sx = 0; sx < 3; sx++) {
                                     for (int sy = 0; sy < 3; sy++) {
                                         working[px+sx][py+sy] = EYE_DARK;
-                                        depths[px+sx][py+sy] = 256 + b * 7 - d * 4 + sy; // used a
+                                        depths[px+sx][py+sy] = 256 + b * 8 - d * 4 + sy; // used a
                                     }
                                     for (int sy = 3; sy < 5; sy++) {
                                         working[px+sx][py+sy] = EYE_DARK;
-                                        depths[px+sx][py+sy] = 256 + b * 7 - d * 4 + sy; // used a
+                                        depths[px+sx][py+sy] = 255 + b * 8 - d * 4 + sy; // used a
                                     }
                                 }
                                 working[px][py] = EYE_LIGHT;
@@ -199,11 +199,11 @@ public class ModelRenderer {
                                 for (int sx = 0; sx < 3; sx++) {
                                     for (int sy = 0; sy < 3; sy++) {
                                         working[px+sx][py+sy] = current - 1;
-                                        depths[px+sx][py+sy] = 256 + b * 7 - d * 4 + sy;
+                                        depths[px+sx][py+sy] = 256 + b * 8 - d * 4 + sy;
                                     }
                                     for (int sy = 3; sy < 5; sy++) {
                                         working[px+sx][py+sy] = current;
-                                        depths[px+sx][py+sy] = 256 + b * 7 - d * 4 + sy;
+                                        depths[px+sx][py+sy] = 255 + b * 8 - d * 4 + sy;
                                     }
                                 }
                             }
@@ -226,8 +226,8 @@ public class ModelRenderer {
                     else {
                         if (hardOutline && working[x - 1][y] == 0) { render[x - 1][y] = 2; } else if (working[x - 1][y] == 0 || depths[x - 1][y] < d - 9 ) { render[x - 1][y] = w; }
                         if (hardOutline && working[x + 1][y] == 0) { render[x + 1][y] = 2; } else if (working[x + 1][y] == 0 || depths[x + 1][y] < d - 9 ) { render[x + 1][y] = w; }
-                        if (hardOutline && working[x][y - 1] == 0) { render[x][y - 1] = 2; } else if (working[x][y - 1] == 0 || depths[x][y - 1] < d - 10) { render[x][y - 1] = w; }
-                        if (hardOutline && working[x][y + 1] == 0) { render[x][y + 1] = 2; } else if (working[x][y + 1] == 0 || depths[x][y + 1] < d - 10) { render[x][y + 1] = w; }
+                        if (hardOutline && working[x][y - 1] == 0) { render[x][y - 1] = 2; } else if (working[x][y - 1] == 0 || depths[x][y - 1] < d - 9 ) { render[x][y - 1] = w; }
+                        if (hardOutline && working[x][y + 1] == 0) { render[x][y + 1] = 2; } else if (working[x][y + 1] == 0 || depths[x][y + 1] < d - 9 ) { render[x][y + 1] = w; }
                     }
                 }
             }
@@ -414,11 +414,11 @@ public class ModelRenderer {
                                 for (int sx = 0; sx < 3; sx++) {
                                     for (int sy = 0; sy < 2; sy++) {
                                         working[px+sx][py+sy] = EYE_DARK;
-                                        depths[px+sx][py+sy] = 256 + b * 7 - d * 4 + sy;
+                                        depths[px+sx][py+sy] = 256 + b * 8 - d * 4 + sy;
                                     }
                                     for (int sy = 2; sy < 5; sy++) {
                                         working[px+sx][py+sy] = EYE_DARK;
-                                        depths[px+sx][py+sy] = 256 + b * 7 - d * 4 + sy;
+                                        depths[px+sx][py+sy] = 255 + b * 8 - d * 4 + sy;
                                     }
                                 }
                                 working[px][py] = EYE_LIGHT;
@@ -431,11 +431,11 @@ public class ModelRenderer {
                                 for (int sx = 0; sx < 3; sx++) {
                                     for (int sy = 3; sy < 5; sy++) {
                                         working[px+sx][py+sy] = current + 1;
-                                        depths[px+sx][py+sy] = 256 + b * 7 - d * 4 + sy;
+                                        depths[px+sx][py+sy] = 256 + b * 8 - d * 4 + sy;
                                     }
                                     for (int sy = 0; sy < 3; sy++) {
                                         working[px+sx][py+sy] = current;
-                                        depths[px+sx][py+sy] = 256 + b * 7 - d * 4 + sy;
+                                        depths[px+sx][py+sy] = 255 + b * 8 - d * 4 + sy;
                                     }
                                 }
                             }
@@ -469,11 +469,11 @@ public class ModelRenderer {
                                 for (int sx = 0; sx < 3; sx++) {
                                     for (int sy = 0; sy < 2; sy++) {
                                         working[px+sx][py+sy] = EYE_DARK;
-                                        depths[px+sx][py+sy] = 256 + b * 7 - d * 4 + sy;
+                                        depths[px+sx][py+sy] = 256 + b * 8 - d * 4 + sy;
                                     }
                                     for (int sy = 2; sy < 5; sy++) {
                                         working[px+sx][py+sy] = EYE_DARK;
-                                        depths[px+sx][py+sy] = 256 + b * 7 - d * 4 + sy;
+                                        depths[px+sx][py+sy] = 255 + b * 8 - d * 4 + sy;
                                     }
                                 }
                                 working[px][py] = EYE_LIGHT;
@@ -486,11 +486,11 @@ public class ModelRenderer {
                                 for (int sx = 0; sx < 3; sx++) {
                                     for (int sy = 3; sy < 5; sy++) {
                                         working[px+sx][py+sy] = current + 1;
-                                        depths[px+sx][py+sy] = 256 + b * 7 - d * 4 + sy;
+                                        depths[px+sx][py+sy] = 256 + b * 8 - d * 4 + sy;
                                     }
                                     for (int sy = 0; sy < 3; sy++) {
                                         working[px+sx][py+sy] = current;
-                                        depths[px+sx][py+sy] = 256 + b * 7 - d * 4 + sy;
+                                        depths[px+sx][py+sy] = 255 + b * 8 - d * 4 + sy;
                                     }
                                 }
                             }
@@ -512,8 +512,8 @@ public class ModelRenderer {
                     else {
                         if (hardOutline && working[x - 1][y] == 0) { render[x - 1][y] = 2; } else if (working[x - 1][y] == 0 || depths[x - 1][y] < d - 9 ) { render[x - 1][y] = w; }
                         if (hardOutline && working[x + 1][y] == 0) { render[x + 1][y] = 2; } else if (working[x + 1][y] == 0 || depths[x + 1][y] < d - 9 ) { render[x + 1][y] = w; }
-                        if (hardOutline && working[x][y - 1] == 0) { render[x][y - 1] = 2; } else if (working[x][y - 1] == 0 || depths[x][y - 1] < d - 10) { render[x][y - 1] = w; }
-                        if (hardOutline && working[x][y + 1] == 0) { render[x][y + 1] = 2; } else if (working[x][y + 1] == 0 || depths[x][y + 1] < d - 10) { render[x][y + 1] = w; }
+                        if (hardOutline && working[x][y - 1] == 0) { render[x][y - 1] = 2; } else if (working[x][y - 1] == 0 || depths[x][y - 1] < d - 9 ) { render[x][y - 1] = w; }
+                        if (hardOutline && working[x][y + 1] == 0) { render[x][y + 1] = 2; } else if (working[x][y + 1] == 0 || depths[x][y + 1] < d - 9 ) { render[x][y + 1] = w; }
                     }
                 }
             }
