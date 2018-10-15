@@ -416,64 +416,18 @@ public class TestDisplay extends ApplicationAdapter {
             //font = new BitmapFont(Gdx.files.internal("tiny.fnt"));
         }
 
-        //ByteFill.Fill2D randomColor = ByteFill.fill2D(mm.randomMainColor());
-
-        ByteFill.Fill[] randomFills = {
-                new ByteFill.Fill.SolidColor(mm.randomMainColor()),
-                new ByteFill.Fill.SolidColor(mm.randomMainColor()),
-                new ByteFill.Fill.SolidColor(mm.randomMainColor())
-        };
-        Fetch[] fetches = {
-                ColorFetch.color(mm.randomMainColor()),
-                ColorFetch.color(mm.randomMainColor()),
-                ColorFetch.color(mm.randomMainColor())
-        };
-        ByteFill.Fill2D stripes2D = ByteFill.Fill2D.fill(ByteFill.Fill.stripes(new int[] {2, 2, 2}, randomFills));
-        Stripes stripes = new Stripes(fetches, new int[]{2, 2, 2});
-        /*
-        ByteFill.Fill2D checkers = ByteFill.checkers(
-                ByteFill.fill2D(mm.randomMainColor()),
-                ByteFill.fill2D(mm.randomMainColor()),
-                3);
-                */
-
-        byte[][][] bytes = ByteFill.Fill3D.fill(voxelText.text2D(
-                font,
-                FakeLanguageGen.SIMPLISH.word(mm.rng.nextLong(), true),
-                new ByteFill.Fill2D.Transformer(stripes2D).skew(-1f)
-                ),
-                8
-        );
-
-        /*
-        voxels = //new BoxModel(bytes,
-                //new Swapper(Swapper.Swap.zyx)
-                        //.skew(1f)
-                        //.stripes(new int[] {2, 2, 2}, fetches)
-        //)
-                .offsetModel(5, 5, 5)
-                .arrayModel(bytes)
-                .model(bytes);
-                */
-
-        voxels = Stripes.checkers(
+        Fetch checkers = Stripes.checkers(
                 ColorFetch.color(mm.randomMainColor()),
                 ColorFetch.color(mm.randomMainColor()),
                 new int[] {2, 2},
                 new int[] {2, 2},
                 new int[] {2, 2}
-        ).model(bytes);
+        );
 
-        //ByteFill.fill(bytes, ByteFill.wireframeBox(bytes, ByteFill.fill3D(mm.randomMainColor())));
-
-        /*voxels = voxelText.text3D(
-                font,
-                FakeLanguageGen.SIMPLISH.word(mm.rng.nextLong(), true),
-                new ByteFill.Fill3D.SolidColor(mm.randomMainColor()),
-                2
-        );*/
-
-        //ByteFill.fill(voxels, ByteFill.wireframeBox(voxels, ByteFill.fill3D(ByteFill.fillY(checkers))));
+        voxels = voxelText
+                .setText(font, FakeLanguageGen.SIMPLISH.word(mm.rng.nextLong(), true))
+                .setFetch(checkers)
+                .setDepth(5);
 
         Arrays.fill(animatedVoxels, voxels);
         int oldWidth = width, oldHeight = height;

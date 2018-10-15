@@ -9,18 +9,71 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import warpwriter.model.Fetch;
+import warpwriter.model.IModel;
 
 /**
  * @author Ben McLean
  */
-public class VoxelText implements Disposable {
+public class VoxelText extends Fetch implements IModel, Disposable {
     protected FrameBuffer buffer;
     protected SpriteBatch batch;
+    protected Pixmap pixmap;
+    protected int xSize = 1;
+    protected Fetch fetch;
+
+    public VoxelText() {
+    }
+
+    public VoxelText(BitmapFont font, String string, Fetch fetch) {
+        setText(font, string);
+        setFetch(fetch);
+    }
+
+    public VoxelText(BitmapFont font, String string, Fetch fetch, int xSize) {
+        this(font, string, fetch);
+        setDepth(xSize);
+    }
+
+    @Override
+    public Fetch fetch(int x, int y, int z) {
+        return fetch == null
+                || pixmap == null
+                || outside(x, y, z)
+                || (pixmap.getPixel(y, z) & 0xFF) < 128
+                ? getNextFetch() : fetch;
+    }
+
+    /**
+     *
+     * @param xSize Set to 0 for infinite depth in both directions, or to a positive depth value
+     * @return this
+     */
+    public VoxelText setDepth(int xSize) {
+        this.xSize = xSize;
+        return this;
+    }
+
+    public VoxelText setText(BitmapFont font, String string) {
+        if (pixmap != null) pixmap.dispose();
+        pixmap = textToPixmap(font, string);
+        return this;
+    }
+
+    /**
+     * @param fetch What to fill the text with
+     * @return this
+     */
+    public VoxelText setFetch(Fetch fetch) {
+        this.fetch = fetch;
+        return this;
+    }
 
     @Override
     public void dispose() {
         if (buffer != null) buffer.dispose();
         if (batch != null) batch.dispose();
+        if (pixmap != null) pixmap.dispose();
     }
 
     public Pixmap textToPixmap(BitmapFont font, String string) {
@@ -56,42 +109,31 @@ public class VoxelText implements Disposable {
         return result;
     }
 
-    public byte[][] text2D(BitmapFont font, String string, ByteFill.Fill2D fill) {
-        return text2D(font, string, fill, ByteFill.Fill2D.SolidColor.transparent);
+    @Override
+    public int xSize() {
+        return xSize == 0 ? 1 : xSize;
     }
 
-    public byte[][] text2D(BitmapFont font, String string, ByteFill.Fill2D yes, ByteFill.Fill2D no) {
-        Pixmap pixmap = textToPixmap(font, string);
-        byte[][] result = ByteFill.Fill2D.fill(
-                ByteFill.Fill2D.transparent(pixmap, no, yes),
-                pixmap.getWidth(),
-                pixmap.getHeight()
-        );
-        pixmap.dispose();
-        return result;
+    @Override
+    public int ySize() {
+        return pixmap == null ? 1 : pixmap.getWidth();
     }
 
-    public byte[][][] text3D(BitmapFont font, String string, ByteFill.Fill3D fill) {
-        return text3D(font, string, fill, 1);
+    @Override
+    public int zSize() {
+        return pixmap == null ? 1 : pixmap.getHeight();
     }
 
-    public byte[][][] text3D(BitmapFont font, String string, ByteFill.Fill3D fill, int depth) {
-        return text3D(font, string, fill, ByteFill.Fill3D.SolidColor.transparent, depth);
+    @Override
+    public boolean inside(int x, int y, int z) {
+        return !outside(x, y, z);
     }
 
-    public byte[][][] text3D(BitmapFont font, String string, ByteFill.Fill3D yes, ByteFill.Fill3D no) {
-        return text3D(font, string, yes, no, 1);
-    }
-
-    public byte[][][] text3D(BitmapFont font, String string, ByteFill.Fill3D yes, ByteFill.Fill3D no, int depth) {
-        Pixmap pixmap = textToPixmap(font, string);
-        byte[][][] result = ByteFill.Fill3D.fill(
-                ByteFill.Fill3D.transparent(pixmap, no, yes),
-                depth,
-                pixmap.getWidth(),
-                pixmap.getHeight()
-        );
-        pixmap.dispose();
-        return result;
+    /**
+     * @return Ignores x if xSize == 0
+     */
+    @Override
+    public boolean outside(int x, int y, int z) {
+        return y < 0 || z < 0 || y >= ySize() || z >= zSize() || (xSize != 0 && (x < 0 || x >= xSize()));
     }
 }

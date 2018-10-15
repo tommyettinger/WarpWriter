@@ -27,6 +27,10 @@ public class FetchModel extends Fetch implements IModel {
         if (fetch != null) add(fetch);
     }
 
+    public FetchModel(byte[][][] convenience) {
+        this(convenience, null);
+    }
+
     public FetchModel(byte[][][] convenience, Fetch fetch) {
         this(convenience.length, convenience[0].length, convenience[0][0].length, fetch);
     }

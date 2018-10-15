@@ -33,6 +33,17 @@ public class PixmapTransparent extends Fetch implements IModel {
         this.fill = fill;
     }
 
+    /**
+     * The pixmap doesn't have to be set right away.
+     */
+    public PixmapTransparent() {
+    }
+
+    public PixmapTransparent setPixmap(Pixmap pixmap) {
+        this.pixmap = pixmap;
+        return this;
+    }
+
     @Override
     public int xSize() {
         return 1;
@@ -40,12 +51,12 @@ public class PixmapTransparent extends Fetch implements IModel {
 
     @Override
     public int ySize() {
-        return pixmap.getWidth();
+        return pixmap == null ? 1 : pixmap.getWidth();
     }
 
     @Override
     public int zSize() {
-        return pixmap.getHeight();
+        return pixmap == null ? 1 : pixmap.getHeight();
     }
 
     /**
@@ -53,7 +64,7 @@ public class PixmapTransparent extends Fetch implements IModel {
      */
     @Override
     public boolean inside(int x, int y, int z) {
-        return !outside(0, y, z);
+        return !outside(x, y, z);
     }
 
     /**
@@ -66,6 +77,9 @@ public class PixmapTransparent extends Fetch implements IModel {
 
     @Override
     public Fetch fetch(int x, int y, int z) {
-        return outside(x, y, z) || (pixmap.getPixel(y, z) & 0xFF) / 255f < threshold ? getNextFetch() : fill;
+        return pixmap == null
+                || outside(x, y, z)
+                || (pixmap.getPixel(y, z) & 0xFF) / 255f < threshold
+                ? getNextFetch() : fill;
     }
 }
