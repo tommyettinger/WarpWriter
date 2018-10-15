@@ -185,6 +185,13 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
     }
 
     /**
+     * @return If fetch is null then return getNextFetch(), else return fetch.
+     */
+    public Fetch deferFetch(Fetch fetch) {
+        return fetch == null ? getNextFetch() : fetch;
+    }
+
+    /**
      * bite(int x, int y, int z) is only supposed to be called when there is no next fetch.
      * <p>
      * But just in case someone is naughty and breaks the chain, this method allows for a recovery, starting a new chain if necessary. Wrap the result of your bite(int x, int y, int z) overrides in this instead of returning (byte) 0 to ensure you're transparent.

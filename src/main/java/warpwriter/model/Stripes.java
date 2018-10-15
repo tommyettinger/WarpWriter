@@ -45,10 +45,6 @@ public class Stripes extends Fetch {
         return deferFetch(stripes[0]);
     }
 
-    public Fetch deferFetch(Fetch fetch) {
-        return fetch == null ? getNextFetch() : fetch;
-    }
-
     /**
      * @param x Two positive width values for columns
      * @param z Two positive height values for rows

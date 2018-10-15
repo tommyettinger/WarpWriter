@@ -47,12 +47,12 @@ public class VoxelText implements Disposable {
         batch.setProjectionMatrix(view.getCamera().combined);
         batch.begin();
         Color old = font.getColor();
-        font.setColor(color);
+        if (color != null) font.setColor(color);
         font.draw(batch, string, 0, height);
         batch.end();
         Pixmap result = ScreenUtils.getFrameBufferPixmap(0, 0, width, height);
         buffer.end();
-        font.setColor(old);
+        if (color != null) font.setColor(old);
         return result;
     }
 
