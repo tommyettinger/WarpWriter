@@ -4,19 +4,14 @@ package warpwriter.model;
  * @author Ben McLean
  */
 public class Skew extends Fetch {
-    public float xSkew, ySkew;
+    public float skew;
 
-    public Skew(float xSkew, float ySkew) {
-        this.xSkew = xSkew;
-        this.ySkew = ySkew;
-    }
-
-    public Skew(float xSkew) {
-        this(xSkew, 0f);
+    public Skew(float skew) {
+        this.skew = skew;
     }
 
     public Fetch fetch(int x, int y, int z) {
-        setChains(x + (int) (y * xSkew), y + (int) (z * ySkew), z);
+        setChains(x, y, z + (int) (y * skew));
         return getNextFetch();
     }
 }

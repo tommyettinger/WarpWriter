@@ -199,12 +199,8 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
         return add(new FetchFetch(iFetch));
     }
 
-    public Fetch skew(float xSkew, float zSkew) {
-        return add(new Skew(xSkew, zSkew));
-    }
-
-    public Fetch skew(float xSkew) {
-        return skew(xSkew, 0f);
+    public Fetch skew(float skew) {
+        return skew(skew);
     }
 
     public Fetch swapper(Swapper.Swap swap) {
