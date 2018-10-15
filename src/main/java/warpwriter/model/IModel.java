@@ -17,13 +17,15 @@ package warpwriter.model;
  * the 3D model was extruded text that was readable when facing the camera, then this 2D slice will still contain a
  * readable slice of that text, just no longer extruded. This matches the behavior of getting a 3D model from a 4D
  * animation of multiple models. Similarly to the 2D case, if you get a 1D position by specifying x and y, then you have
- * an up-and-down line out of a model: {@code byte[] oneDim = arr[x][y];}. If you're using a 2D slice, it is still
- * suggested to use x and y as the names of the axes, and even though they become y and z when copied directly into a 3D
- * model, they can also be used in other ways where x and y don't correspond to y and z (a 2D slice might be used to
- * texture a cube, for example, so some side faces would have the 2D x,y correspond to 3D y,z, others to 3D x,z, and the
- * top and bottom faces to 3D x,y).  A 1D line should probably use x to refer to its one dimension, but there's no other
- * axis to confuse it with, so you could use any convention there (x is still recommended). Like with 2D, a 1D line can
- * be applied in many ways to a 3D model.
+ * an up-and-down line out of a model: {@code byte[] oneDim = arr[x][y];}. If you're using a 2D slice, it is recommended
+ * to use y and z as the names of the axes, because they become y and z when copied directly into a 3D model. They can
+ * also be used in other ways where 2D y and z don't correspond to 3D y and z (a 2D slice might be used to texture a
+ * cube, for example, so some side faces would have the 2D y,z correspond to 3D y,z, others to 3D x,z, and the top and
+ * bottom faces to 3D x,y). A 1D line should probably use z to refer to its one dimension, but there's no other
+ * axis to confuse it with, so you could use any convention there (z is still recommended). Like with 2D, a 1D line can
+ * be applied in many ways to a 3D model. When additional dimensions are added, just go backwards in the alphabet from
+ * z as the first dimension: z for up/down, y for left/right, x for forward/back, w for future/past, v for ana/kata (or
+ * whatever hyperdimensional modeling terms you make up for a fifth dimension), etc.
  * <br>
  * Created by Tommy Ettinger on 10/11/2018.
  *
