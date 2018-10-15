@@ -35,7 +35,7 @@ public class Stripes extends Fetch {
 
     @Override
     public Fetch fetch(int x, int y, int z) {
-        int xStep = Loop.loop(x, repeat);
+        int xStep = Loop.loop(z, repeat);
         int step = 0;
         for (int i = 0; i < widths.length; i++)
             if (step <= xStep)
@@ -45,20 +45,16 @@ public class Stripes extends Fetch {
         return deferFetch(stripes[0]);
     }
 
-    public Fetch deferFetch(Fetch fetch) {
-        return fetch == null ? getNextFetch() : fetch;
-    }
-
     /**
-     * @param x Two positive width values for columns
-     * @param z Two positive height values for rows
+     * @param y Two positive height values for rows
+     * @param z Two positive width values for columns
      */
-    public static Fetch checkers(Fetch white, Fetch black, int[] x, int[] z) {
-        return checkers(new Fetch[]{white, black}, new Fetch[]{black, white}, x, z);
+    public static Fetch checkers(Fetch white, Fetch black, int[] y, int[] z) {
+        return checkers(new Fetch[]{white, black}, new Fetch[]{black, white}, y, z);
     }
 
-    public static Fetch checkers(Fetch[] a, Fetch[] b, int[] x, int[] z) {
-        return new Stripes(x, new Fetch[]{
+    public static Fetch checkers(Fetch[] a, Fetch[] b, int[] y, int[] z) {
+        return new Stripes(y, new Fetch[]{
                 new Swapper(Swapper.Swap.zyx).stripes(z, a),
                 new Swapper(Swapper.Swap.zyx).stripes(z, b)
         });
@@ -68,8 +64,8 @@ public class Stripes extends Fetch {
         return checkers(white, black, size, size, size);
     }
 
-    public static Fetch checkers(Fetch white, Fetch black, int x, int z) {
-        return checkers(white, black, x, z);
+    public static Fetch checkers(Fetch white, Fetch black, int y, int z) {
+        return checkers(white, black, y, z);
     }
 
     public static Fetch checkers(Fetch white, Fetch black, int x, int y, int z) {
@@ -81,9 +77,9 @@ public class Stripes extends Fetch {
     }
 
     /**
-     * @param x Two positive width values for columns
+     * @param x Two positive depth values for layers
      * @param y Two positive height values for rows
-     * @param z Two positive depth values for layers
+     * @param z Two positive width values for columns
      */
     public static Fetch checkers(Fetch white, Fetch black, int[] x, int[] y, int[] z) {
         if (x == null)
@@ -97,8 +93,8 @@ public class Stripes extends Fetch {
         return new Stripes(
                 x,
                 new Fetch[]{
-                        new Swapper(Swapper.Swap.yxz).add(checkers(a, b, y, z)),
-                        new Swapper(Swapper.Swap.yxz).add(checkers(b, a, y, z))
+                        new Swapper(Swapper.Swap.yzx).add(checkers(a, b, y, z)),
+                        new Swapper(Swapper.Swap.yzx).add(checkers(b, a, y, z))
                 }
         );
     }
