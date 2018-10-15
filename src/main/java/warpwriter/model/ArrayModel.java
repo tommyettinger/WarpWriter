@@ -18,6 +18,22 @@ public class ArrayModel extends Fetch implements IModel {
     public ArrayModel(byte[][][] voxels) {
         this.voxels = voxels;
     }
+    
+    public ArrayModel(IFetch fetch, int xSize, int ySize, int zSize) {
+        this(new FetchFetch(fetch), xSize, ySize, zSize);
+    }
+
+    public ArrayModel(Fetch fetch, int xSize, int ySize, int zSize) {
+        this(new FetchModel(fetch, xSize, ySize, zSize));
+    }
+
+    public ArrayModel (IModel model) {
+        voxels = new byte[model.xSize()][model.ySize()][model.zSize()];
+        for (int x=0; x<xSize(); x++)
+            for (int y=0; y<ySize(); y++)
+                for (int z=0; z<zSize(); z++)
+                    voxels[x][y][z] = model.at(x, y, z);
+    }
 
     /**
      * Gets the x size of the IModel, with requests for x limited between 0 (inclusive) to xSize() (exclusive).
