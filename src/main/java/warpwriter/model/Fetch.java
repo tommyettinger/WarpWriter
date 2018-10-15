@@ -30,6 +30,14 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
         return getNextFetch();
     }
 
+    public final Fetch fetch(int y, int z) {
+        return fetch(0, y, z);
+    }
+
+    public final Fetch fetch(int z) {
+        return fetch(0, z);
+    }
+
     /**
      * This method is intended to be overridden with a final decision about which byte to return for a given coordinate.
      *
@@ -39,23 +47,13 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
         return deferByte(x, y, z);
     }
 
-    public byte bite(int x, int z) {
-        return bite(x, 0, z);
+    public final byte bite(int y, int z) {
+        return bite(0, y, z);
     }
 
-    public byte bite(int x) {
-        return bite(x, 0);
+    public final byte bite(int z) {
+        return bite(0, z);
     }
-
-    public Fetch fetch(int x, int z) {
-        return fetch(x, 0, z);
-    }
-
-    public Fetch fetch(int x) {
-        return fetch(x, 0);
-    }
-
-    public int xChain, yChain, zChain;
 
     /**
      * Don't override this method or else you'll break the method chaining!
@@ -76,12 +74,23 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
         return current.bite(x, y, z);
     }
 
-    public final byte at(int x, int z) {
-        return fetch(x, z).at(x, z);
+    @Override
+    public final byte at(int y, int z) {
+        return at(0, y, z);
     }
 
-    public final byte at(int x) {
-        return fetch(x).at(x);
+    @Override
+    public final byte at(int z) {
+        return at(0, z);
+    }
+
+    public int xChain, yChain, zChain;
+
+    public Fetch setChains(int x, int y, int z) {
+        xChain = x;
+        yChain = y;
+        zChain = z;
+        return this;
     }
 
     private Fetch nextFetch;
@@ -112,6 +121,38 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
         return this;
     }
 
+    public Fetch deferFetch(int x, int y, int z) {
+        return getNextFetch() == null ? ColorFetch.transparent : getNextFetch();
+    }
+
+    public Fetch deferFetch(byte result, int x, int y, int z) {
+        return result == 0 ? deferFetch(x, y, z) : ColorFetch.color(result);
+    }
+
+    /**
+     * This method does not chain!
+     *
+     * @return If fetch is null then return getNextFetch(), else return fetch.
+     */
+    public Fetch deferFetch(Fetch fetch) {
+        return fetch == null ? getNextFetch() : fetch;
+    }
+
+    /**
+     * bite(int x, int y, int z) is only supposed to be called when there is no next fetch.
+     * <p>
+     * But just in case someone is naughty and breaks the chain, this method allows for a recovery, starting a new chain if necessary. Wrap the result of your bite(int x, int y, int z) overrides in this instead of returning (byte) 0 to ensure you're transparent.
+     * <p>
+     * This should be the method which ensures that, when no next method is specified in the chain, the background is always transparent.
+     */
+    public byte deferByte(byte result, int x, int y, int z) {
+        return result == (byte) 0 ? deferFetch(x, y, z).at(x, y, z) : result;
+    }
+
+    public byte deferByte(int x, int y, int z) {
+        return deferByte((byte) 0, x, y, z);
+    }
+
     /**
      * This method does not chain!
      * It goes on the end, to transform the results of a chain into an IModel
@@ -120,7 +161,9 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
         return new FetchModel(this, xSize, ySize, zSize);
     }
 
-    /** This method does not chain!
+    /**
+     * This method does not chain!
+     *
      * @param convenience This array is used only to get the size of the model.
      * @return A model version of the current Fetch with the size of the convenience array. The actual contents of the convenience array are not touched past [0][0].length
      */
@@ -174,42 +217,5 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
 
     public Fetch stripes(Fetch[] stripes, int[] widths) {
         return stripes(widths, stripes);
-    }
-
-    public Fetch deferFetch(int x, int y, int z) {
-        return getNextFetch() == null ? ColorFetch.transparent : getNextFetch();
-    }
-
-    public Fetch deferFetch(byte result, int x, int y, int z) {
-        return result == 0 ? deferFetch(x, y, z) : ColorFetch.color(result);
-    }
-
-    /**
-     * @return If fetch is null then return getNextFetch(), else return fetch.
-     */
-    public Fetch deferFetch(Fetch fetch) {
-        return fetch == null ? getNextFetch() : fetch;
-    }
-
-    /**
-     * bite(int x, int y, int z) is only supposed to be called when there is no next fetch.
-     * <p>
-     * But just in case someone is naughty and breaks the chain, this method allows for a recovery, starting a new chain if necessary. Wrap the result of your bite(int x, int y, int z) overrides in this instead of returning (byte) 0 to ensure you're transparent.
-     * <p>
-     * This should be the method which ensures that, when no next method is specified in the chain, the background is always transparent.
-     */
-    public byte deferByte(byte result, int x, int y, int z) {
-        return result == (byte) 0 ? deferFetch(x, y, z).at(x, y, z) : result;
-    }
-
-    public byte deferByte(int x, int y, int z) {
-        return deferByte((byte) 0, x, y, z);
-    }
-
-    public Fetch setChains(int x, int y, int z) {
-        xChain = x;
-        yChain = y;
-        zChain = z;
-        return this;
     }
 }
