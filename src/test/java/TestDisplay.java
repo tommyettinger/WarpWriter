@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import squidpony.FakeLanguageGen;
 import squidpony.StringKit;
+import squidpony.squidmath.WhirlingNoise;
 import warpwriter.*;
 import warpwriter.model.*;
 
@@ -328,27 +329,23 @@ public class TestDisplay extends ApplicationAdapter {
         }
     }
 
+    private NoiseHeightMap heightMap;
+
     public void remakeTerrain(long newModel) {
         mm.rng.setState(determine(newModel));
-        int size = 16;
+        double size = 6;
+
+        if (heightMap == null) {
+            heightMap = new NoiseHeightMap(new WhirlingNoise(), newModel);
+        }
+        else
+        {
+            heightMap.setSeed(newModel);
+        }
+
+        voxels = new HeightMap(heightMap, size, size, size, ColorFetch.color(mm.randomMainColor())).model(12, 12, 12);
+
         /*
-        int color0 = mm.rng.nextInt(30) * 8 + 18,
-                color1 = mm.rng.nextInt(30) * 8 + 18,
-                color2 = mm.rng.nextInt(30) * 8 + 18,
-                color3 = mm.rng.nextInt(30) * 8 + 18;
-        voxels = TerrainCube.terrainCube(
-                size,
-                mm.rng.nextInt(size - 1) + 1,
-                mm.rng.nextInt(size - 1) + 1,
-                mm.rng.nextInt(size - 1) + 1,
-                mm.rng.nextInt(size - 1) + 1,
-                mm.rng.nextInt(size - 1) + 1,
-                ByteFill.noise3D(mm.rng.nextLong(), (byte)(color0), (byte)(color0+1), (byte)(color0+1), (byte)(color0+2), (byte)(color0+2), (byte)(color0+2), (byte)(color0+3)),
-                ByteFill.noise3D(mm.rng.nextLong(), (byte)(color1), (byte)(color1+1), (byte)(color1+1), (byte)(color1+2), (byte)(color1+2), (byte)(color1+2), (byte)(color1+3)),
-                ByteFill.noise3D(mm.rng.nextLong(), (byte)(color2), (byte)(color2+1), (byte)(color2+1), (byte)(color2+2), (byte)(color2+2), (byte)(color2+2), (byte)(color2+3)),
-                ByteFill.noise3D(mm.rng.nextLong(), (byte)(color3), (byte)(color3+1), (byte)(color3+1), (byte)(color3+2), (byte)(color3+2), (byte)(color3+2), (byte)(color3+3))
-        );
-        */
         voxels = new ArrayModel(TerrainCube.terrainCube(
                 size,
                 mm.rng.nextInt(size - 1) + 1,
@@ -361,13 +358,8 @@ public class TestDisplay extends ApplicationAdapter {
                         new ByteFill.Fill2D.SolidColor(mm.randomMainColor()),
                         4, 4
                 ))
-                /*
-                ByteFill.Fill3D.checkers(
-                        new ByteFill.Fill3D.SolidColor(mm.randomMainColor()),
-                        new ByteFill.Fill3D.SolidColor(mm.randomMainColor()),
-                        4, 4, 4
-                )*/
         ));
+        */
 
         Arrays.fill(animatedVoxels, voxels);
         int oldWidth = width, oldHeight = height;
