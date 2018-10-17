@@ -1,5 +1,6 @@
 import com.badlogic.gdx.graphics.Pixmap;
 import warpwriter.ModelMaker;
+import warpwriter.PaletteReducer;
 
 import java.util.LinkedList;
 

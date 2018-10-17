@@ -1,7 +1,7 @@
 package warpwriter;
 
+import squidpony.squidmath.GWTRNG;
 import squidpony.squidmath.NumberTools;
-import squidpony.squidmath.StatefulRNG;
 
 import java.io.InputStream;
 
@@ -17,7 +17,7 @@ public class ModelMaker {
     public final boolean RINSED_PALETTE = true;
     public final byte EYE_DARK = RINSED_PALETTE ? 22 : 30;
     public final byte EYE_LIGHT = 17;
-    public StatefulRNG rng;
+    public GWTRNG rng;
     private byte[][][] ship, shipLarge, warriorMale, sword0, spear0, shield0, shield1;
     private byte[][][][] rightHand, leftHand;
     private int xSize, ySize, zSize;
@@ -33,6 +33,9 @@ public class ModelMaker {
      * See <a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/">Roberts' article</a>
      * for some more information on how he uses this, but we do things differently because we want random-seeming
      * results instead of separated sub-random results.
+     * <br>
+     * Should be very similar to {@link squidpony.squidmath.Noise.HastyPointHash#hashAll(long, long, long, long)},
+     * if not identical. We have a version here that gets a hash between 0 and a bound, as well.
      * @param x x position; any long
      * @param y y position; any long
      * @param z z position; any long
@@ -40,10 +43,10 @@ public class ModelMaker {
      * @return 64-bit hash of the x,y,z point with the given state
      */
     public static long hashAll(long x, long y, long z, long s) {
-        z += s ^ 0xDB4F0B9175AE2165L;
+        z += s * 0xDB4F0B9175AE2165L;
         y += z * 0xBBE0563303A4615FL;
         x += y * 0xA0F2EC75A1FE1575L;
-        s += x * 0x89E182857D9ED688L;
+        s += x * 0x89E182857D9ED689L;
         return ((s = (s ^ s >>> 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ s >>> 25);
     }
     /**
@@ -57,6 +60,9 @@ public class ModelMaker {
      * See <a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/">Roberts' article</a>
      * for some more information on how he uses this, but we do things differently because we want random-seeming
      * results instead of separated sub-random results.
+     * <br>
+     * Should be very similar to {@link squidpony.squidmath.Noise.HastyPointHash#hashAll(long, long, long, long, long)},
+     * if not identical. We have a version here that gets a hash between 0 and a bound, as well.
      * @param x x position; any long
      * @param y y position; any long
      * @param z z position; any long
@@ -68,7 +74,7 @@ public class ModelMaker {
         w += s * 0xE19B01AA9D42C633L;
         z += w * 0xC6D1D6C8ED0C9631L;
         y += z * 0xAF36D01EF7518DBBL;
-        x += y * 0x9A69443F36F710E6L;
+        x += y * 0x9A69443F36F710E7L;
         s += x * 0x881403B9339BD42DL;
         return ((s = (s ^ s >>> 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ s >>> 25);
     }
@@ -83,6 +89,9 @@ public class ModelMaker {
      * See <a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/">Roberts' article</a>
      * for some more information on how he uses this, but we do things differently because we want random-seeming
      * results instead of separated sub-random results.
+     * <br>
+     * Should be very similar to {@link squidpony.squidmath.Noise.HastyPointHash#hashAll(long, long, long, long)}, but
+     * gets a hash between 0 and a bound, instead of a 64-bit long.
      * @param x x position; any long
      * @param y y position; any long
      * @param z z position; any long
@@ -95,7 +104,7 @@ public class ModelMaker {
         z += s * 0xDB4F0B9175AE2165L;
         y += z * 0xBBE0563303A4615FL;
         x += y * 0xA0F2EC75A1FE1575L;
-        s += x * 0x89E182857D9ED688L;
+        s += x * 0x89E182857D9ED689L;
         return (int)((bound * (((s = (s ^ s >>> 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ s >>> 25) & 0xFFFFFFFFL)) >> 32);
     }
 
@@ -110,6 +119,9 @@ public class ModelMaker {
      * See <a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/">Roberts' article</a>
      * for some more information on how he uses this, but we do things differently because we want random-seeming
      * results instead of separated sub-random results.
+     * <br>
+     * Should be very similar to {@link squidpony.squidmath.Noise.HastyPointHash#hashAll(long, long, long, long, long)},
+     * but gets a hash between 0 and a bound, instead of a 64-bit long.
      * @param x x position; any long
      * @param y y position; any long
      * @param z z position; any long
@@ -123,7 +135,7 @@ public class ModelMaker {
         w += s * 0xE19B01AA9D42C633L;
         z += w * 0xC6D1D6C8ED0C9631L;
         y += z * 0xAF36D01EF7518DBBL;
-        x += y * 0x9A69443F36F710E6L;
+        x += y * 0x9A69443F36F710E7L;
         s += x * 0x881403B9339BD42DL;
         return (int)((bound * (((s = (s ^ s >>> 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ s >>> 25) & 0xFFFFFFFFL)) >> 32);
     }
@@ -225,7 +237,7 @@ public class ModelMaker {
     }
     public ModelMaker(long seed)
     {
-        rng = new StatefulRNG(seed);
+        rng = new GWTRNG(-seed);
         InputStream is = this.getClass().getResourceAsStream("/ship.vox");
         ship = VoxIO.readVox(new LittleEndianDataInputStream(is));
         if(ship == null) ship = new byte[12][12][8];
@@ -298,8 +310,8 @@ public class ModelMaker {
         final int side = large ? shipLarge.length : ship.length,
                 high = large ? shipLarge[0][0].length : ship[0][0].length;
         byte[][][] voxels = new byte[side][side][high];
-        byte mainColor = (byte)(RINSED_PALETTE ? rng.nextIntHasty(30) * 8 + rng.between(17, 20) : rng.nextIntHasty(18) * 6 + rng.between(22, 25)),
-                highlightColor = (byte)(RINSED_PALETTE ? rng.nextIntHasty(30) * 8 + rng.between(18, 21) : rng.nextIntHasty(18) * 6 + rng.between(21, 24));
+        byte mainColor = (byte)(RINSED_PALETTE ? rng.nextSignedInt(30) * 8 + rng.between(17, 20) : rng.nextSignedInt(18) * 6 + rng.between(22, 25)),
+                highlightColor = (byte)(RINSED_PALETTE ? rng.nextSignedInt(30) * 8 + rng.between(18, 21) : rng.nextSignedInt(18) * 6 + rng.between(21, 24));
         for (int x = 0; x < side; x++) {
             for (int y = 0; y < side; y++) {
                 for (int z = 0; z < high; z++) {
@@ -532,10 +544,42 @@ public class ModelMaker {
         }
         return frames;
     }
-    
+    /**
+     * Gets the minimum random int between 0 and {@code bound} generated out of {@code trials} generated numbers.
+     * Useful for when numbers should have a strong bias toward zero, but all possible values are between 0, inclusive,
+     * and bound, exclusive.
+     * @param bound the outer exclusive bound; may be negative or positive
+     * @param trials how many numbers to generate and get the minimum of
+     * @return the minimum generated int between 0 and bound out of the specified amount of trials
+     */
+    public int minIntOf(final int bound, final int trials)
+    {
+        int value = rng.nextSignedInt(bound);
+        for (int i = 1; i < trials; i++) {
+            value = Math.min(value, rng.nextSignedInt(bound));
+        }
+        return value;
+    }
+    /**
+     * Gets the maximum random int between 0 and {@code bound} generated out of {@code trials} generated numbers.
+     * Useful for when numbers should have a strong bias away from zero, but all possible values are between 0,
+     * inclusive, and bound, exclusive.
+     * @param bound the outer exclusive bound; may be negative or positive
+     * @param trials how many numbers to generate and get the maximum of
+     * @return the maximum generated int between 0 and bound out of the specified amount of trials
+     */
+    public int maxIntOf(final int bound, final int trials)
+    {
+        int value = rng.nextSignedInt(bound);
+        for (int i = 1; i < trials; i++) {
+            value = Math.max(value, rng.nextSignedInt(bound));
+        }
+        return value;
+    }
+
     public byte[][][] warriorRandom()
     {
-        byte[][][][] used = new byte[rng.maxIntOf(2, 4) + 1][][][];
+        byte[][][][] used = new byte[maxIntOf(2, 4) + 1][][][];
         used[0] = rng.getRandomElement(rightHand);
         if(used.length > 1)
             used[1] = rng.getRandomElement(leftHand);
@@ -889,7 +933,7 @@ public class ModelMaker {
      */
     public byte randomMainColor() {
         return (byte)(RINSED_PALETTE
-                ? rng.nextIntHasty(30) * 8 + rng.between(18, 22)
-                : rng.nextIntHasty(18) * 6 + rng.between(21, 24));
+                ? rng.nextSignedInt(30) * 8 + rng.between(18, 22)
+                : rng.nextSignedInt(18) * 6 + rng.between(21, 24));
     }
 }

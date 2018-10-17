@@ -11,9 +11,7 @@ import squidpony.Thesaurus;
 import squidpony.squidmath.OrderedSet;
 import squidpony.squidmath.StatefulRNG;
 import squidpony.squidmath.UnorderedSet;
-import warpwriter.Coloring;
-import warpwriter.ModelMaker;
-import warpwriter.ModelRenderer;
+import warpwriter.*;
 
 import java.io.IOException;
 
