@@ -413,7 +413,7 @@ public class ModelMaker {
         }
         return frames;
     }
-    private static final int[] RINSED_COCKPIT_COLORS = {3, 7, 12, 24, 26, 27};
+    private static final int[] RINSED_COCKPIT_COLORS = {19, 20, 21, 22, 23, 24, 25, 26, 27};
     public byte[][][] shipRandom()
     {
         xSize = ship.length;
