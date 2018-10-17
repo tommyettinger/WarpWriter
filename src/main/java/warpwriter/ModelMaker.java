@@ -1,6 +1,7 @@
 package warpwriter;
 
 import squidpony.squidmath.GWTRNG;
+import squidpony.squidmath.LinnormRNG;
 import squidpony.squidmath.NumberTools;
 
 import java.io.InputStream;
@@ -951,9 +952,31 @@ public class ModelMaker {
      * @param mainColor the color to mimic the hue of
      * @return a 5-element byte array, with the first item having the lightest color and the last having the darkest
      */
-    public byte[] colorRange(byte mainColor)
+    public static byte[] colorRange(byte mainColor)
     {
         byte idx = (byte) (((mainColor >>> 3) << 3)+1);
         return new byte[]{idx, (byte) (idx+1), (byte) (idx+2), (byte) (idx+3), (byte) (idx+4)};
     }
+
+    /**
+     * Gets a random color palette index, always using {@link Coloring#RINSED}. It will always be in the middle of the
+     * color range, but can lean towards darker colors more often than lighter ones.
+     * @param seed a long seed that should be different every time this is called
+     * @return a byte representing a color palette index, randomly chosen
+     */
+    public static byte randomMainColor(long seed) {
+        return (byte)(LinnormRNG.determineBounded(seed, 30) * 8 + LinnormRNG.determineBounded(~seed, 4) + 18);
+    }
+
+    /**
+     * Gets 5 colors from lightest to darkest, with the same hue chosen randomly from the RINSED palette.
+     * @param seed a long seed that should be different every time this is called
+     * @return a 5-element byte array, with the first item having the lightest color and the last having the darkest
+     */
+    public static byte[] randomColorRange(long seed)
+    {
+        byte idx = (byte) ((LinnormRNG.determineBounded(seed, 30) << 3) + 17);
+        return new byte[]{idx, (byte) (idx+1), (byte) (idx+2), (byte) (idx+3), (byte) (idx+4)};
+    }
+
 }
