@@ -936,4 +936,14 @@ public class ModelMaker {
                 ? rng.nextSignedInt(30) * 8 + rng.between(18, 22)
                 : rng.nextSignedInt(18) * 6 + rng.between(21, 24));
     }
+
+    /**
+     * Gets 5 colors from lightest to darkest, with the same hue chosen randomly from the RINSED palette.
+     * @return a 5-element byte array, with the first item having the lightest color and the last having the darkest
+     */
+    public byte[] randomColorRange()
+    {
+        byte idx = (byte) ((rng.nextSignedInt(30) << 3) + 17);
+        return new byte[]{idx, (byte) (idx+1), (byte) (idx+2), (byte) (idx+3), (byte) (idx+4)};
+    }
 }
