@@ -62,7 +62,7 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
      */
     @Override
     public final byte at(int x, int y, int z) {
-        Fetch current, next = getFirstFetch();
+        Fetch current, next = this;
         do {
             current = next;
             current.setChains(x, y, z);
@@ -106,18 +106,15 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
             next = current.getNextFetch();
         } while (next != null);
         current.nextFetch = nextFetch;
-        nextFetch.setFirstFetch(getFirstFetch());
         return this;
     }
 
-    private Fetch firstFetch = this;
-
-    public Fetch getFirstFetch() {
-        return firstFetch;
+    public Fetch breakChain () {
+        return breakChain(null);
     }
 
-    public Fetch setFirstFetch(Fetch firstFetch) {
-        this.firstFetch = firstFetch;
+    public Fetch breakChain (Fetch nextFetch) {
+        this.nextFetch = nextFetch;
         return this;
     }
 

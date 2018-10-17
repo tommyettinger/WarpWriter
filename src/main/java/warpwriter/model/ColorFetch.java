@@ -29,4 +29,26 @@ public class ColorFetch extends Fetch {
     public byte bite(int x, int y, int z) {
         return color;
     }
+
+    /**
+     * This is a final fetch. Anything added after it should be ignored.
+     *
+     * @param fetch Ignored
+     * @return this
+     */
+    @Override
+    public Fetch add(Fetch fetch) {
+        return this;
+    }
+
+    /**
+     * This is a final fetch. Anything added after it should be ignored.
+     *
+     * @param fetch Ignored
+     * @return this
+     */
+    @Override
+    public Fetch breakChain(Fetch fetch) {
+        return this;
+    }
 }
