@@ -61,7 +61,7 @@
         <maven.gpg.version>1.6</maven.gpg.version>
         <jdk.version>1.7</jdk.version>
         <junit.version>4.11</junit.version>
-        <squidlib.version>e8b3721902</squidlib.version>
+        <squidlib.version>c529df9c59</squidlib.version>
         <gdx.version>1.9.8</gdx.version>
     </properties>
 
@@ -73,15 +73,14 @@
             <version>${squidlib.version}</version>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>com.badlogicgames.gdx</groupId>
             <artifactId>gdx</artifactId>
             <version>${gdx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -110,24 +109,6 @@
         <url>git@github.com:tommyettinger/WarpWriter.git</url>
     </scm>
     <profiles>
-        <profile>
-            <id>doclint-java8-disable</id>
-            <activation>
-                <jdk>[1.8,)</jdk>
-            </activation>
-
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <configuration>
-                            <additionalOptions>-Xdoclint:none</additionalOptions>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
         <profile>
             <!--
             To sign (only needed for Maven Central), add this argument to the mvn command line, just after mvn...
@@ -220,7 +201,7 @@
                     <linksource>true</linksource>
                     <detectOfflineLinks>false</detectOfflineLinks>
                     <excludePackageNames>*emu*</excludePackageNames>
-                    <!--<additionalparam>-Xdoclint:none</additionalparam>-->
+                    <doclint>none</doclint>
                 </configuration>
             </plugin>
         </plugins>

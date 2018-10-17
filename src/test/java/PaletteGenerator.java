@@ -5,11 +5,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
 import squidpony.StringKit;
-import squidpony.squidmath.IntIntOrderedMap;
 import warpwriter.Coloring;
-
-import java.util.Comparator;
-import java.util.TreeSet;
 
 /**
  * Created by Tommy Ettinger on 1/21/2018.
@@ -228,28 +224,29 @@ public class PaletteGenerator extends ApplicationAdapter {
 
         //System.arraycopy(initial, 0, PALETTE, 128, 128);
         System.arraycopy(Coloring.RINSED, 0, PALETTE, 0, 256);
-        IntIntOrderedMap hueToIndex = new IntIntOrderedMap(32);
-        for (int i = 18, s = 16; i < 256; i += 8, s += 8) {
-            hueToIndex.put((int)(hue(Coloring.RINSED[i]) * 1024), s);
-        }
-        TreeSet<IntIntOrderedMap.MapEntry> sorted = new TreeSet<>(new Comparator<IntIntOrderedMap.MapEntry>(){
-            /**
-             * Compares its two arguments for order.  Returns a negative integer,
-             * zero, or a positive integer as the first argument is less than, equal
-             * to, or greater than the second.<p>
-             */
-            @Override
-            public int compare(IntIntOrderedMap.MapEntry o1, IntIntOrderedMap.MapEntry o2) {
-                return o1.getKey() - o2.getKey();
-            }
-        });
-        sorted.addAll(hueToIndex.entrySet());
-        System.out.println(sorted);
-        int idx = 16;
-        for (IntIntOrderedMap.MapEntry ent : sorted) {
-            System.arraycopy(Coloring.RINSED, ent.getValue(), PALETTE, idx, 8);
-            idx += 8;
-        }
+//        IntIntOrderedMap hueToIndex = new IntIntOrderedMap(32);
+//        for (int i = 18, s = 16; i < 256; i += 8, s += 8) {
+//            hueToIndex.put((int)(hue(Coloring.RINSED[i]) * 1024), s);
+//        }
+//        TreeSet<IntIntOrderedMap.MapEntry> sorted = new TreeSet<>(new Comparator<IntIntOrderedMap.MapEntry>(){
+//            /**
+//             * Compares its two arguments for order.  Returns a negative integer,
+//             * zero, or a positive integer as the first argument is less than, equal
+//             * to, or greater than the second.<p>
+//             */
+//            @Override
+//            public int compare(IntIntOrderedMap.MapEntry o1, IntIntOrderedMap.MapEntry o2) {
+//                return o1.getKey() - o2.getKey();
+//            }
+//        });
+//        sorted.addAll(hueToIndex.entrySet());
+//        System.out.println(sorted);
+//        int idx = 16;
+//        for (IntIntOrderedMap.MapEntry ent : sorted) {
+//            System.arraycopy(Coloring.RINSED, ent.getValue(), PALETTE, idx, 8);
+//            idx += 8;
+//        }
+        
 //        Color temp = Color.WHITE.cpy();
 //        float[] hsv = new float[3];
 //        for (int i = 0; i < 9; i++) {

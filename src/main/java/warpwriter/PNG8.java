@@ -1,3 +1,5 @@
+package warpwriter;
+
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -57,8 +59,8 @@ import java.util.zip.DeflaterOutputStream;
  * @author Tommy Ettinger (PNG-8 parts only) */
 
 // If you're porting this into libGDX, remove the GwtIncompatible annotation and exclude this from GWT reflection.
-// You'll also need to include the PaletteReducer class, and unless someone figures out a better way to store the 
-// palette analysis data in PaletteReducer, you'll need IntIntOrderedMap and its dependencies from squidlib-util
+// You'll also need to include the warpwriter.PaletteReducer class, and unless someone figures out a better way to store the 
+// palette analysis data in warpwriter.PaletteReducer, you'll need IntIntOrderedMap and its dependencies from squidlib-util
 // (HashCommon, mostly, but IntVLA would need to be changed into IntArray). A better approach would be to make libGDX's
 // IntIntMap.Entries implement toArray(), which would remove the need for IntIntOrderedMap.
 @GwtIncompatible
@@ -79,81 +81,6 @@ public class PNG8 implements Disposable {
     private int lastLineLen;
 
     public PaletteReducer palette;
-//    /**
-//     * A lookup table from 32 possible levels in the red channel to 6 possible values in the red channel.
-//     */
-//    private static final int[]
-//            redLUT =   {
-//            0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE00003A,
-//            0xFE00003A, 0xFE00003A, 0xFE00003A, 0xFE00003A, 0xFE00003A, 0xFE00003A, 0xFE000074, 0xFE000074,
-//            0xFE000074, 0xFE000074, 0xFE000074, 0xFE0000B6, 0xFE0000B6, 0xFE0000B6, 0xFE0000B6, 0xFE0000B6,
-//            0xFE0000E0, 0xFE0000E0, 0xFE0000E0, 0xFE0000E0, 0xFE0000FF, 0xFE0000FF, 0xFE0000FF, 0xFE0000FF,};
-//    /**
-//     * The 6 possible values that can be used in the red channel with {@link #redLUT}.
-//     */
-//    private static final byte[] redPossibleLUT = {0x00, 0x3A, 0x74, (byte)0xB6, (byte)0xE0, (byte)0xFF};
-//
-//    /**
-//     * A lookup table from 32 possible levels in the green channel to 7 possible values in the green channel.
-//     */
-//    private static final int[]
-//            greenLUT = {
-//            0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE003800,
-//            0xFE003800, 0xFE003800, 0xFE003800, 0xFE003800, 0xFE006000, 0xFE006000, 0xFE006000, 0xFE006000,
-//            0xFE006000, 0xFE009800, 0xFE009800, 0xFE009800, 0xFE009800, 0xFE00C400, 0xFE00C400, 0xFE00C400,
-//            0xFE00C400, 0xFE00EE00, 0xFE00EE00, 0xFE00EE00, 0xFE00EE00, 0xFE00FF00, 0xFE00FF00, 0xFE00FF00,};
-//    /**
-//     * The 7 possible values that can be used in the green channel with {@link #greenLUT}.
-//     */
-//    private static final byte[] greenPossibleLUT = {0x00, 0x38, 0x60, (byte)0x98, (byte)0xC4, (byte)0xEE, (byte)0xFF};
-//    /**
-//     * A lookup table from 32 possible levels in the blue channel to 6 possible values in the blue channel.
-//     */
-//    private static final int[]
-//            blueLUT =  {
-//            0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE380000,
-//            0xFE380000, 0xFE380000, 0xFE380000, 0xFE380000, 0xFE380000, 0xFE760000, 0xFE760000, 0xFE760000,
-//            0xFE760000, 0xFE760000, 0xFE760000, 0xFEAC0000, 0xFEAC0000, 0xFEAC0000, 0xFEAC0000, 0xFEAC0000,
-//            0xFEEA0000, 0xFEEA0000, 0xFEEA0000, 0xFEEA0000, 0xFEFF0000, 0xFEFF0000, 0xFEFF0000, 0xFEFF0000,};
-//    /**
-//     * The 6 possible values that can be used in the blue channel with {@link #blueLUT}.
-//     */
-//    private static final byte[] bluePossibleLUT = {0x00, 0x38, 0x76, (byte)0xAC, (byte)0xEA, (byte)0xFF};
-
-//    public void build253Palette()
-//    {
-//        Arrays.fill(paletteArray, 0);
-//        int i = 0, j, rl, gl, bl, rMin, rMax=0, gMin, gMax, bMin, bMax;
-//        for (int r = 0; r < 6; r++) {
-//            rl = redPossibleLUT[r] & 0xFF;
-//            rMin=rMax;
-//            for (j = rMin; j < 32 && (redLUT[j] & 0xFF) == rl; j++) { }
-//            rMax=j;
-//            gMax = 0;
-//            for (int g = 0; g < 7; g++) {
-//                gl = greenPossibleLUT[g] & 0xFF;
-//                gMin=gMax;
-//                for (j = gMin; j < 32 && (greenLUT[j] >> 8 & 0xFF) == gl; j++) { }
-//                gMax=j;
-//                bMax = 0;
-//                for (int b = 0; b < 6; b++) {
-//                    bl = bluePossibleLUT[b] & 0xFF;
-//                    bMin=bMax;
-//                    for (j = bMin; j < 32 && (blueLUT[j] >> 16 & 0xFF) == bl; j++) { }
-//                    bMax=j;
-//                    paletteArray[++i] =
-//                            (rl << 24
-//                                    | (gl << 16 & 0xFF0000)
-//                                    | (bl << 8 & 0xFF00) | 0xFE);
-//                    for (int rm = rMin; rm < rMax; rm++) {
-//                        for (int gm = gMin; gm < gMax; gm++) {
-//                            Arrays.fill(paletteMapping, (rm << 10) + (gm << 5) + (bMin), (rm << 10) + (gm << 5) + (bMax), (byte)i);
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
 
     public PNG8() {
         this(128 * 128);
@@ -209,7 +136,7 @@ public class PNG8 implements Disposable {
     }
     /**
      * Writes the pixmap to the stream without closing the stream, optionally computing an 8-bit palette from the given
-     * Pixmap. If {@link #palette} is null (the default unless it has been assigned a PaletteReducer value), this will
+     * Pixmap. If {@link #palette} is null (the default unless it has been assigned a warpwriter.PaletteReducer value), this will
      * compute a palette from the given Pixmap regardless of computePalette. Optionally dithers the result if
      * {@code dither} is true.
      * @param file a FileHandle that must be writable, and will have the given Pixmap written as a PNG-8 image
@@ -237,7 +164,7 @@ public class PNG8 implements Disposable {
 
     /**
      * Writes the pixmap to the stream without closing the stream, optionally computing an 8-bit palette from the given
-     * Pixmap. If {@link #palette} is null (the default unless it has been assigned a PaletteReducer value), this will
+     * Pixmap. If {@link #palette} is null (the default unless it has been assigned a warpwriter.PaletteReducer value), this will
      * compute a palette from the given Pixmap regardless of computePalette.
      * @param output an OutputStream that will not be closed
      * @param pixmap a Pixmap to write to the given output stream
@@ -250,7 +177,7 @@ public class PNG8 implements Disposable {
 
     /**
      * Writes the pixmap to the stream without closing the stream, optionally computing an 8-bit palette from the given
-     * Pixmap. If {@link #palette} is null (the default unless it has been assigned a PaletteReducer value), this will
+     * Pixmap. If {@link #palette} is null (the default unless it has been assigned a warpwriter.PaletteReducer value), this will
      * compute a palette from the given Pixmap regardless of computePalette.
      * @param output an OutputStream that will not be closed
      * @param pixmap a Pixmap to write to the given output stream
