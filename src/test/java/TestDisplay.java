@@ -343,7 +343,7 @@ public class TestDisplay extends ApplicationAdapter {
             heightMap.setSeed(newModel);
         }
 
-        voxels = new HeightMap(heightMap, size, size, size, ColorFetch.color(mm.randomMainColor())).model(12, 12, 12);
+        voxels = new HeightMap(heightMap, 0.05, 0.05, 6, ColorFetch.color(mm.randomMainColor())).model(12, 12, 12);
 
         /*
         voxels = new ArrayModel(TerrainCube.terrainCube(

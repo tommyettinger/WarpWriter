@@ -35,7 +35,7 @@ public class HeightMap extends Fetch {
 
     @Override
     public Fetch fetch(int x, int y, int z) {
-        return z < (map.heightMap((int) (x * scaleX), (int) (y * scaleY)) + 1) * scaleZ ?
+        return z < (map.heightMap(x * scaleX, y * scaleY) + 1) * scaleZ ?
                 under : getNextFetch();
     }
 
