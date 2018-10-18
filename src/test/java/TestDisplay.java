@@ -345,22 +345,6 @@ public class TestDisplay extends ApplicationAdapter {
 
         voxels = new HeightMap(heightMap, 0.05, 0.05, 6, ColorFetch.color(mm.randomMainColor())).model(50, 50, 12);
 
-        /*
-        voxels = new ArrayModel(TerrainCube.terrainCube(
-                size,
-                mm.rng.nextInt(size - 1) + 1,
-                mm.rng.nextInt(size - 1) + 1,
-                mm.rng.nextInt(size - 1) + 1,
-                mm.rng.nextInt(size - 1) + 1,
-                mm.rng.nextInt(size - 1) + 1,
-                ByteFill.Fill3D.fill(ByteFill.Fill2D.checkers(
-                        new ByteFill.Fill2D.SolidColor(mm.randomMainColor()),
-                        new ByteFill.Fill2D.SolidColor(mm.randomMainColor()),
-                        4, 4
-                ))
-        ));
-        */
-
         Arrays.fill(animatedVoxels, voxels);
         int oldWidth = width, oldHeight = height;
         for (int f = 0; f < frames; f++) {
