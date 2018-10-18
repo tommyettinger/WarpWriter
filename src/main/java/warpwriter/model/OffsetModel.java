@@ -6,8 +6,20 @@ package warpwriter.model;
  * @author Ben McLean
  */
 public class OffsetModel extends FetchModel {
+    public OffsetModel() {
+        this(0, 0, 0);
+    }
+
+    public OffsetModel(Fetch fetch) {
+        this(0, 0, 0, fetch);
+    }
+
     public OffsetModel(int xSize, int ySize, int zSize) {
-        super(xSize, ySize, zSize);
+        this(xSize, ySize, zSize, null);
+    }
+
+    public OffsetModel(int xSize, int ySize, int zSize, Fetch fetch) {
+        super(xSize, ySize, zSize, fetch);
     }
 
     @Override
