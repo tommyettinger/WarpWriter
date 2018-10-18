@@ -216,11 +216,7 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
         return stripes(widths, stripes);
     }
 
-    public Fetch noiseFetch(long seed, byte mainColor) {
-        return add(new NoiseFetch(seed, mainColor));
-    }
-
-    public Fetch noiseFetch(long seed, byte[] colors) {
+    public Fetch noiseFetch(long seed, byte... colors) {
         return add(new NoiseFetch(seed, colors));
     }
 }
