@@ -39,6 +39,11 @@ public class FetchModel extends Fetch implements IModel {
         this(convenience, fetch);
     }
 
+    /**
+     * Copies size
+     * @param convenience An IModel with a size to copy
+     * @param fetch Actual fetch to use
+     */
     public FetchModel(IModel convenience, Fetch fetch) {
         this(convenience.xSize(), convenience.ySize(), convenience.zSize(), fetch);
     }
