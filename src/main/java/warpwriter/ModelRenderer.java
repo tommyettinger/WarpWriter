@@ -1,6 +1,7 @@
 package warpwriter;
 
 import squidpony.ArrayTools;
+import squidpony.squidgrid.Direction;
 import warpwriter.model.IModel;
 
 import java.util.Arrays;
@@ -51,10 +52,34 @@ public class ModelRenderer {
         }
     }
 
-    public int[][] renderOrtho(IModel voxels, int direction)
+    /**
+     * Gets the internal int code used for a given Direction enum, which must not be null. Extremely unlikely to be
+     * necessary in external code, but maybe if you need to use one of the VariableConverter arrays, it could be handy.
+     * @param d a Direction to look up; must not be null
+     * @return an internal-use int code for the given Direction, from 0 to 3 inclusive
+     */
+    protected static int directionCode(Direction d)
     {
-        final int xs = voxels.xSize(), ys = voxels.ySize(), zs = voxels.zSize();
-        VariableConverter con = directionsOrthoV[direction &= 3];
+        switch(d)
+        {
+            case DOWN:
+            case DOWN_RIGHT:
+                return 0;
+            case LEFT:
+            case DOWN_LEFT:
+                return 1;
+            case UP:
+            case UP_LEFT:
+                return 2;
+            default:
+                return 3;
+        }
+    }
+
+    public int[][] renderOrtho(IModel voxels, Direction dir)
+    {
+        final int xs = voxels.xSize(), ys = voxels.ySize(), zs = voxels.zSize(), direction = directionCode(dir);
+        VariableConverter con = directionsOrthoV[direction];
         int[][] working = makeRenderArray(xs, ys, zs, 4, 5, 1);
         int width = working.length, height = working[0].length;
         int[][] depths = new int[width][height], render;
@@ -238,24 +263,24 @@ public class ModelRenderer {
     }
     /**
      * Renders the given 3D voxel byte array, which should be no larger than 12x12x8, to a 52x64 2D int array storing
-     * color indices, using the given direction to rotate the model's facing (from 0 to 3).
+     * color indices, using the given Direction enum to rotate the model's facing.
      * @param voxels a 3D byte array with each byte storing color information for a voxel.
-     * @param direction a 90-degree-increment counter-clockwise direction, from 0 to 3.
+     * @param direction a Direction enum storing 90-degree-increment direction info
      * @return a 2D int array storing the pixel indices for the rendered model
      */
-    public int[][] renderIso(IModel voxels, int direction) {
-        final int xs = voxels.xSize(), ys = voxels.ySize(), zs = voxels.zSize();
-        VariableConverter con = directionsIsoV[direction &= 3];
+    public int[][] renderIso(IModel voxels, Direction dir) {
+        final int xs = voxels.xSize(), ys = voxels.ySize(), zs = voxels.zSize(), direction = directionCode(dir);
+        VariableConverter con = directionsIsoV[direction];
         int[][] working = makeRenderArray(xs, ys, zs, 4, 5, 1);
         int width = working.length, height = working[0].length;
         int[][] depths = new int[width][height], render;
         int px, py;
         int current;
         int d, w;
-        // for 0, v> , x low to high, y high to low
-        // for 1, <v , x low to high, y low to high
-        // for 2, <^ , x high to low, y low to high
-        // for 3, ^> , x high to low, x high to low
+        // for 0, v> , DOWN_RIGHT, x low to high, y high to low
+        // for 1, <v , DOWN_LEFT,  x low to high, y low to high
+        // for 2, <^ , UP_RIGHT,   x high to low, y low to high
+        // for 3, ^> , UP_LEFT,    x high to low, x high to low
         final int gray = direction ^ direction >>> 1;
         final int cStart = (gray & 2) == 0 ? 0 : xs - 1, cEnd = (gray & 2) == 0 ? xs : -1, cChange = (gray & 2) == 0 ? 1 : -1;
         final int aStart = (gray & 1) == 0 ? ys - 1 : 0, aEnd = (gray & 1) == 0 ? -1 : ys, aChange = (gray & 1) == 0 ? -1 : 1;
@@ -341,10 +366,10 @@ public class ModelRenderer {
         return easeSquares(render, working);
     }
 
-    public int[][] renderOrthoBelow(IModel voxels, int direction)
+    public int[][] renderOrthoBelow(IModel voxels, Direction dir)
     {
-        final int xs = voxels.xSize(), ys = voxels.ySize(), zs = voxels.zSize();
-        VariableConverter con = directionsOrthoV[direction &= 3];
+        final int xs = voxels.xSize(), ys = voxels.ySize(), zs = voxels.zSize(), direction = directionCode(dir);
+        VariableConverter con = directionsOrthoV[direction];
         int[][] working = makeRenderArray(xs, ys, zs, 4, 5, 1);
         int width = working.length, height = working[0].length;
         int[][] depths = new int[width][height], render;
@@ -525,12 +550,12 @@ public class ModelRenderer {
      * Renders the given 3D voxel byte array, which should be no larger than 12x12x8, to a 52x64 2D int array storing
      * color indices, using the given direction to rotate the model's facing (from 0 to 3).
      * @param voxels a 3D byte array with each byte storing color information for a voxel.
-     * @param direction a 90-degree-increment counter-clockwise direction, from 0 to 3.
+     * @param dir a Direction enum storing 90-degree-increment direction info
      * @return a 2D int array storing the pixel indices for the rendered model
      */
-    public int[][] renderIsoBelow(IModel voxels, int direction) {
-        final int xs = voxels.xSize(), ys = voxels.ySize(), zs = voxels.zSize();
-        VariableConverter con = directionsIsoV[direction &= 3];
+    public int[][] renderIsoBelow(IModel voxels, Direction dir) {
+        final int xs = voxels.xSize(), ys = voxels.ySize(), zs = voxels.zSize(), direction = directionCode(dir);
+        VariableConverter con = directionsIsoV[direction];
         int[][] working = makeRenderArray(xs, ys, zs, 4, 5, 1);
         int width = working.length, height = working[0].length;
         int[][] depths = new int[width][height], render;
@@ -625,10 +650,10 @@ public class ModelRenderer {
         return easeSquares(render, working);
     }
 
-    public int[][] renderOrthoSide(IModel voxels, int direction)
+    public int[][] renderOrthoSide(IModel voxels, Direction dir)
     {
-        final int xs = voxels.xSize(), ys = voxels.ySize(), zs = voxels.zSize();
-        VariableConverter con = directionsOrthoSideV[direction &= 3];
+        final int xs = voxels.xSize(), ys = voxels.ySize(), zs = voxels.zSize(), direction = directionCode(dir);
+        VariableConverter con = directionsOrthoSideV[direction];
         int[][] working = makeRenderArray(xs, ys, zs, 4, 5, 1);
         int width = working.length, height = working[0].length;
         int[][] depths = new int[width][height], render;
@@ -797,9 +822,9 @@ public class ModelRenderer {
         }
         return easeSquares(render, working);
     }
-    public int[][] renderIsoSide(IModel voxels, int direction) {
-        final int xs = voxels.xSize(), ys = voxels.ySize(), zs = voxels.zSize();
-        VariableConverter con = directionsIsoSideV[direction &= 3];
+    public int[][] renderIsoSide(IModel voxels, Direction dir) {
+        final int xs = voxels.xSize(), ys = voxels.ySize(), zs = voxels.zSize(), direction = directionCode(dir);
+        VariableConverter con = directionsIsoSideV[direction];
         int[][] working = makeRenderArray(xs, ys, zs, 4, 5, 1);
         int width = working.length, height = working[0].length;
         int[][] depths = new int[width][height], render;

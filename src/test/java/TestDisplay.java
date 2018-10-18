@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import squidpony.FakeLanguageGen;
 import squidpony.StringKit;
+import squidpony.squidgrid.Direction;
 import squidpony.squidmath.FastNoise;
 import squidpony.squidmath.Noise;
 import warpwriter.*;
@@ -43,7 +44,8 @@ public class TestDisplay extends ApplicationAdapter {
 //    private byte[][][][] animatedVoxels;
     private IModel voxels;
     private IModel[] animatedVoxels = new IModel[frames];
-    private int dir = 1, counter = 1;
+    private int counter = 1;
+    private Direction dir = Direction.DOWN;
     private static final int background = 0;
     /**
      * The height of the viewing angle, with 0 being directly below (bottom), 1 being at a 45 degree angle from below
@@ -128,45 +130,45 @@ public class TestDisplay extends ApplicationAdapter {
                     case Input.Keys.UP:
                     case Input.Keys.NUMPAD_8:
                     case Input.Keys.NUM_8:
-                        dir = 2;
+                        dir = Direction.UP;
                         remakeShip(0);
                         return true;
                     case Input.Keys.NUMPAD_6:
                     case Input.Keys.NUM_6:
                     case Input.Keys.RIGHT:
-                        dir = 3;
+                        dir = Direction.RIGHT;
                         remakeShip(0);
                         return true;
                     case Input.Keys.NUMPAD_2:
                     case Input.Keys.NUM_2:
                     case Input.Keys.DOWN:
-                        dir = 0;
+                        dir = Direction.DOWN;
                         remakeShip(0);
                         return true;
                     case Input.Keys.NUMPAD_4:
                     case Input.Keys.NUM_4:
                     case Input.Keys.LEFT:
-                        dir = 1;
+                        dir = Direction.LEFT;
                         remakeShip(0);
                         return true;
                     case Input.Keys.NUMPAD_7:
                     case Input.Keys.NUM_7:
-                        dir = 6;
+                        dir = Direction.UP_LEFT;
                         remakeShip(0);
                         return true;
                     case Input.Keys.NUMPAD_9:
                     case Input.Keys.NUM_9:
-                        dir = 7;
+                        dir = Direction.UP_RIGHT;
                         remakeShip(0);
                         return true;
                     case Input.Keys.NUMPAD_3:
                     case Input.Keys.NUM_3:
-                        dir = 4;
+                        dir = Direction.DOWN_RIGHT;
                         remakeShip(0);
                         return true;
                     case Input.Keys.NUMPAD_1:
                     case Input.Keys.NUM_1:
-                        dir = 5;
+                        dir = Direction.DOWN_LEFT;
                         remakeShip(0);
                         return true;
 
@@ -191,7 +193,7 @@ public class TestDisplay extends ApplicationAdapter {
 //                        VoxIO.writeAnimatedVOX(name + "_Animated.vox", animatedVoxels, palette);
 //                        return true;
                     case Input.Keys.SLASH:
-                        seed += determine(keycode);
+                        seed += determine(seed);
                         return true;
                 }
                 return true;
@@ -221,15 +223,15 @@ public class TestDisplay extends ApplicationAdapter {
             {
                 switch (angle) {
                     case 1:
-                        if (dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
+                        if (dir.isDiagonal()) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
                         else indices = mr.renderOrthoBelow(animatedVoxels[f], dir);
                         break;
                     case 3:
-                        if (dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
+                        if (dir.isDiagonal()) indices = mr.renderIso(animatedVoxels[f], dir);
                         else indices = mr.renderOrtho(animatedVoxels[f], dir);
                         break;
                     default:
-                        if (dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
+                        if (dir.isDiagonal()) indices = mr.renderIsoSide(animatedVoxels[f], dir);
                         else indices = mr.renderOrthoSide(animatedVoxels[f], dir);
                         break;
                 }
@@ -263,15 +265,15 @@ public class TestDisplay extends ApplicationAdapter {
             {
                 switch (angle) {
                     case 1:
-                        if (dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
+                        if (dir.isDiagonal()) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
                         else indices = mr.renderOrthoBelow(animatedVoxels[f], dir);
                         break;
                     case 3:
-                        if (dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
+                        if (dir.isDiagonal()) indices = mr.renderIso(animatedVoxels[f], dir);
                         else indices = mr.renderOrtho(animatedVoxels[f], dir);
                         break;
                     default:
-                        if (dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
+                        if (dir.isDiagonal()) indices = mr.renderIsoSide(animatedVoxels[f], dir);
                         else indices = mr.renderOrthoSide(animatedVoxels[f], dir);
                         break;
                 }
@@ -308,15 +310,15 @@ public class TestDisplay extends ApplicationAdapter {
             {
                 switch (angle) {
                     case 1:
-                        if (dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
+                        if (dir.isDiagonal()) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
                         else indices = mr.renderOrthoBelow(animatedVoxels[f], dir);
                         break;
                     case 3:
-                        if (dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
+                        if (dir.isDiagonal()) indices = mr.renderIso(animatedVoxels[f], dir);
                         else indices = mr.renderOrtho(animatedVoxels[f], dir);
                         break;
                     default:
-                        if (dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
+                        if (dir.isDiagonal()) indices = mr.renderIsoSide(animatedVoxels[f], dir);
                         else indices = mr.renderOrthoSide(animatedVoxels[f], dir);
                         break;
                 }
@@ -352,15 +354,15 @@ public class TestDisplay extends ApplicationAdapter {
             {
                 switch (angle) {
                     case 1:
-                        if (dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
+                        if (dir.isDiagonal()) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
                         else indices = mr.renderOrthoBelow(animatedVoxels[f], dir);
                         break;
                     case 3:
-                        if (dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
+                        if (dir.isDiagonal()) indices = mr.renderIso(animatedVoxels[f], dir);
                         else indices = mr.renderOrtho(animatedVoxels[f], dir);
                         break;
                     default:
-                        if (dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
+                        if (dir.isDiagonal()) indices = mr.renderIsoSide(animatedVoxels[f], dir);
                         else indices = mr.renderOrthoSide(animatedVoxels[f], dir);
                         break;
                 }
@@ -412,15 +414,15 @@ public class TestDisplay extends ApplicationAdapter {
             {
                 switch (angle) {
                     case 1:
-                        if (dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
+                        if (dir.isDiagonal()) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
                         else indices = mr.renderOrthoBelow(animatedVoxels[f], dir);
                         break;
                     case 3:
-                        if (dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
+                        if (dir.isDiagonal()) indices = mr.renderIso(animatedVoxels[f], dir);
                         else indices = mr.renderOrtho(animatedVoxels[f], dir);
                         break;
                     default:
-                        if (dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
+                        if (dir.isDiagonal()) indices = mr.renderIsoSide(animatedVoxels[f], dir);
                         else indices = mr.renderOrthoSide(animatedVoxels[f], dir);
                         break;
                 }
@@ -459,15 +461,15 @@ public class TestDisplay extends ApplicationAdapter {
             {
                 switch (angle) {
                     case 1:
-                        if (dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
+                        if (dir.isDiagonal()) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
                         else indices = mr.renderOrthoBelow(animatedVoxels[f], dir);
                         break;
                     case 3:
-                        if (dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
+                        if (dir.isDiagonal()) indices = mr.renderIso(animatedVoxels[f], dir);
                         else indices = mr.renderOrtho(animatedVoxels[f], dir);
                         break;
                     default:
-                        if (dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
+                        if (dir.isDiagonal()) indices = mr.renderIsoSide(animatedVoxels[f], dir);
                         else indices = mr.renderOrthoSide(animatedVoxels[f], dir);
                         break;
                 }
@@ -502,15 +504,15 @@ public class TestDisplay extends ApplicationAdapter {
             {
                 switch (angle) {
                     case 1:
-                        if (dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
+                        if (dir.isDiagonal()) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
                         else indices = mr.renderOrthoBelow(animatedVoxels[f], dir);
                         break;
                     case 3:
-                        if (dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
+                        if (dir.isDiagonal()) indices = mr.renderIso(animatedVoxels[f], dir);
                         else indices = mr.renderOrtho(animatedVoxels[f], dir);
                         break;
                     default:
-                        if (dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
+                        if (dir.isDiagonal()) indices = mr.renderIsoSide(animatedVoxels[f], dir);
                         else indices = mr.renderOrthoSide(animatedVoxels[f], dir);
                         break;
                 }
@@ -555,15 +557,15 @@ public class TestDisplay extends ApplicationAdapter {
             {
                 switch (angle) {
                     case 1:
-                        if (dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
+                        if (dir.isDiagonal()) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
                         else indices = mr.renderOrthoBelow(animatedVoxels[f], dir);
                         break;
                     case 3:
-                        if (dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
+                        if (dir.isDiagonal()) indices = mr.renderIso(animatedVoxels[f], dir);
                         else indices = mr.renderOrtho(animatedVoxels[f], dir);
                         break;
                     default:
-                        if (dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
+                        if (dir.isDiagonal()) indices = mr.renderIsoSide(animatedVoxels[f], dir);
                         else indices = mr.renderOrthoSide(animatedVoxels[f], dir);
                         break;
                 }
@@ -599,15 +601,15 @@ public class TestDisplay extends ApplicationAdapter {
             {
                 switch (angle) {
                     case 1:
-                        if (dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
+                        if (dir.isDiagonal()) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
                         else indices = mr.renderOrthoBelow(animatedVoxels[f], dir);
                         break;
                     case 2:
-                        if (dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
+                        if (dir.isDiagonal()) indices = mr.renderIsoSide(animatedVoxels[f], dir);
                         else indices = mr.renderOrthoSide(animatedVoxels[f], dir);
                         break;
                     default:
-                        if (dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
+                        if (dir.isDiagonal()) indices = mr.renderIso(animatedVoxels[f], dir);
                         else indices = mr.renderOrtho(animatedVoxels[f], dir);
                         break;
                 }
@@ -653,15 +655,15 @@ public class TestDisplay extends ApplicationAdapter {
             {
                 switch (angle) {
                     case 1:
-                        if (dir >= 4) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
+                        if (dir.isDiagonal()) indices = mr.renderIsoBelow(animatedVoxels[f], dir);
                         else indices = mr.renderOrthoBelow(animatedVoxels[f], dir);
                         break;
                     case 3:
-                        if (dir >= 4) indices = mr.renderIso(animatedVoxels[f], dir);
+                        if (dir.isDiagonal()) indices = mr.renderIso(animatedVoxels[f], dir);
                         else indices = mr.renderOrtho(animatedVoxels[f], dir);
                         break;
                     default:
-                        if (dir >= 4) indices = mr.renderIsoSide(animatedVoxels[f], dir);
+                        if (dir.isDiagonal()) indices = mr.renderIsoSide(animatedVoxels[f], dir);
                         else indices = mr.renderOrthoSide(animatedVoxels[f], dir);
                         break;
                 }
@@ -682,13 +684,10 @@ public class TestDisplay extends ApplicationAdapter {
 
     @Override
     public void render() {
-        int time = (playing ? ++counter : counter) % ((frames << 1) * 6), tempDir; //(tiny && !large ? 0 : 1)
+        int time = (playing ? ++counter : counter) % ((frames << 1) * 6); //(tiny && !large ? 0 : 1)
         if (time == 0 && rotating) {
-            ++dir;
-            tempDir = (dir &= 7);
-            dir = (dir << 2 & 4) | ((dir >> 1) + (dir & 1) & 3);
+            dir = dir.clockwise();
             remakeShip(0);
-            dir = tempDir;
         }
         tex.draw(pixes[(time / 6) % frames], 0, 0);
 
