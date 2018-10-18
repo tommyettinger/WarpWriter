@@ -1,12 +1,12 @@
 package warpwriter.model;
 
 /**
- * Converts a Fetch to a Model with sizes stored in public ints
+ * Converts a Fetch to a Model with sizes stored in ints
  *
  * @author Ben McLean
  */
 public class FetchModel extends Fetch implements IModel {
-    public int xSize, ySize, zSize;
+    protected int xSize, ySize, zSize;
 
     public FetchModel() {
         this(12, 12, 8);
@@ -21,9 +21,7 @@ public class FetchModel extends Fetch implements IModel {
     }
 
     public FetchModel(int xSize, int ySize, int zSize, Fetch fetch) {
-        this.xSize = xSize;
-        this.ySize = ySize;
-        this.zSize = zSize;
+        set(xSize, ySize, zSize);
         if (fetch != null) add(fetch);
     }
 
@@ -39,6 +37,11 @@ public class FetchModel extends Fetch implements IModel {
         this(convenience, fetch);
     }
 
+    /**
+     * Copies size
+     * @param convenience An IModel with a size to copy
+     * @param fetch Actual fetch to use
+     */
     public FetchModel(IModel convenience, Fetch fetch) {
         this(convenience.xSize(), convenience.ySize(), convenience.zSize(), fetch);
     }
@@ -75,5 +78,43 @@ public class FetchModel extends Fetch implements IModel {
     @Override
     public boolean inside(int x, int y, int z) {
         return !outside(x, y, z);
+    }
+
+    public FetchModel add(int x, int y, int z) {
+        return addX(x).addY(y).addZ(z);
+    }
+
+    public FetchModel addX(int x) {
+        xSize+=x;
+        return this;
+    }
+
+    public FetchModel addY(int y) {
+        ySize+=y;
+        return this;
+    }
+
+    public FetchModel addZ(int z) {
+        zSize+=z;
+        return this;
+    }
+
+    public FetchModel set(int x, int y, int z) {
+        return setX(x).setY(y).setZ(z);
+    }
+
+    public FetchModel setX(int x) {
+        xSize = x;
+        return this;
+    }
+
+    public FetchModel setY(int y) {
+        ySize = y;
+        return this;
+    }
+
+    public FetchModel setZ(int z) {
+        zSize = z;
+        return this;
     }
 }
