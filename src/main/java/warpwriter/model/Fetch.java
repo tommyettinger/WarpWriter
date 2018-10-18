@@ -162,7 +162,7 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
      * This method does not chain!
      *
      * @param convenience This array is used only to get the size of the model.
-     * @return A model version of the current Fetch with the size of the convenience array. The actual contents of the convenience array are not touched past [0][0].length
+     * @return A model version of the current Fetch with the size of the convenience array. The actual contents of the convenience array are not touched past [0][0] (to get the length)
      */
     public FetchModel model(byte[][][] convenience) {
         return new FetchModel(this, convenience);
@@ -214,5 +214,13 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
 
     public Fetch stripes(Fetch[] stripes, int[] widths) {
         return stripes(widths, stripes);
+    }
+
+    public Fetch noiseFetch(long seed, byte mainColor) {
+        return add(new NoiseFetch(seed, mainColor));
+    }
+
+    public Fetch noiseFetch(long seed, byte[] colors) {
+        return add(new NoiseFetch(seed, colors));
     }
 }
