@@ -21,9 +21,7 @@ public class FetchModel extends Fetch implements IModel {
     }
 
     public FetchModel(int xSize, int ySize, int zSize, Fetch fetch) {
-        this.xSize = xSize;
-        this.ySize = ySize;
-        this.zSize = zSize;
+        set(xSize, ySize, zSize);
         if (fetch != null) add(fetch);
     }
 
