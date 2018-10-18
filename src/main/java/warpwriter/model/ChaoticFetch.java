@@ -8,8 +8,13 @@ import warpwriter.ModelMaker;
  * continuous like {@link NoiseFetch} (that Fetch changes smoothly, this doesn't).
  */
 public class ChaoticFetch extends Fetch {
-    public long seed;
-    public byte[] colors;
+    protected long seed;
+    protected byte[] colors;
+
+    public ChaoticFetch (long seed) {
+        setSeed(seed);
+        setColors(ModelMaker.randomColorRange(seed));
+    }
 
     public ChaoticFetch(byte... colors) {
         this(0, colors);
@@ -17,7 +22,10 @@ public class ChaoticFetch extends Fetch {
 
     public ChaoticFetch(long seed, byte... colors) {
         this.seed = seed;
-        this.colors = colors;
+        if (colors.length == 1)
+            this.colors = ModelMaker.colorRange(colors[0]);
+        else
+            this.colors = colors;
     }
 
     public byte bite(int x, int y, int z) {
@@ -43,6 +51,16 @@ public class ChaoticFetch extends Fetch {
      */
     @Override
     public Fetch breakChain(Fetch fetch) {
+        return this;
+    }
+
+    public ChaoticFetch setColors (byte[] colors) {
+        this.colors = colors;
+        return this;
+    }
+
+    public ChaoticFetch setSeed(long seed) {
+        this.seed = seed;
         return this;
     }
 }

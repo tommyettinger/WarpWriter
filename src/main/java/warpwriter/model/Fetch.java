@@ -1,5 +1,7 @@
 package warpwriter.model;
 
+import squidpony.squidmath.Noise;
+
 /**
  * This abstract class allows for IFetch implementations to use left-to-right method chaining to defer to other IFetch instances for different coordinates instead of always needing to return a byte themselves.
  * <p>
@@ -162,7 +164,7 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
      * This method does not chain!
      *
      * @param convenience This array is used only to get the size of the model.
-     * @return A model version of the current Fetch with the size of the convenience array. The actual contents of the convenience array are not touched past [0][0].length
+     * @return A model version of the current Fetch with the size of the convenience array. The actual contents of the convenience array are not touched past [0][0] (to get the length)
      */
     public FetchModel model(byte[][][] convenience) {
         return new FetchModel(this, convenience);
@@ -214,5 +216,18 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
 
     public Fetch stripes(Fetch[] stripes, int[] widths) {
         return stripes(widths, stripes);
+    }
+
+    public Fetch chaotic(long seed, byte mainColor) {
+        return add(new ChaoticFetch(seed, mainColor));
+    }
+    
+    public Fetch chaotic(long seed, byte... colors) {
+        return add(new ChaoticFetch(seed, colors));
+    }
+    
+    public Fetch noiseFetch(Noise.Noise3D noise, byte... colors)
+    {
+        return add(new NoiseFetch(noise, colors));
     }
 }

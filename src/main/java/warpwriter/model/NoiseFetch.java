@@ -1,11 +1,18 @@
 package warpwriter.model;
 
 import squidpony.squidmath.Noise;
+import squidpony.squidmath.NumberTools;
 import squidpony.squidmath.WhirlingNoise;
+import warpwriter.ModelMaker;
 
 public class NoiseFetch extends Fetch {
-    public Noise.Noise3D noise;
-    public byte[] colors;
+    protected Noise.Noise3D noise;
+    protected byte[] colors;
+
+    public NoiseFetch (Noise.Noise3D noise) {
+        setNoise(noise);
+        setColors(ModelMaker.randomColorRange(NumberTools.doubleToLongBits(noise.getNoise(1.1, 2.2, 3.3))));
+    }
 
     public NoiseFetch(byte... colors) {
         this(WhirlingNoise.instance, colors);
@@ -13,7 +20,10 @@ public class NoiseFetch extends Fetch {
 
     public NoiseFetch(Noise.Noise3D noise, byte... colors) {
         this.noise = noise;
-        this.colors = colors;
+        if (colors.length == 1)
+            this.colors = ModelMaker.colorRange(colors[0]);
+        else
+            this.colors = colors;
     }
 
     public byte bite(int x, int y, int z) {
@@ -39,6 +49,16 @@ public class NoiseFetch extends Fetch {
      */
     @Override
     public Fetch breakChain(Fetch fetch) {
+        return this;
+    }
+
+    public NoiseFetch setColors (byte[] colors) {
+        this.colors = colors;
+        return this;
+    }
+
+    public NoiseFetch setNoise(Noise.Noise3D noise) {
+        this.noise = noise;
         return this;
     }
 }
