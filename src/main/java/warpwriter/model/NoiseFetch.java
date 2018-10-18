@@ -1,8 +1,8 @@
 package warpwriter.model;
 
+import squidpony.squidmath.FastNoise;
 import squidpony.squidmath.Noise;
 import squidpony.squidmath.NumberTools;
-import squidpony.squidmath.WhirlingNoise;
 import warpwriter.ModelMaker;
 
 public class NoiseFetch extends Fetch {
@@ -15,7 +15,7 @@ public class NoiseFetch extends Fetch {
     }
 
     public NoiseFetch(byte... colors) {
-        this(WhirlingNoise.instance, colors);
+        this(FastNoise.instance, colors);
     }
 
     public NoiseFetch(Noise.Noise3D noise, byte... colors) {

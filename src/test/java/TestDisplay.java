@@ -13,8 +13,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import squidpony.FakeLanguageGen;
 import squidpony.StringKit;
+import squidpony.squidmath.FastNoise;
 import squidpony.squidmath.Noise;
-import squidpony.squidmath.WhirlingNoise;
 import warpwriter.*;
 import warpwriter.model.*;
 
@@ -337,11 +337,11 @@ public class TestDisplay extends ApplicationAdapter {
         double size = 6;
 
         if (heightMap == null) {
-            heightMap = new NoiseHeightMap(new Noise.Layered2D(WhirlingNoise.instance, 2), mm.rng.getState());
+            heightMap = new NoiseHeightMap(new Noise.Layered2D(FastNoise.instance, 2), newModel);
         }
         else
         {
-            heightMap.setSeed(mm.rng.getState());
+            heightMap.setSeed(newModel);
         }
 
         voxels = new HeightMap(heightMap, 0.05, 0.05, size, new NoiseFetch(mm.randomColorRange())).model(50, 50, 12);
