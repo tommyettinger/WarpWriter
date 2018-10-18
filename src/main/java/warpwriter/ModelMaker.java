@@ -951,7 +951,7 @@ public class ModelMaker {
      * @param mainColor the color to mimic the hue of
      * @return a 5-element byte array, with the first item having the lightest color and the last having the darkest
      */
-    public byte[] colorRange(byte mainColor)
+    public static byte[] colorRange(byte mainColor)
     {
         byte idx = (byte) (((mainColor >>> 3) << 3)+1);
         return new byte[]{idx, (byte) (idx+1), (byte) (idx+2), (byte) (idx+3), (byte) (idx+4)};

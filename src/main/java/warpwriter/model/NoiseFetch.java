@@ -3,8 +3,19 @@ package warpwriter.model;
 import warpwriter.ModelMaker;
 
 public class NoiseFetch extends Fetch {
-    public long seed;
-    public byte[] colors;
+    protected long seed;
+    protected byte[] colors;
+    protected static byte[] allColors;
+
+    public NoiseFetch (long seed) {
+        if (allColors == null) {
+            allColors = new byte[256];
+            for (int i = 0; i < 256; i++)
+                allColors[i] = (byte)(i & 0xFF); // TODO: This is almost certainly wrong. Needs a proper int to byte conversion.
+        }
+        setSeed(seed);
+        setColors(allColors);
+    }
 
     public NoiseFetch(byte... colors) {
         this(0, colors);
@@ -12,7 +23,10 @@ public class NoiseFetch extends Fetch {
 
     public NoiseFetch(long seed, byte... colors) {
         this.seed = seed;
-        this.colors = colors;
+        if (colors.length == 1)
+            this.colors = ModelMaker.colorRange(colors[0]);
+        else
+            this.colors = colors;
     }
 
     public byte bite(int x, int y, int z) {
@@ -38,6 +52,16 @@ public class NoiseFetch extends Fetch {
      */
     @Override
     public Fetch breakChain(Fetch fetch) {
+        return this;
+    }
+
+    public NoiseFetch setColors (byte[] colors) {
+        this.colors = colors;
+        return this;
+    }
+
+    public NoiseFetch setSeed(long seed) {
+        this.seed = seed;
         return this;
     }
 }
