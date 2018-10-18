@@ -1,22 +1,25 @@
 package warpwriter.model;
 
+import squidpony.squidmath.FastNoise;
+import squidpony.squidmath.Noise;
+import squidpony.squidmath.NumberTools;
 import warpwriter.ModelMaker;
 
 public class NoiseFetch extends Fetch {
-    protected long seed;
+    protected Noise.Noise3D noise;
     protected byte[] colors;
 
-    public NoiseFetch (long seed) {
-        setSeed(seed);
-        setColors(ModelMaker.randomColorRange(seed));
+    public NoiseFetch (Noise.Noise3D noise) {
+        setNoise(noise);
+        setColors(ModelMaker.randomColorRange(NumberTools.doubleToLongBits(noise.getNoise(1.1, 2.2, 3.3))));
     }
 
     public NoiseFetch(byte... colors) {
-        this(0, colors);
+        this(FastNoise.instance, colors);
     }
 
-    public NoiseFetch(long seed, byte... colors) {
-        this.seed = seed;
+    public NoiseFetch(Noise.Noise3D noise, byte... colors) {
+        this.noise = noise;
         if (colors.length == 1)
             this.colors = ModelMaker.colorRange(colors[0]);
         else
@@ -24,7 +27,7 @@ public class NoiseFetch extends Fetch {
     }
 
     public byte bite(int x, int y, int z) {
-        return colors[ModelMaker.hashBounded(x, y, z, seed, colors.length)];
+        return colors[(int)((noise.getNoise(x * 0.12, y * 0.12, z * 0.12) * 0.499999 + 0.5) * colors.length)];
     }
 
     /**
@@ -54,8 +57,8 @@ public class NoiseFetch extends Fetch {
         return this;
     }
 
-    public NoiseFetch setSeed(long seed) {
-        this.seed = seed;
+    public NoiseFetch setNoise(Noise.Noise3D noise) {
+        this.noise = noise;
         return this;
     }
 }
