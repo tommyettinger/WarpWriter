@@ -1,22 +1,23 @@
 package warpwriter.model;
 
-import warpwriter.ModelMaker;
+import squidpony.squidmath.Noise;
+import squidpony.squidmath.WhirlingNoise;
 
 public class NoiseFetch extends Fetch {
-    public long seed;
+    public Noise.Noise3D noise;
     public byte[] colors;
 
     public NoiseFetch(byte... colors) {
-        this(0, colors);
+        this(WhirlingNoise.instance, colors);
     }
 
-    public NoiseFetch(long seed, byte... colors) {
-        this.seed = seed;
+    public NoiseFetch(Noise.Noise3D noise, byte... colors) {
+        this.noise = noise;
         this.colors = colors;
     }
 
     public byte bite(int x, int y, int z) {
-        return colors[ModelMaker.hashBounded(x, y, z, seed, colors.length)];
+        return colors[(int)((noise.getNoise(x * 0.12, y * 0.12, z * 0.12) * 0.499999 + 0.5) * colors.length)];
     }
 
     /**
