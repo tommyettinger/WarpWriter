@@ -5,16 +5,10 @@ import warpwriter.ModelMaker;
 public class NoiseFetch extends Fetch {
     protected long seed;
     protected byte[] colors;
-    protected static byte[] allColors;
 
     public NoiseFetch (long seed) {
-        if (allColors == null) {
-            allColors = new byte[256];
-            for (int i = 0; i < 256; i++)
-                allColors[i] = (byte)(i & 0xFF); // TODO: This is almost certainly wrong. Needs a proper int to byte conversion.
-        }
         setSeed(seed);
-        setColors(allColors);
+        setColors(ModelMaker.randomColorRange(seed));
     }
 
     public NoiseFetch(byte... colors) {
