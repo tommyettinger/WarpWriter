@@ -2583,11 +2583,11 @@ public class ModelRenderer {
         return new int[w + (outline << 1)][h + (outline << 1)];
     }
 
-    public Pixmap renderToPixmap(IModel model, int angle, int dir) {
+    public Pixmap renderToPixmap(IModel model, int angle, Direction dir) {
         return renderToPixmap(model, angle, dir, Coloring.RINSED);
     }
 
-    public Pixmap renderToPixmap(IModel model, int angle, int dir, int[] palette) {
+    public Pixmap renderToPixmap(IModel model, int angle, Direction dir, int[] palette) {
         int[][] indices = renderToArray(model, angle, dir);
         Pixmap pix = new Pixmap(indices.length, indices[0].length, Pixmap.Format.RGBA8888);
         for (int x = 0; x < indices.length; x++)
@@ -2596,18 +2596,18 @@ public class ModelRenderer {
         return pix;
     }
 
-    public int[][] renderToArray(IModel model, int angle, int dir) {
+    public int[][] renderToArray(IModel model, int angle, Direction dir) {
         switch (angle) {
             case 1:
-                return dir < 4 ?
+                return dir.isCardinal() ?
                         renderOrthoBelow(model, dir)
                         : renderIsoBelow(model, dir);
             case 3:
-                return dir < 4 ?
+                return dir.isCardinal() ?
                         renderOrtho(model, dir)
                         : renderIso(model, dir);
             default:
-                return dir < 4 ?
+                return dir.isCardinal() ?
                         renderOrthoSide(model, dir)
                         : renderIsoSide(model, dir);
         }

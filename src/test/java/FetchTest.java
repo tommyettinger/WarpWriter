@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import warpwriter.Coloring;
+import squidpony.squidgrid.Direction;
 import warpwriter.ModelMaker;
 import warpwriter.ModelRenderer;
 import warpwriter.model.BoxModel;
@@ -32,7 +32,7 @@ public class FetchTest extends ApplicationAdapter {
     private ModelRenderer modelRenderer = new ModelRenderer(false, true);
     private Texture tex;
     private Pixmap pix;
-    private int[] palette = Coloring.RINSED;
+    //private int[] palette = Coloring.RINSED; // do we need this?
 
     @Override
     public void create() {
@@ -45,7 +45,7 @@ public class FetchTest extends ApplicationAdapter {
                 .add(new BoxModel(model.xSize(), model.ySize(), model.zSize(),
                         ColorFetch.color(modelMaker.randomMainColor()
                         )));
-        pix = modelRenderer.renderToPixmap(model, 1, 1);
+        pix = modelRenderer.renderToPixmap(model, 1, Direction.DOWN);
         tex = new Texture(pix);
     }
 
