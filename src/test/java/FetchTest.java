@@ -38,15 +38,15 @@ public class FetchTest extends ApplicationAdapter {
         batch = new SpriteBatch();
         view = new FitViewport(width, height);
         font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
-        viewArea = new FetchModel(200, 200, 10);
+        viewArea = new FetchModel(230, 100, 10);
         offset = new OffsetModel();
-        PacMazeGenerator maze = new PacMazeGenerator(40, 40, modelMaker.rng);
+        PacMazeGenerator maze = new PacMazeGenerator(1000, 1000, modelMaker.rng);
         boolean[][] dungeon = maze.create();
         viewArea.add(offset)
                 .add(new BoxModel(viewArea.xSize(), viewArea.ySize(), viewArea.zSize(),
                         ColorFetch.color(modelMaker.randomMainColor()
                         )))
-                .swapper(Swapper.Swap.zyx)
+                .swapper(Swapper.Swap.zxy)
                 .add(new DungeonFetch(dungeon, 5,
                         ColorFetch.color(modelMaker.randomMainColor()
                 )));
