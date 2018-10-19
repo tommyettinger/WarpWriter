@@ -99,6 +99,10 @@ public class FetchModel extends Fetch implements IModel {
         return this;
     }
 
+    public FetchModel add(CompassDirection direction) {
+        return addX(direction.deltaX).addY(direction.deltaY);
+    }
+
     public FetchModel set(int x, int y, int z) {
         return setX(x).setY(y).setZ(z);
     }

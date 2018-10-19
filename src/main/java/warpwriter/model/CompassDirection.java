@@ -265,4 +265,12 @@ public enum CompassDirection {
         this.deltaX = x;
         this.deltaY = y;
     }
+
+    public CompassDirection right() {
+        return clockwise().clockwise();
+    }
+
+    public CompassDirection left() {
+        return counterClockwise().counterClockwise();
+    }
 }

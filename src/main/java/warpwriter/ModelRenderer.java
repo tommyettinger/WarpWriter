@@ -63,17 +63,17 @@ public class ModelRenderer {
     {
         switch(d)
         {
-            case SOUTH:
+            case NORTH:
+            case NORTH_EAST:
+                return 3;
+            case EAST:
             case SOUTH_EAST:
-                return 0;
-            case WEST:
+                return 2;
+            case SOUTH:
             case SOUTH_WEST:
                 return 1;
-            case NORTH:
-            case NORTH_WEST:
-                return 2;
             default:
-                return 3;
+                return 0;
         }
     }
 
