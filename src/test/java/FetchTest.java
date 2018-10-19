@@ -4,7 +4,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -147,8 +146,6 @@ public class FetchTest extends ApplicationAdapter {
         batch.setProjectionMatrix(view.getCamera().combined);
         batch.begin();
         batch.draw(tex, 0, 0);
-        font.setColor(Color.BLUE);
-        font.draw(batch, "Hello World", width / 2, height / 2);
         batch.end();
     }
 
