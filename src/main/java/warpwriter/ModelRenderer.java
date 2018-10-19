@@ -2,7 +2,7 @@ package warpwriter;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import squidpony.ArrayTools;
-import squidpony.squidgrid.Direction;
+import warpwriter.model.CompassDirection;
 import warpwriter.model.IModel;
 
 import java.util.Arrays;
@@ -54,30 +54,30 @@ public class ModelRenderer {
     }
 
     /**
-     * Gets the internal int code used for a given Direction enum, which must not be null. Extremely unlikely to be
+     * Gets the internal int code used for a given CompassDirection enum, which must not be null. Extremely unlikely to be
      * necessary in external code, but maybe if you need to use one of the VariableConverter arrays, it could be handy.
-     * @param d a Direction to look up; must not be null
-     * @return an internal-use int code for the given Direction, from 0 to 3 inclusive
+     * @param d a CompassDirection to look up; must not be null
+     * @return an internal-use int code for the given CompassDirection, from 0 to 3 inclusive
      */
-    protected static int directionCode(Direction d)
+    protected static int directionCode(CompassDirection d)
     {
         switch(d)
         {
-            case DOWN:
-            case DOWN_RIGHT:
+            case SOUTH:
+            case SOUTH_EAST:
                 return 0;
-            case LEFT:
-            case DOWN_LEFT:
+            case WEST:
+            case SOUTH_WEST:
                 return 1;
-            case UP:
-            case UP_LEFT:
+            case NORTH:
+            case NORTH_WEST:
                 return 2;
             default:
                 return 3;
         }
     }
 
-    public int[][] renderOrtho(IModel voxels, Direction dir)
+    public int[][] renderOrtho(IModel voxels, CompassDirection dir)
     {
         final int xs = voxels.xSize(), ys = voxels.ySize(), zs = voxels.zSize(), direction = directionCode(dir);
         VariableConverter con = directionsOrthoV[direction];
@@ -264,12 +264,12 @@ public class ModelRenderer {
     }
     /**
      * Renders the given 3D voxel byte array, which should be no larger than 12x12x8, to a 52x64 2D int array storing
-     * color indices, using the given Direction enum to rotate the model's facing.
+     * color indices, using the given CompassDirection enum to rotate the model's facing.
      * @param voxels a 3D byte array with each byte storing color information for a voxel.
-     * @param direction a Direction enum storing 90-degree-increment direction info
+     * @param dir a CompassDirection enum storing 90-degree-increment direction info
      * @return a 2D int array storing the pixel indices for the rendered model
      */
-    public int[][] renderIso(IModel voxels, Direction dir) {
+    public int[][] renderIso(IModel voxels, CompassDirection dir) {
         final int xs = voxels.xSize(), ys = voxels.ySize(), zs = voxels.zSize(), direction = directionCode(dir);
         VariableConverter con = directionsIsoV[direction];
         int[][] working = makeRenderArray(xs, ys, zs, 4, 5, 1);
@@ -367,7 +367,7 @@ public class ModelRenderer {
         return easeSquares(render, working);
     }
 
-    public int[][] renderOrthoBelow(IModel voxels, Direction dir)
+    public int[][] renderOrthoBelow(IModel voxels, CompassDirection dir)
     {
         final int xs = voxels.xSize(), ys = voxels.ySize(), zs = voxels.zSize(), direction = directionCode(dir);
         VariableConverter con = directionsOrthoV[direction];
@@ -551,10 +551,10 @@ public class ModelRenderer {
      * Renders the given 3D voxel byte array, which should be no larger than 12x12x8, to a 52x64 2D int array storing
      * color indices, using the given direction to rotate the model's facing (from 0 to 3).
      * @param voxels a 3D byte array with each byte storing color information for a voxel.
-     * @param dir a Direction enum storing 90-degree-increment direction info
+     * @param dir a CompassDirection enum storing 90-degree-increment direction info
      * @return a 2D int array storing the pixel indices for the rendered model
      */
-    public int[][] renderIsoBelow(IModel voxels, Direction dir) {
+    public int[][] renderIsoBelow(IModel voxels, CompassDirection dir) {
         final int xs = voxels.xSize(), ys = voxels.ySize(), zs = voxels.zSize(), direction = directionCode(dir);
         VariableConverter con = directionsIsoV[direction];
         int[][] working = makeRenderArray(xs, ys, zs, 4, 5, 1);
@@ -651,7 +651,7 @@ public class ModelRenderer {
         return easeSquares(render, working);
     }
 
-    public int[][] renderOrthoSide(IModel voxels, Direction dir)
+    public int[][] renderOrthoSide(IModel voxels, CompassDirection dir)
     {
         final int xs = voxels.xSize(), ys = voxels.ySize(), zs = voxels.zSize(), direction = directionCode(dir);
         VariableConverter con = directionsOrthoSideV[direction];
@@ -823,7 +823,7 @@ public class ModelRenderer {
         }
         return easeSquares(render, working);
     }
-    public int[][] renderIsoSide(IModel voxels, Direction dir) {
+    public int[][] renderIsoSide(IModel voxels, CompassDirection dir) {
         final int xs = voxels.xSize(), ys = voxels.ySize(), zs = voxels.zSize(), direction = directionCode(dir);
         VariableConverter con = directionsIsoSideV[direction];
         int[][] working = makeRenderArray(xs, ys, zs, 4, 5, 1);
@@ -2583,11 +2583,11 @@ public class ModelRenderer {
         return new int[w + (outline << 1)][h + (outline << 1)];
     }
 
-    public Pixmap renderToPixmap(IModel model, int angle, Direction dir) {
+    public Pixmap renderToPixmap(IModel model, int angle, CompassDirection dir) {
         return renderToPixmap(model, angle, dir, Coloring.RINSED);
     }
 
-    public Pixmap renderToPixmap(IModel model, int angle, Direction dir, int[] palette) {
+    public Pixmap renderToPixmap(IModel model, int angle, CompassDirection dir, int[] palette) {
         int[][] indices = renderToArray(model, angle, dir);
         Pixmap pix = new Pixmap(indices.length, indices[0].length, Pixmap.Format.RGBA8888);
         for (int x = 0; x < indices.length; x++)
@@ -2596,7 +2596,7 @@ public class ModelRenderer {
         return pix;
     }
 
-    public int[][] renderToArray(IModel model, int angle, Direction dir) {
+    public int[][] renderToArray(IModel model, int angle, CompassDirection dir) {
         switch (angle) {
             case 1:
                 return dir.isCardinal() ?

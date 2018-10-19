@@ -13,7 +13,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import squidpony.FakeLanguageGen;
 import squidpony.StringKit;
-import squidpony.squidgrid.Direction;
 import squidpony.squidmath.FastNoise;
 import squidpony.squidmath.Noise;
 import warpwriter.*;
@@ -45,7 +44,7 @@ public class TestDisplay extends ApplicationAdapter {
     private IModel voxels;
     private IModel[] animatedVoxels = new IModel[frames];
     private int counter = 1;
-    private Direction dir = Direction.DOWN;
+    private CompassDirection dir = CompassDirection.SOUTH;
     private static final int background = 0;
     /**
      * The height of the viewing angle, with 0 being directly below (bottom), 1 being at a 45 degree angle from below
@@ -130,45 +129,45 @@ public class TestDisplay extends ApplicationAdapter {
                     case Input.Keys.UP:
                     case Input.Keys.NUMPAD_8:
                     case Input.Keys.NUM_8:
-                        dir = Direction.UP;
+                        dir = CompassDirection.NORTH;
                         remakeShip(0);
                         return true;
                     case Input.Keys.NUMPAD_6:
                     case Input.Keys.NUM_6:
                     case Input.Keys.RIGHT:
-                        dir = Direction.RIGHT;
+                        dir = CompassDirection.EAST;
                         remakeShip(0);
                         return true;
                     case Input.Keys.NUMPAD_2:
                     case Input.Keys.NUM_2:
                     case Input.Keys.DOWN:
-                        dir = Direction.DOWN;
+                        dir = CompassDirection.SOUTH;
                         remakeShip(0);
                         return true;
                     case Input.Keys.NUMPAD_4:
                     case Input.Keys.NUM_4:
                     case Input.Keys.LEFT:
-                        dir = Direction.LEFT;
+                        dir = CompassDirection.WEST;
                         remakeShip(0);
                         return true;
                     case Input.Keys.NUMPAD_7:
                     case Input.Keys.NUM_7:
-                        dir = Direction.UP_LEFT;
+                        dir = CompassDirection.NORTH_WEST;
                         remakeShip(0);
                         return true;
                     case Input.Keys.NUMPAD_9:
                     case Input.Keys.NUM_9:
-                        dir = Direction.UP_RIGHT;
+                        dir = CompassDirection.NORTH_EAST;
                         remakeShip(0);
                         return true;
                     case Input.Keys.NUMPAD_3:
                     case Input.Keys.NUM_3:
-                        dir = Direction.DOWN_RIGHT;
+                        dir = CompassDirection.SOUTH_EAST;
                         remakeShip(0);
                         return true;
                     case Input.Keys.NUMPAD_1:
                     case Input.Keys.NUM_1:
-                        dir = Direction.DOWN_LEFT;
+                        dir = CompassDirection.SOUTH_WEST;
                         remakeShip(0);
                         return true;
 

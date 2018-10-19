@@ -1,5 +1,7 @@
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
@@ -10,13 +12,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import squidpony.squidgrid.Direction;
 import warpwriter.ModelMaker;
 import warpwriter.ModelRenderer;
-import warpwriter.model.BoxModel;
-import warpwriter.model.ColorFetch;
-import warpwriter.model.FetchModel;
-import warpwriter.model.OffsetModel;
+import warpwriter.model.*;
 
 public class FetchTest extends ApplicationAdapter {
 
@@ -33,6 +31,8 @@ public class FetchTest extends ApplicationAdapter {
     private Texture tex;
     private Pixmap pix;
     //private int[] palette = Coloring.RINSED; // do we need this?
+    private CompassDirection direction = CompassDirection.NORTH;
+    private int angle=1;
 
     @Override
     public void create() {
@@ -45,7 +45,70 @@ public class FetchTest extends ApplicationAdapter {
                 .add(new BoxModel(model.xSize(), model.ySize(), model.zSize(),
                         ColorFetch.color(modelMaker.randomMainColor()
                         )));
-        pix = modelRenderer.renderToPixmap(model, 1, Direction.DOWN);
+        reDraw();
+        Gdx.input.setInputProcessor(new InputAdapter() {
+            @Override
+            public boolean keyDown(int keycode) {
+                boolean needRedraw = true;
+                switch (keycode) {
+                    case Input.Keys.NUMPAD_8:
+                    case Input.Keys.NUM_8:
+                        direction = CompassDirection.NORTH;
+                        break;
+                    case Input.Keys.NUMPAD_6:
+                    case Input.Keys.NUM_6:
+                        direction = CompassDirection.EAST;
+                        break;
+                    case Input.Keys.NUMPAD_2:
+                    case Input.Keys.NUM_2:
+                        direction = CompassDirection.SOUTH;
+                        break;
+                    case Input.Keys.NUMPAD_4:
+                    case Input.Keys.NUM_4:
+                        direction = CompassDirection.WEST;
+                        break;
+                    case Input.Keys.NUMPAD_7:
+                    case Input.Keys.NUM_7:
+                        direction = CompassDirection.NORTH_WEST;
+                        break;
+                    case Input.Keys.NUMPAD_9:
+                    case Input.Keys.NUM_9:
+                        direction = CompassDirection.NORTH_EAST;
+                        break;
+                    case Input.Keys.NUMPAD_3:
+                    case Input.Keys.NUM_3:
+                        direction = CompassDirection.SOUTH_EAST;
+                        break;
+                    case Input.Keys.NUMPAD_1:
+                    case Input.Keys.NUM_1:
+                        direction = CompassDirection.SOUTH_WEST;
+                        break;
+                    case Input.Keys.ENTER:
+                        offset.set(0, 0, 0);
+                        break;
+                    case Input.Keys.NUM_0:
+                        angle=1;
+                        break;
+                    case Input.Keys.MINUS:
+                        angle=2;
+                        break;
+                    case Input.Keys.EQUALS:
+                        angle=3;
+                        break;
+                    default:
+                        needRedraw=false;
+                        break;
+                }
+                if (needRedraw) reDraw();
+                return true;
+            }
+        });
+    }
+
+    public void reDraw() {
+        if (pix != null) pix.dispose();
+        pix = modelRenderer.renderToPixmap(model, angle, direction);
+        if (tex != null) tex.dispose();
         tex = new Texture(pix);
     }
 
