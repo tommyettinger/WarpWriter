@@ -39,9 +39,9 @@ public class FetchTest extends ApplicationAdapter {
         batch = new SpriteBatch();
         view = new FitViewport(width, height);
         font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
-        viewArea = new FetchModel(200, 200, 20);
+        viewArea = new FetchModel(20, 200, 200);
         offset = new OffsetModel();
-        PacMazeGenerator maze = new PacMazeGenerator();
+        PacMazeGenerator maze = new PacMazeGenerator(40, 40, modelMaker.rng);
         boolean[][] dungeon = maze.create();
         viewArea.add(offset)
                 .add(new DungeonFetch(dungeon, 5,
