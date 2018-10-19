@@ -32,24 +32,25 @@ public class FetchTest extends ApplicationAdapter {
     private Pixmap pix;
     //private int[] palette = Coloring.RINSED; // do we need this?
     private CompassDirection direction = CompassDirection.NORTH;
-    private int angle=1;
+    private int angle=3;
 
     @Override
     public void create() {
         batch = new SpriteBatch();
         view = new FitViewport(width, height);
         font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
-        viewArea = new FetchModel(20, 200, 200);
+        viewArea = new FetchModel(200, 200, 10);
         offset = new OffsetModel();
         PacMazeGenerator maze = new PacMazeGenerator(40, 40, modelMaker.rng);
         boolean[][] dungeon = maze.create();
         viewArea.add(offset)
-                .add(new DungeonFetch(dungeon, 5,
-                        ColorFetch.color(modelMaker.randomMainColor()
-                )))
                 .add(new BoxModel(viewArea.xSize(), viewArea.ySize(), viewArea.zSize(),
                         ColorFetch.color(modelMaker.randomMainColor()
-                        )));
+                        )))
+                .swapper(Swapper.Swap.zyx)
+                .add(new DungeonFetch(dungeon, 5,
+                        ColorFetch.color(modelMaker.randomMainColor()
+                )));
 
         reDraw();
         Gdx.input.setInputProcessor(new InputAdapter() {
@@ -58,17 +59,17 @@ public class FetchTest extends ApplicationAdapter {
                 boolean needRedraw = true;
                 switch (keycode) {
                     case Input.Keys.SPACE:
-                        offset.addZ(1); // Up
+                        offset.addZ(angle > 1 ? 1 : -1); // Up
                         break;
                     case Input.Keys.NUMPAD_5:
                     case Input.Keys.NUM_5:
-                        offset.addZ(-1); // Down
+                        offset.addZ(angle > 1 ? -1 : 1); // Down
                         break;
                     case Input.Keys.UP:
-                        offset.add(direction.opposite());
+                            offset.add(angle > 1 ? direction : direction.opposite());
                         break;
                     case Input.Keys.DOWN:
-                        offset.add(direction);
+                        offset.add(angle > 1 ? direction.opposite() : direction);
                         break;
                     case Input.Keys.RIGHT:
                         offset.add(direction.right());

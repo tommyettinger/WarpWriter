@@ -14,6 +14,6 @@ public class DungeonFetch extends Fetch {
     public Fetch fetch (int x, int y, int z) {
         y = y / scale;
         z = z / scale;
-        return y >= 0 && y < dungeon.length && z >= 0 && z < dungeon[y].length && dungeon[y][z] ? walls : getNextFetch();
+        return y >= 0 && y < dungeon.length && z >= 0 && z < dungeon[y].length && !dungeon[y][z] ? walls : getNextFetch();
     }
 }
