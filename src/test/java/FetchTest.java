@@ -12,19 +12,19 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import squidpony.squidgrid.mapping.PacMazeGenerator;
 import warpwriter.ModelMaker;
 import warpwriter.ModelRenderer;
 import warpwriter.model.*;
 
 public class FetchTest extends ApplicationAdapter {
-
     public static final int width = 1280;
     public static final int height = 720;
     protected SpriteBatch batch;
     protected Viewport view;
     protected BitmapFont font;
     protected long seed = 0;
-    protected FetchModel model;
+    protected FetchModel viewArea;
     protected OffsetModel offset;
     private ModelMaker modelMaker = new ModelMaker(seed);
     private ModelRenderer modelRenderer = new ModelRenderer(false, true);
@@ -39,29 +39,42 @@ public class FetchTest extends ApplicationAdapter {
         batch = new SpriteBatch();
         view = new FitViewport(width, height);
         font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
-        model = new FetchModel(20, 20, 20);
+        viewArea = new FetchModel(200, 200, 20);
         offset = new OffsetModel();
-        model.add(offset)
-                .add(new BoxModel(model.xSize(), model.ySize(), model.zSize(),
+        PacMazeGenerator maze = new PacMazeGenerator();
+        boolean[][] dungeon = maze.create();
+        viewArea.add(offset)
+                .add(new DungeonFetch(dungeon, 5,
+                        ColorFetch.color(modelMaker.randomMainColor()
+                )))
+                .add(new BoxModel(viewArea.xSize(), viewArea.ySize(), viewArea.zSize(),
                         ColorFetch.color(modelMaker.randomMainColor()
                         )));
+
         reDraw();
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
             public boolean keyDown(int keycode) {
                 boolean needRedraw = true;
                 switch (keycode) {
-                    case Input.Keys.UP:
-                        offset.add(direction);
+                    case Input.Keys.SPACE:
+                        offset.addZ(1); // Up
                         break;
-                    case Input.Keys.DOWN:
+                    case Input.Keys.NUMPAD_5:
+                    case Input.Keys.NUM_5:
+                        offset.addZ(-1); // Down
+                        break;
+                    case Input.Keys.UP:
                         offset.add(direction.opposite());
                         break;
+                    case Input.Keys.DOWN:
+                        offset.add(direction);
+                        break;
                     case Input.Keys.RIGHT:
-                        offset.add(direction.left()); // Camera's inverted
+                        offset.add(direction.right());
                         break;
                     case Input.Keys.LEFT:
-                        offset.add(direction.right()); // Camera's inverted
+                        offset.add(direction.left());
                         break;
                     case Input.Keys.NUMPAD_8:
                     case Input.Keys.NUM_8:
@@ -119,7 +132,7 @@ public class FetchTest extends ApplicationAdapter {
 
     public void reDraw() {
         if (pix != null) pix.dispose();
-        pix = modelRenderer.renderToPixmap(model, angle, direction);
+        pix = modelRenderer.renderToPixmap(viewArea, angle, direction);
         if (tex != null) tex.dispose();
         tex = new Texture(pix);
     }
