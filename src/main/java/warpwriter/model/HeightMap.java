@@ -28,7 +28,7 @@ public class HeightMap implements IDecide {
     }
 
     @Override
-    public boolean at(int x, int y, int z) {
+    public boolean bool(int x, int y, int z) {
         return z < (map.heightMap(x * scaleX, y * scaleY) + 1) * scaleZ;
     }
 

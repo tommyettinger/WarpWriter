@@ -33,6 +33,6 @@ public class DecideFetch extends Fetch {
 
     @Override
     public Fetch fetch(int x, int y, int z) {
-        return decide.at(x, y, z) ? fetch : getNextFetch();
+        return decide.bool(x, y, z) ? fetch : getNextFetch();
     }
 }

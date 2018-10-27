@@ -16,5 +16,5 @@ public interface IDecide {
      * @param z z position to look up; almost always up/down
      * @return a decision
      */
-    boolean at(int x, int y, int z);
+    boolean bool(int x, int y, int z);
 }
