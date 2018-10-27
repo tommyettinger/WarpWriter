@@ -345,7 +345,15 @@ public class TestDisplay extends ApplicationAdapter {
             heightMap.setSeed(newModel);
         }
 
-        voxels = new HeightMap(heightMap, 0.05, 0.05, size, new NoiseFetch(mm.randomColorRange())).model(50, 50, 12);
+        voxels = new DecideFetch(
+                new HeightMap(
+                        heightMap, 0.05, 0.05, size
+                ),
+                new NoiseFetch(
+                        mm.randomColorRange()
+                )
+        )
+                .model(50, 50, 12);
 
         Arrays.fill(animatedVoxels, voxels);
         int oldWidth = width, oldHeight = height;

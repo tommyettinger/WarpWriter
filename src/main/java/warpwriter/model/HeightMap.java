@@ -1,42 +1,35 @@
 package warpwriter.model;
 
-public class HeightMap extends Fetch {
+public class HeightMap implements IDecide {
     IHeightMap map;
     double scaleX, scaleY, scaleZ;
-    Fetch under;
 
     public IHeightMap getMap() {
         return map;
     }
 
-    public HeightMap(IHeightMap map, double scaleX, double scaleY, double scaleZ, Fetch under) {
+    public HeightMap(IHeightMap map, double scaleX, double scaleY, double scaleZ) {
         this.map = map;
         this.scaleX = scaleX;
         this.scaleY = scaleY;
         this.scaleZ = scaleZ;
-        this.under = under;
     }
 
-    public HeightMap (IHeightMap map, double scaleY, double scaleZ, Fetch under) {
-        this(map, 1, scaleY, scaleZ, under);
+    public HeightMap (IHeightMap map, double scaleY, double scaleZ) {
+        this(map, 1, scaleY, scaleZ);
     }
 
-    public HeightMap (IHeightMap map, double scaleZ, Fetch under) {
-        this(map, 1, scaleZ, under);
-    }
-
-    public HeightMap (IHeightMap map, Fetch under) {
-        this(map, 1, under);
+    public HeightMap (IHeightMap map, double scaleZ) {
+        this(map, 1, scaleZ);
     }
 
     public HeightMap (IHeightMap map) {
-        this(map, ColorFetch.transparent);
+        this(map, 1);
     }
 
     @Override
-    public Fetch fetch(int x, int y, int z) {
-        return z < (map.heightMap(x * scaleX, y * scaleY) + 1) * scaleZ ?
-                under : getNextFetch();
+    public boolean at(int x, int y, int z) {
+        return z < (map.heightMap(x * scaleX, y * scaleY) + 1) * scaleZ;
     }
 
     public static int heightInTriangle(int x, int y, int x1, int y1, int z1, int x2, int y2, int z2, int x3, int y3, int z3) {
