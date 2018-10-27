@@ -129,45 +129,45 @@ public class TestDisplay extends ApplicationAdapter {
                     case Input.Keys.UP:
                     case Input.Keys.NUMPAD_8:
                     case Input.Keys.NUM_8:
-                        dir = CompassDirection.SOUTH;
+                        dir = CompassDirection.NORTH;
                         remakeShip(0);
                         return true;
                     case Input.Keys.NUMPAD_6:
                     case Input.Keys.NUM_6:
                     case Input.Keys.RIGHT:
-                        dir = CompassDirection.WEST;
+                        dir = CompassDirection.EAST;
                         remakeShip(0);
                         return true;
                     case Input.Keys.NUMPAD_2:
                     case Input.Keys.NUM_2:
                     case Input.Keys.DOWN:
-                        dir = CompassDirection.NORTH;
+                        dir = CompassDirection.SOUTH;
                         remakeShip(0);
                         return true;
                     case Input.Keys.NUMPAD_4:
                     case Input.Keys.NUM_4:
                     case Input.Keys.LEFT:
-                        dir = CompassDirection.EAST;
+                        dir = CompassDirection.WEST;
                         remakeShip(0);
                         return true;
                     case Input.Keys.NUMPAD_7:
                     case Input.Keys.NUM_7:
-                        dir = CompassDirection.SOUTH_EAST;
+                        dir = CompassDirection.NORTH_WEST;
                         remakeShip(0);
                         return true;
                     case Input.Keys.NUMPAD_9:
                     case Input.Keys.NUM_9:
-                        dir = CompassDirection.SOUTH_WEST;
+                        dir = CompassDirection.NORTH_EAST;
                         remakeShip(0);
                         return true;
                     case Input.Keys.NUMPAD_3:
                     case Input.Keys.NUM_3:
-                        dir = CompassDirection.NORTH_WEST;
+                        dir = CompassDirection.SOUTH_EAST;
                         remakeShip(0);
                         return true;
                     case Input.Keys.NUMPAD_1:
                     case Input.Keys.NUM_1:
-                        dir = CompassDirection.NORTH_EAST;
+                        dir = CompassDirection.SOUTH_WEST;
                         remakeShip(0);
                         return true;
 
