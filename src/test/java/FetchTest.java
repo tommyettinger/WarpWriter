@@ -12,6 +12,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.squidgrid.mapping.PacMazeGenerator;
+import squidpony.squidmath.FastNoise;
+import squidpony.squidmath.Noise;
 import warpwriter.ModelMaker;
 import warpwriter.ModelRenderer;
 import warpwriter.model.*;
@@ -31,7 +33,7 @@ public class FetchTest extends ApplicationAdapter {
     private Pixmap pix;
     //private int[] palette = Coloring.RINSED; // do we need this?
     private CompassDirection direction = CompassDirection.NORTH;
-    private int angle=3;
+    private int angle = 3;
 
     @Override
     public void create() {
@@ -46,6 +48,7 @@ public class FetchTest extends ApplicationAdapter {
                 .add(new BoxModel(viewArea.xSize(), viewArea.ySize(), viewArea.zSize(),
                         ColorFetch.color(modelMaker.randomMainColor()
                         )))
+                .decideFetch(new HeightDecide(new NoiseHeightMap(new Noise.Layered2D(FastNoise.instance, 2), 0), 5), new NoiseFetch(modelMaker.randomMainColor()))
                 .swapper(Swapper.Swap.zxy)
                 .offsetModel(0, 5, 5)
                 .add(new DecideFetch(
@@ -67,7 +70,7 @@ public class FetchTest extends ApplicationAdapter {
                         offset.addZ(angle > 1 ? -1 : 1); // Down
                         break;
                     case Input.Keys.UP:
-                            offset.add(angle > 1 ? direction : direction.opposite());
+                        offset.add(angle > 1 ? direction : direction.opposite());
                         break;
                     case Input.Keys.DOWN:
                         offset.add(angle > 1 ? direction.opposite() : direction);
@@ -114,16 +117,16 @@ public class FetchTest extends ApplicationAdapter {
                         offset.set(0, 0, 0);
                         break;
                     case Input.Keys.NUM_0:
-                        angle=1;
+                        angle = 1;
                         break;
                     case Input.Keys.MINUS:
-                        angle=2;
+                        angle = 2;
                         break;
                     case Input.Keys.EQUALS:
-                        angle=3;
+                        angle = 3;
                         break;
                     default:
-                        needRedraw=false;
+                        needRedraw = false;
                         break;
                 }
                 if (needRedraw) reDraw();

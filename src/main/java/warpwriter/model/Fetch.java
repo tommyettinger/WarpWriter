@@ -87,9 +87,6 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D, IDecide {
     }
 
     /**
-     * @param x x position to look up; depending on angle, can be forward/back or left/right
-     * @param y y position to look up; depending on angle, can be left/right or forward/back
-     * @param z z position to look up; almost always up/down
      * @return true if at(x, y, z) returns any value besides 0.
      */
     @Override
@@ -122,11 +119,11 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D, IDecide {
         return this;
     }
 
-    public Fetch breakChain () {
+    public final Fetch breakChain() {
         return breakChain(null);
     }
 
-    public Fetch breakChain (Fetch nextFetch) {
+    public Fetch breakChain(Fetch nextFetch) {
         this.nextFetch = nextFetch;
         return this;
     }
@@ -229,16 +226,19 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D, IDecide {
         return stripes(widths, stripes);
     }
 
-    public Fetch chaotic(long seed, byte mainColor) {
+    public Fetch chaoticFetch(long seed, byte mainColor) {
         return add(new ChaoticFetch(seed, mainColor));
     }
-    
-    public Fetch chaotic(long seed, byte... colors) {
+
+    public Fetch chaoticFetch(long seed, byte... colors) {
         return add(new ChaoticFetch(seed, colors));
     }
-    
-    public Fetch noiseFetch(Noise.Noise3D noise, byte... colors)
-    {
+
+    public Fetch noiseFetch(Noise.Noise3D noise, byte... colors) {
         return add(new NoiseFetch(noise, colors));
+    }
+
+    public Fetch decideFetch(IDecide decide, Fetch fetch) {
+        return add(new DecideFetch(decide, fetch));
     }
 }

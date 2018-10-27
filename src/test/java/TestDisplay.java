@@ -39,7 +39,7 @@ public class TestDisplay extends ApplicationAdapter {
     private ModelMaker mm = new ModelMaker(seed);
     private ModelRenderer mr = new ModelRenderer(true, true); // change to (false, true) to disable easing
     private PaletteReducer reducer;
-//    private byte[][][] voxels;
+    //    private byte[][][] voxels;
 //    private byte[][][][] animatedVoxels;
     private IModel voxels;
     private IModel[] animatedVoxels = new IModel[frames];
@@ -204,8 +204,10 @@ public class TestDisplay extends ApplicationAdapter {
     public void remakeFish(long newModel) {
         mm.rng.setState(determine(newModel));
         voxels = new ArrayModel(mm.fishRandom());
-        byte[][][][] anim = mm.animateFish(((ArrayModel)voxels).voxels, frames);
-        for (int i = 0; i < frames; i++) { animatedVoxels[i] = new ArrayModel(anim[i]); }
+        byte[][][][] anim = mm.animateFish(((ArrayModel) voxels).voxels, frames);
+        for (int i = 0; i < frames; i++) {
+            animatedVoxels[i] = new ArrayModel(anim[i]);
+        }
         /*int state = Tools3D.hash(voxels);
         batch.setColor(
                 Float.intBitsToFloat(0xFE000000
@@ -289,7 +291,9 @@ public class TestDisplay extends ApplicationAdapter {
     public void remakeBlob(long newModel) {
         mm.rng.setState(determine(newModel));
         byte[][][][] anim = mm.animateBlobLargeRandom(frames);
-        for (int i = 0; i < frames; i++) { animatedVoxels[i] = new ArrayModel(anim[i]); }
+        for (int i = 0; i < frames; i++) {
+            animatedVoxels[i] = new ArrayModel(anim[i]);
+        }
 
         voxels = animatedVoxels[0];
         //palette = Coloring.ALT_PALETTE;
@@ -339,9 +343,7 @@ public class TestDisplay extends ApplicationAdapter {
 
         if (heightMap == null) {
             heightMap = new NoiseHeightMap(new Noise.Layered2D(FastNoise.instance, 2), newModel);
-        }
-        else
-        {
+        } else {
             heightMap.setSeed(newModel);
         }
 
@@ -405,9 +407,9 @@ public class TestDisplay extends ApplicationAdapter {
         Fetch checkers = Stripes.checkers(
                 ColorFetch.color(mm.randomMainColor()),
                 ColorFetch.color(mm.randomMainColor()),
-                new int[] {2, 2},
-                new int[] {2, 2},
-                new int[] {2, 2}
+                new int[]{2, 2},
+                new int[]{2, 2},
+                new int[]{2, 2}
         );
 
         voxels = voxelText
@@ -456,8 +458,10 @@ public class TestDisplay extends ApplicationAdapter {
         if (newModel != 0) {
             mm.rng.setState(determine(newModel));
             voxels = new ArrayModel(mm.shipRandom());
-            byte[][][][] anim = mm.animateShip(((ArrayModel)voxels).voxels, frames);
-            for (int i = 0; i < frames; i++) { animatedVoxels[i] = new ArrayModel(anim[i]); }
+            byte[][][][] anim = mm.animateShip(((ArrayModel) voxels).voxels, frames);
+            for (int i = 0; i < frames; i++) {
+                animatedVoxels[i] = new ArrayModel(anim[i]);
+            }
         }
         for (int f = 0; f < frames; f++) {
             pix = pixes[f];
@@ -494,8 +498,10 @@ public class TestDisplay extends ApplicationAdapter {
         if (newModel != 0) {
             mm.rng.setState(determine(newModel));
             voxels = new ArrayModel(large ? mm.shipLargeRandom() : mm.shipRandom());
-            byte[][][][] anim = mm.animateShip(((ArrayModel)voxels).voxels, frames);
-            for (int i = 0; i < frames; i++) { animatedVoxels[i] = new ArrayModel(anim[i]); }
+            byte[][][][] anim = mm.animateShip(((ArrayModel) voxels).voxels, frames);
+            for (int i = 0; i < frames; i++) {
+                animatedVoxels[i] = new ArrayModel(anim[i]);
+            }
             /*int state = Tools3D.hash(voxels);
             batch.setColor(
                     Float.intBitsToFloat(0xFE000000
@@ -593,7 +599,7 @@ public class TestDisplay extends ApplicationAdapter {
         try {
             System.out.println(name);
             byte[][][] arr = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream(name)));
-            if(arr != null)
+            if (arr != null)
                 voxels = new ArrayModel(arr);
             /// this is commented out because it's pretty hard to make a working palette by hand; this uses the default
             //palette = VoxIO.lastPalette;
