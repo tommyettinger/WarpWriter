@@ -28,25 +28,23 @@ public enum CompassDirection {
         if (x == 0 && y == 0) {
             return NONE;
         } else {
-            double degree = Math.toDegrees((double) NumberTools.atan2((float)y, (float)x));
-            degree += 450.0D;
-            degree %= 360.0D;
-            if (degree < 22.5D) {
+            float degree = NumberTools.atan2_(y, x) * 360f; // gets degrees from 0 to 360
+            if (degree < 22.5f) {
                 return NORTH;
-            } else if (degree < 67.5D) {
+            } else if (degree < 67.5f) {
                 return NORTH_EAST;
-            } else if (degree < 112.5D) {
+            } else if (degree < 112.5f) {
                 return EAST;
-            } else if (degree < 157.5D) {
+            } else if (degree < 157.5f) {
                 return SOUTH_EAST;
-            } else if (degree < 202.5D) {
+            } else if (degree < 202.5f) {
                 return SOUTH;
-            } else if (degree < 247.5D) {
+            } else if (degree < 247.5f) {
                 return SOUTH_WEST;
-            } else if (degree < 292.5D) {
+            } else if (degree < 292.5f) {
                 return WEST;
             } else {
-                return degree < 337.5D ? NORTH_WEST : NORTH;
+                return degree < 337.5f ? NORTH_WEST : NORTH;
             }
         }
     }
