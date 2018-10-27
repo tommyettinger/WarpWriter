@@ -37,15 +37,17 @@ public class VoxelText extends Fetch implements IModel, Disposable {
 
     @Override
     public Fetch fetch(int x, int y, int z) {
-        return fetch == null
-                || pixmap == null
-                || outside(x, y, z)
-                || (pixmap.getPixel(y, z) & 0xFF) < 128
-                ? getNextFetch() : fetch;
+        return bool(x, y, z) ? fetch : getNextFetch();
+    }
+
+    @Override
+    public boolean bool (int x, int y, int z) {
+        return pixmap != null
+                && inside(x, y, z)
+                && (pixmap.getPixel(y, z) & 0xFF) > 128;
     }
 
     /**
-     *
      * @param xSize Set to 0 for infinite depth in both directions, or to a positive depth value
      * @return this
      */
