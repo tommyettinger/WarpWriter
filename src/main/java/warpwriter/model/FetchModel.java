@@ -121,4 +121,12 @@ public class FetchModel extends Fetch implements IModel {
         zSize = z;
         return this;
     }
+
+    /**
+     * @return inside(x, y, z)
+     */
+    @Override
+    public boolean bool(int x, int y, int z) {
+        return inside(x, y, z);
+    }
 }
