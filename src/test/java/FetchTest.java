@@ -48,7 +48,7 @@ public class FetchTest extends ApplicationAdapter {
                 .add(new BoxModel(viewArea.xSize(), viewArea.ySize(), viewArea.zSize(),
                         ColorFetch.color(modelMaker.randomMainColor()
                         )))
-                .decideFetch(new HeightDecide(new NoiseHeightMap(new Noise.Layered2D(FastNoise.instance, 2), 0), 5), new NoiseFetch(modelMaker.randomMainColor()))
+                .decideFetch(new HeightDecide(new NoiseHeightMap(new Noise.Layered2D(FastNoise.instance, 2), 0), 3), new NoiseFetch(modelMaker.randomMainColor()))
                 .swapper(Swapper.Swap.zxy)
                 .offsetModel(0, 5, 5)
                 .add(new DecideFetch(
