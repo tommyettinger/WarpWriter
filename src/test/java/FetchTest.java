@@ -70,24 +70,24 @@ public class FetchTest extends ApplicationAdapter {
                         offset.addZ(angle > 1 ? -1 : 1); // Down
                         break;
                     case Input.Keys.UP:
-                        offset.add(angle > 1 ? direction : direction.opposite());
-                        break;
-                    case Input.Keys.DOWN:
                         offset.add(angle > 1 ? direction.opposite() : direction);
                         break;
+                    case Input.Keys.DOWN:
+                        offset.add(angle > 1 ? direction : direction.opposite());
+                        break;
                     case Input.Keys.RIGHT:
-                        offset.add(direction.right());
+                        offset.add(angle > 1 ? direction.left() : direction.right());
                         break;
                     case Input.Keys.LEFT:
-                        offset.add(direction.left());
+                        offset.add(angle > 1 ? direction.right() : direction.left());
                         break;
                     case Input.Keys.NUMPAD_8:
                     case Input.Keys.NUM_8:
-                        direction = CompassDirection.SOUTH;
+                        direction = CompassDirection.NORTH;
                         break;
                     case Input.Keys.NUMPAD_6:
                     case Input.Keys.NUM_6:
-                        direction = CompassDirection.WEST;
+                        direction = CompassDirection.EAST;
                         break;
                     case Input.Keys.NUMPAD_2:
                     case Input.Keys.NUM_2:
@@ -95,23 +95,23 @@ public class FetchTest extends ApplicationAdapter {
                         break;
                     case Input.Keys.NUMPAD_4:
                     case Input.Keys.NUM_4:
-                        direction = CompassDirection.EAST;
+                        direction = CompassDirection.SOUTH;
                         break;
                     case Input.Keys.NUMPAD_7:
                     case Input.Keys.NUM_7:
-                        direction = CompassDirection.SOUTH_EAST;
+                        direction = CompassDirection.NORTH_WEST;
                         break;
                     case Input.Keys.NUMPAD_9:
                     case Input.Keys.NUM_9:
-                        direction = CompassDirection.SOUTH_WEST;
+                        direction = CompassDirection.NORTH_EAST;
                         break;
                     case Input.Keys.NUMPAD_3:
                     case Input.Keys.NUM_3:
-                        direction = CompassDirection.NORTH_WEST;
+                        direction = CompassDirection.SOUTH_EAST;
                         break;
                     case Input.Keys.NUMPAD_1:
                     case Input.Keys.NUM_1:
-                        direction = CompassDirection.NORTH_EAST;
+                        direction = CompassDirection.SOUTH_WEST;
                         break;
                     case Input.Keys.ENTER:
                         offset.set(0, 0, 0);
