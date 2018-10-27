@@ -37,7 +37,7 @@ public class ColorFetch extends Fetch {
      * @return this
      */
     @Override
-    public Fetch add(Fetch fetch) {
+    public final Fetch add(Fetch fetch) {
         return this;
     }
 
@@ -48,7 +48,7 @@ public class ColorFetch extends Fetch {
      * @return this
      */
     @Override
-    public Fetch breakChain(Fetch fetch) {
+    public final Fetch breakChain(Fetch fetch) {
         return this;
     }
 }

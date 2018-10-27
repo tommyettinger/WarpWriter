@@ -1,6 +1,6 @@
 package warpwriter.model;
 
-public class HeightMap implements IDecide {
+public class HeightDecide implements IDecide {
     IHeightMap map;
     double scaleX, scaleY, scaleZ;
 
@@ -8,22 +8,22 @@ public class HeightMap implements IDecide {
         return map;
     }
 
-    public HeightMap(IHeightMap map, double scaleX, double scaleY, double scaleZ) {
+    public HeightDecide(IHeightMap map, double scaleX, double scaleY, double scaleZ) {
         this.map = map;
         this.scaleX = scaleX;
         this.scaleY = scaleY;
         this.scaleZ = scaleZ;
     }
 
-    public HeightMap (IHeightMap map, double scaleY, double scaleZ) {
+    public HeightDecide(IHeightMap map, double scaleY, double scaleZ) {
         this(map, 1, scaleY, scaleZ);
     }
 
-    public HeightMap (IHeightMap map, double scaleZ) {
+    public HeightDecide(IHeightMap map, double scaleZ) {
         this(map, 1, scaleZ);
     }
 
-    public HeightMap (IHeightMap map) {
+    public HeightDecide(IHeightMap map) {
         this(map, 1);
     }
 

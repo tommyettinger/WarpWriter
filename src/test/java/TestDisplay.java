@@ -346,7 +346,7 @@ public class TestDisplay extends ApplicationAdapter {
         }
 
         voxels = new DecideFetch(
-                new HeightMap(
+                new HeightDecide(
                         heightMap, 0.05, 0.05, size
                 ),
                 new NoiseFetch(
