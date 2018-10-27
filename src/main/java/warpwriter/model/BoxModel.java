@@ -35,13 +35,6 @@ public class BoxModel extends FetchModel {
      */
     @Override
     public boolean bool(int x, int y, int z) {
-        if (inside(x, y, z)) {
-            boolean x0 = x == 0, x1 = x == xSize() - 1, x2 = x0 || x1,
-                    y0 = y == 0, y1 = y == ySize() - 1, y2 = y0 || y1,
-                    z0 = z == 0, z1 = z == zSize() - 1, z2 = z0 || z1;
-            if ((x2 && y2) || (x2 && z2) || (y2 && z2))
-                return true;
-        }
-        return false;
+        return inside(x, y, z) && (((x == 0 || x == xSize() - 1) && (y == 0 || y == ySize() - 1)) || ((x == 0 || x == xSize() - 1) && (z == 0 || z == zSize() - 1)) || ((y == 0 || y == ySize() - 1) && (z == 0 || z == zSize() - 1)));
     }
 }
