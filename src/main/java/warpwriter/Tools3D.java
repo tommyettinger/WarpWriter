@@ -172,7 +172,7 @@ public class Tools3D {
             if(v >= 1)
             {
                 deepCopyInto(vs1, vs0);
-                //fill(vs1, (byte) 0);
+                //fetch(vs1, (byte) 0);
             }
             for(int x = 0; x < xs; x++)
             {

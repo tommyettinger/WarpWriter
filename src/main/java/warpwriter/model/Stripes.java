@@ -10,7 +10,7 @@ public class Stripes extends Fetch {
 
     /**
      * @param widths  The width of each stripe. All should be positive
-     * @param stripes What to fill each stripe with. Is expected to be the same size as widths. Specify null to indicate that a stripe should defer to the next Fetch
+     * @param stripes What to fetch each stripe with. Is expected to be the same size as widths. Specify null to indicate that a stripe should defer to the next Fetch
      */
     public Stripes(int[] widths, Fetch[] stripes) {
         this.widths = widths;

@@ -61,7 +61,7 @@ public class VoxelText extends Fetch implements IModel, Disposable {
     }
 
     /**
-     * @param fetch What to fill the text with
+     * @param fetch What to fetch the text with
      * @return this
      */
     public VoxelText setFetch(Fetch fetch) {

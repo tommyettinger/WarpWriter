@@ -1999,7 +1999,7 @@ public class ModelRenderer {
         //depths = size2Mix(depths);
         //depths = size2(depths);
         render = new int[24][32];//ArrayTools.copy(working);
-        //int[][] shaded = ArrayTools.fill(65535, 52, 64);
+        //int[][] shaded = ArrayTools.fetch(65535, 52, 64);
         for (int x = 2, rx = 0; x < 50 && rx < 24; x += 2, rx++) {
             for (int y = 2, ry = 1; y < 64 && ry < 32; y += 2, ry++) {
                 render[rx][ry] = working[x][y];
