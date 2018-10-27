@@ -22,7 +22,7 @@ import squidpony.squidmath.Noise;
  *
  * @author Ben McLean
  */
-public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
+public abstract class Fetch implements IFetch, IFetch2D, IFetch1D, IDecide {
     /**
      * This method is intended to be overridden with a decision about which Fetch to use for the provided coordinate.
      * <p>
@@ -84,6 +84,17 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D {
     @Override
     public final byte at(int z) {
         return at(0, z);
+    }
+
+    /**
+     * @param x x position to look up; depending on angle, can be forward/back or left/right
+     * @param y y position to look up; depending on angle, can be left/right or forward/back
+     * @param z z position to look up; almost always up/down
+     * @return true if at(x, y, z) returns any value besides 0.
+     */
+    @Override
+    public boolean bool(int x, int y, int z) {
+        return at(x, y, z) != (byte) 0;
     }
 
     public int xChain, yChain, zChain;
