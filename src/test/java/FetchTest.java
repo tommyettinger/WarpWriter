@@ -48,7 +48,8 @@ public class FetchTest extends ApplicationAdapter {
                         )))
                 .swapper(Swapper.Swap.zxy)
                 .offsetModel(0, 5, 5)
-                .add(new DungeonFetch(dungeon, 5,
+                .add(new DecideFetch(
+                        new DungeonDecide(dungeon, 5),
                         new NoiseFetch(modelMaker.randomMainColor())
                 ));
 
