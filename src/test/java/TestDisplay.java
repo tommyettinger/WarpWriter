@@ -599,11 +599,12 @@ public class TestDisplay extends ApplicationAdapter {
         try {
             System.out.println(name);
             byte[][][] arr = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream(name)));
-            if (arr != null)
+            if (arr != null) {
                 voxels = new ArrayModel(arr);
-            /// this is commented out because it's pretty hard to make a working palette by hand; this uses the default
-            //palette = VoxIO.lastPalette;
-            //reducer.exact(VoxIO.lastPalette);
+                /// this is commented out because it's pretty hard to make a working palette by hand; this uses the default
+                //palette = VoxIO.lastPalette;
+                reducer.exact(VoxIO.lastPalette);
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return;
