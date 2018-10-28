@@ -237,23 +237,23 @@ public class TurnModel extends Fetch implements IModel {
 
     @Override
     public int xSize() {
-        return size().x();
+        return Math.abs(size().x());
     }
 
     @Override
     public int ySize() {
-        return size().y();
+        return Math.abs(size().y());
     }
 
     @Override
     public int zSize() {
-        return size().z();
+        return Math.abs(size().z());
     }
 
     @Override
     public boolean outside(int x, int y, int z) {
         size();
-        return x < 0 || y < 0 || z < 0 || x >= x() || y >= y() || z >= z();
+        return x < 0 || y < 0 || z < 0 || x >= Math.abs(x()) || y >= Math.abs(y()) || z >= Math.abs(z());
     }
 
     @Override
@@ -271,6 +271,10 @@ public class TurnModel extends Fetch implements IModel {
         size();
         int xSize = x(), ySize = y(), zSize = z();
         turn(x, y, z);
-        return deferByte(iModel.at(Loop.loop(x(), xSize), Loop.loop(y(), ySize), Loop.loop(z(), zSize)), x, y, z);
+        int xAns = x(), yAns = y(), zAns = z();
+        if (xSize < 0) xAns -= xSize;
+        if (ySize < 0) yAns -= ySize;
+        if (zSize < 0) zAns -= zSize;
+        return deferByte(iModel.at(xAns, yAns, zAns), x, y, z);
     }
 }
