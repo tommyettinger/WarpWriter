@@ -14,10 +14,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import warpwriter.LittleEndianDataInputStream;
 import warpwriter.ModelRenderer;
 import warpwriter.VoxIO;
-import warpwriter.model.ArrayModel;
-import warpwriter.model.CompassDirection;
-import warpwriter.model.OffsetModel;
-import warpwriter.model.TurnModel;
+import warpwriter.model.*;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -30,8 +27,8 @@ public class TurnTest extends ApplicationAdapter {
     protected BitmapFont font;
     protected TurnModel turnModel;
     protected OffsetModel offset;
-    private TurnModel.Face face = TurnModel.Face.SOUTH;
-    private TurnModel.Roll roll = TurnModel.Roll.UP;
+    private Rotator.Face face = Rotator.Face.TOP;
+    private Rotator.Roll roll = Rotator.Roll.UP;
     private ModelRenderer modelRenderer = new ModelRenderer(false, true);
     private Texture tex;
     private Pixmap pix;
@@ -67,56 +64,64 @@ public class TurnTest extends ApplicationAdapter {
                         offset.addZ(angle > 1 ? -1 : 1); // Down
                         break;
                     case Input.Keys.UP:
-                        roll = TurnModel.Roll.UP;
+                        roll = Rotator.Roll.UP;
                         break;
                     case Input.Keys.DOWN:
-                        roll = TurnModel.Roll.DOWN;
+                        roll = Rotator.Roll.DOWN;
                         break;
                     case Input.Keys.RIGHT:
-                        roll = TurnModel.Roll.RIGHT;
+                        roll = Rotator.Roll.RIGHT;
                         break;
                     case Input.Keys.LEFT:
-                        roll = TurnModel.Roll.LEFT;
+                        roll = Rotator.Roll.LEFT;
                         break;
                     case Input.Keys.NUMPAD_8:
                     case Input.Keys.NUM_8:
                         direction = CompassDirection.NORTH;
-                        face = TurnModel.Face.NORTH;
+                        face = Rotator.Face.TOP;
                         break;
                     case Input.Keys.NUMPAD_6:
                     case Input.Keys.NUM_6:
                         direction = CompassDirection.NORTH;
-                        face = TurnModel.Face.EAST;
+                        face = Rotator.Face.EAST;
                         break;
                     case Input.Keys.NUMPAD_2:
                     case Input.Keys.NUM_2:
                         direction = CompassDirection.NORTH;
-                        face = TurnModel.Face.SOUTH;
+                        face = Rotator.Face.BOTTOM;
                         break;
                     case Input.Keys.NUMPAD_4:
                     case Input.Keys.NUM_4:
                         direction = CompassDirection.NORTH;
-                        face = TurnModel.Face.WEST;
+                        face = Rotator.Face.WEST;
+                        break;
+                    case Input.Keys.SEMICOLON:
+                        direction = CompassDirection.NORTH;
+                        face = Rotator.Face.NORTH;
+                        break;
+                    case Input.Keys.SLASH:
+                        direction = CompassDirection.NORTH;
+                        face = Rotator.Face.SOUTH;
                         break;
                     case Input.Keys.NUMPAD_7:
                     case Input.Keys.NUM_7:
                         direction = CompassDirection.NORTH_WEST;
-                        face = TurnModel.Face.NORTH;
+                        face = Rotator.Face.TOP;
                         break;
                     case Input.Keys.NUMPAD_9:
                     case Input.Keys.NUM_9:
                         direction = CompassDirection.NORTH_WEST;
-                        face = TurnModel.Face.EAST;
+                        face = Rotator.Face.EAST;
                         break;
                     case Input.Keys.NUMPAD_3:
                     case Input.Keys.NUM_3:
                         direction = CompassDirection.NORTH_WEST;
-                        face = TurnModel.Face.SOUTH;
+                        face = Rotator.Face.BOTTOM;
                         break;
                     case Input.Keys.NUMPAD_1:
                     case Input.Keys.NUM_1:
                         direction = CompassDirection.NORTH_WEST;
-                        face = TurnModel.Face.WEST;
+                        face = Rotator.Face.WEST;
                         break;
                     case Input.Keys.ENTER:
                         offset.set(0, 0, 0);
@@ -130,6 +135,10 @@ public class TurnTest extends ApplicationAdapter {
                     case Input.Keys.EQUALS:
                         angle = 3;
                         break;
+                    case Input.Keys.Q:
+                    case Input.Keys.ESCAPE: 
+                        Gdx.app.exit();
+                        break;
                     default:
                         needRedraw = false;
                         break;
@@ -142,7 +151,7 @@ public class TurnTest extends ApplicationAdapter {
 
     public void reDraw() {
         if (pix != null) pix.dispose();
-        turnModel.turn(face, roll);
+        turnModel.set(face).set(roll);
         pix = modelRenderer.renderToPixmap(turnModel, angle, direction);
         if (tex != null) tex.dispose();
         tex = new Texture(pix);
@@ -156,6 +165,8 @@ public class TurnTest extends ApplicationAdapter {
         view.update(width, height);
         batch.setProjectionMatrix(view.getCamera().combined);
         batch.begin();
+        font.draw(batch, face.toString(), 200, 20);
+        font.draw(batch, roll.toString(), 200, 40);
         batch.draw(tex, 0, 0);
         batch.end();
     }
