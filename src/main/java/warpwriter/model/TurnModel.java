@@ -225,27 +225,35 @@ public class TurnModel extends Fetch implements IModel {
         return this;
     }
 
+    public TurnModel size(Face face, Roll roll) {
+        turn(iModel.xSize(), iModel.ySize(), iModel.zSize(), face, roll);
+        return this;
+    }
+
+    public TurnModel size() {
+        turn(iModel.xSize(), iModel.ySize(), iModel.zSize());
+        return this;
+    }
+
     @Override
     public int xSize() {
-        turn(iModel.xSize(), iModel.ySize(), iModel.zSize());
-        return x;
+        return size().x();
     }
 
     @Override
     public int ySize() {
-        turn(iModel.xSize(), iModel.ySize(), iModel.zSize());
-        return y;
+        return size().y();
     }
 
     @Override
     public int zSize() {
-        turn(iModel.xSize(), iModel.ySize(), iModel.zSize());
-        return z;
+        return size().z();
     }
 
     @Override
     public boolean outside(int x, int y, int z) {
-        return x < 0 || y < 0 || z < 0 || x >= xSize() || y >= ySize() || z >= zSize();
+        size();
+        return x < 0 || y < 0 || z < 0 || x >= x() || y >= y() || z >= z();
     }
 
     @Override
@@ -260,7 +268,7 @@ public class TurnModel extends Fetch implements IModel {
 
     @Override
     public byte bite(int x, int y, int z) {
-        turn(iModel.xSize(), iModel.ySize(), iModel.zSize());
+        size();
         int xSize = x(), ySize = y(), zSize = z();
         turn(x, y, z);
         return deferByte(iModel.at(Loop.loop(x(), xSize), Loop.loop(y(), ySize), Loop.loop(z(), zSize)), x, y, z);
