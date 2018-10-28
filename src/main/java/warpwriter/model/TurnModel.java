@@ -58,8 +58,7 @@ public class TurnModel extends Fetch implements IModel {
     }
 
     public TurnModel size() {
-        rotator.turn(iModel.xSize(), iModel.ySize(), iModel.zSize());
-        return this;
+        return size(rotator.face, rotator.roll);
     }
 
     @Override
