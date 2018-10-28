@@ -6,31 +6,21 @@ package warpwriter.model;
  * @author Ben McLean
  */
 public class TurnModel extends Fetch implements IModel {
-    /**
-     * I hereby declare that z+ is upwards (TOP) y+ is north and x+ is east.
-     */
-    public enum Face {
-        TOP, BOTTOM, NORTH, EAST, SOUTH, WEST
-    }
-
-    public enum Roll {UP, RIGHT, DOWN, LEFT}
-
     protected IModel iModel;
-    protected Face face;
-    protected Roll roll;
+    protected Rotator rotator = new Rotator();
 
     public TurnModel set(IModel iModel) {
         this.iModel = iModel;
         return this;
     }
 
-    public TurnModel set(Face face) {
-        this.face = face;
+    public TurnModel set(Rotator.Face face) {
+        rotator.set(face);
         return this;
     }
 
-    public TurnModel set(Roll roll) {
-        this.roll = roll;
+    public TurnModel set(Rotator.Roll roll) {
+        rotator.set(roll);
         return this;
     }
 
@@ -38,222 +28,59 @@ public class TurnModel extends Fetch implements IModel {
         return iModel;
     }
 
-    public Face getFace() {
-        return face;
+    public Rotator.Face getFace() {
+        return rotator.face;
     }
 
-    public Roll getRoll() {
-        return roll;
+    public Rotator.Roll getRoll() {
+        return rotator.roll;
     }
-
-    public TurnModel(IModel iModel, Face face, Roll roll) {
-        set(iModel).set(face).set(roll);
-    }
-
-    protected int x, y, z;
 
     public int x() {
-        return x;
+        return rotator.x();
     }
 
     public int y() {
-        return y;
+        return rotator.y();
     }
 
     public int z() {
-        return z;
+        return rotator.z();
     }
 
-    public TurnModel setX(int x) {
-        this.x = x;
-        return this;
+    public TurnModel(IModel iModel, Rotator.Face face, Rotator.Roll roll) {
+        set(iModel).set(face).set(roll);
     }
 
-    public TurnModel setY(int y) {
-        this.y = y;
-        return this;
-    }
-
-    public TurnModel setZ(int z) {
-        this.z = z;
-        return this;
-    }
-
-    public TurnModel set(int x, int y, int z) {
-        return setX(x).setY(y).setZ(z);
-    }
-
-    public TurnModel clockwiseXY() {
-        return set(y * -1, x, z);
-    }
-
-    public TurnModel counterXY() {
-        return set(y, x * -1, z);
-    }
-
-    public TurnModel clockwiseYZ() {
-        return set(x, z * -1, y);
-    }
-
-    public TurnModel counterYZ() {
-        return set(x, z, y * -1);
-    }
-
-    public TurnModel clockwiseXZ() {
-        return set(z * -1, y, x);
-    }
-
-    public TurnModel counterXZ() {
-        return set(z, y, x * -1);
-    }
-
-    public TurnModel turn() {
-        return turn(x, y, z);
-    }
-
-    public TurnModel turn(Face face, Roll roll) {
-        return turn(x, y, z, face, roll);
-    }
-
-    public TurnModel turn(int x, int y, int z) {
-        return turn(x, y, z, face, roll);
-    }
-
-    public TurnModel turn(int x, int y, int z, Face face, Roll roll) {
-        set(x, y, z);
-        switch (face) {
-            case BOTTOM: // z-
-                clockwiseYZ().clockwiseYZ();
-                switch (roll) {
-                    case RIGHT:
-                        counterXY();
-                        break;
-                    case DOWN:
-                        break;
-                    case LEFT:
-                        clockwiseXY();
-                        break;
-                    case UP:
-                    default:
-                        counterXY().counterXY();
-                        break;
-                }
-                break;
-            case NORTH: // y+
-                clockwiseYZ();
-                switch (roll) {
-                    case RIGHT:
-                        clockwiseXZ();
-                        break;
-                    case DOWN:
-                        clockwiseXZ().clockwiseXZ();
-                        break;
-                    case LEFT:
-                        counterXZ();
-                        break;
-                    case UP:
-                    default:
-                        break;
-                }
-                break;
-            case EAST: // x+
-                clockwiseXZ();
-                switch (roll) {
-                    case RIGHT:
-                        clockwiseYZ();
-                        break;
-                    case DOWN:
-                        clockwiseYZ().clockwiseYZ();
-                        break;
-                    case LEFT:
-                        counterYZ();
-                        break;
-                    case UP:
-                    default:
-                        break;
-                }
-                break;
-            case SOUTH: // y-
-                counterYZ();
-                switch (roll) {
-                    case RIGHT:
-                        counterXZ();
-                        break;
-                    case DOWN:
-                        counterXZ().counterXZ();
-                        break;
-                    case LEFT:
-                        clockwiseXZ();
-                        break;
-                    case UP:
-                    default:
-                        break;
-                }
-                break;
-            case WEST: // x-
-                counterXZ();
-                switch (roll) {
-                    case RIGHT:
-                        counterYZ();
-                        break;
-                    case DOWN:
-                        counterYZ().counterYZ();
-                        break;
-                    case LEFT:
-                        clockwiseYZ();
-                        break;
-                    case UP:
-                    default:
-                        break;
-                }
-                break;
-            case TOP: // z+
-            default:
-                switch (roll) {
-                    case RIGHT:
-                        clockwiseXY();
-                    case DOWN:
-                        clockwiseXY().clockwiseXY();
-                    case LEFT:
-                        counterXY();
-                    case UP:
-                    default:
-                        break;
-                }
-                break;
-        }
-        return this;
-    }
-
-    public TurnModel size(Face face, Roll roll) {
-        turn(iModel.xSize(), iModel.ySize(), iModel.zSize(), face, roll);
+    public TurnModel size(Rotator.Face face, Rotator.Roll roll) {
+        rotator.turn(iModel.xSize(), iModel.ySize(), iModel.zSize(), face, roll);
         return this;
     }
 
     public TurnModel size() {
-        turn(iModel.xSize(), iModel.ySize(), iModel.zSize());
+        rotator.turn(iModel.xSize(), iModel.ySize(), iModel.zSize());
         return this;
     }
 
     @Override
     public int xSize() {
-        return size().x();
+        return Math.abs(size().x());
     }
 
     @Override
     public int ySize() {
-        return size().y();
+        return Math.abs(size().y());
     }
 
     @Override
     public int zSize() {
-        return size().z();
+        return Math.abs(size().z());
     }
 
     @Override
     public boolean outside(int x, int y, int z) {
         size();
-        return x < 0 || y < 0 || z < 0 || x >= x() || y >= y() || z >= z();
+        return x < 0 || y < 0 || z < 0 || x >= Math.abs(x()) || y >= Math.abs(y()) || z >= Math.abs(z());
     }
 
     @Override
@@ -270,7 +97,11 @@ public class TurnModel extends Fetch implements IModel {
     public byte bite(int x, int y, int z) {
         size();
         int xSize = x(), ySize = y(), zSize = z();
-        turn(x, y, z);
-        return deferByte(iModel.at(Loop.loop(x(), xSize), Loop.loop(y(), ySize), Loop.loop(z(), zSize)), x, y, z);
+        rotator.turn(x, y, z);
+        int xAns = x(), yAns = y(), zAns = z();
+        if (xSize < 0) xAns -= xSize;
+        if (ySize < 0) yAns -= ySize;
+        if (zSize < 0) zAns -= zSize;
+        return deferByte(iModel.at(xAns, yAns, zAns), x, y, z);
     }
 }
