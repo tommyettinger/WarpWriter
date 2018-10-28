@@ -262,6 +262,8 @@ public class TurnModel extends Fetch implements IModel {
     public byte bite(int x, int y, int z) {
         turn(x, y, z);
         int xAns = x(), yAns = y(), zAns = z();
-        return deferByte(iModel.at(Loop.loop(xAns, xSize()), Loop.loop(yAns, ySize()), Loop.loop(zAns, zSize())), x, y, z);
+        turn(iModel.xSize(), iModel.ySize(), iModel.zSize());
+        int xSize = x(), ySize = y(), zSize = z();
+        return deferByte(iModel.at(Loop.loop(xAns, xSize), Loop.loop(yAns, ySize), Loop.loop(zAns, zSize)), x, y, z);
     }
 }
