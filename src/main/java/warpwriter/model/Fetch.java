@@ -7,7 +7,7 @@ import squidpony.squidmath.Noise;
  * <p>
  * DO NOT override byte at(int x, int y, int z).
  * <p>
- * Instead, implementing classes are expected to use at least one of the following two options:
+ * Instead, child classes are expected to use at least one of the following two options:
  * <p>
  * 1. Override Fetch fetch(int x, int y, int z) to defer to another Fetch. This will be tried first, and if the result is null then bite(int x, int y, int z) will be called instead.
  * <p>
@@ -18,7 +18,7 @@ import squidpony.squidmath.Noise;
  * Failure to implement the required overrides may result in infinite recursion.
  * <p>
  * To defer to the next method in the chain, use getNextFetch()
- * Coordinates sent to the next Fetch in the chain be manipulated through xChain, yChain and zChain
+ * Coordinates sent to the next Fetch in the chain be manipulated through setChains, setXChain, setYChain and setZChain.
  *
  * @author Ben McLean
  */
@@ -96,11 +96,23 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D, IDecide {
 
     public int xChain, yChain, zChain;
 
-    public Fetch setChains(int x, int y, int z) {
+    public Fetch setXChain(int x) {
         xChain = x;
+        return this;
+    }
+
+    public Fetch setYChain(int y) {
         yChain = y;
+        return this;
+    }
+
+    public Fetch setZChain(int z) {
         zChain = z;
         return this;
+    }
+
+    public Fetch setChains(int x, int y, int z) {
+        return setXChain(x).setYChain(y).setZChain(z);
     }
 
     private Fetch nextFetch;

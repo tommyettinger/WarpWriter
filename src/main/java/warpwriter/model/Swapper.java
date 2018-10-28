@@ -12,7 +12,10 @@ public class Swapper extends Fetch {
         x00, y00, z00,
         Ox0, Oy0, Oz0,
         O0x, O0y, O0z,
-        O00
+        O00,
+        clockwiseXY, counterXY,
+        clockwiseYZ, counterYZ,
+        clockwiseXZ, counterXZ
     }
 
     public Swap swap;
@@ -126,6 +129,24 @@ public class Swapper extends Fetch {
                 break;
             case O00:
                 setChains(0, 0, 0);
+                break;
+            case clockwiseXY:
+                setChains(y * -1, x, z);
+                break;
+            case counterXY:
+                setChains(y, x * -1, z);
+                break;
+            case clockwiseYZ:
+                setChains(x, z * -1, y);
+                break;
+            case counterYZ:
+                setChains(x, z, y * -1);
+                break;
+            case clockwiseXZ:
+                setChains(z * -1, y, x);
+                break;
+            case counterXZ:
+                setChains(z, y, x * -1);
                 break;
         }
         return getNextFetch();
