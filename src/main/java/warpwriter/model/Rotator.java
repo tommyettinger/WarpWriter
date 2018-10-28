@@ -189,10 +189,13 @@ public class Rotator {
                 switch (roll) {
                     case RIGHT:
                         clockwiseXY();
+                        break;
                     case DOWN:
                         clockwiseXY().clockwiseXY();
+                        break;
                     case LEFT:
                         counterXY();
+                        break;
                     case UP:
                     default:
                         break;
