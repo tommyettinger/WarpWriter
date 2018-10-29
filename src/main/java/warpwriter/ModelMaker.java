@@ -238,7 +238,7 @@ public class ModelMaker {
     }
     public ModelMaker(long seed)
     {
-        rng = new GWTRNG(-seed);
+        rng = new GWTRNG(seed);
         InputStream is = this.getClass().getResourceAsStream("/ship.vox");
         ship = VoxIO.readVox(new LittleEndianDataInputStream(is));
         if(ship == null) ship = new byte[12][12][8];

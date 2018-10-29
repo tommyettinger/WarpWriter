@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import warpwriter.LittleEndianDataInputStream;
 import warpwriter.ModelRenderer;
 import warpwriter.VoxIO;
+import warpwriter.WorldMaker;
 import warpwriter.model.*;
 
 import java.io.FileInputStream;
@@ -34,6 +35,8 @@ public class TurnTest extends ApplicationAdapter {
     private Pixmap pix;
     private CompassDirection direction = CompassDirection.NORTH;
     private int angle = 3;
+    private final WorldMaker wm = new WorldMaker(123456789L, 0.8);
+    private ArrayModel world;
 
     @Override
     public void create() {
@@ -47,7 +50,7 @@ public class TurnTest extends ApplicationAdapter {
             e.printStackTrace();
             arr = new byte[80][80][60];
         }
-        turnModel = new TurnModel(new ArrayModel(arr), face, roll);
+        turnModel = new TurnModel(world = new ArrayModel(wm.makeWorld(80, -1, -1)), face, roll);
         offset = new OffsetModel(turnModel);
 
         reDraw();
@@ -56,6 +59,9 @@ public class TurnTest extends ApplicationAdapter {
             public boolean keyDown(int keycode) {
                 boolean needRedraw = true;
                 switch (keycode) {
+                    case Input.Keys.R:
+                        world.voxels = (wm.makeWorld(80, -1, -1));
+                        break;
                     case Input.Keys.SPACE:
                         offset.addZ(angle > 1 ? 1 : -1); // Up
                         break;
