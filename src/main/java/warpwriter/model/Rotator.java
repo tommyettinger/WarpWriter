@@ -117,7 +117,7 @@ public class Rotator {
                 }
                 break;
             case NORTH: // y+
-                clockwiseYZ();
+                counterYZ();
                 switch (roll) {
                     case RIGHT:
                         clockwiseXZ();
@@ -134,24 +134,24 @@ public class Rotator {
                 }
                 break;
             case EAST: // x+
-                clockwiseXZ();
+                clockwiseXZ().clockwiseXY();
                 switch (roll) {
                     case RIGHT:
                         clockwiseYZ();
                         break;
                     case DOWN:
-                        clockwiseYZ().clockwiseYZ();
                         break;
                     case LEFT:
                         counterYZ();
                         break;
                     case UP:
                     default:
+                        clockwiseYZ().clockwiseYZ();
                         break;
                 }
                 break;
             case SOUTH: // y-
-                counterYZ();
+                clockwiseYZ().counterXY().counterXY();
                 switch (roll) {
                     case RIGHT:
                         counterXZ();
@@ -168,19 +168,19 @@ public class Rotator {
                 }
                 break;
             case WEST: // x-
-                counterXZ();
+                counterXZ().counterXY();
                 switch (roll) {
                     case RIGHT:
                         counterYZ();
                         break;
                     case DOWN:
-                        counterYZ().counterYZ();
                         break;
                     case LEFT:
                         clockwiseYZ();
                         break;
                     case UP:
                     default:
+                        counterYZ().counterYZ();
                         break;
                 }
                 break;

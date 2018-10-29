@@ -75,7 +75,7 @@ public class TurnTest extends ApplicationAdapter {
                     case Input.Keys.NUMPAD_8:
                     case Input.Keys.NUM_8:
                         direction = CompassDirection.NORTH;
-                        face = Rotator.Face.TOP;
+                        face = Rotator.Face.NORTH;
                         break;
                     case Input.Keys.NUMPAD_6:
                     case Input.Keys.NUM_6:
@@ -85,7 +85,7 @@ public class TurnTest extends ApplicationAdapter {
                     case Input.Keys.NUMPAD_2:
                     case Input.Keys.NUM_2:
                         direction = CompassDirection.NORTH;
-                        face = Rotator.Face.BOTTOM;
+                        face = Rotator.Face.SOUTH;
                         break;
                     case Input.Keys.NUMPAD_4:
                     case Input.Keys.NUM_4:
@@ -103,7 +103,7 @@ public class TurnTest extends ApplicationAdapter {
                     case Input.Keys.NUMPAD_7:
                     case Input.Keys.NUM_7:
                         direction = CompassDirection.NORTH_WEST;
-                        face = Rotator.Face.TOP;
+                        face = Rotator.Face.NORTH;
                         break;
                     case Input.Keys.NUMPAD_9:
                     case Input.Keys.NUM_9:
@@ -113,7 +113,7 @@ public class TurnTest extends ApplicationAdapter {
                     case Input.Keys.NUMPAD_3:
                     case Input.Keys.NUM_3:
                         direction = CompassDirection.NORTH_WEST;
-                        face = Rotator.Face.BOTTOM;
+                        face = Rotator.Face.SOUTH;
                         break;
                     case Input.Keys.NUMPAD_1:
                     case Input.Keys.NUM_1:
