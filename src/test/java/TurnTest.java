@@ -27,7 +27,6 @@ public class TurnTest extends ApplicationAdapter {
     protected Viewport view;
     protected BitmapFont font;
     protected TurnModel turnModel;
-    protected OffsetModel offset;
     private Rotator.Face face = Rotator.Face.TOP;
     private Rotator.Roll roll = Rotator.Roll.UP;
     private ModelRenderer modelRenderer = new ModelRenderer(false, true);
@@ -51,7 +50,6 @@ public class TurnTest extends ApplicationAdapter {
             arr = new byte[80][80][60];
         }
         turnModel = new TurnModel(world = new ArrayModel(wm.makeWorld(80, -1, -1)), face, roll);
-        offset = new OffsetModel(turnModel);
 
         reDraw();
         Gdx.input.setInputProcessor(new InputAdapter() {
@@ -61,13 +59,6 @@ public class TurnTest extends ApplicationAdapter {
                 switch (keycode) {
                     case Input.Keys.R:
                         world.voxels = (wm.makeWorld(80, -1, -1));
-                        break;
-                    case Input.Keys.SPACE:
-                        offset.addZ(angle > 1 ? 1 : -1); // Up
-                        break;
-                    case Input.Keys.NUMPAD_5:
-                    case Input.Keys.NUM_5:
-                        offset.addZ(angle > 1 ? -1 : 1); // Down
                         break;
                     case Input.Keys.UP:
                         roll = Rotator.Roll.UP;
@@ -128,9 +119,6 @@ public class TurnTest extends ApplicationAdapter {
                     case Input.Keys.NUM_1:
                         direction = CompassDirection.NORTH_WEST;
                         face = Rotator.Face.WEST;
-                        break;
-                    case Input.Keys.ENTER:
-                        offset.set(0, 0, 0);
                         break;
                     case Input.Keys.NUM_0:
                         angle = 1;
