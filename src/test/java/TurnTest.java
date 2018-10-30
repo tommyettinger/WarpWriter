@@ -27,7 +27,7 @@ public class TurnTest extends ApplicationAdapter {
     protected Viewport view;
     protected BitmapFont font;
     protected TurnModel turnModel;
-    private Rotator.Face face = Rotator.Face.TOP;
+    private Rotator.Face face = Rotator.Face.NORTH;
     private Rotator.Roll roll = Rotator.Roll.UP;
     private ModelRenderer modelRenderer = new ModelRenderer(false, true);
     private Texture tex;
