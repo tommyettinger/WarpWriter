@@ -7,17 +7,17 @@ package warpwriter.model;
  */
 public class Rotator {
     /**
-     * I hereby declare that z+ is upwards (TOP) x+ is north and y+ is east
+     * I hereby declare that z+ is upwards x+ is north and y+ is east
      */
     public enum Face {
-        TOP, BOTTOM, NORTH, EAST, SOUTH, WEST
+        UP, DOWN, NORTH, EAST, SOUTH, WEST
     }
 
     /**
      * We are following right-hand rotation.
      */
     public enum Roll {
-        UP, RIGHT, DOWN, LEFT
+        NONE, RIGHT, UTURN, LEFT
     }
 
     protected Face face;
@@ -104,37 +104,17 @@ public class Rotator {
     public Rotator turn(int x, int y, int z, Face face, Roll roll) {
         set(x, y, z);
         switch (face) {
-            case BOTTOM: // z-
-                clockY();
-                switch (roll) {
-                    case RIGHT:
-                        counterZ();
-                        break;
-                    case DOWN:
-                        clockZ().clockZ();
-                        break;
-                    case LEFT:
-                        clockZ();
-                        break;
-                    case UP:
-                    default:
-                        break;
-                }
-                break;
             case NORTH: // x+
             default:
                 switch (roll) {
                     case RIGHT:
                         counterX();
                         break;
-                    case DOWN:
+                    case UTURN:
                         counterX().counterX();
                         break;
                     case LEFT:
                         clockX();
-                        break;
-                    case UP:
-                    default:
                         break;
                 }
                 break;
@@ -144,14 +124,11 @@ public class Rotator {
                     case RIGHT:
                         clockY();
                         break;
-                    case DOWN:
+                    case UTURN:
                         clockY().clockY();
                         break;
                     case LEFT:
                         counterY();
-                        break;
-                    case UP:
-                    default:
                         break;
                 }
                 break;
@@ -161,14 +138,11 @@ public class Rotator {
                     case RIGHT:
                         clockX();
                         break;
-                    case DOWN:
+                    case UTURN:
                         clockX().clockX();
                         break;
                     case LEFT:
                         counterX();
-                        break;
-                    case UP:
-                    default:
                         break;
                 }
                 break;
@@ -178,33 +152,42 @@ public class Rotator {
                     case RIGHT:
                         counterY();
                         break;
-                    case DOWN:
+                    case UTURN:
                         counterY().counterY();
                         break;
                     case LEFT:
                         clockY();
                         break;
-                    case UP:
-                    default:
-                        break;
                 }
                 break;
-            case TOP: // z+
+            case UP: // z+
                 counterY();
                 switch (roll) {
                     case RIGHT:
                         clockZ();
                         break;
-                    case DOWN:
+                    case UTURN:
                         counterZ().counterZ();
                         break;
                     case LEFT:
                         counterZ();
                         break;
-                    case UP:
-                    default:
+                }
+                break;
+            case DOWN: // z-
+                clockY();
+                switch (roll) {
+                    case RIGHT:
+                        counterZ();
+                        break;
+                    case UTURN:
+                        clockZ().clockZ();
+                        break;
+                    case LEFT:
+                        clockZ();
                         break;
                 }
+                break;
         }
         return this;
     }
