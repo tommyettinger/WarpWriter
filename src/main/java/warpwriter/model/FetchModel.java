@@ -39,8 +39,9 @@ public class FetchModel extends Fetch implements IModel {
 
     /**
      * Copies size
+     *
      * @param convenience An IModel with a size to copy
-     * @param fetch Actual fetch to use
+     * @param fetch       Actual fetch to use
      */
     public FetchModel(IModel convenience, Fetch fetch) {
         this(convenience.xSize(), convenience.ySize(), convenience.zSize(), fetch);
@@ -85,17 +86,17 @@ public class FetchModel extends Fetch implements IModel {
     }
 
     public FetchModel addX(int x) {
-        xSize+=x;
+        xSize += x;
         return this;
     }
 
     public FetchModel addY(int y) {
-        ySize+=y;
+        ySize += y;
         return this;
     }
 
     public FetchModel addZ(int z) {
-        zSize+=z;
+        zSize += z;
         return this;
     }
 

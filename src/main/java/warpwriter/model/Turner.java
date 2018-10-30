@@ -24,6 +24,10 @@ public class Turner {
     protected Roll roll;
     protected int x, y, z;
 
+    public Turner(Face face, Roll roll) {
+        set(face, roll);
+    }
+
     public int x() {
         return x;
     }
@@ -34,6 +38,14 @@ public class Turner {
 
     public int z() {
         return z;
+    }
+
+    public Face face() {
+        return face;
+    }
+
+    public Roll roll() {
+        return roll;
     }
 
     public Turner setX(int x) {
@@ -53,6 +65,10 @@ public class Turner {
 
     public Turner set(int x, int y, int z) {
         return setX(x).setY(y).setZ(z);
+    }
+
+    public Turner set(Face face, Roll roll) {
+        return set(face).set(roll);
     }
 
     public Turner set(Face face) {

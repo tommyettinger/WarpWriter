@@ -7,20 +7,15 @@ package warpwriter.model;
  */
 public class TurnModel extends Fetch implements IModel {
     protected IModel iModel;
-    protected Turner turner = new Turner();
+    protected Turner turner;
 
     public TurnModel set(IModel iModel) {
         this.iModel = iModel;
         return this;
     }
 
-    public TurnModel set(Turner.Face face) {
-        turner.set(face);
-        return this;
-    }
-
-    public TurnModel set(Turner.Roll roll) {
-        turner.set(roll);
+    public TurnModel set(Turner turner) {
+        this.turner = turner;
         return this;
     }
 
@@ -28,28 +23,12 @@ public class TurnModel extends Fetch implements IModel {
         return iModel;
     }
 
-    public Turner.Face getFace() {
-        return turner.face;
+    public Turner turner() {
+        return turner;
     }
 
-    public Turner.Roll getRoll() {
-        return turner.roll;
-    }
-
-    public int x() {
-        return turner.x();
-    }
-
-    public int y() {
-        return turner.y();
-    }
-
-    public int z() {
-        return turner.z();
-    }
-
-    public TurnModel(IModel iModel, Turner.Face face, Turner.Roll roll) {
-        set(iModel).set(face).set(roll);
+    public TurnModel(IModel iModel, Turner turner) {
+        set(iModel).set(turner);
     }
 
     public TurnModel size(Turner.Face face, Turner.Roll roll) {
@@ -58,28 +37,28 @@ public class TurnModel extends Fetch implements IModel {
     }
 
     public TurnModel size() {
-        return size(turner.face, turner.roll);
+        return size(turner().face(), turner().roll());
     }
 
     @Override
     public int xSize() {
-        return Math.abs(size().x());
+        return Math.abs(size().turner().x());
     }
 
     @Override
     public int ySize() {
-        return Math.abs(size().y());
+        return Math.abs(size().turner().y());
     }
 
     @Override
     public int zSize() {
-        return Math.abs(size().z());
+        return Math.abs(size().turner().z());
     }
 
     @Override
     public boolean outside(int x, int y, int z) {
         size();
-        return x < 0 || y < 0 || z < 0 || x >= Math.abs(x()) || y >= Math.abs(y()) || z >= Math.abs(z());
+        return x < 0 || y < 0 || z < 0 || x >= Math.abs(turner().x()) || y >= Math.abs(turner().y()) || z >= Math.abs(turner().z());
     }
 
     @Override
@@ -95,12 +74,12 @@ public class TurnModel extends Fetch implements IModel {
     @Override
     public byte bite(int x, int y, int z) {
         size();
-        int xSize = x(), ySize = y(), zSize = z();
-        turner.turn(x, y, z);
-        int xAns = x(), yAns = y(), zAns = z();
+        int xSize = turner().x(), ySize = turner().y(), zSize = turner().z();
+        turner().turn(x, y, z);
+        int xAns = turner().x(), yAns = turner().y(), zAns = turner().z();
         if (xSize < 0) xAns -= xSize;
         if (ySize < 0) yAns -= ySize;
         if (zSize < 0) zAns -= zSize;
-        return deferByte(iModel.at(xAns, yAns, zAns), x, y, z);
+        return deferByte(getModel().at(xAns, yAns, zAns), x, y, z);
     }
 }

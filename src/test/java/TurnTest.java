@@ -49,7 +49,7 @@ public class TurnTest extends ApplicationAdapter {
             e.printStackTrace();
             arr = new byte[80][80][60];
         }
-        turnModel = new TurnModel(world = new ArrayModel(wm.makeWorld(80, -1, -1)), face, roll);
+        turnModel = new TurnModel(world = new ArrayModel(wm.makeWorld(80, -1, -1)), new Turner(face, roll));
 
         reDraw();
         Gdx.input.setInputProcessor(new InputAdapter() {
@@ -130,7 +130,7 @@ public class TurnTest extends ApplicationAdapter {
                         angle = 3;
                         break;
                     case Input.Keys.Q:
-                    case Input.Keys.ESCAPE: 
+                    case Input.Keys.ESCAPE:
                         Gdx.app.exit();
                         break;
                     default:
@@ -145,7 +145,7 @@ public class TurnTest extends ApplicationAdapter {
 
     public void reDraw() {
         if (pix != null) pix.dispose();
-        turnModel.set(face).set(roll);
+        turnModel.turner().set(face, roll);
         pix = modelRenderer.renderToPixmap(turnModel, angle, direction);
         if (tex != null) tex.dispose();
         tex = new Texture(pix);
