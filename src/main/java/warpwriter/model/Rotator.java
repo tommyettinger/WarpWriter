@@ -7,7 +7,7 @@ package warpwriter.model;
  */
 public class Rotator {
     /**
-     * I hereby declare that z+ is upwards x+ is north and y+ is east
+     * I hereby declare that z+ is upwards, x+ is north and y+ is east
      */
     public enum Face {
         UP, DOWN, NORTH, EAST, SOUTH, WEST
