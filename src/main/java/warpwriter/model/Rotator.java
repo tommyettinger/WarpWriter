@@ -106,6 +106,20 @@ public class Rotator {
         switch (face) {
             case BOTTOM: // z-
                 clockY();
+                switch (roll) {
+                    case RIGHT:
+                        counterZ();
+                        break;
+                    case DOWN:
+                        clockZ().clockZ();
+                        break;
+                    case LEFT:
+                        clockZ();
+                        break;
+                    case UP:
+                    default:
+                        break;
+                }
                 break;
             case NORTH: // x+
             default:
@@ -177,6 +191,20 @@ public class Rotator {
                 break;
             case TOP: // z+
                 counterY();
+                switch (roll) {
+                    case RIGHT:
+                        clockZ();
+                        break;
+                    case DOWN:
+                        counterZ().counterZ();
+                        break;
+                    case LEFT:
+                        counterZ();
+                        break;
+                    case UP:
+                    default:
+                        break;
+                }
         }
         return this;
     }
