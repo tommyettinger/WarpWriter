@@ -7,13 +7,18 @@ package warpwriter.model;
  */
 public class Rotator {
     /**
-     * I hereby declare that z+ is upwards (TOP) y+ is north and x+ is east.
+     * I hereby declare that z+ is upwards, x+ is north and y+ is east
      */
     public enum Face {
-        TOP, BOTTOM, NORTH, EAST, SOUTH, WEST
+        UP, DOWN, NORTH, EAST, SOUTH, WEST
     }
 
-    public enum Roll {UP, RIGHT, DOWN, LEFT}
+    /**
+     * We are following right-hand rotation.
+     */
+    public enum Roll {
+        NONE, RIGHT, UTURN, LEFT
+    }
 
     protected Face face;
     protected Roll roll;
@@ -60,27 +65,27 @@ public class Rotator {
         return this;
     }
 
-    public Rotator clockwiseXY() {
+    public Rotator clockZ() {
         return set(y * -1, x, z);
     }
 
-    public Rotator counterXY() {
+    public Rotator counterZ() {
         return set(y, x * -1, z);
     }
 
-    public Rotator clockwiseYZ() {
+    public Rotator clockX() {
         return set(x, z * -1, y);
     }
 
-    public Rotator counterYZ() {
+    public Rotator counterX() {
         return set(x, z, y * -1);
     }
 
-    public Rotator clockwiseXZ() {
+    public Rotator clockY() {
         return set(z * -1, y, x);
     }
 
-    public Rotator counterXZ() {
+    public Rotator counterY() {
         return set(z, y, x * -1);
     }
 
@@ -99,105 +104,87 @@ public class Rotator {
     public Rotator turn(int x, int y, int z, Face face, Roll roll) {
         set(x, y, z);
         switch (face) {
-            case BOTTOM: // z-
-                clockwiseYZ().clockwiseYZ();
-                switch (roll) {
-                    case RIGHT:
-                        counterXY();
-                        break;
-                    case DOWN:
-                        break;
-                    case LEFT:
-                        clockwiseXY();
-                        break;
-                    case UP:
-                    default:
-                        counterXY().counterXY();
-                        break;
-                }
-                break;
-            case NORTH: // y+
-                clockwiseYZ();
-                switch (roll) {
-                    case RIGHT:
-                        clockwiseXZ();
-                        break;
-                    case DOWN:
-                        clockwiseXZ().clockwiseXZ();
-                        break;
-                    case LEFT:
-                        counterXZ();
-                        break;
-                    case UP:
-                    default:
-                        break;
-                }
-                break;
-            case EAST: // x+
-                clockwiseXZ();
-                switch (roll) {
-                    case RIGHT:
-                        clockwiseYZ();
-                        break;
-                    case DOWN:
-                        clockwiseYZ().clockwiseYZ();
-                        break;
-                    case LEFT:
-                        counterYZ();
-                        break;
-                    case UP:
-                    default:
-                        break;
-                }
-                break;
-            case SOUTH: // y-
-                counterYZ();
-                switch (roll) {
-                    case RIGHT:
-                        counterXZ();
-                        break;
-                    case DOWN:
-                        counterXZ().counterXZ();
-                        break;
-                    case LEFT:
-                        clockwiseXZ();
-                        break;
-                    case UP:
-                    default:
-                        break;
-                }
-                break;
-            case WEST: // x-
-                counterXZ();
-                switch (roll) {
-                    case RIGHT:
-                        counterYZ();
-                        break;
-                    case DOWN:
-                        counterYZ().counterYZ();
-                        break;
-                    case LEFT:
-                        clockwiseYZ();
-                        break;
-                    case UP:
-                    default:
-                        break;
-                }
-                break;
-            case TOP: // z+
+            case NORTH: // x+
             default:
                 switch (roll) {
                     case RIGHT:
-                        clockwiseXY();
+                        counterX();
                         break;
-                    case DOWN:
-                        clockwiseXY().clockwiseXY();
+                    case UTURN:
+                        counterX().counterX();
                         break;
                     case LEFT:
-                        counterXY();
+                        clockX();
                         break;
-                    case UP:
-                    default:
+                }
+                break;
+            case EAST: // y+
+                clockZ();
+                switch (roll) {
+                    case RIGHT:
+                        clockY();
+                        break;
+                    case UTURN:
+                        clockY().clockY();
+                        break;
+                    case LEFT:
+                        counterY();
+                        break;
+                }
+                break;
+            case SOUTH: // x-
+                clockZ().clockZ();
+                switch (roll) {
+                    case RIGHT:
+                        clockX();
+                        break;
+                    case UTURN:
+                        clockX().clockX();
+                        break;
+                    case LEFT:
+                        counterX();
+                        break;
+                }
+                break;
+            case WEST: // y-
+                counterZ();
+                switch (roll) {
+                    case RIGHT:
+                        counterY();
+                        break;
+                    case UTURN:
+                        counterY().counterY();
+                        break;
+                    case LEFT:
+                        clockY();
+                        break;
+                }
+                break;
+            case UP: // z+
+                counterY();
+                switch (roll) {
+                    case RIGHT:
+                        clockZ();
+                        break;
+                    case UTURN:
+                        counterZ().counterZ();
+                        break;
+                    case LEFT:
+                        counterZ();
+                        break;
+                }
+                break;
+            case DOWN: // z-
+                clockY();
+                switch (roll) {
+                    case RIGHT:
+                        counterZ();
+                        break;
+                    case UTURN:
+                        clockZ().clockZ();
+                        break;
+                    case LEFT:
+                        clockZ();
                         break;
                 }
                 break;

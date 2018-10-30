@@ -27,13 +27,13 @@ public class TurnTest extends ApplicationAdapter {
     protected Viewport view;
     protected BitmapFont font;
     protected TurnModel turnModel;
-    private Rotator.Face face = Rotator.Face.TOP;
-    private Rotator.Roll roll = Rotator.Roll.UP;
+    private Rotator.Face face = Rotator.Face.NORTH;
+    private Rotator.Roll roll = Rotator.Roll.NONE;
     private ModelRenderer modelRenderer = new ModelRenderer(false, true);
     private Texture tex;
     private Pixmap pix;
     private CompassDirection direction = CompassDirection.NORTH;
-    private int angle = 3;
+    private int angle = 2;
     private final WorldMaker wm = new WorldMaker(123456789L, 0.8);
     private ArrayModel world;
 
@@ -61,10 +61,10 @@ public class TurnTest extends ApplicationAdapter {
                         world.voxels = (wm.makeWorld(80, -1, -1));
                         break;
                     case Input.Keys.UP:
-                        roll = Rotator.Roll.UP;
+                        roll = Rotator.Roll.NONE;
                         break;
                     case Input.Keys.DOWN:
-                        roll = Rotator.Roll.DOWN;
+                        roll = Rotator.Roll.UTURN;
                         break;
                     case Input.Keys.RIGHT:
                         roll = Rotator.Roll.RIGHT;
@@ -75,7 +75,7 @@ public class TurnTest extends ApplicationAdapter {
                     case Input.Keys.NUMPAD_8:
                     case Input.Keys.NUM_8:
                         direction = CompassDirection.NORTH;
-                        face = Rotator.Face.TOP;
+                        face = Rotator.Face.NORTH;
                         break;
                     case Input.Keys.NUMPAD_6:
                     case Input.Keys.NUM_6:
@@ -85,25 +85,25 @@ public class TurnTest extends ApplicationAdapter {
                     case Input.Keys.NUMPAD_2:
                     case Input.Keys.NUM_2:
                         direction = CompassDirection.NORTH;
-                        face = Rotator.Face.BOTTOM;
+                        face = Rotator.Face.SOUTH;
                         break;
                     case Input.Keys.NUMPAD_4:
                     case Input.Keys.NUM_4:
                         direction = CompassDirection.NORTH;
                         face = Rotator.Face.WEST;
                         break;
-                    case Input.Keys.SEMICOLON:
-                        direction = CompassDirection.NORTH;
-                        face = Rotator.Face.NORTH;
-                        break;
                     case Input.Keys.SLASH:
                         direction = CompassDirection.NORTH;
-                        face = Rotator.Face.SOUTH;
+                        face = Rotator.Face.UP;
+                        break;
+                    case Input.Keys.STAR:
+                        direction = CompassDirection.NORTH;
+                        face = Rotator.Face.DOWN;
                         break;
                     case Input.Keys.NUMPAD_7:
                     case Input.Keys.NUM_7:
                         direction = CompassDirection.NORTH_WEST;
-                        face = Rotator.Face.TOP;
+                        face = Rotator.Face.NORTH;
                         break;
                     case Input.Keys.NUMPAD_9:
                     case Input.Keys.NUM_9:
@@ -113,7 +113,7 @@ public class TurnTest extends ApplicationAdapter {
                     case Input.Keys.NUMPAD_3:
                     case Input.Keys.NUM_3:
                         direction = CompassDirection.NORTH_WEST;
-                        face = Rotator.Face.BOTTOM;
+                        face = Rotator.Face.SOUTH;
                         break;
                     case Input.Keys.NUMPAD_1:
                     case Input.Keys.NUM_1:
