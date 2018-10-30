@@ -102,23 +102,23 @@ public class TurnTest extends ApplicationAdapter {
                         break;
                     case Input.Keys.NUMPAD_7:
                     case Input.Keys.NUM_7:
-                        direction = CompassDirection.NORTH_WEST;
-                        face = Turner.Face.NORTH;
+                        direction = CompassDirection.NORTH_EAST;
+                        face = Turner.Face.WEST;
                         break;
                     case Input.Keys.NUMPAD_9:
                     case Input.Keys.NUM_9:
-                        direction = CompassDirection.NORTH_WEST;
-                        face = Turner.Face.EAST;
+                        direction = CompassDirection.NORTH_EAST;
+                        face = Turner.Face.NORTH;
                         break;
                     case Input.Keys.NUMPAD_3:
                     case Input.Keys.NUM_3:
-                        direction = CompassDirection.NORTH_WEST;
-                        face = Turner.Face.SOUTH;
+                        direction = CompassDirection.NORTH_EAST;
+                        face = Turner.Face.EAST;
                         break;
                     case Input.Keys.NUMPAD_1:
                     case Input.Keys.NUM_1:
-                        direction = CompassDirection.NORTH_WEST;
-                        face = Turner.Face.WEST;
+                        direction = CompassDirection.NORTH_EAST;
+                        face = Turner.Face.SOUTH;
                         break;
                     case Input.Keys.NUM_0:
                         angle = 1;
