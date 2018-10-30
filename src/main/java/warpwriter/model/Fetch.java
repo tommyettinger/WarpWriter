@@ -259,6 +259,6 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D, IDecide {
     }
 
     public Fetch turnFetch(Turner turner) {
-        return turnFetch(0, 0, 0, turner);
+        return add(new TurnFetch(turner));
     }
 }
