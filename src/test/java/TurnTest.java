@@ -27,8 +27,6 @@ public class TurnTest extends ApplicationAdapter {
     protected Viewport view;
     protected BitmapFont font;
     protected TurnModel turnModel;
-    private Turner.Face face = Turner.Face.NORTH;
-    private Turner.Roll roll = Turner.Roll.NONE;
     private ModelRenderer modelRenderer = new ModelRenderer(false, true);
     private Texture tex;
     private Pixmap pix;
@@ -49,7 +47,7 @@ public class TurnTest extends ApplicationAdapter {
             e.printStackTrace();
             arr = new byte[80][80][60];
         }
-        turnModel = new TurnModel(world = new ArrayModel(wm.makeWorld(80, -1, -1)), new Turner(face, roll));
+        turnModel = new TurnModel(world = new ArrayModel(wm.makeWorld(80, -1, -1)), new Turner());
 
         reDraw();
         Gdx.input.setInputProcessor(new InputAdapter() {
@@ -61,64 +59,64 @@ public class TurnTest extends ApplicationAdapter {
                         world.voxels = (wm.makeWorld(80, -1, -1));
                         break;
                     case Input.Keys.UP:
-                        roll = Turner.Roll.NONE;
+                        turnModel.turner().set(Turner.Roll.NONE);
                         break;
                     case Input.Keys.DOWN:
-                        roll = Turner.Roll.UTURN;
+                        turnModel.turner().set(Turner.Roll.UTURN);
                         break;
                     case Input.Keys.RIGHT:
-                        roll = Turner.Roll.RIGHT;
+                        turnModel.turner().set(Turner.Roll.RIGHT);
                         break;
                     case Input.Keys.LEFT:
-                        roll = Turner.Roll.LEFT;
+                        turnModel.turner().set(Turner.Roll.LEFT);
                         break;
                     case Input.Keys.NUMPAD_8:
                     case Input.Keys.NUM_8:
                         direction = CompassDirection.NORTH;
-                        face = Turner.Face.NORTH;
+                        turnModel.turner().set(Turner.Face.NORTH);
                         break;
                     case Input.Keys.NUMPAD_6:
                     case Input.Keys.NUM_6:
                         direction = CompassDirection.NORTH;
-                        face = Turner.Face.EAST;
+                        turnModel.turner().set(Turner.Face.EAST);
                         break;
                     case Input.Keys.NUMPAD_2:
                     case Input.Keys.NUM_2:
                         direction = CompassDirection.NORTH;
-                        face = Turner.Face.SOUTH;
+                        turnModel.turner().set(Turner.Face.SOUTH);
                         break;
                     case Input.Keys.NUMPAD_4:
                     case Input.Keys.NUM_4:
                         direction = CompassDirection.NORTH;
-                        face = Turner.Face.WEST;
+                        turnModel.turner().set(Turner.Face.WEST);
                         break;
                     case Input.Keys.SLASH:
                         direction = CompassDirection.NORTH;
-                        face = Turner.Face.UP;
+                        turnModel.turner().set(Turner.Face.UP);
                         break;
                     case Input.Keys.STAR:
                         direction = CompassDirection.NORTH;
-                        face = Turner.Face.DOWN;
+                        turnModel.turner().set(Turner.Face.DOWN);
                         break;
                     case Input.Keys.NUMPAD_7:
                     case Input.Keys.NUM_7:
                         direction = CompassDirection.NORTH_EAST;
-                        face = Turner.Face.WEST;
+                        turnModel.turner().set(Turner.Face.WEST);
                         break;
                     case Input.Keys.NUMPAD_9:
                     case Input.Keys.NUM_9:
                         direction = CompassDirection.NORTH_EAST;
-                        face = Turner.Face.NORTH;
+                        turnModel.turner().set(Turner.Face.NORTH);
                         break;
                     case Input.Keys.NUMPAD_3:
                     case Input.Keys.NUM_3:
                         direction = CompassDirection.NORTH_EAST;
-                        face = Turner.Face.EAST;
+                        turnModel.turner().set(Turner.Face.EAST);
                         break;
                     case Input.Keys.NUMPAD_1:
                     case Input.Keys.NUM_1:
                         direction = CompassDirection.NORTH_EAST;
-                        face = Turner.Face.SOUTH;
+                        turnModel.turner().set(Turner.Face.SOUTH);
                         break;
                     case Input.Keys.NUM_0:
                         angle = 1;
@@ -143,12 +141,12 @@ public class TurnTest extends ApplicationAdapter {
         });
     }
 
-    public void reDraw() {
+    public TurnTest reDraw() {
         if (pix != null) pix.dispose();
-        turnModel.turner().set(face, roll);
         pix = modelRenderer.renderToPixmap(turnModel, angle, direction);
         if (tex != null) tex.dispose();
         tex = new Texture(pix);
+        return this;
     }
 
     @Override
@@ -159,8 +157,8 @@ public class TurnTest extends ApplicationAdapter {
         view.update(width, height);
         batch.setProjectionMatrix(view.getCamera().combined);
         batch.begin();
-        font.draw(batch, face.toString(), 200, 20);
-        font.draw(batch, roll.toString(), 200, 40);
+        font.draw(batch, turnModel.turner().face().toString(), 200, 20);
+        font.draw(batch, turnModel.turner().roll().toString(), 200, 40);
         batch.draw(tex, 0, 0);
         batch.end();
     }
