@@ -109,33 +109,74 @@ public class Rotator {
                 break;
             case NORTH: // x+
             default:
+                switch (roll) {
+                    case RIGHT:
+                        counterX();
+                        break;
+                    case DOWN:
+                        counterX().counterX();
+                        break;
+                    case LEFT:
+                        clockX();
+                        break;
+                    case UP:
+                    default:
+                        break;
+                }
                 break;
             case EAST: // y+
                 clockZ();
+                switch (roll) {
+                    case RIGHT:
+                        clockY();
+                        break;
+                    case DOWN:
+                        clockY().clockY();
+                        break;
+                    case LEFT:
+                        counterY();
+                        break;
+                    case UP:
+                    default:
+                        break;
+                }
                 break;
             case SOUTH: // x-
                 clockZ().clockZ();
+                switch (roll) {
+                    case RIGHT:
+                        clockX();
+                        break;
+                    case DOWN:
+                        clockX().clockX();
+                        break;
+                    case LEFT:
+                        counterX();
+                        break;
+                    case UP:
+                    default:
+                        break;
+                }
                 break;
             case WEST: // y-
                 counterZ();
+                switch (roll) {
+                    case RIGHT:
+                        counterY();
+                        break;
+                    case DOWN:
+                        counterY().counterY();
+                        break;
+                    case LEFT:
+                        clockY();
+                        break;
+                    case UP:
+                    default:
+                        break;
+                }
                 break;
             case TOP: // z+
                 counterY();
-        }
-
-        switch (roll) {
-            case RIGHT:
-                clockZ();
-                break;
-            case DOWN:
-                clockZ().clockZ();
-                break;
-            case LEFT:
-                counterZ();
-                break;
-            case UP:
-            default:
-                break;
         }
         return this;
     }

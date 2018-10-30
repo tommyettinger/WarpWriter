@@ -33,7 +33,7 @@ public class TurnTest extends ApplicationAdapter {
     private Texture tex;
     private Pixmap pix;
     private CompassDirection direction = CompassDirection.NORTH;
-    private int angle = 3;
+    private int angle = 2;
     private final WorldMaker wm = new WorldMaker(123456789L, 0.8);
     private ArrayModel world;
 
