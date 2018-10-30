@@ -7,20 +7,20 @@ package warpwriter.model;
  */
 public class TurnModel extends Fetch implements IModel {
     protected IModel iModel;
-    protected Rotator rotator = new Rotator();
+    protected Turner turner = new Turner();
 
     public TurnModel set(IModel iModel) {
         this.iModel = iModel;
         return this;
     }
 
-    public TurnModel set(Rotator.Face face) {
-        rotator.set(face);
+    public TurnModel set(Turner.Face face) {
+        turner.set(face);
         return this;
     }
 
-    public TurnModel set(Rotator.Roll roll) {
-        rotator.set(roll);
+    public TurnModel set(Turner.Roll roll) {
+        turner.set(roll);
         return this;
     }
 
@@ -28,37 +28,37 @@ public class TurnModel extends Fetch implements IModel {
         return iModel;
     }
 
-    public Rotator.Face getFace() {
-        return rotator.face;
+    public Turner.Face getFace() {
+        return turner.face;
     }
 
-    public Rotator.Roll getRoll() {
-        return rotator.roll;
+    public Turner.Roll getRoll() {
+        return turner.roll;
     }
 
     public int x() {
-        return rotator.x();
+        return turner.x();
     }
 
     public int y() {
-        return rotator.y();
+        return turner.y();
     }
 
     public int z() {
-        return rotator.z();
+        return turner.z();
     }
 
-    public TurnModel(IModel iModel, Rotator.Face face, Rotator.Roll roll) {
+    public TurnModel(IModel iModel, Turner.Face face, Turner.Roll roll) {
         set(iModel).set(face).set(roll);
     }
 
-    public TurnModel size(Rotator.Face face, Rotator.Roll roll) {
-        rotator.turn(iModel.xSize(), iModel.ySize(), iModel.zSize(), face, roll);
+    public TurnModel size(Turner.Face face, Turner.Roll roll) {
+        turner.turn(iModel.xSize(), iModel.ySize(), iModel.zSize(), face, roll);
         return this;
     }
 
     public TurnModel size() {
-        return size(rotator.face, rotator.roll);
+        return size(turner.face, turner.roll);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class TurnModel extends Fetch implements IModel {
     public byte bite(int x, int y, int z) {
         size();
         int xSize = x(), ySize = y(), zSize = z();
-        rotator.turn(x, y, z);
+        turner.turn(x, y, z);
         int xAns = x(), yAns = y(), zAns = z();
         if (xSize < 0) xAns -= xSize;
         if (ySize < 0) yAns -= ySize;

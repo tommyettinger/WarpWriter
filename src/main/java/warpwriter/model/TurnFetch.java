@@ -6,32 +6,32 @@ package warpwriter.model;
  * @author Ben McLean
  */
 public class TurnFetch extends FetchModel {
-    protected Rotator rotator = new Rotator();
+    protected Turner turner = new Turner();
 
-    public TurnFetch(Rotator.Face face, Rotator.Roll roll) {
+    public TurnFetch(Turner.Face face, Turner.Roll roll) {
         super(0, 0, 0);
         set(face).set(roll);
     }
 
-    public TurnFetch(int x, int y, int z, Rotator.Face face, Rotator.Roll roll) {
+    public TurnFetch(int x, int y, int z, Turner.Face face, Turner.Roll roll) {
         super(x, y, z);
         set(face).set(roll);
     }
 
-    public TurnFetch set(Rotator.Face face) {
-        rotator.set(face);
+    public TurnFetch set(Turner.Face face) {
+        turner.set(face);
         return this;
     }
 
-    public TurnFetch set(Rotator.Roll roll) {
-        rotator.set(roll);
+    public TurnFetch set(Turner.Roll roll) {
+        turner.set(roll);
         return this;
     }
 
     @Override
     public Fetch fetch(int x, int y, int z) {
-        rotator.turn(x + xSize(), y + ySize(), z + zSize());
-        setChains(rotator.x() - xSize(), rotator.y() - ySize(), rotator.z() - zSize());
+        turner.turn(x + xSize(), y + ySize(), z + zSize());
+        setChains(turner.x() - xSize(), turner.y() - ySize(), turner.z() - zSize());
         return getNextFetch();
     }
 }
