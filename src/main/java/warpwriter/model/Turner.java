@@ -178,6 +178,7 @@ public class Turner {
     public Turner counterY() {
         switch (face) {
             case NORTH: // x+
+            default:
                 return set(Face.UP);
             case EAST: // y+
                 return set(roll.clock());
@@ -190,7 +191,6 @@ public class Turner {
             case DOWN: // z-
                 return set(Face.NORTH, roll.uturn());
         }
-        return this;
     }
 
     public Turner clockZ() {
