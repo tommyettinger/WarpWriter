@@ -5,7 +5,7 @@ package warpwriter.model;
  *
  * @author Ben McLean
  */
-public class Rotator {
+public class Turner {
     /**
      * I hereby declare that z+ is upwards, x+ is north and y+ is east
      */
@@ -36,72 +36,72 @@ public class Rotator {
         return z;
     }
 
-    public Rotator setX(int x) {
+    public Turner setX(int x) {
         this.x = x;
         return this;
     }
 
-    public Rotator setY(int y) {
+    public Turner setY(int y) {
         this.y = y;
         return this;
     }
 
-    public Rotator setZ(int z) {
+    public Turner setZ(int z) {
         this.z = z;
         return this;
     }
 
-    public Rotator set(int x, int y, int z) {
+    public Turner set(int x, int y, int z) {
         return setX(x).setY(y).setZ(z);
     }
 
-    public Rotator set(Face face) {
+    public Turner set(Face face) {
         this.face = face;
         return this;
     }
 
-    public Rotator set(Roll roll) {
+    public Turner set(Roll roll) {
         this.roll = roll;
         return this;
     }
 
-    public Rotator clockZ() {
+    public Turner clockZ() {
         return set(y * -1, x, z);
     }
 
-    public Rotator counterZ() {
+    public Turner counterZ() {
         return set(y, x * -1, z);
     }
 
-    public Rotator clockX() {
+    public Turner clockX() {
         return set(x, z * -1, y);
     }
 
-    public Rotator counterX() {
+    public Turner counterX() {
         return set(x, z, y * -1);
     }
 
-    public Rotator clockY() {
+    public Turner clockY() {
         return set(z * -1, y, x);
     }
 
-    public Rotator counterY() {
+    public Turner counterY() {
         return set(z, y, x * -1);
     }
 
-    public Rotator turn() {
+    public Turner turn() {
         return turn(x, y, z);
     }
 
-    public Rotator turn(Face face, Roll roll) {
+    public Turner turn(Face face, Roll roll) {
         return turn(x, y, z, face, roll);
     }
 
-    public Rotator turn(int x, int y, int z) {
+    public Turner turn(int x, int y, int z) {
         return turn(x, y, z, face, roll);
     }
 
-    public Rotator turn(int x, int y, int z, Face face, Roll roll) {
+    public Turner turn(int x, int y, int z, Face face, Roll roll) {
         set(x, y, z);
         switch (face) {
             case NORTH: // x+

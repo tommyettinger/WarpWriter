@@ -27,8 +27,8 @@ public class TurnTest extends ApplicationAdapter {
     protected Viewport view;
     protected BitmapFont font;
     protected TurnModel turnModel;
-    private Rotator.Face face = Rotator.Face.NORTH;
-    private Rotator.Roll roll = Rotator.Roll.NONE;
+    private Turner.Face face = Turner.Face.NORTH;
+    private Turner.Roll roll = Turner.Roll.NONE;
     private ModelRenderer modelRenderer = new ModelRenderer(false, true);
     private Texture tex;
     private Pixmap pix;
@@ -61,64 +61,64 @@ public class TurnTest extends ApplicationAdapter {
                         world.voxels = (wm.makeWorld(80, -1, -1));
                         break;
                     case Input.Keys.UP:
-                        roll = Rotator.Roll.NONE;
+                        roll = Turner.Roll.NONE;
                         break;
                     case Input.Keys.DOWN:
-                        roll = Rotator.Roll.UTURN;
+                        roll = Turner.Roll.UTURN;
                         break;
                     case Input.Keys.RIGHT:
-                        roll = Rotator.Roll.RIGHT;
+                        roll = Turner.Roll.RIGHT;
                         break;
                     case Input.Keys.LEFT:
-                        roll = Rotator.Roll.LEFT;
+                        roll = Turner.Roll.LEFT;
                         break;
                     case Input.Keys.NUMPAD_8:
                     case Input.Keys.NUM_8:
                         direction = CompassDirection.NORTH;
-                        face = Rotator.Face.NORTH;
+                        face = Turner.Face.NORTH;
                         break;
                     case Input.Keys.NUMPAD_6:
                     case Input.Keys.NUM_6:
                         direction = CompassDirection.NORTH;
-                        face = Rotator.Face.EAST;
+                        face = Turner.Face.EAST;
                         break;
                     case Input.Keys.NUMPAD_2:
                     case Input.Keys.NUM_2:
                         direction = CompassDirection.NORTH;
-                        face = Rotator.Face.SOUTH;
+                        face = Turner.Face.SOUTH;
                         break;
                     case Input.Keys.NUMPAD_4:
                     case Input.Keys.NUM_4:
                         direction = CompassDirection.NORTH;
-                        face = Rotator.Face.WEST;
+                        face = Turner.Face.WEST;
                         break;
                     case Input.Keys.SLASH:
                         direction = CompassDirection.NORTH;
-                        face = Rotator.Face.UP;
+                        face = Turner.Face.UP;
                         break;
                     case Input.Keys.STAR:
                         direction = CompassDirection.NORTH;
-                        face = Rotator.Face.DOWN;
+                        face = Turner.Face.DOWN;
                         break;
                     case Input.Keys.NUMPAD_7:
                     case Input.Keys.NUM_7:
                         direction = CompassDirection.NORTH_WEST;
-                        face = Rotator.Face.NORTH;
+                        face = Turner.Face.NORTH;
                         break;
                     case Input.Keys.NUMPAD_9:
                     case Input.Keys.NUM_9:
                         direction = CompassDirection.NORTH_WEST;
-                        face = Rotator.Face.EAST;
+                        face = Turner.Face.EAST;
                         break;
                     case Input.Keys.NUMPAD_3:
                     case Input.Keys.NUM_3:
                         direction = CompassDirection.NORTH_WEST;
-                        face = Rotator.Face.SOUTH;
+                        face = Turner.Face.SOUTH;
                         break;
                     case Input.Keys.NUMPAD_1:
                     case Input.Keys.NUM_1:
                         direction = CompassDirection.NORTH_WEST;
-                        face = Rotator.Face.WEST;
+                        face = Turner.Face.WEST;
                         break;
                     case Input.Keys.NUM_0:
                         angle = 1;
