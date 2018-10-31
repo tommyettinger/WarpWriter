@@ -135,9 +135,9 @@ public class Turner {
             case SOUTH: // x-
                 return set(roll.counter());
             case WEST: // y-
-                return set(Face.UP, roll.clock());
+                return set(Face.UP, roll.counter());
             case UP: // z+
-                return set(Face.EAST, roll.clock());
+                return set(Face.EAST, roll.counter());
             case DOWN: // z-
                 return set(Face.WEST, roll.counter());
         }
@@ -153,9 +153,9 @@ public class Turner {
             case SOUTH: // x-
                 return set(roll.clock());
             case WEST: // y-
-                return set(Face.DOWN, roll.counter());
+                return set(Face.DOWN, roll.clock());
             case UP: // z+
-                return set(Face.WEST, roll.counter());
+                return set(Face.WEST, roll.clock());
             case DOWN: // z-
                 return set(Face.EAST, roll.clock());
         }
