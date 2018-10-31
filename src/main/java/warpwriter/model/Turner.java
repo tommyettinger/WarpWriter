@@ -422,6 +422,10 @@ public class Turner {
         return turn(x, y, z, face, roll);
     }
 
+    public Turner turn(int x, int y, int z, int centerX, int centerY, int centerZ) {
+        return turn(x, y, z, face, roll, centerX, centerY, centerZ);
+    }
+
     public Turner turn(int x, int y, int z, Face face, Roll roll) {
         return turn(x, y, z, face, roll, centerX, centerY, centerZ);
     }
