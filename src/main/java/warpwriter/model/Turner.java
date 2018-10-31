@@ -169,11 +169,11 @@ public class Turner {
             case EAST: // y+
                 return set(roll.counter());
             case SOUTH: // x-
-                return set(Face.UP);
+                return set(Face.UP, roll.uturn());
             case WEST: // y-
                 return set(roll.clock());
             case UP: // z+
-                return set(Face.NORTH, roll.uturn());
+                return set(Face.NORTH);
             case DOWN: // z-
                 return set(Face.SOUTH, roll.uturn());
         }
@@ -187,13 +187,13 @@ public class Turner {
             case EAST: // y+
                 return set(roll.clock());
             case SOUTH: // x-
-                return set(Face.DOWN);
+                return set(Face.DOWN, roll.uturn());
             case WEST: // y-
                 return set(roll.counter());
             case UP: // z+
                 return set(Face.SOUTH, roll.uturn());
             case DOWN: // z-
-                return set(Face.NORTH, roll.uturn());
+                return set(Face.NORTH);
         }
     }
 

@@ -127,7 +127,24 @@ public class TurnTest extends ApplicationAdapter {
                     case Input.Keys.EQUALS:
                         angle = 3;
                         break;
-                    case Input.Keys.Q:
+                    case Input.Keys.U:
+                        turnModel.turner().clockX();
+                        break;
+                    case Input.Keys.I:
+                        turnModel.turner().clockY();
+                        break;
+                    case Input.Keys.O:
+                        turnModel.turner().clockZ();
+                        break;
+                    case Input.Keys.J:
+                        turnModel.turner().counterX();
+                        break;
+                    case Input.Keys.K:
+                        turnModel.turner().counterY();
+                        break;
+                    case Input.Keys.L:
+                        turnModel.turner().counterZ();
+                        break;
                     case Input.Keys.ESCAPE:
                         Gdx.app.exit();
                         break;
