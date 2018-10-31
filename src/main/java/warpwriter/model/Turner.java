@@ -113,15 +113,15 @@ public class Turner {
     public int z() {
         return z;
     }
-    
+
     public int centerX() {
         return centerX;
     }
-    
+
     public int centerY() {
         return centerY;
     }
-    
+
     public int centerZ() {
         return centerZ;
     }
@@ -163,7 +163,7 @@ public class Turner {
         centerZ = z;
         return this;
     }
-    
+
     public Turner setCenter(int x, int y, int z) {
         return setCenterX(x).setCenterY(y).setCenterZ(z);
     }
@@ -329,7 +329,7 @@ public class Turner {
     protected Turner setCounterZ() {
         return set(y, x * -1, z);
     }
-    
+
     public Turner add(int x, int y, int z) {
         return set(x() + x, y() + y, z() + z);
     }
@@ -423,7 +423,11 @@ public class Turner {
     }
 
     public Turner turn(int x, int y, int z, Face face, Roll roll) {
-        set(x - centerX(), y - centerY(), z - centerZ());
+        return turn(x, y, z, face, roll, centerX, centerY, centerZ);
+    }
+
+    public Turner turn(int x, int y, int z, Face face, Roll roll, int centerX, int centerY, int centerZ) {
+        set(x - centerX, y - centerY, z - centerZ);
         switch (face) {
             case NORTH: // x+
             default:
@@ -510,6 +514,6 @@ public class Turner {
                 }
                 break;
         }
-        return add(centerX(), centerY(), centerZ());
+        return add(centerX, centerY, centerZ);
     }
 }
