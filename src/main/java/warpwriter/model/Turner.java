@@ -257,6 +257,100 @@ public class Turner {
         return set(y, x * -1, z);
     }
 
+    public Turner add(Turner turner) {
+        return add(turner.face(), turner.roll());
+    }
+
+    public Turner add(Face face, Roll roll) {
+        switch (face) {
+            case NORTH: // x+
+            default:
+                switch (roll) {
+                    case RIGHT:
+                        counterX();
+                        break;
+                    case UTURN:
+                        counterX().counterX();
+                        break;
+                    case LEFT:
+                        clockX();
+                        break;
+                }
+                break;
+            case EAST: // y+
+                clockZ();
+                switch (roll) {
+                    case RIGHT:
+                        clockY();
+                        break;
+                    case UTURN:
+                        clockY().clockY();
+                        break;
+                    case LEFT:
+                        counterY();
+                        break;
+                }
+                break;
+            case SOUTH: // x-
+                clockZ().clockZ();
+                switch (roll) {
+                    case RIGHT:
+                        clockX();
+                        break;
+                    case UTURN:
+                        clockX().clockX();
+                        break;
+                    case LEFT:
+                        counterX();
+                        break;
+                }
+                break;
+            case WEST: // y-
+                counterZ();
+                switch (roll) {
+                    case RIGHT:
+                        counterY();
+                        break;
+                    case UTURN:
+                        counterY().counterY();
+                        break;
+                    case LEFT:
+                        clockY();
+                        break;
+                }
+                break;
+            case UP: // z+
+                counterY();
+                switch (roll) {
+                    case RIGHT:
+                        clockZ();
+                        break;
+                    case UTURN:
+                        counterZ().counterZ();
+                        break;
+                    case LEFT:
+                        counterZ();
+                        break;
+                }
+                break;
+            case DOWN: // z-
+                clockY();
+                switch (roll) {
+                    case RIGHT:
+                        counterZ();
+                        break;
+                    case UTURN:
+                        clockZ().clockZ();
+                        break;
+                    case LEFT:
+                        clockZ();
+                        break;
+                }
+                break;
+        }
+        return this;
+    }
+
     public Turner turn() {
         return turn(x, y, z);
     }
