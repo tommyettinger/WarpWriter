@@ -121,6 +121,10 @@ public class Turner {
         return this;
     }
 
+    public Turner set(Turner turner) {
+        return set(turner.face(), turner.roll());
+    }
+
     public Turner clockX() {
         switch (face) {
             case NORTH: // x+
