@@ -1,7 +1,7 @@
 package warpwriter.model;
 
 /**
- * Rotates integer coordinates about 0, 0, 0
+ * Rotates integer coordinates
  *
  * @author Ben McLean
  */
@@ -90,16 +90,19 @@ public class Turner {
     protected int x = 0, y = 0, z = 0, centerX = 0, centerY = 0, centerZ = 0;
 
     public Turner() {
-        this(Face.NORTH, Roll.NONE);
+        reset();
     }
 
     public Turner(Face face, Roll roll) {
         set(face, roll);
     }
 
+    public Turner(Face face, Roll roll, int centerX, int centerY, int centerZ) {
+        set(face, roll, centerX, centerY, centerZ);
+    }
+
     public Turner(Turner turner) {
-        this(turner.face(), turner.roll());
-        setCenter(turner.centerX(), turner.centerY(), turner.centerZ());
+        set(turner);
     }
 
     public int x() {
@@ -169,7 +172,15 @@ public class Turner {
     }
 
     public Turner reset() {
-        return set(0, 0, 0, Face.NORTH, Roll.NONE);
+        return set(0, 0, 0, Face.NORTH, Roll.NONE, 0, 0, 0);
+    }
+
+    public Turner set(int x, int y, int z, Face face, Roll roll, int centerX, int centerY, int centerZ) {
+        return set(x, y, z).set(face, roll).setCenter(centerX, centerY, centerZ);
+    }
+
+    public Turner set(Face face, Roll roll, int centerX, int centerY, int centerZ) {
+        return set(face, roll).setCenter(centerX, centerY, centerZ);
     }
 
     public Turner set(int x, int y, int z, Face face, Roll roll) {
@@ -306,27 +317,27 @@ public class Turner {
         }
     }
 
-    protected Turner setClockX() {
+    public Turner setClockX() {
         return set(x, z * -1, y);
     }
 
-    protected Turner setCounterX() {
+    public Turner setCounterX() {
         return set(x, z, y * -1);
     }
 
-    protected Turner setClockY() {
+    public Turner setClockY() {
         return set(z * -1, y, x);
     }
 
-    protected Turner setCounterY() {
+    public Turner setCounterY() {
         return set(z, y, x * -1);
     }
 
-    protected Turner setClockZ() {
+    public Turner setClockZ() {
         return set(y * -1, x, z);
     }
 
-    protected Turner setCounterZ() {
+    public Turner setCounterZ() {
         return set(y, x * -1, z);
     }
 
