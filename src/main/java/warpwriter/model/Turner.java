@@ -103,6 +103,14 @@ public class Turner {
         return this;
     }
 
+    public Turner reset() {
+        return set(0, 0, 0, Face.NORTH, Roll.NONE);
+    }
+    
+    public Turner set(int x, int y, int z, Face face, Roll roll) {
+        return set(x, y, z).set(face, roll);
+    }
+
     public Turner set(int x, int y, int z) {
         return setX(x).setY(y).setZ(z);
     }
