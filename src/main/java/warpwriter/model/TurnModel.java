@@ -31,6 +31,10 @@ public class TurnModel extends Fetch implements IModel {
         set(iModel).set(turner);
     }
 
+    public TurnModel(IModel iModel) {
+        set(iModel).set(new Turner());
+    }
+
     public TurnModel size(Turner.Face face, Turner.Roll roll) {
         turner.turn(iModel.xSize(), iModel.ySize(), iModel.zSize(), face, roll);
         return this;

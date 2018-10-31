@@ -47,7 +47,7 @@ public class TurnTest extends ApplicationAdapter {
             e.printStackTrace();
             arr = new byte[80][80][60];
         }
-        turnModel = new TurnModel(world = new ArrayModel(wm.makeWorld(80, -1, -1)), new Turner());
+        turnModel = new TurnModel(world = new ArrayModel(wm.makeWorld(80, -1, -1)));
 
         reDraw();
         Gdx.input.setInputProcessor(new InputAdapter() {

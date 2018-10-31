@@ -99,6 +99,7 @@ public class Turner {
 
     public Turner(Turner turner) {
         this(turner.face(), turner.roll());
+        setCenter(turner.centerX(), turner.centerY(), turner.centerZ());
     }
 
     public int x() {

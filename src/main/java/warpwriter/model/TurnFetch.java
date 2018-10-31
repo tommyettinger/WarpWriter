@@ -1,19 +1,22 @@
 package warpwriter.model;
 
 /**
- * Rotates any Fetch around the point defined by the sizes from FetchModel. If no sizes are specified, turns around 0, 0, 0.
+ * Rotates a Fetch chain using a Turner.
  *
  * @author Ben McLean
  */
-public class TurnFetch extends FetchModel {
+public class TurnFetch extends Fetch {
     protected Turner turner;
 
-    public TurnFetch(Turner turner) {
-        this(0, 0, 0, turner);
+    public TurnFetch() {
+        this(new Turner());
     }
 
-    public TurnFetch(int x, int y, int z, Turner turner) {
-        super(x, y, z);
+    public TurnFetch(TurnFetch turnFetch) {
+        this(new Turner(turnFetch.turner()));
+    }
+
+    public TurnFetch(Turner turner) {
         set(turner);
     }
 
@@ -28,8 +31,8 @@ public class TurnFetch extends FetchModel {
 
     @Override
     public Fetch fetch(int x, int y, int z) {
-        turner.turn(x + xSize(), y + ySize(), z + zSize());
-        setChains(turner.x() - xSize(), turner.y() - ySize(), turner.z() - zSize());
+        turner.turn(x, y, z);
+        setChains(turner.x(), turner.y(), turner.z());
         return getNextFetch();
     }
 }

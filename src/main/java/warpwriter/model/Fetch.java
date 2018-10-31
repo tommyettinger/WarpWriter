@@ -253,11 +253,7 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D, IDecide {
     public Fetch decideFetch(IDecide decide, Fetch fetch) {
         return add(new DecideFetch(decide, fetch));
     }
-
-    public Fetch turnFetch(int x, int y, int z, Turner turner) {
-        return add(new TurnFetch(x, y, z, turner));
-    }
-
+    
     public Fetch turnFetch(Turner turner) {
         return add(new TurnFetch(turner));
     }
