@@ -10,7 +10,12 @@ public class Turner {
      * I hereby declare that z+ is upwards, x+ is north and y+ is east
      */
     public enum Face {
-        UP, DOWN, NORTH, EAST, SOUTH, WEST;
+        UP, // z+
+        DOWN, // z-
+        NORTH, // x+
+        EAST, // y+
+        SOUTH, // x-
+        WEST; // y-
 
         public Face opposite() {
             switch (this) {
@@ -38,7 +43,17 @@ public class Turner {
         NONE, RIGHT, UTURN, LEFT;
 
         public Roll uturn() {
-            return clock().clock();
+            switch (this) {
+                case NONE:
+                default:
+                    return UTURN;
+                case RIGHT:
+                    return LEFT;
+                case UTURN:
+                    return NONE;
+                case LEFT:
+                    return RIGHT;
+            }
         }
 
         public Roll clock() {
