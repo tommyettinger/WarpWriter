@@ -143,8 +143,17 @@ public class ModelRenderer {
                                 }
                             } else if(current == 3) {
                                 for (int sx = 0; sx < 3; sx++) {
-                                    for (int sy = 0; sy < 5; sy++) {
-                                        if(working[px+sx][py+sy] == 0) working[px+sx][py+sy] = current;
+                                    for (int sy = 0; sy < 3; sy++) {
+                                        if (working[px + sx][py + sy] == 0) {
+                                            working[px + sx][py + sy] = 3;
+                                            depths[px + sx][py + sy] = 256 + b * 8 - d * 4 + sy;
+                                        }
+                                    }
+                                    for (int sy = 3; sy < 5; sy++) {
+                                        if (working[px + sx][py + sy] == 0) {
+                                            working[px + sx][py + sy] = 3;
+                                            depths[px + sx][py + sy] = 255 + b * 8 - d * 4 + sy;
+                                        }
                                     }
                                 }
                             } else if(current == 4) {
@@ -200,8 +209,17 @@ public class ModelRenderer {
                                 }
                             } else if(current == 3) {
                                 for (int sx = 0; sx < 3; sx++) {
-                                    for (int sy = 0; sy < 5; sy++) {
-                                        if(working[px+sx][py+sy] == 0) working[px+sx][py+sy] = current;
+                                    for (int sy = 0; sy < 3; sy++) {
+                                        if (working[px + sx][py + sy] == 0) {
+                                            working[px + sx][py + sy] = 3;
+                                            depths[px + sx][py + sy] = 256 + b * 8 - d * 4 + sy;
+                                        }
+                                    }
+                                    for (int sy = 3; sy < 5; sy++) {
+                                        if (working[px + sx][py + sy] == 0) {
+                                            working[px + sx][py + sy] = 3;
+                                            depths[px + sx][py + sy] = 255 + b * 8 - d * 4 + sy;
+                                        }
                                     }
                                 }
                             } else if(current == 4) {
@@ -242,7 +260,8 @@ public class ModelRenderer {
         render = ArrayTools.copy(working);
         for (int x = 1; x < width - 1; x++) {
             for (int y = 1; y < height - 1; y++) {
-                if((w = clampDown(working[x][y])) > 3) {
+                if((w = clampDown(working[x][y])) > 2) {
+                    if(w == 3) w = 2;
                     int o = hardOutline ? 2 : w;
                     d = depths[x][y];
                     if      (working[x - 1][y] == 0 && working[x][y - 1] == 0) { render[x - 1][y] = o; render[x][y - 1] = o; render[x][y] = w; }
@@ -348,7 +367,8 @@ public class ModelRenderer {
         render = ArrayTools.copy(working);
         for (int x = 1; x < width - 1; x++) {
             for (int y = 1; y < height - 1; y++) {
-                if((w = clampDown(working[x][y])) > 3) {
+                if((w = clampDown(working[x][y])) > 2) {
+                    if(w == 3) w = 2;
                     int o = hardOutline ? 2 : w;
                     d = depths[x][y];
                     if      (working[x - 1][y] == 0 && working[x][y - 1] == 0) { render[x - 1][y] = o; render[x][y - 1] = o; render[x][y] = w; }
@@ -432,8 +452,17 @@ public class ModelRenderer {
                                 }
                             } else if(current == 3) {
                                 for (int sx = 0; sx < 3; sx++) {
-                                    for (int sy = 0; sy < 5; sy++) {
-                                        if(working[px+sx][py+sy] == 0) working[px+sx][py+sy] = current;
+                                    for (int sy = 0; sy < 2; sy++) {
+                                        if (working[px + sx][py + sy] == 0) {
+                                            working[px + sx][py + sy] = 3;
+                                            depths[px + sx][py + sy] = 256 + b * 8 - d * 4 + sy;
+                                        }
+                                    }
+                                    for (int sy = 2; sy < 5; sy++) {
+                                        if (working[px + sx][py + sy] == 0) {
+                                            working[px + sx][py + sy] = 3;
+                                            depths[px + sx][py + sy] = 255 + b * 8 - d * 4 + sy;
+                                        }
                                     }
                                 }
                             } else if(current == 4) {
@@ -487,8 +516,17 @@ public class ModelRenderer {
                                 }
                             } else if(current == 3) {
                                 for (int sx = 0; sx < 3; sx++) {
-                                    for (int sy = 0; sy < 5; sy++) {
-                                        if(working[px+sx][py+sy] == 0) working[px+sx][py+sy] = current;
+                                    for (int sy = 0; sy < 2; sy++) {
+                                        if (working[px + sx][py + sy] == 0) {
+                                            working[px + sx][py + sy] = 3;
+                                            depths[px + sx][py + sy] = 256 + b * 8 - d * 4 + sy;
+                                        }
+                                    }
+                                    for (int sy = 2; sy < 5; sy++) {
+                                        if (working[px + sx][py + sy] == 0) {
+                                            working[px + sx][py + sy] = 3;
+                                            depths[px + sx][py + sy] = 255 + b * 8 - d * 4 + sy;
+                                        }
                                     }
                                 }
                             } else if(current == 4) {
@@ -631,7 +669,8 @@ public class ModelRenderer {
 
         for (int x = 1; x < width - 1; x++) {
             for (int y = 1; y < height - 1; y++) {
-                if((w = clampDown(working[x][y])) > 3) {
+                if((w = clampDown(working[x][y])) > 2) {
+                    if(w == 3) w = 2;
                     int o = hardOutline ? 2 : w;
                     d = depths[x][y];
                     if      (working[x - 1][y] == 0 && working[x][y - 1] == 0) { render[x - 1][y] = o; render[x][y - 1] = o; render[x][y] = w; }
@@ -715,7 +754,10 @@ public class ModelRenderer {
                             } else if(current == 3) {
                                 for (int sx = 0; sx < 3; sx++) {
                                     for (int sy = 0; sy < 4; sy++) {
-                                        if(working[px+sx][py+sy] == 0) working[px+sx][py+sy] = current;
+                                        if (working[px + sx][py + sy] == 0) {
+                                            working[px + sx][py + sy] = 3;
+                                            depths[px + sx][py + sy] = 256 + c * 2;
+                                        }
                                     }
                                 }
                             } else if(current == 4) {
@@ -767,7 +809,10 @@ public class ModelRenderer {
                             } else if(current == 3) {
                                 for (int sx = 0; sx < 3; sx++) {
                                     for (int sy = 0; sy < 4; sy++) {
-                                        if(working[px+sx][py+sy] == 0) working[px+sx][py+sy] = current;
+                                        if (working[px + sx][py + sy] == 0) {
+                                            working[px + sx][py + sy] = 3;
+                                            depths[px + sx][py + sy] = 256 + c * 2;
+                                        }
                                     }
                                 }
                             } else if(current == 4) {
@@ -805,7 +850,8 @@ public class ModelRenderer {
         render = ArrayTools.copy(working);
         for (int x = 1; x < width - 1; x++) {
             for (int y = 1; y < height - 1; y++) {
-                if((w = clampDown(working[x][y])) > 3) {
+                if((w = clampDown(working[x][y])) > 2) {
+                    if(w == 3) w = 2;
                     int o = hardOutline ? 2 : w;
                     d = depths[x][y];
                     if      (working[x - 1][y] == 0 && working[x][y - 1] == 0) { render[x - 1][y] = o; render[x][y - 1] = o; render[x][y] = w; }
@@ -897,7 +943,8 @@ public class ModelRenderer {
         render = ArrayTools.copy(working);
         for (int x = 1; x < width - 1; x++) {
             for (int y = 1; y < height - 1; y++) {
-                if((w = clampDown(working[x][y])) > 3) {
+                if((w = clampDown(working[x][y])) > 2) {
+                    if(w == 3) w = 2;
                     int o = hardOutline ? 2 : w;
                     d = depths[x][y];
                     if      (working[x - 1][y] == 0 && working[x][y - 1] == 0) { render[x - 1][y] = o; render[x][y - 1] = o; render[x][y] = w; }

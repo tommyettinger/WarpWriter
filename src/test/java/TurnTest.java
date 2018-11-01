@@ -42,12 +42,12 @@ public class TurnTest extends ApplicationAdapter {
         font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
         byte[][][] arr;
         try {
-            arr = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("Infantry.vox")));
+            arr = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("SpaceMarine.vox")));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             arr = new byte[80][80][60];
         }
-        turnModel = new TurnModel(world = new ArrayModel(wm.makeWorld(80, -1, -1)));
+        turnModel = new TurnModel(world = new ArrayModel(arr));
 
         reDraw();
         Gdx.input.setInputProcessor(new InputAdapter() {
@@ -56,7 +56,7 @@ public class TurnTest extends ApplicationAdapter {
                 boolean needRedraw = true;
                 switch (keycode) {
                     case Input.Keys.R:
-                        world.voxels = (wm.makeWorld(80, -1, -1));
+                        world.voxels = (wm.makeWorld(60, -1, -1));
                         break;
                     case Input.Keys.UP:
                         turnModel.turner().set(Turner.Roll.NONE);
@@ -168,7 +168,7 @@ public class TurnTest extends ApplicationAdapter {
 
     @Override
     public void render() {
-        Gdx.gl.glClearColor(0, 0, 0, 0);
+        Gdx.gl.glClearColor(0.3f, 0.5f, 0.8f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         view.getCamera().position.set(width >> 1, height >> 1, 0);
         view.update(width, height);
