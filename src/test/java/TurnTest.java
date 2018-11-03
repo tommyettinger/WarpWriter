@@ -11,12 +11,14 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import warpwriter.LittleEndianDataInputStream;
 import warpwriter.ModelRenderer;
+import warpwriter.VoxIO;
 import warpwriter.WorldMaker;
-import warpwriter.model.ArrayModel;
-import warpwriter.model.CompassDirection;
-import warpwriter.model.TurnModel;
-import warpwriter.model.Turner;
+import warpwriter.model.*;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class TurnTest extends ApplicationAdapter {
     public static final int width = 1280;
@@ -38,7 +40,14 @@ public class TurnTest extends ApplicationAdapter {
         batch = new SpriteBatch();
         view = new FitViewport(width, height);
         font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
-        turnModel = new TurnModel(world = new ArrayModel(wm.makeWorld(80, -1, -1)));
+        byte[][][] arr;
+        try {
+            arr = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("SpaceMarine.vox")));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            arr = new byte[80][80][60];
+        }
+        turnModel = new TurnModel(world = new ArrayModel(arr));
 
         reDraw();
         Gdx.input.setInputProcessor(new InputAdapter() {
@@ -47,7 +56,7 @@ public class TurnTest extends ApplicationAdapter {
                 boolean needRedraw = true;
                 switch (keycode) {
                     case Input.Keys.R:
-                        world.voxels = (wm.makeWorld(80, -1, -1));
+                        world.voxels = (wm.makeWorld(60, -1, -1));
                         break;
                     case Input.Keys.UP:
                         turnModel.turner().set(Turner.Roll.NONE);
@@ -159,7 +168,7 @@ public class TurnTest extends ApplicationAdapter {
 
     @Override
     public void render() {
-        Gdx.gl.glClearColor(0, 0, 0, 0);
+        Gdx.gl.glClearColor(0.3f, 0.5f, 0.8f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         view.getCamera().position.set(width >> 1, height >> 1, 0);
         view.update(width, height);
