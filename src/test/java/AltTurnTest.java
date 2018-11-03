@@ -17,8 +17,10 @@ import warpwriter.model.ArrayModel;
 import warpwriter.model.CompassDirection;
 import warpwriter.model.TurnModel;
 import warpwriter.model.Turner;
+import warpwriter.view.AltRenderer;
+import warpwriter.view.SpriteBatchRenderer;
 
-public class TurnTest extends ApplicationAdapter {
+public class AltTurnTest extends ApplicationAdapter {
     public static final int width = 1280;
     public static final int height = 720;
     protected SpriteBatch batch;
@@ -32,6 +34,8 @@ public class TurnTest extends ApplicationAdapter {
     private int angle = 2;
     private final WorldMaker wm = new WorldMaker(123456789L, 0.8);
     private ArrayModel world;
+    AltRenderer renderer;
+    SpriteBatchRenderer batchRenderer;
 
     @Override
     public void create() {
@@ -39,6 +43,9 @@ public class TurnTest extends ApplicationAdapter {
         view = new FitViewport(width, height);
         font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
         turnModel = new TurnModel(world = new ArrayModel(wm.makeWorld(80, -1, -1)));
+
+        renderer = new AltRenderer();
+        batchRenderer = new SpriteBatchRenderer(batch).setOffset(50, 50);
 
         reDraw();
         Gdx.input.setInputProcessor(new InputAdapter() {
@@ -149,11 +156,11 @@ public class TurnTest extends ApplicationAdapter {
         });
     }
 
-    public TurnTest reDraw() {
-        if (pix != null) pix.dispose();
-        pix = modelRenderer.renderToPixmap(turnModel, angle, direction);
-        if (tex != null) tex.dispose();
-        tex = new Texture(pix);
+    public AltTurnTest reDraw() {
+//        if (pix != null) pix.dispose();
+//        pix = modelRenderer.renderToPixmap(turnModel, angle, direction);
+//        if (tex != null) tex.dispose();
+//        tex = new Texture(pix);
         return this;
     }
 
@@ -167,7 +174,8 @@ public class TurnTest extends ApplicationAdapter {
         batch.begin();
         font.draw(batch, turnModel.turner().face().toString(), 200, 20);
         font.draw(batch, turnModel.turner().roll().toString(), 200, 40);
-        batch.draw(tex, 0, 0);
+//        batch.draw(tex, 0, 0);
+        renderer.renderOrthoSide(turnModel, batchRenderer);
         batch.end();
     }
 
@@ -176,7 +184,7 @@ public class TurnTest extends ApplicationAdapter {
         config.setTitle("Fetch Tester");
         config.setWindowedMode(width, height);
         config.setIdleFPS(10);
-        final TurnTest app = new TurnTest();
+        final AltTurnTest app = new AltTurnTest();
         new Lwjgl3Application(app, config);
     }
 }

@@ -23,6 +23,11 @@ public class SpriteBatchRenderer implements IRenderer, Disposable {
         pixmap1.dispose();
     }
 
+    public SpriteBatchRenderer set(SpriteBatch batch) {
+        this.batch = batch;
+        return this;
+    }
+
     public SpriteBatchRenderer setOffset(int offsetX, int offsetY) {
         this.offsetX = offsetX;
         this.offsetY = offsetY;
