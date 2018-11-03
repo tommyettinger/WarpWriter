@@ -3,7 +3,7 @@ package warpwriter.view;
 import warpwriter.model.IModel;
 
 /**
- * An alternative to TEttinger's ModelRenderer which uses SpriteBatch and ditches arrays.
+ * A rewrite of TEttinger's ModelRenderer which uses SpriteBatch and ditches arrays.
  *
  * @author Ben McLean
  */
