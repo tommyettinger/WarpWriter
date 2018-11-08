@@ -78,17 +78,17 @@ public class SimpleTest extends ApplicationAdapter {
                         break;
                     case Input.Keys.NUMPAD_6:
                     case Input.Keys.NUM_6:
-                        direction = CompassDirection.NORTH;
+                        direction = CompassDirection.EAST;
                         turnModel.turner().set(Turner.Face.EAST);
                         break;
                     case Input.Keys.NUMPAD_2:
                     case Input.Keys.NUM_2:
-                        direction = CompassDirection.NORTH;
+                        direction = CompassDirection.SOUTH;
                         turnModel.turner().set(Turner.Face.SOUTH);
                         break;
                     case Input.Keys.NUMPAD_4:
                     case Input.Keys.NUM_4:
-                        direction = CompassDirection.NORTH;
+                        direction = CompassDirection.WEST;
                         turnModel.turner().set(Turner.Face.WEST);
                         break;
                     case Input.Keys.SLASH:
@@ -101,7 +101,7 @@ public class SimpleTest extends ApplicationAdapter {
                         break;
                     case Input.Keys.NUMPAD_7:
                     case Input.Keys.NUM_7:
-                        direction = CompassDirection.NORTH_EAST;
+                        direction = CompassDirection.NORTH_WEST;
                         turnModel.turner().set(Turner.Face.WEST);
                         break;
                     case Input.Keys.NUMPAD_9:
@@ -111,12 +111,12 @@ public class SimpleTest extends ApplicationAdapter {
                         break;
                     case Input.Keys.NUMPAD_3:
                     case Input.Keys.NUM_3:
-                        direction = CompassDirection.NORTH_EAST;
+                        direction = CompassDirection.SOUTH_EAST;
                         turnModel.turner().set(Turner.Face.EAST);
                         break;
                     case Input.Keys.NUMPAD_1:
                     case Input.Keys.NUM_1:
-                        direction = CompassDirection.NORTH_EAST;
+                        direction = CompassDirection.SOUTH_EAST;
                         turnModel.turner().set(Turner.Face.SOUTH);
                         break;
                     case Input.Keys.NUM_0:
@@ -172,8 +172,12 @@ public class SimpleTest extends ApplicationAdapter {
 
         font.draw(batch, turnModel.turner().face().toString(), 200, 20);
         font.draw(batch, turnModel.turner().roll().toString(), 200, 40);
+        font.draw(batch, direction.toString(), 200, 60);
         //batch.draw(tex, 0, 0);
-        SimpleDraw.simpleDraw(turnModel, batchRenderer);
+        if (direction.isCardinal())
+            SimpleDraw.simpleDraw(turnModel, batchRenderer);
+        else
+            SimpleDraw.simpleDraw45(turnModel, batchRenderer);
 
         batch.end();
         buffer.end();
