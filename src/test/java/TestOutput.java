@@ -5,7 +5,6 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import squidpony.FakeLanguageGen;
 import squidpony.StringKit;
 import squidpony.Thesaurus;
 import squidpony.squidmath.OrderedSet;
@@ -33,8 +32,8 @@ public class TestOutput extends ApplicationAdapter {
     private int width, height, frames = 1;
     private Pixmap[] pixes = new Pixmap[frames];
     private String pathName, modelName;
-    StatefulRNG srng = new StatefulRNG(initialSeed);
-    int[] palette = Coloring.ALT_PALETTE;
+    private StatefulRNG srng = new StatefulRNG(initialSeed);
+    private int[] palette = Coloring.RINSED;
     private PNG8 png;
     private String makeName(OrderedSet<String> alpha, OrderedSet<String> beta)
     {
@@ -64,11 +63,10 @@ public class TestOutput extends ApplicationAdapter {
         png = new PNG8(width * height * 3 >> 1);
         png.setFlipY(false);
         png.setCompression(6);
-        png.palette = new PaletteReducer(Coloring.GB_GREEN);
+        png.palette = new PaletteReducer(Coloring.RINSED);
         png.palette.setDitherStrength(0.5f);
         pathName = "target/out/" + StringKit.hex(seed);
         Gdx.files.local(pathName).mkdirs();
-        FakeLanguageGen language = FakeLanguageGen.randomLanguage(initialSeed).removeAccents();
         OrderedSet<String> adjective = new OrderedSet<>(256), noun = new OrderedSet<>(256);
         for (int i = 0; i < Thesaurus.adjective.size(); i++) {
             adjective.addAll(Thesaurus.adjective.getAt(i));
@@ -130,7 +128,7 @@ public class TestOutput extends ApplicationAdapter {
             }
         }
         try {
-            png.write(Gdx.files.local(pathName + "/" + modelName + "/" + modelName + "_dir" + dir + "_0.png"), pix, false, true);
+            png.writePrecisely(Gdx.files.local(pathName + "/" + modelName + "/" + modelName + "_dir" + dir + "_0.png"), pix, false);
         } catch (IOException ex) {
             throw new GdxRuntimeException("Error writing PNG: " + modelName + "_dir" + dir + "_0.png", ex);
         }
