@@ -50,7 +50,7 @@ public class SimpleTest extends ApplicationAdapter {
         screenView.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.enableBlending();
 
-        batchRenderer = new SpriteBatchRenderer(batch);
+        batchRenderer = new SpriteBatchRenderer(batch).setScale(16f);
         turnModel = new TurnModel(new ArrayModel(new ModelMaker().warriorRandom()));
 
         //reDraw();

@@ -8,9 +8,10 @@ import com.badlogic.gdx.utils.Disposable;
 
 public class SpriteBatchRenderer implements IRenderer, Disposable {
     protected SpriteBatch batch;
-    protected static Texture one;
+    protected Texture one;
     protected Color color = new Color();
     protected int offsetX=0, offsetY=0;
+    protected float scaleX=1f, scaleY=1f;
 
     public SpriteBatchRenderer(SpriteBatch batch) {
         this.batch = batch;
@@ -34,12 +35,22 @@ public class SpriteBatchRenderer implements IRenderer, Disposable {
         return this;
     }
 
+    public SpriteBatchRenderer setScale(float scale) {
+        return setScale(scale, scale);
+    }
+
+    public SpriteBatchRenderer setScale(float scaleX, float scaleY) {
+        this.scaleX = scaleX;
+        this.scaleY = scaleY;
+        return this;
+    }
+
     @Override
     public IRenderer drawPixel(int x, int y, int color) {
         Color oldColor = batch.getColor();
         this.color.set(color);
         batch.setColor(this.color);
-        batch.draw(one, x + offsetX, y + offsetY, 1, 1);
+        batch.draw(one, (x * scaleX) + offsetX, (y * scaleY) + offsetY, scaleX, scaleY);
         batch.setColor(oldColor);
         return this;
     }
