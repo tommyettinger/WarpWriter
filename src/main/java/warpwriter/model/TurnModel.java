@@ -80,10 +80,16 @@ public class TurnModel extends Fetch implements IModel {
         size();
         int xSize = turner().x(), ySize = turner().y(), zSize = turner().z();
         turner().turn(x, y, z);
-        int xAns = turner().x(), yAns = turner().y(), zAns = turner().z();
-        if (xSize < 0) xAns += getModel().xSize() - 1;
-        if (ySize < 0) yAns += getModel().ySize() - 1;
-        if (zSize < 0) zAns += getModel().zSize() - 1;
-        return deferByte(getModel().at(xAns, yAns, zAns), x, y, z);
+        return deferByte(getModel().at(
+                xSize < 0 ?
+                        turner().x() + getModel().xSize() - 1
+                        : turner().x(),
+                ySize < 0 ?
+                        turner().y() + getModel().ySize() - 1
+                        : turner().y(),
+                zSize < 0 ?
+                        turner().z() + getModel().zSize() - 1
+                        : turner().z()
+        ), x, y, z);
     }
 }
