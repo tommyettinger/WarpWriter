@@ -34,11 +34,11 @@ public class SimpleDraw {
         for (int px = 0; px < ySize; px++) { // pixel x
             for (int py = 0; py < zSize; py++) {  // pixel y
                 for (int a = px, b = 0; a >= 0 && b < xSize; a--, b++) {
-                    if(model.at(b-1, a, py) != 0 && model.at(b, a+1, py) != 0)
+                    if (model.at(b - 1, a, py) != 0 && model.at(b, a + 1, py) != 0)
                         break; // we are inside the model here, don't try to render any further
                     byte result = model.at(b, a, py);
                     if (result != 0) {
-                        renderer.drawRect(px, (py<<1), 2, 2, palette[result & 255]);
+                        renderer.drawRect(px, (py << 1), 2, 2, palette[result & 255]); // "<<1" means "*2"
                         break;
                     }
                 }
@@ -47,11 +47,11 @@ public class SimpleDraw {
         for (int px = ySize; px < pixelWidth; px++) { // pixel x
             for (int py = 0; py < zSize; py++) {  // pixel y
                 for (int a = ySize - 1, b = px - ySize + 1; a >= 0 && b < xSize; a--, b++) {
-                    if(model.at(b-1, a, py) != 0 && model.at(b, a+1, py) != 0)
+                    if (model.at(b - 1, a, py) != 0 && model.at(b, a + 1, py) != 0)
                         break; // we are inside the model here, don't try to render any further
                     byte result = model.at(b, a, py);
                     if (result != 0) {
-                        renderer.drawRect(px, (py<<1), 2, 2, palette[result & 255]);
+                        renderer.drawRect(px, (py << 1), 2, 2, palette[result & 255]); // "<<1" means "*2"
                         break;
                     }
                 }
