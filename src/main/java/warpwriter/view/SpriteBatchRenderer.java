@@ -35,6 +35,12 @@ public class SpriteBatchRenderer implements IRenderer, Disposable {
         return this;
     }
 
+    @Override
+    public SpriteBatchRenderer multiplyScale(float multiplier)
+    {
+        return setScale(scaleX * multiplier, scaleY * multiplier);
+    }
+    
     public SpriteBatchRenderer setScale(float scale) {
         return setScale(scale, scale);
     }
