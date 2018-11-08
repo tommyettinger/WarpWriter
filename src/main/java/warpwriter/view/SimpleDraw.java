@@ -28,7 +28,6 @@ public class SimpleDraw {
     }
 
     public static void simpleDraw45(IModel model, IRenderer renderer, int[] palette) {
-        renderer.multiplyScale(0.5f);
         final int xSize = model.xSize(), ySize = model.ySize(), zSize = model.zSize();
         //int shorter = xSize < ySize ? xSize : ySize;
         final int pixelWidth = xSize + ySize;
@@ -64,7 +63,6 @@ public class SimpleDraw {
                 }
             }
         }
-        renderer.multiplyScale(2f);
 //        for (int z = 0; z < zSize; z++) {
 //            for (int x = 0; x < xSize; x++) {
 //                for (int y = 0; y < ySize; y++) {
