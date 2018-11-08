@@ -102,22 +102,22 @@ public class SimpleTest extends ApplicationAdapter {
                     case Input.Keys.NUMPAD_7:
                     case Input.Keys.NUM_7:
                         direction = CompassDirection.NORTH_WEST;
-                        turnModel.turner().set(Turner.Face.WEST);
+                        turnModel.turner().set(Turner.Face.NORTH);
                         break;
                     case Input.Keys.NUMPAD_9:
                     case Input.Keys.NUM_9:
                         direction = CompassDirection.NORTH_EAST;
-                        turnModel.turner().set(Turner.Face.NORTH);
+                        turnModel.turner().set(Turner.Face.EAST);
                         break;
                     case Input.Keys.NUMPAD_3:
                     case Input.Keys.NUM_3:
                         direction = CompassDirection.SOUTH_EAST;
-                        turnModel.turner().set(Turner.Face.EAST);
+                        turnModel.turner().set(Turner.Face.SOUTH);
                         break;
                     case Input.Keys.NUMPAD_1:
                     case Input.Keys.NUM_1:
-                        direction = CompassDirection.SOUTH_EAST;
-                        turnModel.turner().set(Turner.Face.SOUTH);
+                        direction = CompassDirection.SOUTH_WEST;
+                        turnModel.turner().set(Turner.Face.WEST);
                         break;
                     case Input.Keys.NUM_0:
                         angle = 1;
