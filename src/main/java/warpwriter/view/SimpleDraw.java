@@ -38,10 +38,8 @@ public class SimpleDraw {
                         break; // we are inside the model here, don't try to render any further
                     byte result = model.at(b, a, py);
                     if (result != 0) {
-                        renderer.drawPixel(px, (py<<1), palette[result & 255]);
-                        renderer.drawPixel(px, (py<<1|1), palette[result & 255]);
-                        renderer.drawPixel(px+1, (py<<1), palette[result & 255]);
-                        renderer.drawPixel(px+1, (py<<1|1), palette[result & 255]);
+                        renderer.drawRect(px, (py<<1), 2, 1, palette[result & 255]);
+                        renderer.drawRect(px, (py<<1|1), 2, 1, palette[result & 255]);
                         break;
                     }
                 }
@@ -54,10 +52,8 @@ public class SimpleDraw {
                         break; // we are inside the model here, don't try to render any further
                     byte result = model.at(b, a, py);
                     if (result != 0) {
-                        renderer.drawPixel(px, (py<<1), palette[result & 255]);
-                        renderer.drawPixel(px, (py<<1|1), palette[result & 255]);
-                        renderer.drawPixel(px+1, (py<<1), palette[result & 255]);
-                        renderer.drawPixel(px+1, (py<<1|1), palette[result & 255]);
+                        renderer.drawRect(px, (py<<1), 2, 1, palette[result & 255]);
+                        renderer.drawRect(px, (py<<1|1), 2, 1, palette[result & 255]);
                         break;
                     }
                 }

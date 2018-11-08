@@ -1,7 +1,11 @@
 package warpwriter.view;
 
 public interface IRenderer {
+    /**
+     * Recommended implementation: return drawRect(x, y, 1, 1, color);
+     */
     IRenderer drawPixel(int x, int y, int color);
+    IRenderer drawRect(int x, int y, int xSize, int ySize, int color);
     int getPixel(int x, int y);
 
     /**

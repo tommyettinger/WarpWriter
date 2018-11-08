@@ -53,10 +53,15 @@ public class SpriteBatchRenderer implements IRenderer, Disposable {
 
     @Override
     public IRenderer drawPixel(int x, int y, int color) {
+        return drawRect(x, y, 1, 1, color);
+    }
+
+    @Override
+    public IRenderer drawRect(int x, int y, int xSize, int ySize, int color) {
         Color oldColor = batch.getColor();
         this.color.set(color);
         batch.setColor(this.color);
-        batch.draw(one, (x * scaleX) + offsetX, (y * scaleY) + offsetY, scaleX, scaleY);
+        batch.draw(one, (x * scaleX) + offsetX, (y * scaleY) + offsetY, xSize * scaleX, ySize * scaleY);
         batch.setColor(oldColor);
         return this;
     }
