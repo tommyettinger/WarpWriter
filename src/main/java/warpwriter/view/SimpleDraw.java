@@ -41,8 +41,6 @@ public class SimpleDraw {
                         break;
                     }
                 }
-            }
-            for (int py = 0; py < zSize; py++) {  // pixel y
                 for (int a = ySize - 1, b = px - ySize + 1; a >= 0 && b < xSize; a--, b++) {
                     if (model.at(b - 1, a, py) != 0 && model.at(b, a + 1, py) != 0)
                         break; // we are inside the model here, don't try to render any further
