@@ -34,7 +34,8 @@ public class Stripes extends Fetch {
     }
 
     @Override
-    public Fetch fetch(int x, int y, int z) {
+    public Fetch fetch() {
+        int x = xChain(), y = yChain(), z = zChain();
         int xStep = Loop.loop(z, repeat);
         int step = 0;
         for (int i = 0; i < widths.length; i++)

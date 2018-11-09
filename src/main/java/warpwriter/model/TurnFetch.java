@@ -30,8 +30,8 @@ public class TurnFetch extends Fetch {
     }
 
     @Override
-    public Fetch fetch(int x, int y, int z) {
-        turner.turn(x, y, z);
+    public Fetch fetch() {
+        turner.turn(xChain(), yChain(), zChain());
         setChains(turner.x(), turner.y(), turner.z());
         return getNextFetch();
     }

@@ -71,12 +71,13 @@ public class TurnModel extends Fetch implements IModel {
     }
 
     @Override
-    public Fetch fetch(int x, int y, int z) {
-        return deferFetch(bite(x, y, z), x, y, z);
+    public Fetch fetch() {
+        return deferFetch(bite(), xChain(), yChain(), zChain());
     }
 
     @Override
-    public byte bite(int x, int y, int z) {
+    public byte bite() {
+        int x = xChain(), y = yChain(), z = zChain();
         size();
         int xSize = turner().x(), ySize = turner().y(), zSize = turner().z();
         turner().turn(x, y, z);

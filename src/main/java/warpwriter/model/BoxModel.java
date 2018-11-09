@@ -26,7 +26,8 @@ public class BoxModel extends FetchModel {
     }
 
     @Override
-    public Fetch fetch(int x, int y, int z) {
+    public Fetch fetch() {
+        int x = xChain(), y = yChain(), z = zChain();
         return bool(x, y, z) ? fetch : getNextFetch();
     }
 

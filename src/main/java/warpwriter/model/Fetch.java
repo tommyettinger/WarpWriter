@@ -28,33 +28,17 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D, IDecide {
      * <p>
      * Returning null indicates to outside code that bite(x, y, z) should be called instead.
      */
-    public Fetch fetch(int x, int y, int z) {
+    public Fetch fetch() {
         return getNextFetch();
     }
-
-    public final Fetch fetch(int y, int z) {
-        return fetch(0, y, z);
-    }
-
-    public final Fetch fetch(int z) {
-        return fetch(0, z);
-    }
-
+    
     /**
      * This method is intended to be overridden with a final decision about which byte to return for a given coordinate.
      *
      * @return A final answer, except that it is recommended to wrap results in deferByte(byte result, int x, int y, int z) to ensure smart transparency in the event of a broken chain or if someone screws up and calls this method in the wrong order.
      */
-    public byte bite(int x, int y, int z) {
-        return deferByte(x, y, z);
-    }
-
-    public final byte bite(int y, int z) {
-        return bite(0, y, z);
-    }
-
-    public final byte bite(int z) {
-        return bite(0, z);
+    public byte bite() {
+        return deferByte(xChain(), yChain(), zChain());
     }
 
     /**
@@ -68,12 +52,12 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D, IDecide {
         do {
             current = next;
             current.setChains(x, y, z);
-            next = current.fetch(x, y, z);
+            next = current.fetch();
             x = current.xChain;
             y = current.yChain;
             z = current.zChain;
         } while (next != null);
-        return current.bite(x, y, z);
+        return current.bite();
     }
 
     @Override
@@ -94,7 +78,19 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D, IDecide {
         return at(x, y, z) != (byte) 0;
     }
 
-    public int xChain, yChain, zChain;
+    protected int xChain, yChain, zChain;
+
+    public int xChain() {
+        return xChain;
+    }
+
+    public int yChain() {
+        return yChain;
+    }
+
+    public int zChain() {
+        return zChain;
+    }
 
     public Fetch setXChain(int x) {
         xChain = x;

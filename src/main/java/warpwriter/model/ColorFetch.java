@@ -26,7 +26,7 @@ public class ColorFetch extends Fetch {
     }
 
     @Override
-    public byte bite(int x, int y, int z) {
+    public byte bite() {
         return color;
     }
 

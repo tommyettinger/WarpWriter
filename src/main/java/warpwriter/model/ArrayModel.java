@@ -71,12 +71,14 @@ public class ArrayModel extends Fetch implements IModel {
      * @return a color index as a byte; 0 is empty, and this should usually be masked with {@code & 255} to get an index
      */
     @Override
-    public Fetch fetch(int x, int y, int z) {
+    public Fetch fetch() {
+        int x = xChain(), y = yChain(), z = zChain();
         return inside(x, y, z) ? ColorFetch.color(voxels[x][y][z]) : getNextFetch();
     }
 
     @Override
-    public byte bite(int x, int y, int z) {
+    public byte bite() {
+        int x = xChain(), y = yChain(), z = zChain();
         return deferByte(inside(x, y, z) ? voxels[x][y][z] : (byte) 0, x, y, z);
     }
 

@@ -16,7 +16,8 @@ public class Skew extends Fetch {
     }
 
     @Override
-    public Fetch fetch(int x, int y, int z) {
+    public Fetch fetch() {
+        int x = xChain(), y = yChain(), z = zChain();
         setChains(x, y + (int) (x + ySkew), z + (int) (y * zSkew));
         return getNextFetch();
     }

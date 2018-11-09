@@ -11,8 +11,8 @@ public class Loop extends FetchModel {
     }
 
     @Override
-    public Fetch fetch(int x, int y, int z) {
-        setChains(loop(x, xSize()), loop(y, ySize()), loop(z, zSize()));
+    public Fetch fetch() {
+        setChains(loop(xChain(), xSize()), loop(yChain(), ySize()), loop(zChain(), zSize()));
         return getNextFetch();
     }
 
