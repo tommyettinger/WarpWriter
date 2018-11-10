@@ -128,7 +128,7 @@ public class Turner {
     public enum Roll {
         NONE, RIGHT, UTURN, LEFT;
 
-        public Roll uturn() {
+        public Roll opposite() {
             switch (this) {
                 case NONE:
                 default:
@@ -306,10 +306,10 @@ public class Turner {
     public Turner clockY() {
         switch (face) {
             case DOWN: // z-
-                set(roll.uturn());
+                set(roll.opposite());
                 break;
             case SOUTH: // x-
-                set(roll.uturn());
+                set(roll.opposite());
                 break;
             case EAST: // y+
                 set(roll.counter());
@@ -324,10 +324,10 @@ public class Turner {
     public Turner counterY() {
         switch (face) {
             case UP: // z+
-                set(roll.uturn());
+                set(roll.opposite());
                 break;
             case SOUTH: // x-
-                set(roll.uturn());
+                set(roll.opposite());
                 break;
             case EAST: // y+
                 set(roll.clock());
