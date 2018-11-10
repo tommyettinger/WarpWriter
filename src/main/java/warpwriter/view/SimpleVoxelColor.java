@@ -2,6 +2,9 @@ package warpwriter.view;
 
 import warpwriter.Coloring;
 
+/**
+ * @author Ben McLean
+ */
 public class SimpleVoxelColor implements IVoxelColor {
     public int simple(byte voxel) {
         return Coloring.RINSED[voxel & 255];
