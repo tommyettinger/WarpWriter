@@ -15,7 +15,7 @@ public class SimpleDraw {
                 for (int x = 0; x < model.xSize(); x++) {
                     byte result = model.at(x, y, z);
                     if (result != 0) {
-                        renderer.drawPixel(y, z, color.vertColor(result));
+                        renderer.drawPixel(y, z, color.topFace(result));
                         break;
                     }
                 }
@@ -37,7 +37,7 @@ public class SimpleDraw {
                         break; // we are inside the model here, don't try to render any further
                     byte result = model.at(b, a, py);
                     if (result != 0) {
-                        renderer.drawRect(px, (py << 1), 2, 2, color.leftColor(result)); // "<<1" means "*2"
+                        renderer.drawRect(px, (py << 1), 2, 2, color.leftFace(result)); // "<<1" means "*2"
                         break;
                     }
                 }
@@ -46,7 +46,7 @@ public class SimpleDraw {
                         break; // we are inside the model here, don't try to render any further
                     byte result = model.at(b, a, py);
                     if (result != 0) {
-                        renderer.drawRect(px, (py << 1), 2, 2, color.leftColor(result)); // "<<1" means "*2"
+                        renderer.drawRect(px, (py << 1), 2, 2, color.leftFace(result)); // "<<1" means "*2"
                         break;
                     }
                 }

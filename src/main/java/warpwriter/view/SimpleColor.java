@@ -5,17 +5,17 @@ import warpwriter.Coloring;
 public class SimpleColor implements IColor {
 
     @Override
-    public int vertColor(byte voxel) {
+    public int topFace(byte voxel) {
         return Coloring.RINSED[voxel & 255];
     }
 
     @Override
-    public int leftColor(byte voxel) {
+    public int leftFace(byte voxel) {
         return Coloring.RINSED[voxel & 255];
     }
 
     @Override
-    public int rightColor(byte voxel) {
+    public int rightFace(byte voxel) {
         return Coloring.RINSED[voxel & 255];
     }
 }
