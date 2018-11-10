@@ -32,6 +32,9 @@ public class HeightDecide implements IDecide {
         return z < (map.heightMap(x * scaleX, y * scaleY) + 1) * scaleZ;
     }
 
+    /**
+     * A utility function to calculate the z for (x, y) inside the 3D triangle formed by (x1, y1, z1), (x2, y2, z2) and (x3, y3, z3)
+     */
     public static int heightInTriangle(int x, int y, int x1, int y1, int z1, int x2, int y2, int z2, int x3, int y3, int z3) {
         return (z3 * (x - x1) * (y - y2) + z1 * (x - x2) * (y - y3) + z2 * (x - x3) * (y - y1) - z2 * (x - x1) * (y - y3) - z3 * (x - x2) * (y - y1) - z1 * (x - x3) * (y - y2)) / ((x - x1) * (y - y2) + (x - x2) * (y - y3) + (x - x3) * (y - y1) - (x - x1) * (y - y3) - (x - x2) * (y - y1) - (x - x3) * (y - y2));
     }
