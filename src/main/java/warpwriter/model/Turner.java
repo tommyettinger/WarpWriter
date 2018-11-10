@@ -1,14 +1,13 @@
 package warpwriter.model;
 
 /**
- * Rotates integer coordinates
+ * Rotates integer coordinates.
+ * x+ is north, y+ is east and z+ is up.
+ * We are following right-hand rotation.
  *
  * @author Ben McLean
  */
 public class Turner {
-    /**
-     * x+ is north, y+ is east and z+ is up.
-     */
     public enum Face {
         UP, // z+
         DOWN, // z-
@@ -77,7 +76,7 @@ public class Turner {
             }
         }
 
-        public Face clcokZ() {
+        public Face clockZ() {
             switch (this) {
                 default:
                     return this;
@@ -126,9 +125,6 @@ public class Turner {
         }
     }
 
-    /**
-     * We are following right-hand rotation.
-     */
     public enum Roll {
         NONE, RIGHT, UTURN, LEFT;
 
@@ -375,13 +371,7 @@ public class Turner {
         switch (face) {
             case NORTH: // x+
             default:
-                return set(Face.EAST);
-            case EAST: // y+
-                return set(Face.SOUTH);
-            case SOUTH: // x-
-                return set(Face.WEST);
-            case WEST: // y-
-                return set(Face.NORTH);
+                return set(face().clockZ());
             case UP: // z+
                 return set(roll.counter());
             case DOWN: // z-
@@ -391,15 +381,8 @@ public class Turner {
 
     public Turner counterZ() {
         switch (face) {
-            case NORTH: // x+
             default:
-                return set(Face.WEST);
-            case EAST: // y+
-                return set(Face.NORTH);
-            case SOUTH: // x-
-                return set(Face.EAST);
-            case WEST: // y-
-                return set(Face.SOUTH);
+                return set(face().counterZ());
             case UP: // z+
                 return set(roll.clock());
             case DOWN: // z-
