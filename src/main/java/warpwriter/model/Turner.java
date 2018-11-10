@@ -7,7 +7,7 @@ package warpwriter.model;
  */
 public class Turner {
     /**
-     * I hereby declare that z+ is upwards, x+ is north and y+ is east
+     * x+ is north, y+ is east and z+ is up.
      */
     public enum Face {
         UP, // z+
@@ -16,6 +16,96 @@ public class Turner {
         EAST, // y+
         SOUTH, // x-
         WEST; // y-
+
+        public Face clockX() {
+            switch (this) {
+                default:
+                    return this;
+                case UP:
+                    return EAST;
+                case EAST:
+                    return DOWN;
+                case DOWN:
+                    return WEST;
+                case WEST:
+                    return UP;
+            }
+        }
+
+        public Face counterX() {
+            switch (this) {
+                default:
+                    return this;
+                case UP:
+                    return WEST;
+                case WEST:
+                    return DOWN;
+                case DOWN:
+                    return EAST;
+                case EAST:
+                    return UP;
+            }
+        }
+
+        public Face clockY() {
+            switch (this) {
+                default:
+                    return this;
+                case UP:
+                    return NORTH;
+                case NORTH:
+                    return DOWN;
+                case DOWN:
+                    return SOUTH;
+                case SOUTH:
+                    return UP;
+            }
+        }
+
+        public Face counterY() {
+            switch (this) {
+                default:
+                    return this;
+                case UP:
+                    return SOUTH;
+                case SOUTH:
+                    return DOWN;
+                case DOWN:
+                    return NORTH;
+                case NORTH:
+                    return UP;
+            }
+        }
+
+        public Face clcokZ() {
+            switch (this) {
+                default:
+                    return this;
+                case NORTH:
+                    return WEST;
+                case WEST:
+                    return SOUTH;
+                case SOUTH:
+                    return EAST;
+                case EAST:
+                    return NORTH;
+            }
+        }
+
+        public Face counterZ() {
+            switch (this) {
+                default:
+                    return this;
+                case NORTH:
+                    return EAST;
+                case EAST:
+                    return SOUTH;
+                case SOUTH:
+                    return WEST;
+                case WEST:
+                    return NORTH;
+            }
+        }
 
         public Face opposite() {
             switch (this) {

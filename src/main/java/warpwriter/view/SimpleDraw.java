@@ -3,10 +3,10 @@ package warpwriter.view;
 import warpwriter.model.IModel;
 
 public class SimpleDraw {
-    protected static IColor simpleColor = new LightColor();
+    protected static IColor color = new LightColor();
 
     public static void simpleDraw(IModel model, IRenderer renderer) {
-        simpleDraw(model, renderer, simpleColor);
+        simpleDraw(model, renderer, color);
     }
 
     public static void simpleDraw(IModel model, IRenderer renderer, IColor color) {
@@ -15,7 +15,7 @@ public class SimpleDraw {
                 for (int x = 0; x < model.xSize(); x++) {
                     byte result = model.at(x, y, z);
                     if (result != 0) {
-                        renderer.drawPixel(y, z, color.leftFace(result));
+                        renderer.drawPixel(y, z, color.rightFace(result));
                         break;
                     }
                 }
@@ -24,7 +24,7 @@ public class SimpleDraw {
     }
 
     public static void simpleDraw45(IModel model, IRenderer renderer) {
-        simpleDraw45(model, renderer, simpleColor);
+        simpleDraw45(model, renderer, color);
     }
 
     public static void simpleDraw45(IModel model, IRenderer renderer, IColor color) {
@@ -37,7 +37,7 @@ public class SimpleDraw {
                         break; // we are inside the model here, don't try to render any further
                     byte result = model.at(vx, vy, py);
                     if (result != 0) {
-                        renderer.drawRect(px, (py << 1), 2, 2, color.leftFace(result)); // "<<1" means "*2"
+                        renderer.drawRect(px, (py << 1), 2, 2, color.rightFace(result)); // "<<1" means "*2"
                         break;
                     }
                 }
@@ -46,7 +46,7 @@ public class SimpleDraw {
                         break; // we are inside the model here, don't try to render any further
                     byte result = model.at(vx, vy, py);
                     if (result != 0) {
-                        renderer.drawRect(px, (py << 1), 2, 2, color.leftFace(result)); // "<<1" means "*2"
+                        renderer.drawRect(px, (py << 1), 2, 2, color.rightFace(result)); // "<<1" means "*2"
                         break;
                     }
                 }

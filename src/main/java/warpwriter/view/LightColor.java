@@ -38,35 +38,7 @@ public class LightColor implements IColor {
             return this == ABOVE_LEFT ? ABOVE_RIGHT : this == BELOW_LEFT ? BELOW_RIGHT : this;
         }
 
-        public Direction zTurn() {
-            switch (this) {
-                default:
-                case ABOVE_RIGHT:
-                    return ABOVE_LEFT;
-                case ABOVE_LEFT:
-                    return ABOVE_RIGHT;
-                case BELOW_RIGHT:
-                    return BELOW_LEFT;
-                case BELOW_LEFT:
-                    return BELOW_RIGHT;
-            }
-        }
-
-        public Direction yTurn() {
-            switch (this) {
-                default:
-                case ABOVE_RIGHT:
-                    return BELOW_RIGHT;
-                case ABOVE_LEFT:
-                    return BELOW_LEFT;
-                case BELOW_RIGHT:
-                    return ABOVE_RIGHT;
-                case BELOW_LEFT:
-                    return ABOVE_LEFT;
-            }
-        }
-
-        public Direction xClock() {
+        public Direction clockX() {
             switch (this) {
                 default:
                 case ABOVE_RIGHT:
@@ -80,7 +52,7 @@ public class LightColor implements IColor {
             }
         }
 
-        public Direction xCounter() {
+        public Direction counterX() {
             switch (this) {
                 default:
                 case ABOVE_RIGHT:
@@ -91,6 +63,34 @@ public class LightColor implements IColor {
                     return BELOW_RIGHT;
                 case BELOW_RIGHT:
                     return ABOVE_LEFT;
+            }
+        }
+
+        public Direction turnY() {
+            switch (this) {
+                default:
+                case ABOVE_RIGHT:
+                    return BELOW_RIGHT;
+                case ABOVE_LEFT:
+                    return BELOW_LEFT;
+                case BELOW_RIGHT:
+                    return ABOVE_RIGHT;
+                case BELOW_LEFT:
+                    return ABOVE_LEFT;
+            }
+        }
+
+        public Direction turnZ() {
+            switch (this) {
+                default:
+                case ABOVE_RIGHT:
+                    return ABOVE_LEFT;
+                case ABOVE_LEFT:
+                    return ABOVE_RIGHT;
+                case BELOW_RIGHT:
+                    return BELOW_LEFT;
+                case BELOW_LEFT:
+                    return BELOW_RIGHT;
             }
         }
 
