@@ -3,7 +3,7 @@ package warpwriter.view;
 import warpwriter.model.IModel;
 
 public class SimpleDraw {
-    protected static SimpleColor simpleColor = new SimpleColor();
+    protected static IColor simpleColor = new LightColor();
 
     public static void simpleDraw(IModel model, IRenderer renderer) {
         simpleDraw(model, renderer, simpleColor);
@@ -15,7 +15,7 @@ public class SimpleDraw {
                 for (int x = 0; x < model.xSize(); x++) {
                     byte result = model.at(x, y, z);
                     if (result != 0) {
-                        renderer.drawPixel(y, z, color.topFace(result));
+                        renderer.drawPixel(y, z, color.leftFace(result));
                         break;
                     }
                 }
