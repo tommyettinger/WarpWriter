@@ -214,6 +214,8 @@ public class VoxelColor implements IVoxelColor {
     public interface ITwilight {
         int dark(byte voxel);
 
+        int dim(byte voxel);
+
         int twilight(byte voxel);
 
         int bright(byte voxel);
@@ -233,8 +235,13 @@ public class VoxelColor implements IVoxelColor {
         }
 
         @Override
-        public int dark(byte voxel) {
+        public int dim(byte voxel) {
             return palette[(voxel & 255) + 1]; // TODO: Make array safe!
+        }
+
+        @Override
+        public int dark(byte voxel) {
+            return palette[(voxel & 255) + 2]; // TODO: Make array safe!
         }
     };
 
@@ -252,20 +259,20 @@ public class VoxelColor implements IVoxelColor {
     @Override
     public int topFace(byte voxel) {
         return lightDirection.isHorizontal() ? twilight.twilight(voxel)
-                : lightDirection.isAbove() ? twilight.bright(voxel) : twilight.dark(voxel);
+                : lightDirection.isAbove() ? twilight.bright(voxel) : twilight.dim(voxel);
     }
 
     @Override
     public int bottomFace(byte voxel) {
         return lightDirection.isHorizontal() ? twilight.twilight(voxel)
-                : lightDirection.isBelow() ? twilight.bright(voxel) : twilight.dark(voxel);
+                : lightDirection.isBelow() ? twilight.bright(voxel) : twilight.dim(voxel);
     }
 
     @Override
     public int leftFace(byte voxel) {
         return lightDirection == LightDirection.LEFT ? twilight.bright(voxel)
                 : vertVisible ?
-                lightDirection.isLeft() ? twilight.twilight(voxel) : twilight.dark(voxel)
+                lightDirection.isLeft() ? twilight.twilight(voxel) : twilight.dim(voxel)
                 : lightDirection.isLeft() ? twilight.bright(voxel) : twilight.twilight(voxel);
     }
 
@@ -273,7 +280,7 @@ public class VoxelColor implements IVoxelColor {
     public int rightFace(byte voxel) {
         return lightDirection == LightDirection.RIGHT ? twilight.bright(voxel)
                 : vertVisible ?
-                lightDirection.isRight() ? twilight.twilight(voxel) : twilight.dark(voxel)
+                lightDirection.isRight() ? twilight.twilight(voxel) : twilight.dim(voxel)
                 : lightDirection.isRight() ? twilight.bright(voxel) : twilight.twilight(voxel);
     }
 }
