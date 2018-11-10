@@ -296,97 +296,68 @@ public class Turner {
     }
 
     public Turner clockX() {
-        switch (face) {
-            case NORTH: // x+
-            default:
-                return set(roll.clock());
-            case EAST: // y+
-                return set(Face.DOWN, roll.counter());
-            case SOUTH: // x-
-                return set(roll.counter());
-            case WEST: // y-
-                return set(Face.UP, roll.counter());
-            case UP: // z+
-                return set(Face.EAST, roll.counter());
-            case DOWN: // z-
-                return set(Face.WEST, roll.counter());
-        }
+        return set(face.clockX(), face == Face.NORTH ? roll.clock() : roll.counter());
     }
 
     public Turner counterX() {
-        switch (face) {
-            case NORTH: // x+
-            default:
-                return set(roll.counter());
-            case EAST: // y+
-                return set(Face.UP, roll.clock());
-            case SOUTH: // x-
-                return set(roll.clock());
-            case WEST: // y-
-                return set(Face.DOWN, roll.clock());
-            case UP: // z+
-                return set(Face.WEST, roll.clock());
-            case DOWN: // z-
-                return set(Face.EAST, roll.clock());
-        }
+        return set(face.counterX(), face == Face.NORTH ? roll.counter() : roll.clock());
     }
 
     public Turner clockY() {
         switch (face) {
-            case NORTH: // x+
-            default:
-                return set(Face.DOWN);
-            case EAST: // y+
-                return set(roll.counter());
-            case SOUTH: // x-
-                return set(Face.UP, roll.uturn());
-            case WEST: // y-
-                return set(roll.clock());
-            case UP: // z+
-                return set(Face.NORTH);
             case DOWN: // z-
-                return set(Face.SOUTH, roll.uturn());
+                set(roll.uturn());
+                break;
+            case SOUTH: // x-
+                set(roll.uturn());
+                break;
+            case EAST: // y+
+                set(roll.counter());
+                break;
+            case WEST: // y-
+                set(roll.clock());
+                break;
         }
+        return set(face.clockY());
     }
 
     public Turner counterY() {
         switch (face) {
-            case NORTH: // x+
-            default:
-                return set(Face.UP);
-            case EAST: // y+
-                return set(roll.clock());
-            case SOUTH: // x-
-                return set(Face.DOWN, roll.uturn());
-            case WEST: // y-
-                return set(roll.counter());
             case UP: // z+
-                return set(Face.SOUTH, roll.uturn());
-            case DOWN: // z-
-                return set(Face.NORTH);
+                set(roll.uturn());
+                break;
+            case SOUTH: // x-
+                set(roll.uturn());
+                break;
+            case EAST: // y+
+                set(roll.clock());
+                break;
+            case WEST: // y-
+                set(roll.counter());
+                break;
         }
+        return set(face.counterY());
     }
 
     public Turner clockZ() {
         switch (face) {
-            case NORTH: // x+
-            default:
-                return set(face().clockZ());
             case UP: // z+
                 return set(roll.counter());
             case DOWN: // z-
                 return set(roll.clock());
+            default:
+                return set(face.clockZ());
         }
     }
 
     public Turner counterZ() {
         switch (face) {
-            default:
-                return set(face().counterZ());
             case UP: // z+
                 return set(roll.clock());
             case DOWN: // z-
                 return set(roll.counter());
+            default:
+                return set(face.counterZ());
         }
     }
 
