@@ -1,6 +1,6 @@
 package warpwriter.view;
 
-public interface IColor {
+public interface IVoxelColor {
     int topFace(byte voxel);
     int bottomFace(byte voxel);
     int leftFace(byte voxel);

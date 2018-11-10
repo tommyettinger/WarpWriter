@@ -3,13 +3,13 @@ package warpwriter.view;
 import warpwriter.model.IModel;
 
 public class SimpleDraw {
-    protected static IColor color = new LightColor();
+    protected static IVoxelColor color = new VoxelColor();
 
     public static void simpleDraw(IModel model, IRenderer renderer) {
         simpleDraw(model, renderer, color);
     }
 
-    public static void simpleDraw(IModel model, IRenderer renderer, IColor color) {
+    public static void simpleDraw(IModel model, IRenderer renderer, IVoxelColor color) {
         for (int z = 0; z < model.zSize(); z++) {
             for (int y = 0; y < model.ySize(); y++) {
                 for (int x = 0; x < model.xSize(); x++) {
@@ -27,7 +27,7 @@ public class SimpleDraw {
         simpleDraw45(model, renderer, color);
     }
 
-    public static void simpleDraw45(IModel model, IRenderer renderer, IColor color) {
+    public static void simpleDraw45(IModel model, IRenderer renderer, IVoxelColor color) {
         final int xSize = model.xSize(), ySize = model.ySize(), zSize = model.zSize();
         final int pixelWidth = xSize + ySize;
         for (int px = 0; px < pixelWidth; px++) { // pixel x
