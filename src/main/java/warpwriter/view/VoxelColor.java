@@ -93,7 +93,7 @@ public class VoxelColor implements IVoxelColor {
             }
         }
 
-        public LightDirection clockX() {
+        public LightDirection clock() {
             switch (this) {
                 case ABOVE_RIGHT:
                     return RIGHT;
@@ -112,7 +112,7 @@ public class VoxelColor implements IVoxelColor {
             }
         }
 
-        public LightDirection counterX() {
+        public LightDirection counter() {
             switch (this) {
                 case ABOVE_RIGHT:
                     return ABOVE_LEFT;
@@ -196,18 +196,14 @@ public class VoxelColor implements IVoxelColor {
         return this;
     }
 
-    protected boolean vertVisible = true;
+    protected boolean lightFromFront = true;
 
-    public boolean vertVisible() {
-        return vertVisible;
+    public boolean lightFromFront() {
+        return lightFromFront;
     }
 
-    /**
-     * @param vertVisible Sets whether the vertical face (top or bottom) of the direction the light is pointing is visible from the angle being rendered from. This affects color choice. The left and right faces will use brighter colors if this is false.
-     * @return this
-     */
-    public VoxelColor set(boolean vertVisible) {
-        this.vertVisible = vertVisible;
+    public VoxelColor set(boolean lightFromFront) {
+        this.lightFromFront = lightFromFront;
         return this;
     }
 
@@ -271,16 +267,16 @@ public class VoxelColor implements IVoxelColor {
     @Override
     public int leftFace(byte voxel) {
         return lightDirection == LightDirection.LEFT ? twilight.bright(voxel)
-                : vertVisible ?
+                : lightFromFront ?
                 lightDirection.isLeft() ? twilight.twilight(voxel) : twilight.dim(voxel)
-                : lightDirection.isLeft() ? twilight.bright(voxel) : twilight.twilight(voxel);
+                : lightDirection.isLeft() ? twilight.dim(voxel) : twilight.dark(voxel);
     }
 
     @Override
     public int rightFace(byte voxel) {
         return lightDirection == LightDirection.RIGHT ? twilight.bright(voxel)
-                : vertVisible ?
+                : lightFromFront ?
                 lightDirection.isRight() ? twilight.twilight(voxel) : twilight.dim(voxel)
-                : lightDirection.isRight() ? twilight.bright(voxel) : twilight.twilight(voxel);
+                : lightDirection.isRight() ? twilight.dim(voxel) : twilight.dark(voxel);
     }
 }
