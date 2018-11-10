@@ -3,7 +3,7 @@ package warpwriter.view;
 import warpwriter.Coloring;
 
 public class LightColor implements IColor {
-    public enum Direction {
+    public enum LightDirection {
         ABOVE_RIGHT, ABOVE_LEFT, BELOW_RIGHT, BELOW_LEFT;
 
         public boolean isAbove() {
@@ -22,23 +22,23 @@ public class LightColor implements IColor {
             return !isLeft();
         }
 
-        public Direction above() {
+        public LightDirection above() {
             return this == BELOW_RIGHT ? ABOVE_RIGHT : this == BELOW_LEFT ? ABOVE_LEFT : this;
         }
 
-        public Direction below() {
+        public LightDirection below() {
             return this == ABOVE_RIGHT ? BELOW_RIGHT : this == ABOVE_LEFT ? BELOW_LEFT : this;
         }
 
-        public Direction left() {
+        public LightDirection left() {
             return this == ABOVE_RIGHT ? ABOVE_LEFT : this == BELOW_RIGHT ? BELOW_LEFT : this;
         }
 
-        public Direction right() {
+        public LightDirection right() {
             return this == ABOVE_LEFT ? ABOVE_RIGHT : this == BELOW_LEFT ? BELOW_RIGHT : this;
         }
 
-        public Direction clockX() {
+        public LightDirection clockX() {
             switch (this) {
                 default:
                 case ABOVE_RIGHT:
@@ -52,7 +52,7 @@ public class LightColor implements IColor {
             }
         }
 
-        public Direction counterX() {
+        public LightDirection counterX() {
             switch (this) {
                 default:
                 case ABOVE_RIGHT:
@@ -66,7 +66,7 @@ public class LightColor implements IColor {
             }
         }
 
-        public Direction turnY() {
+        public LightDirection turnY() {
             switch (this) {
                 default:
                 case ABOVE_RIGHT:
@@ -80,7 +80,7 @@ public class LightColor implements IColor {
             }
         }
 
-        public Direction turnZ() {
+        public LightDirection turnZ() {
             switch (this) {
                 default:
                 case ABOVE_RIGHT:
@@ -94,7 +94,7 @@ public class LightColor implements IColor {
             }
         }
 
-        public Direction opposite() {
+        public LightDirection opposite() {
             switch (this) {
                 default:
                 case ABOVE_RIGHT:
@@ -109,14 +109,14 @@ public class LightColor implements IColor {
         }
     }
 
-    protected Direction direction = Direction.ABOVE_RIGHT;
+    protected LightDirection lightDirection = LightDirection.ABOVE_RIGHT;
 
-    public Direction direction() {
-        return direction;
+    public LightDirection direction() {
+        return lightDirection;
     }
 
-    public LightColor set(Direction direction) {
-        this.direction = direction;
+    public LightColor set(LightDirection lightDirection) {
+        this.lightDirection = lightDirection;
         return this;
     }
 
@@ -160,25 +160,25 @@ public class LightColor implements IColor {
 
     @Override
     public int topFace(byte voxel) {
-        return direction.isAbove() ? bright(voxel) : dark(voxel);
+        return lightDirection.isAbove() ? bright(voxel) : dark(voxel);
     }
 
     @Override
     public int bottomFace(byte voxel) {
-        return direction.isBelow() ? bright(voxel) : dark(voxel);
+        return lightDirection.isBelow() ? bright(voxel) : dark(voxel);
     }
 
     @Override
     public int leftFace(byte voxel) {
         return vertVisible ?
-                direction.isLeft() ? normal(voxel) : dark(voxel)
-                : direction.isLeft() ? bright(voxel) : normal(voxel);
+                lightDirection.isLeft() ? normal(voxel) : dark(voxel)
+                : lightDirection.isLeft() ? bright(voxel) : normal(voxel);
     }
 
     @Override
     public int rightFace(byte voxel) {
         return vertVisible ?
-                direction.isRight() ? normal(voxel) : dark(voxel)
-                : direction.isRight() ? bright(voxel) : normal(voxel);
+                lightDirection.isRight() ? normal(voxel) : dark(voxel)
+                : lightDirection.isRight() ? bright(voxel) : normal(voxel);
     }
 }
