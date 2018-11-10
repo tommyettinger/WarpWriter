@@ -2,6 +2,9 @@ package warpwriter.view;
 
 import warpwriter.Coloring;
 
+/**
+ * @author Ben McLean
+ */
 public class VoxelColor implements IVoxelColor {
     public enum LightDirection {
         ABOVE_LEFT, ABOVE_RIGHT,
@@ -196,14 +199,17 @@ public class VoxelColor implements IVoxelColor {
         return this;
     }
 
-    protected boolean lightFromFront = true;
+    /**
+     * Your feeble skills are no match for the power of the Dark Side.
+     */
+    protected boolean darkSide = false;
 
-    public boolean lightFromFront() {
-        return lightFromFront;
+    public boolean darkSide() {
+        return darkSide;
     }
 
-    public VoxelColor set(boolean lightFromFront) {
-        this.lightFromFront = lightFromFront;
+    public VoxelColor set(boolean darkSide) {
+        this.darkSide = darkSide;
         return this;
     }
 
@@ -267,16 +273,16 @@ public class VoxelColor implements IVoxelColor {
     @Override
     public int leftFace(byte voxel) {
         return lightDirection == LightDirection.LEFT ? twilight.bright(voxel)
-                : lightFromFront ?
-                lightDirection.isLeft() ? twilight.twilight(voxel) : twilight.dim(voxel)
-                : lightDirection.isLeft() ? twilight.dim(voxel) : twilight.dark(voxel);
+                : darkSide ?
+                lightDirection.isLeft() ? twilight.dim(voxel) : twilight.dark(voxel)
+                : lightDirection.isLeft() ? twilight.twilight(voxel) : twilight.dim(voxel);
     }
 
     @Override
     public int rightFace(byte voxel) {
         return lightDirection == LightDirection.RIGHT ? twilight.bright(voxel)
-                : lightFromFront ?
-                lightDirection.isRight() ? twilight.twilight(voxel) : twilight.dim(voxel)
-                : lightDirection.isRight() ? twilight.dim(voxel) : twilight.dark(voxel);
+                : darkSide ?
+                lightDirection.isRight() ? twilight.dim(voxel) : twilight.dark(voxel)
+                : lightDirection.isRight() ? twilight.twilight(voxel) : twilight.dim(voxel);
     }
 }
