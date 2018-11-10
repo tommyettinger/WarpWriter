@@ -3,20 +3,6 @@ package warpwriter.view;
 import warpwriter.Coloring;
 
 public class LightColor implements IColor {
-    protected int[] palette = Coloring.RINSED;
-    // vox - 1 is bright
-    // vox is normal
-    // vox + 1 is dark
-
-    public int[] palette() {
-        return palette;
-    }
-
-    public LightColor set(int[] palette) {
-        this.palette = palette;
-        return this;
-    }
-
     public enum Direction {
         ABOVE_RIGHT, ABOVE_LEFT, BELOW_RIGHT, BELOW_LEFT;
 
@@ -146,6 +132,17 @@ public class LightColor implements IColor {
      */
     public LightColor set(boolean vertVisible) {
         this.vertVisible = vertVisible;
+        return this;
+    }
+
+    protected int[] palette = Coloring.RINSED;
+
+    public int[] palette() {
+        return palette;
+    }
+
+    public LightColor set(int[] palette) {
+        this.palette = palette;
         return this;
     }
 
