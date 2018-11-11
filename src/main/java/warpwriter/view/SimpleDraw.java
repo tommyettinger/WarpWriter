@@ -32,15 +32,6 @@ public class SimpleDraw {
         final int pixelWidth = xSize + ySize;
         for (int px = 0; px < pixelWidth; px++) { // pixel x
             for (int py = 0; py < zSize; py++) { // pixel y
-                for (int vx = 0, vy = px; vx < xSize && vy >= 0; vx++, vy--) { // vx is voxel x, vy is voxel y
-                    if (model.at(vx - 1, vy, py) != 0 && model.at(vx, vy + 1, py) != 0)
-                        break; // we are inside the model here, don't try to render any further
-                    byte result = model.at(vx, vy, py);
-                    if (result != 0) {
-                        renderer.drawRect(px, (py), 1, 1, color.rightFace(result)); // "<<1" means "*2"
-                        break;
-                    }
-                }
                 for (int vx = px - ySize + 1, vy = ySize - 1; vx < xSize && vy >= 0; vx++, vy--) {  // vx is voxel x, vy is voxel y
                     if (model.at(vx - 1, vy, py) != 0 && model.at(vx, vy + 1, py) != 0)
                         break; // we are inside the model here, don't try to render any further
