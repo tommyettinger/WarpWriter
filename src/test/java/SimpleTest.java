@@ -177,7 +177,7 @@ public class SimpleTest extends ApplicationAdapter {
         if (direction.isCardinal())
             SimpleDraw.simpleDraw(turnModel, batchRenderer.setScale(16f));
         else
-            SimpleDraw.simpleDraw45(turnModel, batchRenderer.setScale(8f));
+            SimpleDraw.simpleDraw45(turnModel, batchRenderer.setScale(12f, 16f));
 
         batch.end();
         buffer.end();
