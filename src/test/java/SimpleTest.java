@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import warpwriter.ModelMaker;
+import warpwriter.Tools3D;
 import warpwriter.model.ArrayModel;
 import warpwriter.model.CompassDirection;
 import warpwriter.model.TurnModel;
@@ -34,6 +35,8 @@ public class SimpleTest extends ApplicationAdapter {
     protected Texture screenTexture;
     protected TextureRegion screenRegion;
     protected TurnModel turnModel;
+    protected ArrayModel knightModel;
+    protected ModelMaker maker;
     private SpriteBatchRenderer batchRenderer;
     protected CompassDirection direction = CompassDirection.NORTH;
     protected int angle=2;
@@ -51,7 +54,9 @@ public class SimpleTest extends ApplicationAdapter {
         batch.enableBlending();
 
         batchRenderer = new SpriteBatchRenderer(batch).setScale(16f);
-        turnModel = new TurnModel(new ArrayModel(new ModelMaker().warriorRandom()));
+        maker = new ModelMaker(12345);
+        knightModel = new ArrayModel(maker.warriorRandom());
+        turnModel = new TurnModel(knightModel);
 
         //reDraw();
         Gdx.input.setInputProcessor(new InputAdapter() {
@@ -145,6 +150,9 @@ public class SimpleTest extends ApplicationAdapter {
                         break;
                     case Input.Keys.L:
                         turnModel.turner().counterZ();
+                        break;
+                    case Input.Keys.R:
+                        Tools3D.deepCopyInto(maker.warriorRandom(), knightModel.voxels);
                         break;
                     case Input.Keys.ESCAPE:
                         Gdx.app.exit();
