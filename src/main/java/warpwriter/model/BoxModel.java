@@ -17,6 +17,22 @@ public class BoxModel extends FetchModel {
         this(xSize, ySize, zSize, fetch);
     }
 
+    /**
+     * @param model A model which gets added inside the box. Warning: Box size is based on initial model. Does not automatically update box size if model size changes!
+     * @param fetch Color of the box
+     */
+    public BoxModel (IModel model, Fetch fetch) {
+        this(fetch, model.xSize(), model.ySize(), model.zSize());
+        add(new FetchModel(model));
+    }
+
+    /**
+     * @see BoxModel(IModel, Fetch)
+     */
+    public BoxModel (Fetch fetch, IModel model) {
+        this(model, fetch);
+    }
+
     public BoxModel(byte[][][] convenience, Fetch fetch) {
         this(convenience.length, convenience[0].length, convenience[0][0].length, fetch);
     }

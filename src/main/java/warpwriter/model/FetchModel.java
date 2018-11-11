@@ -25,6 +25,15 @@ public class FetchModel extends Fetch implements IModel {
         if (fetch != null) add(fetch);
     }
 
+    /**
+     * Converts an IModel which doesn't extend Fetch into one that does.
+     * @param model Warning: FetchModel size is based on initial model. Does not automatically update FetchModel size if model size changes!
+     */
+    public FetchModel (IModel model) {
+        set(model.xSize(), model.ySize(), model.zSize());
+        add(new FetchFetch(model));
+    }
+
     public FetchModel(byte[][][] convenience) {
         this(convenience, null);
     }

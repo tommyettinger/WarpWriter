@@ -11,10 +11,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import warpwriter.LittleEndianDataInputStream;
-import warpwriter.ModelRenderer;
-import warpwriter.VoxIO;
-import warpwriter.WorldMaker;
+import warpwriter.*;
 import warpwriter.model.*;
 
 import java.io.FileInputStream;
@@ -47,7 +44,9 @@ public class TurnTest extends ApplicationAdapter {
             e.printStackTrace();
             arr = new byte[80][80][60];
         }
-        turnModel = new TurnModel(world = new ArrayModel(arr));
+        turnModel = new TurnModel(new BoxModel(world = new ArrayModel(arr),
+                ColorFetch.color((byte) Coloring.RINSED_NAMES.get("Red 4").intValue())
+        ));
 
         reDraw();
         Gdx.input.setInputProcessor(new InputAdapter() {
