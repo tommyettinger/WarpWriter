@@ -53,9 +53,9 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D, IDecide {
             current = next;
             current.setChains(x, y, z);
             next = current.fetch();
-            x = current.xChain;
-            y = current.yChain;
-            z = current.zChain;
+            x = current.xChain();
+            y = current.yChain();
+            z = current.zChain();
         } while (next != null);
         return current.bite();
     }
