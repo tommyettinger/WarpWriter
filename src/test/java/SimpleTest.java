@@ -13,12 +13,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import warpwriter.Coloring;
 import warpwriter.ModelMaker;
 import warpwriter.Tools3D;
-import warpwriter.model.ArrayModel;
-import warpwriter.model.CompassDirection;
-import warpwriter.model.TurnModel;
-import warpwriter.model.Turner;
+import warpwriter.model.*;
 import warpwriter.view.SimpleDraw;
 import warpwriter.view.SpriteBatchRenderer;
 
@@ -56,7 +54,9 @@ public class SimpleTest extends ApplicationAdapter {
         batchRenderer = new SpriteBatchRenderer(batch).setScale(16f);
         maker = new ModelMaker(12345);
         knightModel = new ArrayModel(maker.warriorRandom());
-        turnModel = new TurnModel(knightModel);
+        turnModel = new TurnModel(new BoxModel(knightModel,
+                ColorFetch.color((byte) Coloring.RINSED_NAMES.get("Red 4").intValue())
+        ));
 
         //reDraw();
         Gdx.input.setInputProcessor(new InputAdapter() {
