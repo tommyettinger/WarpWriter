@@ -19,6 +19,7 @@ import warpwriter.Tools3D;
 import warpwriter.model.*;
 import warpwriter.view.SimpleDraw;
 import warpwriter.view.SpriteBatchRenderer;
+import warpwriter.view.VoxelColor;
 
 public class SimpleTest extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 1280;
@@ -36,6 +37,7 @@ public class SimpleTest extends ApplicationAdapter {
     protected ArrayModel knightModel;
     protected ModelMaker maker;
     private SpriteBatchRenderer batchRenderer;
+    protected VoxelColor voxelColor;
     protected CompassDirection direction = CompassDirection.NORTH;
     protected int angle=2;
 
@@ -51,6 +53,7 @@ public class SimpleTest extends ApplicationAdapter {
         screenView.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.enableBlending();
 
+        voxelColor = new VoxelColor();
         batchRenderer = new SpriteBatchRenderer(batch).setScale(16f);
         maker = new ModelMaker(12345);
         knightModel = new ArrayModel(maker.warriorRandom());
@@ -154,6 +157,15 @@ public class SimpleTest extends ApplicationAdapter {
                     case Input.Keys.R:
                         Tools3D.deepCopyInto(maker.warriorRandom(), knightModel.voxels);
                         break;
+                    case Input.Keys.G:
+                        voxelColor.set(voxelColor.direction().counter());
+                        break;
+                    case Input.Keys.H:
+                        voxelColor.set(voxelColor.direction().clock());
+                        break;
+                    case Input.Keys.Y:
+                        voxelColor.set(!voxelColor.darkSide());
+                        break;
                     case Input.Keys.ESCAPE:
                         Gdx.app.exit();
                         break;
@@ -183,9 +195,9 @@ public class SimpleTest extends ApplicationAdapter {
         font.draw(batch, direction.toString(), 200, 60);
         //batch.draw(tex, 0, 0);
         if (direction.isCardinal())
-            SimpleDraw.simpleDraw(turnModel, batchRenderer.setScale(16f));
+            SimpleDraw.simpleDraw(turnModel, batchRenderer.setScale(16f), voxelColor);
         else
-            SimpleDraw.simpleDraw45(turnModel, batchRenderer.setScale(12f, 16f));
+            SimpleDraw.simpleDraw45(turnModel, batchRenderer.setScale(12f, 16f), voxelColor);
 
         batch.end();
         buffer.end();
