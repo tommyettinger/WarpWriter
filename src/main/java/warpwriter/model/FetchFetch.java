@@ -1,7 +1,7 @@
 package warpwriter.model;
 
 /**
- * Converts an IFetch which doesn't implement Fetch to one that does through encapsulation.
+ * Converts an IFetch which doesn't extend Fetch to one that does through encapsulation.
  *
  * @author Ben McLean
  */
