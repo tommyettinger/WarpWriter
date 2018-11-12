@@ -228,7 +228,7 @@ public class VoxelColor implements IVoxelColor {
 
         @Override
         public int bright(byte voxel) {
-            return palette[(voxel & 255) - 1]; // TODO: Make array safe!
+            return palette[(voxel & 248) + Math.max((voxel & 7) - 1, 0)];
         }
 
         @Override
@@ -238,12 +238,12 @@ public class VoxelColor implements IVoxelColor {
 
         @Override
         public int dim(byte voxel) {
-            return palette[(voxel & 255) + 1]; // TODO: Make array safe!
+            return palette[(voxel & 248) + Math.min((voxel & 7) + 1, 7)];
         }
 
         @Override
         public int dark(byte voxel) {
-            return palette[(voxel & 255) + 2]; // TODO: Make array safe!
+            return palette[(voxel & 248) + Math.min((voxel & 7) + 2, 7)];
         }
     };
 
