@@ -5,7 +5,7 @@ package warpwriter.model;
  */
 public class PlaneDecide implements IDecide {
     public enum Condition {
-        ON, OFF, ABOVE, BELOW, TRUE, FALSE
+        ON, OFF, ABOVE, ON_ABOVE, BELOW, ON_BELOW, TRUE, FALSE
     }
 
     protected Condition condition=Condition.ON;
@@ -19,52 +19,61 @@ public class PlaneDecide implements IDecide {
         return this;
     }
 
-    protected double a, b, c;
+    protected int a, b, c, o;
 
-    public double a() {
+    public int a() {
         return a;
     }
 
-    public double b() {
+    public int b() {
         return b;
     }
 
-    public double c() {
+    public int c() {
         return c;
     }
 
-    public PlaneDecide set(double a, double b, double c) {
+    /**
+     * Offset from the plane.
+     * @return the current offset
+     */
+    public int o() {
+        return o;
+    }
+
+    public PlaneDecide set(int a, int b, int c, int o) {
         this.a = a;
         this.b = b;
         this.c = c;
+        this.o = o;
         return this;
     }
 
-    public PlaneDecide(double a, double b, double c) {
-        this(a, b, c, Condition.ON);
-    }
-
-    public PlaneDecide(double a, double b, double c, Condition condition) {
-        set(a, b, c).set(condition);
+    public PlaneDecide(int a, int b, int c, int o) {
+        set(a, b, c, o);
     }
 
     @Override
     public boolean bool(int x, int y, int z) {
-        double result = x * a + y * b + z * c;
+        int result = x * a + y * b + z * c;
         switch (condition) {
-            default:
-            case ON:
-                return Math.abs(result) < 1;
             case OFF:
-                return !(Math.abs(result) < 1);
+                return result != o;
             case ABOVE:
-                return result > 0;
+                return result > o;
+            case ON_ABOVE:
+                return result >= o;
             case BELOW:
-                return result < 0;
+                return result < o;
+            case ON_BELOW:
+                return result <= o;
             case TRUE:
                 return true;
             case FALSE:
                 return false;
+            default:
+            case ON:
+                return result == o;
         }
     }
 }
