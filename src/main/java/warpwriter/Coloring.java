@@ -475,10 +475,10 @@ public class Coloring {
 
     /**
      * @param name Name of a color
-     * @return Retrieves colors from RINSED_NAMES
+     * @return Retrieves color as a byte from RINSED_NAMES, or 0 if the name isn't found
      */
     public static byte rinsed(String name) {
-        return (byte) Coloring.RINSED_NAMES.get(name).intValue();
+        return RINSED_NAMES.getOrDefault(name, 0).byteValue();
     }
 
     /**
