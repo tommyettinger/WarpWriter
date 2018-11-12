@@ -19,7 +19,7 @@ public class PlaneDecide implements IDecide {
         return this;
     }
 
-    protected int a, b, c;
+    protected int a, b, c, o;
 
     public int a() {
         return a;
@@ -33,38 +33,47 @@ public class PlaneDecide implements IDecide {
         return c;
     }
 
-    public PlaneDecide set(int a, int b, int c) {
+    /**
+     * Offset from the plane.
+     * @return the current offset
+     */
+    public int o() {
+        return o;
+    }
+
+    public PlaneDecide set(int a, int b, int c, int o) {
         this.a = a;
         this.b = b;
         this.c = c;
+        this.o = o;
         return this;
     }
 
-    public PlaneDecide(int a, int b, int c) {
-        set(a, b, c);
+    public PlaneDecide(int a, int b, int c, int o) {
+        set(a, b, c, o);
     }
 
     @Override
     public boolean bool(int x, int y, int z) {
         int result = x * a + y * b + z * c;
         switch (condition) {
-            default:
-            case ON:
-                return result == 0;
             case OFF:
-                return result != 0;
+                return result != o;
             case ABOVE:
-                return result > 0;
+                return result > o;
             case ON_ABOVE:
-                return result >= 0;
+                return result >= o;
             case BELOW:
-                return result < 0;
+                return result < o;
             case ON_BELOW:
-                return result <= 0;
+                return result <= o;
             case TRUE:
                 return true;
             case FALSE:
                 return false;
+            default:
+            case ON:
+                return result == o;
         }
     }
 }
