@@ -147,10 +147,10 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D, IDecide {
     /**
      * This method does not chain!
      *
-     * @return If fetch is null then return getNextFetch(), else return fetch.
+     * @return If fetch is null or it's bite returns transparent then return getNextFetch(), else return fetch.
      */
     public Fetch deferFetch(Fetch fetch) {
-        return fetch == null ? getNextFetch() : fetch;
+        return fetch == null || fetch.bite() == 0 ? getNextFetch() : fetch;
     }
 
     /**

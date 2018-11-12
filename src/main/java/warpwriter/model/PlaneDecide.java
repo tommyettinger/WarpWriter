@@ -5,7 +5,7 @@ package warpwriter.model;
  */
 public class PlaneDecide implements IDecide {
     public enum Condition {
-        ON, OFF, ABOVE, ON_ABOVE, BELOW, ON_BELOW, TRUE, FALSE
+        ON, OFF, ABOVE, BELOW, TRUE, FALSE
     }
 
     protected Condition condition=Condition.ON;
@@ -19,48 +19,48 @@ public class PlaneDecide implements IDecide {
         return this;
     }
 
-    protected int a, b, c;
+    protected double a, b, c;
 
-    public int a() {
+    public double a() {
         return a;
     }
 
-    public int b() {
+    public double b() {
         return b;
     }
 
-    public int c() {
+    public double c() {
         return c;
     }
 
-    public PlaneDecide set(int a, int b, int c) {
+    public PlaneDecide set(double a, double b, double c) {
         this.a = a;
         this.b = b;
         this.c = c;
         return this;
     }
 
-    public PlaneDecide(int a, int b, int c) {
-        set(a, b, c);
+    public PlaneDecide(double a, double b, double c) {
+        this(a, b, c, Condition.ON);
+    }
+
+    public PlaneDecide(double a, double b, double c, Condition condition) {
+        set(a, b, c).set(condition);
     }
 
     @Override
     public boolean bool(int x, int y, int z) {
-        int result = x * a + y * b + z * c;
+        double result = x * a + y * b + z * c;
         switch (condition) {
             default:
             case ON:
-                return result == 0;
+                return Math.abs(result) < 1;
             case OFF:
-                return result != 0;
+                return !(Math.abs(result) < 1);
             case ABOVE:
                 return result > 0;
-            case ON_ABOVE:
-                return result >= 0;
             case BELOW:
                 return result < 0;
-            case ON_BELOW:
-                return result <= 0;
             case TRUE:
                 return true;
             case FALSE:

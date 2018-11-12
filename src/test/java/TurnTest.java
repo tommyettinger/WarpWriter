@@ -48,7 +48,7 @@ public class TurnTest extends ApplicationAdapter {
 
         turnModel = new TurnModel(
                 new DecideFetch(
-                        new PlaneDecide(1, 1, 1).set(PlaneDecide.Condition.ON_BELOW),
+                        new PlaneDecide(1, 1, 1, PlaneDecide.Condition.BELOW),
                         ColorFetch.color((byte) Coloring.RINSED_NAMES.get("Red 4").intValue())
                 )
                         .boxModel(world,
