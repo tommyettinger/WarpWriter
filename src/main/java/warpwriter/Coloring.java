@@ -474,6 +474,14 @@ public class Coloring {
     };
 
     /**
+     * @param name Name of a color
+     * @return Retrieves colors from RINSED_NAMES
+     */
+    public static byte rinsed(String name) {
+        return (byte) Coloring.RINSED_NAMES.get(name).intValue();
+    }
+
+    /**
      * Big OrderedMap of a name for each color in {@link #RINSED}, mapping String keys to index values, while also
      * allowing lookup from an index to the corresponding String key using {@link OrderedMap#keyAt(int)}.
      * Colors with numbers after the names have 0 mean the lightest color in a ramp and 7 mean the darkest.

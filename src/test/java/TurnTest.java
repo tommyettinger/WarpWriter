@@ -44,9 +44,18 @@ public class TurnTest extends ApplicationAdapter {
             e.printStackTrace();
             arr = new byte[80][80][60];
         }
-        turnModel = new TurnModel(new BoxModel(world = new ArrayModel(arr),
+        world = new ArrayModel(arr);
+
+        turnModel = new TurnModel(
+                new DecideFetch(
+                        new PlaneDecide(1, 1, 1).set(PlaneDecide.Condition.ON_BELOW),
+                        ColorFetch.color((byte) Coloring.RINSED_NAMES.get("Red 4").intValue())
+                )
+                        .boxModel(world,
                 ColorFetch.color((byte) Coloring.RINSED_NAMES.get("Red 4").intValue())
-        ));
+        )
+                .model(world.xSize(), world.ySize(), world.zSize())
+        );
 
         reDraw();
         Gdx.input.setInputProcessor(new InputAdapter() {

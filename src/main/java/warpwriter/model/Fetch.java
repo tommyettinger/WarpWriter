@@ -38,7 +38,7 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D, IDecide {
      * @return A final answer, except that it is recommended to wrap results in deferByte(byte result, int x, int y, int z) to ensure smart transparency in the event of a broken chain or if someone screws up and calls this method in the wrong order.
      */
     public byte bite() {
-        return deferByte(xChain(), yChain(), zChain());
+        return deferByte();
     }
 
     /**
@@ -136,12 +136,12 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D, IDecide {
         return this;
     }
 
-    public Fetch deferFetch(int x, int y, int z) {
+    public Fetch deferFetch() {
         return getNextFetch() == null ? ColorFetch.transparent : getNextFetch();
     }
 
-    public Fetch deferFetch(byte result, int x, int y, int z) {
-        return result == 0 ? deferFetch(x, y, z) : ColorFetch.color(result);
+    public Fetch deferFetch(byte result) {
+        return result == 0 ? deferFetch() : ColorFetch.color(result);
     }
 
     /**
@@ -160,19 +160,19 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D, IDecide {
      * <p>
      * This should be the method which ensures that, when no next method is specified in the chain, the background is always transparent.
      */
-    public byte deferByte(byte result, int x, int y, int z) {
-        return result == (byte) 0 ? deferFetch(x, y, z).at(x, y, z) : result;
+    public byte deferByte(byte result) {
+        return result == (byte) 0 ? deferFetch().at(xChain(), yChain(), zChain()) : result;
     }
 
-    public byte deferByte(int x, int y, int z) {
-        return deferByte((byte) 0, x, y, z);
+    public byte deferByte() {
+        return deferByte((byte) 0);
     }
 
     /**
      * This method does not chain!
      * It goes on the end, to transform the results of a chain into an IModel
      */
-    public FetchModel model(int xSize, int ySize, int zSize) {
+    public IModel model(int xSize, int ySize, int zSize) {
         return new FetchModel(this, xSize, ySize, zSize);
     }
 
@@ -208,6 +208,10 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D, IDecide {
 
     public Fetch boxModel(byte[][][] convenience, Fetch color) {
         return add(new BoxModel(convenience, color));
+    }
+
+    public Fetch boxModel(IModel model, Fetch color) {
+        return add(new BoxModel(model, color));
     }
 
     public Fetch fetchFetch(IFetch iFetch) {

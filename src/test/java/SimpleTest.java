@@ -58,7 +58,7 @@ public class SimpleTest extends ApplicationAdapter {
         maker = new ModelMaker(12345);
         knightModel = new ArrayModel(maker.warriorRandom());
         turnModel = new TurnModel(new BoxModel(knightModel,
-                ColorFetch.color((byte) Coloring.RINSED_NAMES.get("Red 4").intValue())
+                ColorFetch.color(Coloring.rinsed("Red 4"))
         ));
 
         //reDraw();

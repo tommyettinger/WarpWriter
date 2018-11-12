@@ -72,7 +72,7 @@ public class TurnModel extends Fetch implements IModel {
 
     @Override
     public Fetch fetch() {
-        return deferFetch(bite(), xChain(), yChain(), zChain());
+        return deferFetch(bite());
     }
 
     @Override
@@ -91,6 +91,6 @@ public class TurnModel extends Fetch implements IModel {
                 zSize < 0 ?
                         turner().z() + getModel().zSize() - 1
                         : turner().z()
-        ), x, y, z);
+        ));
     }
 }
