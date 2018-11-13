@@ -43,14 +43,10 @@ public class BalloonDecide implements IDecide {
         return z2;
     }
 
-    public BalloonDecide setPoint1(int x1, int y1, int z1) {
+    public BalloonDecide set(int x1, int y1, int z1, int x2, int y2, int z2) {
         this.x1 = x1;
         this.y1 = y1;
         this.z1 = z1;
-        return lowGreat();
-    }
-
-    public BalloonDecide setPoint2(int x2, int y2, int z2) {
         this.x2 = x2;
         this.y2 = y2;
         this.z2 = z2;
@@ -58,82 +54,17 @@ public class BalloonDecide implements IDecide {
     }
 
     protected BalloonDecide lowGreat() {
-        //// having lessX and greatX set like this restricts BalloonDecide to only stretching in one direction.
-        //// It works better to just use the start and end points as-is.
-//        if (x1 <= x2) {
-//            lessX = x1;
-//            greatX = x2;
-//        } else {
-//            lessX = x2;
-//            greatX = x1;
-//        }
-//        if (y1 <= y2) {
-//            lessY = y1;
-//            greatY = y2;
-//        } else {
-//            lessY = y2;
-//            greatY = y1;
-//        }
-//        if (z1 <= z2) {
-//            lessZ = z1;
-//            greatZ = z2;
-//        } else {
-//            lessZ = z2;
-//            greatZ = z1;
-//        }
         distance = distance();
         return this;
     }
 
-    public boolean before = false, on = true, after = false;
-
-    public boolean before() {
-        return before;
-    }
-
-    public boolean on() {
-        return on;
-    }
-
-    public boolean after() {
-        return after;
-    }
-
-    public BalloonDecide setOn(boolean on) {
-        this.on = on;
-        return this;
-    }
-
-    public BalloonDecide setBefore(boolean before) {
-        this.before = before;
-        return this;
-    }
-
-    public BalloonDecide setAfter(boolean after) {
-        this.after = after;
-        return this;
-    }
-
-    public BalloonDecide set(boolean before, boolean on, boolean after) {
-        return setBefore(before).setOn(on).setAfter(after);
-    }
-
-    public BalloonDecide(int x1, int y1, int z1, int x2, int y2, int z2, boolean before, boolean on, boolean after) {
-        this(x1, y1, z1, x2, y2, z2);
-        set(before, on, after);
-    }
-
     public BalloonDecide(int x1, int y1, int z1, int x2, int y2, int z2) {
-        setPoint1(x1, y1, z1).setPoint2(x2, y2, z2);
+        set(x1, y1, z1, x2, y2, z2);
     }
 
     @Override
     public boolean bool(int x, int y, int z) {
-        double less = distance(x, y, z, x1, y1, z1),
-                great = distance(x, y, z, x2, y2, z2);
-        return (on && equals(less + great, distance))
-                || (before && equals(less + distance, great))
-                || (after && equals(great + distance, less));
+        return equals(distance(x, y, z, x1, y1, z1) + distance(x, y, z, x2, y2, z2), distance);
     }
 
     public boolean equals(double a, double b) {
