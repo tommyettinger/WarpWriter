@@ -83,55 +83,13 @@ public class BalloonDecide implements IDecide {
         return this;
     }
 
-    public boolean before = false, on = true, after = false;
-
-    public boolean before() {
-        return before;
-    }
-
-    public boolean on() {
-        return on;
-    }
-
-    public boolean after() {
-        return after;
-    }
-
-    public BalloonDecide setOn(boolean on) {
-        this.on = on;
-        return this;
-    }
-
-    public BalloonDecide setBefore(boolean before) {
-        this.before = before;
-        return this;
-    }
-
-    public BalloonDecide setAfter(boolean after) {
-        this.after = after;
-        return this;
-    }
-
-    public BalloonDecide set(boolean before, boolean on, boolean after) {
-        return setBefore(before).setOn(on).setAfter(after);
-    }
-
-    public BalloonDecide(int x1, int y1, int z1, int x2, int y2, int z2, boolean before, boolean on, boolean after) {
-        this(x1, y1, z1, x2, y2, z2);
-        set(before, on, after);
-    }
-
     public BalloonDecide(int x1, int y1, int z1, int x2, int y2, int z2) {
         setPoint1(x1, y1, z1).setPoint2(x2, y2, z2);
     }
 
     @Override
     public boolean bool(int x, int y, int z) {
-        double less = distance(x, y, z, lessX, lessY, lessZ),
-                great = distance(x, y, z, greatX, greatY, greatZ);
-        return (on && equals(less + great, distance))
-                || (before && equals(less + distance, great))
-                || (after && equals(great + distance, less));
+        return equals(distance(x, y, z, lessX, lessY, lessZ) + distance(x, y, z, greatX, greatY, greatZ), distance);
     }
 
     public boolean equals(double a, double b) {
