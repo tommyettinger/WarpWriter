@@ -6,8 +6,8 @@ package warpwriter.model;
  * @author Ben McLean
  */
 public class BalloonDecide implements IDecide {
-    protected int x1 = 0, y1 = 0, z1 = 0, x2 = 0, y2 = 0, z2 = 0,
-            lessX = 0, greatX = 0, lessY = 0, greatY = 0, lessZ = 0, greatZ = 0;
+    protected int x1 = 0, y1 = 0, z1 = 0, x2 = 0, y2 = 0, z2 = 0;
+            //lessX = 0, greatX = 0, lessY = 0, greatY = 0, lessZ = 0, greatZ = 0;
     protected double distance = 0, width = 1;
 
     public double width() {
@@ -58,27 +58,29 @@ public class BalloonDecide implements IDecide {
     }
 
     protected BalloonDecide lowGreat() {
-        if (x1 <= x2) {
-            lessX = x1;
-            greatX = x2;
-        } else {
-            lessX = x2;
-            greatX = x1;
-        }
-        if (y1 <= y2) {
-            lessY = y1;
-            greatY = y2;
-        } else {
-            lessY = y2;
-            greatY = y1;
-        }
-        if (z1 <= z2) {
-            lessZ = z1;
-            greatZ = z2;
-        } else {
-            lessZ = z2;
-            greatZ = z1;
-        }
+        //// having lessX and greatX set like this restricts BalloonDecide to only stretching in one direction.
+        //// It works better to just use the start and end points as-is.
+//        if (x1 <= x2) {
+//            lessX = x1;
+//            greatX = x2;
+//        } else {
+//            lessX = x2;
+//            greatX = x1;
+//        }
+//        if (y1 <= y2) {
+//            lessY = y1;
+//            greatY = y2;
+//        } else {
+//            lessY = y2;
+//            greatY = y1;
+//        }
+//        if (z1 <= z2) {
+//            lessZ = z1;
+//            greatZ = z2;
+//        } else {
+//            lessZ = z2;
+//            greatZ = z1;
+//        }
         distance = distance();
         return this;
     }
@@ -127,8 +129,8 @@ public class BalloonDecide implements IDecide {
 
     @Override
     public boolean bool(int x, int y, int z) {
-        double less = distance(x, y, z, lessX, lessY, lessZ),
-                great = distance(x, y, z, greatX, greatY, greatZ);
+        double less = distance(x, y, z, x1, y1, z1),
+                great = distance(x, y, z, x2, y2, z2);
         return (on && equals(less + great, distance))
                 || (before && equals(less + distance, great))
                 || (after && equals(great + distance, less));
