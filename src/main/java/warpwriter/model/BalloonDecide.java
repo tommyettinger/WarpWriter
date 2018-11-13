@@ -50,10 +50,6 @@ public class BalloonDecide implements IDecide {
         this.x2 = x2;
         this.y2 = y2;
         this.z2 = z2;
-        return lowGreat();
-    }
-
-    protected BalloonDecide lowGreat() {
         distance = distance();
         return this;
     }
