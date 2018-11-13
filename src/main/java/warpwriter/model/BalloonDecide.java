@@ -43,21 +43,13 @@ public class BalloonDecide implements IDecide {
         return z2;
     }
 
-    public BalloonDecide setPoint1(int x1, int y1, int z1) {
+    public BalloonDecide set(int x1, int y1, int z1, int x2, int y2, int z2) {
         this.x1 = x1;
         this.y1 = y1;
         this.z1 = z1;
-        return lowGreat();
-    }
-
-    public BalloonDecide setPoint2(int x2, int y2, int z2) {
         this.x2 = x2;
         this.y2 = y2;
         this.z2 = z2;
-        return lowGreat();
-    }
-
-    protected BalloonDecide lowGreat() {
         if (x1 <= x2) {
             lessX = x1;
             greatX = x2;
@@ -84,7 +76,7 @@ public class BalloonDecide implements IDecide {
     }
 
     public BalloonDecide(int x1, int y1, int z1, int x2, int y2, int z2) {
-        setPoint1(x1, y1, z1).setPoint2(x2, y2, z2);
+        set(x1, y1, z1, x2, y2, z2);
     }
 
     @Override
