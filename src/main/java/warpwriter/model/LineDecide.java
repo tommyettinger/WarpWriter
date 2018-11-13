@@ -81,7 +81,7 @@ public class LineDecide implements IDecide {
     public boolean on() {
         return on;
     }
-    
+
     public boolean after() {
         return after;
     }
@@ -116,9 +116,11 @@ public class LineDecide implements IDecide {
 
     @Override
     public boolean bool(int x, int y, int z) {
-        return (before && equals(distance(x, y, z, lessX, lessY, lessZ), distance))
-                || (after && equals(distance(x, y, z, greatX, greatY, greatZ), distance))
-                || (on && equals(distance(x, y, z, lessX, lessY, lessZ), distance(x, y, z, greatX, greatY, greatZ)));
+        double less = distance(x, y, z, lessX, lessY, lessZ),
+                great = distance(x, y, z, greatX, greatY, greatZ);
+        return (on && equals(less, great))
+                || (before && equals(less, distance))
+                || (after && equals(great, distance));
     }
 
     public static boolean equals(double a, double b) {
