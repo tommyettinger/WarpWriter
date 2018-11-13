@@ -8,7 +8,7 @@ public class PlaneDecide implements IDecide {
         ON, OFF, ABOVE, ON_ABOVE, BELOW, ON_BELOW, TRUE, FALSE
     }
 
-    protected Condition condition=Condition.ON;
+    protected Condition condition = Condition.ON;
 
     public Condition condition() {
         return condition;
@@ -19,61 +19,63 @@ public class PlaneDecide implements IDecide {
         return this;
     }
 
-    protected int a, b, c, o;
+    protected double slopeX, slopeY, slopeZ;
+    protected int offset;
 
-    public int a() {
-        return a;
+    public double slopeX() {
+        return slopeX;
     }
 
-    public int b() {
-        return b;
+    public double slopeY() {
+        return slopeY;
     }
 
-    public int c() {
-        return c;
+    public double slopeZ() {
+        return slopeZ;
     }
 
     /**
      * Offset from the plane.
+     *
      * @return the current offset
      */
-    public int o() {
-        return o;
+    public int offset() {
+        return offset;
     }
 
-    public PlaneDecide set(int a, int b, int c, int o) {
-        this.a = a;
-        this.b = b;
-        this.c = c;
-        this.o = o;
+    public PlaneDecide set(double slopeX, double slopeY, double slopeZ, int offset) {
+        this.slopeX = slopeX;
+        this.slopeY = slopeY;
+        this.slopeZ = slopeZ;
+        this.offset = offset;
         return this;
     }
 
-    public PlaneDecide(int a, int b, int c, int o) {
-        set(a, b, c, o);
+    public PlaneDecide(double slopeX, double slopeY, double slopeZ, int offset) {
+        set(slopeX, slopeY, slopeZ, offset);
     }
 
     @Override
     public boolean bool(int x, int y, int z) {
-        int result = x * a + y * b + z * c;
+        double result = x * slopeX + y * slopeY + z * slopeZ - offset;
         switch (condition) {
             case OFF:
-                return result != o;
+                return Math.abs(result) > 1;
             case ABOVE:
-                return result > o;
+                return result > 1;
             case ON_ABOVE:
-                return result >= o;
+                return result > 0;
             case BELOW:
-                return result < o;
+                return result < -1;
             case ON_BELOW:
-                return result <= o;
+                return result < 0;
             case TRUE:
                 return true;
             case FALSE:
                 return false;
             default:
             case ON:
-                return result == o;
+                return Math.abs(result) < 1;
         }
     }
 }
