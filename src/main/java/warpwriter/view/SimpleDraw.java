@@ -45,24 +45,23 @@ public class SimpleDraw {
                         // it wouldn't be correct to show the model's guts; instead show an edge color we already found                         
                         //renderer.drawRect(px, py, 1, 1, color.leftFace(result));
                         break;
-                    }
-                    else
+                    } else
                         result = model.at(vx, vy, py);
                     if (result != 0) {
-                        if(leftVisible) {
-                            if(drewExtra)
+                        if (leftVisible) {
+                            if (drewExtra)
                                 drewExtra = false;
-                            else 
-                                renderer.drawRect(px, py, 1, 1, color.leftFace(result));
+                            else
+                                renderer.drawPixel(px, py, color.leftFace(result));
                         }
-                        if(rightVisible) {
-                            renderer.drawRect(px+1, py, 1, 1, color.rightFace(result));
+                        if (rightVisible) {
+                            renderer.drawPixel(px + 1, py, color.rightFace(result));
                             drewExtra = true;
                         }
                         break;
                     }
                 }
-                if(result == 0)
+                if (result == 0)
                     drewExtra = false;
             }
         }
