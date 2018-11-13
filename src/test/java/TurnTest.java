@@ -49,7 +49,7 @@ public class TurnTest extends ApplicationAdapter {
         turnModel = new TurnModel(
                 new DecideFetch(
 //                        new PlaneDecide(1, 1, 1, 100).set(PlaneDecide.Condition.ON),
-                        new LineDecide(0, 0, 0, 100, 0, 100),
+                        new LineDecide(0, 0, 0, 100, 100, 100),
                         ColorFetch.color(Coloring.rinsed("Coastal Water 2"))
                 )
                         .boxModel(world,

@@ -118,9 +118,9 @@ public class LineDecide implements IDecide {
     public boolean bool(int x, int y, int z) {
         double less = distance(x, y, z, lessX, lessY, lessZ),
                 great = distance(x, y, z, greatX, greatY, greatZ);
-        return (on && equals(less, great))
-                || (before && equals(less, distance))
-                || (after && equals(great, distance));
+        return (on && equals(less + great, distance))
+                || (before && equals(less + distance, great))
+                || (after && equals(great + distance, less));
     }
 
     public static boolean equals(double a, double b) {
