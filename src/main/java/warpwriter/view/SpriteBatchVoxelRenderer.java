@@ -10,8 +10,8 @@ public class SpriteBatchVoxelRenderer implements IPixelRenderer, ITriangleRender
     protected SpriteBatch batch;
     protected Texture one, triangle;
     protected Color color = new Color();
-    protected int offsetX=0, offsetY=0;
-    protected float scaleX=1f, scaleY=1f;
+    protected int offsetX = 0, offsetY = 0;
+    protected float scaleX = 1f, scaleY = 1f;
 
     public SpriteBatchVoxelRenderer(SpriteBatch batch) {
         this.batch = batch;
@@ -45,12 +45,10 @@ public class SpriteBatchVoxelRenderer implements IPixelRenderer, ITriangleRender
         return this;
     }
 
-    @Override
-    public SpriteBatchVoxelRenderer multiplyScale(float multiplier)
-    {
+    public SpriteBatchVoxelRenderer multiplyScale(float multiplier) {
         return setScale(scaleX * multiplier, scaleY * multiplier);
     }
-    
+
     public SpriteBatchVoxelRenderer setScale(float scale) {
         return setScale(scale, scale);
     }
@@ -74,11 +72,6 @@ public class SpriteBatchVoxelRenderer implements IPixelRenderer, ITriangleRender
         batch.draw(one, (x * scaleX) + offsetX, (y * scaleY) + offsetY, xSize * scaleX, ySize * scaleY);
         batch.setColor(oldColor);
         return this;
-    }
-
-    @Override
-    public int getPixel(int x, int y) {
-        return 0;
     }
 
     /**
