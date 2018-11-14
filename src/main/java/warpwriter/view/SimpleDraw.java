@@ -30,31 +30,32 @@ public class SimpleDraw {
     public static void simpleDraw45(IModel model, IRenderer renderer, IVoxelColor color) {
         final int xSize = model.xSize(), ySize = model.ySize(), zSize = model.zSize();
         final int pixelWidth = xSize + ySize;
+        byte result = 0;
         for (int px = 0; px < pixelWidth; px += 2) { // pixel x
             for (int py = 0; py < zSize; py++) { // pixel y
                 boolean leftDone = false, rightDone = false;
                 for (int vx = px - ySize + 1, vy = 0; vx < xSize && vy < ySize; vx++, vy++) { // vx is voxel x, vy is voxel y
-                    byte result = model.at(vx, vy, py);
+                    if (!leftDone) {
+                        result = model.at(vx - 1, vy, py);
+                        if (result != 0) {
+                            renderer.drawPixel(px, py, color.rightFace(result));
+                            leftDone = true;
+                        }
+                    }
+                    if (!rightDone) {
+                        result = model.at(vx, vy - 1, py);
+                        if (result != 0) {
+                            renderer.drawPixel(px + 1, py, color.leftFace(result));
+                            rightDone = true;
+                        }
+                    }
+                    if (leftDone && rightDone) break;
+                    result = model.at(vx, vy, py);
                     if (result != 0) {
                         if (!leftDone) renderer.drawPixel(px, py, color.leftFace(result));
                         if (!rightDone) renderer.drawPixel(px + 1, py, color.rightFace(result));
                         break;
                     }
-                    if (!leftDone) {
-                        result = model.at(vx + 1, vy, py);
-                        if (result != 0) {
-                            renderer.drawPixel(px, py, color.leftFace(result));
-                            leftDone = true;
-                        }
-                    }
-                    if (!rightDone) {
-                        result = model.at(vx, vy + 1, py);
-                        if (result != 0) {
-                            renderer.drawPixel(px + 1, py, color.rightFace(result));
-                            rightDone = true;
-                        }
-                    }
-                    if (leftDone && rightDone) break;
                 }
             }
         }
