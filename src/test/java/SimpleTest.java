@@ -196,7 +196,9 @@ public class SimpleTest extends ApplicationAdapter {
         font.draw(batch, turnModel.turner().roll().toString(), 200, 40);
         font.draw(batch, direction.toString(), 200, 60);
         //batch.draw(tex, 0, 0);
-        if (direction.isCardinal())
+        if (angle > 2)
+            SimpleDraw.simpleDrawIso(turnModel, batchRenderer.setScale(16f));
+        else if (direction.isCardinal())
             SimpleDraw.simpleDraw(turnModel, batchRenderer.setScale(16f), voxelColor);
         else
             SimpleDraw.simpleDraw45(turnModel, batchRenderer.setScale(12f, 16f), voxelColor);

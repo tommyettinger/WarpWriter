@@ -68,6 +68,6 @@ public class SimpleDraw {
 
     public static void simpleDrawIso(IModel model, ITriangleRenderer renderer, IVoxelColor color) {
         renderer.drawLeftTriangle(0, 0, Color.rgba8888(Color.RED));
-        renderer.drawLeftTriangle(2, 0, Color.rgba8888(Color.BLUE));
+        renderer.drawRightTriangle(2, 0, Color.rgba8888(Color.BLUE));
     }
 }

@@ -3,12 +3,14 @@ package warpwriter.view;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
 
 public class SpriteBatchVoxelRenderer implements IPixelRenderer, ITriangleRenderer, Disposable {
     protected SpriteBatch batch;
-    protected Texture one, triangle;
+    protected Texture one;
+    protected Sprite triangle;
     protected Color color = new Color();
     protected int offsetX = 0, offsetY = 0;
     protected float scaleX = 1f, scaleY = 1f;
@@ -29,8 +31,9 @@ public class SpriteBatchVoxelRenderer implements IPixelRenderer, ITriangleRender
         pixmap1.drawPixel(0, 1, -1);
         pixmap1.drawPixel(1, 1, -1);
         pixmap1.drawPixel(0, 2, -1);
-        triangle = new Texture(pixmap1);
+        Texture triangle = new Texture(pixmap1);
         triangle.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        this.triangle = new Sprite(triangle);
         pixmap1.dispose();
     }
 
@@ -67,8 +70,7 @@ public class SpriteBatchVoxelRenderer implements IPixelRenderer, ITriangleRender
     @Override
     public IPixelRenderer drawRect(int x, int y, int xSize, int ySize, int color) {
         float oldColor = batch.getPackedColor(); // requires less conversions than batch.getColor(), same result
-        this.color.set(color);
-        batch.setColor(this.color);
+        batch.setColor(this.color.set(color));
         batch.draw(one, (x * scaleX) + offsetX, (y * scaleY) + offsetY, xSize * scaleX, ySize * scaleY);
         batch.setColor(oldColor);
         return this;
@@ -80,19 +82,24 @@ public class SpriteBatchVoxelRenderer implements IPixelRenderer, ITriangleRender
     @Override
     public void dispose() {
         one.dispose();
+        triangle.getTexture().dispose();
     }
 
     @Override
     public ITriangleRenderer drawLeftTriangle(int x, int y, int color) {
-        return this;
+        return drawTriangle(x, y ,color, true);
     }
 
     @Override
     public ITriangleRenderer drawRightTriangle(int x, int y, int color) {
+        return drawTriangle(x, y, color, false);
+    }
+
+    public SpriteBatchVoxelRenderer drawTriangle(int x, int y, int color, boolean left){
         float oldColor = batch.getPackedColor(); // requires less conversions than batch.getColor(), same result
-        this.color.set(color);
-        batch.setColor(this.color);
-        batch.draw(triangle, (x * scaleX) + offsetX, (y * scaleY) + offsetY, scaleX, scaleY);
+        batch.setColor(this.color.set(color));
+        triangle.setFlip(left, false);
+        batch.draw(triangle, (x * scaleX) + offsetX, (y * scaleY) + offsetY, scaleX * 2, scaleY * 3);
         batch.setColor(oldColor);
         return this;
     }
