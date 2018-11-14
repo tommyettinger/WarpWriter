@@ -195,6 +195,7 @@ public class SimpleTest extends ApplicationAdapter {
         font.draw(batch, turnModel.turner().face().toString(), 0, 20);
         font.draw(batch, turnModel.turner().roll().toString(), 0, 40);
         font.draw(batch, direction.toString(), 0, 60);
+        font.draw(batch, turnModel.xSize() + ", " + turnModel.ySize() + ", " + turnModel.zSize(), 0, 80);
         //batch.draw(tex, 0, 0);
         if (angle > 2)
             SimpleDraw.simpleDrawIso(turnModel, batchRenderer.setScale(16f));
