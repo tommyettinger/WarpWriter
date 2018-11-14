@@ -87,7 +87,7 @@ public class SpriteBatchVoxelRenderer implements IPixelRenderer, ITriangleRender
 
     @Override
     public ITriangleRenderer drawLeftTriangle(int x, int y, int color) {
-        return drawTriangle(x, y ,color, true);
+        return drawTriangle(x, y, color, true);
     }
 
     @Override
@@ -95,7 +95,7 @@ public class SpriteBatchVoxelRenderer implements IPixelRenderer, ITriangleRender
         return drawTriangle(x, y, color, false);
     }
 
-    public SpriteBatchVoxelRenderer drawTriangle(int x, int y, int color, boolean left){
+    public SpriteBatchVoxelRenderer drawTriangle(int x, int y, int color, boolean left) {
         float oldColor = batch.getPackedColor(); // requires less conversions than batch.getColor(), same result
         batch.setColor(this.color.set(color));
         triangle.setFlip(left, false);
