@@ -30,14 +30,14 @@ public class SimpleDraw {
     public static void simpleDraw45(IModel model, IRenderer renderer, IVoxelColor color) {
         final int xSize = model.xSize(), ySize = model.ySize(), zSize = model.zSize();
         final int pixelWidth = xSize + ySize;
-        for (int py = 0; py < zSize; py += 2) { // pixel y
-            for (int px = 0; px < pixelWidth; px++) { // pixel x
+        for (int px = 0; px < pixelWidth; px += 2) { // pixel x
+            for (int py = 0; py < zSize; py++) { // pixel y
                 boolean leftDone = false, rightDone = false;
                 for (int vx = px - ySize + 1, vy = 0; vx < xSize && vy < ySize; vx++, vy++) { // vx is voxel x, vy is voxel y
                     byte result = model.at(vx, vy, py);
                     if (result != 0) {
                         renderer.drawPixel(px, py, color.leftFace(result));
-                        renderer.drawPixel(px, py + 1, color.rightFace(result));
+                        renderer.drawPixel(px + 1, py, color.rightFace(result));
                         break;
                     }
                     if (!leftDone) {
@@ -50,7 +50,7 @@ public class SimpleDraw {
                     if (!rightDone) {
                         result = model.at(vx, vy + 1, py);
                         if (result != 0) {
-                            renderer.drawPixel(px, py + 1, color.rightFace(result));
+                            renderer.drawPixel(px + 1, py, color.rightFace(result));
                             rightDone = true;
                         }
                     }
