@@ -54,7 +54,7 @@ public class SimpleTest extends ApplicationAdapter {
         batch.enableBlending();
 
         voxelColor = new VoxelColor();
-        batchRenderer = new SpriteBatchVoxelRenderer(batch).setScale(16f);
+        batchRenderer = new SpriteBatchVoxelRenderer(batch).setOffset(16, 100);
         maker = new ModelMaker(12345);
         knightModel = new ArrayModel(maker.warriorRandom());
         // uses a 13x12x8 model to test SimpleDraw's support for odd-number sizes
@@ -187,14 +187,14 @@ public class SimpleTest extends ApplicationAdapter {
         Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         worldView.apply();
-        worldView.getCamera().position.set(0, 0, 0);
+        worldView.getCamera().position.set(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2, 0);
         worldView.update(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         batch.setProjectionMatrix(worldView.getCamera().combined);
         batch.begin();
 
-        font.draw(batch, turnModel.turner().face().toString(), 200, 20);
-        font.draw(batch, turnModel.turner().roll().toString(), 200, 40);
-        font.draw(batch, direction.toString(), 200, 60);
+        font.draw(batch, turnModel.turner().face().toString(), 0, 20);
+        font.draw(batch, turnModel.turner().roll().toString(), 0, 40);
+        font.draw(batch, direction.toString(), 0, 60);
         //batch.draw(tex, 0, 0);
         if (angle > 2)
             SimpleDraw.simpleDrawIso(turnModel, batchRenderer.setScale(16f));
