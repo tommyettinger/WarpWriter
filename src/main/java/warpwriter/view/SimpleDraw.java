@@ -36,8 +36,8 @@ public class SimpleDraw {
                 for (int vx = px - ySize + 1, vy = 0; vx < xSize && vy < ySize; vx++, vy++) { // vx is voxel x, vy is voxel y
                     byte result = model.at(vx, vy, py);
                     if (result != 0) {
-                        renderer.drawPixel(px, py, color.leftFace(result));
-                        renderer.drawPixel(px + 1, py, color.rightFace(result));
+                        if (!leftDone) renderer.drawPixel(px, py, color.leftFace(result));
+                        if (!rightDone) renderer.drawPixel(px + 1, py, color.rightFace(result));
                         break;
                     }
                     if (!leftDone) {
