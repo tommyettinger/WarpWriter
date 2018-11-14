@@ -6,14 +6,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
 
-public class SpriteBatchRenderer implements IRenderer, Disposable {
+public class SpriteBatchVoxelRenderer implements IPixelRenderer, ITriangleRenderer, Disposable {
     protected SpriteBatch batch;
-    protected Texture one;
+    protected Texture one, triangle;
     protected Color color = new Color();
     protected int offsetX=0, offsetY=0;
     protected float scaleX=1f, scaleY=1f;
 
-    public SpriteBatchRenderer(SpriteBatch batch) {
+    public SpriteBatchVoxelRenderer(SpriteBatch batch) {
         this.batch = batch;
 
         //creating "one" texture.
@@ -22,42 +22,52 @@ public class SpriteBatchRenderer implements IRenderer, Disposable {
         one = new Texture(pixmap1);
         one.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         pixmap1.dispose();
+
+        //creating "triangle" texture.
+        pixmap1 = new Pixmap(2, 3, Pixmap.Format.RGBA8888);
+        pixmap1.drawPixel(0, 0, -1);
+        pixmap1.drawPixel(0, 1, -1);
+        pixmap1.drawPixel(1, 1, -1);
+        pixmap1.drawPixel(0, 2, -1);
+        triangle = new Texture(pixmap1);
+        triangle.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        pixmap1.dispose();
     }
 
-    public SpriteBatchRenderer set(SpriteBatch batch) {
+    public SpriteBatchVoxelRenderer set(SpriteBatch batch) {
         this.batch = batch;
         return this;
     }
 
-    public SpriteBatchRenderer setOffset(int offsetX, int offsetY) {
+    public SpriteBatchVoxelRenderer setOffset(int offsetX, int offsetY) {
         this.offsetX = offsetX;
         this.offsetY = offsetY;
         return this;
     }
 
     @Override
-    public SpriteBatchRenderer multiplyScale(float multiplier)
+    public SpriteBatchVoxelRenderer multiplyScale(float multiplier)
     {
         return setScale(scaleX * multiplier, scaleY * multiplier);
     }
     
-    public SpriteBatchRenderer setScale(float scale) {
+    public SpriteBatchVoxelRenderer setScale(float scale) {
         return setScale(scale, scale);
     }
 
-    public SpriteBatchRenderer setScale(float scaleX, float scaleY) {
+    public SpriteBatchVoxelRenderer setScale(float scaleX, float scaleY) {
         this.scaleX = scaleX;
         this.scaleY = scaleY;
         return this;
     }
 
     @Override
-    public IRenderer drawPixel(int x, int y, int color) {
+    public IPixelRenderer drawPixel(int x, int y, int color) {
         return drawRect(x, y, 1, 1, color);
     }
 
     @Override
-    public IRenderer drawRect(int x, int y, int xSize, int ySize, int color) {
+    public IPixelRenderer drawRect(int x, int y, int xSize, int ySize, int color) {
         float oldColor = batch.getPackedColor(); // requires less conversions than batch.getColor(), same result
         this.color.set(color);
         batch.setColor(this.color);
@@ -77,5 +87,20 @@ public class SpriteBatchRenderer implements IRenderer, Disposable {
     @Override
     public void dispose() {
         one.dispose();
+    }
+
+    @Override
+    public ITriangleRenderer drawLeftTriangle(int x, int y, int color) {
+        return this;
+    }
+
+    @Override
+    public ITriangleRenderer drawRightTriangle(int x, int y, int color) {
+        float oldColor = batch.getPackedColor(); // requires less conversions than batch.getColor(), same result
+        this.color.set(color);
+        batch.setColor(this.color);
+        batch.draw(triangle, (x * scaleX) + offsetX, (y * scaleY) + offsetY, scaleX, scaleY);
+        batch.setColor(oldColor);
+        return this;
     }
 }

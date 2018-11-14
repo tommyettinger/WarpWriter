@@ -1,15 +1,16 @@
 package warpwriter.view;
 
+import com.badlogic.gdx.graphics.Color;
 import warpwriter.model.IModel;
 
 public class SimpleDraw {
     protected static IVoxelColor color = new VoxelColor();
 
-    public static void simpleDraw(IModel model, IRenderer renderer) {
+    public static void simpleDraw(IModel model, IPixelRenderer renderer) {
         simpleDraw(model, renderer, color);
     }
 
-    public static void simpleDraw(IModel model, IRenderer renderer, IVoxelColor color) {
+    public static void simpleDraw(IModel model, IPixelRenderer renderer, IVoxelColor color) {
         for (int z = 0; z < model.zSize(); z++) {
             for (int y = 0; y < model.ySize(); y++) {
                 for (int x = 0; x < model.xSize(); x++) {
@@ -23,11 +24,11 @@ public class SimpleDraw {
         }
     }
 
-    public static void simpleDraw45(IModel model, IRenderer renderer) {
+    public static void simpleDraw45(IModel model, IPixelRenderer renderer) {
         simpleDraw45(model, renderer, color);
     }
 
-    public static void simpleDraw45(IModel model, IRenderer renderer, IVoxelColor color) {
+    public static void simpleDraw45(IModel model, IPixelRenderer renderer, IVoxelColor color) {
         final int xSize = model.xSize(), ySize = model.ySize(), zSize = model.zSize();
         final int pixelWidth = xSize + ySize;
         byte result = 0;
@@ -59,5 +60,14 @@ public class SimpleDraw {
                 }
             }
         }
+    }
+
+    public static void simpleDrawIso(IModel model, ITriangleRenderer renderer) {
+        simpleDrawIso(model, renderer, color);
+    }
+
+    public static void simpleDrawIso(IModel model, ITriangleRenderer renderer, IVoxelColor color) {
+        renderer.drawLeftTriangle(0, 0, Color.rgba8888(Color.RED));
+        renderer.drawLeftTriangle(2, 0, Color.rgba8888(Color.BLUE));
     }
 }

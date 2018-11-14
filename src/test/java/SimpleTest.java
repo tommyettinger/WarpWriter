@@ -18,7 +18,7 @@ import warpwriter.ModelMaker;
 import warpwriter.Tools3D;
 import warpwriter.model.*;
 import warpwriter.view.SimpleDraw;
-import warpwriter.view.SpriteBatchRenderer;
+import warpwriter.view.SpriteBatchVoxelRenderer;
 import warpwriter.view.VoxelColor;
 
 public class SimpleTest extends ApplicationAdapter {
@@ -36,7 +36,7 @@ public class SimpleTest extends ApplicationAdapter {
     protected TurnModel turnModel;
     protected ArrayModel knightModel;
     protected ModelMaker maker;
-    private SpriteBatchRenderer batchRenderer;
+    private SpriteBatchVoxelRenderer batchRenderer;
     protected VoxelColor voxelColor;
     protected CompassDirection direction = CompassDirection.NORTH;
     protected int angle=2;
@@ -54,7 +54,7 @@ public class SimpleTest extends ApplicationAdapter {
         batch.enableBlending();
 
         voxelColor = new VoxelColor();
-        batchRenderer = new SpriteBatchRenderer(batch).setScale(16f);
+        batchRenderer = new SpriteBatchVoxelRenderer(batch).setScale(16f);
         maker = new ModelMaker(12345);
         knightModel = new ArrayModel(maker.warriorRandom());
         // uses a 13x12x8 model to test SimpleDraw's support for odd-number sizes
