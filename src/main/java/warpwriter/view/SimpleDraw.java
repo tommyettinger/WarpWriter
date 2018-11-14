@@ -34,7 +34,7 @@ public class SimpleDraw {
         for (int px = 0; px < pixelWidth; px += 2) { // pixel x
             for (int py = 0; py < zSize; py++) { // pixel y
                 boolean leftDone = false, rightDone = false;
-                for (int vx = px - ySize, vy = ySize; vx < xSize && vy >= 0; vx++, vy--) { // vx is voxel x, vy is voxel y
+                for (int vx = px - ySize, vy = ySize; vx <= xSize && vy >= -1; vx++, vy--) { // vx is voxel x, vy is voxel y
                     if (!leftDone) {
                         result = model.at(vx - 1, vy, py);
                         if (result != 0) {

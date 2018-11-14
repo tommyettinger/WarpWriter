@@ -57,9 +57,11 @@ public class SimpleTest extends ApplicationAdapter {
         batchRenderer = new SpriteBatchRenderer(batch).setScale(16f);
         maker = new ModelMaker(12345);
         knightModel = new ArrayModel(maker.warriorRandom());
-        turnModel = new TurnModel(new BoxModel(knightModel,
-                ColorFetch.color(Coloring.rinsed("Red 4"))
-        ));
+        // uses a 13x12x8 model to test SimpleDraw's support for odd-number sizes
+        turnModel = new TurnModel(knightModel.boxModel(13, 12, 8, ColorFetch.color(Coloring.rinsed("Red 4"))).model(13, 12, 8));
+//        turnModel = new TurnModel(new BoxModel(knightModel,
+//                ColorFetch.color(Coloring.rinsed("Red 4"))
+//        ));
 
         //reDraw();
         Gdx.input.setInputProcessor(new InputAdapter() {
