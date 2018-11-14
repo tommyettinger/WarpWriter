@@ -11,9 +11,10 @@ public class SimpleDraw {
     }
 
     public static void simpleDraw(IModel model, IPixelRenderer renderer, IVoxelColor color) {
-        for (int z = 0; z < model.zSize(); z++) {
-            for (int y = 0; y < model.ySize(); y++) {
-                for (int x = 0; x < model.xSize(); x++) {
+        int xSize = model.xSize(), ySize = model.ySize(), zSize = model.zSize();
+        for (int z = 0; z < xSize; z++) {
+            for (int y = 0; y < ySize; y++) {
+                for (int x = 0; x < zSize; x++) {
                     byte result = model.at(x, y, z);
                     if (result != 0) {
                         renderer.drawPixel(y, z, color.rightFace(result));
@@ -29,8 +30,8 @@ public class SimpleDraw {
     }
 
     public static void simpleDraw45(IModel model, IPixelRenderer renderer, IVoxelColor color) {
-        final int xSize = model.xSize(), ySize = model.ySize(), zSize = model.zSize();
-        final int pixelWidth = xSize + ySize;
+        int xSize = model.xSize(), ySize = model.ySize(), zSize = model.zSize();
+        int pixelWidth = xSize + ySize;
         byte result = 0;
         for (int px = 0; px < pixelWidth; px += 2) { // pixel x
             for (int py = 0; py < zSize; py++) { // pixel y
