@@ -172,8 +172,8 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D, IDecide {
      * This method does not chain!
      * It goes on the end, to transform the results of a chain into an IModel
      */
-    public IModel model(int xSize, int ySize, int zSize) {
-        return new FetchModel(this, xSize, ySize, zSize);
+    public IModel model(int sizeX, int sizeY, int sizeZ) {
+        return new FetchModel(this, sizeX, sizeY, sizeZ);
     }
 
     /**
@@ -190,20 +190,20 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D, IDecide {
         return new FetchModel();
     }
 
-    public Fetch offsetModel(int xSize, int ySize, int zSize) {
-        return add(new OffsetModel(xSize, ySize, zSize));
+    public Fetch offsetModel(int sizeX, int sizeY, int sizeZ) {
+        return add(new OffsetModel(sizeX, sizeY, sizeZ));
     }
 
-    public Fetch loop(int xSize, int ySize, int zSize) {
-        return add(new Loop(xSize, ySize, zSize));
+    public Fetch loop(int sizeX, int sizeY, int sizeZ) {
+        return add(new Loop(sizeX, sizeY, sizeZ));
     }
 
     public Fetch arrayModel(byte[][][] bytes) {
         return add(new ArrayModel(bytes));
     }
 
-    public Fetch boxModel(int xSize, int ySize, int zSize, Fetch color) {
-        return add(new BoxModel(xSize, ySize, zSize, color));
+    public Fetch boxModel(int sizeX, int sizeY, int sizeZ, Fetch color) {
+        return add(new BoxModel(sizeX, sizeY, sizeZ, color));
     }
 
     public Fetch boxModel(byte[][][] convenience, Fetch color) {
