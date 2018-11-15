@@ -8,13 +8,13 @@ package warpwriter.model;
 public class BoxModel extends FetchModel {
     public Fetch fetch;
 
-    public BoxModel(int xSize, int ySize, int zSize, Fetch fetch) {
-        super(xSize, ySize, zSize);
+    public BoxModel(int sizeX, int sizeY, int sizeZ, Fetch fetch) {
+        super(sizeX, sizeY, sizeZ);
         this.fetch = fetch;
     }
 
-    public BoxModel(Fetch fetch, int xSize, int ySize, int zSize) {
-        this(xSize, ySize, zSize, fetch);
+    public BoxModel(Fetch fetch, int sizeX, int sizeY, int sizeZ) {
+        this(sizeX, sizeY, sizeZ, fetch);
     }
 
     /**
