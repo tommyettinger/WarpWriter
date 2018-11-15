@@ -171,8 +171,8 @@ public class Turner {
         }
     }
 
-    protected Face face;
-    protected Roll roll;
+    protected Face face = Face.NORTH;
+    protected Roll roll = Roll.NONE;
     protected int x = 0, y = 0, z = 0, centerX = 0, centerY = 0, centerZ = 0;
 
     public Turner() {
@@ -185,6 +185,10 @@ public class Turner {
 
     public Turner(Face face, Roll roll, int centerX, int centerY, int centerZ) {
         set(face, roll, centerX, centerY, centerZ);
+    }
+
+    public Turner(int centerX, int centerY, int centerZ) {
+        setCenter(centerX, centerY, centerZ);
     }
 
     public Turner(Turner turner) {
@@ -268,11 +272,7 @@ public class Turner {
     public Turner set(Face face, Roll roll, int centerX, int centerY, int centerZ) {
         return set(face, roll).setCenter(centerX, centerY, centerZ);
     }
-
-    public Turner set(int x, int y, int z, Face face, Roll roll) {
-        return set(x, y, z).set(face, roll);
-    }
-
+    
     public Turner set(int x, int y, int z) {
         return setX(x).setY(y).setZ(z);
     }
