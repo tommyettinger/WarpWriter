@@ -31,7 +31,7 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D, IDecide {
     public Fetch fetch() {
         return getNextFetch();
     }
-    
+
     /**
      * This method is intended to be overridden with a final decision about which byte to return for a given coordinate.
      *
@@ -253,7 +253,7 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D, IDecide {
     public Fetch decideFetch(IDecide decide, Fetch fetch) {
         return add(new DecideFetch(decide, fetch));
     }
-    
+
     public Fetch turnFetch(Turner turner) {
         return add(new TurnFetch(turner));
     }
