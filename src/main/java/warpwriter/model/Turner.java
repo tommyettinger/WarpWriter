@@ -575,4 +575,34 @@ public class Turner {
         }
         return add(centerX, centerY, centerZ);
     }
+
+    /**
+     * Given the size of a model, sets x(), y(), z() to the offset needed to push the model back onto 0, 0, 0.
+     * @return this
+     */
+    public Turner offsets(int sizeX, int sizeY, int sizeZ) {
+        switch(face) {
+            case NORTH:
+                switch (roll) {
+                    default:
+                    case NONE: set(0, 0, 0); break;
+                    case RIGHT: set(0, 0, sizeZ - 1); break;
+                    case UTURN: set(0, sizeY - 1, sizeZ - 1); break;
+                    case LEFT: set(0, sizeY - 1, 0); break;
+                }
+                break;
+            case EAST:
+            case SOUTH:
+                switch (roll) {
+                    default:
+                    case NONE: set(sizeX - 1, sizeY - 1, 0); break;
+                    case RIGHT:
+                }
+                break;
+            case WEST:
+            case UP:
+            case DOWN:
+        }
+        return this;
+    }
 }
