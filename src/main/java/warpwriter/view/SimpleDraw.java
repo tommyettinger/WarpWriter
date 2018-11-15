@@ -12,9 +12,9 @@ public class SimpleDraw {
 
     public static void simpleDraw(IModel model, IPixelRenderer renderer, IVoxelColor color) {
         int xSize = model.xSize(), ySize = model.ySize(), zSize = model.zSize();
-        for (int z = 0; z < xSize; z++) {
+        for (int z = 0; z < zSize; z++) {
             for (int y = 0; y < ySize; y++) {
-                for (int x = 0; x < zSize; x++) {
+                for (int x = 0; x < xSize; x++) {
                     byte result = model.at(x, y, z);
                     if (result != 0) {
                         renderer.drawPixel(y, z, color.rightFace(result));
