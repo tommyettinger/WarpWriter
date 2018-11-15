@@ -6,22 +6,22 @@ package warpwriter.model;
  * @author Ben McLean
  */
 public class FetchModel extends Fetch implements IModel {
-    protected int xSize, ySize, zSize;
+    protected int sizeX, sizeY, sizeZ;
 
     public FetchModel() {
         this(12, 12, 8);
     }
 
-    public FetchModel(int xSize, int ySize, int zSize) {
-        this(xSize, ySize, zSize, null);
+    public FetchModel(int sizeX, int sizeY, int sizeZ) {
+        this(sizeX, sizeY, sizeZ, null);
     }
 
-    public FetchModel(Fetch fetch, int xSize, int ySize, int zSize) {
-        this(xSize, ySize, zSize, fetch);
+    public FetchModel(Fetch fetch, int sizeX, int sizeY, int sizeZ) {
+        this(sizeX, sizeY, sizeZ, fetch);
     }
 
-    public FetchModel(int xSize, int ySize, int zSize, Fetch fetch) {
-        set(xSize, ySize, zSize);
+    public FetchModel(int sizeX, int sizeY, int sizeZ, Fetch fetch) {
+        set(sizeX, sizeY, sizeZ);
         if (fetch != null) add(fetch);
     }
 
@@ -62,17 +62,17 @@ public class FetchModel extends Fetch implements IModel {
 
     @Override
     public int sizeX() {
-        return xSize;
+        return sizeX;
     }
 
     @Override
     public int sizeY() {
-        return ySize;
+        return sizeY;
     }
 
     @Override
     public int sizeZ() {
-        return zSize;
+        return sizeZ;
     }
 
     @Override
@@ -90,17 +90,17 @@ public class FetchModel extends Fetch implements IModel {
     }
 
     public FetchModel addX(int x) {
-        xSize += x;
+        sizeX += x;
         return this;
     }
 
     public FetchModel addY(int y) {
-        ySize += y;
+        sizeY += y;
         return this;
     }
 
     public FetchModel addZ(int z) {
-        zSize += z;
+        sizeZ += z;
         return this;
     }
 
@@ -113,17 +113,17 @@ public class FetchModel extends Fetch implements IModel {
     }
 
     public FetchModel setX(int x) {
-        xSize = x;
+        sizeX = x;
         return this;
     }
 
     public FetchModel setY(int y) {
-        ySize = y;
+        sizeY = y;
         return this;
     }
 
     public FetchModel setZ(int z) {
-        zSize = z;
+        sizeZ = z;
         return this;
     }
 

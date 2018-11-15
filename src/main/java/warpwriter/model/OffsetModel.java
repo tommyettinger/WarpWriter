@@ -30,12 +30,12 @@ public class OffsetModel extends FetchModel {
         set(fetch);
     }
 
-    public OffsetModel(int xSize, int ySize, int zSize) {
-        this(xSize, ySize, zSize, null);
+    public OffsetModel(int sizeX, int sizeY, int sizeZ) {
+        this(sizeX, sizeY, sizeZ, null);
     }
 
-    public OffsetModel(int xSize, int ySize, int zSize, Fetch fetch) {
-        super(xSize, ySize, zSize);
+    public OffsetModel(int sizeX, int sizeY, int sizeZ, Fetch fetch) {
+        super(sizeX, sizeY, sizeZ);
         set(fetch);
     }
 
