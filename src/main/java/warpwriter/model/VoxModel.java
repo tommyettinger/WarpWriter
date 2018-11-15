@@ -48,37 +48,37 @@ public class VoxModel extends SparseVoxelSet implements IModel {
     }
 
     /**
-     * Gets the x size of the IModel, with requests for x limited between 0 (inclusive) to xSize() (exclusive).
+     * Gets the x size of the IModel, with requests for x limited between 0 (inclusive) to sizeX() (exclusive).
      *
      * @return the size of the x dimension of the IModel
      */
     @Override
-    public int xSize() {
+    public int sizeX() {
         return sizeX;
     }
 
     /**
-     * Gets the y size of the IModel, with requests for y limited between 0 (inclusive) to ySize() (exclusive).
+     * Gets the y size of the IModel, with requests for y limited between 0 (inclusive) to sizeY() (exclusive).
      *
      * @return the size of the y dimension of the IModel
      */
     @Override
-    public int ySize() {
+    public int sizeY() {
         return sizeY;
     }
 
     /**
-     * Gets the z size of the IModel, with requests for z limited between 0 (inclusive) to zSize() (exclusive).
+     * Gets the z size of the IModel, with requests for z limited between 0 (inclusive) to sizeZ() (exclusive).
      *
      * @return the size of the z dimension of the IModel
      */
     @Override
-    public int zSize() {
+    public int sizeZ() {
         return sizeZ;
     }
 
     public boolean outside(int x, int y, int z) {
-        return x < 0 || y < 0 || z < 0 || x >= xSize() || y >= ySize() || z >= zSize();
+        return x < 0 || y < 0 || z < 0 || x >= sizeX() || y >= sizeY() || z >= sizeZ();
     }
 
     public boolean inside(int x, int y, int z) {

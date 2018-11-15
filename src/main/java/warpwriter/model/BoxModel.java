@@ -22,7 +22,7 @@ public class BoxModel extends FetchModel {
      * @param fetch Color of the box
      */
     public BoxModel (IModel model, Fetch fetch) {
-        this(fetch, model.xSize(), model.ySize(), model.zSize());
+        this(fetch, model.sizeX(), model.sizeY(), model.sizeZ());
         add(new FetchModel(model));
     }
 
@@ -52,6 +52,6 @@ public class BoxModel extends FetchModel {
      */
     @Override
     public boolean bool(int x, int y, int z) {
-        return inside(x, y, z) && (((x == 0 || x == xSize() - 1) && (y == 0 || y == ySize() - 1)) || ((x == 0 || x == xSize() - 1) && (z == 0 || z == zSize() - 1)) || ((y == 0 || y == ySize() - 1) && (z == 0 || z == zSize() - 1)));
+        return inside(x, y, z) && (((x == 0 || x == sizeX() - 1) && (y == 0 || y == sizeY() - 1)) || ((x == 0 || x == sizeX() - 1) && (z == 0 || z == sizeZ() - 1)) || ((y == 0 || y == sizeY() - 1) && (z == 0 || z == sizeZ() - 1)));
     }
 }

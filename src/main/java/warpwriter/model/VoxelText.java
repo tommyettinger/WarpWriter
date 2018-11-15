@@ -112,17 +112,17 @@ public class VoxelText extends Fetch implements IModel, Disposable {
     }
 
     @Override
-    public int xSize() {
+    public int sizeX() {
         return xSize == 0 ? 1 : xSize;
     }
 
     @Override
-    public int ySize() {
+    public int sizeY() {
         return pixmap == null ? 1 : pixmap.getWidth();
     }
 
     @Override
-    public int zSize() {
+    public int sizeZ() {
         return pixmap == null ? 1 : pixmap.getHeight();
     }
 
@@ -132,10 +132,10 @@ public class VoxelText extends Fetch implements IModel, Disposable {
     }
 
     /**
-     * @return Ignores x if xSize == 0
+     * @return Ignores x if sizeX == 0
      */
     @Override
     public boolean outside(int x, int y, int z) {
-        return y < 0 || z < 0 || y >= ySize() || z >= zSize() || (xSize != 0 && (x < 0 || x >= xSize()));
+        return y < 0 || z < 0 || y >= sizeY() || z >= sizeZ() || (xSize != 0 && (x < 0 || x >= sizeX()));
     }
 }

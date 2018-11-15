@@ -30,7 +30,7 @@ public class FetchModel extends Fetch implements IModel {
      * @param model Warning: FetchModel size is based on initial model. Does not automatically update FetchModel size if model size changes!
      */
     public FetchModel (IModel model) {
-        set(model.xSize(), model.ySize(), model.zSize());
+        set(model.sizeX(), model.sizeY(), model.sizeZ());
         add(new FetchFetch(model));
     }
 
@@ -53,7 +53,7 @@ public class FetchModel extends Fetch implements IModel {
      * @param fetch       Actual fetch to use
      */
     public FetchModel(IModel convenience, Fetch fetch) {
-        this(convenience.xSize(), convenience.ySize(), convenience.zSize(), fetch);
+        this(convenience.sizeX(), convenience.sizeY(), convenience.sizeZ(), fetch);
     }
 
     public FetchModel(Fetch fetch, IModel convenience) {
@@ -61,23 +61,23 @@ public class FetchModel extends Fetch implements IModel {
     }
 
     @Override
-    public int xSize() {
+    public int sizeX() {
         return xSize;
     }
 
     @Override
-    public int ySize() {
+    public int sizeY() {
         return ySize;
     }
 
     @Override
-    public int zSize() {
+    public int sizeZ() {
         return zSize;
     }
 
     @Override
     public boolean outside(int x, int y, int z) {
-        return x < 0 || y < 0 || z < 0 || x >= xSize() || y >= ySize() || z >= zSize();
+        return x < 0 || y < 0 || z < 0 || x >= sizeX() || y >= sizeY() || z >= sizeZ();
     }
 
     @Override

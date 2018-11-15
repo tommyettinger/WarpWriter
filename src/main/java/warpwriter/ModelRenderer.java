@@ -79,7 +79,7 @@ public class ModelRenderer {
 
     public int[][] renderOrtho(IModel voxels, CompassDirection dir)
     {
-        final int xs = voxels.xSize(), ys = voxels.ySize(), zs = voxels.zSize(), direction = directionCode(dir);
+        final int xs = voxels.sizeX(), ys = voxels.sizeY(), zs = voxels.sizeZ(), direction = directionCode(dir);
         VariableConverter con = directionsOrthoV[direction];
         int[][] working = makeRenderArray(xs, ys, zs, 4, 5, 1);
         int width = working.length, height = working[0].length;
@@ -289,7 +289,7 @@ public class ModelRenderer {
      * @return a 2D int array storing the pixel indices for the rendered model
      */
     public int[][] renderIso(IModel voxels, CompassDirection dir) {
-        final int xs = voxels.xSize(), ys = voxels.ySize(), zs = voxels.zSize(), direction = directionCode(dir);
+        final int xs = voxels.sizeX(), ys = voxels.sizeY(), zs = voxels.sizeZ(), direction = directionCode(dir);
         VariableConverter con = directionsIsoV[direction];
         int[][] working = makeRenderArray(xs, ys, zs, 4, 5, 1);
         int width = working.length, height = working[0].length;
@@ -389,7 +389,7 @@ public class ModelRenderer {
 
     public int[][] renderOrthoBelow(IModel voxels, CompassDirection dir)
     {
-        final int xs = voxels.xSize(), ys = voxels.ySize(), zs = voxels.zSize(), direction = directionCode(dir);
+        final int xs = voxels.sizeX(), ys = voxels.sizeY(), zs = voxels.sizeZ(), direction = directionCode(dir);
         VariableConverter con = directionsOrthoV[direction];
         int[][] working = makeRenderArray(xs, ys, zs, 4, 5, 1);
         int width = working.length, height = working[0].length;
@@ -593,7 +593,7 @@ public class ModelRenderer {
      * @return a 2D int array storing the pixel indices for the rendered model
      */
     public int[][] renderIsoBelow(IModel voxels, CompassDirection dir) {
-        final int xs = voxels.xSize(), ys = voxels.ySize(), zs = voxels.zSize(), direction = directionCode(dir);
+        final int xs = voxels.sizeX(), ys = voxels.sizeY(), zs = voxels.sizeZ(), direction = directionCode(dir);
         VariableConverter con = directionsIsoV[direction];
         int[][] working = makeRenderArray(xs, ys, zs, 4, 5, 1);
         int width = working.length, height = working[0].length;
@@ -692,7 +692,7 @@ public class ModelRenderer {
 
     public int[][] renderOrthoSide(IModel voxels, CompassDirection dir)
     {
-        final int xs = voxels.xSize(), ys = voxels.ySize(), zs = voxels.zSize(), direction = directionCode(dir);
+        final int xs = voxels.sizeX(), ys = voxels.sizeY(), zs = voxels.sizeZ(), direction = directionCode(dir);
         VariableConverter con = directionsOrthoSideV[direction];
         int[][] working = makeRenderArray(xs, ys, zs, 4, 5, 1);
         int width = working.length, height = working[0].length;
@@ -870,7 +870,7 @@ public class ModelRenderer {
         return easeSquares(render, working);
     }
     public int[][] renderIsoSide(IModel voxels, CompassDirection dir) {
-        final int xs = voxels.xSize(), ys = voxels.ySize(), zs = voxels.zSize(), direction = directionCode(dir);
+        final int xs = voxels.sizeX(), ys = voxels.sizeY(), zs = voxels.sizeZ(), direction = directionCode(dir);
         VariableConverter con = directionsIsoSideV[direction];
         int[][] working = makeRenderArray(xs, ys, zs, 4, 5, 1);
         int width = working.length, height = working[0].length;

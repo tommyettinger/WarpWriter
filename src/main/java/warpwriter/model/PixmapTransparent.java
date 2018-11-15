@@ -74,17 +74,17 @@ public class PixmapTransparent extends Fetch implements IModel {
     }
 
     @Override
-    public int xSize() {
+    public int sizeX() {
         return 1;
     }
 
     @Override
-    public int ySize() {
+    public int sizeY() {
         return pixmap == null ? 1 : pixmap.getWidth();
     }
 
     @Override
-    public int zSize() {
+    public int sizeZ() {
         return pixmap == null ? 1 : pixmap.getHeight();
     }
 
@@ -101,7 +101,7 @@ public class PixmapTransparent extends Fetch implements IModel {
      */
     @Override
     public boolean outside(int x, int y, int z) {
-        return y < 0 || z < 0 || y >= ySize() || z >= zSize();
+        return y < 0 || z < 0 || y >= sizeY() || z >= sizeZ();
     }
 
     @Override

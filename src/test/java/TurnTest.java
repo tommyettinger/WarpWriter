@@ -55,7 +55,7 @@ public class TurnTest extends ApplicationAdapter {
                         .boxModel(world,
                 ColorFetch.color(Coloring.rinsed("Red 4"))
         )
-                .model(world.xSize(), world.ySize(), world.zSize())
+                .model(world.sizeX(), world.sizeY(), world.sizeZ())
         );
 
         reDraw();

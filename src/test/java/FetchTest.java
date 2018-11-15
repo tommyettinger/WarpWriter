@@ -45,7 +45,7 @@ public class FetchTest extends ApplicationAdapter {
         PacMazeGenerator maze = new PacMazeGenerator(1000, 1000, modelMaker.rng);
         boolean[][] dungeon = maze.create();
         viewArea.add(offset)
-                .add(new BoxModel(viewArea.xSize(), viewArea.ySize(), viewArea.zSize(),
+                .add(new BoxModel(viewArea.sizeX(), viewArea.sizeY(), viewArea.sizeZ(),
                         ColorFetch.color(modelMaker.randomMainColor()
                         )))
                 .decideFetch(new HeightDecide(new NoiseHeightMap(new Noise.Layered2D(FastNoise.instance, 2), 0), 3), new NoiseFetch(modelMaker.randomMainColor()))

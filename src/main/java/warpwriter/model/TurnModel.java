@@ -36,7 +36,7 @@ public class TurnModel extends Fetch implements IModel {
     }
 
     public TurnModel size(Turner.Face face, Turner.Roll roll) {
-        turner.turn(iModel.xSize(), iModel.ySize(), iModel.zSize(), face, roll);
+        turner.turn(iModel.sizeX(), iModel.sizeY(), iModel.sizeZ(), face, roll);
         return this;
     }
 
@@ -45,17 +45,17 @@ public class TurnModel extends Fetch implements IModel {
     }
 
     @Override
-    public int xSize() {
+    public int sizeX() {
         return Math.abs(size().turner().x());
     }
 
     @Override
-    public int ySize() {
+    public int sizeY() {
         return Math.abs(size().turner().y());
     }
 
     @Override
-    public int zSize() {
+    public int sizeZ() {
         return Math.abs(size().turner().z());
     }
 
@@ -83,13 +83,13 @@ public class TurnModel extends Fetch implements IModel {
         turner().turn(x, y, z);
         return deferByte(getModel().at(
                 xSize < 0 ?
-                        turner().x() + getModel().xSize() - 1
+                        turner().x() + getModel().sizeX() - 1
                         : turner().x(),
                 ySize < 0 ?
-                        turner().y() + getModel().ySize() - 1
+                        turner().y() + getModel().sizeY() - 1
                         : turner().y(),
                 zSize < 0 ?
-                        turner().z() + getModel().zSize() - 1
+                        turner().z() + getModel().sizeZ() - 1
                         : turner().z()
         ));
     }

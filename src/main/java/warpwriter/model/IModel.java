@@ -2,7 +2,7 @@ package warpwriter.model;
 
 /**
  * An abstraction for IFetch types that also have limits on their 3D bounds, limiting what values can be passed to
- * {@link #at(int, int, int)} to between 0 (inclusive) and the xSize(), ySize(), and zSize() methods here (exclusive).
+ * {@link #at(int, int, int)} to between 0 (inclusive) and the sizeX(), sizeY(), and sizeZ() methods here (exclusive).
  * The limits here are intended to be used to determine the size of rendered images or models, so they shouldn't be used
  * for a different purpose unless the implementation is not meant to be rendered.
  * <br>
@@ -33,25 +33,25 @@ package warpwriter.model;
  */
 public interface IModel extends IFetch {
     /**
-     * Gets the x size of the IModel, with requests for x limited between 0 (inclusive) to xSize() (exclusive).
+     * Gets the x size of the IModel, with requests for x limited between 0 (inclusive) to sizeX() (exclusive).
      *
      * @return the size of the x dimension of the IModel
      */
-    int xSize();
+    int sizeX();
 
     /**
-     * Gets the y size of the IModel, with requests for y limited between 0 (inclusive) to ySize() (exclusive).
+     * Gets the y size of the IModel, with requests for y limited between 0 (inclusive) to sizeY() (exclusive).
      *
      * @return the size of the y dimension of the IModel
      */
-    int ySize();
+    int sizeY();
 
     /**
-     * Gets the z size of the IModel, with requests for z limited between 0 (inclusive) to zSize() (exclusive).
+     * Gets the z size of the IModel, with requests for z limited between 0 (inclusive) to sizeZ() (exclusive).
      *
      * @return the size of the z dimension of the IModel
      */
-    int zSize();
+    int sizeZ();
 
     /**
      * @return True if the given coordinate is inside the intended range
@@ -65,7 +65,7 @@ public interface IModel extends IFetch {
      * @return True if the given coordinate is outside the intended range
      * <p>
      * Recommended (but not required) implementation:
-     * public boolean outside(int x, int y, int z) { return x < 0 || y < 0 || z < 0 || x >= xSize() || y >= ySize() || z >= zSize(); }
+     * public boolean outside(int x, int y, int z) { return x < 0 || y < 0 || z < 0 || x >= sizeX() || y >= sizeY() || z >= sizeZ(); }
      */
     boolean outside(int x, int y, int z);
 }
