@@ -26,7 +26,7 @@ public class Swapper extends Fetch {
 
     @Override
     public Fetch fetch() {
-        int x = xChain(), y = yChain(), z = zChain();
+        int x = chainX(), y = chainY(), z = chainZ();
         switch (swap) {
             default:
             case xyz:

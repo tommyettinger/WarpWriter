@@ -43,7 +43,7 @@ public class BoxModel extends FetchModel {
 
     @Override
     public Fetch fetch() {
-        int x = xChain(), y = yChain(), z = zChain();
+        int x = chainX(), y = chainY(), z = chainZ();
         return bool(x, y, z) ? fetch : getNextFetch();
     }
 

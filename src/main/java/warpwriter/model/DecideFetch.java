@@ -33,6 +33,6 @@ public class DecideFetch extends Fetch {
 
     @Override
     public Fetch fetch() {
-        return decide.bool(xChain(), yChain(), zChain()) ? fetch : getNextFetch();
+        return decide.bool(chainX(), chainY(), chainZ()) ? fetch : getNextFetch();
     }
 }

@@ -42,7 +42,7 @@ public class OffsetModel extends FetchModel {
     @Override
     public Fetch fetch() {
         return fetch == null ?
-                setChains(xChain() + sizeX(), yChain() + sizeY(), zChain() + sizeZ()).getNextFetch()
-                : deferFetch(fetch.setChains(xChain() + sizeX(), yChain() + sizeY(), zChain() + sizeZ()));
+                setChains(chainX() + sizeX(), chainY() + sizeY(), chainZ() + sizeZ()).getNextFetch()
+                : deferFetch(fetch.setChains(chainX() + sizeX(), chainY() + sizeY(), chainZ() + sizeZ()));
     }
 }

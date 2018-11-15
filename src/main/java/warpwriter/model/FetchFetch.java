@@ -14,11 +14,11 @@ public class FetchFetch extends Fetch {
 
     @Override
     public Fetch fetch() {
-        return deferFetch(iFetch.at(xChain(), yChain(), zChain()));
+        return deferFetch(iFetch.at(chainX(), chainY(), chainZ()));
     }
 
     @Override
     public byte bite() {
-        return deferByte(iFetch.at(xChain(), yChain(), zChain()));
+        return deferByte(iFetch.at(chainX(), chainY(), chainZ()));
     }
 }

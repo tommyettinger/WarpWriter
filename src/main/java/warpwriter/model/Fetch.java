@@ -18,7 +18,7 @@ import squidpony.squidmath.Noise;
  * Failure to implement the required overrides may result in infinite recursion.
  * <p>
  * To defer to the next method in the chain, use getNextFetch()
- * Coordinates sent to the next Fetch in the chain be manipulated through setChains, setXChain, setYChain and setZChain.
+ * Coordinates sent to the next Fetch in the chain be manipulated through setChains, setChainX, setChainY and setChainZ.
  *
  * @author Ben McLean
  */
@@ -53,9 +53,9 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D, IDecide {
             current = next;
             current.setChains(x, y, z);
             next = current.fetch();
-            x = current.xChain();
-            y = current.yChain();
-            z = current.zChain();
+            x = current.chainX();
+            y = current.chainY();
+            z = current.chainZ();
         } while (next != null);
         return current.bite();
     }
@@ -78,37 +78,37 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D, IDecide {
         return at(x, y, z) != (byte) 0;
     }
 
-    protected int xChain, yChain, zChain;
+    protected int chainX, chainY, chainZ;
 
-    public int xChain() {
-        return xChain;
+    public int chainX() {
+        return chainX;
     }
 
-    public int yChain() {
-        return yChain;
+    public int chainY() {
+        return chainY;
     }
 
-    public int zChain() {
-        return zChain;
+    public int chainZ() {
+        return chainZ;
     }
 
-    public Fetch setXChain(int x) {
-        xChain = x;
+    public Fetch setChainX(int x) {
+        chainX = x;
         return this;
     }
 
-    public Fetch setYChain(int y) {
-        yChain = y;
+    public Fetch setChainY(int y) {
+        chainY = y;
         return this;
     }
 
-    public Fetch setZChain(int z) {
-        zChain = z;
+    public Fetch setChainZ(int z) {
+        chainZ = z;
         return this;
     }
 
     public Fetch setChains(int x, int y, int z) {
-        return setXChain(x).setYChain(y).setZChain(z);
+        return setChainX(x).setChainY(y).setChainZ(z);
     }
 
     private Fetch nextFetch;
@@ -161,7 +161,7 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D, IDecide {
      * This should be the method which ensures that, when no next method is specified in the chain, the background is always transparent.
      */
     public byte deferByte(byte result) {
-        return result == (byte) 0 ? deferFetch().at(xChain(), yChain(), zChain()) : result;
+        return result == (byte) 0 ? deferFetch().at(chainX(), chainY(), chainZ()) : result;
     }
 
     public byte deferByte() {
@@ -218,12 +218,12 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D, IDecide {
         return add(new FetchFetch(iFetch));
     }
 
-    public Fetch skew(float zSkew) {
-        return skew(0f, zSkew);
+    public Fetch skew(float skewZ) {
+        return skew(0f, skewZ);
     }
 
-    public Fetch skew(float ySkew, float zSkew) {
-        return add(new Skew(ySkew, zSkew));
+    public Fetch skew(float skewY, float skewZ) {
+        return add(new Skew(skewY, skewZ));
     }
 
     public Fetch swapper(Swapper.Swap swap) {

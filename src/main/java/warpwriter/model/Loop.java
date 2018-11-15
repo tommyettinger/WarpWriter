@@ -12,7 +12,7 @@ public class Loop extends FetchModel {
 
     @Override
     public Fetch fetch() {
-        setChains(loop(xChain(), sizeX()), loop(yChain(), sizeY()), loop(zChain(), sizeZ()));
+        setChains(loop(chainX(), sizeX()), loop(chainY(), sizeY()), loop(chainZ(), sizeZ()));
         return getNextFetch();
     }
 
