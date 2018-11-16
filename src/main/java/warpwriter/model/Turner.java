@@ -272,7 +272,7 @@ public class Turner {
     public Turner set(Face face, Roll roll, int centerX, int centerY, int centerZ) {
         return set(face, roll).setCenter(centerX, centerY, centerZ);
     }
-    
+
     public Turner set(int x, int y, int z) {
         return setX(x).setY(y).setZ(z);
     }
@@ -578,25 +578,44 @@ public class Turner {
 
     /**
      * Given the size of a model, sets x(), y(), z() to the offset needed to push the model back onto 0, 0, 0.
+     *
      * @return this
      */
     public Turner offsets(int sizeX, int sizeY, int sizeZ) {
-        switch(face) {
+        switch (face) {
             case NORTH:
                 switch (roll) {
                     default:
-                    case NONE: set(0, 0, 0); break;
-                    case RIGHT: set(0, 0, sizeZ - 1); break;
-                    case UTURN: set(0, sizeY - 1, sizeZ - 1); break;
-                    case LEFT: set(0, sizeY - 1, 0); break;
+                    case NONE:
+                        set(0, 0, 0);
+                        break;
+                    case RIGHT:
+                        set(0, 0, sizeZ - 1);
+                        break;
+                    case UTURN:
+                        set(0, sizeY - 1, sizeZ - 1);
+                        break;
+                    case LEFT:
+                        set(0, sizeY - 1, 0);
+                        break;
                 }
                 break;
             case EAST:
             case SOUTH:
                 switch (roll) {
                     default:
-                    case NONE: set(sizeX - 1, sizeY - 1, 0); break;
+                    case NONE:
+                        set(sizeX - 1, sizeY - 1, 0);
+                        break;
                     case RIGHT:
+                        set(sizeX - 1, sizeY - 1, sizeZ - 1);
+                        break;
+                    case UTURN:
+                        set(sizeX - 1, 0, sizeZ - 1);
+                        break;
+                    case LEFT:
+                        set(sizeX - 1, 0, 0);
+                        break;
                 }
                 break;
             case WEST:
