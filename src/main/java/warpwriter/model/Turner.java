@@ -582,46 +582,37 @@ public class Turner {
      * @return this
      */
     public Turner offsets(int sizeX, int sizeY, int sizeZ) {
+        int x = sizeX - 1, y = sizeY - 1, z = sizeZ - 1;
         switch (face) {
             case NORTH:
                 switch (roll) {
                     default:
                     case NONE:
-                        set(0, 0, 0);
-                        break;
+                        return set(0, 0, 0);
                     case RIGHT:
-                        set(0, 0, sizeZ - 1);
-                        break;
+                        return set(0, 0, z);
                     case UTURN:
-                        set(0, sizeY - 1, sizeZ - 1);
-                        break;
+                        return set(0, y, z);
                     case LEFT:
-                        set(0, sizeY - 1, 0);
-                        break;
+                        return set(0, y, 0);
                 }
-                break;
             case EAST:
             case SOUTH:
                 switch (roll) {
                     default:
                     case NONE:
-                        set(sizeX - 1, sizeY - 1, 0);
-                        break;
+                        return set(x, y, 0);
                     case RIGHT:
-                        set(sizeX - 1, sizeY - 1, sizeZ - 1);
-                        break;
+                        return set(x, y, z);
                     case UTURN:
-                        set(sizeX - 1, 0, sizeZ - 1);
-                        break;
+                        return set(x, 0, z);
                     case LEFT:
-                        set(sizeX - 1, 0, 0);
-                        break;
+                        return set(x, 0, 0);
                 }
-                break;
             case WEST:
             case UP:
             case DOWN:
         }
-        return this;
+        return set(0, 0, 0);
     }
 }
