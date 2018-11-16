@@ -611,6 +611,17 @@ public class Turner {
                 }
             case WEST:
             case UP:
+                switch (roll) {
+                    default:
+                    case NONE:
+                        return set(0, 0, z);
+                    case RIGHT:
+                        return set(x, 0, z);
+                    case UTURN:
+                        return set(x, y, z);
+                    case LEFT:
+                        return set(0, y, z);
+                }
             case DOWN:
         }
         return set(0, 0, 0);
