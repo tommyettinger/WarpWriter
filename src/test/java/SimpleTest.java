@@ -77,64 +77,64 @@ public class SimpleTest extends ApplicationAdapter {
                 boolean needRedraw = true;
                 switch (keycode) {
                     case Input.Keys.UP:
-                        turnModel.turner().set(Turner.Roll.NONE);
+                        turnModel.turner().set(Turner.Roll.TWELVE);
                         break;
                     case Input.Keys.DOWN:
-                        turnModel.turner().set(Turner.Roll.UTURN);
+                        turnModel.turner().set(Turner.Roll.SIX);
                         break;
                     case Input.Keys.RIGHT:
-                        turnModel.turner().set(Turner.Roll.RIGHT);
+                        turnModel.turner().set(Turner.Roll.THREE);
                         break;
                     case Input.Keys.LEFT:
-                        turnModel.turner().set(Turner.Roll.LEFT);
+                        turnModel.turner().set(Turner.Roll.NINE);
                         break;
                     case Input.Keys.NUMPAD_8:
                     case Input.Keys.NUM_8:
                         direction = CompassDirection.NORTH;
-                        turnModel.turner().set(Turner.Face.NORTH);
+                        turnModel.turner().set(Turner.Face.X_PLUS);
                         break;
                     case Input.Keys.NUMPAD_6:
                     case Input.Keys.NUM_6:
                         direction = CompassDirection.EAST;
-                        turnModel.turner().set(Turner.Face.EAST);
+                        turnModel.turner().set(Turner.Face.Y_PLUS);
                         break;
                     case Input.Keys.NUMPAD_2:
                     case Input.Keys.NUM_2:
                         direction = CompassDirection.SOUTH;
-                        turnModel.turner().set(Turner.Face.SOUTH);
+                        turnModel.turner().set(Turner.Face.X_MINUS);
                         break;
                     case Input.Keys.NUMPAD_4:
                     case Input.Keys.NUM_4:
                         direction = CompassDirection.WEST;
-                        turnModel.turner().set(Turner.Face.WEST);
+                        turnModel.turner().set(Turner.Face.Y_MINUS);
                         break;
                     case Input.Keys.SLASH:
                         direction = CompassDirection.NORTH;
-                        turnModel.turner().set(Turner.Face.UP);
+                        turnModel.turner().set(Turner.Face.Z_PLUS);
                         break;
                     case Input.Keys.STAR:
                         direction = CompassDirection.NORTH;
-                        turnModel.turner().set(Turner.Face.DOWN);
+                        turnModel.turner().set(Turner.Face.Z_MINUS);
                         break;
                     case Input.Keys.NUMPAD_7:
                     case Input.Keys.NUM_7:
                         direction = CompassDirection.NORTH_WEST;
-                        turnModel.turner().set(Turner.Face.NORTH);
+                        turnModel.turner().set(Turner.Face.X_PLUS);
                         break;
                     case Input.Keys.NUMPAD_9:
                     case Input.Keys.NUM_9:
                         direction = CompassDirection.NORTH_EAST;
-                        turnModel.turner().set(Turner.Face.EAST);
+                        turnModel.turner().set(Turner.Face.Y_PLUS);
                         break;
                     case Input.Keys.NUMPAD_3:
                     case Input.Keys.NUM_3:
                         direction = CompassDirection.SOUTH_EAST;
-                        turnModel.turner().set(Turner.Face.SOUTH);
+                        turnModel.turner().set(Turner.Face.X_MINUS);
                         break;
                     case Input.Keys.NUMPAD_1:
                     case Input.Keys.NUM_1:
                         direction = CompassDirection.SOUTH_WEST;
-                        turnModel.turner().set(Turner.Face.WEST);
+                        turnModel.turner().set(Turner.Face.Y_MINUS);
                         break;
                     case Input.Keys.NUM_0:
                         angle = 1;
