@@ -489,7 +489,7 @@ public class Turner {
         set(x - centerX, y - centerY, z - centerZ);
         switch (face) {
             case EAST: // y+
-                //setClockX().setClockZ();
+                setClockZ();
                 switch (roll) {
                     case RIGHT:
                         setClockY();
@@ -517,7 +517,7 @@ public class Turner {
                 }
                 break;
             case WEST: // y-
-                //setCounterX().setCounterZ();
+                setCounterZ();
                 switch (roll) {
                     case RIGHT:
                         setCounterY();
@@ -531,7 +531,7 @@ public class Turner {
                 }
                 break;
             case UP: // z+
-                //setCounterY();
+                setCounterY();
                 switch (roll) {
                     case RIGHT:
                         setClockZ();
@@ -545,7 +545,7 @@ public class Turner {
                 }
                 break;
             case DOWN: // z-
-                //setClockY();
+                setClockY();
                 switch (roll) {
                     case RIGHT:
                         setCounterZ();
