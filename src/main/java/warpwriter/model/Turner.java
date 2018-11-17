@@ -298,15 +298,23 @@ public class Turner {
     public Turner clockX() {
         switch (face) {
             case X_PLUS:
-                return set(roll.counter());
-            case X_MINUS:
                 return set(roll.clock());
+            case X_MINUS:
+                return set(roll.counter());
+            default:
+                return set(face.clockX(), roll.counter());
         }
-        return set(face.clockX());
     }
 
     public Turner counterX() {
-        return set(face.counterX(), face == Face.X_PLUS ? roll.counter() : roll.clock());
+        switch (face) {
+            case X_PLUS:
+                return set(roll.counter());
+            case X_MINUS:
+                return set(roll.clock());
+            default:
+                return set(face.counterX(), roll.clock());
+        }
     }
 
     public Turner clockY() {
