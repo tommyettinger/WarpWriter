@@ -15,7 +15,7 @@ public class SimpleDraw {
         for (int z = 0; z < sizeZ; z++) {
             for (int y = 0; y < sizeY; y++) {
                 for (int x = sizeX - 1; x >= 0; x--) {
-                    renderer.drawPixel(y, z, Color.rgba8888(Color.RED));
+//                    renderer.drawPixel(y, z, Color.rgba8888(Color.RED));
                     byte result = model.at(x, y, z);
                     if (result != 0) {
                         renderer.drawPixel(y, z, color.rightFace(result));
@@ -70,20 +70,20 @@ public class SimpleDraw {
     }
 
     public static void simpleDrawIso(IModel model, ITriangleRenderer renderer, IVoxelColor color) {
-//        renderer.drawLeftTriangle(0, 0, Color.rgba8888(Color.RED));
-//        renderer.drawRightTriangle(2, 0, Color.rgba8888(Color.BLUE));
-        int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ();
-        int pixelWidth = sizeX + sizeY;
-        byte result = 0;
-        boolean rightDone = false, upRightDone = false, upLeftDone = false, leftDone = false;
+        int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ(),
+                sizeX2 = sizeX * 2, sizeY2 = sizeY * 2, pixelWidth = sizeX2 + sizeY2;
         // To move one x+ in voxels is x + 2, y + 2 in pixels.
         // To move one y+ in voxels is x + 2, y - 2 in pixels.
         // To move one z+ in voxels is y + 4 in pixels.
-        for (int px = 0; px < sizeY * 2; px+=2) {
-            for (int py = sizeY * 2 - px;
-                 py <= sizeY * 2 - px + sizeZ * 4 + px * 2;
+        for (int px = 0; px < pixelWidth; px += 4) {
+            int startPY = Math.abs(sizeY2 - px);
+            for (int py = startPY;
+                 py <= startPY + sizeZ * 4; // TODO: Add top of model
                  py += 4) {
-                renderer.drawRightTriangle(px, py, Color.rgba8888(Color.RED));
+                renderer.drawLeftTriangle(px, py, Color.rgba8888(Color.GREEN));
+                renderer.drawRightTriangle(px, py - 2, Color.rgba8888(Color.BLUE));
+                renderer.drawRightTriangle(px + 2, py, Color.rgba8888(Color.YELLOW));
+                renderer.drawLeftTriangle(px + 2, py - 2, Color.rgba8888(Color.RED));
             }
         }
 
