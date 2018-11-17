@@ -14,7 +14,7 @@ public class SimpleDraw {
         int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ();
         for (int z = 0; z < sizeZ; z++) {
             for (int y = 0; y < sizeY; y++) {
-                for (int x = 0; x < sizeX; x++) {
+                for (int x = sizeX - 1; x >= 0; x--) {
                     renderer.drawPixel(y, z, Color.rgba8888(Color.RED));
                     byte result = model.at(x, y, z);
                     if (result != 0) {
@@ -38,16 +38,16 @@ public class SimpleDraw {
             for (int py = 0; py < sizeZ; py++) { // pixel y
 //                renderer.drawRect(px, py, 2, 1, Color.rgba8888(Color.RED));
                 boolean leftDone = false, rightDone = pixelWidth - px < 2;
-                for (int vx = px - sizeY, vy = sizeY; vx <= sizeX && vy >= -1; vx++, vy--) { // vx is voxel x, vy is voxel y
+                for (int vx = sizeX, vy = px - sizeY; vx >= -1 && vy <= sizeY; vx--, vy++) { // vx is voxel x, vy is voxel y
                     if (!leftDone) {
-                        result = model.at(vx - 1, vy, py);
+                        result = model.at(vx, vy - 1, py);
                         if (result != 0) {
                             renderer.drawPixel(px, py, color.rightFace(result));
                             leftDone = true;
                         }
                     }
                     if (!rightDone) {
-                        result = model.at(vx, vy + 1, py);
+                        result = model.at(vx + 1, vy, py);
                         if (result != 0) {
                             renderer.drawPixel(px + 1, py, color.leftFace(result));
                             rightDone = true;
