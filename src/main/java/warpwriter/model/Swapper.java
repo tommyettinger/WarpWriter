@@ -28,7 +28,6 @@ public class Swapper extends Fetch {
     public Fetch fetch() {
         int x = chainX(), y = chainY(), z = chainZ();
         switch (swap) {
-            default:
             case xyz:
                 setChains(x, y, z);
                 break;
@@ -147,6 +146,7 @@ public class Swapper extends Fetch {
                 setChains(y * -1, x, z);
                 break;
             case counterZ:
+            default:
                 setChains(y, x * -1, z);
                 break;
         }
