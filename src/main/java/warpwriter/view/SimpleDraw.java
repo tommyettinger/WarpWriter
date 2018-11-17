@@ -68,7 +68,19 @@ public class SimpleDraw {
     }
 
     public static void simpleDrawIso(IModel model, ITriangleRenderer renderer, IVoxelColor color) {
-        renderer.drawLeftTriangle(0, 0, Color.rgba8888(Color.RED));
-        renderer.drawRightTriangle(2, 0, Color.rgba8888(Color.BLUE));
+//        renderer.drawLeftTriangle(0, 0, Color.rgba8888(Color.RED));
+//        renderer.drawRightTriangle(2, 0, Color.rgba8888(Color.BLUE));
+        int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ();
+        int pixelWidth = sizeX + sizeY;
+        byte result = 0;
+        boolean rightDone = false, upRightDone = false, upLeftDone = false, leftDone = false;
+        // To move one x+ in voxels is x + 2, y + 2 in pixels.
+        // To move one y+ in voxels is x + 2, y - 2 in pixels.
+        // To move one z+ in voxels is y + 4 in pixels.
+        for (int px = 0; px < sizeX * 2 + sizeY * 2; px+=2) {
+            for (int py = sizeY * 2 - px; py <= sizeY * 2 - px + sizeZ * 4; py += 4) {
+                renderer.drawLeftTriangle(px, py, Color.rgba8888(Color.RED));
+            }
+        }
     }
 }
