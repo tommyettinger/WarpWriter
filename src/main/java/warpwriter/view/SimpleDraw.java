@@ -15,6 +15,7 @@ public class SimpleDraw {
         for (int z = 0; z < sizeZ; z++) {
             for (int y = 0; y < sizeY; y++) {
                 for (int x = 0; x < sizeX; x++) {
+                    renderer.drawPixel(y, z, Color.rgba8888(Color.RED));
                     byte result = model.at(x, y, z);
                     if (result != 0) {
                         renderer.drawPixel(y, z, color.rightFace(result));
@@ -35,6 +36,7 @@ public class SimpleDraw {
         byte result = 0;
         for (int px = 0; px < pixelWidth; px += 2) { // pixel x
             for (int py = 0; py < sizeZ; py++) { // pixel y
+                renderer.drawRect(px, py, 2, 1, Color.rgba8888(Color.RED));
                 boolean leftDone = false, rightDone = false;
                 for (int vx = px - sizeY, vy = sizeY; vx <= sizeX && vy >= -1; vx++, vy--) { // vx is voxel x, vy is voxel y
                     if (!leftDone) {
@@ -68,7 +70,22 @@ public class SimpleDraw {
     }
 
     public static void simpleDrawIso(IModel model, ITriangleRenderer renderer, IVoxelColor color) {
-        renderer.drawLeftTriangle(0, 0, Color.rgba8888(Color.RED));
-        renderer.drawRightTriangle(2, 0, Color.rgba8888(Color.BLUE));
+//        renderer.drawLeftTriangle(0, 0, Color.rgba8888(Color.RED));
+//        renderer.drawRightTriangle(2, 0, Color.rgba8888(Color.BLUE));
+        int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ();
+        int pixelWidth = sizeX + sizeY;
+        byte result = 0;
+        boolean rightDone = false, upRightDone = false, upLeftDone = false, leftDone = false;
+        // To move one x+ in voxels is x + 2, y + 2 in pixels.
+        // To move one y+ in voxels is x + 2, y - 2 in pixels.
+        // To move one z+ in voxels is y + 4 in pixels.
+        for (int px = 0; px < sizeY * 2; px+=2) {
+            for (int py = sizeY * 2 - px;
+                 py <= sizeY * 2 - px + sizeZ * 4 + px * 2;
+                 py += 4) {
+                renderer.drawRightTriangle(px, py, Color.rgba8888(Color.RED));
+            }
+        }
+
     }
 }
