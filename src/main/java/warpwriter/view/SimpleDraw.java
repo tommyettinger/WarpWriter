@@ -72,13 +72,29 @@ public class SimpleDraw {
     public static void simpleDrawIso(IModel model, ITriangleRenderer renderer, IVoxelColor color) {
         int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ(),
                 sizeX2 = sizeX * 2, sizeY2 = sizeY * 2, pixelWidth = sizeX2 + sizeY2;
+        int great, less;
+        if (sizeX2 > sizeY2) {
+            great = sizeX2;
+            less = sizeY2;
+        } else {
+            great = sizeY2;
+            less = sizeX2;
+        }
         // To move one x+ in voxels is x + 2, y + 2 in pixels.
         // To move one y+ in voxels is x + 2, y - 2 in pixels.
         // To move one z+ in voxels is y + 4 in pixels.
         for (int px = 0; px < pixelWidth; px += 4) {
-            int startPY = Math.abs(sizeY2 - px);
-            for (int py = startPY;
-                 py <= startPY + sizeZ * 4; // TODO: Add top of model
+            int bottomPY = Math.abs(sizeY2 - px);
+            for (int py = bottomPY;
+                 py <= bottomPY + sizeZ * 4 + (
+                         px < less ?
+                                 px * 2
+                                 : px < sizeX2 ?
+                                 sizeX2
+                                 : px < sizeY2 ?
+                                 sizeY2
+                                 : (pixelWidth - px) * 2
+                 ); // TODO: Add top of model
                  py += 4) {
                 renderer.drawLeftTriangle(px, py, Color.rgba8888(Color.GREEN));
                 renderer.drawRightTriangle(px, py - 2, Color.rgba8888(Color.BLUE));
