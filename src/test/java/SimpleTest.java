@@ -58,7 +58,7 @@ public class SimpleTest extends ApplicationAdapter {
         batchRenderer = new SpriteBatchVoxelRenderer(batch).setOffset(16, 100);
         maker = new ModelMaker(12345);
         try {
-            knightModel = new ArrayModel(VoxIO.readVox(new LittleEndianDataInputStream(SimpleTest.class.getResourceAsStream("/Box.vox"))));
+            knightModel = new ArrayModel(VoxIO.readVox(new LittleEndianDataInputStream(SimpleTest.class.getResourceAsStream("/dumbcube.vox"))));
         } catch (Exception e) {
             e.printStackTrace();
             knightModel = new ArrayModel(maker.warriorRandom());
@@ -208,9 +208,9 @@ public class SimpleTest extends ApplicationAdapter {
         if (angle > 2)
             SimpleDraw.simpleDrawIso(turnModel, batchRenderer.setScale(2f));
         else if (direction.isCardinal())
-            SimpleDraw.simpleDraw(turnModel, batchRenderer.setScale(16f), voxelColor);
+            SimpleDraw.simpleDraw(turnModel, batchRenderer.setScale(4f), voxelColor);
         else
-            SimpleDraw.simpleDraw45(turnModel, batchRenderer.setScale(12f, 16f), voxelColor);
+            SimpleDraw.simpleDraw45(turnModel, batchRenderer.setScale(3f, 4f), voxelColor);
 
         batch.end();
         buffer.end();
