@@ -86,12 +86,12 @@ public class SimpleDraw {
         for (int px = 0; px < pixelWidth; px += 4) {
             int bottomPY = Math.abs(sizeY2 - 2 - px),
                     topPY = bottomPY + sizeZ * 4 - 2 + (
-                            px < great ?
-                                    px < less ?
+                            px < great - 1 ?
+                                    px < less - 1 ?
                                             px * 2
                                             : px < sizeY2 ?
                                             sizeX * 3 + (sizeY % 2 == 0 ? 4 : 0) // Descending
-                                            : 0 // Ascending
+                                            : sizeX * 2 - (sizeY % 2 == 0 ? 0 : 4) // Ascending
                                     : (pixelWidth - px) * 2 - (sizeZ % 2 == 0 ? 4 : 8));
 
             // Begin drawing bottom row triangles
@@ -116,7 +116,7 @@ public class SimpleDraw {
             // Finish drawing main bulk of model
 
             // Begin drawing top triangles
-            if (px < sizeX2 || Math.abs(sizeX2 - px) < 2) {
+            if (px < sizeX2) {
                 renderer.drawLeftTriangle(px + 2, topPY, Color.rgba8888(Color.PURPLE));
             } else {
                 renderer.drawRightTriangle(px, topPY, Color.rgba8888(Color.PURPLE));
