@@ -494,106 +494,73 @@ public class Turner {
     public Turner turn(int x, int y, int z, Face face, Roll roll, int centerX, int centerY, int centerZ) {
         set(x - centerX, y - centerY, z - centerZ);
         switch (face) {
-            // rotation info from http://www.euclideanspace.com/maths/algebra/matrix/transforms/examples/index.htm
-            // note: y and z are swapped here relative to how that site describes it
-            // not totally sure if all these are right yet.
             case Y_PLUS: // y+
-//                setClockZ();
+                setClockZ();
                 switch (roll) {
                     case THREE:
-//                        setCounterY();
-                        set(y, x, z);
+                        setCounterY();
                         break;
                     case SIX:
-//                        setClockY().setClockY();
-                        set(y, x, -z);
+                        setClockY().setClockY();
                         break;
                     case NINE:
-//                        setClockY();
-                        set(-z, x, -y);
-                        break;
-                    case TWELVE:
-                        set(-y, x, z);
+                        setClockY();
                         break;
                 }
                 break;
             case X_MINUS: // x-
-//                setClockZ().setClockZ();
+                setClockZ().setClockZ();
                 switch (roll) {
                     case THREE:
-//                        setClockX();
-                        set(-x, -z, -y);
-                        break;
-                    case TWELVE:
-//                        setClockX().setClockX();
-                        set(-x, -y, z);
-                        break;
-                    case NINE:
-//                        setCounterX();
-                        set(-x, z, y);
+                        setClockX();
                         break;
                     case SIX:
-                        set(-x, y, -z);
+                        setClockX().setClockX();
+                        break;
+                    case NINE:
+                        setCounterX();
                         break;
                 }
                 break;
             case Y_MINUS: // y-
-//                setCounterZ();
+                setCounterZ();
                 switch (roll) {
                     case THREE:
-//                        setClockY();
-                        set(-z, -x, y);
-                        break;
-                    case TWELVE:
-//                        setCounterY().setCounterY();
-                        set(y, -x, z);
-                        break;
-                    case NINE:
-//                        setCounterY();
-                        set(z, -x, -y);
+                        setClockY();
                         break;
                     case SIX:
-                        set(-y, -x, -z);
+                        setCounterY().setCounterY();
+                        break;
+                    case NINE:
+                        setCounterY();
                         break;
                 }
                 break;
             case Z_PLUS: // z+
-//                setCounterY();
+                setCounterY();
                 switch (roll) {
                     case THREE:
-//                        setClockZ();
-                        set(y, z, x);
+                        setClockZ();
                         break;
                     case SIX:
-//                        setCounterZ().setCounterZ();
-                        set(z, -y, x);
+                        setCounterZ().setCounterZ();
                         break;
                     case NINE:
-//                        setCounterZ();
-                        set(-y, -z, x);
-                        break;
-                    case TWELVE:
-                        set(z, y, -x);
+                        setCounterZ();
                         break;
                 }
                 break;
             case Z_MINUS: // z-
-//                setClockY();
+                setClockY();
                 switch (roll) {
                     case THREE:
-//                        setCounterZ();
-                        set(y, -z, -x);
-                        break;
-                    case TWELVE:
-//                        setClockZ().setClockZ();
-                        set(-z, -y, -x);
-                        break;
-                    case NINE:
-//                        setClockZ();
-                        set(-y, z, -x);
+                        setCounterZ();
                         break;
                     case SIX:
-                        set(y, z, -x);
+                        setClockZ().setClockZ();
+                        break;
+                    case NINE:
+                        setClockZ();
                         break;
                 }
                 break;
@@ -601,16 +568,13 @@ public class Turner {
             default:
                 switch (roll) {
                     case THREE:
-//                        setCounterX();
-                        set(x, z, -y);
+                        setCounterX();
                         break;
                     case SIX:
-//                        setCounterX().setCounterX();
-                        set(x, -y, -z);
+                        setCounterX().setCounterX();
                         break;
                     case NINE:
-//                        setClockX();
-                        set(x, -z, y);
+                        setClockX();
                         break;
                 }
                 break;
