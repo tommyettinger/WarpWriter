@@ -1,7 +1,4 @@
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
@@ -40,8 +37,9 @@ public class SimpleTest extends ApplicationAdapter {
     private SpriteBatchVoxelRenderer batchRenderer;
     protected VoxelColor voxelColor;
     protected CompassDirection direction = CompassDirection.NORTH;
-    protected int angle=2;
+    protected int angle = 2;
     protected byte[][][] box;
+
     @Override
     public void create() {
         font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
@@ -72,7 +70,63 @@ public class SimpleTest extends ApplicationAdapter {
 //        ));
 
         //reDraw();
-        Gdx.input.setInputProcessor(new InputAdapter() {
+        Gdx.input.setInputProcessor(inputProcessor());
+    }
+
+    @Override
+    public void render() {
+        buffer.begin();
+        Gdx.gl.glClearColor(0, 0, 0, 0);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        worldView.apply();
+        worldView.getCamera().position.set(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2, 0);
+        worldView.update(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
+        batch.setProjectionMatrix(worldView.getCamera().combined);
+        batch.begin();
+
+        font.draw(batch, turnModel.turner().face().toString(), 0, 20);
+        font.draw(batch, turnModel.turner().roll().toString(), 0, 40);
+        font.draw(batch, direction.toString(), 0, 60);
+        font.draw(batch, turnModel.sizeX() + ", " + turnModel.sizeY() + ", " + turnModel.sizeZ(), 0, 80);
+        //batch.draw(tex, 0, 0);
+        if (angle > 2)
+            SimpleDraw.simpleDrawIso(turnModel, batchRenderer.setScale(1f));
+        else if (direction.isCardinal())
+            SimpleDraw.simpleDraw(turnModel, batchRenderer.setScale(4f), voxelColor);
+        else
+            SimpleDraw.simpleDraw45(turnModel, batchRenderer.setScale(3f, 4f), voxelColor);
+
+        batch.end();
+        buffer.end();
+        Gdx.gl.glClearColor(0, 0, 0, 0);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        screenView.apply();
+        batch.setProjectionMatrix(screenView.getCamera().combined);
+        batch.begin();
+        screenTexture = buffer.getColorBufferTexture();
+        screenTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        screenRegion.setRegion(screenTexture);
+        screenRegion.flip(false, true);
+        batch.draw(screenRegion, 0, 0);
+        batch.end();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        screenView.update(width, height);
+    }
+
+    public static void main(String[] arg) {
+        Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        config.setTitle("Simple Tester");
+        config.setWindowedMode(SCREEN_WIDTH, SCREEN_HEIGHT);
+        config.setIdleFPS(10);
+        final SimpleTest app = new SimpleTest();
+        new Lwjgl3Application(app, config);
+    }
+
+    public InputProcessor inputProcessor() {
+        return new InputAdapter() {
             @Override
             public boolean keyDown(int keycode) {
                 boolean needRedraw = true;
@@ -194,58 +248,6 @@ public class SimpleTest extends ApplicationAdapter {
                 //if (needRedraw) reDraw();
                 return true;
             }
-        });
-    }
-
-    @Override
-    public void render() {
-        buffer.begin();
-        Gdx.gl.glClearColor(0, 0, 0, 0);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        worldView.apply();
-        worldView.getCamera().position.set(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2, 0);
-        worldView.update(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
-        batch.setProjectionMatrix(worldView.getCamera().combined);
-        batch.begin();
-
-        font.draw(batch, turnModel.turner().face().toString(), 0, 20);
-        font.draw(batch, turnModel.turner().roll().toString(), 0, 40);
-        font.draw(batch, direction.toString(), 0, 60);
-        font.draw(batch, turnModel.sizeX() + ", " + turnModel.sizeY() + ", " + turnModel.sizeZ(), 0, 80);
-        //batch.draw(tex, 0, 0);
-        if (angle > 2)
-            SimpleDraw.simpleDrawIso(turnModel, batchRenderer.setScale(2f));
-        else if (direction.isCardinal())
-            SimpleDraw.simpleDraw(turnModel, batchRenderer.setScale(4f), voxelColor);
-        else
-            SimpleDraw.simpleDraw45(turnModel, batchRenderer.setScale(3f, 4f), voxelColor);
-
-        batch.end();
-        buffer.end();
-        Gdx.gl.glClearColor(0, 0, 0, 0);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        screenView.apply();
-        batch.setProjectionMatrix(screenView.getCamera().combined);
-        batch.begin();
-        screenTexture = buffer.getColorBufferTexture();
-        screenTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
-        screenRegion.setRegion(screenTexture);
-        screenRegion.flip(false, true);
-        batch.draw(screenRegion, 0, 0);
-        batch.end();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        screenView.update(width, height);
-    }
-
-    public static void main(String[] arg) {
-        Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-        config.setTitle("Simple Tester");
-        config.setWindowedMode(SCREEN_WIDTH, SCREEN_HEIGHT);
-        config.setIdleFPS(10);
-        final SimpleTest app = new SimpleTest();
-        new Lwjgl3Application(app, config);
+        };
     }
 }

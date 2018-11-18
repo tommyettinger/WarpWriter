@@ -71,7 +71,7 @@ public class SimpleDraw {
 
     public static void simpleDrawIso(IModel model, ITriangleRenderer renderer, IVoxelColor color) {
         int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ(),
-                sizeX2 = sizeX * 2, sizeY2 = sizeY * 2, pixelWidth = sizeX2 + sizeY2;
+                sizeX2 = sizeX * 2, sizeY2 = sizeY * 2, pixelWidth = sizeX2 + sizeY2 - ((sizeX + sizeY) % 2 == 1 ? 4 : 0);
         int great, less;
         if (sizeX2 >= sizeY2) {
             great = sizeX2;
@@ -84,23 +84,42 @@ public class SimpleDraw {
         // To move one y+ in voxels is x + 2, y - 2 in pixels.
         // To move one z+ in voxels is y + 4 in pixels.
         for (int px = 0; px < pixelWidth; px += 4) {
-            int bottomPY = Math.abs(sizeY2 - 2 - px);
-            for (int py = bottomPY;
-                 py <= bottomPY + sizeZ * 4 - 2 + (
-                         px < great ?
-                                 px < less ?
-                                         px * 2
-                                         : great + 2
-                                 : (pixelWidth - px) * 2 - 8
+            int bottomPY = Math.abs(sizeY2 - 2 - px),
+                    topPY = bottomPY + sizeZ * 4 - 2 + (
+                            px < great ?
+                                    px < less ?
+                                            px * 2
+                                            : less * 2 - 4
+                                    : (pixelWidth - px) * 2 - 8);
 
-                 );
-                 py += 4) {
+            // Begin drawing bottom row triangles
+            renderer.drawLeftTriangle(px, bottomPY - 4, Color.rgba8888(Color.PURPLE));
+            renderer.drawRightTriangle(px + 2, bottomPY - 4, Color.rgba8888(Color.PURPLE));
+            if (px < sizeY2 - 2) {
+                renderer.drawLeftTriangle(px + 2, bottomPY - 6, Color.rgba8888(Color.PURPLE));
+            } else if (px > sizeY2) {
+                renderer.drawRightTriangle(px, bottomPY - 6, Color.rgba8888(Color.PURPLE));
+            } else if (sizeY % 2 == 0) {
+                renderer.drawRightTriangle(px, bottomPY-6, Color.rgba8888(Color.WHITE));
+            }
+            // Finish drawing bottom row triangles
+
+            // Begin drawing main bulk of model
+            for (int py = bottomPY; py <= topPY; py += 4) {
                 renderer.drawLeftTriangle(px, py, Color.rgba8888(Color.GREEN));
                 renderer.drawRightTriangle(px, py - 2, Color.rgba8888(Color.BLUE));
                 renderer.drawRightTriangle(px + 2, py, Color.rgba8888(Color.YELLOW));
                 renderer.drawLeftTriangle(px + 2, py - 2, Color.rgba8888(Color.RED));
             }
-        }
+            // Finish drawing main bulk of model
 
+            // Begin drawing top triangles
+            if (px < sizeX2 || Math.abs(sizeX2 - px) < 2) {
+                renderer.drawLeftTriangle(px + 2, topPY, Color.rgba8888(Color.PURPLE));
+            } else {
+                renderer.drawRightTriangle(px, topPY, Color.rgba8888(Color.PURPLE));
+            }
+            // Finish drawing top triangles.
+        }
     }
 }
