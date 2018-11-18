@@ -89,7 +89,9 @@ public class SimpleDraw {
                             px < great ?
                                     px < less ?
                                             px * 2
-                                            : 0 // This line is always wrong no matter what I do
+                                            : px < sizeY2 ?
+                                            sizeX * 3 + (sizeY % 2 == 0 ? 4 : 0) // Descending
+                                            : 0 // Ascending
                                     : (pixelWidth - px) * 2 - (sizeZ % 2 == 0 ? 4 : 8));
 
             // Begin drawing bottom row triangles
@@ -100,7 +102,7 @@ public class SimpleDraw {
             } else if (px > sizeY2) {
                 renderer.drawRightTriangle(px, bottomPY - 6, Color.rgba8888(Color.PURPLE));
             } else if (sizeY % 2 == 0) {
-                renderer.drawRightTriangle(px, bottomPY-6, Color.rgba8888(Color.WHITE));
+                renderer.drawRightTriangle(px, bottomPY - 6, Color.rgba8888(Color.WHITE));
             }
             // Finish drawing bottom row triangles
 
