@@ -83,15 +83,16 @@ public class SimpleDraw {
         // To move one x+ in voxels is x + 2, y + 2 in pixels.
         // To move one y+ in voxels is x + 2, y - 2 in pixels.
         // To move one z+ in voxels is y + 4 in pixels.
-        for (int px = 0; px < pixelWidth + 1; px += 4) {
-            int bottomPY = Math.abs(sizeY2 - px);
+        for (int px = 0; px < pixelWidth; px += 4) {
+            int bottomPY = Math.abs(sizeY2 - 2 - px);
             for (int py = bottomPY;
-                 py <= bottomPY + sizeZ * 4 + (
+                 py <= bottomPY + sizeZ * 4 - 2 + (
                          px < great ?
                                  px < less ?
                                          px * 2
-                                         : great + 8
-                                 : (pixelWidth - px) * 2
+                                         : great + 2
+                                 : (pixelWidth - px) * 2 - 8
+
                  );
                  py += 4) {
                 renderer.drawLeftTriangle(px, py, Color.rgba8888(Color.GREEN));
