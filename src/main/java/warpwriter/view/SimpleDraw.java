@@ -86,26 +86,12 @@ public class SimpleDraw {
         for (int px = 0; px < pixelWidth + 1; px += 4) {
             int bottomPY = Math.abs(sizeY2 - px);
             for (int py = bottomPY;
-                 py <= bottomPY + sizeZ * 4 +(
-                         sizeX < sizeY ?
-                                 px < sizeY2 ?
-                                         px < sizeX2 ?
+                 py <= bottomPY + sizeZ * 4 + (
+                                 px < great ?
+                                         px < less ?
                                                  px * 2
-                                                 : sizeY2 + 8
+                                                 : great + 8
                                          : (pixelWidth - px) * 2
-                                 : px < sizeX2 ?
-                                 px < sizeY2 ?
-                                         px * 2
-                                         : sizeX2 + 8
-                                 : (pixelWidth - px) * 2
-                         /*
-                         px < less ?
-                                 px * 2
-                                 : px < great ?
-                                 //less + px * 2 - great
-            0
-                                 : (pixelWidth - px) * 2
-                                 */
                  )
                     ; // TODO: Add top of model
                  py += 4) {
