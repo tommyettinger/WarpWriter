@@ -38,6 +38,7 @@ public class SimpleTest extends ApplicationAdapter {
     protected VoxelColor voxelColor;
     protected CompassDirection direction = CompassDirection.NORTH;
     protected int angle = 2;
+    protected byte[][][] box;
 
     @Override
     public void create() {
@@ -55,11 +56,12 @@ public class SimpleTest extends ApplicationAdapter {
         batchRenderer = new SpriteBatchVoxelRenderer(batch).setOffset(16, 100);
         maker = new ModelMaker(12345);
         try {
-            knightModel = new ArrayModel(VoxIO.readVox(new LittleEndianDataInputStream(SimpleTest.class.getResourceAsStream("/dumbcube.vox"))));
+            box = VoxIO.readVox(new LittleEndianDataInputStream(SimpleTest.class.getResourceAsStream("/dumbcube.vox")));
         } catch (Exception e) {
             e.printStackTrace();
-            knightModel = new ArrayModel(maker.warriorRandom());
+            box = maker.warriorRandom();
         }
+        knightModel = new ArrayModel(box);
         // uses a 13x12x8 model to test SimpleDraw's support for odd-number sizes
         //turnModel = new TurnModel(knightModel.boxModel(13, 12, 8, ColorFetch.color(Coloring.rinsed("Red 4"))).model(13, 12, 8));
         turnModel = new TurnModel(knightModel);
@@ -220,6 +222,10 @@ public class SimpleTest extends ApplicationAdapter {
                         knightModel = new ArrayModel(maker.warriorRandom());
                         turnModel.set(knightModel.boxModel(13, 12, 8, ColorFetch.color(Coloring.rinsed("Red 4"))).model(13, 12, 8));
                         break;
+                    case Input.Keys.B:                         
+                        knightModel.voxels = box;
+                        turnModel.set(knightModel);
+                        break;
                     case Input.Keys.G:
                         voxelColor.set(voxelColor.direction().counter());
                         break;
@@ -228,6 +234,9 @@ public class SimpleTest extends ApplicationAdapter {
                         break;
                     case Input.Keys.Y:
                         voxelColor.set(!voxelColor.darkSide());
+                        break;
+                    case Input.Keys.T: // try again
+                        turnModel.turner().reset();
                         break;
                     case Input.Keys.ESCAPE:
                         Gdx.app.exit();
