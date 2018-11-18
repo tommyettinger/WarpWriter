@@ -91,18 +91,33 @@ public class SimpleDraw {
                                             px * 2
                                             : great + 4
                                     : (pixelWidth - px) * 2 - 8);
+
+            // Begin drawing bottom row triangles
+            renderer.drawLeftTriangle(px, bottomPY - 4, Color.rgba8888(Color.PURPLE));
+            renderer.drawRightTriangle(px + 2, bottomPY - 4, Color.rgba8888(Color.PURPLE));
+            if (px < sizeY2) {
+                renderer.drawLeftTriangle(px + 2, bottomPY - 6, Color.rgba8888(Color.PURPLE));
+            } else {
+                renderer.drawRightTriangle(px, bottomPY - 6, Color.rgba8888(Color.PURPLE));
+            }
+            // Finish drawing bottom row triangles
+
+            // Begin drawing main bulk of model
             for (int py = bottomPY; py <= topPY; py += 4) {
                 renderer.drawLeftTriangle(px, py, Color.rgba8888(Color.GREEN));
                 renderer.drawRightTriangle(px, py - 2, Color.rgba8888(Color.BLUE));
                 renderer.drawRightTriangle(px + 2, py, Color.rgba8888(Color.YELLOW));
                 renderer.drawLeftTriangle(px + 2, py - 2, Color.rgba8888(Color.RED));
             }
+            // Finish drawing main bulk of model
 
-            if (px < sizeX2) { // Draw the missing triangles across the top
+            // Begin drawing top triangles
+            if (px < sizeX2) {
                 renderer.drawLeftTriangle(px + 2, topPY, Color.rgba8888(Color.PURPLE));
             } else {
                 renderer.drawRightTriangle(px, topPY, Color.rgba8888(Color.PURPLE));
             }
+            // Finish drawing top triangles.
         }
     }
 }
