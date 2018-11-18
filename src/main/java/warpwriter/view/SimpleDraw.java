@@ -87,13 +87,12 @@ public class SimpleDraw {
             int bottomPY = Math.abs(sizeY2 - px);
             for (int py = bottomPY;
                  py <= bottomPY + sizeZ * 4 + (
-                                 px < great ?
-                                         px < less ?
-                                                 px * 2
-                                                 : great + 8
-                                         : (pixelWidth - px) * 2
-                 )
-                    ; // TODO: Add top of model
+                         px < great ?
+                                 px < less ?
+                                         px * 2
+                                         : great + 8
+                                 : (pixelWidth - px) * 2
+                 );
                  py += 4) {
                 renderer.drawLeftTriangle(px, py, Color.rgba8888(Color.GREEN));
                 renderer.drawRightTriangle(px, py - 2, Color.rgba8888(Color.BLUE));
