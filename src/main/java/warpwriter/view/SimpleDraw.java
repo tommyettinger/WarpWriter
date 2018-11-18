@@ -89,7 +89,9 @@ public class SimpleDraw {
                             px < great ?
                                     px < less ?
                                             px * 2
-                                            : less * 2 - 4
+                                            : px == less ?
+                                            great
+                                                : 0
                                     : (pixelWidth - px) * 2 - 8);
 
             // Begin drawing bottom row triangles
