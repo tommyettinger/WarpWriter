@@ -71,7 +71,7 @@ public class SimpleDraw {
 
     public static void simpleDrawIso(IModel model, ITriangleRenderer renderer, IVoxelColor color) {
         int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ(),
-                sizeX2 = sizeX * 2, sizeY2 = sizeY * 2, pixelWidth = sizeX2 + sizeY2;
+                sizeX2 = sizeX * 2, sizeY2 = sizeY * 2, pixelWidth = sizeX2 + sizeY2 - ((sizeX + sizeY) % 2 == 1 ? 4 : 0);
         int great, less;
         if (sizeX2 >= sizeY2) {
             great = sizeX2;
@@ -89,16 +89,18 @@ public class SimpleDraw {
                             px < great ?
                                     px < less ?
                                             px * 2
-                                            : great + 4
+                                            : less * 2 - 4
                                     : (pixelWidth - px) * 2 - 8);
 
             // Begin drawing bottom row triangles
             renderer.drawLeftTriangle(px, bottomPY - 4, Color.rgba8888(Color.PURPLE));
             renderer.drawRightTriangle(px + 2, bottomPY - 4, Color.rgba8888(Color.PURPLE));
-            if (px < sizeY2) {
+            if (px < sizeY2 - 2) {
                 renderer.drawLeftTriangle(px + 2, bottomPY - 6, Color.rgba8888(Color.PURPLE));
-            } else {
+            } else if (px > sizeY2) {
                 renderer.drawRightTriangle(px, bottomPY - 6, Color.rgba8888(Color.PURPLE));
+            } else if (sizeY % 2 == 0) {
+                renderer.drawRightTriangle(px, bottomPY-6, Color.rgba8888(Color.WHITE));
             }
             // Finish drawing bottom row triangles
 
@@ -112,7 +114,7 @@ public class SimpleDraw {
             // Finish drawing main bulk of model
 
             // Begin drawing top triangles
-            if (px < sizeX2) {
+            if (px < sizeX2 || Math.abs(sizeX2 - px) < 2) {
                 renderer.drawLeftTriangle(px + 2, topPY, Color.rgba8888(Color.PURPLE));
             } else {
                 renderer.drawRightTriangle(px, topPY, Color.rgba8888(Color.PURPLE));
