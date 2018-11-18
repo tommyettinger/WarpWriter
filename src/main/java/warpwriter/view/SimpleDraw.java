@@ -89,10 +89,8 @@ public class SimpleDraw {
                             px < great ?
                                     px < less ?
                                             px * 2
-                                            : px == less ?
-                                            great
-                                                : 0
-                                    : (pixelWidth - px) * 2 - 8);
+                                            : 0 // This line is always wrong no matter what I do
+                                    : (pixelWidth - px) * 2 - (sizeZ % 2 == 0 ? 4 : 8));
 
             // Begin drawing bottom row triangles
             renderer.drawLeftTriangle(px, bottomPY - 4, Color.rgba8888(Color.PURPLE));
