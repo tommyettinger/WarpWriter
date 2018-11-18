@@ -73,7 +73,7 @@ public class SimpleDraw {
         int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ(),
                 sizeX2 = sizeX * 2, sizeY2 = sizeY * 2, pixelWidth = sizeX2 + sizeY2;
         int great, less;
-        if (sizeX2 > sizeY2) {
+        if (sizeX2 >= sizeY2) {
             great = sizeX2;
             less = sizeY2;
         } else {
@@ -83,16 +83,31 @@ public class SimpleDraw {
         // To move one x+ in voxels is x + 2, y + 2 in pixels.
         // To move one y+ in voxels is x + 2, y - 2 in pixels.
         // To move one z+ in voxels is y + 4 in pixels.
-        for (int px = 0; px < pixelWidth; px += 4) {
+        for (int px = 0; px < pixelWidth + 1; px += 4) {
             int bottomPY = Math.abs(sizeY2 - px);
             for (int py = bottomPY;
-                 py <= bottomPY + sizeZ * 4 + (
+                 py <= bottomPY + sizeZ * 4 +(
+                         sizeX < sizeY ?
+                                 px < sizeY2 ?
+                                         px < sizeX2 ?
+                                                 px * 2
+                                                 : sizeY2 + 8
+                                         : (pixelWidth - px) * 2
+                                 : px < sizeX2 ?
+                                 px < sizeY2 ?
+                                         px * 2
+                                         : sizeX2 + 8
+                                 : (pixelWidth - px) * 2
+                         /*
                          px < less ?
                                  px * 2
                                  : px < great ?
-                                 less + px * 2 - great
+                                 //less + px * 2 - great
+            0
                                  : (pixelWidth - px) * 2
-                 ); // TODO: Add top of model
+                                 */
+                 )
+                    ; // TODO: Add top of model
                  py += 4) {
                 renderer.drawLeftTriangle(px, py, Color.rgba8888(Color.GREEN));
                 renderer.drawRightTriangle(px, py - 2, Color.rgba8888(Color.BLUE));
