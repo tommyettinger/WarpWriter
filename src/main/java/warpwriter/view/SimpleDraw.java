@@ -89,10 +89,8 @@ public class SimpleDraw {
                  py <= bottomPY + sizeZ * 4 + (
                          px < less ?
                                  px * 2
-                                 : px < sizeX2 ?
-                                 sizeX2
-                                 : px < sizeY2 ?
-                                 sizeY2
+                                 : px < great ?
+                                 less + px * 2 - great
                                  : (pixelWidth - px) * 2
                  ); // TODO: Add top of model
                  py += 4) {
