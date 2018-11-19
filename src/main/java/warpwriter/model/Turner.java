@@ -493,92 +493,94 @@ public class Turner {
 
     public Turner turn(int x, int y, int z, Face face, Roll roll, int centerX, int centerY, int centerZ) {
         set(x - centerX, y - centerY, z - centerZ);
+        
         switch (face) {
             case Y_PLUS: // y+
                 setClockZ();
-                switch (roll) {
-                    case THREE:
-                        setCounterY();
-                        break;
-                    case SIX:
-                        setClockY().setClockY();
-                        break;
-                    case NINE:
-                        setClockY();
-                        break;
-                }
+//                switch (roll) {
+//                    case THREE:
+//                        setCounterY();
+//                        break;
+//                    case SIX:
+//                        setClockY().setClockY();
+//                        break;
+//                    case NINE:
+//                        setClockY();
+//                        break;
+//                }
                 break;
             case X_MINUS: // x-
                 setClockZ().setClockZ();
-                switch (roll) {
-                    case THREE:
-                        setClockX();
-                        break;
-                    case SIX:
-                        setClockX().setClockX();
-                        break;
-                    case NINE:
-                        setCounterX();
-                        break;
-                }
+//                switch (roll) {
+//                    case THREE:
+//                        setClockX();
+//                        break;
+//                    case SIX:
+//                        setClockX().setClockX();
+//                        break;
+//                    case NINE:
+//                        setCounterX();
+//                        break;
+//                }
                 break;
             case Y_MINUS: // y-
                 setCounterZ();
-                switch (roll) {
-                    case THREE:
-                        setClockY();
-                        break;
-                    case SIX:
-                        setCounterY().setCounterY();
-                        break;
-                    case NINE:
-                        setCounterY();
-                        break;
-                }
+//                switch (roll) {
+//                    case THREE:
+//                        setClockY();
+//                        break;
+//                    case SIX:
+//                        setCounterY().setCounterY();
+//                        break;
+//                    case NINE:
+//                        setCounterY();
+//                        break;
+//                }
                 break;
             case Z_PLUS: // z+
                 setCounterY();
-                switch (roll) {
-                    case THREE:
-                        setClockZ();
-                        break;
-                    case SIX:
-                        setCounterZ().setCounterZ();
-                        break;
-                    case NINE:
-                        setCounterZ();
-                        break;
-                }
+//                switch (roll) {
+//                    case THREE:
+//                        setClockZ();
+//                        break;
+//                    case SIX:
+//                        setCounterZ().setCounterZ();
+//                        break;
+//                    case NINE:
+//                        setCounterZ();
+//                        break;
+//                }
                 break;
             case Z_MINUS: // z-
                 setClockY();
-                switch (roll) {
-                    case THREE:
-                        setCounterZ();
-                        break;
-                    case SIX:
-                        setClockZ().setClockZ();
-                        break;
-                    case NINE:
-                        setClockZ();
-                        break;
-                }
+//                switch (roll) {
+//                    case THREE:
+//                        setCounterZ();
+//                        break;
+//                    case SIX:
+//                        setClockZ().setClockZ();
+//                        break;
+//                    case NINE:
+//                        setClockZ();
+//                        break;
+//                }
                 break;
-            case X_PLUS: // x+
-            default:
-                switch (roll) {
-                    case THREE:
-                        setCounterX();
-                        break;
-                    case SIX:
-                        setCounterX().setCounterX();
-                        break;
-                    case NINE:
-                        setClockX();
-                        break;
-                }
+//            case X_PLUS: // x+, no work needed
+//            default:
+//                break;
+        }
+        switch (roll) {
+            case THREE:
+                setClockX();
+                break;
+            case SIX:
+                setCounterX().setCounterX();
+                break;
+            case NINE:
+                setCounterX();
                 break;
         }
+
         return add(centerX, centerY, centerZ);
     }
 }
