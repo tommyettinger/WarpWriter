@@ -1,6 +1,5 @@
 package warpwriter.view;
 
-import com.badlogic.gdx.graphics.Color;
 import warpwriter.warp.VoxelModel;
 
 /**
@@ -14,16 +13,22 @@ public class WarpDraw {
     }
 
     public static void draw(VoxelModel model, IPixelRenderer renderer, IVoxelColor color) {
-        final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ(), 
-                startX = model.startX(), startY = model.startY(), startZ = model.startZ(),       
-                stepX = model.stepX(), stepY = model.stepY(), stepZ = model.stepZ();
-        for (int z = startZ; z < sizeZ && z >= 0; z += stepZ) {
-            for (int y = startY; y < sizeY && y >= 0; y += stepY) {
-                for (int x = startX; x < sizeX && x >= 0; x += stepX) {
-                    renderer.drawPixel(y, z, Color.rgba8888(Color.RED));
-                    byte result = model.voxels[sizeZ * (sizeY * x + y) + z];
+        final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ(),
+                startX = model.startX(), startY = model.startY(), startZ = model.startZ(),
+                stepX = model.stepX(), stepY = model.stepY(), stepZ = model.stepZ(),
+                sy = model.sizes[1], sz = model.sizes[2],
+                rx = model.rotation[0] ^ model.rotation[0] >> 31,
+                ry = model.rotation[1] ^ model.rotation[1] >> 31,
+                rz = model.rotation[2] ^ model.rotation[2] >> 31;
+        int py, px;
+        for (py = 0, model.temp[rz] = startZ; model.temp[rz] < sizeZ && model.temp[rz] >= 0; model.temp[rz] += stepZ, py++) {
+            for (px = 0, model.temp[ry] = startY; model.temp[ry] < sizeY && model.temp[ry] >= 0; model.temp[ry] += stepY, px++) {
+                for (model.temp[rx] = startX; model.temp[rx] < sizeX && model.temp[rx] >= 0; model.temp[rx] += stepX) {
+                    // uncomment to show background in red
+                    //renderer.drawPixel(px, py, Color.rgba8888(Color.RED));
+                    byte result = model.voxels[sz * (sy * model.temp[0] + model.temp[1]) + model.temp[2]];
                     if (result != 0) {
-                        renderer.drawPixel(y, z, color.rightFace(result));
+                        renderer.drawPixel(px, py, color.rightFace(result));
                         break;
                     }
                 }

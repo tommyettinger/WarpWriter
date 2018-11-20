@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import squidpony.StringKit;
 import warpwriter.LittleEndianDataInputStream;
 import warpwriter.ModelMaker;
 import warpwriter.VoxIO;
@@ -30,7 +31,7 @@ public class WarpTest extends ApplicationAdapter {
     protected FrameBuffer buffer;
     protected Texture screenTexture;
     protected TextureRegion screenRegion;
-    protected VoxelModel knightModel;
+    protected VoxelModel model, dumbCube, warrior;
     protected ModelMaker maker;
     private SpriteBatchVoxelRenderer batchRenderer;
     protected VoxelColor voxelColor;
@@ -58,7 +59,9 @@ public class WarpTest extends ApplicationAdapter {
             e.printStackTrace();
             box = maker.warriorRandom();
         }
-        knightModel = new VoxelModel(box);
+        dumbCube = new VoxelModel(box);
+        warrior = new VoxelModel(maker.warriorRandom());
+        model = dumbCube;
         Gdx.input.setInputProcessor(inputProcessor());
     }
 
@@ -73,8 +76,11 @@ public class WarpTest extends ApplicationAdapter {
         batch.setProjectionMatrix(worldView.getCamera().combined);
         batch.begin();
 
-        font.draw(batch, knightModel.sizeX() + ", " + knightModel.sizeY() + ", " + knightModel.sizeZ(), 0, 80);         
-        WarpDraw.draw(knightModel, batchRenderer.setScale(4f), voxelColor);
+        font.draw(batch, StringKit.join(", ", model.sizes) + " (original)", 0, 80);
+        font.draw(batch, model.sizeX() + ", " + model.sizeY() + ", " + model.sizeZ() + " (modified)", 0, 60);
+        font.draw(batch, StringKit.join(", ", model.rotation) + " (rotation)", 0, 40);
+        font.draw(batch, model.startX() + ", " + model.startY() + ", " + model.startZ() + " (starts)", 0, 20);
+        WarpDraw.draw(model, batchRenderer.setScale(4f), voxelColor);
 
         batch.end();
         buffer.end();
@@ -109,7 +115,6 @@ public class WarpTest extends ApplicationAdapter {
         return new InputAdapter() {
             @Override
             public boolean keyDown(int keycode) {
-                boolean needRedraw = true;
                 switch (keycode) {
 //                    case Input.Keys.UP:
 //                        turnModel.turner().set(Turner.Roll.TWELVE);
@@ -189,43 +194,53 @@ public class WarpTest extends ApplicationAdapter {
 //                    case Input.Keys.O:
 //                        turnModel.turner().clockZ();
 //                        break;
-//                    case Input.Keys.J:
-//                        turnModel.turner().counterX();
-//                        break;
-//                    case Input.Keys.K:
-//                        turnModel.turner().counterY();
-//                        break;
-//                    case Input.Keys.L:
-//                        turnModel.turner().counterZ();
-//                        break;
-//                    case Input.Keys.R:
-//                        knightModel = new ArrayModel(maker.warriorRandom());
-//                        turnModel.set(knightModel.boxModel(13, 12, 8, ColorFetch.color(Coloring.rinsed("Red 4"))).model(13, 12, 8));
-//                        break;
-//                    case Input.Keys.B:                         
-//                        knightModel.voxels = box;
-//                        turnModel.set(knightModel);
-//                        break;
-//                    case Input.Keys.G:
-//                        voxelColor.set(voxelColor.direction().counter());
-//                        break;
-//                    case Input.Keys.H:
-//                        voxelColor.set(voxelColor.direction().clock());
-//                        break;
-//                    case Input.Keys.Y:
-//                        voxelColor.set(!voxelColor.darkSide());
-//                        break;
-//                    case Input.Keys.T: // try again
-//                        turnModel.turner().reset();
-//                        break;
+                    case Input.Keys.J:
+                    {
+                        final int y = model.rotation[2], z = ~model.rotation[1];
+                        model.rotation[1] = y;
+                        model.rotation[2] = z;
+                    }
+                        break;
+                    case Input.Keys.K:
+                    {
+                        final int x = ~model.rotation[2], z = model.rotation[0];
+                        model.rotation[0] = x;
+                        model.rotation[2] = z;
+                    }
+                        break;
+                    case Input.Keys.L:
+                    {
+                        final int x = model.rotation[1], y = ~model.rotation[0];
+                        model.rotation[0] = x;
+                        model.rotation[1] = y;
+                    }
+                        break;
+                    case Input.Keys.B:
+                        model = dumbCube;
+                        break;
+                    case Input.Keys.W:
+                        model = warrior;
+                        break;
+                    case Input.Keys.A:
+                        voxelColor.set(voxelColor.direction().counter());
+                        break;
+                    case Input.Keys.S:
+                        voxelColor.set(voxelColor.direction().clock());
+                        break;
+                    case Input.Keys.D:
+                        voxelColor.set(!voxelColor.darkSide());
+                        break;
+                    case Input.Keys.R: // reset
+                        model.rotation[0] = -1;
+                        model.rotation[1] = 1;
+                        model.rotation[2] = 2;
+                        break;
                     case Input.Keys.ESCAPE:
                         Gdx.app.exit();
                         break;
                     default:
-                        needRedraw = false;
                         break;
                 }
-                //if (needRedraw) reDraw();
                 return true;
             }
         };

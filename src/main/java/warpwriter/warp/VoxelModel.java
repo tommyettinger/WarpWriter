@@ -19,6 +19,11 @@ public class VoxelModel {
      * will be reversed.
      */
     public int[] rotation;
+
+    /**
+     * Working array for manipulating x, y, and z by their indices.
+     */
+    final public int[] temp = new int[3];
     
     public VoxelModel()
     {
