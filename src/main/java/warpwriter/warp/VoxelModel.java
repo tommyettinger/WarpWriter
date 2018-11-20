@@ -12,8 +12,8 @@ import warpwriter.model.IModel;
 public class VoxelModel implements IModel {
     public byte[] voxels;
     /**
-     *  Sizes of the model without rotation, with sizes[0] referring to x, [1] to y, and [2] to z. It is expected that
-     *  {@link #rotation} will be used to remap axes when this is accessed, but this (sizes) should not change.
+     * Sizes of the model without rotation, with sizes[0] referring to x, [1] to y, and [2] to z. It is expected that
+     * {@link #rotation} will be used to remap axes when this is accessed, but this (sizes) should not change.
      */
     public int[] sizes;
     /**
@@ -26,16 +26,14 @@ public class VoxelModel implements IModel {
      * Working array for manipulating x, y, and z by their indices.
      */
     final public int[] temp = new int[3];
-    
-    public VoxelModel()
-    {
+
+    public VoxelModel() {
         voxels = new byte[1];
         sizes = new int[]{1, 1, 1};
         rotation = new int[]{-1, 1, 2};
     }
-    
-    public VoxelModel(byte[][][] data)
-    {
+
+    public VoxelModel(byte[][][] data) {
         final int sx = data.length, sy = data[0].length, sz = data[0][0].length;
         sizes = new int[]{sx, sy, sz};
         voxels = new byte[sx * sy * sz];
@@ -48,24 +46,21 @@ public class VoxelModel implements IModel {
     }
 
     @Override
-    public int sizeX()
-    {
+    public int sizeX() {
         final int rot = rotation[0];
         // bitwise stuff here flips the bits in rot if negative, leaves it alone if positive
         return sizes[rot ^ rot >> 31];
     }
 
     @Override
-    public int sizeY()
-    {
+    public int sizeY() {
         final int rot = rotation[1];
         // bitwise stuff here flips the bits in rot if negative, leaves it alone if positive
         return sizes[rot ^ rot >> 31];
     }
 
     @Override
-    public int sizeZ()
-    {
+    public int sizeZ() {
         final int rot = rotation[2];
         // bitwise stuff here flips the bits in rot if negative, leaves it alone if positive
         return sizes[rot ^ rot >> 31];
@@ -81,59 +76,53 @@ public class VoxelModel implements IModel {
         return x < 0 || y < 0 || z < 0 || x >= sizeX() || y >= sizeY() || z >= sizeZ();
     }
 
-    public int startX()
-    {
+    public int startX() {
         final int rot = rotation[0];
-        if(rot < 0)
+        if (rot < 0)
             return sizes[~rot] - 1; // when rot is negative, we need to go from the end of the axis, not the start
         else
             return 0;
     }
 
-    public int startY()
-    {
+    public int startY() {
         final int rot = rotation[1];
-        if(rot < 0)
+        if (rot < 0)
             return sizes[~rot] - 1; // when rot is negative, we need to go from the end of the axis, not the start
         else
             return 0;
     }
 
-    public int startZ()
-    {
+    public int startZ() {
         final int rot = rotation[2];
-        if(rot < 0)
+        if (rot < 0)
             return sizes[~rot] - 1; // when rot is negative, we need to go from the end of the axis, not the start
         else
             return 0;
     }
 
-    public int stepX()
-    {
+    public int stepX() {
         return rotation[0] >> 31 | 1; // if selected rotation is negative, return -1, otherwise return 1
     }
-    
-    public int stepY()
-    {
+
+    public int stepY() {
         return rotation[1] >> 31 | 1; // if selected rotation is negative, return -1, otherwise return 1
     }
-    
-    public int stepZ()
-    {
+
+    public int stepZ() {
         return rotation[2] >> 31 | 1; // if selected rotation is negative, return -1, otherwise return 1
     }
 
     /**
      * Using the adjusted x, y, z (after rotation) produced with {@link #startX()}, {@link #stepX()}, and the other
      * versions for y and z, this gets the voxel color as a byte at that adjusted coordinate.
+     *
      * @param x adjusted x, as from {@code startX() + stepX() * x}
      * @param y adjusted y, as from {@code startY() + stepY() * y}
      * @param z adjusted z, as from {@code startZ() + stepZ() * z}
      * @return the voxel color at the given position, as a byte that should probably be masked with {@code & 255}
      */
     @Override
-    public byte at(int x, int y, int z)
-    {
+    public byte at(int x, int y, int z) {
 //        x = startX() + stepX() * x;
 //        y = startY() + stepY() * y;
 //        z = startZ() + stepZ() * z;
