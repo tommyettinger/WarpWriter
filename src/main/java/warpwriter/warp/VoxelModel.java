@@ -24,7 +24,7 @@ public class VoxelModel {
     {
         voxels = new byte[1];
         sizes = new int[]{1, 1, 1};
-        rotation = new int[]{0, 1, 2};
+        rotation = new int[]{-1, 1, 2};
     }
     
     public VoxelModel(byte[][][] data)
@@ -32,7 +32,7 @@ public class VoxelModel {
         final int sx = data.length, sy = data[0].length, sz = data[0][0].length;
         sizes = new int[]{sx, sy, sz};
         voxels = new byte[sx * sy * sz];
-        rotation = new int[]{0, 1, 2};
+        rotation = new int[]{-1, 1, 2};
         for (int x = 0; x < sx; x++) {
             for (int y = 0; y < sy; y++) {
                 System.arraycopy(data[x][y], 0, voxels, sz * (x * sy + y), sz);
