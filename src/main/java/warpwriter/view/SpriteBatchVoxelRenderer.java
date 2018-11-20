@@ -1,17 +1,16 @@
 package warpwriter.view;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.NumberUtils;
 
 public class SpriteBatchVoxelRenderer implements IPixelRenderer, ITriangleRenderer, Disposable {
     protected SpriteBatch batch;
     protected Texture one;
     protected Sprite triangle;
-    protected Color color = new Color();
     protected int offsetX = 0, offsetY = 0;
     protected float scaleX = 1f, scaleY = 1f;
 
@@ -69,8 +68,10 @@ public class SpriteBatchVoxelRenderer implements IPixelRenderer, ITriangleRender
 
     @Override
     public IPixelRenderer drawRect(int x, int y, int xSize, int ySize, int color) {
-        float oldColor = batch.getPackedColor(); // requires less conversions than batch.getColor(), same result
-        batch.setColor(this.color.set(color));
+        final float oldColor = batch.getPackedColor(); // requires less conversions than batch.getColor(), same result
+        batch.setColor(NumberUtils.intToFloatColor(Integer.reverseBytes(color)));
+                                                   // converts from RGBA to ABGR
+                       // converts ABGR int to float color, which SpriteBatch can use without needing an object
         batch.draw(one, (x * scaleX) + offsetX, (y * scaleY) + offsetY, xSize * scaleX, ySize * scaleY);
         batch.setColor(oldColor);
         return this;
@@ -97,7 +98,9 @@ public class SpriteBatchVoxelRenderer implements IPixelRenderer, ITriangleRender
 
     public SpriteBatchVoxelRenderer drawTriangle(int x, int y, int color, boolean left) {
         float oldColor = batch.getPackedColor(); // requires less conversions than batch.getColor(), same result
-        batch.setColor(this.color.set(color));
+        batch.setColor(NumberUtils.intToFloatColor(Integer.reverseBytes(color)));
+                                                   // converts from RGBA to ABGR
+                       // converts ABGR int to float color, which SpriteBatch can use without needing an object
         triangle.setFlip(left, false);
         batch.draw(triangle, (x * scaleX) + offsetX, (y * scaleY) + offsetY, scaleX * 2, scaleY * 3);
         batch.setColor(oldColor);
