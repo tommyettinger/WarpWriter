@@ -1,5 +1,7 @@
 package warpwriter.warp;
 
+import warpwriter.model.IModel;
+
 /**
  * Trying again; a way of storing voxel models using a 1D array and a more involved method of lookup that should deal
  * correctly with rotation. The idea here is to provide tools for iterating over voxels along certain axes, which is
@@ -7,7 +9,7 @@ package warpwriter.warp;
  * <br>
  * Created by Tommy Ettinger on 11/19/2018.
  */
-public class VoxelModel {
+public class VoxelModel implements IModel {
     public byte[] voxels;
     /**
      *  Sizes of the model without rotation, with sizes[0] referring to x, [1] to y, and [2] to z. It is expected that
@@ -45,23 +47,38 @@ public class VoxelModel {
         }
     }
 
+    @Override
     public int sizeX()
     {
         final int rot = rotation[0];
         // bitwise stuff here flips the bits in rot if negative, leaves it alone if positive
         return sizes[rot ^ rot >> 31];
     }
+
+    @Override
     public int sizeY()
     {
         final int rot = rotation[1];
         // bitwise stuff here flips the bits in rot if negative, leaves it alone if positive
         return sizes[rot ^ rot >> 31];
     }
+
+    @Override
     public int sizeZ()
     {
         final int rot = rotation[2];
         // bitwise stuff here flips the bits in rot if negative, leaves it alone if positive
         return sizes[rot ^ rot >> 31];
+    }
+
+    @Override
+    public boolean inside(int x, int y, int z) {
+        return !outside(x, y, z);
+    }
+
+    @Override
+    public boolean outside(int x, int y, int z) {
+        return x < 0 || y < 0 || z < 0 || x >= sizeX() || y >= sizeY() || z >= sizeZ();
     }
 
     public int startX()
@@ -114,6 +131,7 @@ public class VoxelModel {
      * @param z adjusted z, as from {@code startZ() + stepZ() * z}
      * @return the voxel color at the given position, as a byte that should probably be masked with {@code & 255}
      */
+    @Override
     public byte at(int x, int y, int z)
     {
 //        x = startX() + stepX() * x;
