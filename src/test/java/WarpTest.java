@@ -76,9 +76,9 @@ public class WarpTest extends ApplicationAdapter {
         batch.setProjectionMatrix(worldView.getCamera().combined);
         batch.begin();
 
-        font.draw(batch, StringKit.join(", ", model.sizes) + " (original)", 0, 80);
+        font.draw(batch, StringKit.join(", ", model.sizes()) + " (original)", 0, 80);
         font.draw(batch, model.sizeX() + ", " + model.sizeY() + ", " + model.sizeZ() + " (modified)", 0, 60);
-        font.draw(batch, StringKit.join(", ", model.rotation) + " (rotation)", 0, 40);
+        font.draw(batch, StringKit.join(", ", model.rotation()) + " (rotation)", 0, 40);
         font.draw(batch, model.startX() + ", " + model.startY() + ", " + model.startZ() + " (starts)", 0, 20);
         WarpDraw.draw(model, batchRenderer.setScale(4f), voxelColor);
 
@@ -196,23 +196,23 @@ public class WarpTest extends ApplicationAdapter {
 //                        break;
                     case Input.Keys.J:
                     {
-                        final int y = model.rotation[2], z = ~model.rotation[1];
-                        model.rotation[1] = y;
-                        model.rotation[2] = z;
+                        final int y = model.rotation()[2], z = ~model.rotation()[1];
+                        model.rotation()[1] = y;
+                        model.rotation()[2] = z;
                     }
                         break;
                     case Input.Keys.K:
                     {
-                        final int x = ~model.rotation[2], z = model.rotation[0];
-                        model.rotation[0] = x;
-                        model.rotation[2] = z;
+                        final int x = ~model.rotation()[2], z = model.rotation()[0];
+                        model.rotation()[0] = x;
+                        model.rotation()[2] = z;
                     }
                         break;
                     case Input.Keys.L:
                     {
-                        final int x = model.rotation[1], y = ~model.rotation[0];
-                        model.rotation[0] = x;
-                        model.rotation[1] = y;
+                        final int x = model.rotation()[1], y = ~model.rotation()[0];
+                        model.rotation()[0] = x;
+                        model.rotation()[1] = y;
                     }
                         break;
                     case Input.Keys.B:
@@ -231,9 +231,9 @@ public class WarpTest extends ApplicationAdapter {
                         voxelColor.set(!voxelColor.darkSide());
                         break;
                     case Input.Keys.R: // reset
-                        model.rotation[0] = -1;
-                        model.rotation[1] = 1;
-                        model.rotation[2] = 2;
+                        model.rotation()[0] = -1;
+                        model.rotation()[1] = 1;
+                        model.rotation()[2] = 2;
                         break;
                     case Input.Keys.ESCAPE:
                         Gdx.app.exit();

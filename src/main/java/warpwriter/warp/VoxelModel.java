@@ -54,7 +54,7 @@ public class VoxelModel implements IModel {
     /**
      * Working array for manipulating x, y, and z by their indices.
      */
-    final protected int[] temp = new int[3];
+    final public int[] temp = new int[3];
 
     public VoxelModel() {
         set(new byte[1]);
