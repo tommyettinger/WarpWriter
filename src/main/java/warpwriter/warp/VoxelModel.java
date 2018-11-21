@@ -164,11 +164,11 @@ public class VoxelModel implements IModel {
     }
 
     public int x(int index) {
-        return ((index - z(index)) / sizeZ() - y(index)) / sizeY();
+        return (index / (sizeZ() * sizeY()));
     }
 
     public int y(int index) {
-        return (index - z(index)) % sizeY();
+        return (index / sizeZ()) % sizeY();
     }
 
     public int z(int index) {
