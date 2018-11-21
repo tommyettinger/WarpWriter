@@ -227,9 +227,7 @@ public class WarpTest extends ApplicationAdapter {
                         voxelColor.set(!voxelColor.darkSide());
                         break;
                     case Input.Keys.R: // reset
-                        model.rotation()[0] = -1;
-                        model.rotation()[1] = 1;
-                        model.rotation()[2] = 2;
+                        model.reset();
                         break;
                     case Input.Keys.ESCAPE:
                         Gdx.app.exit();

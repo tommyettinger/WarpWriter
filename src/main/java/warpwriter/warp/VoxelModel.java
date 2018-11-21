@@ -216,4 +216,16 @@ public class VoxelModel implements IModel {
         rotation()[1] = y;
         return this;
     }
+
+    /**
+     * Resets the rotation array.
+     *
+     * @return this
+     */
+    public VoxelModel reset() {
+        rotation()[0] = -1;
+        rotation()[1] = 1;
+        rotation()[2] = 2;
+        return this;
+    }
 }
