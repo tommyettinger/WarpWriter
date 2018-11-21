@@ -79,7 +79,7 @@ public class WarpTest extends ApplicationAdapter {
         font.draw(batch, StringKit.join(", ", model.sizes()) + " (original)", 0, 80);
         font.draw(batch, model.sizeX() + ", " + model.sizeY() + ", " + model.sizeZ() + " (modified)", 0, 60);
         font.draw(batch, StringKit.join(", ", model.rotation()) + " (rotation)", 0, 40);
-        font.draw(batch, model.startX() + ", " + model.startY() + ", " + model.startZ() + " (starts)", 0, 20);
+        font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 20);
         WarpDraw.draw(model, batchRenderer.setScale(4f), voxelColor);
 
         batch.end();
@@ -104,9 +104,10 @@ public class WarpTest extends ApplicationAdapter {
 
     public static void main(String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-        config.setTitle("Simple Tester");
+        config.setTitle("Warp Tester");
         config.setWindowedMode(SCREEN_WIDTH, SCREEN_HEIGHT);
         config.setIdleFPS(10);
+        config.useVsync(false);
         final WarpTest app = new WarpTest();
         new Lwjgl3Application(app, config);
     }
@@ -185,36 +186,55 @@ public class WarpTest extends ApplicationAdapter {
 //                    case Input.Keys.EQUALS:
 //                        angle = 3;
 //                        break;
-//                    case Input.Keys.U:
-//                        turnModel.turner().clockX();
-//                        break;
-//                    case Input.Keys.I:
-//                        turnModel.turner().clockY();
-//                        break;
-//                    case Input.Keys.O:
-//                        turnModel.turner().clockZ();
-//                        break;
+
+                    // rotate counterclockwise around x
+                    case Input.Keys.U:
+                    {
+                        final int y = ~model.rotation()[2], z = model.rotation()[1];
+                        model.rotation()[1] = y;
+                        model.rotation()[2] = z;
+                    }
+                    break;
+                    // rotate counterclockwise around y
+                    case Input.Keys.I:
+                    {
+                        final int x = model.rotation()[2], z = ~model.rotation()[0];
+                        model.rotation()[0] = x;
+                        model.rotation()[2] = z;
+                    }
+                    break;
+                    // rotate counterclockwise around z
+                    case Input.Keys.O:
+                    {
+                        final int x = ~model.rotation()[1], y = model.rotation()[0];
+                        model.rotation()[0] = x;
+                        model.rotation()[1] = y;
+                    }
+                    break;
+                    // rotate clockwise around x
                     case Input.Keys.J:
                     {
                         final int y = model.rotation()[2], z = ~model.rotation()[1];
                         model.rotation()[1] = y;
                         model.rotation()[2] = z;
                     }
-                        break;
+                    break;
+                    // rotate clockwise around y
                     case Input.Keys.K:
                     {
                         final int x = ~model.rotation()[2], z = model.rotation()[0];
                         model.rotation()[0] = x;
                         model.rotation()[2] = z;
                     }
-                        break;
+                    break;
+                    // rotate clockwise around z
                     case Input.Keys.L:
                     {
                         final int x = model.rotation()[1], y = ~model.rotation()[0];
                         model.rotation()[0] = x;
                         model.rotation()[1] = y;
                     }
-                        break;
+                    break;
                     case Input.Keys.B:
                         model = dumbCube;
                         break;

@@ -10,11 +10,13 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import warpwriter.Coloring;
 import warpwriter.LittleEndianDataInputStream;
 import warpwriter.ModelMaker;
 import warpwriter.VoxIO;
-import warpwriter.model.*;
+import warpwriter.model.ArrayModel;
+import warpwriter.model.CompassDirection;
+import warpwriter.model.TurnModel;
+import warpwriter.model.Turner;
 import warpwriter.view.SimpleDraw;
 import warpwriter.view.SpriteBatchVoxelRenderer;
 import warpwriter.view.VoxelColor;
@@ -87,7 +89,8 @@ public class SimpleTest extends ApplicationAdapter {
         font.draw(batch, turnModel.turner().face().toString(), 0, 20);
         font.draw(batch, turnModel.turner().roll().toString(), 0, 40);
         font.draw(batch, direction.toString(), 0, 60);
-        font.draw(batch, turnModel.sizeX() + ", " + turnModel.sizeY() + ", " + turnModel.sizeZ(), 0, 80);
+        //font.draw(batch, turnModel.sizeX() + ", " + turnModel.sizeY() + ", " + turnModel.sizeZ(), 0, 80);
+        font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 80);
         //batch.draw(tex, 0, 0);
         if (angle > 2)
             SimpleDraw.simpleDrawIso(turnModel, batchRenderer.setScale(1f));
@@ -121,6 +124,7 @@ public class SimpleTest extends ApplicationAdapter {
         config.setTitle("Simple Tester");
         config.setWindowedMode(SCREEN_WIDTH, SCREEN_HEIGHT);
         config.setIdleFPS(10);
+        config.useVsync(false);
         final SimpleTest app = new SimpleTest();
         new Lwjgl3Application(app, config);
     }
@@ -220,7 +224,8 @@ public class SimpleTest extends ApplicationAdapter {
                         break;
                     case Input.Keys.R:
                         knightModel = new ArrayModel(maker.warriorRandom());
-                        turnModel.set(knightModel.boxModel(13, 12, 8, ColorFetch.color(Coloring.rinsed("Red 4"))).model(13, 12, 8));
+                        turnModel.set(knightModel);
+//                        turnModel.set(knightModel.boxModel(13, 12, 8, ColorFetch.color(Coloring.rinsed("Red 4"))).model(13, 12, 8));
                         break;
                     case Input.Keys.B:                         
                         knightModel.voxels = box;

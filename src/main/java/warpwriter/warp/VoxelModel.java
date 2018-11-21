@@ -10,7 +10,7 @@ import warpwriter.model.IModel;
  * Created by Tommy Ettinger on 11/19/2018.
  */
 public class VoxelModel implements IModel {
-    protected byte[] voxels;
+    public byte[] voxels;
 
     public byte[] voxels() {
         return voxels;
