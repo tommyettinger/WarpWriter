@@ -155,7 +155,23 @@ public class VoxelModel implements IModel {
 //        x = startX() + stepX() * x;
 //        y = startY() + stepY() * y;
 //        z = startZ() + stepZ() * z;
-        final int index = sizeZ() * (sizeY() * x + y) + z;
+        final int index = index(x, y, z);
         return index < -1 || index >= voxels().length ? 0 : voxels()[index];
+    }
+
+    public int index(int x, int y, int z) {
+        return sizeZ() * (sizeY() * x + y) + z;
+    }
+
+    public int x(int index) {
+        return ((index - z(index)) / sizeZ() - y(index)) / sizeY();
+    }
+
+    public int y(int index) {
+        return (index - z(index)) % sizeY();
+    }
+
+    public int z(int index) {
+        return index % sizeZ();
     }
 }
