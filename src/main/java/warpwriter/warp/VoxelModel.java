@@ -10,34 +10,63 @@ import warpwriter.model.IModel;
  * Created by Tommy Ettinger on 11/19/2018.
  */
 public class VoxelModel implements IModel {
-    public byte[] voxels;
+    protected byte[] voxels;
+
+    public byte[] voxels() {
+        return voxels;
+    }
+
+    public VoxelModel set(byte[] voxels) {
+        this.voxels = voxels;
+        return this;
+    }
+
     /**
      * Sizes of the model without rotation, with sizes[0] referring to x, [1] to y, and [2] to z. It is expected that
      * {@link #rotation} will be used to remap axes when this is accessed, but this (sizes) should not change.
      */
-    public int[] sizes;
+    protected int[] sizes;
+
+    public int[] sizes() {
+        return sizes;
+    }
+
+    public VoxelModel setSizes(int[] sizes) {
+        this.sizes = sizes;
+        return this;
+    }
+
     /**
      * Stores 3 ints that are used to remap axes; if an int {@code n} is negative, the axis corresponding to {@code ~n}
      * will be reversed.
      */
-    public int[] rotation;
+    protected int[] rotation;
+
+    public int[] rotation() {
+        return rotation;
+    }
+
+    public VoxelModel setRotation(int[] rotation) {
+        this.rotation = rotation;
+        return this;
+    }
 
     /**
      * Working array for manipulating x, y, and z by their indices.
      */
-    final public int[] temp = new int[3];
+    final protected int[] temp = new int[3];
 
     public VoxelModel() {
-        voxels = new byte[1];
-        sizes = new int[]{1, 1, 1};
-        rotation = new int[]{-1, 1, 2};
+        set(new byte[1]);
+        setSizes(new int[]{1, 1, 1});
+        setRotation(rotation = new int[]{-1, 1, 2});
     }
 
     public VoxelModel(byte[][][] data) {
         final int sx = data.length, sy = data[0].length, sz = data[0][0].length;
-        sizes = new int[]{sx, sy, sz};
-        voxels = new byte[sx * sy * sz];
-        rotation = new int[]{-1, 1, 2};
+        setSizes(new int[]{sx, sy, sz});
+        set(new byte[sx * sy * sz]);
+        setRotation(new int[]{-1, 1, 2});
         for (int x = 0; x < sx; x++) {
             for (int y = 0; y < sy; y++) {
                 System.arraycopy(data[x][y], 0, voxels, sz * (x * sy + y), sz);
@@ -47,23 +76,23 @@ public class VoxelModel implements IModel {
 
     @Override
     public int sizeX() {
-        final int rot = rotation[0];
+        final int rot = rotation()[0];
         // bitwise stuff here flips the bits in rot if negative, leaves it alone if positive
-        return sizes[rot ^ rot >> 31];
+        return sizes()[rot ^ rot >> 31];
     }
 
     @Override
     public int sizeY() {
-        final int rot = rotation[1];
+        final int rot = rotation()[1];
         // bitwise stuff here flips the bits in rot if negative, leaves it alone if positive
-        return sizes[rot ^ rot >> 31];
+        return sizes()[rot ^ rot >> 31];
     }
 
     @Override
     public int sizeZ() {
-        final int rot = rotation[2];
+        final int rot = rotation()[2];
         // bitwise stuff here flips the bits in rot if negative, leaves it alone if positive
-        return sizes[rot ^ rot >> 31];
+        return sizes()[rot ^ rot >> 31];
     }
 
     @Override
@@ -77,39 +106,39 @@ public class VoxelModel implements IModel {
     }
 
     public int startX() {
-        final int rot = rotation[0];
+        final int rot = rotation()[0];
         if (rot < 0)
-            return sizes[~rot] - 1; // when rot is negative, we need to go from the end of the axis, not the start
+            return sizes()[~rot] - 1; // when rot is negative, we need to go from the end of the axis, not the start
         else
             return 0;
     }
 
     public int startY() {
-        final int rot = rotation[1];
+        final int rot = rotation()[1];
         if (rot < 0)
-            return sizes[~rot] - 1; // when rot is negative, we need to go from the end of the axis, not the start
+            return sizes()[~rot] - 1; // when rot is negative, we need to go from the end of the axis, not the start
         else
             return 0;
     }
 
     public int startZ() {
-        final int rot = rotation[2];
+        final int rot = rotation()[2];
         if (rot < 0)
-            return sizes[~rot] - 1; // when rot is negative, we need to go from the end of the axis, not the start
+            return sizes()[~rot] - 1; // when rot is negative, we need to go from the end of the axis, not the start
         else
             return 0;
     }
 
     public int stepX() {
-        return rotation[0] >> 31 | 1; // if selected rotation is negative, return -1, otherwise return 1
+        return rotation()[0] >> 31 | 1; // if selected rotation is negative, return -1, otherwise return 1
     }
 
     public int stepY() {
-        return rotation[1] >> 31 | 1; // if selected rotation is negative, return -1, otherwise return 1
+        return rotation()[1] >> 31 | 1; // if selected rotation is negative, return -1, otherwise return 1
     }
 
     public int stepZ() {
-        return rotation[2] >> 31 | 1; // if selected rotation is negative, return -1, otherwise return 1
+        return rotation()[2] >> 31 | 1; // if selected rotation is negative, return -1, otherwise return 1
     }
 
     /**
@@ -126,7 +155,7 @@ public class VoxelModel implements IModel {
 //        x = startX() + stepX() * x;
 //        y = startY() + stepY() * y;
 //        z = startZ() + stepZ() * z;
-        final int sy = sizeY(), sz = sizeZ();
-        return voxels[sz * (sy * x + y) + z];
+        final int index = sizeZ() * (sizeY() * x + y) + z;
+        return index < -1 || index >= voxels().length ? 0 : voxels()[index];
     }
 }
