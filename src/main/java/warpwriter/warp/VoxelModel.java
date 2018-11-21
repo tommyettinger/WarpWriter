@@ -174,4 +174,46 @@ public class VoxelModel implements IModel {
     public int z(int index) {
         return index % sizeZ();
     }
+
+    public VoxelModel counterX() {
+        final int y = ~rotation()[2], z = rotation()[1];
+        rotation()[1] = y;
+        rotation()[2] = z;
+        return this;
+    }
+
+    public VoxelModel counterY() {
+        final int x = rotation()[2], z = ~rotation()[0];
+        rotation()[0] = x;
+        rotation()[2] = z;
+        return this;
+    }
+
+    public VoxelModel counterZ() {
+        final int x = ~rotation()[1], y = rotation()[0];
+        rotation()[0] = x;
+        rotation()[1] = y;
+        return this;
+    }
+
+    public VoxelModel clockX() {
+        final int y = rotation()[2], z = ~rotation()[1];
+        rotation()[1] = y;
+        rotation()[2] = z;
+        return this;
+    }
+
+    public VoxelModel clockY() {
+        final int x = ~rotation()[2], z = rotation()[0];
+        rotation()[0] = x;
+        rotation()[2] = z;
+        return this;
+    }
+
+    public VoxelModel clockZ() {
+        final int x = rotation()[1], y = ~rotation()[0];
+        rotation()[0] = x;
+        rotation()[1] = y;
+        return this;
+    }
 }

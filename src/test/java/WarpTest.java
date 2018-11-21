@@ -189,52 +189,28 @@ public class WarpTest extends ApplicationAdapter {
 
                     // rotate counterclockwise around x
                     case Input.Keys.U:
-                    {
-                        final int y = ~model.rotation()[2], z = model.rotation()[1];
-                        model.rotation()[1] = y;
-                        model.rotation()[2] = z;
-                    }
-                    break;
+                        model.counterX();
+                        break;
                     // rotate counterclockwise around y
                     case Input.Keys.I:
-                    {
-                        final int x = model.rotation()[2], z = ~model.rotation()[0];
-                        model.rotation()[0] = x;
-                        model.rotation()[2] = z;
-                    }
-                    break;
+                        model.counterY();
+                        break;
                     // rotate counterclockwise around z
                     case Input.Keys.O:
-                    {
-                        final int x = ~model.rotation()[1], y = model.rotation()[0];
-                        model.rotation()[0] = x;
-                        model.rotation()[1] = y;
-                    }
-                    break;
+                        model.counterZ();
+                        break;
                     // rotate clockwise around x
                     case Input.Keys.J:
-                    {
-                        final int y = model.rotation()[2], z = ~model.rotation()[1];
-                        model.rotation()[1] = y;
-                        model.rotation()[2] = z;
-                    }
-                    break;
+                        model.clockX();
+                        break;
                     // rotate clockwise around y
                     case Input.Keys.K:
-                    {
-                        final int x = ~model.rotation()[2], z = model.rotation()[0];
-                        model.rotation()[0] = x;
-                        model.rotation()[2] = z;
-                    }
-                    break;
+                        model.clockY();
+                        break;
                     // rotate clockwise around z
                     case Input.Keys.L:
-                    {
-                        final int x = model.rotation()[1], y = ~model.rotation()[0];
-                        model.rotation()[0] = x;
-                        model.rotation()[1] = y;
-                    }
-                    break;
+                        model.clockZ();
+                        break;
                     case Input.Keys.B:
                         model = dumbCube;
                         break;
