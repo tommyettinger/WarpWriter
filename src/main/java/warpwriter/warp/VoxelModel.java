@@ -76,23 +76,24 @@ public class VoxelModel implements IModel {
 
     @Override
     public int sizeX() {
-        final int rot = rotation()[0];
-        // bitwise stuff here flips the bits in rot if negative, leaves it alone if positive
-        return sizes()[rot ^ rot >> 31];
+        return sizes()[flipBits(rotation()[0])];
     }
 
     @Override
     public int sizeY() {
-        final int rot = rotation()[1];
-        // bitwise stuff here flips the bits in rot if negative, leaves it alone if positive
-        return sizes()[rot ^ rot >> 31];
+        return sizes()[flipBits(rotation()[1])];
     }
 
     @Override
     public int sizeZ() {
-        final int rot = rotation()[2];
-        // bitwise stuff here flips the bits in rot if negative, leaves it alone if positive
-        return sizes()[rot ^ rot >> 31];
+        return sizes()[flipBits(rotation()[2])];
+    }
+
+    /**
+     * bitwise stuff here flips the bits in rot if negative, leaves it alone if positive
+     */
+    public static int flipBits(int rot) {
+        return rot ^ rot >> 31;
     }
 
     @Override
