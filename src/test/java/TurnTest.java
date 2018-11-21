@@ -67,66 +67,6 @@ public class TurnTest extends ApplicationAdapter {
                     case Input.Keys.R:
                         world.voxels = (wm.makeWorld(60, -1, -1));
                         break;
-                    case Input.Keys.UP:
-                        turnModel.turner().set(Turner.Roll.TWELVE);
-                        break;
-                    case Input.Keys.DOWN:
-                        turnModel.turner().set(Turner.Roll.SIX);
-                        break;
-                    case Input.Keys.RIGHT:
-                        turnModel.turner().set(Turner.Roll.THREE);
-                        break;
-                    case Input.Keys.LEFT:
-                        turnModel.turner().set(Turner.Roll.NINE);
-                        break;
-                    case Input.Keys.NUMPAD_8:
-                    case Input.Keys.NUM_8:
-                        direction = CompassDirection.NORTH;
-                        turnModel.turner().set(Turner.Face.X_PLUS);
-                        break;
-                    case Input.Keys.NUMPAD_6:
-                    case Input.Keys.NUM_6:
-                        direction = CompassDirection.NORTH;
-                        turnModel.turner().set(Turner.Face.Y_PLUS);
-                        break;
-                    case Input.Keys.NUMPAD_2:
-                    case Input.Keys.NUM_2:
-                        direction = CompassDirection.NORTH;
-                        turnModel.turner().set(Turner.Face.X_MINUS);
-                        break;
-                    case Input.Keys.NUMPAD_4:
-                    case Input.Keys.NUM_4:
-                        direction = CompassDirection.NORTH;
-                        turnModel.turner().set(Turner.Face.Y_MINUS);
-                        break;
-                    case Input.Keys.SLASH:
-                        direction = CompassDirection.NORTH;
-                        turnModel.turner().set(Turner.Face.Z_PLUS);
-                        break;
-                    case Input.Keys.STAR:
-                        direction = CompassDirection.NORTH;
-                        turnModel.turner().set(Turner.Face.Z_MINUS);
-                        break;
-                    case Input.Keys.NUMPAD_7:
-                    case Input.Keys.NUM_7:
-                        direction = CompassDirection.NORTH_EAST;
-                        turnModel.turner().set(Turner.Face.Y_MINUS);
-                        break;
-                    case Input.Keys.NUMPAD_9:
-                    case Input.Keys.NUM_9:
-                        direction = CompassDirection.NORTH_EAST;
-                        turnModel.turner().set(Turner.Face.X_PLUS);
-                        break;
-                    case Input.Keys.NUMPAD_3:
-                    case Input.Keys.NUM_3:
-                        direction = CompassDirection.NORTH_EAST;
-                        turnModel.turner().set(Turner.Face.Y_PLUS);
-                        break;
-                    case Input.Keys.NUMPAD_1:
-                    case Input.Keys.NUM_1:
-                        direction = CompassDirection.NORTH_EAST;
-                        turnModel.turner().set(Turner.Face.X_MINUS);
-                        break;
                     case Input.Keys.NUM_0:
                         angle = 1;
                         break;
@@ -183,8 +123,8 @@ public class TurnTest extends ApplicationAdapter {
         view.update(width, height);
         batch.setProjectionMatrix(view.getCamera().combined);
         batch.begin();
-        font.draw(batch, turnModel.turner().face().toString(), 200, 20);
-        font.draw(batch, turnModel.turner().roll().toString(), 200, 40);
+//        font.draw(batch, turnModel.turner().face().toString(), 200, 20);
+//        font.draw(batch, turnModel.turner().roll().toString(), 200, 40);
         batch.draw(tex, 0, 0);
         batch.end();
     }

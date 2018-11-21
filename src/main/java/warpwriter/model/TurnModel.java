@@ -7,14 +7,14 @@ package warpwriter.model;
  */
 public class TurnModel extends Fetch implements IModel {
     protected IModel iModel;
-    protected Turner turner;
+    protected Turner2 turner;
 
     public TurnModel set(IModel iModel) {
         this.iModel = iModel;
         return this;
     }
 
-    public TurnModel set(Turner turner) {
+    public TurnModel set(Turner2 turner) {
         this.turner = turner;
         return this;
     }
@@ -23,25 +23,21 @@ public class TurnModel extends Fetch implements IModel {
         return iModel;
     }
 
-    public Turner turner() {
+    public Turner2 turner() {
         return turner;
     }
 
-    public TurnModel(IModel iModel, Turner turner) {
+    public TurnModel(IModel iModel, Turner2 turner) {
         set(iModel).set(turner);
     }
 
     public TurnModel(IModel iModel) {
-        set(iModel).set(new Turner());
-    }
-
-    public TurnModel size(Turner.Face face, Turner.Roll roll) {
-        turner().turn(getModel().sizeX(), getModel().sizeY(), getModel().sizeZ(), face, roll);
-        return this;
+        set(iModel).set(new Turner2());
     }
 
     public TurnModel size() {
-        return size(turner().face(), turner().roll());
+        turner().input(getModel().sizeX(), getModel().sizeY(), getModel().sizeZ());
+        return this;
     }
 
     @Override
@@ -80,8 +76,8 @@ public class TurnModel extends Fetch implements IModel {
 //        turner().offsets(getModel().sizeX(), getModel().sizeY(), getModel().sizeZ());
 //        int offsetX = turner().x(), offsetY = turner().y(), offsetZ = turner().z();
         size();
-        int sizeX = turner().x(), sizeY = turner().y(), sizeZ = turner().z();
-        turner().turn(chainX(), chainY(), chainZ());
+        int sizeX = Math.abs(turner().x()), sizeY = Math.abs(turner().y()), sizeZ = Math.abs(turner().z());
+        turner().input(chainX(), chainY(), chainZ());
         return deferByte(getModel().at(
                 turner().x() + (sizeX < 0 ? getModel().sizeX() - 1 : 0),
                 turner().y() + (sizeY < 0 ? getModel().sizeY() - 1 : 0),
