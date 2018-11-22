@@ -40,6 +40,10 @@ public class TurnModel extends Fetch implements IModel {
         return this;
     }
 
+    /**
+     * @param axis 0 for x, 1 for y, 2 for z
+     * @return Model size after rotation
+     */
     public int size(int axis) {
         return modelSize(turner().rotation(axis)); // modelSize() handles negative sizes correctly
     }
@@ -81,8 +85,7 @@ public class TurnModel extends Fetch implements IModel {
 
     @Override
     public boolean outside(int x, int y, int z) {
-        size();
-        return x < 0 || y < 0 || z < 0 || x >= Math.abs(turner().x()) || y >= Math.abs(turner().y()) || z >= Math.abs(turner().z());
+        return x < 0 || y < 0 || z < 0 || x >= sizeX() || y >= sizeY() || z >= sizeZ();
     }
 
     @Override
