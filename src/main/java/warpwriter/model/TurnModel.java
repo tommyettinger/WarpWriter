@@ -113,6 +113,8 @@ public class TurnModel extends Fetch implements IModel {
      * This is a slightly slower version of bite() which shows what it would look like if it relied on turner to actually implement rotation rather than just to store rotation data.
      * <p>
      * It is not used because using it would involve six reverse lookups on the rotation array instead of none.
+     *
+     * @return Output identical to bite()
      */
     private byte slowBite() {
         turner.input(chainX(), chainY(), chainZ());
