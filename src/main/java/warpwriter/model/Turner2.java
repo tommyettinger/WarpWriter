@@ -196,7 +196,7 @@ public class Turner2 {
     }
 
     public int turn(int index) {
-        return input(affected(index)) * (rotation(index) >> 31 | 1);
+        return input(affected(index)) * step(index);
     }
 
     /**
