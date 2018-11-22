@@ -11,7 +11,7 @@ public class SimpleDraw {
     }
 
     public static void simpleDraw(IModel model, IPixelRenderer renderer, IVoxelColor color) {
-        int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ();
+        final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ();
         for (int z = 0; z < sizeZ; z++) {
             for (int y = 0; y < sizeY; y++) {
                 renderer.drawPixel(y, z, Color.rgba8888(Color.RED));

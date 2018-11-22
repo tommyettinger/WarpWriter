@@ -11,13 +11,9 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.StringKit;
-import warpwriter.LittleEndianDataInputStream;
+import warpwriter.Coloring;
 import warpwriter.ModelMaker;
-import warpwriter.VoxIO;
-import warpwriter.model.ArrayModel;
-import warpwriter.model.FetchModel;
-import warpwriter.model.NoiseFetch;
-import warpwriter.model.TurnModel;
+import warpwriter.model.*;
 import warpwriter.view.SimpleDraw;
 import warpwriter.view.SpriteBatchVoxelRenderer;
 import warpwriter.view.VoxelColor;
@@ -58,16 +54,16 @@ public class SimpleTest extends ApplicationAdapter {
         voxelColor = new VoxelColor();
         batchRenderer = new SpriteBatchVoxelRenderer(batch).setOffset(16, 100);
         maker = new ModelMaker(12345);
-        try {
-            box = VoxIO.readVox(new LittleEndianDataInputStream(SimpleTest.class.getResourceAsStream("/dumbcube.vox")));
-        } catch (Exception e) {
-            e.printStackTrace();
+//        try {
+//            box = VoxIO.readVox(new LittleEndianDataInputStream(SimpleTest.class.getResourceAsStream("/dumbcube.vox")));
+//        } catch (Exception e) {
+//            e.printStackTrace();
             box = maker.warriorRandom();
-        }
-        knightModel = new ArrayModel(box);
+//        }
+        knightModel = new ArrayModel(maker.warriorRandom());
         // uses a 13x12x8 model to test SimpleDraw's support for odd-number sizes
-        //turnModel = new TurnModel(knightModel.boxModel(13, 12, 8, ColorFetch.color(Coloring.rinsed("Red 4"))).model(13, 12, 8));
-        turnModel = new TurnModel(knightModel);
+        turnModel = new TurnModel(knightModel.boxModel(13, 12, 8, ColorFetch.color(Coloring.rinsed("Red 4"))).model(13, 12, 8));
+//        turnModel = new TurnModel(knightModel);
 //        turnModel = new TurnModel(new BoxModel(knightModel,
 //                ColorFetch.color(Coloring.rinsed("Red 4"))
 //        ));
