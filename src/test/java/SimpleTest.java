@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import squidpony.StringKit;
 import warpwriter.LittleEndianDataInputStream;
 import warpwriter.ModelMaker;
 import warpwriter.VoxIO;
@@ -85,12 +86,10 @@ public class SimpleTest extends ApplicationAdapter {
         batch.setProjectionMatrix(worldView.getCamera().combined);
         batch.begin();
 
-//        font.draw(batch, turnModel.turner().face().toString(), 0, 20);
-//        font.draw(batch, turnModel.turner().roll().toString(), 0, 40);
-        font.draw(batch, direction.toString(), 0, 60);
-        //font.draw(batch, turnModel.sizeX() + ", " + turnModel.sizeY() + ", " + turnModel.sizeZ(), 0, 80);
-        font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 80);
-        //batch.draw(tex, 0, 0);
+        font.draw(batch, StringKit.join(", ", turnModel.getModel().sizeX(), turnModel.getModel().sizeY(), turnModel.getModel().sizeZ()) + " (original)", 0, 80);
+        font.draw(batch, turnModel.sizeX() + ", " + turnModel.sizeY() + ", " + turnModel.sizeZ() + " (modified)", 0, 60);
+        font.draw(batch, StringKit.join(", ", turnModel.turner().rotation()) + " (rotation)", 0, 40);
+        font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 20);
         if (angle > 2)
             SimpleDraw.simpleDrawIso(turnModel, batchRenderer.setScale(1f));
         else if (direction.isCardinal())
@@ -166,7 +165,7 @@ public class SimpleTest extends ApplicationAdapter {
                         turnModel.set(knightModel);
 //                        turnModel.set(knightModel.boxModel(13, 12, 8, ColorFetch.color(Coloring.rinsed("Red 4"))).model(13, 12, 8));
                         break;
-                    case Input.Keys.B:                         
+                    case Input.Keys.B:
                         knightModel.voxels = box;
                         turnModel.set(knightModel);
                         break;

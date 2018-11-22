@@ -76,17 +76,21 @@ public class VoxelModel implements IModel {
 
     @Override
     public int sizeX() {
-        return sizes()[flipBits(rotation()[0])];
+        return sizes()[affected(0)];
     }
 
     @Override
     public int sizeY() {
-        return sizes()[flipBits(rotation()[1])];
+        return sizes()[affected(1)];
     }
 
     @Override
     public int sizeZ() {
-        return sizes()[flipBits(rotation()[2])];
+        return sizes()[affected(2)];
+    }
+
+    public int affected(int axis) {
+        return flipBits(rotation[axis]);
     }
 
     /**

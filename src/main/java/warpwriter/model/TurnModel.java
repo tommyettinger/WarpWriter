@@ -42,17 +42,17 @@ public class TurnModel extends Fetch implements IModel {
 
     @Override
     public int sizeX() {
-        return Math.abs(size().turner().x());
+        return modelSize(turner().affected(0));
     }
 
     @Override
     public int sizeY() {
-        return Math.abs(size().turner().y());
+        return modelSize(turner().affected(1));
     }
 
     @Override
     public int sizeZ() {
-        return Math.abs(size().turner().z());
+        return modelSize(turner().affected(2));
     }
 
     @Override
@@ -75,13 +75,37 @@ public class TurnModel extends Fetch implements IModel {
     public byte bite() {
 //        turner().offsets(getModel().sizeX(), getModel().sizeY(), getModel().sizeZ());
 //        int offsetX = turner().x(), offsetY = turner().y(), offsetZ = turner().z();
-        size();
-        int sizeX = Math.abs(turner().x()), sizeY = Math.abs(turner().y()), sizeZ = Math.abs(turner().z());
         turner().input(chainX(), chainY(), chainZ());
+        final int x = turner().x(),
+                y = turner().y(),
+                z = turner().z(),
+                sizeX = modelSize(turner().affected(0)) - 1,
+                sizeY = modelSize(turner().affected(1)) - 1,
+                sizeZ = modelSize(turner().affected(2)) - 1;
+
         return deferByte(getModel().at(
-                turner().x() + (sizeX < 0 ? getModel().sizeX() - 1 : 0),
-                turner().y() + (sizeY < 0 ? getModel().sizeY() - 1 : 0),
-                turner().z() + (sizeZ < 0 ? getModel().sizeZ() - 1 : 0)
+                turner().rotation(0) < 0 ? sizeX - x : x,
+                turner().rotation(1) < 0 ? sizeY - y : y,
+                turner().rotation(2) < 0 ? sizeZ - z : z
         ));
+    }
+
+    /**
+     * Allows treating the sizes of the underlying model as if they were in an array.
+     *
+     * @param index 0 for x, 1 for y or 2 for z
+     * @return the size of the specified dimension
+     */
+    public int modelSize(int index) {
+        switch (index) {
+            case 0:
+                return getModel().sizeX();
+            case 1:
+                return getModel().sizeY();
+            case 2:
+                return getModel().sizeZ();
+            default:
+                throw new ArrayIndexOutOfBoundsException();
+        }
     }
 }

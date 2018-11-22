@@ -171,8 +171,12 @@ public class Turner2 {
         return turn(2);
     }
 
+    public int affected(int axis) {
+        return flipBits(rotation(axis));
+    }
+
     public int turn(int index) {
-        return input(flipBits(rotation(index))) * (rotation(index) >> 31 | 1);
+        return input(affected(index)) * (rotation(index) >> 31 | 1);
     }
 
     /**
