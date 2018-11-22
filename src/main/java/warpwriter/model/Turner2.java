@@ -6,7 +6,8 @@ package warpwriter.model;
  * @author Ben McLean
  */
 public class Turner2 {
-    public Turner2() {}
+    public Turner2() {
+    }
 
     public Turner2(Turner2 other) {
         System.arraycopy(other.rotation(), 0, rotation, 0, rotation.length);
@@ -164,10 +165,15 @@ public class Turner2 {
     }
     */
 
-    public int[] input = new int[]{0, 0, 0};
+    protected int[] input = new int[]{0, 0, 0};
 
     public int input(int index) {
-        return input[index];
+        return input[flipBits(index)];
+    }
+
+    public Turner2 input(int index, int value) {
+        input[flipBits(index)] = value;
+        return this;
     }
 
     public Turner2 input(int x, int y, int z) {
@@ -193,8 +199,23 @@ public class Turner2 {
         return flipBits(rotation(axis));
     }
 
-    public int turn(int index) {
-        return input(affected(index));
+    public int turn(int axis) {
+        final int index = reverseLookup(axis);
+        return input(index) * step(index);
+    }
+
+    /**
+     * Does a reverse lookup on the rotation array for the axis affected by the rotation
+     *
+     * @param axis 0 or -1 for x, 1 or -2 for y, 2 or -3 for z
+     * @return Which axis the specified axis was before the rotation. 0 for x, 1 for y, 2 for z.
+     */
+    public int reverseLookup(int axis) {
+        final int index = flipBits(axis);
+        for (int rot = 0; rot < rotation.length; rot++)
+            if (index == affected(rot))
+                return rot;
+        throw new IllegalStateException();
     }
 
     /**

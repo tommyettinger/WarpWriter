@@ -97,14 +97,29 @@ public class TurnModel extends Fetch implements IModel {
         return deferFetch(bite());
     }
 
-    protected int[] temp = new int[]{0, 0, 0};
-
+    /**
+     * Side effect: Uses the input values in turner as temporary storage, wiping out whatever may be stored in there. Outputs of turner are irrelevant, as turner is being used in this case to store rotation data without being used to actually implement the rotation.
+     */
     @Override
     public byte bite() {
-        for (int i = 0; i < temp.length; i++)
-            temp[turner().affected(i)] = start(i) + turner().step(i) * chain(i);
+        for (int i = 0; i < 3; i++)
+            turner.input(turner().affected(i), start(i) + turner().step(i) * chain(i));
         return deferByte(getModel().at(
-                temp[0], temp[1], temp[2]
+                turner.input(0), turner.input(1), turner.input(2)
+        ));
+    }
+
+    /**
+     * This is a slightly slower version of bite() which shows what it would look like if it relied on turner to actually implement rotation rather than just to store rotation data.
+     * <p>
+     * It is not used because using it would involve six reverse lookups on the rotation array instead of none.
+     */
+    private byte slowBite() {
+        turner.input(chainX(), chainY(), chainZ());
+        return deferByte(getModel().at(
+                turner.x() + start(turner.reverseLookup(0)),
+                turner.y() + start(turner.reverseLookup(1)),
+                turner.z() + start(turner.reverseLookup(2))
         ));
     }
 
