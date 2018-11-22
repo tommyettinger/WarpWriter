@@ -31,7 +31,7 @@ public class TurnFetch extends Fetch {
 
     @Override
     public Fetch fetch() {
-        turner.turn(chainX(), chainY(), chainZ());
+        turner.input(chainX(), chainY(), chainZ());
         setChains(turner.x(), turner.y(), turner.z());
         return getNextFetch();
     }
