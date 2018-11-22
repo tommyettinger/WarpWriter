@@ -10,7 +10,7 @@ public class Turner2 {
     }
 
     public Turner2(Turner2 other) {
-        System.arraycopy(other.rotation(), 0, rotation, 0, rotation.length);
+        System.arraycopy(other.rotation, 0, rotation, 0, rotation.length);
     }
 
     /**
