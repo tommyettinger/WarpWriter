@@ -161,6 +161,9 @@ public class SimpleTest extends ApplicationAdapter {
                         turnModel.turner().counterZ();
                         break;
                     case Input.Keys.R:
+                        turnModel.turner().reset();
+                        break;
+                    case Input.Keys.P:
                         knightModel = new ArrayModel(maker.warriorRandom());
                         turnModel.set(knightModel);
 //                        turnModel.set(knightModel.boxModel(13, 12, 8, ColorFetch.color(Coloring.rinsed("Red 4"))).model(13, 12, 8));
