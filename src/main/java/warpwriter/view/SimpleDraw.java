@@ -14,8 +14,8 @@ public class SimpleDraw {
         int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ();
         for (int z = 0; z < sizeZ; z++) {
             for (int y = 0; y < sizeY; y++) {
+                renderer.drawPixel(y, z, Color.rgba8888(Color.RED));
                 for (int x = sizeX - 1; x >= 0; x--) {
-                    renderer.drawPixel(y, z, Color.rgba8888(Color.RED));
                     byte result = model.at(x, y, z);
                     if (result != 0) {
                         renderer.drawPixel(y, z, color.rightFace(result));
