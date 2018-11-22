@@ -95,13 +95,14 @@ public class TurnModel extends Fetch implements IModel {
         return deferFetch(bite());
     }
 
+    protected int[] temp = new int[]{0, 0, 0};
+
     @Override
     public byte bite() {
-        turner.input[turner().affected(0)] = start(0) + turner().step(0) * chainX;
-        turner.input[turner().affected(1)] = start(1) + turner().step(1) * chainY;
-        turner.input[turner().affected(2)] = start(2) + turner().step(2) * chainZ;
+        for (int i = 0; i < temp.length; i++)
+            temp[turner().affected(i)] = start(i) + turner().step(i) * chain(i);
         return deferByte(getModel().at(
-                turner.input(0), turner.input(1), turner.input(2)
+                temp[0], temp[1], temp[2]
         ));
     }
 
