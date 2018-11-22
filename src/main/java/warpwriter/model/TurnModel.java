@@ -65,10 +65,9 @@ public class TurnModel extends Fetch implements IModel {
 
     public int start(int axis) {
         final int rot = turner().rotation(axis);
-        if (rot < 0)
-            return modelSize(rot) - 1; // when rot is negative, we need to go from the end of the axis, not the start
-        else
-            return 0;
+        return rot < 0 ?
+                modelSize(rot) - 1 // when rot is negative, we need to go from the end of the axis, not the start
+                : 0;
     }
 
     public int startX() {
