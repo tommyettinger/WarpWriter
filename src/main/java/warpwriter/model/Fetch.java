@@ -9,16 +9,17 @@ import squidpony.squidmath.Noise;
  * <p>
  * Instead, child classes are expected to use at least one of the following two options:
  * <p>
- * 1. Override Fetch fetch(int x, int y, int z) to defer to another Fetch. This will be tried first, and if the result is null then bite(int x, int y, int z) will be called instead.
+ * 1. Override Fetch fetch() to defer to another Fetch. This will be tried first, and if the result is null then bite() will be called instead. Get the coordinates to evaluate from chainX(), chainY() and chainZ().
  * <p>
- * 2. Override byte bite(int x, int y, int z) to decide what byte to use at the end of a chain. It is recommended to wrap return statements in deferByte(byte result, int x, int y, int z) to guarantee smart transparency in the event of a broken chain or if the bite method is accidentally called at the wrong time.
+ * 2. Override byte bite() to decide what byte to use at the end of a chain. It is recommended to wrap return statements in deferByte(byte result) to guarantee smart transparency. Get the coordinates to evaluate from chainX(), chainY() and chainZ().
  * <p>
- * If both methods are overridden then a Fetch can be used both as a filter for other Fetches and as a final fetch, depending on whether or not it is on the end of it's chain.
+ * If both methods are overridden then a Fetch can be used both as a filter for other Fetches and as a final fetch, depending on whether or not it is on the end of its chain.
  * <p>
  * Failure to implement the required overrides may result in infinite recursion.
  * <p>
- * To defer to the next method in the chain, use getNextFetch()
- * Coordinates sent to the next Fetch in the chain be manipulated through setChains, setChainX, setChainY and setChainZ.
+ * To defer to the next method in the chain, use getNextFetch().
+ * <p>
+ * Coordinates to be sent to the next Fetch in the chain can be set through setChains, setChainX, setChainY and setChainZ.
  *
  * @author Ben McLean
  */
