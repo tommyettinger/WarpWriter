@@ -97,20 +97,15 @@ public class TurnModel extends Fetch implements IModel {
 
     @Override
     public byte bite() {
-        turner().input(chainX(), chainY(), chainZ());
+        int x = turner().rotation(0);
+        int y = turner().rotation(1);
+        int z = turner().rotation(2);
+        turner.input[Turner2.flipBits(x)] = start(0) + turner().step(0) * chainX;
+        turner.input[Turner2.flipBits(y)] = start(1) + turner().step(1) * chainY;
+        turner.input[Turner2.flipBits(z)] = start(2) + turner().step(2) * chainZ;
         return deferByte(getModel().at(
-                turn(0), turn(1), turn(2)
+                turner.input(0), turner.input(1), turner.input(2)
         ));
-    }
-
-    public int turn(int axis) {
-        //return start(axis) + turner().step(axis) * value;
-        //return turner().rotation(axis) < 0 ? size(axis) - value : value;
-        return turner().turn(axis) + (
-                turner().rotation(axis) < 0 ?
-                        modelSize(axis) - 1
-                        : 0
-        );
     }
 
     /**

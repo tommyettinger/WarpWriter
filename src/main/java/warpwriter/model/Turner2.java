@@ -9,7 +9,7 @@ public class Turner2 {
     public Turner2() {}
 
     public Turner2(Turner2 other) {
-        System.arraycopy(other.rotation(), 0, rotation, 0, rotation().length);
+        System.arraycopy(other.rotation(), 0, rotation, 0, rotation.length);
     }
 
     /**
@@ -194,11 +194,13 @@ public class Turner2 {
     }
 
     public int turn(int index) {
-        return input(affected(index)) * step(index);
+        return input(affected(index));
     }
 
     /**
-     * bitwise stuff here flips the bits in rot if negative, leaves it alone if positive
+     * Flips the bits in rot if rot is negative, leaves it alone if positive. Where x, y, and z correspond to elements
+     * 0, 1, and 2 in a rotation array, if those axes are reversed we use {@code ~0}, or -1, for x, and likewise -2 and
+     * -3 for y and z when reversed.
      */
     public static int flipBits(int rot) {
         return rot ^ rot >> 31; // (rot ^ rot >> 31) is roughly equal to (rot < 0 ? -1 - rot : rot)
