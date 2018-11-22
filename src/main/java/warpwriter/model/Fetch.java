@@ -35,7 +35,7 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D, IDecide {
     /**
      * This method is intended to be overridden with a final decision about which byte to return for a given coordinate.
      *
-     * @return A final answer, except that it is recommended to wrap results in deferByte(byte result, int x, int y, int z) to ensure smart transparency in the event of a broken chain or if someone screws up and calls this method in the wrong order.
+     * @return A final answer, except that it is recommended to wrap results in deferByte(byte result) to ensure smart transparency in the event of a broken chain or if someone screws up and calls this method in the wrong order.
      */
     public byte bite() {
         return deferByte();
@@ -154,7 +154,7 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D, IDecide {
     }
 
     /**
-     * bite(int x, int y, int z) is only supposed to be called when there is no next fetch.
+     * bite() is generally only called by outside code when there is no next fetch.
      * <p>
      * But just in case someone is naughty and breaks the chain, this method allows for a recovery, starting a new chain if necessary. Wrap the result of your bite(int x, int y, int z) overrides in this instead of returning (byte) 0 to ensure you're transparent.
      * <p>
@@ -182,11 +182,11 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D, IDecide {
      * @param convenience This array is used only to get the size of the model.
      * @return A model version of the current Fetch with the size of the convenience array. The actual contents of the convenience array are not touched past [0][0] (to get the length)
      */
-    public FetchModel model(byte[][][] convenience) {
+    public IModel model(byte[][][] convenience) {
         return new FetchModel(this, convenience);
     }
 
-    public FetchModel model() {
+    public IModel model() {
         return new FetchModel();
     }
 
