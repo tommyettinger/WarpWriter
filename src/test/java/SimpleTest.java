@@ -58,7 +58,7 @@ public class SimpleTest extends ApplicationAdapter {
 //            box = VoxIO.readVox(new LittleEndianDataInputStream(SimpleTest.class.getResourceAsStream("/dumbcube.vox")));
 //        } catch (Exception e) {
 //            e.printStackTrace();
-            box = maker.warriorRandom();
+//            box = maker.warriorRandom();
 //        }
         knightModel = new ArrayModel(maker.warriorRandom());
         // uses a 13x12x8 model to test SimpleDraw's support for odd-number sizes
@@ -88,7 +88,7 @@ public class SimpleTest extends ApplicationAdapter {
         font.draw(batch, StringKit.join(", ", turnModel.turner().rotation()) + " (rotation)", 0, 40);
         font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 20);
         if (angle > 2)
-            SimpleDraw.simpleDrawIso(turnModel, batchRenderer.setScale(1f));
+            SimpleDraw.simpleDrawIso(turnModel, batchRenderer.setScale(2f));
         else if (z45)
             SimpleDraw.simpleDraw45(turnModel, batchRenderer.setScale(3f, 4f), voxelColor);
         else
@@ -160,13 +160,9 @@ public class SimpleTest extends ApplicationAdapter {
                         turnModel.turner().reset();
                         break;
                     case Input.Keys.P:
-                        knightModel = new ArrayModel(maker.warriorRandom());
-                        turnModel.set(knightModel);
-//                        turnModel.set(knightModel.boxModel(13, 12, 8, ColorFetch.color(Coloring.rinsed("Red 4"))).model(13, 12, 8));
-                        break;
-                    case Input.Keys.B:
-                        knightModel.voxels = box;
-                        turnModel.set(knightModel);
+//                        knightModel = new ArrayModel(maker.warriorRandom());
+//                        turnModel.set(knightModel);
+                        turnModel.set(knightModel.boxModel(13, 12, 8, ColorFetch.color(Coloring.rinsed("Red 4"))).model(13, 12, 8));
                         break;
                     case Input.Keys.S:
                         turnModel.set(new FetchModel(100, 100, 80,
