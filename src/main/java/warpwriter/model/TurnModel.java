@@ -42,7 +42,7 @@ public class TurnModel extends Fetch implements IModel {
 
     public int size(int axis) {
         final int rot = turner().rotation(axis);
-        return modelSize(rot < 0 ? ~rot : rot);
+        return modelSize(rot); // modelSize() handles negative sizes correctly
     }
 
     @Override
@@ -63,7 +63,7 @@ public class TurnModel extends Fetch implements IModel {
     public int start(int axis) {
         final int rot = turner().rotation(axis);
         if (rot < 0)
-            return modelSize(~rot) - 1; // when rot is negative, we need to go from the end of the axis, not the start
+            return modelSize(rot) - 1; // when rot is negative, we need to go from the end of the axis, not the start
         else
             return 0;
     }
@@ -115,18 +115,24 @@ public class TurnModel extends Fetch implements IModel {
     }
 
     /**
-     * Allows treating the sizes of the underlying model as if they were in an array.
+     * Allows treating the sizes of the underlying model as if they were in an array. Allows negative values for index,
+     * unlike an array, and will correctly treat the negative index that corresponds to a reversed axis as if it was the
+     * the corresponding non-reversed axis. This means -1 will be the same as 0, -2 the same as 1, and -3 the same as 2.
      *
-     * @param index 0 for x, 1 for y or 2 for z
+     * @param index 0 or -1 for x, 1 or -2 for y, or 2 or -3 for z; negative index values have the same size,
+     *              but different starts and directions
      * @return the size of the specified dimension
      */
     public int modelSize(int index) {
         switch (index) {
             case 0:
+            case -1:
                 return getModel().sizeX();
             case 1:
+            case -2:
                 return getModel().sizeY();
             case 2:
+            case -3:
                 return getModel().sizeZ();
             default:
                 throw new ArrayIndexOutOfBoundsException();
