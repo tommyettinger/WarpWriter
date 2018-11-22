@@ -26,7 +26,9 @@ public class NoiseFetch extends Fetch {
             this.colors = colors;
     }
 
-    public byte bite(int x, int y, int z) {
+    @Override
+    public byte bite() {
+        final int x = chainX(), y = chainY(), z = chainZ();
         return colors[(int)((noise.getNoise(x * 0.12, y * 0.12, z * 0.12) * 0.499999 + 0.5) * colors.length)];
     }
 

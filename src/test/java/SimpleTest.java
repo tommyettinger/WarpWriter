@@ -15,6 +15,8 @@ import warpwriter.LittleEndianDataInputStream;
 import warpwriter.ModelMaker;
 import warpwriter.VoxIO;
 import warpwriter.model.ArrayModel;
+import warpwriter.model.FetchModel;
+import warpwriter.model.NoiseFetch;
 import warpwriter.model.TurnModel;
 import warpwriter.view.SimpleDraw;
 import warpwriter.view.SpriteBatchVoxelRenderer;
@@ -130,7 +132,6 @@ public class SimpleTest extends ApplicationAdapter {
         return new InputAdapter() {
             @Override
             public boolean keyDown(int keycode) {
-                boolean needRedraw = true;
                 switch (keycode) {
                     case Input.Keys.NUM_0:
                         angle = 1;
@@ -168,6 +169,10 @@ public class SimpleTest extends ApplicationAdapter {
                         knightModel.voxels = box;
                         turnModel.set(knightModel);
                         break;
+                    case Input.Keys.S:
+                        turnModel.set(new FetchModel(100, 100, 80,
+                                new NoiseFetch((byte) 0, (byte) 0, (byte) 0, (byte) 113, (byte) 114, (byte) 115, (byte) 116, (byte) 0, (byte) 0, (byte) 0)));
+                        break;
                     case Input.Keys.G:
                         voxelColor.set(voxelColor.direction().counter());
                         break;
@@ -186,11 +191,7 @@ public class SimpleTest extends ApplicationAdapter {
                     case Input.Keys.ESCAPE:
                         Gdx.app.exit();
                         break;
-                    default:
-                        needRedraw = false;
-                        break;
                 }
-                //if (needRedraw) reDraw();
                 return true;
             }
         };
