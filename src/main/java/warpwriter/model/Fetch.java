@@ -191,6 +191,57 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D, IDecide {
         return new FetchModel();
     }
 
+    /**
+     * Allows treating the chained values as if they were in an array. Allows negative values for index,
+     * unlike an array, and will correctly treat the negative index that corresponds to a reversed axis as if it was the
+     * the corresponding non-reversed axis. This means -1 will be the same as 0, -2 the same as 1, and -3 the same as 2.
+     *
+     * @param index 0 or -1 for x, 1 or -2 for y, or 2 or -3 for z; negative index values have the same size,
+     *              but different starts and directions
+     * @return the size of the specified dimension
+     */
+    public int chain(int index) {
+        switch (index) {
+            case 0:
+            case -1:
+                return chainX();
+            case 1:
+            case -2:
+                return chainY();
+            case 2:
+            case -3:
+                return chainZ();
+            default:
+                throw new ArrayIndexOutOfBoundsException();
+        }
+    }
+
+    /**
+     * Allows treating the chained values as if they were in an array. Allows negative values for index,
+     * unlike an array, and will correctly treat the negative index that corresponds to a reversed axis as if it was the
+     * the corresponding non-reversed axis. This means -1 will be the same as 0, -2 the same as 1, and -3 the same as 2.
+     *
+     * @param index 0 or -1 for x, 1 or -2 for y, or 2 or -3 for z; negative index values have the same size,
+     *              but different starts and directions
+     * @param value The value to set
+     * @return the size of the specified dimension
+     */
+    public Fetch setChain(int index, int value) {
+        switch (index) {
+            case 0:
+            case -1:
+                return setChainX(value);
+            case 1:
+            case -2:
+                return setChainY(value);
+            case 2:
+            case -3:
+                return setChainZ(value);
+            default:
+                throw new ArrayIndexOutOfBoundsException();
+        }
+    }
+
     public Fetch offsetModel(int sizeX, int sizeY, int sizeZ) {
         return add(new OffsetModel(sizeX, sizeY, sizeZ));
     }
