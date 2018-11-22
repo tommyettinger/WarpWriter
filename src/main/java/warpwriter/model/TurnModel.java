@@ -41,8 +41,7 @@ public class TurnModel extends Fetch implements IModel {
     }
 
     public int size(int axis) {
-        final int rot = turner().rotation(axis);
-        return modelSize(rot < 0 ? ~rot : rot);
+        return modelSize(Turner2.flipBits(turner().rotation(axis)));
     }
 
     @Override
