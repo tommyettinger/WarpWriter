@@ -41,8 +41,7 @@ public class TurnModel extends Fetch implements IModel {
     }
 
     public int size(int axis) {
-        final int rot = turner().rotation(axis);
-        return modelSize(rot); // modelSize() handles negative sizes correctly
+        return modelSize(turner().rotation(axis)); // modelSize() handles negative sizes correctly
     }
 
     @Override

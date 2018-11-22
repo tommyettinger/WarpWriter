@@ -203,6 +203,6 @@ public class Turner2 {
      * bitwise stuff here flips the bits in rot if negative, leaves it alone if positive
      */
     public static int flipBits(int rot) {
-        return rot ^ rot >> 31;
+        return rot ^ rot >> 31; // (rot ^ rot >> 31) is roughly equal to (rot < 0 ? -1 - rot : rot)
     }
 }
