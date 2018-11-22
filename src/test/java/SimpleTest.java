@@ -15,7 +15,6 @@ import warpwriter.LittleEndianDataInputStream;
 import warpwriter.ModelMaker;
 import warpwriter.VoxIO;
 import warpwriter.model.ArrayModel;
-import warpwriter.model.CompassDirection;
 import warpwriter.model.TurnModel;
 import warpwriter.view.SimpleDraw;
 import warpwriter.view.SpriteBatchVoxelRenderer;
@@ -38,7 +37,7 @@ public class SimpleTest extends ApplicationAdapter {
     protected ModelMaker maker;
     private SpriteBatchVoxelRenderer batchRenderer;
     protected VoxelColor voxelColor;
-    protected CompassDirection direction = CompassDirection.NORTH;
+    protected boolean z45 = false;
     protected int angle = 2;
     protected byte[][][] box;
 
@@ -92,10 +91,10 @@ public class SimpleTest extends ApplicationAdapter {
         font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 20);
         if (angle > 2)
             SimpleDraw.simpleDrawIso(turnModel, batchRenderer.setScale(1f));
-        else if (direction.isCardinal())
-            SimpleDraw.simpleDraw(turnModel, batchRenderer.setScale(4f), voxelColor);
-        else
+        else if (z45)
             SimpleDraw.simpleDraw45(turnModel, batchRenderer.setScale(3f, 4f), voxelColor);
+        else
+            SimpleDraw.simpleDraw(turnModel, batchRenderer.setScale(4f), voxelColor);
 
         batch.end();
         buffer.end();
@@ -180,6 +179,9 @@ public class SimpleTest extends ApplicationAdapter {
                         break;
                     case Input.Keys.T: // try again
                         turnModel.turner().reset();
+                        break;
+                    case Input.Keys.F:
+                        z45 = !z45;
                         break;
                     case Input.Keys.ESCAPE:
                         Gdx.app.exit();
