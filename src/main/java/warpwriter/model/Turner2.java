@@ -87,6 +87,26 @@ public class Turner2 {
         return this;
     }
 
+    /**
+     * @param index 0 for x, 1 for y, 2 for z
+     * @return if selected rotation is negative, return -1, otherwise return 1
+     */
+    public int step(int index) {
+        return rotation[index] >> 31 | 1;
+    }
+
+    public int stepX() {
+        return step(0);
+    }
+
+    public int stepY() {
+        return step(1);
+    }
+
+    public int stepZ() {
+        return step(2);
+    }
+
     /*
     protected int[] center = new int[] {0, 0, 0};
 

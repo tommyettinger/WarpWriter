@@ -40,19 +40,43 @@ public class TurnModel extends Fetch implements IModel {
         return this;
     }
 
+    public int size(int axis) {
+        return modelSize(turner().affected(axis));
+    }
+
     @Override
     public int sizeX() {
-        return modelSize(turner().affected(0));
+        return size(0);
     }
 
     @Override
     public int sizeY() {
-        return modelSize(turner().affected(1));
+        return size(1);
     }
 
     @Override
     public int sizeZ() {
-        return modelSize(turner().affected(2));
+        return size(2);
+    }
+
+    public int start(int axis) {
+        final int rot = turner().rotation(axis);
+        if (rot < 0)
+            return modelSize(~rot) - 1; // when rot is negative, we need to go from the end of the axis, not the start
+        else
+            return 0;
+    }
+
+    public int startX() {
+        return start(0);
+    }
+
+    public int startY() {
+        return start(1);
+    }
+
+    public int startZ() {
+        return start(2);
     }
 
     @Override
@@ -73,20 +97,11 @@ public class TurnModel extends Fetch implements IModel {
 
     @Override
     public byte bite() {
-//        turner().offsets(getModel().sizeX(), getModel().sizeY(), getModel().sizeZ());
-//        int offsetX = turner().x(), offsetY = turner().y(), offsetZ = turner().z();
-        turner().input(chainX(), chainY(), chainZ());
-        final int x = turner().x(),
-                y = turner().y(),
-                z = turner().z(),
-                sizeX = modelSize(turner().affected(0)) - 1,
-                sizeY = modelSize(turner().affected(1)) - 1,
-                sizeZ = modelSize(turner().affected(2)) - 1;
-
+        //turner().input(chainX(), chainY(), chainZ());
         return deferByte(getModel().at(
-                turner().rotation(0) < 0 ? sizeX - x : x,
-                turner().rotation(1) < 0 ? sizeY - y : y,
-                turner().rotation(2) < 0 ? sizeZ - z : z
+                startX() + turner().stepX() * chainX(),
+                startY() + turner().stepY() * chainY(),
+                startZ() + turner().stepZ() * chainZ()
         ));
     }
 
