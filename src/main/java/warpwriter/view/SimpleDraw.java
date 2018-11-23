@@ -115,25 +115,35 @@ public class SimpleDraw {
             if (px + 2 > sizeX2) {
                 renderer.drawRightTriangle(px, topPY, Color.rgba8888(Color.PURPLE));
             } else if (sizeX % 2 == 0 || sizeX2 != px + 2) { // Prevent extra triangle from appearing on top
-                renderer.drawLeftTriangle(px + 2, topPY, Color.rgba8888(Color.PURPLE));
+                result = model.at(px / 2, 0, sizeZ - 1);
+                if (result != 0) {
+                    renderer.drawLeftTriangle(px + 2, topPY, color.topFace(result));
+                }
             }
             // Finish drawing top triangles.
         }
 
         // Drawing right edge (only for when sizeX is odd numbered)
         if (sizeX % 2 == 1) {
-            final int bottom = Math.abs(sizeY2 - 2 - pixelWidth);
-            result = model.at(sizeX - 1, 0, 0);
+            final int vx = sizeX - 1, vy = 0,
+                    bottom = Math.abs(sizeY2 - 2 - pixelWidth);
+            result = model.at(vx, vy, 0);
             if (result != 0) {
                 renderer.drawRightTriangle(pixelWidth + 2, bottom - 4, color.rightFace(result)); // lower right corner
             }
-
             for (int py = bottom; py < bottom + sizeZ * 4; py += 4) {
                 final int vz = (py - bottom) / 4;
-                renderer.drawRightTriangle(pixelWidth + 2, py, Color.rgba8888(Color.YELLOW));
-
-                result = model.at(sizeX - 1, 0, vz);
+                boolean aboveEmpty = true;
+                if (vz != sizeZ - 1) {
+                    result = model.at(vx, vy, vz + 1);
+                    renderer.drawRightTriangle(pixelWidth + 2, py, color.rightFace(result));
+                    aboveEmpty = false;
+                }
+                result = model.at(vx, vy, vz);
                 if (result != 0) {
+                    if (aboveEmpty) {
+                        renderer.drawRightTriangle(pixelWidth + 2, py, color.topFace(result));
+                    }
                     renderer.drawLeftTriangle(pixelWidth + 2, py - 2, color.rightFace(result));
                 }
             }
