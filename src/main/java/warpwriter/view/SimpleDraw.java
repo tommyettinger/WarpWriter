@@ -129,8 +129,13 @@ public class SimpleDraw {
             }
 
             for (int py = bottom; py < bottom + sizeZ * 4; py += 4) {
+                final int vz = (py - bottom) / 4;
                 renderer.drawRightTriangle(pixelWidth + 2, py, Color.rgba8888(Color.YELLOW));
-                renderer.drawLeftTriangle(pixelWidth + 2, py - 2, Color.rgba8888(Color.GOLDENROD));
+
+                result = model.at(sizeX - 1, 0, vz);
+                if (result != 0) {
+                    renderer.drawLeftTriangle(pixelWidth + 2, py - 2, color.rightFace(result));
+                }
             }
         }
         // Finish drawing right edge
