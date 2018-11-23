@@ -92,7 +92,7 @@ public class SimpleTest extends ApplicationAdapter {
             font.draw(batch, "Y", 0, 100);
             font.draw(batch, "Z", 0, 100 + (turnModel.sizeY() * 2 + turnModel.sizeZ() * 2) * scale);
             font.draw(batch, "X", 0, 100 + (turnModel.sizeY() * 2 + turnModel.sizeZ() * 4 + turnModel.sizeX()) * scale);
-            SimpleDraw.simpleDrawIso(turnModel, batchRenderer.setScale(scale));
+            SimpleDraw.simpleDrawIso(turnModel, batchRenderer.setScale(scale), voxelColor);
         }
         else if (z45)
             SimpleDraw.simpleDraw45(turnModel, batchRenderer.setScale(3f, 4f), voxelColor);

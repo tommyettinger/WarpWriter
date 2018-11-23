@@ -72,6 +72,7 @@ public class SimpleDraw {
     }
 
     public static void simpleDrawIso(IModel model, ITriangleRenderer renderer, IVoxelColor color) {
+        byte result;
         final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ(),
                 sizeX2 = sizeX * 2, sizeY2 = sizeY * 2,
                 pixelWidth = sizeX2 + sizeY2 - ((sizeX + sizeY) % 2 == 1 ? 4 : 0);
@@ -79,6 +80,7 @@ public class SimpleDraw {
         // To move one y+ in voxels is x + 2, y - 2 in pixels.
         // To move one z+ in voxels is y + 4 in pixels.
         for (int px = 0; px < pixelWidth; px += 4) {
+//            final boolean left = px <
             final int bottomPY = Math.abs(sizeY2 - 2 - px),
                     topPY = Math.abs(sizeY2 - 2) + // black space at the bottom from the first column
                             (sizeZ - 1) * 4 + // height of model
@@ -92,7 +94,10 @@ public class SimpleDraw {
             } else if (px > sizeY2) {
                 renderer.drawRightTriangle(px, bottomPY - 6, Color.rgba8888(Color.PURPLE));
             } else if (sizeY % 2 == 0) {
-                renderer.drawRightTriangle(px, bottomPY - 6, Color.rgba8888(Color.WHITE)); // Very bottom
+                result = model.at(0, 0, 0);
+                if (result != 0) {
+                    renderer.drawRightTriangle(px, bottomPY - 6, color.rightFace(result)); // Very bottom
+                }
             }
             // Finish drawing bottom row triangles
 
