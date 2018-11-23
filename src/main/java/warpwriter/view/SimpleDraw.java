@@ -202,7 +202,8 @@ public class SimpleDraw {
                                     topLeft = true;
                                 }
                                 if (!left) {
-                                    renderer.drawRightTriangle(px, py - 2, color.rightFace(result));
+                                    // TODO: Fix this
+//                                    renderer.drawRightTriangle(px, py - 2, color.rightFace(result));
                                     left = true;
                                 }
                             }
