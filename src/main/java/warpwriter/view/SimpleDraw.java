@@ -99,7 +99,7 @@ public class SimpleDraw {
                                             : px <= sizeY2 ?
                                             sizeX * 3 // Descending
                                             : sizeX2 // Ascending
-                                    : (pixelWidth - px) * 2 - (sizeZ % 2 == 0 ? 4 : 8));
+                                    : (pixelWidth - px) * 2 - (sizeZ % 2 == 1 ? 4 : 0));
 
             // Begin drawing bottom row triangles
             renderer.drawLeftTriangle(px, bottomPY - 4, Color.rgba8888(Color.PURPLE));
