@@ -75,21 +75,11 @@ public class SimpleDraw {
         final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ(),
                 sizeX2 = sizeX * 2, sizeY2 = sizeY * 2,
                 pixelWidth = sizeX2 + sizeY2 - ((sizeX + sizeY) % 2 == 1 ? 4 : 0);
-        int great, less;
-        if (sizeX2 >= sizeY2) {
-            great = sizeX2;
-            less = sizeY2;
-        } else {
-            great = sizeY2;
-            less = sizeX2;
-        }
         // To move one x+ in voxels is x + 2, y + 2 in pixels.
         // To move one y+ in voxels is x + 2, y - 2 in pixels.
         // To move one z+ in voxels is y + 4 in pixels.
         for (int px = 0; px < pixelWidth; px += 4) {
-            final boolean ascending = px < great && px > less && px > sizeY2;
-            final boolean descending = px < great && px > less && px <= sizeY2;
-            int bottomPY = Math.abs(sizeY2 - 2 - px),
+            final int bottomPY = Math.abs(sizeY2 - 2 - px),
                     topPY = Math.abs(sizeY2 - 2) + // black space at the bottom from the first column
                             (sizeZ - 1) * 4 + // height of model
                             sizeX2 - Math.abs(sizeX2 - 2 - px);
@@ -116,10 +106,12 @@ public class SimpleDraw {
             // Finish drawing main bulk of model
 
             // Begin drawing top triangles
-            if (px < sizeX2) {
-                renderer.drawLeftTriangle(px + 2, topPY, Color.rgba8888(Color.PURPLE));
-            } else {
-                renderer.drawRightTriangle(px, topPY, Color.rgba8888(Color.PURPLE));
+            if (sizeX % 2 == 0 || sizeX2 != px + 2) { // Prevent extra triangle from appearing on top
+                if (px < sizeX2) {
+                    renderer.drawLeftTriangle(px + 2, topPY, Color.rgba8888(Color.PURPLE));
+                } else {
+                    renderer.drawRightTriangle(px, topPY, Color.rgba8888(Color.PURPLE));
+                }
             }
             // Finish drawing top triangles.
         }
