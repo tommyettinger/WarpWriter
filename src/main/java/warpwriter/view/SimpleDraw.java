@@ -113,7 +113,10 @@ public class SimpleDraw {
 
             // Begin drawing top triangles
             if (px + 2 > sizeX2) {
-                renderer.drawRightTriangle(px, topPY, Color.rgba8888(Color.PURPLE));
+                result = model.at(sizeX - 1, (px / 2) - sizeX, sizeZ - 1);
+                if (result != 0) {
+                    renderer.drawRightTriangle(px, topPY, color.topFace(result));
+                }
             } else if (sizeX % 2 == 0 || sizeX2 != px + 2) { // Prevent extra triangle from appearing on top
                 result = model.at(px / 2, 0, sizeZ - 1);
                 if (result != 0) {
