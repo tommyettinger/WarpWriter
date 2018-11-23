@@ -80,15 +80,15 @@ public class SimpleDraw {
         // To move one y+ in voxels is x + 2, y - 2 in pixels.
         // To move one z+ in voxels is y + 4 in pixels.
         for (int px = 0; px < pixelWidth; px += 4) {
-//            final boolean left = px <
+            final boolean right = px + 2 > sizeY2, Left = !right;
             final int bottomPY = Math.abs(sizeY2 - 2 - px),
                     topPY = Math.abs(sizeY2 - 2) + // black space at the bottom from the first column
                             (sizeZ - 1) * 4 + // height of model
                             sizeX2 - Math.abs(sizeX2 - 2 - px);
 
             // Begin drawing bottom row triangles
-            renderer.drawLeftTriangle(px, bottomPY - 4, Color.rgba8888(Color.PURPLE));
-            renderer.drawRightTriangle(px + 2, bottomPY - 4, Color.rgba8888(Color.PURPLE));
+            renderer.drawLeftTriangle(px, bottomPY - 4, Color.rgba8888(Color.OLIVE));
+            renderer.drawRightTriangle(px + 2, bottomPY - 4, Color.rgba8888(Color.OLIVE));
             if (px < sizeY2 - 2) {
                 renderer.drawLeftTriangle(px + 2, bottomPY - 6, Color.rgba8888(Color.PURPLE));
             } else if (px > sizeY2) {
@@ -103,6 +103,7 @@ public class SimpleDraw {
 
             // Begin drawing main bulk of model
             for (int py = bottomPY; py <= topPY; py += 4) {
+                final boolean top = py > bottomPY + (sizeZ - 1) * 4, bottom = !top;
                 renderer.drawLeftTriangle(px, py, Color.rgba8888(Color.GREEN));
                 renderer.drawRightTriangle(px, py - 2, Color.rgba8888(Color.BLUE));
                 renderer.drawRightTriangle(px + 2, py, Color.rgba8888(Color.YELLOW));
@@ -122,7 +123,11 @@ public class SimpleDraw {
         // Drawing right edge (only for when sizeX is odd numbered)
         if (sizeX % 2 == 1) {
             final int bottom = Math.abs(sizeY2 - 2 - pixelWidth);
-            renderer.drawRightTriangle(pixelWidth + 2, bottom - 4, Color.rgba8888(Color.WHITE)); // lower right corner
+            result = model.at(sizeX - 1, 0, 0);
+            if (result != 0) {
+                renderer.drawRightTriangle(pixelWidth + 2, bottom - 4, color.rightFace(result)); // lower right corner
+            }
+
             for (int py = bottom; py < bottom + sizeZ * 4; py += 4) {
                 renderer.drawRightTriangle(pixelWidth + 2, py, Color.rgba8888(Color.YELLOW));
                 renderer.drawLeftTriangle(pixelWidth + 2, py - 2, Color.rgba8888(Color.GOLDENROD));
