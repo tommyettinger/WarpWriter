@@ -90,16 +90,9 @@ public class SimpleDraw {
             final boolean ascending = px < great && px > less && px > sizeY2;
             final boolean descending = px < great && px > less && px <= sizeY2;
             int bottomPY = Math.abs(sizeY2 - 2 - px),
-                    topPY = bottomPY +
-                            sizeZ * 4 // Height
-                            - 2 + (
-                            px < great ?
-                                    px <= less ?
-                                            px * 2
-                                            : px <= sizeY2 ?
-                                            sizeX * 3 // Descending
-                                            : sizeX2 // Ascending
-                                    : (pixelWidth - px) * 2 - (sizeZ % 2 == 0 ? 4 : 8));
+                    topPY = Math.abs(sizeY2 - 2) + // black space at the bottom from the first column
+                            (sizeZ - 1) * 4 + // height of model
+                            sizeX2 - Math.abs(sizeX2 - 2 - px);
 
             // Begin drawing bottom row triangles
             renderer.drawLeftTriangle(px, bottomPY - 4, Color.rgba8888(Color.PURPLE));
@@ -113,24 +106,12 @@ public class SimpleDraw {
             }
             // Finish drawing bottom row triangles
 
-            class Debug {
-                Color a(Color color) {
-                    return ascending ?
-                            Color.ORANGE
-                            : descending ?
-                            Color.CYAN
-                            : color;
-                }
-            }
-
-            Debug debug = new Debug();
-
             // Begin drawing main bulk of model
             for (int py = bottomPY; py <= topPY; py += 4) {
-                renderer.drawLeftTriangle(px, py, Color.rgba8888(debug.a(Color.GREEN)));
-                renderer.drawRightTriangle(px, py - 2, Color.rgba8888(debug.a(Color.BLUE)));
-                renderer.drawRightTriangle(px + 2, py, Color.rgba8888(debug.a(Color.YELLOW)));
-                renderer.drawLeftTriangle(px + 2, py - 2, Color.rgba8888(debug.a(Color.RED)));
+                renderer.drawLeftTriangle(px, py, Color.rgba8888(Color.GREEN));
+                renderer.drawRightTriangle(px, py - 2, Color.rgba8888(Color.BLUE));
+                renderer.drawRightTriangle(px + 2, py, Color.rgba8888(Color.YELLOW));
+                renderer.drawLeftTriangle(px + 2, py - 2, Color.rgba8888(Color.RED));
             }
             // Finish drawing main bulk of model
 
