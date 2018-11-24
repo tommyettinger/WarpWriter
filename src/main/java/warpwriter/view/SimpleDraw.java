@@ -41,14 +41,14 @@ public class SimpleDraw {
 //                renderer.drawRect(px, py, 2, 1, Color.rgba8888(Color.RED));
                 boolean leftDone = false, rightDone = pixelWidth - px < 2;
                 for (int vx = 0, vy = px - sizeX + 1; vx <= sizeX && vy <= sizeY; vx++, vy++) { // vx is voxel x, vy is voxel y
-                    if (!leftDone && vy != 0) {
+                    if (!leftDone && vy > 0) {
                         result = model.at(vx, vy - 1, py);
                         if (result != 0) {
                             renderer.drawPixel(px, py, color.rightFace(result));
                             leftDone = true;
                         }
                     }
-                    if (!rightDone && vx != 0) {
+                    if (!rightDone && vx > 0) {
                         result = model.at(vx - 1, vy, py);
                         if (result != 0) {
                             renderer.drawPixel(px + 1, py, color.leftFace(result));
