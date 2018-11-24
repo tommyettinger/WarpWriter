@@ -170,8 +170,8 @@ public class SimpleTest extends ApplicationAdapter {
                         turnModel.set(knightModel.boxModel(13, 12, 8, ColorFetch.color(Coloring.rinsed("Red 4"))).model(13, 12, 8));
                         break;
                     case Input.Keys.S:
-                        turnModel.set(new FetchModel(100, 100, 80,
-                                new NoiseFetch((byte) 0, (byte) 0, (byte) 0, (byte) 113, (byte) 114, (byte) 115, (byte) 116, (byte) 0, (byte) 0, (byte) 0)));
+                        turnModel.set(new FetchModel(20, 20, 20,
+                                new NoiseFetch((byte) 194, (byte) 194))); //(byte) 0, (byte) 0, (byte) 0,   , (byte) 0, (byte) 0, (byte) 0   , (byte) 98, (byte) 130, (byte) 162 
                         break;
                     case Input.Keys.G:
                         voxelColor.set(voxelColor.direction().counter());
