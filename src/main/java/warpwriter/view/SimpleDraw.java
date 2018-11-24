@@ -102,7 +102,7 @@ public class SimpleDraw {
             // Finish drawing bottom row triangles
 
             // Begin drawing main bulk of model
-            for (int py = bottomPY; py <= topPY; py += 4) {
+            for (int py = bottomPY - 4; py <= topPY; py += 4) {
                 final boolean topSide = py > bottomPY + (sizeVZ - 1) * 4, bottomSide = !topSide;
                 final int startVX = rightSide ? px / 2 - sizeVY + 1 : 0, // TODO: Fix this to work up top
                         startVY = leftSide ? px / 2 : sizeVY - 1, // TODO: Fix this to work up top
@@ -198,12 +198,13 @@ public class SimpleDraw {
                             result = model.at(vx, vy + 1, vz);
                             if (result != 0) {
                                 if (!topLeft) {
-                                    renderer.drawLeftTriangle(px, py, color.rightFace(result));
+                                    // TODO: Check this is working
+                                    renderer.drawLeftTriangle(px, py, Color.rgba8888(Color.GREEN));
                                     topLeft = true;
                                 }
                                 if (!left) {
-                                    // TODO: Fix this
-//                                    renderer.drawRightTriangle(px, py - 2, color.rightFace(result));
+                                    // TODO: Check this is working
+                                    renderer.drawRightTriangle(px, py - 2, Color.rgba8888(Color.BLUE));
                                     left = true;
                                 }
                             }
@@ -224,9 +225,13 @@ public class SimpleDraw {
                         }
                     }
                 } else {
+                    // Top left:
                     renderer.drawLeftTriangle(px, py, Color.rgba8888(Color.GREEN));
+                    // Left:
                     renderer.drawRightTriangle(px, py - 2, Color.rgba8888(Color.BLUE));
+                    // Top right:
                     renderer.drawRightTriangle(px + 2, py, Color.rgba8888(Color.YELLOW));
+                    // Right:
                     renderer.drawLeftTriangle(px + 2, py - 2, Color.rgba8888(Color.RED));
                 }
             }
