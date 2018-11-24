@@ -40,8 +40,11 @@ public class SimpleDraw {
             for (int px = 0; px <= pixelWidth; px += 2) { // pixel x
 //                renderer.drawRect(px, py, 2, 1, Color.rgba8888(Color.RED));
                 boolean leftDone = false, rightDone = pixelWidth - px < 2;
-                for (int vx = 0, vy = px - sizeX + 1; vx <= sizeX && vy <= sizeY; vx++, vy++) { // vx is voxel x, vy is voxel y
-                    if(vy < 0) continue;
+                final int startX = px > sizeX - 1 ? 0 : sizeX - px - 1,
+                        startY = px - sizeX + 1 < 0 ? 0 : px - sizeX + 1;
+                for (int vx = startX, vy = startY;
+                     vx <= sizeX && vy <= sizeY;
+                     vx++, vy++) { // vx is voxel x, vy is voxel y
                     if (!leftDone && vy != 0) {
                         result = model.at(vx, vy - 1, py);
                         if (result != 0) {
