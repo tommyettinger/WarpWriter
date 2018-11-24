@@ -121,7 +121,7 @@ public class SimpleDraw {
                          vx < sizeVX && vy < sizeVY && vz >= 0;
                          vx++, vy++, vz--) {
 
-                        if (vz != sizeVZ - 1 && vx != sizeVX - 1) {
+                        if ((!topLeft || !left) && vz < sizeVZ - 1 && vx < sizeVX - 1) {
                             result = model.at(vx - 1, vy, vz + 1);
                             if (result != 0) {
                                 if (!topLeft) {
@@ -135,7 +135,7 @@ public class SimpleDraw {
                             }
                         }
 
-                        if (vz != sizeVZ - 1 && vy != sizeVY - 1) {
+                        if ((!topRight || !right) && vz < sizeVZ - 1 && vy < sizeVY - 1) {
                             result = model.at(vx, vy - 1, vz + 1);
                             if (result != 0) {
                                 if (!topRight) {
@@ -149,7 +149,7 @@ public class SimpleDraw {
                             }
                         }
 
-                        if (vz != sizeVZ - 1) {
+                        if ((!topLeft || !topRight) && vz < sizeVZ - 1) {
                             result = model.at(vx, vy, vz + 1);
                             if (result != 0) {
                                 if (!topLeft) {
@@ -184,7 +184,7 @@ public class SimpleDraw {
                         result = model.at(vx, vy, vz);
                         if (result != 0) {
                             if (!topLeft) {
-                                renderer.drawLeftTriangle(px, py, color.topFace(result));
+                                renderer.drawLeftTriangle(px, py, flash(color.topFace(result)));
                             }
                             if (!topRight) {
                                 renderer.drawRightTriangle(px + 2, py, color.topFace(result));
@@ -198,7 +198,7 @@ public class SimpleDraw {
                             break;
                         }
 
-                        if (vy < sizeVY - 1) {
+                        if ((!topLeft || !left) && vy < sizeVY - 1) {
                             result = model.at(vx, vy + 1, vz);
                             if (result != 0) {
                                 if (!topLeft) {
@@ -214,7 +214,7 @@ public class SimpleDraw {
                             }
                         }
 
-                        if (vx < sizeVX - 1) {
+                        if ((!topRight || !right) && vx < sizeVX - 1) {
                             result = model.at(vx + 1, vy, vz);
                             if (result != 0) {
                                 if (!topRight) {
@@ -282,5 +282,24 @@ public class SimpleDraw {
             }
         }
         // Finish drawing right edge
+    }
+
+    static boolean flash = false;
+    static long time = System.currentTimeMillis(),
+            duration = 500; // Milliseconds flashes last
+
+    /**
+     * This enables colors to flash onscreen for debugging purposes.
+     *
+     * @param color Color to show when not flashing
+     * @return White if flash is active, else color.
+     */
+    static int flash(int color) {
+        final long now = System.currentTimeMillis();
+        if (now - time >= duration) {
+            flash = !flash;
+            time = now;
+        }
+        return flash ? Color.rgba8888(Color.WHITE) : color;
     }
 }
