@@ -49,7 +49,7 @@ public class SimpleDraw {
                             leftDone = true;
                         }
                     }
-                    if (!rightDone && vx != 0) {
+                    if (!rightDone && vx > 0) {
                         result = model.at(vx - 1, vy, py);
                         if (result != 0) {
                             renderer.drawPixel(px + 1, py, color.leftFace(result));
