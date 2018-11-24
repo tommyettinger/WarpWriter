@@ -174,7 +174,7 @@ public class SimpleDraw {
                         if (!right && vy != 0) {
                             result = model.at(vx, vy - 1, vz);
                             if (result != 0) {
-                                renderer.drawLeftTriangle(px + 2, py - 2, color.topFace(result));
+                                renderer.drawLeftTriangle(px + 2, py - 2, color.rightFace(result));
                                 right = true;
                             }
                         }
