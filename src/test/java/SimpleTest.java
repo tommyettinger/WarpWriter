@@ -96,12 +96,12 @@ public class SimpleTest extends ApplicationAdapter {
                 SimpleDraw.simpleDrawIso(turnModel, batchRenderer.setScale(scale), voxelColor);
             }
             else
-                SimpleDraw.simpleDrawAbove(turnModel, batchRenderer.setScale(4f, 2f), voxelColor);
+                SimpleDraw.simpleDrawAbove(turnModel, batchRenderer.setScale(6f, 3f), voxelColor);
         }
         else if (z45)
-            SimpleDraw.simpleDraw45(turnModel, batchRenderer.setScale(3f, 4f), voxelColor);
+            SimpleDraw.simpleDraw45(turnModel, batchRenderer.setScale(4f, 6f), voxelColor);
         else
-            SimpleDraw.simpleDraw(turnModel, batchRenderer.setScale(4f), voxelColor);
+            SimpleDraw.simpleDraw(turnModel, batchRenderer.setScale(6f), voxelColor);
         batch.setColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
         batch.end();
         buffer.end();
