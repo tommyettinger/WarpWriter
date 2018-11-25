@@ -178,12 +178,12 @@ public class SimpleDraw {
             // Finish drawing main bulk of model
 
             // Begin drawing top triangles
-            if (px + 2 > sizeVX2) {
+            if (px + 2 > sizeVY2) {
                 result = model.at(sizeVX - 1, (px / 2) - sizeVX, sizeVZ - 1);
                 if (result != 0) {
                     renderer.drawRightTriangle(px, topPY, color.topFace(result));
                 }
-            } else if (sizeVX % 2 == 0 || sizeVX2 != px + 2) { // Prevent extra triangle from appearing on top
+            } else if (sizeVY % 2 == 0 || sizeVY2 != px + 2) { // Prevent extra triangle from appearing on top
                 result = model.at(px / 2, 0, sizeVZ - 1);
                 if (result != 0) {
                     renderer.drawLeftTriangle(px + 2, topPY, color.topFace(result));
@@ -191,10 +191,10 @@ public class SimpleDraw {
             }
             // Finish drawing top triangles.
 
-            // Drawing right edge (only for when sizeX is odd numbered)
-            if (sizeVX % 2 == 1) {
-                final int vx = sizeVX - 1, vy = 0,
-                        bottom = Math.abs(sizeVY2 - 2 - pixelWidth);
+            // Drawing right edge (only for when sizeY is odd numbered)
+            if (sizeVY % 2 == 1) {
+                final int vx = 0, vy = sizeVY - 1,
+                        bottom = Math.abs(sizeVX2 - 2 - pixelWidth);
                 result = model.at(vx, vy, 0);
                 if (result != 0) {
                     renderer.drawRightTriangle(pixelWidth + 2, bottom - 4, color.rightFace(result)); // lower right corner
