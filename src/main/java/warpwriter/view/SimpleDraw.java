@@ -183,13 +183,14 @@ public class SimpleDraw {
             // Finish drawing main bulk of model
 
             // Begin drawing top triangles
-            if (px + 2 > sizeVY2) {
-                result = model.at(sizeVX - 1, (px / 2) - sizeVX, sizeVZ - 1);
+            if (px - 2 > sizeVY2) {
+                // TODO: Fix upper right triangles
+                result = model.at(sizeVX - 1, (px - sizeVY2) / 2, sizeVZ - 1);
                 if (result != 0) {
-                    renderer.drawRightTriangle(px, topPY, color.topFace(result));
+                    renderer.drawRightTriangle(px, topPY, flash(color.topFace(result)));
                 }
             } else if (sizeVY % 2 == 0 || sizeVY2 != px + 2) { // Prevent extra triangle from appearing on top
-                result = model.at(px / 2, 0, sizeVZ - 1);
+                result = model.at(0, px / 2, sizeVZ - 1);
                 if (result != 0) {
                     renderer.drawLeftTriangle(px + 2, topPY, color.topFace(result));
                 }
