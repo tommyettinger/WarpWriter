@@ -219,7 +219,7 @@ public class SimpleDraw {
                         if ((!left || !topLeft) && vy > 0) {
                             result = model.at(vx, vy - 1, vz);
                             if (!left) {
-                                renderer.drawRightTriangle(px, py - 2, color.rightFace(result));
+                                renderer.drawRightTriangle(px, py - 2, color.topFace(result));
                                 left = true;
                             }
                         }
@@ -228,7 +228,7 @@ public class SimpleDraw {
                         if ((!right || !topRight) && vx > 0) {
                             result = model.at(vx - 1, vy, vz);
                             if (!right) {
-                                renderer.drawLeftTriangle(px + 2, py - 2, color.leftFace(result));
+                                renderer.drawLeftTriangle(px + 2, py - 2, color.topFace(result));
                                 right = true;
                             }
                         }
