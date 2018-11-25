@@ -96,7 +96,7 @@ public class SimpleTest extends ApplicationAdapter {
                 SimpleDraw.simpleDrawIso(turnModel, batchRenderer.setScale(scale), voxelColor);
             }
             else
-                SimpleDraw.simpleDrawAbove(turnModel, batchRenderer.setScale(4f, 3f), voxelColor);
+                SimpleDraw.simpleDrawAbove(turnModel, batchRenderer.setScale(4f, 2f), voxelColor);
         }
         else if (z45)
             SimpleDraw.simpleDraw45(turnModel, batchRenderer.setScale(3f, 4f), voxelColor);
