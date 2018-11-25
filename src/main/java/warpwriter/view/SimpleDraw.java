@@ -75,18 +75,18 @@ public class SimpleDraw {
         final int sizeX = model.sizeX(),
                 sizeY = model.sizeY(),
                 sizeZ = model.sizeZ(),
-                pixelHeight = sizeY + sizeY;
+                pixelHeight = (sizeY + sizeZ) * 2;
         byte result = 0;
         for (int py = 0; py <= pixelHeight; py += 2) { // pixel y
             for (int px = 0; px < sizeY - 1; px++) { // pixel x
-                final int vy = px;
                 renderer.drawRect(px, py, 1, 2, Color.rgba8888(Color.RED));
                 boolean below = false, above = pixelHeight - py < 2;
-                final int startX = (py / 2) > sizeZ - 1 ? (py / 2) - sizeY - 1 : 0,
+                final int startX = (py / 2) > sizeZ - 1 ? (py / 2) - sizeZ + 1 : 0,
+                        vy = px,
                         startZ = (py / 2) > sizeZ - 1 ? sizeZ - 1 : (py / 2);
                 for (int vx = startX, vz = startZ;
                      vx < sizeX && vz >= 0;
-                     vx++, vz--) { // vx is voxel x, vy is voxel y
+                     vx++, vz--) { // vx is voxel x, vz is voxel z
                     if (!above && vz + 1 < sizeZ) {
                         result = model.at(vx, vy, vz + 1);
                         if (result != 0) {
