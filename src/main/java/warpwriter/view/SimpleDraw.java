@@ -71,6 +71,48 @@ public class SimpleDraw {
         }
     }
 
+    public static void simpleDrawAbove(IModel model, IPixelRenderer renderer, IVoxelColor color) {
+        final int sizeX = model.sizeX(),
+                sizeY = model.sizeY(),
+                sizeZ = model.sizeZ(),
+                pixelHeight = sizeY + sizeY;
+        byte result = 0;
+        for (int py = 0; py <= pixelHeight; py += 2) { // pixel y
+            for (int px = 0; px < sizeY - 1; px++) { // pixel x
+                final int vy = px;
+                renderer.drawRect(px, py, 1, 2, Color.rgba8888(Color.RED));
+                boolean below = false, above = pixelHeight - py < 2;
+                final int startX = (py / 2) > sizeZ - 1 ? (py / 2) - sizeY - 1 : 0,
+                        startZ = (py / 2) > sizeZ - 1 ? sizeZ - 1 : (py / 2);
+                for (int vx = startX, vz = startZ;
+                     vx < sizeX && vz >= 0;
+                     vx++, vz--) { // vx is voxel x, vy is voxel y
+                    if (!above && vz + 1 < sizeZ) {
+                        result = model.at(vx, vy, vz + 1);
+                        if (result != 0) {
+                            renderer.drawPixel(px, py + 1, color.rightFace(result));
+                            above = true;
+                        }
+                    }
+                    if (!below && vx - 1 > sizeX) {
+                        result = model.at(vx + 1, vy, vz);
+                        if (result != 0) {
+                            renderer.drawPixel(px, py, color.topFace(result));
+                            below = true;
+                        }
+                    }
+                    if (above && below) break;
+                    result = model.at(vx, vy, vz);
+                    if (result != 0) {
+                        if (!above) renderer.drawPixel(px, py + 1, color.topFace(result));
+                        if (!below) renderer.drawPixel(px, py, color.rightFace(result));
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
     public static void simpleDrawIso(IModel model, ITriangleRenderer renderer) {
         simpleDrawIso(model, renderer, color);
     }

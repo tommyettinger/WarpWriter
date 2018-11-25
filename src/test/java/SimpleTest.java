@@ -88,11 +88,15 @@ public class SimpleTest extends ApplicationAdapter {
         font.draw(batch, StringKit.join(", ", turnModel.turner().rotation()) + " (rotation)", 0, 40);
         font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 20);
         if (angle > 2) {
-            final float scale = 2f;
-            font.draw(batch, "Y", 0, 100);
-            font.draw(batch, "Z", 0, 100 + (turnModel.sizeY() * 2 + turnModel.sizeZ() * 2) * scale);
-            font.draw(batch, "X", 0, 100 + (turnModel.sizeY() * 2 + turnModel.sizeZ() * 4 + turnModel.sizeX()) * scale);
-            SimpleDraw.simpleDrawIso(turnModel, batchRenderer.setScale(scale), voxelColor);
+            if (z45) {
+                final float scale = 2f;
+                font.draw(batch, "Y", 0, 100);
+                font.draw(batch, "Z", 0, 100 + (turnModel.sizeY() * 2 + turnModel.sizeZ() * 2) * scale);
+                font.draw(batch, "X", 0, 100 + (turnModel.sizeY() * 2 + turnModel.sizeZ() * 4 + turnModel.sizeX()) * scale);
+                SimpleDraw.simpleDrawIso(turnModel, batchRenderer.setScale(scale), voxelColor);
+            }
+            else
+                SimpleDraw.simpleDrawAbove(turnModel, batchRenderer.setScale(4f, 3f), voxelColor);
         }
         else if (z45)
             SimpleDraw.simpleDraw45(turnModel, batchRenderer.setScale(3f, 4f), voxelColor);
