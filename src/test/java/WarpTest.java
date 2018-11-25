@@ -71,19 +71,16 @@ public class WarpTest extends ApplicationAdapter {
         
         Gdx.gl.glClearColor(0.4f, 0.75f, 0.3f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
+        
         worldView.apply();
         worldView.getCamera().position.set(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2, 0);
         worldView.update(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         batch.setProjectionMatrix(worldView.getCamera().combined);
         batch.begin();
-
-        font.draw(batch, StringKit.join(", ", model.sizes()) + " (original)", 0, 80);
-        font.draw(batch, model.sizeX() + ", " + model.sizeY() + ", " + model.sizeZ() + " (modified)", 0, 60);
-        font.draw(batch, StringKit.join(", ", model.rotation()) + " (rotation)", 0, 40);
-        font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 20);
+        
+        WarpDraw.drawOutline(model, batchRenderer);
         WarpDraw.draw(model, batchRenderer, voxelColor);
-
+        batch.setColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
         batch.end();
         buffer.end();
         Gdx.gl.glClearColor(0, 0, 0, 0);
@@ -96,6 +93,10 @@ public class WarpTest extends ApplicationAdapter {
         screenRegion.setRegion(screenTexture);
         screenRegion.flip(false, true);
         batch.draw(screenRegion, 0, 0);
+        font.draw(batch, StringKit.join(", ", model.sizes()) + " (original)", 0, 80);
+        font.draw(batch, model.sizeX() + ", " + model.sizeY() + ", " + model.sizeZ() + " (modified)", 0, 60);
+        font.draw(batch, StringKit.join(", ", model.rotation()) + " (rotation)", 0, 40);
+        font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 20);
         batch.end();
     }
 
