@@ -98,7 +98,7 @@ public class SimpleTest extends ApplicationAdapter {
             SimpleDraw.simpleDraw45(turnModel, batchRenderer.setScale(3f, 4f), voxelColor);
         else
             SimpleDraw.simpleDraw(turnModel, batchRenderer.setScale(4f), voxelColor);
-
+        batch.setColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
         batch.end();
         buffer.end();
         Gdx.gl.glClearColor(0, 0, 0, 0);

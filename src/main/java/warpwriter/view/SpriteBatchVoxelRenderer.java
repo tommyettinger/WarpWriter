@@ -68,12 +68,12 @@ public class SpriteBatchVoxelRenderer implements IPixelRenderer, ITriangleRender
 
     @Override
     public IPixelRenderer drawRect(int x, int y, int xSize, int ySize, int color) {
-        final float oldColor = batch.getPackedColor(); // requires less conversions than batch.getColor(), same result
+        //final float oldColor = batch.getPackedColor(); // requires less conversions than batch.getColor(), same result
         batch.setColor(NumberUtils.intToFloatColor(Integer.reverseBytes(color)));
                                                    // converts from RGBA to ABGR
                        // converts ABGR int to float color, which SpriteBatch can use without needing an object
         batch.draw(one, (x * scaleX) + offsetX, (y * scaleY) + offsetY, xSize * scaleX, ySize * scaleY);
-        batch.setColor(oldColor);
+        //batch.setColor(oldColor);
         return this;
     }
 
