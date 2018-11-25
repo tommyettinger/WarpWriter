@@ -75,7 +75,7 @@ public class SimpleDraw {
         final int sizeX = model.sizeX(),
                 sizeY = model.sizeY(),
                 sizeZ = model.sizeZ(),
-                pixelHeight = (sizeY + sizeZ) * 2;
+                pixelHeight = (sizeX + sizeZ) * 2;
         byte result = 0;
         for (int py = 0; py <= pixelHeight; py += 2) { // pixel y
             for (int px = 0; px < sizeY; px++) { // pixel x
