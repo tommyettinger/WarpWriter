@@ -31,7 +31,7 @@ public class WarpDraw {
                     // uncomment to show background in red
                     //renderer.drawPixel(px, py, Color.rgba8888(Color.RED));
                     byte result = model.voxels[sz * (sy * model.temp[0] + model.temp[1]) + model.temp[2]];
-                    if (result != 0) {
+                    if (result != 0 && result != Coloring.CLEAR) {
                         renderer.drawRect(px, py + 3, 3, 1, color.topFace(result));
                         renderer.drawRect(px, py, 3, 3, color.rightFace(result));
                         break;

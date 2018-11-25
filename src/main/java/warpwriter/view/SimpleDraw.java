@@ -76,40 +76,45 @@ public class SimpleDraw {
                 sizeY = model.sizeY(),
                 sizeZ = model.sizeZ(),
                 pixelHeight = (sizeX + sizeZ) * 2;
-        byte result = 0;
-        for (int py = 0; py <= pixelHeight; py += 2) { // pixel y
-            for (int px = 0; px < sizeY; px++) { // pixel x
-//                renderer.drawRect(px, py, 1, 2, Color.rgba8888(Color.RED));
+        for (int vy = 0; vy < sizeY; vy++) { // voxel y is pixel x
+            // Begin bottom row
+            byte result = model.at(sizeX - 1, 0, 0);
+            if (result != 0) {
+                renderer.drawPixel(vy, 0, color.rightFace(result));
+            }
+            // Finish bottom row
+            // Begin main bulk of model
+            for (int py = 1; py < pixelHeight; py += 2) { // pixel y
                 boolean below = false, above = pixelHeight - py < 2;
                 final int startX = (py / 2) > sizeZ - 1 ? (py / 2) - sizeZ + 1 : 0,
-                        vy = px,
                         startZ = (py / 2) > sizeZ - 1 ? sizeZ - 1 : (py / 2);
                 for (int vx = startX, vz = startZ;
-                     vx < sizeX && vz >= 0;
+                     vx <= sizeX && vz >= -1;
                      vx++, vz--) { // vx is voxel x, vz is voxel z
                     if (!above && vz + 1 < sizeZ) {
                         result = model.at(vx, vy, vz + 1);
                         if (result != 0) {
-                            renderer.drawPixel(px, py + 1, color.rightFace(result));
+                            renderer.drawPixel(vy, py + 1, color.rightFace(result));
                             above = true;
                         }
                     }
                     if (!below && vx > 0) {
                         result = model.at(vx - 1, vy, vz);
                         if (result != 0) {
-                            renderer.drawPixel(px, py, color.topFace(result));
+                            renderer.drawPixel(vy, py, color.topFace(result));
                             below = true;
                         }
                     }
                     if (above && below) break;
                     result = model.at(vx, vy, vz);
                     if (result != 0) {
-                        if (!above) renderer.drawPixel(px, py + 1, color.topFace(result));
-                        if (!below) renderer.drawPixel(px, py, color.rightFace(result));
+                        if (!above) renderer.drawPixel(vy, py + 1, color.topFace(result));
+                        if (!below) renderer.drawPixel(vy, py, color.rightFace(result));
                         break;
                     }
                 }
             }
+            // Finish main bulk of model
         }
     }
 

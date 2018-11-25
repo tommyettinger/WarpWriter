@@ -19,6 +19,8 @@ import warpwriter.view.VoxelColor;
 import warpwriter.view.WarpDraw;
 import warpwriter.warp.VoxelModel;
 
+import java.io.FileInputStream;
+
 public class WarpTest extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 1280;
     public static final int SCREEN_HEIGHT = 720;
@@ -55,12 +57,13 @@ public class WarpTest extends ApplicationAdapter {
         maker = new ModelMaker(12345);
         try {
             box = VoxIO.readVox(new LittleEndianDataInputStream(WarpTest.class.getResourceAsStream("/dumbcube.vox")));
+            warrior = new VoxelModel(VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("SpaceMarine.vox"))));
         } catch (Exception e) {
             e.printStackTrace();
             box = maker.warriorRandom();
+            warrior = new VoxelModel(maker.warriorRandom());
         }
         dumbCube = new VoxelModel(box);
-        warrior = new VoxelModel(maker.warriorRandom());
         model = dumbCube;
         Gdx.input.setInputProcessor(inputProcessor());
     }
