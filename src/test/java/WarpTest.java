@@ -68,8 +68,10 @@ public class WarpTest extends ApplicationAdapter {
     @Override
     public void render() {
         buffer.begin();
-        Gdx.gl.glClearColor(0, 0, 0, 0);
+        
+        Gdx.gl.glClearColor(0.4f, 0.75f, 0.3f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         worldView.apply();
         worldView.getCamera().position.set(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2, 0);
         worldView.update(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
@@ -80,7 +82,7 @@ public class WarpTest extends ApplicationAdapter {
         font.draw(batch, model.sizeX() + ", " + model.sizeY() + ", " + model.sizeZ() + " (modified)", 0, 60);
         font.draw(batch, StringKit.join(", ", model.rotation()) + " (rotation)", 0, 40);
         font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 20);
-        WarpDraw.draw(model, batchRenderer.setScale(4f), voxelColor);
+        WarpDraw.draw(model, batchRenderer, voxelColor);
 
         batch.end();
         buffer.end();
