@@ -122,24 +122,27 @@ public class SimpleDraw {
         final int sizeVX = model.sizeX(), sizeVY = model.sizeY(), sizeVZ = model.sizeZ(),
                 sizeVX2 = sizeVX * 2, sizeVY2 = sizeVY * 2,
                 pixelWidth = sizeVX2 + sizeVY2 - ((sizeVX + sizeVY) % 2 == 1 ? 4 : 0);
-        // To move one x+ in voxels is x + 2, y + 2 in pixels.
-        // To move one y+ in voxels is x + 2, y - 2 in pixels.
+        // To move one x+ in voxels is x + 2, y - 2 in pixels.
+        // To move one x- in voxels is x - 2, y + 2 in pixels.
+        // To move one y+ in voxels is x + 2, y + 2 in pixels.
+        // To move one y- in voxels is x - 2, y - 2 in pixels.
         // To move one z+ in voxels is y + 4 in pixels.
+        // To move one z- in voxels is y - 4 in pixels.
         for (int px = 0; px < pixelWidth; px += 4) {
             final boolean rightSide = px + 2 > sizeVY2, leftSide = !rightSide;
-            final int bottomPY = Math.abs(sizeVY2 - 2 - px),
-                    topPY = Math.abs(sizeVY2 - 2) + // black space at the bottom from the first column
+            final int bottomPY = Math.abs(sizeVX2 - 2 - px),
+                    topPY = Math.abs(sizeVX2 - 2) + // black space at the bottom from the first column
                             (sizeVZ - 1) * 4 + // height of model
-                            sizeVX2 - Math.abs(sizeVX2 - 2 - px);
+                            sizeVY2 - Math.abs(sizeVY2 - 2 - px);
 
             // Begin drawing bottom row triangles
             renderer.drawLeftTriangle(px, bottomPY - 4, Color.rgba8888(Color.OLIVE));
             renderer.drawRightTriangle(px + 2, bottomPY - 4, Color.rgba8888(Color.OLIVE));
-            if (px < sizeVY2 - 2) {
+            if (px < sizeVX2 - 2) {
                 renderer.drawLeftTriangle(px + 2, bottomPY - 6, Color.rgba8888(Color.PURPLE));
-            } else if (px > sizeVY2) {
+            } else if (px > sizeVX2) {
                 renderer.drawRightTriangle(px, bottomPY - 6, Color.rgba8888(Color.PURPLE));
-            } else if (sizeVY % 2 == 0) {
+            } else if (sizeVX % 2 == 0) {
                 result = model.at(0, 0, 0);
                 if (result != 0) {
                     renderer.drawRightTriangle(px, bottomPY - 6, color.rightFace(result)); // Very bottom
@@ -150,8 +153,8 @@ public class SimpleDraw {
             // Begin drawing main bulk of model
             for (int py = bottomPY - 4; py <= topPY; py += 4) {
                 final boolean topSide = py > bottomPY + (sizeVZ - 1) * 4, bottomSide = !topSide;
-                final int startVX = rightSide ? px / 2 - sizeVY + 1 : 0, // TODO: Fix this to work up top
-                        startVY = leftSide ? px / 2 : sizeVY - 1, // TODO: Fix this to work up top
+                final int startVX = px / 2 < sizeVX ? px / 2 : sizeVX - 1, // TODO: Fix this to work up top
+                        startVY = px / 2 < sizeVX ? 0 : px / 2 - sizeVX + 1, // TODO: Fix this to work up top
                         startVZ = bottomSide ? (py - bottomPY) / 4 : sizeVZ - 1;
 
                 if (bottomSide) {
