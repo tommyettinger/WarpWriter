@@ -182,29 +182,35 @@ public class SimpleDraw {
                         // x, y+, z = Back right
 
                         // OK here goes:
-//                        // x, y-, z+ = Above front left
-//                        if ((!left || !topLeft) && vy > 0 && vz < sizeVZ - 1) {
-//                            result = model.at(vx, vy - 1, vz + 1);
-//                            if (result != 0) {
-//                                if (!topLeft) {
-//                                    renderer.drawLeftTriangle(px, py, color.rightFace(result));
-//                                    topLeft = true;
-//                                }
-//                                if (!left) {
-//                                    renderer.drawRightTriangle(px, py - 2, color.rightFace(result));
-//                                    left = true;
-//                                }
-//                            }
-//                        }
-//
-//                        // x-, y, z+ = Above front right
-//                        if (!topRight && vx > 0 && vz < sizeVZ - 1) {
-//                            result = model.at(vx - 1, vy, vz + 1);
-//                            if (result != 0) {
-//                                renderer.drawRightTriangle(px + 2, py, color.leftFace(result));
-//                                topRight = true;
-//                            }
-//                        }
+                        // x, y-, z+ = Above front left
+                        if ((!left || !topLeft) && vy > 0 && vz < sizeVZ - 1) {
+                            result = model.at(vx, vy - 1, vz + 1);
+                            if (result != 0) {
+                                if (!topLeft) {
+                                    renderer.drawLeftTriangle(px, py, color.rightFace(result));
+                                    topLeft = true;
+                                }
+                                if (!left) {
+                                    renderer.drawRightTriangle(px, py - 2, color.rightFace(result));
+                                    left = true;
+                                }
+                            }
+                        }
+
+                        // x-, y, z+ = Above front right
+                        if ((!topRight || !right) && vx > 0 && vz < sizeVZ - 1) {
+                            result = model.at(vx - 1, vy, vz + 1);
+                            if (!topRight) {
+                                if (result != 0) {
+                                    renderer.drawRightTriangle(px + 2, py, color.leftFace(result));
+                                    topRight = true;
+                                }
+                            }
+                            if (!right) {
+                                renderer.drawLeftTriangle(px + 2, py - 2, color.leftFace(result));
+                                right = true;
+                            }
+                        }
 
                         // x, y, z+ = Above
                         if ((!topLeft || !topRight) && vz < sizeVZ - 1) {
@@ -278,7 +284,7 @@ public class SimpleDraw {
                                     topRight = true;
                                 }
                                 if (!right) {
-                                    renderer.drawLeftTriangle(px + 2, py - 2, flash(color.leftFace(result)));
+                                    renderer.drawLeftTriangle(px + 2, py - 2, color.leftFace(result));
                                     right = true;
                                 }
                             }
