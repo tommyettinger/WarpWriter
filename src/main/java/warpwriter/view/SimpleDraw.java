@@ -136,7 +136,7 @@ public class SimpleDraw {
         for (int px = 0; px < pixelWidth; px += 4) {
             final boolean rightSide = px + 2 > sizeVY2, leftSide = !rightSide;
             final int bottomPY = Math.abs(sizeVX2 - 2 - px),
-                    topPY = Math.abs(sizeVX2 - 2) + // black space at the bottom from the first column
+                    topPY = sizeVX2 - 2 + // black space at the bottom from the first column
                             (sizeVZ - 1) * 4 + // height of model
                             sizeVY2 - Math.abs(sizeVY2 - 2 - px);
 
@@ -158,8 +158,13 @@ public class SimpleDraw {
             // Begin drawing main bulk of model
             for (int py = bottomPY - 4; py <= topPY; py += 4) {
                 final boolean topSide = py > bottomPY + (sizeVZ - 1) * 4, bottomSide = !topSide;
-                final int startVX = px < sizeVX2 ? sizeVX - 1 - px / 2 : 0, // TODO: Fix this to work up top
-                        startVY = px < sizeVX2 ? 0 : px / 2 - sizeVX + 1, // TODO: Fix this to work up top
+                final double pow = Math.pow(px / 2 - sizeVX, 2);
+                final int startVX = bottomSide ? px < sizeVX2 ? sizeVX - 1 - px / 2 : 0
+                        : (int) Math.sqrt(pow + Math.pow(py / 4 - sizeVZ, 2)),
+                        startVY = bottomSide ? px < sizeVX2 ? 0 : px / 2 - sizeVX + 1
+                                : (int) Math.sqrt(pow + Math.pow(
+                                sizeVY - (topPY - py) / 2
+                                , 2)),
                         startVZ = bottomSide ? (py - bottomPY) / 4 : sizeVZ - 1;
 
                 boolean left = false,
@@ -170,138 +175,134 @@ public class SimpleDraw {
                      vx < sizeVX && vy < sizeVY && vz >= 0;
                      vx++, vy++, vz--) {
 
-                    if (bottomSide) {
-                        // Order to check
-                        // x, y-, z+ = Above front left
-                        // x-, y, z+ = Above front right
-                        // x, y, z+ = Above
-                        // x, y-, z = Front left
-                        // x-, y, z = Front right
-                        // x, y, z  = Center
-                        // x+, y, z = Back left
-                        // x, y+, z = Back right
+                    // Order to check
+                    // x, y-, z+ = Above front left
+                    // x-, y, z+ = Above front right
+                    // x, y, z+ = Above
+                    // x, y-, z = Front left
+                    // x-, y, z = Front right
+                    // x, y, z  = Center
+                    // x+, y, z = Back left
+                    // x, y+, z = Back right
 
-                        // OK here goes:
-                        // x, y-, z+ = Above front left
-                        if ((!left || !topLeft) && vy > 0 && vz < sizeVZ - 1) {
-                            result = model.at(vx, vy - 1, vz + 1);
-                            if (result != 0) {
-                                if (!topLeft) {
-                                    renderer.drawLeftTriangle(px, py, color.rightFace(result));
-                                    topLeft = true;
-                                }
-                                if (!left) {
-                                    renderer.drawRightTriangle(px, py - 2, color.rightFace(result));
-                                    left = true;
-                                }
+                    // OK here goes:
+                    // x, y-, z+ = Above front left
+                    if ((!left || !topLeft) && vy > 0 && vz < sizeVZ - 1) {
+                        result = model.at(vx, vy - 1, vz + 1);
+                        if (result != 0) {
+                            if (!topLeft) {
+                                renderer.drawLeftTriangle(px, py, color.rightFace(result));
+                                topLeft = true;
                             }
-                        }
-
-                        // x-, y, z+ = Above front right
-                        if ((!topRight || !right) && vx > 0 && vz < sizeVZ - 1) {
-                            result = model.at(vx - 1, vy, vz + 1);
-                            if (result != 0) {
-                                if (!topRight) {
-                                    if (result != 0) {
-                                        renderer.drawRightTriangle(px + 2, py, color.leftFace(result));
-                                        topRight = true;
-                                    }
-                                }
-                                if (!right) {
-                                    renderer.drawLeftTriangle(px + 2, py - 2, color.leftFace(result));
-                                    right = true;
-                                }
-                            }
-                        }
-
-                        // x, y, z+ = Above
-                        if ((!topLeft || !topRight) && vz < sizeVZ - 1) {
-                            result = model.at(vx, vy, vz + 1);
-                            if (result != 0) {
-                                if (!topLeft) {
-                                    renderer.drawLeftTriangle(px, py, color.leftFace(result));
-                                    topLeft = true;
-                                }
-                                if (!topRight) {
-                                    renderer.drawRightTriangle(px + 2, py, color.rightFace(result));
-                                    topRight = true;
-                                }
-                            }
-                        }
-
-                        // x, y-, z = Front left
-                        if (!left && vy > 0) {
-                            result = model.at(vx, vy - 1, vz);
-                            if (result != 0) {
-                                renderer.drawRightTriangle(px, py - 2, color.topFace(result));
+                            if (!left) {
+                                renderer.drawRightTriangle(px, py - 2, color.rightFace(result));
                                 left = true;
                             }
                         }
+                    }
 
-                        // x-, y, z = Front right
-                        if (!right && vx > 0) {
-                            result = model.at(vx - 1, vy, vz);
-                            if (result != 0) {
-                                renderer.drawLeftTriangle(px + 2, py - 2, color.topFace(result));
+                    // x-, y, z+ = Above front right
+                    if ((!topRight || !right) && vx > 0 && vz < sizeVZ - 1) {
+                        result = model.at(vx - 1, vy, vz + 1);
+                        if (result != 0) {
+                            if (!topRight) {
+                                renderer.drawRightTriangle(px + 2, py, color.leftFace(result));
+                                topRight = true;
+                            }
+                            if (!right) {
+                                renderer.drawLeftTriangle(px + 2, py - 2, color.leftFace(result));
                                 right = true;
                             }
                         }
+                    }
 
-                        // x, y, z  = Center
-                        if (left && topLeft && topRight && right) break;
-                        result = model.at(vx, vy, vz);
+                    // x, y, z+ = Above
+                    if ((!topLeft || !topRight) && vz < sizeVZ - 1) {
+                        result = model.at(vx, vy, vz + 1);
                         if (result != 0) {
-                            if (!topLeft)
-                                renderer.drawLeftTriangle(px, py, color.topFace(result));
-                            if (!left)
-                                renderer.drawRightTriangle(px, py - 2, color.leftFace(result));
-                            if (!topRight)
-                                renderer.drawRightTriangle(px + 2, py, color.topFace(result));
-                            if (!right)
-                                renderer.drawLeftTriangle(px + 2, py - 2, color.rightFace(result));
-                            break;
-                        }
-
-                        // x+, y, z = Back left
-                        if ((!left || !topLeft) && vx < sizeVX - 1) {
-                            result = model.at(vx + 1, vy, vz);
-                            if (result != 0) {
-                                if (!topLeft) {
-                                    renderer.drawLeftTriangle(px, py, color.rightFace(result));
-                                    topLeft = true;
-                                }
-                                if (!left) {
-                                    renderer.drawRightTriangle(px, py - 2, color.rightFace(result));
-                                    left = true;
-                                }
+                            if (!topLeft) {
+                                renderer.drawLeftTriangle(px, py, color.leftFace(result));
+                                topLeft = true;
+                            }
+                            if (!topRight) {
+                                renderer.drawRightTriangle(px + 2, py, color.rightFace(result));
+                                topRight = true;
                             }
                         }
+                    }
 
-                        // x, y+, z = Back right
-                        if ((!right || !topRight) && vy < sizeVY - 1) {
-                            result = model.at(vx, vy + 1, vz);
-                            if (result != 0) {
-                                if (!topRight) {
-                                    renderer.drawRightTriangle(px + 2, py, color.leftFace(result));
-                                    topRight = true;
-                                }
-                                if (!right) {
-                                    renderer.drawLeftTriangle(px + 2, py - 2, color.leftFace(result));
-                                    right = true;
-                                }
+                    // x, y-, z = Front left
+                    if (!left && vy > 0) {
+                        result = model.at(vx, vy - 1, vz);
+                        if (result != 0) {
+                            renderer.drawRightTriangle(px, py - 2, color.topFace(result));
+                            left = true;
+                        }
+                    }
+
+                    // x-, y, z = Front right
+                    if (!right && vx > 0) {
+                        result = model.at(vx - 1, vy, vz);
+                        if (result != 0) {
+                            renderer.drawLeftTriangle(px + 2, py - 2, color.topFace(result));
+                            right = true;
+                        }
+                    }
+
+                    // x, y, z  = Center
+                    if (left && topLeft && topRight && right) break;
+                    result = model.at(vx, vy, vz);
+                    if (result != 0) {
+                        if (!topLeft)
+                            renderer.drawLeftTriangle(px, py, color.topFace(result));
+                        if (!left)
+                            renderer.drawRightTriangle(px, py - 2, color.leftFace(result));
+                        if (!topRight)
+                            renderer.drawRightTriangle(px + 2, py, color.topFace(result));
+                        if (!right)
+                            renderer.drawLeftTriangle(px + 2, py - 2, color.rightFace(result));
+                        break;
+                    }
+
+                    // x+, y, z = Back left
+                    if ((!left || !topLeft) && vx < sizeVX - 1) {
+                        result = model.at(vx + 1, vy, vz);
+                        if (result != 0) {
+                            if (!topLeft) {
+                                renderer.drawLeftTriangle(px, py, color.rightFace(result));
+                                topLeft = true;
+                            }
+                            if (!left) {
+                                renderer.drawRightTriangle(px, py - 2, color.rightFace(result));
+                                left = true;
+                            }
+                        }
+                    }
+
+                    // x, y+, z = Back right
+                    if ((!right || !topRight) && vy < sizeVY - 1) {
+                        result = model.at(vx, vy + 1, vz);
+                        if (result != 0) {
+                            if (!topRight) {
+                                renderer.drawRightTriangle(px + 2, py, color.leftFace(result));
+                                topRight = true;
+                            }
+                            if (!right) {
+                                renderer.drawLeftTriangle(px + 2, py - 2, color.leftFace(result));
+                                right = true;
                             }
                         }
                     }
 
                     // Debugging to show something instead of transparent
-                    if (!topLeft)
-                        renderer.drawLeftTriangle(px, py, Color.rgba8888(Color.GREEN));
-                    if (!left)
-                        renderer.drawRightTriangle(px, py - 2, Color.rgba8888(Color.BLUE));
-                    if (!topRight)
-                        renderer.drawRightTriangle(px + 2, py, Color.rgba8888(Color.YELLOW));
-                    if (!right)
-                        renderer.drawLeftTriangle(px + 2, py - 2, Color.rgba8888(Color.RED));
+//                    if (!topLeft)
+//                        renderer.drawLeftTriangle(px, py, Color.rgba8888(Color.GREEN));
+//                    if (!left)
+//                        renderer.drawRightTriangle(px, py - 2, Color.rgba8888(Color.BLUE));
+//                    if (!topRight)
+//                        renderer.drawRightTriangle(px + 2, py, Color.rgba8888(Color.YELLOW));
+//                    if (!right)
+//                        renderer.drawLeftTriangle(px + 2, py - 2, Color.rgba8888(Color.RED));
                     // Finish debugging
                 }
             }
