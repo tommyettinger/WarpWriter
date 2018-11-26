@@ -158,7 +158,7 @@ public class SimpleDraw {
             // Begin drawing main bulk of model
             for (int py = bottomPY - 4; py <= topPY; py += 4) {
                 final boolean topSide = py > bottomPY + (sizeVZ - 1) * 4, bottomSide = !topSide;
-                final int startVX = px < sizeVX2 ? px / 2 : sizeVX - 1, // TODO: Fix this to work up top
+                final int startVX = px < sizeVX2 ? sizeVX - 1 - px / 2 : sizeVX - 1, // TODO: Fix this to work up top
                         startVY = px < sizeVX2 ? 0 : px / 2 - sizeVX + 1, // TODO: Fix this to work up top
                         startVZ = bottomSide ? (py - bottomPY) / 4 : sizeVZ - 1;
 
