@@ -160,11 +160,11 @@ public class SimpleDraw {
                 final boolean topSide = py > bottomPY + (sizeVZ - 1) * 4, bottomSide = !topSide;
                 final double pow = Math.pow(px / 2 - sizeVX, 2);
                 // Getting help from: http://clintbellanger.net/articles/isometric_math/
-                // map.x = (screen.x / TILE_WIDTH_HALF + screen.y / TILE_HEIGHT_HALF) /2;
-                // map.y = (screen.y / TILE_HEIGHT_HALF -(screen.x / TILE_WIDTH_HALF)) /2;
+                // map.x = (screen.x / TILE_WIDTH_HALF - screen.y / TILE_HEIGHT_HALF) /2;
+                // map.y = (screen.y / TILE_HEIGHT_HALF - (screen.x / TILE_WIDTH_HALF)) /2;
                 final int screenY = py - bottomPY - (sizeVZ - 1) * 4,
                         startVX = bottomSide ? px < sizeVX2 ? sizeVX - 1 - px / 2 : 0
-                        : (int) ((px + screenY / 1.5) / 2),
+                        : (int) ((px - screenY / 1.5) / 2),
                         startVY = bottomSide ? px < sizeVX2 ? 0 : px / 2 - sizeVX + 1
                                 : (int) ((screenY / 1.5 - px) / 2),
                         startVZ = bottomSide ? (py - bottomPY) / 4 : sizeVZ - 1;
