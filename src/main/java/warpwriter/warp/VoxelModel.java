@@ -157,15 +157,15 @@ public class VoxelModel implements IModel {
      */
     @Override
     public byte at(int x, int y, int z) {
-//        x = startX() + stepX() * x;
-//        y = startY() + stepY() * y;
-//        z = startZ() + stepZ() * z;
-        final int index = index(x, y, z);
+        temp[flipBits(rotation()[0])] = startX() + stepX() * x;
+        temp[flipBits(rotation()[1])] = startY() + stepY() * y;
+        temp[flipBits(rotation()[2])] = startZ() + stepZ() * z;
+        final int index = index(temp[0], temp[1], temp[2]);
         return index < 0 || index >= voxels().length ? 0 : voxels()[index];
     }
 
     public int index(int x, int y, int z) {
-        return sizeZ() * (sizeY() * x + y) + z;
+        return sizes()[2] * (sizes()[1] * x + y) + z;
     }
 
     public int x(int index) {
