@@ -38,7 +38,7 @@ public class WarpTest extends ApplicationAdapter {
     private SpriteBatchVoxelRenderer batchRenderer;
     protected VoxelColor voxelColor;
     protected int angle = 2;
-    protected boolean diagonal = false;
+    protected boolean diagonal = false, outline = true;
     protected byte[][][] box;
 
     @Override
@@ -82,12 +82,10 @@ public class WarpTest extends ApplicationAdapter {
         batch.setProjectionMatrix(worldView.getCamera().combined);
         batch.begin();
         if(diagonal) {
-            WarpDraw.draw45Outline(model, batchRenderer);
-            WarpDraw.draw45(model, batchRenderer, voxelColor);
+            WarpDraw.simpleDraw45(model, batchRenderer, voxelColor, outline);
         }
         else {
-            WarpDraw.drawOutline(model, batchRenderer);
-            WarpDraw.draw(model, batchRenderer, voxelColor);
+            WarpDraw.simpleDraw(model, batchRenderer, voxelColor, outline);
         }
         batch.setColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
         batch.end();
@@ -240,6 +238,9 @@ public class WarpTest extends ApplicationAdapter {
                         break;
                     case Input.Keys.F:
                         diagonal = !diagonal;
+                        break;
+                    case  Input.Keys.E: // edges
+                        outline = !outline;
                         break;
                     case Input.Keys.R: // reset
                         model.reset();
