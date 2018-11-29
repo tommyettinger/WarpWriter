@@ -143,17 +143,20 @@ public class SimpleDraw {
             // Begin drawing bottom row triangles
             renderer.drawLeftTriangle(px, bottomPY - 4, Color.rgba8888(Color.OLIVE));
             renderer.drawRightTriangle(px + 2, bottomPY - 4, Color.rgba8888(Color.OLIVE));
-            if (px < sizeVX2 - 2) {
+            if (px < sizeVX2 - 2) { // Left side of model
                 result = model.at(px / 2, 0, 0);
                 if (result != 0) {
                     renderer.drawLeftTriangle(px + 2, bottomPY - 6, color.leftFace(result));
                 }
-            } else if (px > sizeVX2) {
-                renderer.drawRightTriangle(px, bottomPY - 6, Color.rgba8888(Color.PURPLE));
-            } else if (sizeVX % 2 == 0) {
+            } else if (px > sizeVX2) { // Right side of model
+                result = model.at(0, px / 2 - sizeVX + 1, 0);
+                if (result != 0) {
+                    renderer.drawRightTriangle(px, bottomPY - 6, color.rightFace(result));
+                }
+            } else if (sizeVX % 2 == 0) { // Very bottom
                 result = model.at(0, 0, 0);
                 if (result != 0) {
-                    renderer.drawRightTriangle(px, bottomPY - 6, color.rightFace(result)); // Very bottom
+                    renderer.drawRightTriangle(px, bottomPY - 6, color.rightFace(result));
                 }
             }
             // Finish drawing bottom row triangles
