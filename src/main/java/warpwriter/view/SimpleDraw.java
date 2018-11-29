@@ -296,10 +296,10 @@ public class SimpleDraw {
 //                        renderer.drawLeftTriangle(px, py, Color.rgba8888(Color.GREEN));
 //                    if (!left)
 //                        renderer.drawRightTriangle(px, py - 2, Color.rgba8888(Color.BLUE));
-                    if (!topRight)
-                        renderer.drawRightTriangle(px + 2, py, Color.rgba8888(Color.YELLOW));
-                    if (!right)
-                        renderer.drawLeftTriangle(px + 2, py - 2, Color.rgba8888(Color.RED));
+//                    if (!topRight)
+//                        renderer.drawRightTriangle(px + 2, py, Color.rgba8888(Color.YELLOW));
+//                    if (!right)
+//                        renderer.drawLeftTriangle(px + 2, py - 2, Color.rgba8888(Color.RED));
                     // Finish debugging
                 }
             }
@@ -319,8 +319,8 @@ public class SimpleDraw {
             }
             // Finish drawing top triangles.
 
-            // Drawing right edge (only for when sizeY is odd numbered)
-            if (sizeVY % 2 == 1) {
+            // Drawing right edge (only for when sizeVX + sizeVY is odd numbered)
+            if ((sizeVX + sizeVY) % 2 == 1) {
                 final int vx = 0, vy = sizeVY - 1,
                         bottom = Math.abs(sizeVX2 - 2 - pixelWidth);
                 result = model.at(vx, vy, 0);
