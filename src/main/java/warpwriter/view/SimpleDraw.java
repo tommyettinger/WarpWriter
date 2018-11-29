@@ -141,22 +141,46 @@ public class SimpleDraw {
                             sizeVY2 - Math.abs(sizeVY2 - 2 - px);
 
             // Begin drawing bottom row triangles
-            renderer.drawLeftTriangle(px, bottomPY - 4, Color.rgba8888(Color.OLIVE));
-            renderer.drawRightTriangle(px + 2, bottomPY - 4, Color.rgba8888(Color.OLIVE));
             if (px < sizeVX2 - 2) { // Left side of model
                 result = model.at(px / 2, 0, 0);
                 if (result != 0) {
                     renderer.drawLeftTriangle(px + 2, bottomPY - 6, color.leftFace(result));
+                    renderer.drawLeftTriangle(px, bottomPY - 4, color.leftFace(result));
+                    renderer.drawRightTriangle(px + 2, bottomPY - 4, color.leftFace(result));
+                } else if (px / 2 < sizeVX2 - 1) {
+                    result = model.at(px / 2 + 1, 0, 0);
+                    if (result != 0) {
+                        renderer.drawLeftTriangle(px, bottomPY - 4, color.rightFace(result));
+                    }
                 }
-            } else if (px > sizeVX2) { // Right side of model
+            } else if (px > sizeVX2 - 2) { // Right side of model
                 result = model.at(0, px / 2 - sizeVX + 1, 0);
                 if (result != 0) {
                     renderer.drawRightTriangle(px, bottomPY - 6, color.rightFace(result));
+                    renderer.drawLeftTriangle(px, bottomPY - 4, color.rightFace(result));
+                    renderer.drawRightTriangle(px + 2, bottomPY - 4, color.rightFace(result));
+                } else if (px / 2 - sizeVX + 1 < sizeVY - 1) {
+                    result = model.at(0, px / 2 - sizeVX + 2, 0);
+                    if (result != 0) {
+                        renderer.drawRightTriangle(px + 2, bottomPY - 4, color.leftFace(result));
+                    }
                 }
-            } else if (sizeVX % 2 == 0) { // Very bottom
+            } else { // Very bottom
                 result = model.at(0, 0, 0);
                 if (result != 0) {
-                    renderer.drawRightTriangle(px, bottomPY - 6, color.rightFace(result));
+                    renderer.drawLeftTriangle(px, bottomPY - 4, color.leftFace(result));
+                    renderer.drawRightTriangle(px + 2, bottomPY - 4, color.rightFace(result));
+                    if (sizeVX % 2 == 0)
+                        renderer.drawRightTriangle(px, bottomPY - 6, color.rightFace(result));
+                } else {
+                    result = model.at(px / 2 + 1, 0, 0);
+                    if (result != 0) {
+                        renderer.drawLeftTriangle(px, bottomPY - 4, color.rightFace(result));
+                    }
+                    result = model.at(0, px / 2 - sizeVX + 2, 0);
+                    if (result != 0) {
+                        renderer.drawRightTriangle(px + 2, bottomPY - 4, color.leftFace(result));
+                    }
                 }
             }
             // Finish drawing bottom row triangles
