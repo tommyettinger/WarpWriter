@@ -158,10 +158,9 @@ public class SimpleDraw {
             // Begin drawing main bulk of model
             for (int py = bottomPY - 4; py <= topPY; py += 4) {
                 final boolean topSide = py > bottomPY + (sizeVZ - 1) * 4, bottomSide = !topSide;
-                final double pow = Math.pow(px / 2 - sizeVX, 2);
-                final int addative = (py - bottomPY) / 4 - sizeVZ + 1,
-                        startVX = (px < sizeVX2 ? sizeVX - 1 - px / 2 : 0) + (topSide ? addative : 0),
-                        startVY = (px < sizeVX2 ? 0 : px / 2 - sizeVX + 1) + (topSide ? addative : 0),
+                final int additive = (py - bottomPY) / 4 - sizeVZ + 1,
+                        startVX = (px < sizeVX2 ? sizeVX - 1 - px / 2 : 0) + (topSide ? additive : 0),
+                        startVY = (px < sizeVX2 ? 0 : px / 2 - sizeVX + 1) + (topSide ? additive : 0),
                         startVZ = bottomSide ? (py - bottomPY) / 4 : sizeVZ - 1;
 
                 boolean left = false,
