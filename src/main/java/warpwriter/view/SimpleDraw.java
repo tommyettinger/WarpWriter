@@ -144,7 +144,10 @@ public class SimpleDraw {
             renderer.drawLeftTriangle(px, bottomPY - 4, Color.rgba8888(Color.OLIVE));
             renderer.drawRightTriangle(px + 2, bottomPY - 4, Color.rgba8888(Color.OLIVE));
             if (px < sizeVX2 - 2) {
-                renderer.drawLeftTriangle(px + 2, bottomPY - 6, Color.rgba8888(Color.PURPLE));
+                result = model.at(px / 2, 0, 0);
+                if (result != 0) {
+                    renderer.drawLeftTriangle(px + 2, bottomPY - 6, color.leftFace(result));
+                }
             } else if (px > sizeVX2) {
                 renderer.drawRightTriangle(px, bottomPY - 6, Color.rgba8888(Color.PURPLE));
             } else if (sizeVX % 2 == 0) {
