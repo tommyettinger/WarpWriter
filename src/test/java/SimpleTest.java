@@ -186,9 +186,6 @@ public class SimpleTest extends ApplicationAdapter {
                     case Input.Keys.H:
                         voxelColor.set(voxelColor.direction().clock());
                         break;
-                    case Input.Keys.Y:
-                        voxelColor.set(!voxelColor.darkSide());
-                        break;
                     case Input.Keys.T: // try again
                         turnModel.turner().reset();
                         break;

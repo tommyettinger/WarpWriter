@@ -233,9 +233,6 @@ public class WarpTest extends ApplicationAdapter {
                     case Input.Keys.S:
                         voxelColor.set(voxelColor.direction().clock());
                         break;
-                    case Input.Keys.D:
-                        voxelColor.set(!voxelColor.darkSide());
-                        break;
                     case Input.Keys.F:
                         diagonal = !diagonal;
                         break;

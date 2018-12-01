@@ -243,20 +243,6 @@ public class VoxelColor implements IVoxelColor {
         return this;
     }
 
-    /**
-     * Your feeble skills are no match for the power of the Dark Side.
-     */
-    protected boolean darkSide = false;
-
-    public boolean darkSide() {
-        return darkSide;
-    }
-
-    public VoxelColor set(boolean darkSide) {
-        this.darkSide = darkSide;
-        return this;
-    }
-
     public interface ITwilight {
         int dark(byte voxel);
 
