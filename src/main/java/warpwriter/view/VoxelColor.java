@@ -324,33 +324,69 @@ public class VoxelColor implements IVoxelColor {
 
     @Override
     public int topFace(byte voxel) {
-        return lightDirection.isHorizontal() ? twilight.twilight(voxel)
-                : lightDirection.isAbove() ? twilight.bright(voxel)
-                : lightDirection.isBelow() ? twilight.dark(voxel)
-                : twilight.dim(voxel);
+        switch (lightDirection) {
+            case ABOVE_RIGHT:
+            case ABOVE_LEFT:
+                return twilight.bright(voxel);
+            case RIGHT_BELOW:
+            case LEFT_BELOW:
+                return twilight.dim(voxel);
+            case BELOW_RIGHT:
+            case BELOW_LEFT:
+                return twilight.dark(voxel);
+            default:
+                return twilight.twilight(voxel);
+        }
     }
 
     @Override
     public int bottomFace(byte voxel) {
-        return lightDirection.isHorizontal() ? twilight.twilight(voxel)
-                : lightDirection.isBelow() ? twilight.bright(voxel)
-                : lightDirection.isAbove() ? twilight.dark(voxel)
-                : twilight.dim(voxel);
+        switch (lightDirection) {
+            case BELOW_LEFT:
+            case BELOW_RIGHT:
+                return twilight.bright(voxel);
+            case LEFT_ABOVE:
+            case RIGHT_ABOVE:
+                return twilight.dim(voxel);
+            case ABOVE_LEFT:
+            case ABOVE_RIGHT:
+                return twilight.dark(voxel);
+            default:
+                return twilight.twilight(voxel);
+        }
     }
 
     @Override
     public int leftFace(byte voxel) {
-        return lightDirection == LightDirection.LEFT_ABOVE || lightDirection == LightDirection.LEFT_BELOW ? twilight.bright(voxel)
-                : darkSide ?
-                lightDirection.isLeft() ? twilight.dim(voxel) : twilight.dark(voxel)
-                : lightDirection.isLeft() ? twilight.twilight(voxel) : twilight.dim(voxel);
+        switch (lightDirection) {
+            case LEFT_ABOVE:
+            case LEFT_BELOW:
+                return twilight.bright(voxel);
+            case ABOVE_RIGHT:
+            case BELOW_RIGHT:
+                return twilight.dim(voxel);
+            case RIGHT_ABOVE:
+            case RIGHT_BELOW:
+                return twilight.dark(voxel);
+            default:
+                return twilight.twilight(voxel);
+        }
     }
 
     @Override
     public int rightFace(byte voxel) {
-        return lightDirection == LightDirection.RIGHT_ABOVE || lightDirection == LightDirection.RIGHT_BELOW ? twilight.bright(voxel)
-                : darkSide ?
-                lightDirection.isRight() ? twilight.dim(voxel) : twilight.dark(voxel)
-                : lightDirection.isRight() ? twilight.twilight(voxel) : twilight.dim(voxel);
+        switch (lightDirection) {
+            case RIGHT_ABOVE:
+            case RIGHT_BELOW:
+                return twilight.bright(voxel);
+            case ABOVE_LEFT:
+            case BELOW_LEFT:
+                return twilight.dim(voxel);
+            case LEFT_ABOVE:
+            case LEFT_BELOW:
+                return twilight.dark(voxel);
+            default:
+                return twilight.twilight(voxel);
+        }
     }
 }
