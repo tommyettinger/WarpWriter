@@ -336,15 +336,17 @@ public class SimpleDraw {
                         }
                     }
 
-                    // Debugging to show something instead of transparent
+                    // Debugging
+                    if (startVX == 8 && startVY == 0 && startVZ == 3) {
 //                    if (!topLeft)
-//                        renderer.drawLeftTriangle(px, py, Color.rgba8888(Color.GREEN));
+                        renderer.drawLeftTriangle(px, py, flash());
 //                    if (!left)
-//                        renderer.drawRightTriangle(px, py - 2, Color.rgba8888(Color.BLUE));
+                        renderer.drawRightTriangle(px, py - 2, flash());
 //                    if (!topRight)
-//                        renderer.drawRightTriangle(px + 2, py, Color.rgba8888(Color.YELLOW));
+                        renderer.drawRightTriangle(px + 2, py, flash());
 //                    if (!right)
-//                        renderer.drawLeftTriangle(px + 2, py - 2, Color.rgba8888(Color.RED));
+                        renderer.drawLeftTriangle(px + 2, py - 2, flash());
+                    }
                     // Finish debugging
                 }
             }
@@ -410,5 +412,9 @@ public class SimpleDraw {
             time = now;
         }
         return flash ? Color.rgba8888(Color.WHITE) : color;
+    }
+
+    static int flash() {
+        return flash(Color.rgba8888(Color.CLEAR));
     }
 }
