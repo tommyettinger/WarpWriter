@@ -147,18 +147,10 @@ public class SimpleDraw {
                     renderer.drawLeftTriangle(px + 2, bottomPY - 6, color.leftFace(result));
                     renderer.drawLeftTriangle(px, bottomPY - 4, color.leftFace(result));
                     renderer.drawRightTriangle(px + 2, bottomPY - 4, color.leftFace(result));
-                } else {
-                    if (sizeVY > 1) {
-                        result = model.at(px / 2, 1, 0);
-                        if (result != 0) {
-                            renderer.drawRightTriangle(px + 2, bottomPY - 4, color.leftFace(result));
-                        }
-                    }
-                    if (px / 2 < sizeVX2 - 1) {
-                        result = model.at(px / 2 + 1, 0, 0);
-                        if (result != 0) {
-                            renderer.drawLeftTriangle(px, bottomPY - 4, color.rightFace(result));
-                        }
+                } else if (px / 2 < sizeVX2 - 1) {
+                    result = model.at(px / 2 + 1, 0, 0);
+                    if (result != 0) {
+                        renderer.drawLeftTriangle(px, bottomPY - 4, color.rightFace(result));
                     }
                 }
             } else if (px > sizeVX2 - 2) { // Right side of model
@@ -167,12 +159,10 @@ public class SimpleDraw {
                     renderer.drawRightTriangle(px, bottomPY - 6, color.rightFace(result));
                     renderer.drawLeftTriangle(px, bottomPY - 4, color.rightFace(result));
                     renderer.drawRightTriangle(px + 2, bottomPY - 4, color.rightFace(result));
-                } else {
-                    if (px / 2 - sizeVX + 1 < sizeVY - 1) {
-                        result = model.at(0, px / 2 - sizeVX + 2, 0);
-                        if (result != 0) {
-                            renderer.drawRightTriangle(px + 2, bottomPY - 4, color.leftFace(result));
-                        }
+                } else if (px / 2 - sizeVX + 1 < sizeVY - 1) {
+                    result = model.at(0, px / 2 - sizeVX + 2, 0);
+                    if (result != 0) {
+                        renderer.drawRightTriangle(px + 2, bottomPY - 4, color.leftFace(result));
                     }
                 }
             } else { // Very bottom
