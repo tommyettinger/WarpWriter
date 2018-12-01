@@ -336,17 +336,33 @@ public class SimpleDraw {
                         }
                     }
 
-                    // Debugging
-                    if (startVX == 8 && startVY == 0 && startVZ == 3) {
-//                    if (!topLeft)
-                        renderer.drawLeftTriangle(px, py, flash());
-//                    if (!left)
-                        renderer.drawRightTriangle(px, py - 2, flash());
-//                    if (!topRight)
-                        renderer.drawRightTriangle(px + 2, py, flash());
-//                    if (!right)
-                        renderer.drawLeftTriangle(px + 2, py - 2, flash());
+                    // x+, y+ z = Back center
+                    if ((!topLeft || !topRight) && vx < sizeVX - 1 && vy < sizeVY - 1) {
+                        result = model.at(vx + 1, vy + 1, vz);
+                        if (result != 0) {
+                            if (!topRight) {
+                                renderer.drawRightTriangle(px + 2, py, color.rightFace(result));
+                                topRight = true;
+                            }
+                            if (!topLeft) {
+                                renderer.drawLeftTriangle(px, py, color.leftFace(result));
+                                topLeft = true;
+                            }
+                        }
                     }
+
+                    // Debugging
+//                    if (startVX == 8 && startVY == 0 && startVZ == 3) {
+////                        Gdx.app.log("debug", "Coord: " + vx + ", " + vy + ", " + vz);
+////                    if (!topLeft)
+//                        renderer.drawLeftTriangle(px, py, flash());
+////                    if (!left)
+//                        renderer.drawRightTriangle(px, py - 2, flash());
+////                    if (!topRight)
+//                        renderer.drawRightTriangle(px + 2, py, flash());
+////                    if (!right)
+//                        renderer.drawLeftTriangle(px + 2, py - 2, flash());
+//                    }
                     // Finish debugging
                 }
             }
