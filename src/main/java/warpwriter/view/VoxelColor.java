@@ -1,5 +1,6 @@
 package warpwriter.view;
 
+import com.badlogic.gdx.graphics.Color;
 import warpwriter.Coloring;
 
 /**
@@ -264,9 +265,29 @@ public class VoxelColor implements IVoxelColor {
         int twilight(byte voxel);
 
         int bright(byte voxel);
+
+        int light(int brightness, byte voxel);
     }
 
-    public static final ITwilight RinsedTwilight = new ITwilight() {
+    public static abstract class Twilight implements ITwilight {
+        @Override
+        public int light(int brightness, byte voxel) {
+            if (voxel == 0) return Color.rgba8888(Color.CLEAR);
+            switch (brightness) {
+                case 0:
+                    return dark(voxel);
+                case 1:
+                    return dim(voxel);
+                case 2:
+                    return twilight(voxel);
+                case 3:
+                    return bright(voxel);
+            }
+            return brightness > 3 ? Color.rgba8888(Color.WHITE) : Color.rgba8888(Color.BLACK);
+        }
+    }
+
+    public static final ITwilight RinsedTwilight = new Twilight() {
         protected int[] palette = Coloring.RINSED;
 
         @Override
