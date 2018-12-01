@@ -168,12 +168,6 @@ public class SimpleDraw {
                     renderer.drawLeftTriangle(px, bottomPY - 4, color.rightFace(result));
                     renderer.drawRightTriangle(px + 2, bottomPY - 4, color.rightFace(result));
                 } else {
-                    if (sizeVX > 1) {
-                        result = model.at(1, px / 2 - sizeVX + 2, 0);
-                        if (result != 0) {
-                            renderer.drawLeftTriangle(px, bottomPY - 4, color.rightFace(result));
-                        }
-                    }
                     if (px / 2 - sizeVX + 1 < sizeVY - 1) {
                         result = model.at(0, px / 2 - sizeVX + 2, 0);
                         if (result != 0) {
@@ -226,6 +220,8 @@ public class SimpleDraw {
                     // x, y, z  = Center
                     // x+, y, z = Back left
                     // x, y+, z = Back right
+                    // x+, y, z- = Below left
+                    // x, y+ z- = Below right
 
                     // OK here goes:
                     // x, y-, z+ = Above front left
