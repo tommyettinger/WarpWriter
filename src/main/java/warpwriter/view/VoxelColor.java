@@ -261,13 +261,17 @@ public class VoxelColor implements IVoxelColor {
     @Override
     public int topFace(byte voxel) {
         return lightDirection.isHorizontal() ? twilight.twilight(voxel)
-                : lightDirection.isAbove() ? twilight.bright(voxel) : twilight.dim(voxel);
+                : lightDirection.isAbove() ? twilight.bright(voxel)
+                : lightDirection.isBelow() ? twilight.dark(voxel)
+                : twilight.dim(voxel);
     }
 
     @Override
     public int bottomFace(byte voxel) {
         return lightDirection.isHorizontal() ? twilight.twilight(voxel)
-                : lightDirection.isBelow() ? twilight.bright(voxel) : twilight.dim(voxel);
+                : lightDirection.isBelow() ? twilight.bright(voxel)
+                : lightDirection.isAbove() ? twilight.dark(voxel)
+                : twilight.dim(voxel);
     }
 
     @Override
