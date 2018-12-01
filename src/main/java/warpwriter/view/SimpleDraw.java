@@ -229,7 +229,7 @@ public class SimpleDraw {
 
                     // OK here goes:
                     // x, y-, z+ = Above front left
-                    if ((!left || !topLeft) && vy > 0 && vz < sizeVZ - 1) {
+                    if ((!left || !topLeft) && vx == 0 && vy > 0 && vz < sizeVZ - 1) {
                         result = model.at(vx, vy - 1, vz + 1);
                         if (result != 0) {
                             if (!topLeft) {
@@ -244,7 +244,7 @@ public class SimpleDraw {
                     }
 
                     // x-, y, z+ = Above front right
-                    if ((!topRight || !right) && vx > 0 && vz < sizeVZ - 1) {
+                    if ((!topRight || !right) && vx > 0 && vy == 0 && vz < sizeVZ - 1) {
                         result = model.at(vx - 1, vy, vz + 1);
                         if (result != 0) {
                             if (!topRight) {
