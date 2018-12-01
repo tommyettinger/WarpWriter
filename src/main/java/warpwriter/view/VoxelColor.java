@@ -8,7 +8,7 @@ import warpwriter.Coloring;
 public class VoxelColor implements IVoxelColor {
     public enum LightDirection {
         ABOVE_LEFT, ABOVE_RIGHT,
-        LEFT, RIGHT,
+        LEFT_ABOVE, LEFT_BELOW, RIGHT_ABOVE, RIGHT_BELOW,
         BELOW_LEFT, BELOW_RIGHT;
 
         public boolean isAbove() {
@@ -16,7 +16,10 @@ public class VoxelColor implements IVoxelColor {
         }
 
         public boolean isHorizontal() {
-            return this == LEFT || this == RIGHT;
+            return this == LEFT_ABOVE
+                    || this == LEFT_BELOW
+                    || this == RIGHT_ABOVE
+                    || this == RIGHT_BELOW;
         }
 
         public boolean isBelow() {
@@ -24,20 +27,28 @@ public class VoxelColor implements IVoxelColor {
         }
 
         public boolean isLeft() {
-            return this == LEFT || this == ABOVE_LEFT || this == BELOW_LEFT;
+            return this == LEFT_ABOVE
+                    || this == LEFT_BELOW
+                    || this == ABOVE_LEFT
+                    || this == BELOW_LEFT;
         }
 
         public boolean isRight() {
-            return this == RIGHT || this == ABOVE_RIGHT || this == BELOW_RIGHT;
+            return this == RIGHT_ABOVE
+                    || this == RIGHT_BELOW
+                    || this == ABOVE_RIGHT
+                    || this == BELOW_RIGHT;
         }
 
         public LightDirection above() {
             switch (this) {
                 case BELOW_LEFT:
-                case LEFT:
+                case LEFT_BELOW:
+                case LEFT_ABOVE:
                     return ABOVE_LEFT;
                 case BELOW_RIGHT:
-                case RIGHT:
+                case RIGHT_BELOW:
+                case RIGHT_ABOVE:
                     return ABOVE_RIGHT;
                 default:
                     return this;
@@ -47,11 +58,13 @@ public class VoxelColor implements IVoxelColor {
         public LightDirection horizontal() {
             switch (this) {
                 case BELOW_LEFT:
+                    return LEFT_BELOW;
                 case ABOVE_LEFT:
-                    return LEFT;
+                    return LEFT_ABOVE;
                 case BELOW_RIGHT:
+                    return RIGHT_BELOW;
                 case ABOVE_RIGHT:
-                    return RIGHT;
+                    return RIGHT_ABOVE;
                 default:
                     return this;
             }
@@ -60,10 +73,12 @@ public class VoxelColor implements IVoxelColor {
         public LightDirection below() {
             switch (this) {
                 case ABOVE_LEFT:
-                case LEFT:
+                case LEFT_ABOVE:
+                case LEFT_BELOW:
                     return BELOW_LEFT;
                 case ABOVE_RIGHT:
-                case RIGHT:
+                case RIGHT_ABOVE:
+                case RIGHT_BELOW:
                     return BELOW_RIGHT;
                 default:
                     return this;
@@ -74,8 +89,10 @@ public class VoxelColor implements IVoxelColor {
             switch (this) {
                 case ABOVE_RIGHT:
                     return ABOVE_LEFT;
-                case RIGHT:
-                    return LEFT;
+                case RIGHT_ABOVE:
+                    return LEFT_ABOVE;
+                case RIGHT_BELOW:
+                    return LEFT_BELOW;
                 case BELOW_RIGHT:
                     return BELOW_LEFT;
                 default:
@@ -87,8 +104,10 @@ public class VoxelColor implements IVoxelColor {
             switch (this) {
                 case ABOVE_LEFT:
                     return ABOVE_RIGHT;
-                case LEFT:
-                    return RIGHT;
+                case LEFT_ABOVE:
+                    return RIGHT_ABOVE;
+                case LEFT_BELOW:
+                    return RIGHT_BELOW;
                 case BELOW_LEFT:
                     return BELOW_RIGHT;
                 default:
@@ -99,14 +118,18 @@ public class VoxelColor implements IVoxelColor {
         public LightDirection clock() {
             switch (this) {
                 case ABOVE_RIGHT:
-                    return RIGHT;
-                case RIGHT:
+                    return RIGHT_ABOVE;
+                case RIGHT_ABOVE:
+                    return RIGHT_BELOW;
+                case RIGHT_BELOW:
                     return BELOW_RIGHT;
                 case BELOW_RIGHT:
                     return BELOW_LEFT;
                 case BELOW_LEFT:
-                    return LEFT;
-                case LEFT:
+                    return LEFT_BELOW;
+                case LEFT_BELOW:
+                    return LEFT_ABOVE;
+                case LEFT_ABOVE:
                     return ABOVE_LEFT;
                 case ABOVE_LEFT:
                     return ABOVE_RIGHT;
@@ -120,14 +143,18 @@ public class VoxelColor implements IVoxelColor {
                 case ABOVE_RIGHT:
                     return ABOVE_LEFT;
                 case ABOVE_LEFT:
-                    return LEFT;
-                case LEFT:
+                    return LEFT_ABOVE;
+                case LEFT_ABOVE:
+                    return LEFT_BELOW;
+                case LEFT_BELOW:
                     return BELOW_LEFT;
                 case BELOW_LEFT:
                     return BELOW_RIGHT;
                 case BELOW_RIGHT:
-                    return RIGHT;
-                case RIGHT:
+                    return RIGHT_BELOW;
+                case RIGHT_BELOW:
+                    return RIGHT_ABOVE;
+                case RIGHT_ABOVE:
                     return ABOVE_RIGHT;
                 default:
                     return this;
@@ -144,6 +171,14 @@ public class VoxelColor implements IVoxelColor {
                     return ABOVE_RIGHT;
                 case BELOW_LEFT:
                     return ABOVE_LEFT;
+                case RIGHT_ABOVE:
+                    return RIGHT_BELOW;
+                case RIGHT_BELOW:
+                    return RIGHT_ABOVE;
+                case LEFT_ABOVE:
+                    return LEFT_BELOW;
+                case LEFT_BELOW:
+                    return LEFT_ABOVE;
                 default:
                     return this;
             }
@@ -153,16 +188,20 @@ public class VoxelColor implements IVoxelColor {
             switch (this) {
                 case ABOVE_RIGHT:
                     return ABOVE_LEFT;
-                case RIGHT:
-                    return LEFT;
                 case BELOW_RIGHT:
                     return BELOW_LEFT;
                 case ABOVE_LEFT:
                     return ABOVE_RIGHT;
-                case LEFT:
-                    return RIGHT;
                 case BELOW_LEFT:
                     return BELOW_RIGHT;
+                case RIGHT_BELOW:
+                    return LEFT_BELOW;
+                case RIGHT_ABOVE:
+                    return LEFT_ABOVE;
+                case LEFT_BELOW:
+                    return RIGHT_BELOW;
+                case LEFT_ABOVE:
+                    return RIGHT_ABOVE;
                 default:
                     return this;
             }
@@ -172,14 +211,18 @@ public class VoxelColor implements IVoxelColor {
             switch (this) {
                 case ABOVE_RIGHT:
                     return BELOW_LEFT;
-                case RIGHT:
-                    return LEFT;
+                case RIGHT_ABOVE:
+                    return LEFT_BELOW;
+                case RIGHT_BELOW:
+                    return LEFT_ABOVE;
                 case BELOW_RIGHT:
                     return ABOVE_LEFT;
                 case ABOVE_LEFT:
                     return BELOW_RIGHT;
-                case LEFT:
-                    return RIGHT;
+                case LEFT_BELOW:
+                    return RIGHT_ABOVE;
+                case LEFT_ABOVE:
+                    return RIGHT_BELOW;
                 case BELOW_LEFT:
                     return ABOVE_RIGHT;
                 default:
@@ -276,7 +319,7 @@ public class VoxelColor implements IVoxelColor {
 
     @Override
     public int leftFace(byte voxel) {
-        return lightDirection == LightDirection.LEFT ? twilight.bright(voxel)
+        return lightDirection == LightDirection.LEFT_ABOVE || lightDirection == LightDirection.LEFT_BELOW ? twilight.bright(voxel)
                 : darkSide ?
                 lightDirection.isLeft() ? twilight.dim(voxel) : twilight.dark(voxel)
                 : lightDirection.isLeft() ? twilight.twilight(voxel) : twilight.dim(voxel);
@@ -284,7 +327,7 @@ public class VoxelColor implements IVoxelColor {
 
     @Override
     public int rightFace(byte voxel) {
-        return lightDirection == LightDirection.RIGHT ? twilight.bright(voxel)
+        return lightDirection == LightDirection.RIGHT_ABOVE || lightDirection == LightDirection.RIGHT_BELOW ? twilight.bright(voxel)
                 : darkSide ?
                 lightDirection.isRight() ? twilight.dim(voxel) : twilight.dark(voxel)
                 : lightDirection.isRight() ? twilight.twilight(voxel) : twilight.dim(voxel);
