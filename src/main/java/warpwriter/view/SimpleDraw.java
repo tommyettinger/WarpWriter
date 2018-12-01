@@ -351,9 +351,27 @@ public class SimpleDraw {
                         }
                     }
 
+                    // x+, y, z- = Below left
+                    if (!left && vx < sizeVX - 1 && vz > 0) {
+                        result = model.at(vx + 1, vy, vz - 1);
+                        if (result != 0) {
+                            renderer.drawRightTriangle(px, py - 2, color.topFace(result));
+                            left = true;
+                        }
+                    }
+
+                    // x, y+ z- = Below right
+                    if (!right && vy < sizeVY - 1 && vz > 0) {
+                        result = model.at(vx, vy + 1, vz - 1);
+                        if (result != 0) {
+                            renderer.drawLeftTriangle(px + 2, py - 2, color.topFace(result));
+                            right = true;
+                        }
+                    }
+
                     // Debugging
-//                    if (startVX == 8 && startVY == 0 && startVZ == 3) {
-////                        Gdx.app.log("debug", "Coord: " + vx + ", " + vy + ", " + vz);
+//                    if (startVX == 10 && startVY == 0 && startVZ == 3) {
+//                        Gdx.app.log("debug", "Coord: " + vx + ", " + vy + ", " + vz);
 ////                    if (!topLeft)
 //                        renderer.drawLeftTriangle(px, py, flash());
 ////                    if (!left)
