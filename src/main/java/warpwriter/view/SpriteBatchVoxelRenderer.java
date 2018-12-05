@@ -181,55 +181,61 @@ public class SpriteBatchVoxelRenderer implements IPixelRenderer, ITriangleRender
 
     @Override
     public ITriangleRenderer drawLeftTriangleVerticalFace(int x, int y, byte voxel) {
-        return drawLeftTriangle(x, y,
-                flipY ?
-                        color.bottomFace(voxel)
-                        : color.topFace(voxel)
-        );
+        final int color = flipY ?
+                this.color.bottomFace(voxel)
+                : this.color.topFace(voxel);
+        return flipX ?
+                drawRightTriangle(x, y, color)
+                : drawLeftTriangle(x, y, color);
     }
 
     @Override
     public ITriangleRenderer drawLeftTriangleLeftFace(int x, int y, byte voxel) {
-        return drawLeftTriangle(x, y,
-                flipX ?
-                        color.rightFace(voxel)
-                        : color.leftFace(voxel)
-        );
+        final int color = flipX ?
+                this.color.rightFace(voxel)
+                : this.color.leftFace(voxel);
+        return flipX ?
+                drawRightTriangle(x, y, color)
+                : drawLeftTriangle(x, y, color);
     }
 
     @Override
     public ITriangleRenderer drawLeftTriangleRightFace(int x, int y, byte voxel) {
-        return drawLeftTriangle(x, y,
-                flipX ?
-                        color.leftFace(voxel)
-                        : color.rightFace(voxel)
-        );
+        final int color = flipX ?
+                this.color.leftFace(voxel)
+                : this.color.rightFace(voxel);
+        return flipX ?
+                drawRightTriangle(x, y, color)
+                : drawLeftTriangle(x, y, color);
     }
 
     @Override
     public ITriangleRenderer drawRightTriangleVerticalFace(int x, int y, byte voxel) {
-        return drawRightTriangle(x, y,
-                flipY ?
-                        color.bottomFace(voxel)
-                        : color.topFace(voxel)
-        );
+        final int color = flipY ?
+                this.color.bottomFace(voxel)
+                : this.color.topFace(voxel);
+        return flipX ?
+                drawLeftTriangle(x, y, color)
+                : drawRightTriangle(x, y, color);
     }
 
     @Override
     public ITriangleRenderer drawRightTriangleLeftFace(int x, int y, byte voxel) {
-        return drawRightTriangle(x, y,
-                flipX ?
-                        color.rightFace(voxel)
-                        : color.leftFace(voxel)
-        );
+        final int color = flipX ?
+                this.color.rightFace(voxel)
+                : this.color.leftFace(voxel);
+        return flipX ?
+                drawLeftTriangle(x, y, color)
+                : drawRightTriangle(x, y, color);
     }
 
     @Override
     public ITriangleRenderer drawRightTriangleRightFace(int x, int y, byte voxel) {
-        return drawRightTriangle(x, y,
-                flipX ?
-                        color.leftFace(voxel)
-                        : color.rightFace(voxel)
-        );
+        final int color = flipX ?
+                this.color.leftFace(voxel)
+                : this.color.rightFace(voxel);
+        return flipX ?
+                drawLeftTriangle(x, y, color)
+                : drawRightTriangle(x, y, color);
     }
 }
