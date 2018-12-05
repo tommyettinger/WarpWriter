@@ -8,14 +8,32 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.NumberUtils;
 
 public class SpriteBatchVoxelRenderer implements IPixelRenderer, ITriangleRenderer, Disposable {
-    protected static IVoxelColor color = new VoxelColor();
+    protected VoxelColor color = new VoxelColor();
     protected SpriteBatch batch;
     protected Texture one;
     protected Sprite triangle;
     protected int offsetX = 0, offsetY = 0;
     protected float scaleX = 1f, scaleY = 1f;
-
     protected boolean flipX = false, flipY = false;
+
+    public VoxelColor color() {
+        return color;
+    }
+
+    public SpriteBatchVoxelRenderer set(VoxelColor color) {
+        this.color = color;
+        return this;
+    }
+
+    public SpriteBatchVoxelRenderer flipX() {
+        flipX = !flipX;
+        return this;
+    }
+
+    public SpriteBatchVoxelRenderer flipY() {
+        flipY = !flipY;
+        return this;
+    }
 
     public boolean getFlipX() {
         return flipX;
@@ -136,25 +154,25 @@ public class SpriteBatchVoxelRenderer implements IPixelRenderer, ITriangleRender
 
     @Override
     public IPixelRenderer drawPixelVerticalFace(int x, int y, byte voxel) {
-        return drawPixel(x, y, SpriteBatchVoxelRenderer.color.topFace(voxel));
+        return drawPixel(x, y, color.topFace(voxel));
     }
 
     @Override
     public IPixelRenderer drawPixelLeftFace(int x, int y, byte voxel) {
-        return drawPixel(x, y, SpriteBatchVoxelRenderer.color.leftFace(voxel));
+        return drawPixel(x, y, color.leftFace(voxel));
     }
 
     @Override
     public IPixelRenderer drawPixelRightFace(int x, int y, byte voxel) {
-        return drawPixel(x, y, SpriteBatchVoxelRenderer.color.rightFace(voxel));
+        return drawPixel(x, y, color.rightFace(voxel));
     }
 
     @Override
     public ITriangleRenderer drawLeftTriangleVerticalFace(int x, int y, byte voxel) {
         return drawLeftTriangle(x, y,
                 flipY ?
-                        SpriteBatchVoxelRenderer.color.bottomFace(voxel)
-                        : SpriteBatchVoxelRenderer.color.topFace(voxel)
+                        color.bottomFace(voxel)
+                        : color.topFace(voxel)
         );
     }
 
@@ -162,8 +180,8 @@ public class SpriteBatchVoxelRenderer implements IPixelRenderer, ITriangleRender
     public ITriangleRenderer drawLeftTriangleLeftFace(int x, int y, byte voxel) {
         return drawLeftTriangle(x, y,
                 flipX ?
-                        SpriteBatchVoxelRenderer.color.rightFace(voxel)
-                        : SpriteBatchVoxelRenderer.color.leftFace(voxel)
+                        color.rightFace(voxel)
+                        : color.leftFace(voxel)
         );
     }
 
@@ -171,8 +189,8 @@ public class SpriteBatchVoxelRenderer implements IPixelRenderer, ITriangleRender
     public ITriangleRenderer drawLeftTriangleRightFace(int x, int y, byte voxel) {
         return drawLeftTriangle(x, y,
                 flipX ?
-                        SpriteBatchVoxelRenderer.color.leftFace(voxel)
-                        : SpriteBatchVoxelRenderer.color.rightFace(voxel)
+                        color.leftFace(voxel)
+                        : color.rightFace(voxel)
         );
     }
 
@@ -180,8 +198,8 @@ public class SpriteBatchVoxelRenderer implements IPixelRenderer, ITriangleRender
     public ITriangleRenderer drawRightTriangleVerticalFace(int x, int y, byte voxel) {
         return drawRightTriangle(x, y,
                 flipY ?
-                        SpriteBatchVoxelRenderer.color.bottomFace(voxel)
-                        : SpriteBatchVoxelRenderer.color.topFace(voxel)
+                        color.bottomFace(voxel)
+                        : color.topFace(voxel)
         );
     }
 
@@ -189,8 +207,8 @@ public class SpriteBatchVoxelRenderer implements IPixelRenderer, ITriangleRender
     public ITriangleRenderer drawRightTriangleLeftFace(int x, int y, byte voxel) {
         return drawRightTriangle(x, y,
                 flipX ?
-                        SpriteBatchVoxelRenderer.color.rightFace(voxel)
-                        : SpriteBatchVoxelRenderer.color.leftFace(voxel)
+                        color.rightFace(voxel)
+                        : color.leftFace(voxel)
         );
     }
 
@@ -198,8 +216,8 @@ public class SpriteBatchVoxelRenderer implements IPixelRenderer, ITriangleRender
     public ITriangleRenderer drawRightTriangleRightFace(int x, int y, byte voxel) {
         return drawRightTriangle(x, y,
                 flipX ?
-                        SpriteBatchVoxelRenderer.color.leftFace(voxel)
-                        : SpriteBatchVoxelRenderer.color.rightFace(voxel)
+                        color.leftFace(voxel)
+                        : color.rightFace(voxel)
         );
     }
 }

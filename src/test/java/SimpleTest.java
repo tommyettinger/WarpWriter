@@ -16,7 +16,6 @@ import warpwriter.ModelMaker;
 import warpwriter.model.*;
 import warpwriter.view.SimpleDraw;
 import warpwriter.view.SpriteBatchVoxelRenderer;
-import warpwriter.view.VoxelColor;
 
 public class SimpleTest extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 1280;
@@ -34,7 +33,6 @@ public class SimpleTest extends ApplicationAdapter {
     protected ArrayModel knightModel;
     protected ModelMaker maker;
     private SpriteBatchVoxelRenderer batchRenderer;
-    protected VoxelColor voxelColor;
     protected boolean z45 = false;
     protected int angle = 2;
     protected byte[][][] box;
@@ -51,7 +49,6 @@ public class SimpleTest extends ApplicationAdapter {
         screenView.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.enableBlending();
 
-        voxelColor = new VoxelColor();
         batchRenderer = new SpriteBatchVoxelRenderer(batch).setOffset(16, 100);
         maker = new ModelMaker(12345);
 //        try {
@@ -179,16 +176,22 @@ public class SimpleTest extends ApplicationAdapter {
                                 new NoiseFetch((byte) 194, (byte) 194))); //(byte) 0, (byte) 0, (byte) 0,   , (byte) 0, (byte) 0, (byte) 0   , (byte) 98, (byte) 130, (byte) 162 
                         break;
                     case Input.Keys.G:
-                        voxelColor.set(voxelColor.direction().counter());
+                        batchRenderer.color().set(batchRenderer.color().direction().counter());
                         break;
                     case Input.Keys.H:
-                        voxelColor.set(voxelColor.direction().clock());
+                        batchRenderer.color().set(batchRenderer.color().direction().clock());
                         break;
                     case Input.Keys.T: // try again
                         turnModel.turner().reset();
                         break;
                     case Input.Keys.F:
                         z45 = !z45;
+                        break;
+                    case Input.Keys.X:
+                        batchRenderer.flipX();
+                        break;
+                    case Input.Keys.C:
+                        batchRenderer.flipY();
                         break;
                     case Input.Keys.ESCAPE:
                         Gdx.app.exit();
