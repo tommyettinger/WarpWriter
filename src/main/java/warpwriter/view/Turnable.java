@@ -3,7 +3,7 @@ package warpwriter.view;
 import warpwriter.model.TurnModel;
 
 public class Turnable {
-    TurnModel turnModel;
+    protected TurnModel turnModel;
 
     public Turnable set(TurnModel turnModel) {
         this.turnModel = turnModel;
@@ -14,7 +14,7 @@ public class Turnable {
         return turnModel;
     }
 
-    boolean y45 = false, z45 = false;
+    protected boolean y45 = false, z45 = false;
 
     public Turnable clockX() {
         turnModel.turner().clockX();

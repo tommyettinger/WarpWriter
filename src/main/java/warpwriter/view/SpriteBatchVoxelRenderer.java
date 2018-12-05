@@ -15,6 +15,26 @@ public class SpriteBatchVoxelRenderer implements IPixelRenderer, ITriangleRender
     protected int offsetX = 0, offsetY = 0;
     protected float scaleX = 1f, scaleY = 1f;
 
+    protected boolean flipX = false, flipY = false;
+
+    public boolean getFlipX() {
+        return flipX;
+    }
+
+    public boolean getFlipY() {
+        return flipY;
+    }
+
+    public SpriteBatchVoxelRenderer setFlipX(boolean flipX) {
+        this.flipX = flipX;
+        return this;
+    }
+
+    public SpriteBatchVoxelRenderer setFlipY(boolean flipY) {
+        this.flipY = flipY;
+        return this;
+    }
+
     public SpriteBatchVoxelRenderer(SpriteBatch batch) {
         this.batch = batch;
 
@@ -66,12 +86,17 @@ public class SpriteBatchVoxelRenderer implements IPixelRenderer, ITriangleRender
         return drawRect(x, y, 1, 1, color);
     }
 
-    public IPixelRenderer drawRect(int x, int y, int xSize, int ySize, int color) {
+    public IPixelRenderer drawRect(int x, int y, int sizeX, int sizeY, int color) {
         //final float oldColor = batch.getPackedColor(); // requires less conversions than batch.getColor(), same result
         batch.setColor(NumberUtils.intToFloatColor(Integer.reverseBytes(color)));
         // converts from RGBA to ABGR
         // converts ABGR int to float color, which SpriteBatch can use without needing an object
-        batch.draw(one, (x * scaleX) + offsetX, (y * scaleY) + offsetY, xSize * scaleX, ySize * scaleY);
+        batch.draw(one,
+                x * scaleX * (flipX ? -1 : 1) + offsetX,
+                y * scaleY * (flipY ? -1 : 1) + offsetY,
+                sizeX * scaleX,
+                sizeY * scaleY
+        );
         //batch.setColor(oldColor);
         return this;
     }
@@ -99,7 +124,12 @@ public class SpriteBatchVoxelRenderer implements IPixelRenderer, ITriangleRender
         // converts from RGBA to ABGR
         // converts ABGR int to float color, which SpriteBatch can use without needing an object
         triangle.setFlip(left, false);
-        batch.draw(triangle, (x * scaleX) + offsetX, (y * scaleY) + offsetY, scaleX * 2, scaleY * 3);
+        batch.draw(triangle,
+                x * scaleX * (flipX ? -1 : 1) + offsetX,
+                y * scaleY * (flipY ? -1 : 1) + offsetY,
+                scaleX * 2,
+                scaleY * 3
+        );
         batch.setColor(oldColor);
         return this;
     }
