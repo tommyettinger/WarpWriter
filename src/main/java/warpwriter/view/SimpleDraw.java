@@ -4,13 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import warpwriter.model.IModel;
 
 public class SimpleDraw {
-    protected static IVoxelColor color = new VoxelColor();
-
     public static void simpleDraw(IModel model, IPixelRenderer renderer) {
-        simpleDraw(model, renderer, color);
-    }
-
-    public static void simpleDraw(IModel model, IPixelRenderer renderer, IVoxelColor color) {
         final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ();
         for (int z = 0; z < sizeZ; z++) {
             for (int y = 0; y < sizeY; y++) {
@@ -18,7 +12,7 @@ public class SimpleDraw {
                 for (int x = 0; x < sizeX; x++) {
                     byte result = model.at(x, y, z);
                     if (result != 0) {
-                        renderer.drawPixel(y, z, color.rightFace(result));
+                        renderer.drawPixelRightFace(y, z, result);
                         break;
                     }
                 }
@@ -27,10 +21,6 @@ public class SimpleDraw {
     }
 
     public static void simpleDraw45(IModel model, IPixelRenderer renderer) {
-        simpleDraw45(model, renderer, color);
-    }
-
-    public static void simpleDraw45(IModel model, IPixelRenderer renderer, IVoxelColor color) {
         final int sizeX = model.sizeX(),
                 sizeY = model.sizeY(),
                 sizeZ = model.sizeZ(),
@@ -48,22 +38,22 @@ public class SimpleDraw {
                     if (!leftDone && vy != 0) {
                         result = model.at(vx, vy - 1, py);
                         if (result != 0) {
-                            renderer.drawPixel(px, py, color.rightFace(result));
+                            renderer.drawPixelRightFace(px, py, result);
                             leftDone = true;
                         }
                     }
                     if (!rightDone && vx > 0) {
                         result = model.at(vx - 1, vy, py);
                         if (result != 0) {
-                            renderer.drawPixel(px + 1, py, color.leftFace(result));
+                            renderer.drawPixelLeftFace(px + 1, py, result);
                             rightDone = true;
                         }
                     }
                     if (leftDone && rightDone) break;
                     result = model.at(vx, vy, py);
                     if (result != 0) {
-                        if (!leftDone) renderer.drawPixel(px, py, color.leftFace(result));
-                        if (!rightDone) renderer.drawPixel(px + 1, py, color.rightFace(result));
+                        if (!leftDone) renderer.drawPixelLeftFace(px, py, result);
+                        if (!rightDone) renderer.drawPixelRightFace(px + 1, py, result);
                         break;
                     }
                 }
@@ -71,7 +61,7 @@ public class SimpleDraw {
         }
     }
 
-    public static void simpleDrawAbove(IModel model, IPixelRenderer renderer, IVoxelColor color) {
+    public static void simpleDrawAbove(IModel model, IPixelRenderer renderer) {
         final int sizeX = model.sizeX(),
                 sizeY = model.sizeY(),
                 sizeZ = model.sizeZ(),
@@ -80,7 +70,7 @@ public class SimpleDraw {
             // Begin bottom row
             byte result = model.at(sizeX - 1, 0, 0);
             if (result != 0) {
-                renderer.drawPixel(vy, 0, color.rightFace(result));
+                renderer.drawPixelRightFace(vy, 0, result);
             }
             // Finish bottom row
             // Begin main bulk of model
@@ -94,22 +84,22 @@ public class SimpleDraw {
                     if (!above && vz + 1 < sizeZ) {
                         result = model.at(vx, vy, vz + 1);
                         if (result != 0) {
-                            renderer.drawPixel(vy, py + 1, color.rightFace(result));
+                            renderer.drawPixelRightFace(vy, py + 1, result);
                             above = true;
                         }
                     }
                     if (!below && vx > 0) {
                         result = model.at(vx - 1, vy, vz);
                         if (result != 0) {
-                            renderer.drawPixel(vy, py, color.topFace(result));
+                            renderer.drawPixelVerticalFace(vy, py, result);
                             below = true;
                         }
                     }
                     if (above && below) break;
                     result = model.at(vx, vy, vz);
                     if (result != 0) {
-                        if (!above) renderer.drawPixel(vy, py + 1, color.topFace(result));
-                        if (!below) renderer.drawPixel(vy, py, color.rightFace(result));
+                        if (!above) renderer.drawPixelVerticalFace(vy, py + 1, result);
+                        if (!below) renderer.drawPixelRightFace(vy, py, result);
                         break;
                     }
                 }
@@ -119,10 +109,6 @@ public class SimpleDraw {
     }
 
     public static void simpleDrawIso(IModel model, ITriangleRenderer renderer) {
-        simpleDrawIso(model, renderer, color);
-    }
-
-    public static void simpleDrawIso(IModel model, ITriangleRenderer renderer, IVoxelColor color) {
         byte result;
         final int sizeVX = model.sizeX(), sizeVY = model.sizeY(), sizeVZ = model.sizeZ(),
                 sizeVX2 = sizeVX * 2, sizeVY2 = sizeVY * 2,
@@ -144,42 +130,42 @@ public class SimpleDraw {
             if (px < sizeVX2 - 2) { // Left side of model
                 result = model.at(px / 2, 0, 0);
                 if (result != 0) {
-                    renderer.drawLeftTriangle(px + 2, bottomPY - 6, color.leftFace(result));
-                    renderer.drawLeftTriangle(px, bottomPY - 4, color.leftFace(result));
-                    renderer.drawRightTriangle(px + 2, bottomPY - 4, color.leftFace(result));
+                    renderer.drawLeftTriangleLeftFace(px + 2, bottomPY - 6, result);
+                    renderer.drawLeftTriangleLeftFace(px, bottomPY - 4, result);
+                    renderer.drawRightTriangleLeftFace(px + 2, bottomPY - 4, result);
                 } else if (px / 2 < sizeVX2 - 1) {
                     result = model.at(px / 2 + 1, 0, 0);
                     if (result != 0) {
-                        renderer.drawLeftTriangle(px, bottomPY - 4, color.rightFace(result));
+                        renderer.drawLeftTriangleRightFace(px, bottomPY - 4, result);
                     }
                 }
             } else if (px > sizeVX2 - 2) { // Right side of model
                 result = model.at(0, px / 2 - sizeVX + 1, 0);
                 if (result != 0) {
-                    renderer.drawRightTriangle(px, bottomPY - 6, color.rightFace(result));
-                    renderer.drawLeftTriangle(px, bottomPY - 4, color.rightFace(result));
-                    renderer.drawRightTriangle(px + 2, bottomPY - 4, color.rightFace(result));
+                    renderer.drawRightTriangleRightFace(px, bottomPY - 6, result);
+                    renderer.drawLeftTriangleRightFace(px, bottomPY - 4, result);
+                    renderer.drawRightTriangleRightFace(px + 2, bottomPY - 4, result);
                 } else if (px / 2 - sizeVX + 1 < sizeVY - 1) {
                     result = model.at(0, px / 2 - sizeVX + 2, 0);
                     if (result != 0) {
-                        renderer.drawRightTriangle(px + 2, bottomPY - 4, color.leftFace(result));
+                        renderer.drawRightTriangleLeftFace(px + 2, bottomPY - 4, result);
                     }
                 }
             } else { // Very bottom
                 result = model.at(0, 0, 0);
                 if (result != 0) {
-                    renderer.drawLeftTriangle(px, bottomPY - 4, color.leftFace(result));
-                    renderer.drawRightTriangle(px + 2, bottomPY - 4, color.rightFace(result));
+                    renderer.drawLeftTriangleLeftFace(px, bottomPY - 4, result);
+                    renderer.drawRightTriangleRightFace(px + 2, bottomPY - 4, result);
                     if (sizeVX % 2 == 0)
-                        renderer.drawRightTriangle(px, bottomPY - 6, color.rightFace(result));
+                        renderer.drawRightTriangleRightFace(px, bottomPY - 6, result);
                 } else {
                     result = model.at(px / 2 + 1, 0, 0);
                     if (result != 0) {
-                        renderer.drawLeftTriangle(px, bottomPY - 4, color.rightFace(result));
+                        renderer.drawLeftTriangleRightFace(px, bottomPY - 4, result);
                     }
                     result = model.at(0, px / 2 - sizeVX + 2, 0);
                     if (result != 0) {
-                        renderer.drawRightTriangle(px + 2, bottomPY - 4, color.leftFace(result));
+                        renderer.drawRightTriangleLeftFace(px + 2, bottomPY - 4, result);
                     }
                 }
             }
@@ -219,11 +205,11 @@ public class SimpleDraw {
                         result = model.at(vx, vy - 1, vz + 1);
                         if (result != 0) {
                             if (!topLeft) {
-                                renderer.drawLeftTriangle(px, py, color.rightFace(result));
+                                renderer.drawLeftTriangleRightFace(px, py, result);
                                 topLeft = true;
                             }
                             if (!left) {
-                                renderer.drawRightTriangle(px, py - 2, color.rightFace(result));
+                                renderer.drawRightTriangleRightFace(px, py - 2, result);
                                 left = true;
                             }
                         }
@@ -234,11 +220,11 @@ public class SimpleDraw {
                         result = model.at(vx - 1, vy, vz + 1);
                         if (result != 0) {
                             if (!topRight) {
-                                renderer.drawRightTriangle(px + 2, py, color.leftFace(result));
+                                renderer.drawRightTriangleLeftFace(px + 2, py, result);
                                 topRight = true;
                             }
                             if (!right) {
-                                renderer.drawLeftTriangle(px + 2, py - 2, color.leftFace(result));
+                                renderer.drawLeftTriangleLeftFace(px + 2, py - 2, result);
                                 right = true;
                             }
                         }
@@ -249,11 +235,11 @@ public class SimpleDraw {
                         result = model.at(vx, vy, vz + 1);
                         if (result != 0) {
                             if (!topLeft) {
-                                renderer.drawLeftTriangle(px, py, color.leftFace(result));
+                                renderer.drawLeftTriangleLeftFace(px, py, result);
                                 topLeft = true;
                             }
                             if (!topRight) {
-                                renderer.drawRightTriangle(px + 2, py, color.rightFace(result));
+                                renderer.drawRightTriangleRightFace(px + 2, py, result);
                                 topRight = true;
                             }
                         }
@@ -263,7 +249,7 @@ public class SimpleDraw {
                     if (!left && vy > 0) {
                         result = model.at(vx, vy - 1, vz);
                         if (result != 0) {
-                            renderer.drawRightTriangle(px, py - 2, color.topFace(result));
+                            renderer.drawRightTriangleVerticalFace(px, py - 2, result);
                             left = true;
                         }
                     }
@@ -272,7 +258,7 @@ public class SimpleDraw {
                     if (!right && vx > 0) {
                         result = model.at(vx - 1, vy, vz);
                         if (result != 0) {
-                            renderer.drawLeftTriangle(px + 2, py - 2, color.topFace(result));
+                            renderer.drawLeftTriangleVerticalFace(px + 2, py - 2, result);
                             right = true;
                         }
                     }
@@ -282,13 +268,13 @@ public class SimpleDraw {
                     result = model.at(vx, vy, vz);
                     if (result != 0) {
                         if (!topLeft)
-                            renderer.drawLeftTriangle(px, py, color.topFace(result));
+                            renderer.drawLeftTriangleVerticalFace(px, py, result);
                         if (!left)
-                            renderer.drawRightTriangle(px, py - 2, color.leftFace(result));
+                            renderer.drawRightTriangleLeftFace(px, py - 2, result);
                         if (!topRight)
-                            renderer.drawRightTriangle(px + 2, py, color.topFace(result));
+                            renderer.drawRightTriangleVerticalFace(px + 2, py, result);
                         if (!right)
-                            renderer.drawLeftTriangle(px + 2, py - 2, color.rightFace(result));
+                            renderer.drawLeftTriangleRightFace(px + 2, py - 2, result);
                         break;
                     }
 
@@ -297,11 +283,11 @@ public class SimpleDraw {
                         result = model.at(vx + 1, vy, vz);
                         if (result != 0) {
                             if (!topLeft) {
-                                renderer.drawLeftTriangle(px, py, color.rightFace(result));
+                                renderer.drawLeftTriangleRightFace(px, py, result);
                                 topLeft = true;
                             }
                             if (!left) {
-                                renderer.drawRightTriangle(px, py - 2, color.rightFace(result));
+                                renderer.drawRightTriangleRightFace(px, py - 2, result);
                                 left = true;
                             }
                         }
@@ -312,11 +298,11 @@ public class SimpleDraw {
                         result = model.at(vx, vy + 1, vz);
                         if (result != 0) {
                             if (!topRight) {
-                                renderer.drawRightTriangle(px + 2, py, color.leftFace(result));
+                                renderer.drawRightTriangleLeftFace(px + 2, py, result);
                                 topRight = true;
                             }
                             if (!right) {
-                                renderer.drawLeftTriangle(px + 2, py - 2, color.leftFace(result));
+                                renderer.drawLeftTriangleLeftFace(px + 2, py - 2, result);
                                 right = true;
                             }
                         }
@@ -327,11 +313,11 @@ public class SimpleDraw {
                         result = model.at(vx + 1, vy + 1, vz);
                         if (result != 0) {
                             if (!topRight) {
-                                renderer.drawRightTriangle(px + 2, py, color.rightFace(result));
+                                renderer.drawRightTriangleRightFace(px + 2, py, result);
                                 topRight = true;
                             }
                             if (!topLeft) {
-                                renderer.drawLeftTriangle(px, py, color.leftFace(result));
+                                renderer.drawLeftTriangleLeftFace(px, py, result);
                                 topLeft = true;
                             }
                         }
@@ -341,7 +327,7 @@ public class SimpleDraw {
                     if (!left && vx < sizeVX - 1 && vz > 0) {
                         result = model.at(vx + 1, vy, vz - 1);
                         if (result != 0) {
-                            renderer.drawRightTriangle(px, py - 2, color.topFace(result));
+                            renderer.drawRightTriangleVerticalFace(px, py - 2, result);
                             left = true;
                         }
                     }
@@ -350,7 +336,7 @@ public class SimpleDraw {
                     if (!right && vy < sizeVY - 1 && vz > 0) {
                         result = model.at(vx, vy + 1, vz - 1);
                         if (result != 0) {
-                            renderer.drawLeftTriangle(px + 2, py - 2, color.topFace(result));
+                            renderer.drawLeftTriangleVerticalFace(px + 2, py - 2, result);
                             right = true;
                         }
                     }
@@ -376,12 +362,12 @@ public class SimpleDraw {
             if (px + 2 < sizeVY2) { // Top left triangles
                 result = model.at(0, px / 2, sizeVZ - 1);
                 if (result != 0) {
-                    renderer.drawLeftTriangle(px + 2, topPY, color.topFace(result));
+                    renderer.drawLeftTriangleVerticalFace(px + 2, topPY, result);
                 }
             } else if (px + 2 > sizeVY2) { // Top right triangles
                 result = model.at((px - sizeVY2) / 2, sizeVY - 1, sizeVZ - 1);
                 if (result != 0) {
-                    renderer.drawRightTriangle(px, topPY, color.topFace(result));
+                    renderer.drawRightTriangleVerticalFace(px, topPY, result);
                 }
             }
             // Finish drawing top triangles.
@@ -392,22 +378,22 @@ public class SimpleDraw {
                         bottom = Math.abs(sizeVX2 - 2 - pixelWidth);
                 result = model.at(vx, vy, 0);
                 if (result != 0) {
-                    renderer.drawRightTriangle(pixelWidth + 2, bottom - 4, color.rightFace(result)); // lower right corner
+                    renderer.drawRightTriangleRightFace(pixelWidth + 2, bottom - 4, result); // lower right corner
                 }
                 for (int py = bottom; py < bottom + sizeVZ * 4; py += 4) {
                     final int vz = (py - bottom) / 4;
                     boolean aboveEmpty = true;
                     if (vz != sizeVZ - 1) {
                         result = model.at(vx, vy, vz + 1);
-                        renderer.drawRightTriangle(pixelWidth + 2, py, color.rightFace(result));
+                        renderer.drawRightTriangleRightFace(pixelWidth + 2, py, result);
                         aboveEmpty = false;
                     }
                     result = model.at(vx, vy, vz);
                     if (result != 0) {
                         if (aboveEmpty) {
-                            renderer.drawRightTriangle(pixelWidth + 2, py, color.topFace(result));
+                            renderer.drawRightTriangleVerticalFace(pixelWidth + 2, py, result);
                         }
-                        renderer.drawLeftTriangle(pixelWidth + 2, py - 2, color.rightFace(result));
+                        renderer.drawLeftTriangleRightFace(pixelWidth + 2, py - 2, result);
                     }
                 }
             }

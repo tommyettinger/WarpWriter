@@ -10,4 +10,10 @@ public interface IPixelRenderer {
     IPixelRenderer drawPixel(int x, int y, int color);
 
     IPixelRenderer drawRect(int x, int y, int xSize, int ySize, int color);
+
+    IPixelRenderer drawPixelVerticalFace(int x, int y, byte voxel);
+
+    IPixelRenderer drawPixelLeftFace(int x, int y, byte voxel);
+
+    IPixelRenderer drawPixelRightFace(int x, int y, byte voxel);
 }
