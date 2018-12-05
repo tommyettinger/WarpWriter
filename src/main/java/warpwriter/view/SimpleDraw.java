@@ -5,14 +5,62 @@ import warpwriter.model.IModel;
 
 public class SimpleDraw {
     public static void simpleDraw(IModel model, IPixelRenderer renderer) {
+        simpleDrawRight(model, renderer);
+    }
+
+    public static void simpleDrawRight(IModel model, IPixelRenderer renderer) {
         final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ();
         for (int z = 0; z < sizeZ; z++) {
             for (int y = 0; y < sizeY; y++) {
-//                renderer.drawPixel(y, z, Color.rgba8888(Color.RED));
                 for (int x = 0; x < sizeX; x++) {
                     byte result = model.at(x, y, z);
                     if (result != 0) {
                         renderer.drawPixelRightFace(y, z, result);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    public static void simpleDrawLeft(IModel model, IPixelRenderer renderer) {
+        final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ();
+        for (int z = 0; z < sizeZ; z++) {
+            for (int y = 0; y < sizeY; y++) {
+                for (int x = sizeX - 1; x >= 0; x++) {
+                    byte result = model.at(x, y, z);
+                    if (result != 0) {
+                        renderer.drawPixelLeftFace(y, z, result);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    public static void simpleDrawTop(IModel model, IPixelRenderer renderer) {
+        final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ();
+        for (int y = 0; y < sizeY; y++) {
+            for (int x = 0; x < sizeX; x++) {
+                for (int z = sizeZ - 1; z >= 0; z--) {
+                    byte result = model.at(x, y, z);
+                    if (result != 0) {
+                        renderer.drawPixelVerticalFace(y, x, result);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    public static void simpleDrawBottom(IModel model, IPixelRenderer renderer) {
+        final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ();
+        for (int y = 0; y < sizeY; y++) {
+            for (int x = 0; x < sizeX; x++) {
+                for (int z = 0; z < sizeZ; z--) {
+                    byte result = model.at(x, y, z);
+                    if (result != 0) {
+                        renderer.drawPixelVerticalFace(y, x, result);
                         break;
                     }
                 }
