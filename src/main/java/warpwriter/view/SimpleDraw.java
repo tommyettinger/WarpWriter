@@ -108,11 +108,22 @@ public class SimpleDraw {
         }
     }
 
+    public static int isoHeight(IModel model) {
+        return (model.sizeX() - 1) * 2 +
+                (model.sizeZ() - 1) * 4 +
+                (model.sizeY() - 1) * 2;
+    }
+
+    public static int isoWidth(IModel model) {
+        final int sizeVX = model.sizeX(), sizeVY = model.sizeY();
+        return sizeVX * 2 + sizeVY * 2 - ((sizeVX + sizeVY) % 2 == 1 ? 4 : 0);
+    }
+
     public static void simpleDrawIso(IModel model, ITriangleRenderer renderer) {
         byte result;
         final int sizeVX = model.sizeX(), sizeVY = model.sizeY(), sizeVZ = model.sizeZ(),
                 sizeVX2 = sizeVX * 2, sizeVY2 = sizeVY * 2,
-                pixelWidth = sizeVX2 + sizeVY2 - ((sizeVX + sizeVY) % 2 == 1 ? 4 : 0);
+                pixelWidth = isoWidth(model);
         // To move one x+ in voxels is x + 2, y - 2 in pixels.
         // To move one x- in voxels is x - 2, y + 2 in pixels.
         // To move one y+ in voxels is x + 2, y + 2 in pixels.
