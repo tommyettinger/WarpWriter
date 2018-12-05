@@ -49,7 +49,7 @@ public class SimpleTest extends ApplicationAdapter {
         screenView.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.enableBlending();
 
-        batchRenderer = new SpriteBatchVoxelRenderer(batch).setOffset(16, 100);
+        batchRenderer = new SpriteBatchVoxelRenderer(batch).setOffset(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2);
         maker = new ModelMaker(12345);
 //        try {
 //            box = VoxIO.readVox(new LittleEndianDataInputStream(SimpleTest.class.getResourceAsStream("/dumbcube.vox")));
@@ -90,9 +90,9 @@ public class SimpleTest extends ApplicationAdapter {
         if (angle > 2) {
             if (z45) {
                 final float scale = 1f;
-                font.draw(batch, "X", 0, 100);
-                font.draw(batch, "Z", 0, 100 + (turnModel.sizeY() * 2 + turnModel.sizeZ() * 2) * scale);
-                font.draw(batch, "Y", 0, 100 + (turnModel.sizeY() * 2 + turnModel.sizeZ() * 4 + turnModel.sizeX()) * scale);
+//                font.draw(batch, "X", 0, 100);
+//                font.draw(batch, "Z", 0, 100 + (turnModel.sizeY() * 2 + turnModel.sizeZ() * 2) * scale);
+//                font.draw(batch, "Y", 0, 100 + (turnModel.sizeY() * 2 + turnModel.sizeZ() * 4 + turnModel.sizeX()) * scale);
                 SimpleDraw.simpleDrawIso(turnModel, batchRenderer.setScale(scale * 2f, scale));
             } else
                 SimpleDraw.simpleDrawAbove(turnModel, batchRenderer.setScale(6f, 2f));

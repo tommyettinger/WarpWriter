@@ -154,17 +154,29 @@ public class SpriteBatchVoxelRenderer implements IPixelRenderer, ITriangleRender
 
     @Override
     public IPixelRenderer drawPixelVerticalFace(int x, int y, byte voxel) {
-        return drawPixel(x, y, color.topFace(voxel));
+        return drawPixel(x, y,
+                flipY ?
+                        color.bottomFace(voxel)
+                        : color.topFace(voxel)
+        );
     }
 
     @Override
     public IPixelRenderer drawPixelLeftFace(int x, int y, byte voxel) {
-        return drawPixel(x, y, color.leftFace(voxel));
+        return drawPixel(x, y,
+                flipX ?
+                        color.rightFace(voxel)
+                        : color.leftFace(voxel)
+        );
     }
 
     @Override
     public IPixelRenderer drawPixelRightFace(int x, int y, byte voxel) {
-        return drawPixel(x, y, color.rightFace(voxel));
+        return drawPixel(x, y,
+                flipX ?
+                        color.leftFace(voxel)
+                        : color.rightFace(voxel)
+        );
     }
 
     @Override
