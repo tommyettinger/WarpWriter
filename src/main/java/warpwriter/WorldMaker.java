@@ -23,7 +23,7 @@ public class WorldMaker {
     public WorldMaker(long seed, double detailMultiplier)
     {
         rng = new GWTRNG(seed);
-        terrain = new FastNoise(rng.nextInt(), terrainFreq * 0.8f, FastNoise.SIMPLEX_FRACTAL, (int) (0.5 + detailMultiplier * 10));
+        terrain = new FastNoise(rng.nextInt(), terrainFreq * 0.6f, FastNoise.SIMPLEX_FRACTAL, (int) (0.5 + detailMultiplier * 10));
         terrain.setFractalType(FastNoise.RIDGED_MULTI);
         terrainLayered = new FastNoise(rng.nextInt(), terrainRidgedFreq * 2.75f, FastNoise.SIMPLEX_FRACTAL, (int) (1 + detailMultiplier * 6), 0.5f, 2f);
         heat = new FastNoise(rng.nextInt(), heatFreq, FastNoise.SIMPLEX_FRACTAL, (int) (0.5 + detailMultiplier * 3), 0.75f, 1f / 0.75f);
@@ -113,9 +113,10 @@ public class WorldMaker {
                 minHeat = Double.POSITIVE_INFINITY, maxHeat = Double.NEGATIVE_INFINITY,
                 minWet = Double.POSITIVE_INFINITY, maxWet = Double.NEGATIVE_INFINITY;
         
-        double radius = diameter * 0.5, r2 = radius * radius, iRadius = 1.0 / radius,
-                dist2, offX, offY, offZ, hi, he, mo;
+        float radius = diameter * 0.5f, r2 = radius * radius, iRadius = 1f / radius,
+                dist2, offX, offY, offZ;
         float sx, sy, sz;
+        double hi, he, mo;
         byte[][][] world = new byte[diameter][diameter][diameter];
         double[][][] heightData = new double[diameter][diameter][diameter],
                 heatData = new double[diameter][diameter][diameter],
@@ -123,15 +124,15 @@ public class WorldMaker {
         int[][][] heightCodeData = new int[diameter][diameter][diameter];
         for (int x = 0; x < diameter; x++) {
             offX = x - radius;
-            sx = (float) (offX * iRadius);
+            sx = (offX * iRadius);
             offX *= offX;
             for (int y = 0; y < diameter; y++) {
                 offY = y - radius;
-                sy = (float) (offY * iRadius);
+                sy = (offY * iRadius);
                 offY *= offY;
                 for (int z = 0; z < diameter; z++) {
                     offZ = z - radius;
-                    sz = (float) (offZ * iRadius);
+                    sz = (offZ * iRadius);
                     offZ *= offZ;
                     dist2 = offX + offY + offZ;
                     // check for surface positions
@@ -139,7 +140,7 @@ public class WorldMaker {
                     {
                         heightData[x][y][z] = (hi = terrainLayered.getSimplexFractal(sx +
                                         terrain.getSimplexFractal(sx, sy, sz) * 0.5f,
-                                sy, sz) + landModifier - 1.0);
+                                sy, sz) + (float) landModifier - 1f);
                         heatData[x][y][z] = (he = heat.getSimplexFractal(sx, sy
                                         + heatRidged.getSimplexFractal(sx, sy, sz)
                                 , sz));
@@ -265,8 +266,8 @@ public class WorldMaker {
                             hc = 0;
                         }
 
-                        world[x][y][z] = biomeTable[hi < coastalWaterUpper ? hc + 54 // 54 == 9 * 6, 9 is used for Ocean groups
-                                : ((hi >= sandLower && hi < sandUpper) ? hc + 36 : hc + mc * 6)];
+                        world[x][y][z] = hi < coastalWaterUpper ? biomeTable[hc + 54] // 54 == 9 * 6, 9 is used for Ocean groups
+                                : (byte)(biomeTable[(hi >= sandLower && hi < sandUpper) ? hc + 36 : hc + mc * 6] + Math.abs(heat.getSimplexFractal(y * iRadius, z * iRadius, x * iRadius) * 3.5f));
                     }
                 }
             }

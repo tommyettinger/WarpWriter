@@ -24,7 +24,7 @@ public class TurnTest extends ApplicationAdapter {
     protected Viewport view;
     protected BitmapFont font;
     protected TurnModel turnModel;
-    private ModelRenderer modelRenderer = new ModelRenderer(false, true);
+    private ModelRenderer modelRenderer = new ModelRenderer(true, true);
     private Texture tex;
     private Pixmap pix;
     private CompassDirection direction = CompassDirection.NORTH;
