@@ -46,7 +46,7 @@ public class TurnTest extends ApplicationAdapter {
         }
         world = new ArrayModel(arr);
 
-        turnModel = new TurnModel(
+        turnModel = new TurnModel().set(
                 new DecideFetch(
 //                        new PlaneDecide(1, 1, 1, 100).set(PlaneDecide.Condition.ON),
                         new BalloonDecide(0, 30, 30, 30, 0, 0), // gives it a weird angle for testing

@@ -1,10 +1,16 @@
 package warpwriter.view;
 
+import warpwriter.model.IModel;
 import warpwriter.model.TurnModel;
 
 public class Turnable {
     protected SpriteBatchVoxelRenderer batchRenderer;
-    protected TurnModel turnModel;
+    protected TurnModel turnModel = new TurnModel();
+
+    public Turnable set(IModel model) {
+        turnModel.set(model);
+        return this;
+    }
 
     public Turnable set(SpriteBatchVoxelRenderer batchRenderer) {
         this.batchRenderer = batchRenderer;
@@ -15,9 +21,8 @@ public class Turnable {
         return batchRenderer;
     }
 
-    public Turnable set(TurnModel turnModel) {
-        this.turnModel = turnModel;
-        return this;
+    public IModel getModel() {
+        return turnModel.getModel();
     }
 
     public TurnModel turnModel() {

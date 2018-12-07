@@ -71,7 +71,7 @@ public class SimpleTest extends ApplicationAdapter {
         turnable = new Turnable()
                 .set(batchRenderer)
                 .setOffset(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2)
-                .set(new TurnModel(new ArrayModel(maker.warriorRandom())));
+                .set(new TurnModel().set(new ArrayModel(maker.warriorRandom())));
         Gdx.input.setInputProcessor(inputProcessor());
     }
 
@@ -86,7 +86,7 @@ public class SimpleTest extends ApplicationAdapter {
         batch.setProjectionMatrix(worldView.getCamera().combined);
         batch.begin();
 
-        font.draw(batch, StringKit.join(", ", turnable.turnModel().getModel().sizeX(), turnable.turnModel().getModel().sizeY(), turnable.turnModel().getModel().sizeZ()) + " (original)", 0, 80);
+        font.draw(batch, StringKit.join(", ", turnable.getModel().sizeX(), turnable.getModel().sizeY(), turnable.getModel().sizeZ()) + " (original)", 0, 80);
         font.draw(batch, turnable.turnModel().sizeX() + ", " + turnable.turnModel().sizeY() + ", " + turnable.turnModel().sizeZ() + " (modified)", 0, 60);
         font.draw(batch, StringKit.join(", ", turnable.turnModel().turner().rotation()) + " (rotation)", 0, 40);
         font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 20);
@@ -160,12 +160,16 @@ public class SimpleTest extends ApplicationAdapter {
                         turnable.reset();
                         break;
                     case Input.Keys.P:
-//                        knightModel = new ArrayModel(maker.warriorRandom());
-//                        turnModel.set(knightModel);
-                        turnable.turnModel().set(new ArrayModel(maker.warriorRandom()).boxModel(13, 12, 8, ColorFetch.color(Coloring.rinsed("Red 4"))).model(13, 12, 8));
+                        turnable.set(
+                                new ArrayModel(maker.warriorRandom())
+                                        .boxModel(13, 12, 8,
+                                                ColorFetch.color(Coloring.rinsed("Red 4"))
+                                        )
+                                        .model(13, 12, 8)
+                        );
                         break;
                     case Input.Keys.S:
-                        turnable.turnModel().set(new FetchModel(20, 20, 20,
+                        turnable.set(new FetchModel(20, 20, 20,
                                 new NoiseFetch((byte) 194, (byte) 194))); //(byte) 0, (byte) 0, (byte) 0,   , (byte) 0, (byte) 0, (byte) 0   , (byte) 98, (byte) 130, (byte) 162 
                         break;
                     case Input.Keys.G:
@@ -176,15 +180,6 @@ public class SimpleTest extends ApplicationAdapter {
                         break;
                     case Input.Keys.T: // try again
                         turnable.reset();
-                        break;
-                    case Input.Keys.F:
-                        z45 = !z45;
-                        break;
-                    case Input.Keys.X:
-                        batchRenderer.flipX();
-                        break;
-                    case Input.Keys.C:
-                        batchRenderer.flipY();
                         break;
                     case Input.Keys.ESCAPE:
                         Gdx.app.exit();

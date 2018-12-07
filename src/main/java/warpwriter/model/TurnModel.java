@@ -7,7 +7,7 @@ package warpwriter.model;
  */
 public class TurnModel extends Fetch implements IModel {
     protected IModel iModel;
-    protected Turner turner;
+    protected Turner turner = new Turner();
 
     public TurnModel set(IModel iModel) {
         this.iModel = iModel;
@@ -25,14 +25,6 @@ public class TurnModel extends Fetch implements IModel {
 
     public Turner turner() {
         return turner;
-    }
-
-    public TurnModel(IModel iModel, Turner turner) {
-        set(iModel).set(turner);
-    }
-
-    public TurnModel(IModel iModel) {
-        set(iModel).set(new Turner());
     }
 
     public TurnModel size() {
