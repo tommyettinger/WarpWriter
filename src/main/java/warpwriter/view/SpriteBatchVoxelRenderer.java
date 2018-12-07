@@ -86,6 +86,14 @@ public class SpriteBatchVoxelRenderer implements IPixelRenderer, ITriangleRender
         return this;
     }
 
+    public int offsetX() {
+        return offsetX;
+    }
+
+    public int offsetY() {
+        return offsetY;
+    }
+
     public SpriteBatchVoxelRenderer multiplyScale(float multiplier) {
         return setScale(scaleX * multiplier, scaleY * multiplier);
     }
