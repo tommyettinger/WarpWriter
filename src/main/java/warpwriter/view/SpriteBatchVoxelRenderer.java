@@ -8,12 +8,50 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.NumberUtils;
 
 public class SpriteBatchVoxelRenderer implements IPixelRenderer, ITriangleRenderer, Disposable {
-    protected static IVoxelColor color = new VoxelColor();
+    protected VoxelColor color = new VoxelColor();
     protected SpriteBatch batch;
     protected Texture one;
     protected Sprite triangle;
     protected int offsetX = 0, offsetY = 0;
     protected float scaleX = 1f, scaleY = 1f;
+    protected boolean flipX = false, flipY = false;
+
+    public VoxelColor color() {
+        return color;
+    }
+
+    public SpriteBatchVoxelRenderer set(VoxelColor color) {
+        this.color = color;
+        return this;
+    }
+
+    public SpriteBatchVoxelRenderer flipX() {
+        flipX = !flipX;
+        return this;
+    }
+
+    public SpriteBatchVoxelRenderer flipY() {
+        flipY = !flipY;
+        return this;
+    }
+
+    public boolean getFlipX() {
+        return flipX;
+    }
+
+    public boolean getFlipY() {
+        return flipY;
+    }
+
+    public SpriteBatchVoxelRenderer setFlipX(boolean flipX) {
+        this.flipX = flipX;
+        return this;
+    }
+
+    public SpriteBatchVoxelRenderer setFlipY(boolean flipY) {
+        this.flipY = flipY;
+        return this;
+    }
 
     public SpriteBatchVoxelRenderer(SpriteBatch batch) {
         this.batch = batch;
@@ -48,6 +86,14 @@ public class SpriteBatchVoxelRenderer implements IPixelRenderer, ITriangleRender
         return this;
     }
 
+    public int offsetX() {
+        return offsetX;
+    }
+
+    public int offsetY() {
+        return offsetY;
+    }
+
     public SpriteBatchVoxelRenderer multiplyScale(float multiplier) {
         return setScale(scaleX * multiplier, scaleY * multiplier);
     }
@@ -66,12 +112,17 @@ public class SpriteBatchVoxelRenderer implements IPixelRenderer, ITriangleRender
         return drawRect(x, y, 1, 1, color);
     }
 
-    public IPixelRenderer drawRect(int x, int y, int xSize, int ySize, int color) {
+    public IPixelRenderer drawRect(int x, int y, int sizeX, int sizeY, int color) {
         //final float oldColor = batch.getPackedColor(); // requires less conversions than batch.getColor(), same result
         batch.setColor(NumberUtils.intToFloatColor(Integer.reverseBytes(color)));
         // converts from RGBA to ABGR
         // converts ABGR int to float color, which SpriteBatch can use without needing an object
-        batch.draw(one, (x * scaleX) + offsetX, (y * scaleY) + offsetY, xSize * scaleX, ySize * scaleY);
+        batch.draw(one,
+                x * scaleX * (flipX ? -1 : 1) + offsetX,
+                y * scaleY * (flipY ? -1 : 1) + offsetY,
+                sizeX * scaleX,
+                sizeY * scaleY
+        );
         //batch.setColor(oldColor);
         return this;
     }
@@ -99,53 +150,100 @@ public class SpriteBatchVoxelRenderer implements IPixelRenderer, ITriangleRender
         // converts from RGBA to ABGR
         // converts ABGR int to float color, which SpriteBatch can use without needing an object
         triangle.setFlip(left, false);
-        batch.draw(triangle, (x * scaleX) + offsetX, (y * scaleY) + offsetY, scaleX * 2, scaleY * 3);
+        batch.draw(triangle,
+                x * scaleX * (flipX ? -1 : 1) + offsetX,
+                y * scaleY * (flipY ? -1 : 1) + offsetY,
+                scaleX * 2,
+                scaleY * 3
+        );
         batch.setColor(oldColor);
         return this;
     }
 
     @Override
     public IPixelRenderer drawPixelVerticalFace(int x, int y, byte voxel) {
-        return drawPixel(x, y, SpriteBatchVoxelRenderer.color.topFace(voxel));
+        return drawPixel(x, y,
+                flipY ?
+                        color.bottomFace(voxel)
+                        : color.topFace(voxel)
+        );
     }
 
     @Override
     public IPixelRenderer drawPixelLeftFace(int x, int y, byte voxel) {
-        return drawPixel(x, y, SpriteBatchVoxelRenderer.color.leftFace(voxel));
+        return drawPixel(x, y,
+                flipX ?
+                        color.rightFace(voxel)
+                        : color.leftFace(voxel)
+        );
     }
 
     @Override
     public IPixelRenderer drawPixelRightFace(int x, int y, byte voxel) {
-        return drawPixel(x, y, SpriteBatchVoxelRenderer.color.rightFace(voxel));
+        return drawPixel(x, y,
+                flipX ?
+                        color.leftFace(voxel)
+                        : color.rightFace(voxel)
+        );
     }
 
     @Override
     public ITriangleRenderer drawLeftTriangleVerticalFace(int x, int y, byte voxel) {
-        return drawLeftTriangle(x, y, SpriteBatchVoxelRenderer.color.topFace(voxel));
+        final int color = flipY ?
+                this.color.bottomFace(voxel)
+                : this.color.topFace(voxel);
+        return flipX ?
+                drawRightTriangle(x, y, color)
+                : drawLeftTriangle(x, y, color);
     }
 
     @Override
     public ITriangleRenderer drawLeftTriangleLeftFace(int x, int y, byte voxel) {
-        return drawLeftTriangle(x, y, SpriteBatchVoxelRenderer.color.leftFace(voxel));
+        final int color = flipX ?
+                this.color.rightFace(voxel)
+                : this.color.leftFace(voxel);
+        return flipX ?
+                drawRightTriangle(x, y, color)
+                : drawLeftTriangle(x, y, color);
     }
 
     @Override
     public ITriangleRenderer drawLeftTriangleRightFace(int x, int y, byte voxel) {
-        return drawLeftTriangle(x, y, SpriteBatchVoxelRenderer.color.rightFace(voxel));
+        final int color = flipX ?
+                this.color.leftFace(voxel)
+                : this.color.rightFace(voxel);
+        return flipX ?
+                drawRightTriangle(x, y, color)
+                : drawLeftTriangle(x, y, color);
     }
 
     @Override
     public ITriangleRenderer drawRightTriangleVerticalFace(int x, int y, byte voxel) {
-        return drawRightTriangle(x, y, SpriteBatchVoxelRenderer.color.topFace(voxel));
+        final int color = flipY ?
+                this.color.bottomFace(voxel)
+                : this.color.topFace(voxel);
+        return flipX ?
+                drawLeftTriangle(x, y, color)
+                : drawRightTriangle(x, y, color);
     }
 
     @Override
     public ITriangleRenderer drawRightTriangleLeftFace(int x, int y, byte voxel) {
-        return drawRightTriangle(x, y, SpriteBatchVoxelRenderer.color.leftFace(voxel));
+        final int color = flipX ?
+                this.color.rightFace(voxel)
+                : this.color.leftFace(voxel);
+        return flipX ?
+                drawLeftTriangle(x, y, color)
+                : drawRightTriangle(x, y, color);
     }
 
     @Override
     public ITriangleRenderer drawRightTriangleRightFace(int x, int y, byte voxel) {
-        return drawRightTriangle(x, y, SpriteBatchVoxelRenderer.color.rightFace(voxel));
+        final int color = flipX ?
+                this.color.leftFace(voxel)
+                : this.color.rightFace(voxel);
+        return flipX ?
+                drawLeftTriangle(x, y, color)
+                : drawRightTriangle(x, y, color);
     }
 }

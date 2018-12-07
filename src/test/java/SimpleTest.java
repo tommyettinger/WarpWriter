@@ -14,9 +14,8 @@ import squidpony.StringKit;
 import warpwriter.Coloring;
 import warpwriter.ModelMaker;
 import warpwriter.model.*;
-import warpwriter.view.SimpleDraw;
 import warpwriter.view.SpriteBatchVoxelRenderer;
-import warpwriter.view.VoxelColor;
+import warpwriter.view.Turnable;
 
 public class SimpleTest extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 1280;
@@ -30,11 +29,9 @@ public class SimpleTest extends ApplicationAdapter {
     protected FrameBuffer buffer;
     protected Texture screenTexture;
     protected TextureRegion screenRegion;
-    protected TurnModel turnModel;
-    protected ArrayModel knightModel;
     protected ModelMaker maker;
+    protected Turnable turnable;
     private SpriteBatchVoxelRenderer batchRenderer;
-    protected VoxelColor voxelColor;
     protected boolean z45 = false;
     protected int angle = 2;
     protected byte[][][] box;
@@ -51,8 +48,8 @@ public class SimpleTest extends ApplicationAdapter {
         screenView.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.enableBlending();
 
-        voxelColor = new VoxelColor();
-        batchRenderer = new SpriteBatchVoxelRenderer(batch).setOffset(16, 100);
+        batchRenderer = new SpriteBatchVoxelRenderer(batch);
+
         maker = new ModelMaker(12345);
 //        try {
 //            box = VoxIO.readVox(new LittleEndianDataInputStream(SimpleTest.class.getResourceAsStream("/dumbcube.vox")));
@@ -60,18 +57,21 @@ public class SimpleTest extends ApplicationAdapter {
 //            e.printStackTrace();
 //            box = maker.warriorRandom();
 //        }
-        knightModel = new ArrayModel(maker.warriorRandom());
         // uses a 13x12x8 model to test SimpleDraw's support for odd-number sizes
-        turnModel = new TurnModel(knightModel
+//        turnModel = new TurnModel(knightModel
 //                .boxModel(13, 12, 8, ColorFetch.color(Coloring.rinsed("Red 4")))
 //                .model(13, 12, 8)
-        );
+//        );
 //        turnModel = new TurnModel(knightModel);
 //        turnModel = new TurnModel(new BoxModel(knightModel,
 //                ColorFetch.color(Coloring.rinsed("Red 4"))
 //        ));
 
         //reDraw();
+        turnable = new Turnable()
+                .set(batchRenderer)
+                .setOffset(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2)
+                .set(new TurnModel(new ArrayModel(maker.warriorRandom())));
         Gdx.input.setInputProcessor(inputProcessor());
     }
 
@@ -86,23 +86,13 @@ public class SimpleTest extends ApplicationAdapter {
         batch.setProjectionMatrix(worldView.getCamera().combined);
         batch.begin();
 
-        font.draw(batch, StringKit.join(", ", turnModel.getModel().sizeX(), turnModel.getModel().sizeY(), turnModel.getModel().sizeZ()) + " (original)", 0, 80);
-        font.draw(batch, turnModel.sizeX() + ", " + turnModel.sizeY() + ", " + turnModel.sizeZ() + " (modified)", 0, 60);
-        font.draw(batch, StringKit.join(", ", turnModel.turner().rotation()) + " (rotation)", 0, 40);
+        font.draw(batch, StringKit.join(", ", turnable.turnModel().getModel().sizeX(), turnable.turnModel().getModel().sizeY(), turnable.turnModel().getModel().sizeZ()) + " (original)", 0, 80);
+        font.draw(batch, turnable.turnModel().sizeX() + ", " + turnable.turnModel().sizeY() + ", " + turnable.turnModel().sizeZ() + " (modified)", 0, 60);
+        font.draw(batch, StringKit.join(", ", turnable.turnModel().turner().rotation()) + " (rotation)", 0, 40);
         font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 20);
-        if (angle > 2) {
-            if (z45) {
-                final float scale = 1f;
-                font.draw(batch, "X", 0, 100);
-                font.draw(batch, "Z", 0, 100 + (turnModel.sizeY() * 2 + turnModel.sizeZ() * 2) * scale);
-                font.draw(batch, "Y", 0, 100 + (turnModel.sizeY() * 2 + turnModel.sizeZ() * 4 + turnModel.sizeX()) * scale);
-                SimpleDraw.simpleDrawIso(turnModel, batchRenderer.setScale(scale * 2f, scale));
-            } else
-                SimpleDraw.simpleDrawAbove(turnModel, batchRenderer.setScale(6f, 2f));
-        } else if (z45)
-            SimpleDraw.simpleDraw45(turnModel, batchRenderer.setScale(4f, 6f));
-        else
-            SimpleDraw.simpleDraw(turnModel, batchRenderer.setScale(6f));
+
+        turnable.render();
+
         batch.setColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
         batch.end();
         buffer.end();
@@ -149,46 +139,52 @@ public class SimpleTest extends ApplicationAdapter {
                         angle = 3;
                         break;
                     case Input.Keys.U:
-                        turnModel.turner().clockX();
+                        turnable.clockX();
                         break;
                     case Input.Keys.I:
-                        turnModel.turner().clockY();
+                        turnable.clockY();
                         break;
                     case Input.Keys.O:
-                        turnModel.turner().clockZ();
+                        turnable.clockZ();
                         break;
                     case Input.Keys.J:
-                        turnModel.turner().counterX();
+                        turnable.counterX();
                         break;
                     case Input.Keys.K:
-                        turnModel.turner().counterY();
+                        turnable.counterY();
                         break;
                     case Input.Keys.L:
-                        turnModel.turner().counterZ();
+                        turnable.counterZ();
                         break;
                     case Input.Keys.R:
-                        turnModel.turner().reset();
+                        turnable.reset();
                         break;
                     case Input.Keys.P:
 //                        knightModel = new ArrayModel(maker.warriorRandom());
 //                        turnModel.set(knightModel);
-                        turnModel.set(knightModel.boxModel(13, 12, 8, ColorFetch.color(Coloring.rinsed("Red 4"))).model(13, 12, 8));
+                        turnable.turnModel().set(new ArrayModel(maker.warriorRandom()).boxModel(13, 12, 8, ColorFetch.color(Coloring.rinsed("Red 4"))).model(13, 12, 8));
                         break;
                     case Input.Keys.S:
-                        turnModel.set(new FetchModel(20, 20, 20,
+                        turnable.turnModel().set(new FetchModel(20, 20, 20,
                                 new NoiseFetch((byte) 194, (byte) 194))); //(byte) 0, (byte) 0, (byte) 0,   , (byte) 0, (byte) 0, (byte) 0   , (byte) 98, (byte) 130, (byte) 162 
                         break;
                     case Input.Keys.G:
-                        voxelColor.set(voxelColor.direction().counter());
+                        batchRenderer.color().set(batchRenderer.color().direction().counter());
                         break;
                     case Input.Keys.H:
-                        voxelColor.set(voxelColor.direction().clock());
+                        batchRenderer.color().set(batchRenderer.color().direction().clock());
                         break;
                     case Input.Keys.T: // try again
-                        turnModel.turner().reset();
+                        turnable.reset();
                         break;
                     case Input.Keys.F:
                         z45 = !z45;
+                        break;
+                    case Input.Keys.X:
+                        batchRenderer.flipX();
+                        break;
+                    case Input.Keys.C:
+                        batchRenderer.flipY();
                         break;
                     case Input.Keys.ESCAPE:
                         Gdx.app.exit();

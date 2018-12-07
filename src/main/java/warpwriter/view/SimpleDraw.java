@@ -5,14 +5,62 @@ import warpwriter.model.IModel;
 
 public class SimpleDraw {
     public static void simpleDraw(IModel model, IPixelRenderer renderer) {
+        simpleDrawRight(model, renderer);
+    }
+
+    public static void simpleDrawRight(IModel model, IPixelRenderer renderer) {
         final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ();
         for (int z = 0; z < sizeZ; z++) {
             for (int y = 0; y < sizeY; y++) {
-//                renderer.drawPixel(y, z, Color.rgba8888(Color.RED));
                 for (int x = 0; x < sizeX; x++) {
                     byte result = model.at(x, y, z);
                     if (result != 0) {
                         renderer.drawPixelRightFace(y, z, result);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    public static void simpleDrawLeft(IModel model, IPixelRenderer renderer) {
+        final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ();
+        for (int z = 0; z < sizeZ; z++) {
+            for (int y = 0; y < sizeY; y++) {
+                for (int x = sizeX - 1; x >= 0; x++) {
+                    byte result = model.at(x, y, z);
+                    if (result != 0) {
+                        renderer.drawPixelLeftFace(y, z, result);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    public static void simpleDrawTop(IModel model, IPixelRenderer renderer) {
+        final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ();
+        for (int y = 0; y < sizeY; y++) {
+            for (int x = 0; x < sizeX; x++) {
+                for (int z = sizeZ - 1; z >= 0; z--) {
+                    byte result = model.at(x, y, z);
+                    if (result != 0) {
+                        renderer.drawPixelVerticalFace(y, x, result);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    public static void simpleDrawBottom(IModel model, IPixelRenderer renderer) {
+        final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ();
+        for (int y = 0; y < sizeY; y++) {
+            for (int x = 0; x < sizeX; x++) {
+                for (int z = 0; z < sizeZ; z--) {
+                    byte result = model.at(x, y, z);
+                    if (result != 0) {
+                        renderer.drawPixelVerticalFace(y, x, result);
                         break;
                     }
                 }
@@ -108,11 +156,22 @@ public class SimpleDraw {
         }
     }
 
+    public static int isoHeight(IModel model) {
+        return (model.sizeX() - 1) * 2 +
+                (model.sizeZ() - 1) * 4 +
+                (model.sizeY() - 1) * 2;
+    }
+
+    public static int isoWidth(IModel model) {
+        final int sizeVX = model.sizeX(), sizeVY = model.sizeY();
+        return sizeVX * 2 + sizeVY * 2 - ((sizeVX + sizeVY) % 2 == 1 ? 4 : 0);
+    }
+
     public static void simpleDrawIso(IModel model, ITriangleRenderer renderer) {
         byte result;
         final int sizeVX = model.sizeX(), sizeVY = model.sizeY(), sizeVZ = model.sizeZ(),
                 sizeVX2 = sizeVX * 2, sizeVY2 = sizeVY * 2,
-                pixelWidth = sizeVX2 + sizeVY2 - ((sizeVX + sizeVY) % 2 == 1 ? 4 : 0);
+                pixelWidth = isoWidth(model);
         // To move one x+ in voxels is x + 2, y - 2 in pixels.
         // To move one x- in voxels is x - 2, y + 2 in pixels.
         // To move one y+ in voxels is x + 2, y + 2 in pixels.
