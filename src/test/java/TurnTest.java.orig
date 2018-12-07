@@ -46,7 +46,19 @@ public class TurnTest extends ApplicationAdapter {
 //        }
         world = new ArrayModel(arr);
 
+<<<<<<< HEAD
         turnModel = new TurnModel().set(
+                new DecideFetch(
+//                        new PlaneDecide(1, 1, 1, 100).set(PlaneDecide.Condition.ON),
+                        new BalloonDecide(0, 30, 30, 30, 0, 0), // gives it a weird angle for testing
+                        ColorFetch.color(Coloring.rinsed("Coastal Water 2"))
+                )
+                        .boxModel(world,
+                                ColorFetch.color(Coloring.rinsed("Red 4"))
+                        )
+                        .model(world.sizeX(), world.sizeY(), world.sizeZ())
+=======
+        turnModel = new TurnModel(
                 world
 //                new DecideFetch(
 ////                        new PlaneDecide(1, 1, 1, 100).set(PlaneDecide.Condition.ON),
@@ -57,6 +69,7 @@ public class TurnTest extends ApplicationAdapter {
 //                                ColorFetch.color(Coloring.rinsed("Red 4"))
 //                        )
 //                        .model(world.sizeX(), world.sizeY(), world.sizeZ())
+>>>>>>> 1dd6fd6383adb11a0d7a1996a5c737744a5fab37
         );
 
         reDraw();
