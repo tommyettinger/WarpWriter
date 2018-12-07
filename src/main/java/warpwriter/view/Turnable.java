@@ -124,12 +124,14 @@ public class Turnable {
     }
 
     public Turnable render() {
+        final int sizeX = (z45 ? SimpleDraw.isoWidth(turnModel) : turnModel.sizeY() - 1) * (int) scaleX,
+                offCenter = sizeX / 2;
         switch (angle) {
             case 0: // Bottom
                 SimpleDraw.simpleDrawBottom(turnModel, batchRenderer
                         .setFlipX(false).setFlipY(false)
                         .setScale(scaleX * 6f, scaleY * 6f)
-                        .setOffset(offsetX, offsetY)
+                        .setOffset(offsetX - offCenter * 6, offsetY)
                 );
                 break;
             case 1: // Below
@@ -138,17 +140,18 @@ public class Turnable {
                     SimpleDraw.simpleDrawIso(turnModel, batchRenderer
                             .setFlipX(true).setFlipY(true)
                             .setScale(scaleX * 2f, scaleY)
-                            .setOffset(offsetX + SimpleDraw.isoWidth(turnModel) * 2, offsetY + SimpleDraw.isoHeight(turnModel))
+                            .setOffset(offsetX + (sizeX - offCenter) * 2, offsetY + SimpleDraw.isoHeight(turnModel))
                     );
                     turnModel.turner().counterZ().counterY().counterY();
-                }
-                else {
+                } else {
                     turnModel.turner().clockY().clockY().clockZ().clockZ();
+                    batchRenderer.color().set(batchRenderer.color().direction().flipZ());
                     SimpleDraw.simpleDrawAbove(turnModel, batchRenderer
                             .setFlipX(true).setFlipY(true)
                             .setScale(scaleX * 6f, scaleY * 2f)
-                            .setOffset(offsetX + turnModel.sizeY() * 6, offsetY + (turnModel.sizeX() + turnModel.sizeZ()) * 4)
+                            .setOffset(offsetX + (sizeX - offCenter) * 6, offsetY + (turnModel.sizeX() + turnModel.sizeZ()) * 4)
                     );
+                    batchRenderer.color().set(batchRenderer.color().direction().flipZ());
                     turnModel.turner().counterZ().counterZ().counterY().counterY();
                 }
                 break;
@@ -157,13 +160,13 @@ public class Turnable {
                     SimpleDraw.simpleDraw45(turnModel, batchRenderer
                             .setFlipX(false).setFlipY(false)
                             .setScale(scaleX * 4f, scaleY * 6f)
-                            .setOffset(offsetX, offsetY)
+                            .setOffset(offsetX - offCenter * 2, offsetY)
                     );
                 else
                     SimpleDraw.simpleDraw(turnModel, batchRenderer
                             .setFlipX(false).setFlipY(false)
                             .setScale(scaleX * 6f, scaleY * 6f)
-                            .setOffset(offsetX, offsetY)
+                            .setOffset(offsetX - offCenter * 6, offsetY)
                     );
                 break;
             case 3: // Above
@@ -171,20 +174,20 @@ public class Turnable {
                     SimpleDraw.simpleDrawIso(turnModel, batchRenderer
                             .setFlipX(false).setFlipY(false)
                             .setScale(scaleX * 2f, scaleY)
-                            .setOffset(offsetX, offsetY)
+                            .setOffset(offsetX - offCenter * 2, offsetY)
                     );
                 else
                     SimpleDraw.simpleDrawAbove(turnModel, batchRenderer
                             .setFlipX(false).setFlipY(false)
                             .setScale(scaleX * 6f, scaleY * 2f)
-                            .setOffset(offsetX, offsetY)
+                            .setOffset(offsetX - offCenter * 6, offsetY)
                     );
                 break;
             case 4: // Top
                 SimpleDraw.simpleDrawTop(turnModel, batchRenderer
                         .setFlipX(false).setFlipY(false)
                         .setScale(scaleX * 6f, scaleY * 6f)
-                        .setOffset(offsetX, offsetY)
+                        .setOffset(offsetX - offCenter * 6, offsetY)
                 );
                 break;
             default:

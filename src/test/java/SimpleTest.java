@@ -68,7 +68,7 @@ public class SimpleTest extends ApplicationAdapter {
         //reDraw();
         turnable = new Turnable()
                 .set(batchRenderer)
-                .setOffset(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2)
+                .setOffset(VIRTUAL_WIDTH / 2, 100)
                 .set(new TurnModel().set(new ArrayModel(maker.warriorRandom())));
         Gdx.input.setInputProcessor(inputProcessor());
     }
