@@ -14,7 +14,7 @@ import squidpony.StringKit;
 import warpwriter.LittleEndianDataInputStream;
 import warpwriter.ModelMaker;
 import warpwriter.VoxIO;
-import warpwriter.view.SpriteBatchVoxelRenderer;
+import warpwriter.view.VoxelSpriteBatchRenderer;
 import warpwriter.view.VoxelColor;
 import warpwriter.view.WarpDraw;
 import warpwriter.warp.VoxelModel;
@@ -35,7 +35,7 @@ public class WarpTest extends ApplicationAdapter {
     protected TextureRegion screenRegion;
     protected VoxelModel model, dumbCube, warrior;
     protected ModelMaker maker;
-    private SpriteBatchVoxelRenderer batchRenderer;
+    private VoxelSpriteBatchRenderer batchRenderer;
     protected VoxelColor voxelColor;
     protected int angle = 2;
     protected boolean diagonal = false, outline = true;
@@ -54,7 +54,7 @@ public class WarpTest extends ApplicationAdapter {
         batch.enableBlending();
 
         voxelColor = new VoxelColor();
-        batchRenderer = new SpriteBatchVoxelRenderer(batch).setOffset(16, 100);
+        batchRenderer = new VoxelSpriteBatchRenderer(batch).setOffset(16, 100);
         maker = new ModelMaker(12345);
         try {
             box = VoxIO.readVox(new LittleEndianDataInputStream(WarpTest.class.getResourceAsStream("/dumbcube.vox")));

@@ -3,7 +3,7 @@ package warpwriter.view;
 import com.badlogic.gdx.graphics.Color;
 import warpwriter.model.IModel;
 
-public class SimpleDraw {
+public class VoxelDraw {
     public static void simpleDraw(IModel model, IPixelRenderer renderer) {
         simpleDrawRight(model, renderer);
     }

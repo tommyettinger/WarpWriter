@@ -14,8 +14,8 @@ import squidpony.StringKit;
 import warpwriter.Coloring;
 import warpwriter.ModelMaker;
 import warpwriter.model.*;
-import warpwriter.view.SpriteBatchVoxelRenderer;
-import warpwriter.view.Turnable;
+import warpwriter.view.VoxelSpriteBatchRenderer;
+import warpwriter.view.VoxelSprite;
 
 public class SimpleTest extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 1280;
@@ -30,8 +30,8 @@ public class SimpleTest extends ApplicationAdapter {
     protected Texture screenTexture;
     protected TextureRegion screenRegion;
     protected ModelMaker maker;
-    protected Turnable turnable;
-    private SpriteBatchVoxelRenderer batchRenderer;
+    protected VoxelSprite voxelSprite;
+    private VoxelSpriteBatchRenderer batchRenderer;
     protected byte[][][] box;
 
     @Override
@@ -46,7 +46,7 @@ public class SimpleTest extends ApplicationAdapter {
         screenView.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.enableBlending();
 
-        batchRenderer = new SpriteBatchVoxelRenderer(batch);
+        batchRenderer = new VoxelSpriteBatchRenderer(batch);
 
         maker = new ModelMaker(12345);
 //        try {
@@ -55,7 +55,7 @@ public class SimpleTest extends ApplicationAdapter {
 //            e.printStackTrace();
 //            box = maker.warriorRandom();
 //        }
-        // uses a 13x12x8 model to test SimpleDraw's support for odd-number sizes
+        // uses a 13x12x8 model to test VoxelDraw's support for odd-number sizes
 //        turnModel = new TurnModel(knightModel
 //                .boxModel(13, 12, 8, ColorFetch.color(Coloring.rinsed("Red 4")))
 //                .model(13, 12, 8)
@@ -66,7 +66,7 @@ public class SimpleTest extends ApplicationAdapter {
 //        ));
 
         //reDraw();
-        turnable = new Turnable()
+        voxelSprite = new VoxelSprite()
                 .set(batchRenderer)
                 .setOffset(VIRTUAL_WIDTH / 2, 100)
                 .set(new TurnModel().set(new ArrayModel(maker.warriorRandom())));
@@ -84,12 +84,12 @@ public class SimpleTest extends ApplicationAdapter {
         batch.setProjectionMatrix(worldView.getCamera().combined);
         batch.begin();
 
-        font.draw(batch, StringKit.join(", ", turnable.getModel().sizeX(), turnable.getModel().sizeY(), turnable.getModel().sizeZ()) + " (original)", 0, 80);
-        font.draw(batch, turnable.turnModel().sizeX() + ", " + turnable.turnModel().sizeY() + ", " + turnable.turnModel().sizeZ() + " (modified)", 0, 60);
-        font.draw(batch, StringKit.join(", ", turnable.turnModel().turner().rotation()) + " (rotation)", 0, 40);
+        font.draw(batch, StringKit.join(", ", voxelSprite.getModel().sizeX(), voxelSprite.getModel().sizeY(), voxelSprite.getModel().sizeZ()) + " (original)", 0, 80);
+        font.draw(batch, voxelSprite.turnModel().sizeX() + ", " + voxelSprite.turnModel().sizeY() + ", " + voxelSprite.turnModel().sizeZ() + " (modified)", 0, 60);
+        font.draw(batch, StringKit.join(", ", voxelSprite.turnModel().turner().rotation()) + " (rotation)", 0, 40);
         font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 20);
 
-        turnable.render();
+        voxelSprite.render();
 
         batch.setColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
         batch.end();
@@ -128,37 +128,37 @@ public class SimpleTest extends ApplicationAdapter {
             public boolean keyDown(int keycode) {
                 switch (keycode) {
                     case Input.Keys.NUM_0:
-                        turnable.setAngle(1);
+                        voxelSprite.setAngle(1);
                         break;
                     case Input.Keys.MINUS:
-                        turnable.setAngle(2);
+                        voxelSprite.setAngle(2);
                         break;
                     case Input.Keys.EQUALS:
-                        turnable.setAngle(3);
+                        voxelSprite.setAngle(3);
                         break;
                     case Input.Keys.U:
-                        turnable.clockX();
+                        voxelSprite.clockX();
                         break;
                     case Input.Keys.I:
-                        turnable.clockY();
+                        voxelSprite.clockY();
                         break;
                     case Input.Keys.O:
-                        turnable.clockZ();
+                        voxelSprite.clockZ();
                         break;
                     case Input.Keys.J:
-                        turnable.counterX();
+                        voxelSprite.counterX();
                         break;
                     case Input.Keys.K:
-                        turnable.counterY();
+                        voxelSprite.counterY();
                         break;
                     case Input.Keys.L:
-                        turnable.counterZ();
+                        voxelSprite.counterZ();
                         break;
                     case Input.Keys.R:
-                        turnable.reset();
+                        voxelSprite.reset();
                         break;
                     case Input.Keys.P:
-                        turnable.set(
+                        voxelSprite.set(
                                 new ArrayModel(maker.warriorRandom())
                                         .boxModel(13, 12, 8,
                                                 ColorFetch.color(Coloring.rinsed("Red 4"))
@@ -167,7 +167,7 @@ public class SimpleTest extends ApplicationAdapter {
                         );
                         break;
                     case Input.Keys.S:
-                        turnable.set(new FetchModel(20, 20, 20,
+                        voxelSprite.set(new FetchModel(20, 20, 20,
                                 new NoiseFetch((byte) 194, (byte) 194))); //(byte) 0, (byte) 0, (byte) 0,   , (byte) 0, (byte) 0, (byte) 0   , (byte) 98, (byte) 130, (byte) 162 
                         break;
                     case Input.Keys.G:
@@ -177,7 +177,7 @@ public class SimpleTest extends ApplicationAdapter {
                         batchRenderer.color().set(batchRenderer.color().direction().clock());
                         break;
                     case Input.Keys.T: // try again
-                        turnable.reset();
+                        voxelSprite.reset();
                         break;
                     case Input.Keys.ESCAPE:
                         Gdx.app.exit();

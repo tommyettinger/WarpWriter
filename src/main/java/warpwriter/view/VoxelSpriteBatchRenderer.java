@@ -7,55 +7,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.NumberUtils;
 
-public class SpriteBatchVoxelRenderer implements IPixelRenderer, ITriangleRenderer, Disposable {
-    protected VoxelColor color = new VoxelColor();
-    protected SpriteBatch batch;
-    protected Texture one;
-    protected Sprite triangle;
-    protected int offsetX = 0, offsetY = 0;
-    protected float scaleX = 1f, scaleY = 1f;
-    protected boolean flipX = false, flipY = false;
-
-    public VoxelColor color() {
-        return color;
+public class VoxelSpriteBatchRenderer implements IPixelRenderer, ITriangleRenderer, Disposable {
+    public VoxelSpriteBatchRenderer(SpriteBatch batch) {
+        this();
+        set(batch);
     }
 
-    public SpriteBatchVoxelRenderer set(VoxelColor color) {
-        this.color = color;
-        return this;
-    }
+    private Texture one;
+    private Sprite triangle;
 
-    public SpriteBatchVoxelRenderer flipX() {
-        flipX = !flipX;
-        return this;
-    }
-
-    public SpriteBatchVoxelRenderer flipY() {
-        flipY = !flipY;
-        return this;
-    }
-
-    public boolean getFlipX() {
-        return flipX;
-    }
-
-    public boolean getFlipY() {
-        return flipY;
-    }
-
-    public SpriteBatchVoxelRenderer setFlipX(boolean flipX) {
-        this.flipX = flipX;
-        return this;
-    }
-
-    public SpriteBatchVoxelRenderer setFlipY(boolean flipY) {
-        this.flipY = flipY;
-        return this;
-    }
-
-    public SpriteBatchVoxelRenderer(SpriteBatch batch) {
-        this.batch = batch;
-
+    public VoxelSpriteBatchRenderer() {
         //creating "one" texture.
         Pixmap pixmap1 = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap1.drawPixel(0, 0, -1);
@@ -75,12 +36,40 @@ public class SpriteBatchVoxelRenderer implements IPixelRenderer, ITriangleRender
         pixmap1.dispose();
     }
 
-    public SpriteBatchVoxelRenderer set(SpriteBatch batch) {
+    /**
+     * Does not dispose the sprite batch!
+     */
+    @Override
+    public void dispose() {
+        one.dispose();
+        triangle.getTexture().dispose();
+    }
+
+    protected VoxelColor color = new VoxelColor();
+
+    public VoxelColor color() {
+        return color;
+    }
+
+    public VoxelSpriteBatchRenderer set(VoxelColor color) {
+        this.color = color;
+        return this;
+    }
+
+    protected SpriteBatch batch;
+
+    public VoxelSpriteBatchRenderer set(SpriteBatch batch) {
         this.batch = batch;
         return this;
     }
 
-    public SpriteBatchVoxelRenderer setOffset(int offsetX, int offsetY) {
+    public SpriteBatch batch() {
+        return batch;
+    }
+
+    protected int offsetX = 0, offsetY = 0;
+
+    public VoxelSpriteBatchRenderer setOffset(int offsetX, int offsetY) {
         this.offsetX = offsetX;
         this.offsetY = offsetY;
         return this;
@@ -94,15 +83,47 @@ public class SpriteBatchVoxelRenderer implements IPixelRenderer, ITriangleRender
         return offsetY;
     }
 
-    public SpriteBatchVoxelRenderer multiplyScale(float multiplier) {
+    protected boolean flipX = false, flipY = false;
+
+    public VoxelSpriteBatchRenderer flipX() {
+        flipX = !flipX;
+        return this;
+    }
+
+    public VoxelSpriteBatchRenderer flipY() {
+        flipY = !flipY;
+        return this;
+    }
+
+    public boolean getFlipX() {
+        return flipX;
+    }
+
+    public boolean getFlipY() {
+        return flipY;
+    }
+
+    public VoxelSpriteBatchRenderer setFlipX(boolean flipX) {
+        this.flipX = flipX;
+        return this;
+    }
+
+    public VoxelSpriteBatchRenderer setFlipY(boolean flipY) {
+        this.flipY = flipY;
+        return this;
+    }
+
+    protected float scaleX = 1f, scaleY = 1f;
+
+    public VoxelSpriteBatchRenderer multiplyScale(float multiplier) {
         return setScale(scaleX * multiplier, scaleY * multiplier);
     }
 
-    public SpriteBatchVoxelRenderer setScale(float scale) {
+    public VoxelSpriteBatchRenderer setScale(float scale) {
         return setScale(scale, scale);
     }
 
-    public SpriteBatchVoxelRenderer setScale(float scaleX, float scaleY) {
+    public VoxelSpriteBatchRenderer setScale(float scaleX, float scaleY) {
         this.scaleX = scaleX;
         this.scaleY = scaleY;
         return this;
@@ -127,15 +148,6 @@ public class SpriteBatchVoxelRenderer implements IPixelRenderer, ITriangleRender
         return this;
     }
 
-    /**
-     * Does not dispose the sprite batch!
-     */
-    @Override
-    public void dispose() {
-        one.dispose();
-        triangle.getTexture().dispose();
-    }
-
     public ITriangleRenderer drawLeftTriangle(int x, int y, int color) {
         return drawTriangle(x, y, color, true);
     }
@@ -144,7 +156,7 @@ public class SpriteBatchVoxelRenderer implements IPixelRenderer, ITriangleRender
         return drawTriangle(x, y, color, false);
     }
 
-    public SpriteBatchVoxelRenderer drawTriangle(int x, int y, int color, boolean left) {
+    public VoxelSpriteBatchRenderer drawTriangle(int x, int y, int color, boolean left) {
         float oldColor = batch.getPackedColor(); // requires less conversions than batch.getColor(), same result
         batch.setColor(NumberUtils.intToFloatColor(Integer.reverseBytes(color)));
         // converts from RGBA to ABGR

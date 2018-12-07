@@ -375,4 +375,30 @@ public class VoxelColor implements IVoxelColor {
                 return twilight.twilight(voxel);
         }
     }
+
+    public static class SimpleVoxelColor implements IVoxelColor {
+        public static int simple(byte voxel) {
+            return Coloring.RINSED[voxel & 255];
+        }
+
+        @Override
+        public int topFace(byte voxel) {
+            return simple(voxel);
+        }
+
+        @Override
+        public int bottomFace(byte voxel) {
+            return simple(voxel);
+        }
+
+        @Override
+        public int leftFace(byte voxel) {
+            return simple(voxel);
+        }
+
+        @Override
+        public int rightFace(byte voxel) {
+            return simple(voxel);
+        }
+    }
 }
