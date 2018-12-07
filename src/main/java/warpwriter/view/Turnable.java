@@ -133,22 +133,26 @@ public class Turnable {
                 );
                 break;
             case 1: // Below
+                if (z45) {
+                    turnModel.turner().clockY().clockY().clockZ();
+                    SimpleDraw.simpleDrawIso(turnModel, batchRenderer
+                            .setFlipX(true).setFlipY(true)
+                            .setScale(scaleX * 2f, scaleY)
+                            .setOffset(offsetX + SimpleDraw.isoWidth(turnModel) * 2, offsetY + SimpleDraw.isoHeight(turnModel))
+                    );
+                    turnModel.turner().counterZ().counterY().counterY();
+                }
+                else {
+                    turnModel.turner().clockY().clockY().clockZ().clockZ();
+                    SimpleDraw.simpleDrawAbove(turnModel, batchRenderer
+                            .setFlipX(true).setFlipY(true)
+                            .setScale(scaleX * 6f, scaleY * 2f)
+                            .setOffset(offsetX + turnModel.sizeY() * 6, offsetY + (turnModel.sizeX() + turnModel.sizeZ()) * 4)
+                    );
+                    turnModel.turner().counterZ().counterZ().counterY().counterY();
+                }
                 break;
             case 2: // Side
-                if (z45)
-                    SimpleDraw.simpleDrawIso(turnModel, batchRenderer
-                            .setFlipX(false).setFlipY(false)
-                            .setScale(scaleX * 2f, scaleY)
-                            .setOffset(offsetX, offsetY)
-                    );
-                else
-                    SimpleDraw.simpleDrawAbove(turnModel, batchRenderer
-                            .setFlipX(false).setFlipY(false)
-                            .setScale(scaleX * 6f, scaleY * 2f)
-                            .setOffset(offsetX, offsetY)
-                    );
-                break;
-            case 3: // Above
                 if (z45)
                     SimpleDraw.simpleDraw45(turnModel, batchRenderer
                             .setFlipX(false).setFlipY(false)
@@ -159,6 +163,20 @@ public class Turnable {
                     SimpleDraw.simpleDraw(turnModel, batchRenderer
                             .setFlipX(false).setFlipY(false)
                             .setScale(scaleX * 6f, scaleY * 6f)
+                            .setOffset(offsetX, offsetY)
+                    );
+                break;
+            case 3: // Above
+                if (z45)
+                    SimpleDraw.simpleDrawIso(turnModel, batchRenderer
+                            .setFlipX(false).setFlipY(false)
+                            .setScale(scaleX * 2f, scaleY)
+                            .setOffset(offsetX, offsetY)
+                    );
+                else
+                    SimpleDraw.simpleDrawAbove(turnModel, batchRenderer
+                            .setFlipX(false).setFlipY(false)
+                            .setScale(scaleX * 6f, scaleY * 2f)
                             .setOffset(offsetX, offsetY)
                     );
                 break;

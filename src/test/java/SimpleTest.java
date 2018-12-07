@@ -32,8 +32,6 @@ public class SimpleTest extends ApplicationAdapter {
     protected ModelMaker maker;
     protected Turnable turnable;
     private SpriteBatchVoxelRenderer batchRenderer;
-    protected boolean z45 = false;
-    protected int angle = 2;
     protected byte[][][] box;
 
     @Override
@@ -130,13 +128,13 @@ public class SimpleTest extends ApplicationAdapter {
             public boolean keyDown(int keycode) {
                 switch (keycode) {
                     case Input.Keys.NUM_0:
-                        angle = 1;
+                        turnable.setAngle(1);
                         break;
                     case Input.Keys.MINUS:
-                        angle = 2;
+                        turnable.setAngle(2);
                         break;
                     case Input.Keys.EQUALS:
-                        angle = 3;
+                        turnable.setAngle(3);
                         break;
                     case Input.Keys.U:
                         turnable.clockX();
