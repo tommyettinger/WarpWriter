@@ -11,11 +11,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import warpwriter.*;
-import warpwriter.model.*;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import warpwriter.ModelRenderer;
+import warpwriter.WorldMaker;
+import warpwriter.model.ArrayModel;
+import warpwriter.model.CompassDirection;
+import warpwriter.model.TurnModel;
 
 public class TurnTest extends ApplicationAdapter {
     public static final int width = 1280;
@@ -37,25 +37,26 @@ public class TurnTest extends ApplicationAdapter {
         batch = new SpriteBatch();
         view = new FitViewport(width, height);
         font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
-        byte[][][] arr;
-        try {
-            arr = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("SpaceMarine.vox")));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            arr = new byte[80][80][60];
-        }
+        byte[][][] arr = wm.makeWorld(120, -1, -1);
+//        try {
+//            arr = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("SpaceMarine.vox")));
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//            arr = new byte[80][80][60];
+//        }
         world = new ArrayModel(arr);
 
         turnModel = new TurnModel(
-                new DecideFetch(
-//                        new PlaneDecide(1, 1, 1, 100).set(PlaneDecide.Condition.ON),
-                        new BalloonDecide(0, 30, 30, 30, 0, 0), // gives it a weird angle for testing
-                        ColorFetch.color(Coloring.rinsed("Coastal Water 2"))
-                )
-                        .boxModel(world,
-                                ColorFetch.color(Coloring.rinsed("Red 4"))
-                        )
-                        .model(world.sizeX(), world.sizeY(), world.sizeZ())
+                world
+//                new DecideFetch(
+////                        new PlaneDecide(1, 1, 1, 100).set(PlaneDecide.Condition.ON),
+//                        new BalloonDecide(0, 30, 30, 30, 0, 0), // gives it a weird angle for testing
+//                        ColorFetch.color(Coloring.rinsed("Coastal Water 2"))
+//                )
+//                        .boxModel(world,
+//                                ColorFetch.color(Coloring.rinsed("Red 4"))
+//                        )
+//                        .model(world.sizeX(), world.sizeY(), world.sizeZ())
         );
 
         reDraw();
@@ -65,7 +66,7 @@ public class TurnTest extends ApplicationAdapter {
                 boolean needRedraw = true;
                 switch (keycode) {
                     case Input.Keys.R:
-                        world.voxels = (wm.makeWorld(60, -1, -1));
+                        world.voxels = (wm.makeWorld(120, -1, -1));
                         break;
                     case Input.Keys.NUM_0:
                         angle = 1;
