@@ -116,7 +116,7 @@ public class VoxelDraw {
                 pixelHeight = (sizeX + sizeZ) * 2;
         for (int vy = 0; vy < sizeY; vy++) { // voxel y is pixel x
             // Begin bottom row
-            byte result = model.at(sizeX - 1, 0, 0);
+            byte result = model.at(0, vy, 0);
             if (result != 0) {
                 renderer.drawPixelRightFace(vy, 0, result);
             }
