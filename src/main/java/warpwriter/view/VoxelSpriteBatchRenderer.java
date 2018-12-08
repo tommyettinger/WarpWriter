@@ -148,10 +148,12 @@ public class VoxelSpriteBatchRenderer implements IPixelRenderer, ITriangleRender
         return this;
     }
 
+    @Override
     public ITriangleRenderer drawLeftTriangle(int x, int y, int color) {
         return drawTriangle(x, y, color, true);
     }
 
+    @Override
     public ITriangleRenderer drawRightTriangle(int x, int y, int color) {
         return drawTriangle(x, y, color, false);
     }
