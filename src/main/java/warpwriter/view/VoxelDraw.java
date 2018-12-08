@@ -69,11 +69,11 @@ public class VoxelDraw {
     }
 
     public static void simpleDraw45(IModel model, IPixelRenderer renderer) {
+        byte v;
         final int sizeX = model.sizeX(),
                 sizeY = model.sizeY(),
                 sizeZ = model.sizeZ(),
                 pixelWidth = sizeX + sizeY;
-        byte v = 0;
         for (int py = 0; py < sizeZ; py++) { // pixel y
             for (int px = 0; px <= pixelWidth; px += 2) { // pixel x
 //                renderer.drawRect(px, py, 2, 1, Color.rgba8888(Color.RED));
@@ -187,16 +187,18 @@ public class VoxelDraw {
 
             // Begin drawing bottom row triangles
             if (px < sizeVX2 - 2) { // Left side of model
-                v = model.at(px / 2, 0, 0);
+                boolean right = false;
+                v = model.at(sizeVX - px / 2 - 2, 0, 0); // Front right
                 if (v != 0) {
-                    renderer.drawLeftTriangleLeftFace(px + 2, bottomPY - 6, v);
-                    renderer.drawLeftTriangleLeftFace(px, bottomPY - 4, v);
                     renderer.drawRightTriangleLeftFace(px + 2, bottomPY - 4, v);
-                } else if (px / 2 < sizeVX2 - 1) {
-                    v = model.at(sizeVX - (px / 2 + 1), 0, 0);
-                    if (v != 0) {
-                        renderer.drawLeftTriangleLeftFace(px, bottomPY - 4, v);
-                    }
+                    renderer.drawLeftTriangleLeftFace(px + 2, bottomPY - 6, v);
+                    right = true;
+                }
+                v = model.at(sizeVX - px / 2 - 1, 0, 0); // Center
+                if (v != 0) {
+                    renderer.drawLeftTriangleLeftFace(px, bottomPY - 4, v);
+                    if (!right)
+                        renderer.drawRightTriangleRightFace(px + 2, bottomPY - 4, v);
                 }
             } else if (px > sizeVX2 - 2) { // Right side of model
                 v = model.at(0, px / 2 - sizeVX + 1, 0);
