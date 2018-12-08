@@ -4,11 +4,11 @@ import warpwriter.Coloring;
 import warpwriter.model.IModel;
 
 public class VoxelDraw {
-    public static void simpleDraw(IModel model, IPixelRenderer renderer) {
-        simpleDrawRight(model, renderer);
+    public static void draw(IModel model, IPixelRenderer renderer) {
+        drawRight(model, renderer);
     }
 
-    public static void simpleDrawRight(IModel model, IPixelRenderer renderer) {
+    public static void drawRight(IModel model, IPixelRenderer renderer) {
         final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ();
         for (int z = 0; z < sizeZ; z++) {
             for (int y = 0; y < sizeY; y++) {
@@ -23,7 +23,7 @@ public class VoxelDraw {
         }
     }
 
-    public static void simpleDrawLeft(IModel model, IPixelRenderer renderer) {
+    public static void drawLeft(IModel model, IPixelRenderer renderer) {
         final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ();
         for (int z = 0; z < sizeZ; z++) {
             for (int y = 0; y < sizeY; y++) {
@@ -38,7 +38,7 @@ public class VoxelDraw {
         }
     }
 
-    public static void simpleDrawTop(IModel model, IPixelRenderer renderer) {
+    public static void drawTop(IModel model, IPixelRenderer renderer) {
         final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ();
         for (int y = 0; y < sizeY; y++) {
             for (int x = 0; x < sizeX; x++) {
@@ -53,7 +53,7 @@ public class VoxelDraw {
         }
     }
 
-    public static void simpleDrawBottom(IModel model, IPixelRenderer renderer) {
+    public static void drawBottom(IModel model, IPixelRenderer renderer) {
         final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ();
         for (int y = 0; y < sizeY; y++) {
             for (int x = 0; x < sizeX; x++) {
@@ -68,7 +68,7 @@ public class VoxelDraw {
         }
     }
 
-    public static void simpleDraw45(IModel model, IPixelRenderer renderer) {
+    public static void draw45(IModel model, IPixelRenderer renderer) {
         byte v;
         final int sizeX = model.sizeX(),
                 sizeY = model.sizeY(),
@@ -109,7 +109,7 @@ public class VoxelDraw {
         }
     }
 
-    public static void simpleDrawAbove(IModel model, IPixelRenderer renderer) {
+    public static void drawAbove(IModel model, IPixelRenderer renderer) {
         final int sizeX = model.sizeX(),
                 sizeY = model.sizeY(),
                 sizeZ = model.sizeZ(),
@@ -117,9 +117,7 @@ public class VoxelDraw {
         for (int vy = 0; vy < sizeY; vy++) { // voxel y is pixel x
             // Begin bottom row
             byte v = model.at(0, vy, 0);
-            if (v != 0) {
-                renderer.drawPixelRightFace(vy, 0, v);
-            }
+            if (v != 0) renderer.drawPixelRightFace(vy, 0, v);
             // Finish bottom row
             // Begin main bulk of model
             for (int py = 1; py < pixelHeight; py += 2) { // pixel y
@@ -167,7 +165,7 @@ public class VoxelDraw {
         return sizeVX * 2 + sizeVY * 2 - ((sizeVX + sizeVY) % 2 == 1 ? 4 : 0);
     }
 
-    public static void simpleDrawIso(IModel model, ITriangleRenderer renderer) {
+    public static void drawIso(IModel model, ITriangleRenderer renderer) {
         byte v;
         final int sizeVX = model.sizeX(), sizeVY = model.sizeY(), sizeVZ = model.sizeZ(),
                 sizeVX2 = sizeVX * 2, sizeVY2 = sizeVY * 2,
@@ -201,16 +199,17 @@ public class VoxelDraw {
                         renderer.drawRightTriangleRightFace(px + 2, bottomPY - 4, v);
                 }
             } else if (px > sizeVX2 - 2) { // Right side of model
-                v = model.at(0, px / 2 - sizeVX + 1, 0);
+                boolean left = false;
+                v = model.at(0, px / 2 - sizeVX, 0); // Front left
                 if (v != 0) {
                     renderer.drawRightTriangleRightFace(px, bottomPY - 6, v);
                     renderer.drawLeftTriangleRightFace(px, bottomPY - 4, v);
+                    left = true;
+                }
+                v = model.at(0, px / 2 - sizeVX + 1, 0); // Center
+                if (v != 0) {
                     renderer.drawRightTriangleRightFace(px + 2, bottomPY - 4, v);
-                } else if (px / 2 - sizeVX + 1 < sizeVY - 1) {
-                    v = model.at(0, px / 2 - sizeVX + 2, 0);
-                    if (v != 0) {
-                        renderer.drawRightTriangleLeftFace(px + 2, bottomPY - 4, v);
-                    }
+                    if (!left) renderer.drawLeftTriangleLeftFace(px, bottomPY - 4, v);
                 }
             } else { // Very bottom
                 v = model.at(0, 0, 0);

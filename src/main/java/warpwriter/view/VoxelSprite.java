@@ -137,7 +137,7 @@ public class VoxelSprite implements Disposable {
                 offCenter = sizeX / 2;
         switch (angle) {
             case 0: // Bottom
-                VoxelDraw.simpleDrawBottom(turnModel, renderer
+                VoxelDraw.drawBottom(turnModel, renderer
                         .setFlipX(false).setFlipY(false)
                         .setScale(scaleX * 6f, scaleY * 6f)
                         .setOffset(offsetX - offCenter * 6, offsetY)
@@ -146,7 +146,7 @@ public class VoxelSprite implements Disposable {
             case 1: // Below
                 if (z45) {
                     turnModel.turner().clockY().clockY().clockZ();
-                    VoxelDraw.simpleDrawIso(turnModel, renderer
+                    VoxelDraw.drawIso(turnModel, renderer
                             .setFlipX(true).setFlipY(true)
                             .setScale(scaleX * 2f, scaleY)
                             .setOffset(offsetX + (sizeX - offCenter) * 2, offsetY + VoxelDraw.isoHeight(turnModel))
@@ -155,7 +155,7 @@ public class VoxelSprite implements Disposable {
                 } else {
                     turnModel.turner().clockY().clockY().clockZ().clockZ();
                     renderer.color().set(renderer.color().direction().flipZ());
-                    VoxelDraw.simpleDrawAbove(turnModel, renderer
+                    VoxelDraw.drawAbove(turnModel, renderer
                             .setFlipX(true).setFlipY(true)
                             .setScale(scaleX * 6f, scaleY * 2f)
                             .setOffset(offsetX + (sizeX - offCenter) * 6, offsetY + (turnModel.sizeX() + turnModel.sizeZ()) * 4)
@@ -166,13 +166,13 @@ public class VoxelSprite implements Disposable {
                 break;
             case 2: // Side
                 if (z45)
-                    VoxelDraw.simpleDraw45(turnModel, renderer
+                    VoxelDraw.draw45(turnModel, renderer
                             .setFlipX(false).setFlipY(false)
                             .setScale(scaleX * 4f, scaleY * 6f)
                             .setOffset(offsetX - offCenter * 2, offsetY)
                     );
                 else
-                    VoxelDraw.simpleDraw(turnModel, renderer
+                    VoxelDraw.draw(turnModel, renderer
                             .setFlipX(false).setFlipY(false)
                             .setScale(scaleX * 6f, scaleY * 6f)
                             .setOffset(offsetX - offCenter * 6, offsetY)
@@ -180,20 +180,20 @@ public class VoxelSprite implements Disposable {
                 break;
             case 3: // Above
                 if (z45)
-                    VoxelDraw.simpleDrawIso(turnModel, renderer
+                    VoxelDraw.drawIso(turnModel, renderer
                             .setFlipX(false).setFlipY(false)
                             .setScale(scaleX * 2f, scaleY)
                             .setOffset(offsetX - offCenter * 2, offsetY)
                     );
                 else
-                    VoxelDraw.simpleDrawAbove(turnModel, renderer
+                    VoxelDraw.drawAbove(turnModel, renderer
                             .setFlipX(false).setFlipY(false)
                             .setScale(scaleX * 6f, scaleY * 2f)
                             .setOffset(offsetX - offCenter * 6, offsetY)
                     );
                 break;
             case 4: // Top
-                VoxelDraw.simpleDrawTop(turnModel, renderer
+                VoxelDraw.drawTop(turnModel, renderer
                         .setFlipX(false).setFlipY(false)
                         .setScale(scaleX * 6f, scaleY * 6f)
                         .setOffset(offsetX - offCenter * 6, offsetY)
