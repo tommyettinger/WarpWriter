@@ -1,9 +1,10 @@
-package warpwriter.model;
+package warpwriter.model.fetch;
 
 import squidpony.squidmath.FastNoise;
 import squidpony.squidmath.Noise;
 import squidpony.squidmath.NumberTools;
 import warpwriter.ModelMaker;
+import warpwriter.model.Fetch;
 
 public class NoiseFetch extends Fetch {
     protected Noise.Noise3D noise;

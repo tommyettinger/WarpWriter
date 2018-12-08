@@ -1,5 +1,7 @@
 package warpwriter.model;
 
+import warpwriter.model.fetch.FetchFetch;
+
 /**
  * Converts a Fetch to a Model with sizes stored in ints
  *

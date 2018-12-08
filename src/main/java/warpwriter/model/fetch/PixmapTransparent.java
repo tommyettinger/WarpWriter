@@ -1,6 +1,8 @@
-package warpwriter.model;
+package warpwriter.model.fetch;
 
 import com.badlogic.gdx.graphics.Pixmap;
+import warpwriter.model.Fetch;
+import warpwriter.model.IModel;
 
 /**
  * This fetch discriminates based on the transparency level of a Pixmap.

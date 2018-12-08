@@ -13,7 +13,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import warpwriter.ModelRenderer;
 import warpwriter.WorldMaker;
-import warpwriter.model.ArrayModel;
+import warpwriter.model.fetch.ArrayModel;
 import warpwriter.model.CompassDirection;
 import warpwriter.model.TurnModel;
 

@@ -1,4 +1,7 @@
-package warpwriter.model;
+package warpwriter.model.fetch;
+
+import warpwriter.model.Fetch;
+import warpwriter.model.IFetch;
 
 /**
  * Converts an IFetch which doesn't extend Fetch to one that does through encapsulation.

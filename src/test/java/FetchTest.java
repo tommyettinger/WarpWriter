@@ -17,6 +17,9 @@ import squidpony.squidmath.Noise;
 import warpwriter.ModelMaker;
 import warpwriter.ModelRenderer;
 import warpwriter.model.*;
+import warpwriter.model.decide.DungeonDecide;
+import warpwriter.model.decide.HeightDecide;
+import warpwriter.model.fetch.*;
 
 public class FetchTest extends ApplicationAdapter {
     public static final int width = 1280;

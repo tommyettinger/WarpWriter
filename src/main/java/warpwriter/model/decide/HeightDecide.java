@@ -1,4 +1,7 @@
-package warpwriter.model;
+package warpwriter.model.decide;
+
+import warpwriter.model.IDecide;
+import warpwriter.model.fetch.IHeightMap;
 
 public class HeightDecide implements IDecide {
     IHeightMap map;

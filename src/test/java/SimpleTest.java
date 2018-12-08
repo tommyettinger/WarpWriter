@@ -14,6 +14,9 @@ import squidpony.StringKit;
 import warpwriter.Coloring;
 import warpwriter.ModelMaker;
 import warpwriter.model.*;
+import warpwriter.model.fetch.ArrayModel;
+import warpwriter.model.fetch.ColorFetch;
+import warpwriter.model.fetch.NoiseFetch;
 import warpwriter.view.VoxelSpriteBatchRenderer;
 import warpwriter.view.VoxelSprite;
 
@@ -168,7 +171,7 @@ public class SimpleTest extends ApplicationAdapter {
                         break;
                     case Input.Keys.S:
                         voxelSprite.set(new FetchModel(20, 20, 20,
-                                new NoiseFetch((byte) 194, (byte) 194))); //(byte) 0, (byte) 0, (byte) 0,   , (byte) 0, (byte) 0, (byte) 0   , (byte) 98, (byte) 130, (byte) 162 
+                                new NoiseFetch((byte) 194, (byte) 194))); //(byte) 0, (byte) 0, (byte) 0,   , (byte) 0, (byte) 0, (byte) 0   , (byte) 98, (byte) 130, (byte) 162
                         break;
                     case Input.Keys.G:
                         batchRenderer.color().set(batchRenderer.color().direction().counter());

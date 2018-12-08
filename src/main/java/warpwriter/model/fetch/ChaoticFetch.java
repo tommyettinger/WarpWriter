@@ -1,6 +1,7 @@
-package warpwriter.model;
+package warpwriter.model.fetch;
 
 import warpwriter.ModelMaker;
+import warpwriter.model.Fetch;
 
 /**
  * A Fetch that pseudo-randomly chooses a color from a given array or vararg of byte colors, with (hopefully) no

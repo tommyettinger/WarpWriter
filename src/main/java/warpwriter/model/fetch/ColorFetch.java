@@ -1,4 +1,6 @@
-package warpwriter.model;
+package warpwriter.model.fetch;
+
+import warpwriter.model.Fetch;
 
 /**
  * Always returns a solid color. Prevents creating more than 256 ColorFetch objects total.

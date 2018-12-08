@@ -1,4 +1,6 @@
-package warpwriter.model;
+package warpwriter.model.fetch;
+
+import warpwriter.model.Fetch;
 
 /**
  * @author Ben McLean

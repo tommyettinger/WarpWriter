@@ -1,4 +1,4 @@
-package warpwriter.model;
+package warpwriter.model.fetch;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import warpwriter.model.Fetch;
+import warpwriter.model.IModel;
 
 /**
  * @author Ben McLean

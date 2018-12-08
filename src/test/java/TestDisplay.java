@@ -17,6 +17,8 @@ import squidpony.squidmath.FastNoise;
 import squidpony.squidmath.Noise;
 import warpwriter.*;
 import warpwriter.model.*;
+import warpwriter.model.decide.HeightDecide;
+import warpwriter.model.fetch.*;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

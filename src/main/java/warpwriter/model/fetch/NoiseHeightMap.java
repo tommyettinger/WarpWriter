@@ -1,4 +1,4 @@
-package warpwriter.model;
+package warpwriter.model.fetch;
 
 import squidpony.squidmath.Noise;
 

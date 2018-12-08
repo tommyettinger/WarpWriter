@@ -1,4 +1,7 @@
-package warpwriter.model;
+package warpwriter.model.fetch;
+
+import warpwriter.model.Fetch;
+import warpwriter.model.Turner;
 
 /**
  * Rotates a Fetch chain using a Turner.

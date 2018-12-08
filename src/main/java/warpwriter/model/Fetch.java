@@ -1,6 +1,7 @@
 package warpwriter.model;
 
 import squidpony.squidmath.Noise;
+import warpwriter.model.fetch.*;
 
 /**
  * This abstract class allows for IFetch implementations to use left-to-right method chaining to defer to other IFetch instances for different coordinates instead of always needing to return a byte themselves.
@@ -23,7 +24,7 @@ import squidpony.squidmath.Noise;
  *
  * @author Ben McLean
  */
-public abstract class Fetch implements IFetch, IFetch2D, IFetch1D, IDecide {
+public abstract class Fetch implements IFetch, IDecide {
     /**
      * This method is intended to be overridden with a decision about which Fetch to use for the provided coordinate.
      * <p>
@@ -61,12 +62,10 @@ public abstract class Fetch implements IFetch, IFetch2D, IFetch1D, IDecide {
         return current.bite();
     }
 
-    @Override
     public final byte at(int y, int z) {
         return at(0, y, z);
     }
 
-    @Override
     public final byte at(int z) {
         return at(0, z);
     }

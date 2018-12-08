@@ -1,4 +1,8 @@
-package warpwriter.model;
+package warpwriter.model.fetch;
+
+import warpwriter.model.Fetch;
+import warpwriter.model.FetchModel;
+import warpwriter.model.IModel;
 
 /**
  * Draws a wireframe box!

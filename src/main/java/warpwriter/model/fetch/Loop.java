@@ -1,4 +1,7 @@
-package warpwriter.model;
+package warpwriter.model.fetch;
+
+import warpwriter.model.Fetch;
+import warpwriter.model.FetchModel;
 
 /**
  * Infinitely loop any Fetch in any or all of the three dimensions.

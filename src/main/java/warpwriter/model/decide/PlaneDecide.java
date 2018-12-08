@@ -1,4 +1,6 @@
-package warpwriter.model;
+package warpwriter.model.decide;
+
+import warpwriter.model.IDecide;
 
 /**
  * @author Ben McLean

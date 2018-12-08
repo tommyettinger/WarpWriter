@@ -1,4 +1,8 @@
-package warpwriter.model;
+package warpwriter.model.fetch;
+
+import warpwriter.model.Fetch;
+import warpwriter.model.IFetch;
+import warpwriter.model.IModel;
 
 /**
  * A simple IModel that wraps a 3D byte array, using its bounds to implement {@link #sizeX()} and its related methods
