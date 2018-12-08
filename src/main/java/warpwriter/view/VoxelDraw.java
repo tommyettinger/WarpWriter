@@ -13,9 +13,9 @@ public class VoxelDraw {
         for (int z = 0; z < sizeZ; z++) {
             for (int y = 0; y < sizeY; y++) {
                 for (int x = 0; x < sizeX; x++) {
-                    byte result = model.at(x, y, z);
-                    if (result != 0) {
-                        renderer.drawPixelRightFace(y, z, result);
+                    byte v = model.at(x, y, z);
+                    if (v != 0) {
+                        renderer.drawPixelRightFace(y, z, v);
                         break;
                     }
                 }
@@ -28,9 +28,9 @@ public class VoxelDraw {
         for (int z = 0; z < sizeZ; z++) {
             for (int y = 0; y < sizeY; y++) {
                 for (int x = sizeX - 1; x >= 0; x++) {
-                    byte result = model.at(x, y, z);
-                    if (result != 0) {
-                        renderer.drawPixelLeftFace(y, z, result);
+                    byte v = model.at(x, y, z);
+                    if (v != 0) {
+                        renderer.drawPixelLeftFace(y, z, v);
                         break;
                     }
                 }
@@ -43,9 +43,9 @@ public class VoxelDraw {
         for (int y = 0; y < sizeY; y++) {
             for (int x = 0; x < sizeX; x++) {
                 for (int z = sizeZ - 1; z >= 0; z--) {
-                    byte result = model.at(x, y, z);
-                    if (result != 0) {
-                        renderer.drawPixelVerticalFace(y, x, result);
+                    byte v = model.at(x, y, z);
+                    if (v != 0) {
+                        renderer.drawPixelVerticalFace(y, x, v);
                         break;
                     }
                 }
@@ -58,9 +58,9 @@ public class VoxelDraw {
         for (int y = 0; y < sizeY; y++) {
             for (int x = 0; x < sizeX; x++) {
                 for (int z = 0; z < sizeZ; z--) {
-                    byte result = model.at(x, y, z);
-                    if (result != 0) {
-                        renderer.drawPixelVerticalFace(y, x, result);
+                    byte v = model.at(x, y, z);
+                    if (v != 0) {
+                        renderer.drawPixelVerticalFace(y, x, v);
                         break;
                     }
                 }
@@ -73,7 +73,7 @@ public class VoxelDraw {
                 sizeY = model.sizeY(),
                 sizeZ = model.sizeZ(),
                 pixelWidth = sizeX + sizeY;
-        byte result = 0;
+        byte v = 0;
         for (int py = 0; py < sizeZ; py++) { // pixel y
             for (int px = 0; px <= pixelWidth; px += 2) { // pixel x
 //                renderer.drawRect(px, py, 2, 1, Color.rgba8888(Color.RED));
@@ -84,24 +84,24 @@ public class VoxelDraw {
                      vx <= sizeX && vy <= sizeY;
                      vx++, vy++) { // vx is voxel x, vy is voxel y
                     if (!leftDone && vy != 0) {
-                        result = model.at(vx, vy - 1, py);
-                        if (result != 0) {
-                            renderer.drawPixelRightFace(px, py, result);
+                        v = model.at(vx, vy - 1, py);
+                        if (v != 0) {
+                            renderer.drawPixelRightFace(px, py, v);
                             leftDone = true;
                         }
                     }
                     if (!rightDone && vx > 0) {
-                        result = model.at(vx - 1, vy, py);
-                        if (result != 0) {
-                            renderer.drawPixelLeftFace(px + 1, py, result);
+                        v = model.at(vx - 1, vy, py);
+                        if (v != 0) {
+                            renderer.drawPixelLeftFace(px + 1, py, v);
                             rightDone = true;
                         }
                     }
                     if (leftDone && rightDone) break;
-                    result = model.at(vx, vy, py);
-                    if (result != 0) {
-                        if (!leftDone) renderer.drawPixelLeftFace(px, py, result);
-                        if (!rightDone) renderer.drawPixelRightFace(px + 1, py, result);
+                    v = model.at(vx, vy, py);
+                    if (v != 0) {
+                        if (!leftDone) renderer.drawPixelLeftFace(px, py, v);
+                        if (!rightDone) renderer.drawPixelRightFace(px + 1, py, v);
                         break;
                     }
                 }
@@ -116,9 +116,9 @@ public class VoxelDraw {
                 pixelHeight = (sizeX + sizeZ) * 2;
         for (int vy = 0; vy < sizeY; vy++) { // voxel y is pixel x
             // Begin bottom row
-            byte result = model.at(0, vy, 0);
-            if (result != 0) {
-                renderer.drawPixelRightFace(vy, 0, result);
+            byte v = model.at(0, vy, 0);
+            if (v != 0) {
+                renderer.drawPixelRightFace(vy, 0, v);
             }
             // Finish bottom row
             // Begin main bulk of model
@@ -130,24 +130,24 @@ public class VoxelDraw {
                      vx <= sizeX && vz >= -1;
                      vx++, vz--) { // vx is voxel x, vz is voxel z
                     if (!above && vz + 1 < sizeZ) {
-                        result = model.at(vx, vy, vz + 1);
-                        if (result != 0) {
-                            renderer.drawPixelRightFace(vy, py + 1, result);
+                        v = model.at(vx, vy, vz + 1);
+                        if (v != 0) {
+                            renderer.drawPixelRightFace(vy, py + 1, v);
                             above = true;
                         }
                     }
                     if (!below && vx > 0) {
-                        result = model.at(vx - 1, vy, vz);
-                        if (result != 0) {
-                            renderer.drawPixelVerticalFace(vy, py, result);
+                        v = model.at(vx - 1, vy, vz);
+                        if (v != 0) {
+                            renderer.drawPixelVerticalFace(vy, py, v);
                             below = true;
                         }
                     }
                     if (above && below) break;
-                    result = model.at(vx, vy, vz);
-                    if (result != 0) {
-                        if (!above) renderer.drawPixelVerticalFace(vy, py + 1, result);
-                        if (!below) renderer.drawPixelRightFace(vy, py, result);
+                    v = model.at(vx, vy, vz);
+                    if (v != 0) {
+                        if (!above) renderer.drawPixelVerticalFace(vy, py + 1, v);
+                        if (!below) renderer.drawPixelRightFace(vy, py, v);
                         break;
                     }
                 }
@@ -168,7 +168,7 @@ public class VoxelDraw {
     }
 
     public static void simpleDrawIso(IModel model, ITriangleRenderer renderer) {
-        byte result;
+        byte v;
         final int sizeVX = model.sizeX(), sizeVY = model.sizeY(), sizeVZ = model.sizeZ(),
                 sizeVX2 = sizeVX * 2, sizeVY2 = sizeVY * 2,
                 pixelWidth = isoWidth(model);
@@ -187,44 +187,44 @@ public class VoxelDraw {
 
             // Begin drawing bottom row triangles
             if (px < sizeVX2 - 2) { // Left side of model
-                result = model.at(px / 2, 0, 0);
-                if (result != 0) {
-                    renderer.drawLeftTriangleLeftFace(px + 2, bottomPY - 6, result);
-                    renderer.drawLeftTriangleLeftFace(px, bottomPY - 4, result);
-                    renderer.drawRightTriangleLeftFace(px + 2, bottomPY - 4, result);
+                v = model.at(px / 2, 0, 0);
+                if (v != 0) {
+                    renderer.drawLeftTriangleLeftFace(px + 2, bottomPY - 6, v);
+                    renderer.drawLeftTriangleLeftFace(px, bottomPY - 4, v);
+                    renderer.drawRightTriangleLeftFace(px + 2, bottomPY - 4, v);
                 } else if (px / 2 < sizeVX2 - 1) {
-                    result = model.at(px / 2 + 1, 0, 0);
-                    if (result != 0) {
-                        renderer.drawLeftTriangleRightFace(px, bottomPY - 4, result);
+                    v = model.at(sizeVX - (px / 2 + 1), 0, 0);
+                    if (v != 0) {
+                        renderer.drawLeftTriangleLeftFace(px, bottomPY - 4, v);
                     }
                 }
             } else if (px > sizeVX2 - 2) { // Right side of model
-                result = model.at(0, px / 2 - sizeVX + 1, 0);
-                if (result != 0) {
-                    renderer.drawRightTriangleRightFace(px, bottomPY - 6, result);
-                    renderer.drawLeftTriangleRightFace(px, bottomPY - 4, result);
-                    renderer.drawRightTriangleRightFace(px + 2, bottomPY - 4, result);
+                v = model.at(0, px / 2 - sizeVX + 1, 0);
+                if (v != 0) {
+                    renderer.drawRightTriangleRightFace(px, bottomPY - 6, v);
+                    renderer.drawLeftTriangleRightFace(px, bottomPY - 4, v);
+                    renderer.drawRightTriangleRightFace(px + 2, bottomPY - 4, v);
                 } else if (px / 2 - sizeVX + 1 < sizeVY - 1) {
-                    result = model.at(0, px / 2 - sizeVX + 2, 0);
-                    if (result != 0) {
-                        renderer.drawRightTriangleLeftFace(px + 2, bottomPY - 4, result);
+                    v = model.at(0, px / 2 - sizeVX + 2, 0);
+                    if (v != 0) {
+                        renderer.drawRightTriangleLeftFace(px + 2, bottomPY - 4, v);
                     }
                 }
             } else { // Very bottom
-                result = model.at(0, 0, 0);
-                if (result != 0) {
-                    renderer.drawLeftTriangleLeftFace(px, bottomPY - 4, result);
-                    renderer.drawRightTriangleRightFace(px + 2, bottomPY - 4, result);
+                v = model.at(0, 0, 0);
+                if (v != 0) {
+                    renderer.drawLeftTriangleLeftFace(px, bottomPY - 4, v);
+                    renderer.drawRightTriangleRightFace(px + 2, bottomPY - 4, v);
                     if (sizeVX % 2 == 0)
-                        renderer.drawRightTriangleRightFace(px, bottomPY - 6, result);
+                        renderer.drawRightTriangleRightFace(px, bottomPY - 6, v);
                 } else {
-                    result = model.at(px / 2 + 1, 0, 0);
-                    if (result != 0) {
-                        renderer.drawLeftTriangleRightFace(px, bottomPY - 4, result);
+                    v = model.at(px / 2 + 1, 0, 0);
+                    if (v != 0) {
+                        renderer.drawLeftTriangleRightFace(px, bottomPY - 4, v);
                     }
-                    result = model.at(0, px / 2 - sizeVX + 2, 0);
-                    if (result != 0) {
-                        renderer.drawRightTriangleLeftFace(px + 2, bottomPY - 4, result);
+                    v = model.at(0, px / 2 - sizeVX + 2, 0);
+                    if (v != 0) {
+                        renderer.drawRightTriangleLeftFace(px + 2, bottomPY - 4, v);
                     }
                 }
             }
@@ -261,14 +261,14 @@ public class VoxelDraw {
                     // OK here goes:
                     // x, y-, z+ = Above front left
                     if ((!left || !topLeft) && vx == 0 && vy > 0 && vz < sizeVZ - 1) {
-                        result = model.at(vx, vy - 1, vz + 1);
-                        if (result != 0) {
+                        v = model.at(vx, vy - 1, vz + 1);
+                        if (v != 0) {
                             if (!topLeft) {
-                                renderer.drawLeftTriangleRightFace(px, py, result);
+                                renderer.drawLeftTriangleRightFace(px, py, v);
                                 topLeft = true;
                             }
                             if (!left) {
-                                renderer.drawRightTriangleRightFace(px, py - 2, result);
+                                renderer.drawRightTriangleRightFace(px, py - 2, v);
                                 left = true;
                             }
                         }
@@ -276,14 +276,14 @@ public class VoxelDraw {
 
                     // x-, y, z+ = Above front right
                     if ((!topRight || !right) && vx > 0 && vy == 0 && vz < sizeVZ - 1) {
-                        result = model.at(vx - 1, vy, vz + 1);
-                        if (result != 0) {
+                        v = model.at(vx - 1, vy, vz + 1);
+                        if (v != 0) {
                             if (!topRight) {
-                                renderer.drawRightTriangleLeftFace(px + 2, py, result);
+                                renderer.drawRightTriangleLeftFace(px + 2, py, v);
                                 topRight = true;
                             }
                             if (!right) {
-                                renderer.drawLeftTriangleLeftFace(px + 2, py - 2, result);
+                                renderer.drawLeftTriangleLeftFace(px + 2, py - 2, v);
                                 right = true;
                             }
                         }
@@ -291,14 +291,14 @@ public class VoxelDraw {
 
                     // x, y, z+ = Above
                     if ((!topLeft || !topRight) && vz < sizeVZ - 1) {
-                        result = model.at(vx, vy, vz + 1);
-                        if (result != 0) {
+                        v = model.at(vx, vy, vz + 1);
+                        if (v != 0) {
                             if (!topLeft) {
-                                renderer.drawLeftTriangleLeftFace(px, py, result);
+                                renderer.drawLeftTriangleLeftFace(px, py, v);
                                 topLeft = true;
                             }
                             if (!topRight) {
-                                renderer.drawRightTriangleRightFace(px + 2, py, result);
+                                renderer.drawRightTriangleRightFace(px + 2, py, v);
                                 topRight = true;
                             }
                         }
@@ -306,47 +306,47 @@ public class VoxelDraw {
 
                     // x, y-, z = Front left
                     if (!left && vy > 0) {
-                        result = model.at(vx, vy - 1, vz);
-                        if (result != 0) {
-                            renderer.drawRightTriangleVerticalFace(px, py - 2, result);
+                        v = model.at(vx, vy - 1, vz);
+                        if (v != 0) {
+                            renderer.drawRightTriangleVerticalFace(px, py - 2, v);
                             left = true;
                         }
                     }
 
                     // x-, y, z = Front right
                     if (!right && vx > 0) {
-                        result = model.at(vx - 1, vy, vz);
-                        if (result != 0) {
-                            renderer.drawLeftTriangleVerticalFace(px + 2, py - 2, result);
+                        v = model.at(vx - 1, vy, vz);
+                        if (v != 0) {
+                            renderer.drawLeftTriangleVerticalFace(px + 2, py - 2, v);
                             right = true;
                         }
                     }
 
                     // x, y, z  = Center
                     if (left && topLeft && topRight && right) break;
-                    result = model.at(vx, vy, vz);
-                    if (result != 0) {
+                    v = model.at(vx, vy, vz);
+                    if (v != 0) {
                         if (!topLeft)
-                            renderer.drawLeftTriangleVerticalFace(px, py, result);
+                            renderer.drawLeftTriangleVerticalFace(px, py, v);
                         if (!left)
-                            renderer.drawRightTriangleLeftFace(px, py - 2, result);
+                            renderer.drawRightTriangleLeftFace(px, py - 2, v);
                         if (!topRight)
-                            renderer.drawRightTriangleVerticalFace(px + 2, py, result);
+                            renderer.drawRightTriangleVerticalFace(px + 2, py, v);
                         if (!right)
-                            renderer.drawLeftTriangleRightFace(px + 2, py - 2, result);
+                            renderer.drawLeftTriangleRightFace(px + 2, py - 2, v);
                         break;
                     }
 
                     // x+, y, z = Back left
                     if ((!left || !topLeft) && vx < sizeVX - 1) {
-                        result = model.at(vx + 1, vy, vz);
-                        if (result != 0) {
+                        v = model.at(vx + 1, vy, vz);
+                        if (v != 0) {
                             if (!topLeft) {
-                                renderer.drawLeftTriangleRightFace(px, py, result);
+                                renderer.drawLeftTriangleRightFace(px, py, v);
                                 topLeft = true;
                             }
                             if (!left) {
-                                renderer.drawRightTriangleRightFace(px, py - 2, result);
+                                renderer.drawRightTriangleRightFace(px, py - 2, v);
                                 left = true;
                             }
                         }
@@ -354,14 +354,14 @@ public class VoxelDraw {
 
                     // x, y+, z = Back right
                     if ((!right || !topRight) && vy < sizeVY - 1) {
-                        result = model.at(vx, vy + 1, vz);
-                        if (result != 0) {
+                        v = model.at(vx, vy + 1, vz);
+                        if (v != 0) {
                             if (!topRight) {
-                                renderer.drawRightTriangleLeftFace(px + 2, py, result);
+                                renderer.drawRightTriangleLeftFace(px + 2, py, v);
                                 topRight = true;
                             }
                             if (!right) {
-                                renderer.drawLeftTriangleLeftFace(px + 2, py - 2, result);
+                                renderer.drawLeftTriangleLeftFace(px + 2, py - 2, v);
                                 right = true;
                             }
                         }
@@ -369,14 +369,14 @@ public class VoxelDraw {
 
                     // x+, y+ z = Back center
                     if ((!topLeft || !topRight) && vx < sizeVX - 1 && vy < sizeVY - 1) {
-                        result = model.at(vx + 1, vy + 1, vz);
-                        if (result != 0) {
+                        v = model.at(vx + 1, vy + 1, vz);
+                        if (v != 0) {
                             if (!topRight) {
-                                renderer.drawRightTriangleRightFace(px + 2, py, result);
+                                renderer.drawRightTriangleRightFace(px + 2, py, v);
                                 topRight = true;
                             }
                             if (!topLeft) {
-                                renderer.drawLeftTriangleLeftFace(px, py, result);
+                                renderer.drawLeftTriangleLeftFace(px, py, v);
                                 topLeft = true;
                             }
                         }
@@ -384,18 +384,18 @@ public class VoxelDraw {
 
                     // x+, y, z- = Below left
                     if (!left && vx < sizeVX - 1 && vz > 0) {
-                        result = model.at(vx + 1, vy, vz - 1);
-                        if (result != 0) {
-                            renderer.drawRightTriangleVerticalFace(px, py - 2, result);
+                        v = model.at(vx + 1, vy, vz - 1);
+                        if (v != 0) {
+                            renderer.drawRightTriangleVerticalFace(px, py - 2, v);
                             left = true;
                         }
                     }
 
                     // x, y+ z- = Below right
                     if (!right && vy < sizeVY - 1 && vz > 0) {
-                        result = model.at(vx, vy + 1, vz - 1);
-                        if (result != 0) {
-                            renderer.drawLeftTriangleVerticalFace(px + 2, py - 2, result);
+                        v = model.at(vx, vy + 1, vz - 1);
+                        if (v != 0) {
+                            renderer.drawLeftTriangleVerticalFace(px + 2, py - 2, v);
                             right = true;
                         }
                     }
@@ -419,14 +419,14 @@ public class VoxelDraw {
 
             // Begin drawing top triangles
             if (px + 2 < sizeVY2) { // Top left triangles
-                result = model.at(0, px / 2, sizeVZ - 1);
-                if (result != 0) {
-                    renderer.drawLeftTriangleVerticalFace(px + 2, topPY, result);
+                v = model.at(0, px / 2, sizeVZ - 1);
+                if (v != 0) {
+                    renderer.drawLeftTriangleVerticalFace(px + 2, topPY, v);
                 }
             } else if (px + 2 > sizeVY2) { // Top right triangles
-                result = model.at((px - sizeVY2) / 2, sizeVY - 1, sizeVZ - 1);
-                if (result != 0) {
-                    renderer.drawRightTriangleVerticalFace(px, topPY, result);
+                v = model.at((px - sizeVY2) / 2, sizeVY - 1, sizeVZ - 1);
+                if (v != 0) {
+                    renderer.drawRightTriangleVerticalFace(px, topPY, v);
                 }
             }
             // Finish drawing top triangles.
@@ -435,24 +435,24 @@ public class VoxelDraw {
             if ((sizeVX + sizeVY) % 2 == 1) {
                 final int vx = 0, vy = sizeVY - 1,
                         bottom = Math.abs(sizeVX2 - 2 - pixelWidth);
-                result = model.at(vx, vy, 0);
-                if (result != 0) {
-                    renderer.drawRightTriangleRightFace(pixelWidth + 2, bottom - 4, result); // lower right corner
+                v = model.at(vx, vy, 0);
+                if (v != 0) {
+                    renderer.drawRightTriangleRightFace(pixelWidth + 2, bottom - 4, v); // lower right corner
                 }
                 for (int py = bottom; py < bottom + sizeVZ * 4; py += 4) {
                     final int vz = (py - bottom) / 4;
                     boolean aboveEmpty = true;
                     if (vz != sizeVZ - 1) {
-                        result = model.at(vx, vy, vz + 1);
-                        renderer.drawRightTriangleRightFace(pixelWidth + 2, py, result);
+                        v = model.at(vx, vy, vz + 1);
+                        renderer.drawRightTriangleRightFace(pixelWidth + 2, py, v);
                         aboveEmpty = false;
                     }
-                    result = model.at(vx, vy, vz);
-                    if (result != 0) {
+                    v = model.at(vx, vy, vz);
+                    if (v != 0) {
                         if (aboveEmpty) {
-                            renderer.drawRightTriangleVerticalFace(pixelWidth + 2, py, result);
+                            renderer.drawRightTriangleVerticalFace(pixelWidth + 2, py, v);
                         }
-                        renderer.drawLeftTriangleRightFace(pixelWidth + 2, py - 2, result);
+                        renderer.drawLeftTriangleRightFace(pixelWidth + 2, py - 2, v);
                     }
                 }
             }
@@ -470,7 +470,7 @@ public class VoxelDraw {
      * @param color Color to show when not flashing
      * @return White if flash is active, else color.
      */
-    static byte flash(byte color) {
+    static byte f(byte color) {
         final long now = System.currentTimeMillis();
         if (now - time >= duration) {
             flash = !flash;
@@ -479,7 +479,7 @@ public class VoxelDraw {
         return flash ? Coloring.rinsed("Gray 0") : color;
     }
 
-    static byte flash() {
-        return flash((byte) 0);
+    static byte f() {
+        return f((byte) 0);
     }
 }
