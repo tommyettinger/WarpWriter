@@ -1,6 +1,6 @@
 package warpwriter.view;
 
-import com.badlogic.gdx.graphics.Color;
+import warpwriter.Coloring;
 import warpwriter.model.IModel;
 
 public class VoxelDraw {
@@ -461,8 +461,8 @@ public class VoxelDraw {
     }
 
     static boolean flash = false;
-    static long time = System.currentTimeMillis(),
-            duration = 500; // Milliseconds flashes last
+    static long time = System.currentTimeMillis();
+    static final long duration = 500; // Milliseconds flashes last
 
     /**
      * This enables colors to flash onscreen for debugging purposes.
@@ -470,16 +470,16 @@ public class VoxelDraw {
      * @param color Color to show when not flashing
      * @return White if flash is active, else color.
      */
-    static int flash(int color) {
+    static byte flash(byte color) {
         final long now = System.currentTimeMillis();
         if (now - time >= duration) {
             flash = !flash;
             time = now;
         }
-        return flash ? Color.rgba8888(Color.WHITE) : color;
+        return flash ? Coloring.rinsed("Gray 0") : color;
     }
 
-    static int flash() {
-        return flash(Color.rgba8888(Color.CLEAR));
+    static byte flash() {
+        return flash((byte) 0);
     }
 }
