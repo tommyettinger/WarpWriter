@@ -13,12 +13,15 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.StringKit;
 import warpwriter.Coloring;
 import warpwriter.ModelMaker;
-import warpwriter.model.*;
+import warpwriter.model.DecideFetch;
+import warpwriter.model.FetchModel;
+import warpwriter.model.IModel;
+import warpwriter.model.decide.LineDecide;
 import warpwriter.model.fetch.ArrayModel;
+import warpwriter.model.fetch.BoxModel;
 import warpwriter.model.fetch.ColorFetch;
-import warpwriter.model.fetch.NoiseFetch;
-import warpwriter.view.VoxelSpriteBatchRenderer;
 import warpwriter.view.VoxelSprite;
+import warpwriter.view.VoxelSpriteBatchRenderer;
 
 public class SimpleTest extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 1280;
@@ -34,8 +37,18 @@ public class SimpleTest extends ApplicationAdapter {
     protected TextureRegion screenRegion;
     protected ModelMaker maker;
     protected VoxelSprite voxelSprite;
+    protected boolean box = false;
     private VoxelSpriteBatchRenderer batchRenderer;
-    protected byte[][][] box;
+
+    public static void main(String[] arg) {
+        Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        config.setTitle("Simple Tester");
+        config.setWindowedMode(SCREEN_WIDTH, SCREEN_HEIGHT);
+        config.setIdleFPS(10);
+        config.useVsync(false);
+        final SimpleTest app = new SimpleTest();
+        new Lwjgl3Application(app, config);
+    }
 
     @Override
     public void create() {
@@ -49,31 +62,30 @@ public class SimpleTest extends ApplicationAdapter {
         screenView.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.enableBlending();
 
-        batchRenderer = new VoxelSpriteBatchRenderer(batch);
-
         maker = new ModelMaker(12345);
-//        try {
-//            box = VoxIO.readVox(new LittleEndianDataInputStream(SimpleTest.class.getResourceAsStream("/dumbcube.vox")));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            box = maker.warriorRandom();
-//        }
-        // uses a 13x12x8 model to test VoxelDraw's support for odd-number sizes
-//        turnModel = new TurnModel(knightModel
-//                .boxModel(13, 12, 8, ColorFetch.color(Coloring.rinsed("Red 4")))
-//                .model(13, 12, 8)
-//        );
-//        turnModel = new TurnModel(knightModel);
-//        turnModel = new TurnModel(new BoxModel(knightModel,
-//                ColorFetch.color(Coloring.rinsed("Red 4"))
-//        ));
-
-        //reDraw();
+        batchRenderer = new VoxelSpriteBatchRenderer(batch);
         voxelSprite = new VoxelSprite()
                 .set(batchRenderer)
-                .setOffset(VIRTUAL_WIDTH / 2, 100)
-                .set(new TurnModel().set(new ArrayModel(maker.warriorRandom())));
+                .setOffset(VIRTUAL_WIDTH / 2, 100);
+        makeModel();
         Gdx.input.setInputProcessor(inputProcessor());
+    }
+
+    public void makeModel() {
+        voxelSprite.set(
+                box ?
+                        new BoxModel(model(), ColorFetch.color(Coloring.rinsed("Red 4")))
+                        : model()
+        );
+    }
+
+    public IModel model() {
+        FetchModel model = new ArrayModel(maker.warriorRandom());
+        return new DecideFetch(
+                new LineDecide(0, 0, 0, model.sizeX(), model.sizeY(), model.sizeZ()),
+                ColorFetch.color(Coloring.rinsed("Powder Blue 2"))
+                )
+                .add(model).model(model.sizeX(), model.sizeY(), model.sizeZ());
     }
 
     @Override
@@ -115,16 +127,6 @@ public class SimpleTest extends ApplicationAdapter {
         screenView.update(width, height);
     }
 
-    public static void main(String[] arg) {
-        Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-        config.setTitle("Simple Tester");
-        config.setWindowedMode(SCREEN_WIDTH, SCREEN_HEIGHT);
-        config.setIdleFPS(10);
-        config.useVsync(false);
-        final SimpleTest app = new SimpleTest();
-        new Lwjgl3Application(app, config);
-    }
-
     public InputProcessor inputProcessor() {
         return new InputAdapter() {
             @Override
@@ -161,17 +163,11 @@ public class SimpleTest extends ApplicationAdapter {
                         voxelSprite.reset();
                         break;
                     case Input.Keys.P:
-                        voxelSprite.set(
-                                new ArrayModel(maker.warriorRandom())
-                                        .boxModel(13, 12, 8,
-                                                ColorFetch.color(Coloring.rinsed("Red 4"))
-                                        )
-                                        .model(13, 12, 8)
-                        );
+                        makeModel();
                         break;
-                    case Input.Keys.S:
-                        voxelSprite.set(new FetchModel(20, 20, 20,
-                                new NoiseFetch((byte) 194, (byte) 194))); //(byte) 0, (byte) 0, (byte) 0,   , (byte) 0, (byte) 0, (byte) 0   , (byte) 98, (byte) 130, (byte) 162
+                    case Input.Keys.B:
+                        box = !box;
+                        makeModel();
                         break;
                     case Input.Keys.G:
                         batchRenderer.color().set(batchRenderer.color().direction().counter());

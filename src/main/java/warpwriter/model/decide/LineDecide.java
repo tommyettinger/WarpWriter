@@ -90,13 +90,42 @@ public class LineDecide implements IDecide {
         setPoints(x1, y1, z1, x2, y2, z2);
     }
 
+    /**
+     * Picked up this algorithm from http://members.chello.at/easyfilter/bresenham.html
+     */
+    public static boolean checkLine3D(int x, int y, int z, int x0, int y0, int z0, int x1, int y1, int z1) {
+        int dx = Math.abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
+        int dy = Math.abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
+        int dz = Math.abs(z1 - z0), sz = z0 < z1 ? 1 : -1;
+        int dm = Math.max(Math.max(dx, dy), dz), i = dm; /* maximum difference */
+        x1 = y1 = z1 = dm / 2; /* error offset */
+
+        while (true) {
+            //setPixel(x0,y0,z0);
+            if (x0 == x && y0 == y && z0 == z) return true;
+            if (i-- == 0) break;
+            x1 -= dx;
+            if (x1 < 0) {
+                x1 += dm;
+                x0 += sx;
+            }
+            y1 -= dy;
+            if (y1 < 0) {
+                y1 += dm;
+                y0 += sy;
+            }
+            z1 -= dz;
+            if (z1 < 0) {
+                z1 += dm;
+                z0 += sz;
+            }
+        }
+        return false;
+    }
+
     @Override
     public boolean bool(int x, int y, int z) {
-        double first = distance(x, y, z, x1, y1, z1),
-                second = distance(x, y, z, x2, y2, z2);
-        return (on && equals(first + second, distance))
-                || (before && equals(first + distance, second))
-                || (after && equals(second + distance, first));
+        return checkLine3D(x, y, z, x1, y1, z1, x2, y2, z2);
     }
 
     public static boolean equals(double a, double b) {
