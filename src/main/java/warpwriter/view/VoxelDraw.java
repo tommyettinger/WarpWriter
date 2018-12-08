@@ -424,7 +424,7 @@ public class VoxelDraw {
                     renderer.drawLeftTriangleVerticalFace(px + 2, topPY, v);
                 }
             } else if (px + 2 > sizeVY2) { // Top right triangles
-                v = model.at((px - sizeVY2) / 2, sizeVY - 1, sizeVZ - 1);
+                v = model.at(sizeVY - 1 + sizeVX - px / 2, sizeVY - 1, sizeVZ - 1);
                 if (v != 0) {
                     renderer.drawRightTriangleVerticalFace(px, topPY, v);
                 }
