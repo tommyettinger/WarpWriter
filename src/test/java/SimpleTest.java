@@ -13,10 +13,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.StringKit;
 import warpwriter.Coloring;
 import warpwriter.ModelMaker;
-import warpwriter.model.DecideFetch;
-import warpwriter.model.FetchModel;
 import warpwriter.model.IModel;
-import warpwriter.model.decide.LineDecide;
 import warpwriter.model.fetch.ArrayModel;
 import warpwriter.model.fetch.BoxModel;
 import warpwriter.model.fetch.ColorFetch;
@@ -74,18 +71,13 @@ public class SimpleTest extends ApplicationAdapter {
     public void makeModel() {
         voxelSprite.set(
                 box ?
-                        new BoxModel(model(), ColorFetch.color(Coloring.rinsed("Red 4")))
+                        new BoxModel(model(), ColorFetch.color(Coloring.rinsed("Powder Blue 3")))
                         : model()
         );
     }
 
     public IModel model() {
-        FetchModel model = new ArrayModel(maker.warriorRandom());
-        return new DecideFetch(
-                new LineDecide(0, 0, 0, model.sizeX(), model.sizeY(), model.sizeZ()),
-                ColorFetch.color(Coloring.rinsed("Powder Blue 2"))
-                )
-                .add(model).model(model.sizeX(), model.sizeY(), model.sizeZ());
+        return new ArrayModel(maker.warriorRandom());
     }
 
     @Override
