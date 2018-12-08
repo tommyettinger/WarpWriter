@@ -109,7 +109,6 @@ public class WorldMaker {
         coolingModifier = (coolMod <= 0) ? rng.nextDouble(0.45) * (rng.nextDouble() - 0.5) + 1.1 : coolMod;
         
         double minHeight = Double.POSITIVE_INFINITY, maxHeight = Double.NEGATIVE_INFINITY,
-                minHeightActual = Double.POSITIVE_INFINITY, maxHeightActual = Double.NEGATIVE_INFINITY,
                 minHeat = Double.POSITIVE_INFINITY, maxHeat = Double.NEGATIVE_INFINITY,
                 minWet = Double.POSITIVE_INFINITY, maxWet = Double.NEGATIVE_INFINITY;
         
@@ -121,7 +120,6 @@ public class WorldMaker {
         double[][][] heightData = new double[diameter][diameter][diameter],
                 heatData = new double[diameter][diameter][diameter],
                 moistureData = new double[diameter][diameter][diameter];
-        int[][][] heightCodeData = new int[diameter][diameter][diameter];
         for (int x = 0; x < diameter; x++) {
             offX = x - radius;
             sx = (offX * iRadius);
@@ -146,8 +144,6 @@ public class WorldMaker {
                                 , sz));
                         moistureData[x][y][z] = (mo = moisture.getSimplexFractal(sx, sy, sz
                                 + moistureRidged.getSimplexFractal(sx, sy, sz)));
-                        minHeightActual = Math.min(minHeightActual, hi);
-                        maxHeightActual = Math.max(maxHeightActual, hi);
                         
                         minHeight = Math.min(minHeight, hi);
                         maxHeight = Math.max(maxHeight, hi);
@@ -164,8 +160,6 @@ public class WorldMaker {
                 }
             }
         }
-        minHeightActual = Math.min(minHeightActual, minHeight);
-        maxHeightActual = Math.max(maxHeightActual, maxHeight);
         double  heatDiff = 0.8 / (maxHeat0 - minHeat0),
                 wetDiff = 1.0 / (maxWet0 - minWet0),
                 hMod;
@@ -181,7 +175,7 @@ public class WorldMaker {
                     if (hi > 10000) {
                         continue;
                     } else
-                        heightCodeData[x][y][z] = (t = codeHeight(hi));
+                        t = codeHeight(hi);
                     hMod = 1.0;
                     switch (t) {
                         case 0:
@@ -227,7 +221,6 @@ public class WorldMaker {
                 }
             }
         }
-        final double i_hot = (maxHeat == minHeat) ? 1.0 : 1.0 / (maxHeat - minHeat);
         for (int x = 0; x < diameter; x++) {
             for (int y = 0; y < diameter; y++) {
                 for (int z = 0; z < diameter; z++) {
@@ -266,8 +259,15 @@ public class WorldMaker {
                             hc = 0;
                         }
 
-                        world[x][y][z] = hi < coastalWaterUpper ? biomeTable[hc + 54] // 54 == 9 * 6, 9 is used for Ocean groups
-                                : (byte)(biomeTable[(hi >= sandLower && hi < sandUpper) ? hc + 36 : hc + mc * 6] + Math.abs(heat.getSimplexFractal(y * iRadius, z * iRadius, x * iRadius) * 3.5f));
+                        if(hi < coastalWaterUpper) 
+                            // deeper water gets a darker color, some shallow water gets a lighter color
+                            world[x][y][z] = (byte)(biomeTable[hc + 54] - 0.01 - hi * 3); // 54 == 9 * 6, 9 is used for Ocean groups
+                        else {
+                            // produces minor color variations in splotches, seemingly at random;
+                            // x,y,z don't correspond to the same arguments in getSimplexFractal() intentionally
+                            float adj = Math.abs(heat.getSimplexFractal(y * 0.1f, z * 0.1f, x * 0.1f) * 3f);
+                            world[x][y][z] = (byte)(biomeTable[(hi >= sandLower && hi < sandUpper) ? hc + 36 : hc + mc * 6] + adj);
+                        }
                     }
                 }
             }
