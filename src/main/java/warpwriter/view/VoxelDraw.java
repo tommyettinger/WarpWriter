@@ -441,8 +441,10 @@ public class VoxelDraw {
                     boolean aboveEmpty = true;
                     if (vz != sizeVZ - 1) {
                         v = model.at(vx, vy, vz + 1);
-                        renderer.drawRightTriangleRightFace(pixelWidth + 2, py, v);
-                        aboveEmpty = false;
+                        if (v != 0) {
+                            renderer.drawRightTriangleRightFace(pixelWidth + 2, py, v);
+                            aboveEmpty = false;
+                        }
                     }
                     v = model.at(vx, vy, vz);
                     if (v != 0) {
