@@ -255,8 +255,8 @@ public class VoxelDraw {
                     // x, y, z  = Center
                     // x+, y, z = Back left
                     // x, y+, z = Back right
-                    // x+, y, z- = Below left
-                    // x, y+ z- = Below right
+                    // x+, y, z- = Below back left
+                    // x, y+ z- = Below back right
 
                     // OK here goes:
                     // x, y-, z+ = Above front left
@@ -382,7 +382,7 @@ public class VoxelDraw {
                         }
                     }
 
-                    // x+, y, z- = Below left
+                    // x+, y, z- = Below back left
                     if (!left && vx < sizeVX - 1 && vz > 0) {
                         v = model.at(vx + 1, vy, vz - 1);
                         if (v != 0) {
@@ -391,7 +391,7 @@ public class VoxelDraw {
                         }
                     }
 
-                    // x, y+ z- = Below right
+                    // x, y+ z- = Below back right
                     if (!right && vy < sizeVY - 1 && vz > 0) {
                         v = model.at(vx, vy + 1, vz - 1);
                         if (v != 0) {
