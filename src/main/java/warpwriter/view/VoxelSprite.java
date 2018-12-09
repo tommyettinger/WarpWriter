@@ -9,9 +9,10 @@ public class VoxelSprite implements Disposable {
     protected VoxelSpriteBatchRenderer renderer;
     protected TurnModel turnModel = new TurnModel();
 
-    public VoxelSprite() {}
+    public VoxelSprite() {
+    }
 
-    public VoxelSprite (SpriteBatch batch) {
+    public VoxelSprite(SpriteBatch batch) {
         this();
         set(new VoxelSpriteBatchRenderer(batch));
     }
