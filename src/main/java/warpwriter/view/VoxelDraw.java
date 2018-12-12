@@ -23,6 +23,23 @@ public class VoxelDraw {
         }
     }
 
+    public static void drawRight6PeekTop(IModel model, IPixelRenderer renderer) {
+        final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ();
+        for (int z = 0; z < sizeZ; z++) {
+            for (int y = 0; y < sizeY; y++) {
+                for (int x = 0; x < sizeX; x++) {
+                    byte v = model.at(x, y, z);
+                    if (v != 0) {
+                        renderer.drawRectRightFace(y * 6, z * 6, 6, 6, v);
+                        if (z >= sizeZ - 1 || model.at(x, y, z + 1) == 0)
+                            renderer.drawRectVerticalFace(y * 6, z * 6 + 5, 6, 1, v);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
     public static void drawLeft(IModel model, IPixelRenderer renderer) {
         final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ();
         for (int z = 0; z < sizeZ; z++) {
