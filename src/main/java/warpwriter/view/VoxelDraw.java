@@ -23,7 +23,7 @@ public class VoxelDraw {
         }
     }
 
-    public static void drawRight6PeekTop(IModel model, IPixelRenderer renderer) {
+    public static void drawRightPeekTop(IModel model, IPixelRenderer renderer) {
         final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ();
         for (int z = 0; z < sizeZ; z++) {
             for (int y = 0; y < sizeY; y++) {
@@ -93,7 +93,6 @@ public class VoxelDraw {
                 pixelWidth = sizeX + sizeY;
         for (int py = 0; py < sizeZ; py++) { // pixel y
             for (int px = 0; px <= pixelWidth; px += 2) { // pixel x
-//                renderer.drawRect(px, py, 2, 1, Color.rgba8888(Color.RED));
                 boolean leftDone = false, rightDone = pixelWidth - px < 2;
                 final int startX = px > sizeX - 1 ? 0 : sizeX - px - 1,
                         startY = px - sizeX + 1 < 0 ? 0 : px - sizeX + 1;
@@ -119,6 +118,59 @@ public class VoxelDraw {
                     if (v != 0) {
                         if (!leftDone) renderer.drawPixelLeftFace(px, py, v);
                         if (!rightDone) renderer.drawPixelRightFace(px + 1, py, v);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    public static void draw45PeekTop(IModel model, IPixelRenderer renderer) {
+        byte v;
+        final int sizeX = model.sizeX(),
+                sizeY = model.sizeY(),
+                sizeZ = model.sizeZ(),
+                pixelWidth = sizeX + sizeY;
+        for (int py = 0; py < sizeZ; py++) { // pixel y
+            for (int px = 0; px <= pixelWidth; px += 2) { // pixel x
+                boolean leftDone = false, rightDone = pixelWidth - px < 2;
+                final int startX = px > sizeX - 1 ? 0 : sizeX - px - 1,
+                        startY = px - sizeX + 1 < 0 ? 0 : px - sizeX + 1;
+                for (int vx = startX, vy = startY;
+                     vx <= sizeX && vy <= sizeY;
+                     vx++, vy++) { // vx is voxel x, vy is voxel y
+                    if (!leftDone && vy != 0) {
+                        v = model.at(vx, vy - 1, py);
+                        if (v != 0) {
+                            renderer.drawRectRightFace(px * 4, py * 6, 4, 6, v);
+                            if (py >= sizeZ - 1 || model.at(vx, vy - 1, py + 1) == 0)
+                                renderer.drawRectVerticalFace(px * 4, py * 6 + 5, 4, 1, v);
+                            leftDone = true;
+                        }
+                    }
+                    if (!rightDone && vx > 0) {
+                        v = model.at(vx - 1, vy, py);
+                        if (v != 0) {
+                            renderer.drawRectLeftFace((px + 1) * 4, py * 6, 4, 6, v);
+                            if (py >= sizeZ - 1 || model.at(vx - 1, vy, py + 1) == 0)
+                                renderer.drawRectVerticalFace((px + 1) * 4, py * 6 + 5, 4, 1, v);
+                            rightDone = true;
+                        }
+                    }
+                    if (leftDone && rightDone) break;
+                    v = model.at(vx, vy, py);
+                    if (v != 0) {
+                        boolean peek = py >= sizeZ - 1 || model.at(vx, vy, py + 1) == 0;
+                        if (!leftDone) {
+                            renderer.drawRectLeftFace(px * 4, py * 6, 4, 6, v);
+                            if (peek)
+                                renderer.drawRectVerticalFace(px * 4, py * 6 + 5, 4, 1, v);
+                        }
+                        if (!rightDone) {
+                            renderer.drawRectRightFace((px + 1) * 4, py * 6, 4, 6, v);
+                            if (peek)
+                                renderer.drawRectVerticalFace((px + 1) * 4, py * 6 + 5, 4, 1, v);
+                        }
                         break;
                     }
                 }

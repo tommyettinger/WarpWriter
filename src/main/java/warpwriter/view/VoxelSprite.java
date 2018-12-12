@@ -167,13 +167,13 @@ public class VoxelSprite implements Disposable {
                 break;
             case 2: // Side
                 if (z45)
-                    VoxelDraw.draw45(turnModel, renderer
+                    VoxelDraw.draw45PeekTop(turnModel, renderer
                             .setFlipX(false).setFlipY(false)
-                            .setScale(scaleX * 4f, scaleY * 6f)
+                            .setScale(scaleX, scaleY)
                             .setOffset(offsetX - offCenter * 2, offsetY)
                     );
                 else
-                    VoxelDraw.drawRight6PeekTop(turnModel, renderer
+                    VoxelDraw.drawRightPeekTop(turnModel, renderer
                             .setFlipX(false).setFlipY(false)
                             .setScale(scaleX, scaleY)
                             .setOffset(offsetX - offCenter * 6, offsetY)
