@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.StringKit;
@@ -22,6 +24,43 @@ import warpwriter.view.VoxelSprite;
 import warpwriter.view.VoxelSpriteBatchRenderer;
 
 public class SimpleTest extends ApplicationAdapter {
+    public static final String vertexShader = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" //
+            + "attribute vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" //
+            + "attribute vec2 " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" //
+            + "uniform mat4 u_projTrans;\n" //
+            + "varying vec4 v_color;\n" //
+            + "varying vec2 v_texCoords;\n" //
+            + "\n" //
+            + "void main()\n" //
+            + "{\n" //
+            + "   v_color = " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" //
+            + "   v_color.a = v_color.a * (255.0/254.0);\n" //
+            + "   v_texCoords = " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" //
+            + "   gl_Position =  u_projTrans * " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" //
+            + "}\n";
+
+    public static final String fragmentShader = "#version 150\n" +
+            "varying vec2 v_texCoords;\n" +
+            "varying vec4 v_color;\n" +
+            "uniform float outlineH;\n" +
+            "uniform float outlineW;\n" +
+            "uniform vec4 outlineColor;\n" +
+            "uniform sampler2D u_texture;\n" +
+            "void main()\n" +
+            "{\n" +
+            "   vec2 offsetx;\n" +
+            "   offsetx.x = outlineW;\n" +
+            "   vec2 offsety;\n" +
+            "   offsety.y = outlineH;\n" +
+            "   float alpha = texture2D( u_texture, v_texCoords ).a;\n" +
+            "   alpha = max(alpha, texture2D( u_texture, v_texCoords + offsetx).a);\n" +
+            "   alpha = max(alpha, texture2D( u_texture, v_texCoords - offsetx).a);\n" +
+            "   alpha = max(alpha, texture2D( u_texture, v_texCoords + offsety).a);\n" +
+            "   alpha = max(alpha, texture2D( u_texture, v_texCoords - offsety).a);\n" +
+            "   gl_FragColor = v_color * texture2D( u_texture, v_texCoords );\n" +
+            "   gl_FragColor.a = alpha;\n" +
+            "}";
+
     public static final int backgroundColor = Color.rgba8888(Color.OLIVE);
     public static final int SCREEN_WIDTH = 1280;
     public static final int SCREEN_HEIGHT = 720;
@@ -37,7 +76,9 @@ public class SimpleTest extends ApplicationAdapter {
     protected ModelMaker maker;
     protected VoxelSprite voxelSprite;
     protected boolean box = false;
-    private VoxelSpriteBatchRenderer batchRenderer;
+    protected VoxelSpriteBatchRenderer batchRenderer;
+    protected ShaderProgram shader;
+    protected ShaderProgram defaultShader;
 
     public static void main(String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
@@ -68,6 +109,10 @@ public class SimpleTest extends ApplicationAdapter {
                 .setOffset(VIRTUAL_WIDTH / 2, 100);
         makeModel();
         Gdx.input.setInputProcessor(inputProcessor());
+
+        defaultShader = SpriteBatch.createDefaultShader();
+        shader = new ShaderProgram(vertexShader, fragmentShader);
+        if (!shader.isCompiled()) throw new GdxRuntimeException("Couldn't compile shader: " + shader.getLog());
     }
 
     public void makeModel() {
@@ -104,10 +149,10 @@ public class SimpleTest extends ApplicationAdapter {
         batch.end();
         buffer.end();
         Gdx.gl.glClearColor(
-                ((backgroundColor >> 24) & 0xff) * (1f / 255f),
-                ((backgroundColor >> 16) & 0xff) * (1f / 255f),
-                ((backgroundColor >> 8) & 0xff) * (1f / 255f),
-                (backgroundColor & 0xff) * (1f / 255f)
+                ((backgroundColor >> 24) & 0xff) / 255f,
+                ((backgroundColor >> 16) & 0xff) / 255f,
+                ((backgroundColor >> 8) & 0xff) / 255f,
+                (backgroundColor & 0xff) / 255f
         );
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         screenView.apply();
@@ -117,7 +162,14 @@ public class SimpleTest extends ApplicationAdapter {
         screenTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         screenRegion.setRegion(screenTexture);
         screenRegion.flip(false, true);
+
+        batch.setShader(shader);
+        shader.setUniformf("outlineH", 1f);
+        shader.setUniformf("outlineW", 1f);
+        shader.setUniformf("outlineColor", 0f, 0f, 0f, 1f); // TODO: Discover why this line causes a crash.
+
         batch.draw(screenRegion, 0, 0);
+        batch.setShader(defaultShader);
         batch.end();
     }
 
