@@ -44,7 +44,6 @@ public class SimpleTest extends ApplicationAdapter {
             "varying vec4 v_color;\n" +
             "uniform float outlineH;\n" +
             "uniform float outlineW;\n" +
-            "uniform vec4 outlineColor;\n" +
             "uniform sampler2D u_texture;\n" +
             "void main()\n" +
             "{\n" +
@@ -164,9 +163,8 @@ public class SimpleTest extends ApplicationAdapter {
         screenRegion.flip(false, true);
 
         batch.setShader(shader);
-        shader.setUniformf("outlineH", 1f);
-        shader.setUniformf("outlineW", 1f);
-        shader.setUniformf("outlineColor", 0f, 0f, 0f, 1f); // TODO: Discover why this line causes a crash.
+        shader.setUniformf("outlineH", 1f / VIRTUAL_HEIGHT);
+        shader.setUniformf("outlineW", 1f / VIRTUAL_WIDTH);
 
         batch.draw(screenRegion, 0, 0);
         batch.setShader(defaultShader);
