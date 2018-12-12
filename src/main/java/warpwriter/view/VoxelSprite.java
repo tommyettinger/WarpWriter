@@ -173,7 +173,7 @@ public class VoxelSprite implements Disposable {
                             .setOffset(offsetX - offCenter * 2, offsetY)
                     );
                 else
-                    VoxelDraw.drawRightPeekTop(turnModel, renderer
+                    VoxelDraw.drawRightPeek(turnModel, renderer
                             .setFlipX(false).setFlipY(false)
                             .setScale(scaleX, scaleY)
                             .setOffset(offsetX - offCenter * 6, offsetY)
