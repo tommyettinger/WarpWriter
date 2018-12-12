@@ -1,6 +1,7 @@
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -21,6 +22,7 @@ import warpwriter.view.VoxelSprite;
 import warpwriter.view.VoxelSpriteBatchRenderer;
 
 public class SimpleTest extends ApplicationAdapter {
+    public static final int backgroundColor = Color.rgba8888(Color.OLIVE);
     public static final int SCREEN_WIDTH = 1280;
     public static final int SCREEN_HEIGHT = 720;
     public static final int VIRTUAL_WIDTH = 640;
@@ -101,7 +103,12 @@ public class SimpleTest extends ApplicationAdapter {
         batch.setColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
         batch.end();
         buffer.end();
-        Gdx.gl.glClearColor(0, 0, 0, 0);
+        Gdx.gl.glClearColor(
+                ((backgroundColor >> 24) & 0xff) * (1f / 255f),
+                ((backgroundColor >> 16) & 0xff) * (1f / 255f),
+                ((backgroundColor >> 8) & 0xff) * (1f / 255f),
+                (backgroundColor & 0xff) * (1f / 255f)
+        );
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         screenView.apply();
         batch.setProjectionMatrix(screenView.getCamera().combined);
