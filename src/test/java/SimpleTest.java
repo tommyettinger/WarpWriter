@@ -15,13 +15,19 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.StringKit;
 import warpwriter.Coloring;
+import warpwriter.LittleEndianDataInputStream;
 import warpwriter.ModelMaker;
+import warpwriter.VoxIO;
 import warpwriter.model.IModel;
 import warpwriter.model.fetch.ArrayModel;
 import warpwriter.model.fetch.BoxModel;
 import warpwriter.model.fetch.ColorFetch;
+import warpwriter.view.VoxelColor;
 import warpwriter.view.VoxelSprite;
 import warpwriter.view.VoxelSpriteBatchRenderer;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class SimpleTest extends ApplicationAdapter {
     public static final String vertexShader = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" //
@@ -103,6 +109,7 @@ public class SimpleTest extends ApplicationAdapter {
 
         maker = new ModelMaker(12345);
         batchRenderer = new VoxelSpriteBatchRenderer(batch);
+        batchRenderer.set(batchRenderer.color().set(VoxelColor.AuroraTwilight)); // comment out to use Rinsed
         voxelSprite = new VoxelSprite()
                 .set(batchRenderer)
                 .setOffset(VIRTUAL_WIDTH / 2, 100);
@@ -123,7 +130,16 @@ public class SimpleTest extends ApplicationAdapter {
     }
 
     public IModel model() {
-        return new ArrayModel(maker.warriorRandom());
+        try {
+            return new ArrayModel(
+                    //// Aurora folder has vox models with a different palette, which involves a different ITwilight.
+                    VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("Aurora/Warrior_Male_W.vox")))
+                    //// If using Rinsed, use the line below instead of the one above.
+                    //maker.warriorRandom()
+            );
+        } catch (FileNotFoundException e) {
+            return new ArrayModel(maker.warriorRandom());
+        }
     }
 
     @Override

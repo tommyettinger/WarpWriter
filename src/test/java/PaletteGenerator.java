@@ -4,7 +4,6 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
-import squidpony.StringKit;
 
 /**
  * Created by Tommy Ettinger on 1/21/2018.
@@ -798,20 +797,20 @@ public class PaletteGenerator extends ApplicationAdapter {
         
 //        System.arraycopy(PALETTE, 7, PALETTE, 127, 113);
 
-        for (int i = 0; i < 256; i++) {
-            PALETTE[i] = (AURORA[i][1] << 24) | (AURORA[i][2] << 16) | (AURORA[i][3] << 8) | 0xFF;
-        }
+//        for (int i = 0; i < 256; i++) {
+//            PALETTE[i] = (AURORA[i][1] << 24) | (AURORA[i][2] << 16) | (AURORA[i][3] << 8) | 0xFF;
+//        }
 
-        StringBuilder sb = new StringBuilder((1 + 12 * 8) * 32);
-        for (int i = 0; i < 32; i++) {
-            for (int j = 0; j < 8; j++) {
-                sb.append(StringKit.hex(PALETTE[i << 3 | j]), 0, 6).append('\n');
-            }
-        }
-        String sbs = sb.toString();
-        System.out.println(sbs);
-        Gdx.files.local("DawnBringer_Aurora_Official.hex").writeString(sbs, false);
-        sb.setLength(0);
+//        StringBuilder sb = new StringBuilder((1 + 12 * 8) * 32);
+//        for (int i = 0; i < 32; i++) {
+//            for (int j = 0; j < 8; j++) {
+//                sb.append(StringKit.hex(PALETTE[i << 3 | j]), 0, 6).append('\n');
+//            }
+//        }
+//        String sbs = sb.toString();
+//        System.out.println(sbs);
+//        Gdx.files.local("DawnBringer_Aurora_Official.hex").writeString(sbs, false);
+//        sb.setLength(0);
 
 //        StringBuilder sb = new StringBuilder((1 + 12 * 8) * 32);
 //        for (int i = 0; i < 32; i++) {
@@ -835,17 +834,17 @@ public class PaletteGenerator extends ApplicationAdapter {
 //            sb.append("0x").append(StringKit.hex(p)).append(' ').append(diff).append('\n');
 //        }
 //        Gdx.files.local("PaletteDifferences.txt").writeString(sb.toString(), false);
-        Pixmap pix = new Pixmap(128, 128, Pixmap.Format.RGBA8888);
-        for (int i = 0; i < 256; i++) {
-            pix.setColor(PALETTE[i]);
-            pix.fillRectangle((i & 15) << 3, (i & -16) >>> 1, 8, 8);
-        }
-//        Pixmap pix = new Pixmap(256, 1, Pixmap.Format.RGBA8888);
-//        for (int i = 0; i < 255; i++) {
-//            pix.drawPixel(i, 0, PALETTE[i+1]);
+//        Pixmap pix = new Pixmap(128, 128, Pixmap.Format.RGBA8888);
+//        for (int i = 0; i < 256; i++) {
+//            pix.setColor(PALETTE[i]);
+//            pix.fillRectangle((i & 15) << 3, (i & -16) >>> 1, 8, 8);
 //        }
-//        pix.drawPixel(255, 0, 0);
-        PixmapIO.writePNG(Gdx.files.local("DawnBringer_Aurora_Official.png"), pix);
+        Pixmap pix = new Pixmap(256, 1, Pixmap.Format.RGBA8888);
+        for (int i = 0; i < 255; i++) {
+            pix.drawPixel(i, 0, PALETTE[i+1]);
+        }
+        pix.drawPixel(255, 0, 0);
+        PixmapIO.writePNG(Gdx.files.local("DB_Aurora.png"), pix);
         Gdx.app.exit();
     }
 
