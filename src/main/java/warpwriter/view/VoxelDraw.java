@@ -129,11 +129,11 @@ public class VoxelDraw {
         }
     }
 
-    public static void draw45PeekTop(IModel model, IPixelRenderer renderer) {
-        draw45PeekTop(model, renderer, 4, 6);
+    public static void draw45Peek(IModel model, IPixelRenderer renderer) {
+        draw45Peek(model, renderer, 4, 6);
     }
 
-    public static void draw45PeekTop(IModel model, IPixelRenderer renderer, int scaleX, int scaleY) {
+    public static void draw45Peek(IModel model, IPixelRenderer renderer, int scaleX, int scaleY) {
         byte v;
         final int sizeX = model.sizeX(),
                 sizeY = model.sizeY(),
