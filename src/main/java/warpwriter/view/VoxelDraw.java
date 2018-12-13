@@ -4,18 +4,22 @@ import warpwriter.Coloring;
 import warpwriter.model.IModel;
 
 public class VoxelDraw {
-    public static void draw(IModel model, IPixelRenderer renderer) {
+    public static void draw(IModel model, IRectangleRenderer renderer) {
         drawRight(model, renderer);
     }
 
-    public static void drawRight(IModel model, IPixelRenderer renderer) {
+    public static void drawRight(IModel model, IRectangleRenderer renderer) {
+        drawRight(model, renderer, 6, 6);
+    }
+
+    public static void drawRight(IModel model, IRectangleRenderer renderer, int scaleX, int scaleY) {
         final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ();
         for (int z = 0; z < sizeZ; z++) {
             for (int y = 0; y < sizeY; y++) {
                 for (int x = 0; x < sizeX; x++) {
                     byte v = model.at(x, y, z);
                     if (v != 0) {
-                        renderer.drawPixelRightFace(y, z, v);
+                        renderer.rectRight(y * scaleX, z * scaleY, scaleX, scaleY, v);
                         break;
                     }
                 }
@@ -23,20 +27,20 @@ public class VoxelDraw {
         }
     }
 
-    public static void drawRightPeek(IModel model, IPixelRenderer renderer) {
+    public static void drawRightPeek(IModel model, IRectangleRenderer renderer) {
         drawRightPeek(model, renderer, 6, 6);
     }
 
-    public static void drawRightPeek(IModel model, IPixelRenderer renderer, int scaleX, int scaleY) {
+    public static void drawRightPeek(IModel model, IRectangleRenderer renderer, int scaleX, int scaleY) {
         final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ();
         for (int z = 0; z < sizeZ; z++) {
             for (int y = 0; y < sizeY; y++) {
                 for (int x = 0; x < sizeX; x++) {
                     byte v = model.at(x, y, z);
                     if (v != 0) {
-                        renderer.drawRectRightFace(y * scaleX, z * scaleY, scaleX, scaleY, v);
+                        renderer.rectRight(y * scaleX, z * scaleY, scaleX, scaleY, v);
                         if (z >= sizeZ - 1 || model.at(x, y, z + 1) == 0)
-                            renderer.drawRectVerticalFace(y * scaleX, (z + 1) * scaleY - 1, scaleX, 1, v);
+                            renderer.rectVertical(y * scaleX, (z + 1) * scaleY - 1, scaleX, 1, v);
                         break;
                     }
                 }
@@ -44,14 +48,18 @@ public class VoxelDraw {
         }
     }
 
-    public static void drawLeft(IModel model, IPixelRenderer renderer) {
+    public static void drawLeft(IModel model, IRectangleRenderer renderer) {
+        drawLeft(model, renderer, 6, 6);
+    }
+
+    public static void drawLeft(IModel model, IRectangleRenderer renderer, int scaleX, int scaleY) {
         final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ();
         for (int z = 0; z < sizeZ; z++) {
             for (int y = 0; y < sizeY; y++) {
                 for (int x = sizeX - 1; x >= 0; x++) {
                     byte v = model.at(x, y, z);
                     if (v != 0) {
-                        renderer.drawPixelLeftFace(y, z, v);
+                        renderer.rectLeft(y * scaleX, z * scaleY, scaleX, scaleY, v);
                         break;
                     }
                 }
@@ -59,14 +67,18 @@ public class VoxelDraw {
         }
     }
 
-    public static void drawTop(IModel model, IPixelRenderer renderer) {
+    public static void drawTop(IModel model, IRectangleRenderer renderer) {
+        drawTop(model, renderer, 6, 6);
+    }
+
+    public static void drawTop(IModel model, IRectangleRenderer renderer, int scaleX, int scaleY) {
         final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ();
         for (int y = 0; y < sizeY; y++) {
             for (int x = 0; x < sizeX; x++) {
                 for (int z = sizeZ - 1; z >= 0; z--) {
                     byte v = model.at(x, y, z);
                     if (v != 0) {
-                        renderer.drawPixelVerticalFace(y, x, v);
+                        renderer.rectVertical(y * scaleX, z * scaleY, scaleX, scaleY, v);
                         break;
                     }
                 }
@@ -74,14 +86,18 @@ public class VoxelDraw {
         }
     }
 
-    public static void drawBottom(IModel model, IPixelRenderer renderer) {
+    public static void drawBottom(IModel model, IRectangleRenderer renderer) {
+        drawBottom(model, renderer, 6, 6);
+    }
+
+    public static void drawBottom(IModel model, IRectangleRenderer renderer, int scaleX, int scaleY) {
         final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ();
         for (int y = 0; y < sizeY; y++) {
             for (int x = 0; x < sizeX; x++) {
                 for (int z = 0; z < sizeZ; z--) {
                     byte v = model.at(x, y, z);
                     if (v != 0) {
-                        renderer.drawPixelVerticalFace(y, x, v);
+                        renderer.rectVertical(y * scaleX, z * scaleY, scaleX, scaleY, v);
                         break;
                     }
                 }
@@ -89,7 +105,11 @@ public class VoxelDraw {
         }
     }
 
-    public static void draw45(IModel model, IPixelRenderer renderer) {
+    public static void draw45(IModel model, IRectangleRenderer renderer) {
+        draw45(model, renderer, 6, 6);
+    }
+
+    public static void draw45(IModel model, IRectangleRenderer renderer, int scaleX, int scaleY) {
         byte v;
         final int sizeX = model.sizeX(),
                 sizeY = model.sizeY(),
@@ -106,22 +126,24 @@ public class VoxelDraw {
                     if (!leftDone && vy != 0) {
                         v = model.at(vx, vy - 1, py);
                         if (v != 0) {
-                            renderer.drawPixelRightFace(px, py, v);
+                            renderer.rectRight(px * scaleX, py * scaleY, scaleX, scaleY, v);
                             leftDone = true;
                         }
                     }
                     if (!rightDone && vx > 0) {
                         v = model.at(vx - 1, vy, py);
                         if (v != 0) {
-                            renderer.drawPixelLeftFace(px + 1, py, v);
+                            renderer.rectLeft((px + 1) * scaleX, py * scaleY, scaleX, scaleY, v);
                             rightDone = true;
                         }
                     }
                     if (leftDone && rightDone) break;
                     v = model.at(vx, vy, py);
                     if (v != 0) {
-                        if (!leftDone) renderer.drawPixelLeftFace(px, py, v);
-                        if (!rightDone) renderer.drawPixelRightFace(px + 1, py, v);
+                        if (!leftDone)
+                            renderer.rectLeft(px * scaleX, py * scaleY, scaleX, scaleY, v);
+                        if (!rightDone)
+                            renderer.rectRight((px + 1) * scaleX, py * scaleY, scaleX, scaleY, v);
                         break;
                     }
                 }
@@ -129,11 +151,11 @@ public class VoxelDraw {
         }
     }
 
-    public static void draw45Peek(IModel model, IPixelRenderer renderer) {
+    public static void draw45Peek(IModel model, IRectangleRenderer renderer) {
         draw45Peek(model, renderer, 4, 6);
     }
 
-    public static void draw45Peek(IModel model, IPixelRenderer renderer, int scaleX, int scaleY) {
+    public static void draw45Peek(IModel model, IRectangleRenderer renderer, int scaleX, int scaleY) {
         byte v;
         final int sizeX = model.sizeX(),
                 sizeY = model.sizeY(),
@@ -150,18 +172,18 @@ public class VoxelDraw {
                     if (!leftDone && vy != 0) {
                         v = model.at(vx, vy - 1, py);
                         if (v != 0) {
-                            renderer.drawRectRightFace(px * scaleX, py * scaleY, scaleX, scaleY, v);
+                            renderer.rectRight(px * scaleX, py * scaleY, scaleX, scaleY, v);
                             if (py >= sizeZ - 1 || model.at(vx, vy - 1, py + 1) == 0)
-                                renderer.drawRectVerticalFace(px * scaleX, (py + 1) * scaleY - 1, scaleX, 1, v);
+                                renderer.rectVertical(px * scaleX, (py + 1) * scaleY - 1, scaleX, 1, v);
                             leftDone = true;
                         }
                     }
                     if (!rightDone && vx > 0) {
                         v = model.at(vx - 1, vy, py);
                         if (v != 0) {
-                            renderer.drawRectLeftFace((px + 1) * scaleX, py * scaleY, scaleX, scaleY, v);
+                            renderer.rectLeft((px + 1) * scaleX, py * scaleY, scaleX, scaleY, v);
                             if (py >= sizeZ - 1 || model.at(vx - 1, vy, py + 1) == 0)
-                                renderer.drawRectVerticalFace((px + 1) * scaleX, (py + 1) * scaleY - 1, scaleX, 1, v);
+                                renderer.rectVertical((px + 1) * scaleX, (py + 1) * scaleY - 1, scaleX, 1, v);
                             rightDone = true;
                         }
                     }
@@ -170,14 +192,14 @@ public class VoxelDraw {
                     if (v != 0) {
                         boolean peek = py >= sizeZ - 1 || model.at(vx, vy, py + 1) == 0;
                         if (!leftDone) {
-                            renderer.drawRectLeftFace(px * scaleX, py * scaleY, scaleX, scaleY, v);
+                            renderer.rectLeft(px * scaleX, py * scaleY, scaleX, scaleY, v);
                             if (peek)
-                                renderer.drawRectVerticalFace(px * scaleX, (py + 1) * scaleY - 1, scaleX, 1, v);
+                                renderer.rectVertical(px * scaleX, (py + 1) * scaleY - 1, scaleX, 1, v);
                         }
                         if (!rightDone) {
-                            renderer.drawRectRightFace((px + 1) * scaleX, py * scaleY, scaleX, scaleY, v);
+                            renderer.rectRight((px + 1) * scaleX, py * scaleY, scaleX, scaleY, v);
                             if (peek)
-                                renderer.drawRectVerticalFace((px + 1) * scaleX, (py + 1) * scaleY - 1, scaleX, 1, v);
+                                renderer.rectVertical((px + 1) * scaleX, (py + 1) * scaleY - 1, scaleX, 1, v);
                         }
                         break;
                     }
@@ -186,7 +208,11 @@ public class VoxelDraw {
         }
     }
 
-    public static void drawAbove(IModel model, IPixelRenderer renderer) {
+    public static void drawAbove(IModel model, IRectangleRenderer renderer) {
+        drawAbove(model, renderer, 6, 2);
+    }
+
+    public static void drawAbove(IModel model, IRectangleRenderer renderer, int scaleX, int scaleY) {
         final int sizeX = model.sizeX(),
                 sizeY = model.sizeY(),
                 sizeZ = model.sizeZ(),
@@ -194,7 +220,7 @@ public class VoxelDraw {
         for (int vy = 0; vy < sizeY; vy++) { // voxel y is pixel x
             // Begin bottom row
             byte v = model.at(0, vy, 0);
-            if (v != 0) renderer.drawPixelRightFace(vy, 0, v);
+            if (v != 0) renderer.rectRight(vy * scaleX, 0, scaleX, scaleY, v);
             // Finish bottom row
             // Begin main bulk of model
             for (int py = 1; py < pixelHeight; py += 2) { // pixel y
@@ -207,22 +233,22 @@ public class VoxelDraw {
                     if (!above && vz + 1 < sizeZ) {
                         v = model.at(vx, vy, vz + 1);
                         if (v != 0) {
-                            renderer.drawPixelRightFace(vy, py + 1, v);
+                            renderer.rectRight(vy * scaleX, (py + 1) * scaleY, scaleX, scaleY, v);
                             above = true;
                         }
                     }
                     if (!below && vx > 0) {
                         v = model.at(vx - 1, vy, vz);
                         if (v != 0) {
-                            renderer.drawPixelVerticalFace(vy, py, v);
+                            renderer.rectVertical(vy * scaleX, py * scaleY, scaleX, scaleY, v);
                             below = true;
                         }
                     }
                     if (above && below) break;
                     v = model.at(vx, vy, vz);
                     if (v != 0) {
-                        if (!above) renderer.drawPixelVerticalFace(vy, py + 1, v);
-                        if (!below) renderer.drawPixelRightFace(vy, py, v);
+                        if (!above) renderer.rectVertical(vy * scaleX, (py + 1) * scaleY, scaleX, scaleY, v);
+                        if (!below) renderer.rectRight(vy * scaleX, py * scaleY, scaleX, scaleY, v);
                         break;
                     }
                 }

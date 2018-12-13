@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.NumberUtils;
 
-public class VoxelSpriteBatchRenderer implements IPixelRenderer, ITriangleRenderer, Disposable {
+public class VoxelSpriteBatchRenderer implements IRectangleRenderer, ITriangleRenderer, Disposable {
     public VoxelSpriteBatchRenderer(SpriteBatch batch) {
         this();
         set(batch);
@@ -129,11 +129,11 @@ public class VoxelSpriteBatchRenderer implements IPixelRenderer, ITriangleRender
         return this;
     }
 
-    public IPixelRenderer drawPixel(int x, int y, int color) {
-        return drawRect(x, y, 1, 1, color);
+    public IRectangleRenderer drawPixel(int x, int y, int color) {
+        return rect(x, y, 1, 1, color);
     }
 
-    public IPixelRenderer drawRect(int x, int y, int sizeX, int sizeY, int color) {
+    public IRectangleRenderer rect(int x, int y, int sizeX, int sizeY, int color) {
         //final float oldColor = batch.getPackedColor(); // requires less conversions than batch.getColor(), same result
         batch.setColor(NumberUtils.intToFloatColor(Integer.reverseBytes(color)));
         // converts from RGBA to ABGR
@@ -175,13 +175,8 @@ public class VoxelSpriteBatchRenderer implements IPixelRenderer, ITriangleRender
     }
 
     @Override
-    public IPixelRenderer drawPixelVerticalFace(int x, int y, byte voxel) {
-        return drawRectVerticalFace(x, y, 1, 1, voxel);
-    }
-
-    @Override
-    public IPixelRenderer drawRectVerticalFace(int x, int y, int sizeX, int sizeY, byte voxel) {
-        return drawRect(x, y, sizeX, sizeY,
+    public IRectangleRenderer rectVertical(int x, int y, int sizeX, int sizeY, byte voxel) {
+        return rect(x, y, sizeX, sizeY,
                 flipY ?
                         color.bottomFace(voxel)
                         : color.topFace(voxel)
@@ -189,13 +184,8 @@ public class VoxelSpriteBatchRenderer implements IPixelRenderer, ITriangleRender
     }
 
     @Override
-    public IPixelRenderer drawPixelLeftFace(int x, int y, byte voxel) {
-        return drawRectLeftFace(x, y, 1, 1, voxel);
-    }
-
-    @Override
-    public IPixelRenderer drawRectLeftFace(int x, int y, int sizeX, int sizeY, byte voxel) {
-        return drawRect(x, y, sizeX, sizeY,
+    public IRectangleRenderer rectLeft(int x, int y, int sizeX, int sizeY, byte voxel) {
+        return rect(x, y, sizeX, sizeY,
                 flipX ?
                         color.rightFace(voxel)
                         : color.leftFace(voxel)
@@ -203,13 +193,8 @@ public class VoxelSpriteBatchRenderer implements IPixelRenderer, ITriangleRender
     }
 
     @Override
-    public IPixelRenderer drawPixelRightFace(int x, int y, byte voxel) {
-        return drawRectRightFace(x, y, 1, 1, voxel);
-    }
-
-    @Override
-    public IPixelRenderer drawRectRightFace(int x, int y, int sizeX, int sizeY, byte voxel) {
-        return drawRect(x, y, sizeX, sizeY,
+    public IRectangleRenderer rectRight(int x, int y, int sizeX, int sizeY, byte voxel) {
+        return rect(x, y, sizeX, sizeY,
                 flipX ?
                         color.leftFace(voxel)
                         : color.rightFace(voxel)

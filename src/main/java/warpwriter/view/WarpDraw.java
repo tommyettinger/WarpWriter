@@ -10,11 +10,11 @@ import warpwriter.warp.VoxelModel;
 public class WarpDraw {
     protected static IVoxelColor color = new VoxelColor();
 
-    public static void draw(VoxelModel model, IPixelRenderer renderer) {
+    public static void draw(VoxelModel model, IRectangleRenderer renderer) {
         draw(model, renderer, color);
     }
 
-    public static void draw(VoxelModel model, IPixelRenderer renderer, IVoxelColor color) {
+    public static void draw(VoxelModel model, IRectangleRenderer renderer, IVoxelColor color) {
         final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ(),
                 startX = model.startX(), startY = model.startY(), startZ = model.startZ(),
                 stepX = model.stepX(), stepY = model.stepY(), stepZ = model.stepZ(),
@@ -33,8 +33,8 @@ public class WarpDraw {
                     //renderer.drawPixel(px, py, Color.rgba8888(Color.RED));
                     byte result = model.voxels[sz * (sy * model.temp[0] + model.temp[1]) + model.temp[2]];
                     if (result != 0 && result != Coloring.CLEAR) {
-                        renderer.drawRect(px, py + 3, 3, 1, color.topFace(result));
-                        renderer.drawRect(px, py, 3, 3, color.rightFace(result));
+                        renderer.rect(px, py + 3, 3, 1, color.topFace(result));
+                        renderer.rect(px, py, 3, 3, color.rightFace(result));
                         break;
                     }
                 }
@@ -42,7 +42,7 @@ public class WarpDraw {
         }
     }
 
-    public static void drawOutline(VoxelModel model, IPixelRenderer renderer) {
+    public static void drawOutline(VoxelModel model, IRectangleRenderer renderer) {
         final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ(),
                 startX = model.startX(), startY = model.startY(), startZ = model.startZ(),
                 stepX = model.stepX(), stepY = model.stepY(), stepZ = model.stepZ(),
@@ -62,7 +62,7 @@ public class WarpDraw {
                     //renderer.drawPixel(px, py, Color.rgba8888(Color.RED));
                     byte result = model.voxels[sz * (sy * model.temp[0] + model.temp[1]) + model.temp[2]];
                     if (result != 0 && result != Coloring.CLEAR) {
-                        renderer.drawRect(px, py, 5, 6, outline);
+                        renderer.rect(px, py, 5, 6, outline);
                         break;
                     }
                 }
@@ -70,15 +70,15 @@ public class WarpDraw {
         }
     }
 
-    public static void simpleDraw(IModel model, IPixelRenderer renderer) {
+    public static void simpleDraw(IModel model, IRectangleRenderer renderer) {
         simpleDraw(model, renderer, color, true);
     }
 
-    public static void simpleDraw(IModel model, IPixelRenderer renderer, IVoxelColor color) {
+    public static void simpleDraw(IModel model, IRectangleRenderer renderer, IVoxelColor color) {
         simpleDraw(model, renderer, color, true);
     }
 
-    public static void simpleDraw(IModel model, IPixelRenderer renderer, IVoxelColor color, boolean outline) {
+    public static void simpleDraw(IModel model, IRectangleRenderer renderer, IVoxelColor color, boolean outline) {
         final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ();
         if (outline) {
             final int outlineColor = Coloring.RINSED[Coloring.OUTLINE];
@@ -87,7 +87,7 @@ public class WarpDraw {
                     for (int x = 0; x < sizeX; x++) {
                         byte result = model.at(x, y, z);
                         if (result != 0 && result != Coloring.CLEAR) {
-                            renderer.drawRect(px, py, 5, 6, outlineColor);
+                            renderer.rect(px, py, 5, 6, outlineColor);
                             break;
                         }
                     }
@@ -100,8 +100,8 @@ public class WarpDraw {
                 for (int x = 0; x < sizeX; x++) {
                     byte result = model.at(x, y, z);
                     if (result != 0 && result != Coloring.CLEAR) {
-                        renderer.drawRect(px, py + 3, 3, 1, color.topFace(result));
-                        renderer.drawRect(px, py, 3, 3, color.rightFace(result));
+                        renderer.rect(px, py + 3, 3, 1, color.topFace(result));
+                        renderer.rect(px, py, 3, 3, color.rightFace(result));
                         break;
                     }
                 }
@@ -109,15 +109,15 @@ public class WarpDraw {
         }
     }
 
-    public static void simpleDraw45(IModel model, IPixelRenderer renderer) {
+    public static void simpleDraw45(IModel model, IRectangleRenderer renderer) {
         simpleDraw45(model, renderer, color, true);
     }
 
-    public static void simpleDraw45(IModel model, IPixelRenderer renderer, IVoxelColor color) {
+    public static void simpleDraw45(IModel model, IRectangleRenderer renderer, IVoxelColor color) {
         simpleDraw45(model, renderer, color, true);
     }
 
-    public static void simpleDraw45(IModel model, IPixelRenderer renderer, IVoxelColor color, boolean outline) {
+    public static void simpleDraw45(IModel model, IRectangleRenderer renderer, IVoxelColor color, boolean outline) {
         final int sizeX = model.sizeX(),
                 sizeY = model.sizeY(),
                 sizeZ = model.sizeZ(),
@@ -139,21 +139,21 @@ public class WarpDraw {
                         if (!leftDone && vy != 0) {
                             result = model.at(vx, vy - 1, ry);
                             if (result != 0 && result != Coloring.CLEAR) {
-                                renderer.drawRect(px, py, 4, 6, outlineColor);
+                                renderer.rect(px, py, 4, 6, outlineColor);
                                 leftDone = true;
                             }
                         }
                         if (!rightDone && vx > 0) {
                             result = model.at(vx - 1, vy, ry);
                             if (result != 0 && result != Coloring.CLEAR) {
-                                renderer.drawRect(px + 2, py, 4, 6, outlineColor);
+                                renderer.rect(px + 2, py, 4, 6, outlineColor);
                                 rightDone = true;
                             }
                         }
                         if (leftDone && rightDone) break;
                         result = model.at(vx, vy, ry);
                         if (result != 0 && result != Coloring.CLEAR) {
-                            renderer.drawRect(px, py, 6, 6, outlineColor);
+                            renderer.rect(px, py, 6, 6, outlineColor);
                             break;
                         }
                     }
@@ -164,7 +164,7 @@ public class WarpDraw {
             // ry is the number of rays cast on the screen-y axis, py is the pixel-y position
             for (int px = 1, rx = 0; rx <= rayWidth; rx += 2, px += 4) {
                 // rx is the number of rays cast on the screen-x axis, px is the pixel-x position
-//                renderer.drawRect(px, py, 2, 1, Color.rgba8888(Color.RED));
+//                renderer.rect(px, py, 2, 1, Color.rgba8888(Color.RED));
                 boolean leftDone = false, rightDone = rayWidth - rx < 2;
                 final int startX = rx > sizeX - 1 ? 0 : sizeX - rx - 1,
                         startY = rx - sizeX + 1 < 0 ? 0 : rx - sizeX + 1;
@@ -174,16 +174,16 @@ public class WarpDraw {
                     if (!leftDone && vy != 0) {
                         result = model.at(vx, vy - 1, ry);
                         if (result != 0 && result != Coloring.CLEAR) {
-                            renderer.drawRect(px, py + 3, 2, 1, color.topFace(result));
-                            renderer.drawRect(px, py, 2, 3, color.rightFace(result));
+                            renderer.rect(px, py + 3, 2, 1, color.topFace(result));
+                            renderer.rect(px, py, 2, 3, color.rightFace(result));
                             leftDone = true;
                         }
                     }
                     if (!rightDone && vx > 0) {
                         result = model.at(vx - 1, vy, ry);
                         if (result != 0 && result != Coloring.CLEAR) {
-                            renderer.drawRect(px + 2, py + 3, 2, 1, color.topFace(result));
-                            renderer.drawRect(px + 2, py, 2, 3, color.leftFace(result));
+                            renderer.rect(px + 2, py + 3, 2, 1, color.topFace(result));
+                            renderer.rect(px + 2, py, 2, 3, color.leftFace(result));
                             rightDone = true;
                         }
                     }
@@ -191,17 +191,17 @@ public class WarpDraw {
                     result = model.at(vx, vy, ry);
                     if (result != 0 && result != Coloring.CLEAR) {
                         if (!leftDone && !rightDone) {
-                            renderer.drawRect(px, py + 3, 4, 1, color.topFace(result));
-                            renderer.drawRect(px, py, 2, 3, color.leftFace(result));
-                            renderer.drawRect(px + 2, py, 2, 3, color.rightFace(result));
+                            renderer.rect(px, py + 3, 4, 1, color.topFace(result));
+                            renderer.rect(px, py, 2, 3, color.leftFace(result));
+                            renderer.rect(px + 2, py, 2, 3, color.rightFace(result));
                         } else {
                             if (!leftDone) {
-                                renderer.drawRect(px, py + 3, 2, 1, color.topFace(result));
-                                renderer.drawRect(px, py, 2, 3, color.leftFace(result));
+                                renderer.rect(px, py + 3, 2, 1, color.topFace(result));
+                                renderer.rect(px, py, 2, 3, color.leftFace(result));
                             }
                             if (!rightDone) {
-                                renderer.drawRect(px + 2, py + 3, 2, 1, color.topFace(result));
-                                renderer.drawRect(px + 2, py, 2, 3, color.rightFace(result));
+                                renderer.rect(px + 2, py + 3, 2, 1, color.topFace(result));
+                                renderer.rect(px + 2, py, 2, 3, color.rightFace(result));
                             }
                         }
                         break;
@@ -212,11 +212,11 @@ public class WarpDraw {
     }
 
 
-    public static void draw45(VoxelModel model, IPixelRenderer renderer) {
+    public static void draw45(VoxelModel model, IRectangleRenderer renderer) {
         draw45(model, renderer, color);
     }
 
-    public static void draw45(VoxelModel model, IPixelRenderer renderer, IVoxelColor color) {
+    public static void draw45(VoxelModel model, IRectangleRenderer renderer, IVoxelColor color) {
         final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ(),
                 stepX = model.stepX(), stepY = model.stepY(), stepZ = model.stepZ(),
                 sy = model.sizes()[1], sz = model.sizes()[2],
@@ -229,7 +229,7 @@ public class WarpDraw {
         for (int py = 0, vz = startZ; vz < sizeZ && vz >= 0; vz += stepZ, py += 3) {
             model.temp[rz] = vz;
             for (int px = 0; px <= pixelWidth; px += 2) { // pixel x
-//                renderer.drawRect(px, py, 2, 1, Color.rgba8888(Color.RED));
+//                renderer.rect(px, py, 2, 1, Color.rgba8888(Color.RED));
                 boolean leftDone = false, rightDone = pixelWidth - px < 2;
                 final int startX = px > sizeX - 1 ? 0 : sizeX - px - 1,
                         startY = px - sizeX + 1 < 0 ? 0 : px - sizeX + 1;
@@ -241,8 +241,8 @@ public class WarpDraw {
                         model.temp[rx] = vx;
                         result = model.voxels[sz * (sy * model.temp[0] + model.temp[1]) + model.temp[2]];
                         if (result != 0 && result != Coloring.CLEAR) {
-                            renderer.drawRect(px << 1, py + 3, 2, 1, color.topFace(result));
-                            renderer.drawRect(px << 1, py, 2, 3, color.rightFace(result));
+                            renderer.rect(px << 1, py + 3, 2, 1, color.topFace(result));
+                            renderer.rect(px << 1, py, 2, 3, color.rightFace(result));
                             leftDone = true;
                         }
                     }
@@ -251,8 +251,8 @@ public class WarpDraw {
                         model.temp[rx] = vx - 1;
                         result = model.voxels[sz * (sy * model.temp[0] + model.temp[1]) + model.temp[2]];
                         if (result != 0 && result != Coloring.CLEAR) {
-                            renderer.drawRect((px + 1) << 1, py + 3, 2, 1, color.topFace(result));
-                            renderer.drawRect((px + 1) << 1, py, 2, 3, color.leftFace(result));
+                            renderer.rect((px + 1) << 1, py + 3, 2, 1, color.topFace(result));
+                            renderer.rect((px + 1) << 1, py, 2, 3, color.leftFace(result));
                             rightDone = true;
                         }
                     }
@@ -262,17 +262,17 @@ public class WarpDraw {
                     result = model.voxels[sz * (sy * model.temp[0] + model.temp[1]) + model.temp[2]];
                     if (result != 0 && result != Coloring.CLEAR) {
                         if (!leftDone && !rightDone) {
-                            renderer.drawRect(px << 1, py + 3, 4, 1, color.topFace(result));
-                            renderer.drawRect(px << 1, py, 2, 3, color.leftFace(result));
-                            renderer.drawRect((px + 1) << 1, py, 2, 3, color.rightFace(result));
+                            renderer.rect(px << 1, py + 3, 4, 1, color.topFace(result));
+                            renderer.rect(px << 1, py, 2, 3, color.leftFace(result));
+                            renderer.rect((px + 1) << 1, py, 2, 3, color.rightFace(result));
                         } else {
                             if (!leftDone) {
-                                renderer.drawRect(px << 1, py + 3, 2, 1, color.topFace(result));
-                                renderer.drawRect(px << 1, py, 2, 3, color.leftFace(result));
+                                renderer.rect(px << 1, py + 3, 2, 1, color.topFace(result));
+                                renderer.rect(px << 1, py, 2, 3, color.leftFace(result));
                             }
                             if (!rightDone) {
-                                renderer.drawRect((px + 1) << 1, py + 3, 2, 1, color.topFace(result));
-                                renderer.drawRect((px + 1) << 1, py, 2, 3, color.rightFace(result));
+                                renderer.rect((px + 1) << 1, py + 3, 2, 1, color.topFace(result));
+                                renderer.rect((px + 1) << 1, py, 2, 3, color.rightFace(result));
                             }
                         }
                         break;
@@ -282,7 +282,7 @@ public class WarpDraw {
         }
     }
 
-    public static void draw45Outline(VoxelModel model, IPixelRenderer renderer) {
+    public static void draw45Outline(VoxelModel model, IRectangleRenderer renderer) {
         final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ(),
                 stepX = model.stepX(), stepY = model.stepY(), stepZ = model.stepZ(),
                 sy = model.sizes()[1], sz = model.sizes()[2],
@@ -305,7 +305,7 @@ public class WarpDraw {
                     model.temp[rx] = vx;
                     result = model.voxels[sz * (sy * model.temp[0] + model.temp[1]) + model.temp[2]];
                     if (result != 0 && result != Coloring.CLEAR) {
-                        renderer.drawRect((px << 1) - 1, py - 1, 6, 6, outline);
+                        renderer.rect((px << 1) - 1, py - 1, 6, 6, outline);
                         break;
                     }
                 }
