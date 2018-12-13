@@ -56,10 +56,10 @@ public class VoxelText extends Fetch implements IModel, Disposable {
         return (pixel & 0xFF) > 128 ? // If opacity is greater than half
                 fill
                 : outline != null // If there is an outline set
-                && ((y <= sizeY() - 1 && (pixmap.getPixel(y + 1, z) & 0xFF) > 128)
-                || (y >= 0 && (pixmap.getPixel(y - 1, z) & 0xFF) > 128)
-                || (x < sizeX() - 1 && (pixmap.getPixel(y, z + 1) & 0xFF) > 128)
-                || (x >= 0 && (pixmap.getPixel(y, z - 1) & 0xFF) > 128))
+                && ((y < pixmap.getWidth() - 1 && (pixmap.getPixel(y + 1, z) & 0xFF) > 128)
+                || (y > 0 && (pixmap.getPixel(y - 1, z) & 0xFF) > 128)
+                || (z < pixmap.getHeight() - 1 && (pixmap.getPixel(y, z + 1) & 0xFF) > 128)
+                || (z > 0 && (pixmap.getPixel(y, z - 1) & 0xFF) > 128))
                 ? outline
                 : getNextFetch();
     }
@@ -150,12 +150,12 @@ public class VoxelText extends Fetch implements IModel, Disposable {
 
     @Override
     public int sizeY() {
-        return pixmap == null ? 1 : pixmap.getWidth() + (outline == null ? 0 : 2);
+        return pixmap == null ? 1 : pixmap.getWidth();
     }
 
     @Override
     public int sizeZ() {
-        return pixmap == null ? 1 : pixmap.getHeight() + (outline == null ? 0 : 2);
+        return pixmap == null ? 1 : pixmap.getHeight();
     }
 
     @Override
