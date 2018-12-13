@@ -416,7 +416,7 @@ public class TestDisplay extends ApplicationAdapter {
 
         voxels = voxelText
                 .setText(font, FakeLanguageGen.SIMPLISH.word(mm.rng.nextLong(), true))
-                .setFetch(checkers)
+                .setFill(checkers)
                 .setDepth(5);
 
         Arrays.fill(animatedVoxels, voxels);
