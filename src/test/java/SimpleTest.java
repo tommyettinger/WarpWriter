@@ -30,6 +30,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class SimpleTest extends ApplicationAdapter {
+    /**
+     * This is the default vertex shader from libGDX.
+     */
     public static final String vertexShader = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" //
             + "attribute vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" //
             + "attribute vec2 " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" //
@@ -45,6 +48,9 @@ public class SimpleTest extends ApplicationAdapter {
             + "   gl_Position =  u_projTrans * " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" //
             + "}\n";
 
+    /**
+     * This fragment shader draws a black outline around things.
+     */
     public static final String fragmentShader = "#version 150\n" +
             "varying vec2 v_texCoords;\n" +
             "varying vec4 v_color;\n" +
