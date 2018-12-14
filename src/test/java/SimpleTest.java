@@ -13,16 +13,21 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import squidpony.FakeLanguageGen;
 import squidpony.StringKit;
 import warpwriter.Coloring;
+import warpwriter.LittleEndianDataInputStream;
 import warpwriter.ModelMaker;
+import warpwriter.VoxIO;
 import warpwriter.model.IModel;
+import warpwriter.model.fetch.ArrayModel;
 import warpwriter.model.fetch.BoxModel;
 import warpwriter.model.fetch.ColorFetch;
-import warpwriter.model.fetch.VoxelText;
+import warpwriter.view.VoxelColor;
 import warpwriter.view.VoxelSprite;
 import warpwriter.view.VoxelSpriteBatchRenderer;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class SimpleTest extends ApplicationAdapter {
     public static final String vertexShader = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" //
@@ -125,21 +130,26 @@ public class SimpleTest extends ApplicationAdapter {
     }
 
     public IModel model() {
-        return new VoxelText()
-                .setText(font, FakeLanguageGen.SIMPLISH.word(maker.rng.nextLong(), true))
-                .setFill(ColorFetch.color(Coloring.rinsed("Powder Blue 3")))
-                .setOutline(ColorFetch.color(Coloring.rinsed("Red 4")))
-                .setDepth(5);
-//        try {
-//            return new ArrayModel(
-//                    //// Aurora folder has vox models with a different palette, which involves a different ITwilight.
-//                    VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("Aurora/Warrior_Male_W.vox")))
-//                    //// If using Rinsed, use the line below instead of the one above.
-//                    //maker.warriorRandom()
-//            );
-//        } catch (FileNotFoundException e) {
-//            return new ArrayModel(maker.warriorRandom());
-//        }
+//        return new VoxelText()
+//                .setText(font, FakeLanguageGen.SIMPLISH.word(maker.rng.nextLong(), true))
+//                .setFill(ColorFetch.color(Coloring.rinsed("Powder Blue 3")))
+//                .setOutline(ColorFetch.color(Coloring.rinsed("Red 4")))
+//                .setDepth(5);
+        try {
+            //// loads Artillery.vox, which has a palette set in that model; this palette doesn't match Rinsed or Aurora
+            final byte[][][] arr = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("HasOwnPalette/Artillery.vox")));
+            //// set the palette to the one from the vox model, using arbitraryTwilight()
+            batchRenderer.set(batchRenderer.color().set(VoxelColor.arbitraryTwilight(VoxIO.lastPalette)));
+            return new ArrayModel(
+                    arr
+                    //// Aurora folder has vox models with a different palette, which involves a different ITwilight.
+                    //VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("Aurora/Warrior_Male_W.vox")))
+                    // If using Rinsed, use the line below instead of the one above.
+                    //maker.warriorRandom()
+            );
+        } catch (FileNotFoundException e) {
+            return new ArrayModel(maker.warriorRandom());
+        }
     }
 
     @Override

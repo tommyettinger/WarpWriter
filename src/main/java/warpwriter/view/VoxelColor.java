@@ -1,5 +1,6 @@
 package warpwriter.view;
 
+import com.badlogic.gdx.math.MathUtils;
 import warpwriter.Coloring;
 
 /**
@@ -852,6 +853,64 @@ public class VoxelColor implements IVoxelColor {
             return RAMP_VALUES[voxel & 255][0];
         }
     };
+    
+    public static ITwilight arbitraryTwilight(final int[] rgbaPalette) {
+        return new Twilight() {
+            private int[][] RAMP_VALUES = new int[256][4];
+            {
+                for (int i = 1; i < 256 && i < rgbaPalette.length; i++) {
+                    int color = RAMP_VALUES[i][1] = rgbaPalette[i];
+                    float luma = ((color >>> 24) * 0.299f) +
+                            ((color >>> 16 & 0xFF) * 0.587f) +
+                            ((color >>> 8 & 0xFF) * 0.114f),
+                            chromaB = (((color >>> 24) * -0.168736f) +
+                                    ((color >>> 16 & 0xFF) * -0.331264f) +
+                                    ((color >>> 8 & 0xFF) * 0.5f)) * 0.875f,
+                            chromaR = (((color >>> 24) * 0.5f) +
+                                    ((color >>> 16 & 0xFF) * -0.418688f) +
+                                    ((color >>> 8 & 0xFF) * -0.081312f)) * 0.875f, 
+                            lumaBright = Math.min(luma * 1.125f, 1f), 
+                            lumaDim = luma * 0.875f,
+                            lumaDark = luma * 0.75f;
+                    RAMP_VALUES[i][2] =
+                            (int)(MathUtils.clamp(lumaDim + chromaR * 1.402f, 0f, 255f)) << 24 | 
+                            (int)(MathUtils.clamp(lumaDim - chromaB * 0.344136f - chromaR * 0.714136f, 0f, 255f)) << 16 |
+                            (int)(MathUtils.clamp(lumaDim + chromaB * 1.772f, 0f, 255f)) << 8 | 0xFF;
+                    chromaB *= 0.875f;
+                    chromaR *= 0.875f;
+                    RAMP_VALUES[i][0] =
+                            (int)(MathUtils.clamp(lumaBright + chromaR * 1.402f, 0f, 255f)) << 24 | 
+                            (int)(MathUtils.clamp(lumaBright - chromaB * 0.344136f - chromaR * 0.714136f, 0f, 255f)) << 16 |
+                            (int)(MathUtils.clamp(lumaBright + chromaB * 1.772f, 0f, 255f)) << 8 | 0xFF;
+                    chromaB *= 0.875f;
+                    chromaR *= 0.875f;
+                    RAMP_VALUES[i][3] =
+                            (int)(MathUtils.clamp(lumaDark + chromaR * 1.402f, 0f, 255f)) << 24 | 
+                            (int)(MathUtils.clamp(lumaDark - chromaB * 0.344136f - chromaR * 0.714136f, 0f, 255f)) << 16 |
+                            (int)(MathUtils.clamp(lumaDark + chromaB * 1.772f, 0f, 255f)) << 8 | 0xFF;
+                }
+            }
+            @Override
+            public int dark(byte voxel) {
+                return RAMP_VALUES[voxel & 255][3];
+            }
+
+            @Override
+            public int dim(byte voxel) {
+                return RAMP_VALUES[voxel & 255][2];
+            }
+
+            @Override
+            public int twilight(byte voxel) {
+                return RAMP_VALUES[voxel & 255][1];
+            }
+
+            @Override
+            public int bright(byte voxel) {
+                return RAMP_VALUES[voxel & 255][0];
+            }
+        };
+    }
 
     protected ITwilight twilight = RinsedTwilight;
 
