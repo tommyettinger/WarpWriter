@@ -23,7 +23,7 @@ import warpwriter.model.IModel;
 import warpwriter.model.fetch.ArrayModel;
 import warpwriter.model.fetch.BoxModel;
 import warpwriter.model.fetch.ColorFetch;
-import warpwriter.view.VoxelColor;
+import warpwriter.view.Twilight;
 import warpwriter.view.VoxelSprite;
 import warpwriter.view.VoxelSpriteBatchRenderer;
 
@@ -111,12 +111,13 @@ public class SimpleTest extends ApplicationAdapter {
 
         new Lwjgl3Application(app, config);
     }
+
     public void load(String name) {
         try {
             //// loads a file by its full path, which we get via drag+drop
             final byte[][][] arr = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream(name)));
             //// set the palette to the one from the vox model, using arbitraryTwilight()
-            batchRenderer.set(batchRenderer.color().set(VoxelColor.arbitraryTwilight(VoxIO.lastPalette)));
+            batchRenderer.set(batchRenderer.color().set(Twilight.arbitraryTwilight(VoxIO.lastPalette)));
             voxelSprite.set(new ArrayModel(
                     arr
                     //// Aurora folder has vox models with a different palette, which involves a different ITwilight.
@@ -126,7 +127,7 @@ public class SimpleTest extends ApplicationAdapter {
             ));
         } catch (FileNotFoundException e) {
             voxelSprite.set(new ArrayModel(maker.warriorRandom()));
-            batchRenderer.set(batchRenderer.color().set(VoxelColor.RinsedTwilight));
+            batchRenderer.set(batchRenderer.color().set(Twilight.RinsedTwilight));
         }
     }
 
@@ -174,7 +175,7 @@ public class SimpleTest extends ApplicationAdapter {
             //// loads Artillery.vox, which has a palette set in that model; this palette doesn't match Rinsed or Aurora
             final byte[][][] arr = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("HasOwnPalette/Artillery.vox")));
             //// set the palette to the one from the vox model, using arbitraryTwilight()
-            batchRenderer.set(batchRenderer.color().set(VoxelColor.arbitraryTwilight(VoxIO.lastPalette)));
+            batchRenderer.set(batchRenderer.color().set(Twilight.arbitraryTwilight(VoxIO.lastPalette)));
             return new ArrayModel(
                     arr
                     //// Aurora folder has vox models with a different palette, which involves a different ITwilight.

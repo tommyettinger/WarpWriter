@@ -5,6 +5,13 @@ import com.badlogic.gdx.utils.Disposable;
 import warpwriter.model.IModel;
 import warpwriter.model.TurnModel;
 
+/**
+ * This class is can be understood as like the Sprite class in libGDX, except it is for rendering voxel models instead of 2D textures.
+ * <p>
+ * An expected use case would be to make a VoxelSprite for every voxel model that needs to be rendered on screen, but it's possible to also re-use the same instance by rapidly swapping out models and other settings.
+ *
+ * @author Ben McLean
+ */
 public class VoxelSprite implements Disposable {
     protected VoxelSpriteBatchRenderer renderer;
     protected TurnModel turnModel = new TurnModel();
@@ -89,26 +96,51 @@ public class VoxelSprite implements Disposable {
         return offsetY;
     }
 
+    /**
+     * Rotates clockwise on the X axis 90 degrees.
+     *
+     * @return this
+     */
     public VoxelSprite clockX() {
         turnModel.turner().clockX();
         return this;
     }
 
+    /**
+     * Rotates counterclockwise on the X axis 90 degrees.
+     *
+     * @return this
+     */
     public VoxelSprite counterX() {
         turnModel.turner().counterX();
         return this;
     }
 
+    /**
+     * Rotates clockwise on the Y axis 90 degrees.
+     *
+     * @return this
+     */
     public VoxelSprite clockY() {
         turnModel.turner().clockY();
         return this;
     }
 
+    /**
+     * Rotates counterclockwise on the Y axis 90 degrees.
+     *
+     * @return this
+     */
     public VoxelSprite counterY() {
         turnModel.turner().counterY();
         return this;
     }
 
+    /**
+     * Rotates clockwise on the Z axis 45 degrees.
+     *
+     * @return this
+     */
     public VoxelSprite clockZ() {
         if (z45) {
             z45 = false;
@@ -118,6 +150,11 @@ public class VoxelSprite implements Disposable {
         return this;
     }
 
+    /**
+     * Rotates counterclockwise on the Z axis 45 degrees.
+     *
+     * @return this
+     */
     public VoxelSprite counterZ() {
         if (z45)
             z45 = false;

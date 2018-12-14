@@ -7,6 +7,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.NumberUtils;
 
+/**
+ * Renders voxel models to a libGDX SpriteBatch.
+ *
+ * @author Ben McLean
+ */
 public class VoxelSpriteBatchRenderer implements IRectangleRenderer, ITriangleRenderer, Disposable {
     public VoxelSpriteBatchRenderer(SpriteBatch batch) {
         this();

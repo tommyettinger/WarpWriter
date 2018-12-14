@@ -1,6 +1,8 @@
 package warpwriter.view;
 
 /**
+ * An IRectangleRenderer understands how to draw rectangles representing the three visible faces of a voxel cube.
+ *
  * @author Ben McLean
  */
 public interface IRectangleRenderer {
