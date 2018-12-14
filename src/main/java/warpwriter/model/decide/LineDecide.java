@@ -125,7 +125,15 @@ public class LineDecide implements IDecide {
 
     @Override
     public boolean bool(int x, int y, int z) {
-        return checkLine3D(x, y, z, x1, y1, z1, x2, y2, z2);
+        return inside(x, y, z) && checkLine3D(x, y, z, x1, y1, z1, x2, y2, z2);
+    }
+
+    public boolean inside(int x, int y, int z) {
+        return !outside(x, y, z);
+    }
+
+    public boolean outside(int x, int y, int z) {
+        return x < Math.min(x1, x2) || y < Math.min(y1, y2) || z < Math.min(z1, z2) || x > Math.max(x1, x2) || y > Math.max(y1, y2) || z > Math.max(z1, z2);
     }
 
     public static boolean equals(double a, double b) {
