@@ -1,7 +1,6 @@
 package warpwriter.model.fetch;
 
 import warpwriter.model.Fetch;
-import warpwriter.model.FetchModel;
 import warpwriter.model.IFetch;
 import warpwriter.model.IModel;
 
@@ -13,7 +12,7 @@ import warpwriter.model.IModel;
  *
  * @author Tommy Ettinger
  */
-public class ArrayModel extends FetchModel {
+public class ArrayModel extends Fetch implements IModel {
     public byte[][][] voxels;
 
     public ArrayModel() {
