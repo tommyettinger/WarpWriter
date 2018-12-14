@@ -1,6 +1,7 @@
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3WindowAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -98,7 +99,35 @@ public class SimpleTest extends ApplicationAdapter {
         config.setIdleFPS(10);
         config.useVsync(false);
         final SimpleTest app = new SimpleTest();
+        config.setWindowListener(new Lwjgl3WindowAdapter() {
+            @Override
+            public void filesDropped(String[] files) {
+                if (files != null && files.length > 0) {
+                    if (files[0].endsWith(".vox"))
+                        app.load(files[0]);
+                }
+            }
+        });
+
         new Lwjgl3Application(app, config);
+    }
+    public void load(String name) {
+        try {
+            //// loads a file by its full path, which we get via drag+drop
+            final byte[][][] arr = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream(name)));
+            //// set the palette to the one from the vox model, using arbitraryTwilight()
+            batchRenderer.set(batchRenderer.color().set(VoxelColor.arbitraryTwilight(VoxIO.lastPalette)));
+            voxelSprite.set(new ArrayModel(
+                    arr
+                    //// Aurora folder has vox models with a different palette, which involves a different ITwilight.
+                    //VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("Aurora/Warrior_Male_W.vox")))
+                    // If using Rinsed, use the line below instead of the one above.
+                    //maker.warriorRandom()
+            ));
+        } catch (FileNotFoundException e) {
+            voxelSprite.set(new ArrayModel(maker.warriorRandom()));
+            batchRenderer.set(batchRenderer.color().set(VoxelColor.RinsedTwilight));
+        }
     }
 
     @Override
