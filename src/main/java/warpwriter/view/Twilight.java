@@ -663,7 +663,7 @@ public abstract class Twilight implements ITwilight {
                             chromaR = (((color >>> 24) * 0.5f) +
                                     ((color >>> 16 & 0xFF) * -0.418688f) +
                                     ((color >>> 8 & 0xFF) * -0.081312f)) * 0.875f,
-                            lumaBright = Math.min(luma * 1.125f, 1f),
+                            lumaBright = Math.min(luma * 1.125f, 255f),
                             lumaDim = luma * 0.875f,
                             lumaDark = luma * 0.75f;
                     RAMP_VALUES[i][2] =
