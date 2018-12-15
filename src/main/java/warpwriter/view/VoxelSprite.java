@@ -89,7 +89,7 @@ public class VoxelSprite implements Disposable {
     }
 
     public VoxelSprite addScale(float x, float y) {
-        return setScale(scaleX() + x).setScale(scaleY() + y);
+        return setScale(scaleX() + x, scaleY() + y);
     }
 
     public VoxelSprite multiplyScale(float x, float y) {
