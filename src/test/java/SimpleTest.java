@@ -73,7 +73,7 @@ public class SimpleTest extends ApplicationAdapter {
             "   gl_FragColor.a = alpha;\n" +
             "}";
 
-    public static final int backgroundColor = Color.rgba8888(Color.OLIVE);
+    public static final int backgroundColor = Color.rgba8888(Color.DARK_GRAY);
     public static final int SCREEN_WIDTH = 1280;
     public static final int SCREEN_HEIGHT = 720;
     public static final int VIRTUAL_WIDTH = 640;

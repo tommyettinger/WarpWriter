@@ -80,6 +80,22 @@ public class VoxelSprite implements Disposable {
         return this;
     }
 
+    public float scaleX() {
+        return scaleX;
+    }
+
+    public float scaleY() {
+        return scaleY;
+    }
+
+    public VoxelSprite addScale(float x, float y) {
+        return setScale(scaleX() + x).setScale(scaleY() + y);
+    }
+
+    public VoxelSprite multiplyScale(float x, float y) {
+        return setScale(scaleX() * x).setScale(scaleY() * y);
+    }
+
     protected int offsetX = 0, offsetY = 0;
 
     public VoxelSprite setOffset(int offsetX, int offsetY) {
