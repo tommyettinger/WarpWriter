@@ -3,6 +3,7 @@ package warpwriter;
 import squidpony.squidmath.GWTRNG;
 import squidpony.squidmath.LinnormRNG;
 import squidpony.squidmath.NumberTools;
+import warpwriter.view.Twilight;
 
 import java.io.InputStream;
 
@@ -517,7 +518,7 @@ public class ModelMaker {
                                             ? 0
                                             // checks another 6 bits, starting after discarding 12 bits from the bottom
                                             : ((paint >>> 12 & 0x3FL) < 40L) ? (byte)(
-                                                    (RINSED_PALETTE) ? 18 + (paint & 3) : 18 + (paint & 7))
+                                            (RINSED_PALETTE) ? 18 + (paint & 3) : 18 + (paint & 7))
                                             // checks another 6 bits, starting after discarding 18 bits from the bottom
                                             : ((paint >>> 18 & 0x3FL) < 8L) ? highlightColor : mainColor;
                         }
@@ -529,6 +530,65 @@ public class ModelMaker {
         //return nextShip;
         //return Tools3D.runCA(nextShip, 1);
     }
+    /**
+     * Use <a href="https://i.imgur.com/CrI1LyU.png">This image with Aurora hex codes</a> for reference.
+     */
+    private static final byte[] AURORA_COCKPIT_COLORS = {0x69, 0x6A, 0x6B, 0x6C, 0x6D, 0x6E, 0x6F, 0x70, 0x71, 0x72,
+            0x71, 0x72, 0x73, 0x78, 0x79, 0x7A, 0x7B,
+            (byte) 0xBC, (byte) 0xBE, (byte) 0xBF, (byte) 0xC1, (byte) 0xC3, (byte) 0xC4, (byte) 0xC5,
+            (byte) 0xC6, (byte) 0xC7, (byte) 0xCC, (byte) 0xCD, (byte) 0xCF };
+    public byte[][][] shipLargeRandomAurora()
+    {
+        xSize = shipLarge.length;
+        ySize = shipLarge[0].length;
+        zSize = shipLarge[0][0].length;
+        byte[][][] nextShip = new byte[xSize][ySize][zSize];
+        final int halfY = ySize >> 1, smallYSize = ySize - 1;
+        int color;
+        long seed = rng.nextLong(), current, paint;
+        final byte mainColor = Twilight.RAMPS[determineBounded(seed + 1L, 245) + 11][2],
+                highlightColor = Twilight.RAMPS[Twilight.RAMPS[determineBounded(seed + 333L, 245) + 11][0] & 255][0],
+                cockpitColor = AURORA_COCKPIT_COLORS[determineBounded(seed + 55555L, AURORA_COCKPIT_COLORS.length)];
+        int xx, yy, zz;
+        for (int x = 0; x < xSize; x++) {
+            for (int y = 0; y < halfY; y++) {
+                for (int z = 0; z < zSize; z++) {
+                    color = (shipLarge[x][y][z] & 255);
+                    if (color != 0) {
+                        // this 4-input-plus-state hash is really a slight modification on LightRNG.determine(), but
+                        // it mixes the x, y, and z inputs more thoroughly than other techniques do, and we then use
+                        // different sections of the random bits for different purposes. This helps reduce the possible
+                        // issues from using rng.next(5) and rng.next(6) all over if the bits those use have a pattern.
+                        // In the original model, all voxels of the same color will be hashed with similar behavior but
+                        // any with different colors will get unrelated values.
+                        xx = x + 1;
+                        yy = y + 1;
+                        zz = z / 3;
+                        current = hashAll(xx + (xx | zz) >> 3, (yy + (yy | zz)) / 3, zz, color, seed);
+                        paint = hashAll((xx + (xx | z)) / 7, (yy + (yy | z)) / 5, z, color, seed);
+                        if (color < 8) { // checks bottom 6 bits
+                            if((current >>> 6 & 0x7L) != 0)
+                                nextShip[x][smallYSize - y][z] = nextShip[x][y][z] =
+                                        Twilight.RAMPS[cockpitColor & 255][3 - (z + 6 >> 3) & 3];
+                        } else {
+                            nextShip[x][smallYSize - y][z] = nextShip[x][y][z] =
+                                    // checks another 6 bits, starting after discarding 6 bits from the bottom
+                                    ((current >>> 6 & 0x1FFL) < color * 6)
+                                            ? 0
+                                            // checks another 6 bits, starting after discarding 12 bits from the bottom
+                                            : ((paint >>> 12 & 0x3FL) < 40L) ? Twilight.RAMPS[10][(int) paint & 3]
+                                            // checks another 6 bits, starting after discarding 18 bits from the bottom
+                                            : ((paint >>> 18 & 0x3FL) < 8L) ? highlightColor : mainColor;
+                        }
+                    }
+                }
+            }
+        }
+        return Tools3D.largestPart(nextShip);
+        //return nextShip;
+        //return Tools3D.runCA(nextShip, 1);
+    }
+
     public byte[][][][] animateShip(byte[][][] spaceship, final int frameCount)
     {
         final int xSize = spaceship.length, ySize = spaceship[0].length, zSize = spaceship[0][0].length;
