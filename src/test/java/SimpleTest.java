@@ -187,7 +187,7 @@ public class SimpleTest extends ApplicationAdapter {
                     //maker.warriorRandom()
             );
         } catch (Exception e) {
-            batchRenderer.color().set(Twilight.RinsedTwilight)
+            batchRenderer.color().set(Twilight.RinsedTwilight);
             return new ArrayModel(maker.warriorRandom());
         }
     }
