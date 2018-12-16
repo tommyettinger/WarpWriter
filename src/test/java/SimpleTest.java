@@ -145,7 +145,7 @@ public class SimpleTest extends ApplicationAdapter {
 
         maker = new ModelMaker(12345);
         batchRenderer = new VoxelSpriteBatchRenderer(batch);
-//        batchRenderer.set(batchRenderer.color().set(VoxelColor.AuroraTwilight)); // comment out to use Rinsed
+        batchRenderer.color().set(Twilight.AuroraTwilight); // comment out to use Rinsed
         voxelSprite = new VoxelSprite()
                 .set(batchRenderer)
                 .setOffset(VIRTUAL_WIDTH / 2, 100);
@@ -176,7 +176,8 @@ public class SimpleTest extends ApplicationAdapter {
 //            final byte[][][] arr = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("HasOwnPalette/Artillery.vox")));
             //// set the palette to the one from the vox model, using arbitraryTwilight()
 //            batchRenderer.set(batchRenderer.color().set(Twilight.arbitraryTwilight(VoxIO.lastPalette)));
-            batchRenderer.color().set(Twilight.arbitraryTwilight(Coloring.AURORA));
+            batchRenderer.color().set(Twilight.AuroraTwilight);
+//            batchRenderer.color().set(Twilight.arbitraryTwilight(Coloring.AURORA));
             return new ArrayModel(
                     maker.shipLargeRandomAurora()
 //                    arr
@@ -186,6 +187,7 @@ public class SimpleTest extends ApplicationAdapter {
                     //maker.warriorRandom()
             );
         } catch (Exception e) {
+            batchRenderer.color().set(Twilight.RinsedTwilight)
             return new ArrayModel(maker.warriorRandom());
         }
     }
