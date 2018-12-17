@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.NumberUtils;
+import squidpony.squidmath.NumberTools;
 
 /**
  * Renders voxel models to a libGDX SpriteBatch.
@@ -140,9 +140,10 @@ public class VoxelSpriteBatchRenderer implements IRectangleRenderer, ITriangleRe
 
     public IRectangleRenderer rect(int x, int y, int sizeX, int sizeY, int color) {
         //final float oldColor = batch.getPackedColor(); // requires less conversions than batch.getColor(), same result
-        batch.setColor(NumberUtils.intToFloatColor(Integer.reverseBytes(color)));
-        // converts from RGBA to ABGR
-        // converts ABGR int to float color, which SpriteBatch can use without needing an object
+        batch.setColor(NumberTools.intBitsToFloat(Integer.reverseBytes(color) & 0xF7FFFFFF));
+        // converts RGBA int to ABGR int, masks out one bit of alpha (libGDX thing), and converts to float color
+        // I think SquidLib's intBitsToFloat() is slightly more efficient than libGDX's NumberUtils, not sure.
+        // float colors can be used by SpriteBatch without needing an object.
         batch.draw(one,
                 x * scaleX * (flipX ? -1 : 1) + offsetX,
                 y * scaleY * (flipY ? -1 : 1) + offsetY,
@@ -165,9 +166,10 @@ public class VoxelSpriteBatchRenderer implements IRectangleRenderer, ITriangleRe
 
     public VoxelSpriteBatchRenderer drawTriangle(int x, int y, int color, boolean left) {
         float oldColor = batch.getPackedColor(); // requires less conversions than batch.getColor(), same result
-        batch.setColor(NumberUtils.intToFloatColor(Integer.reverseBytes(color)));
-        // converts from RGBA to ABGR
-        // converts ABGR int to float color, which SpriteBatch can use without needing an object
+        batch.setColor(NumberTools.intBitsToFloat(Integer.reverseBytes(color) & 0xF7FFFFFF));
+        // converts RGBA int to ABGR int, masks out one bit of alpha (libGDX thing), and converts to float color
+        // I think SquidLib's intBitsToFloat() is slightly more efficient than libGDX's NumberUtils, not sure.
+        // float colors can be used by SpriteBatch without needing an object.
         triangle.setFlip(left, false);
         batch.draw(triangle,
                 x * scaleX * (flipX ? -1 : 1) + offsetX,

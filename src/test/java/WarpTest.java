@@ -13,11 +13,11 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.StringKit;
 import warpwriter.LittleEndianDataInputStream;
 import warpwriter.ModelMaker;
+import warpwriter.Tools3D;
 import warpwriter.VoxIO;
-import warpwriter.view.VoxelSpriteBatchRenderer;
-import warpwriter.view.VoxelColor;
-import warpwriter.view.WarpDraw;
-import warpwriter.warp.VoxelModel;
+import warpwriter.model.TurnModel;
+import warpwriter.model.fetch.ArrayModel;
+import warpwriter.view.*;
 
 import java.io.FileInputStream;
 
@@ -31,11 +31,12 @@ public class WarpTest extends ApplicationAdapter {
     protected Viewport screenView;
     protected BitmapFont font;
     protected FrameBuffer buffer;
-    protected Texture screenTexture;
+    protected Texture screenTexture, pmTexture;
     protected TextureRegion screenRegion;
-    protected VoxelModel model, dumbCube, warrior;
+    protected TurnModel model, dumbCube, warrior;
     protected ModelMaker maker;
     private VoxelSpriteBatchRenderer batchRenderer;
+    private VoxelPixmapRenderer pixmapRenderer;
     protected VoxelColor voxelColor;
     protected int angle = 2;
     protected boolean diagonal = false, outline = true;
@@ -53,18 +54,20 @@ public class WarpTest extends ApplicationAdapter {
         screenView.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.enableBlending();
 
-        voxelColor = new VoxelColor();
+        voxelColor = new VoxelColor().set(Twilight.AuroraTwilight);
         batchRenderer = new VoxelSpriteBatchRenderer(batch).setOffset(16, 100);
+        pixmapRenderer = new VoxelPixmapRenderer(new Pixmap(128, 128, Pixmap.Format.RGBA8888), voxelColor);
+        pmTexture = new Texture(pixmapRenderer.pixmap);
         maker = new ModelMaker(12345);
         try {
-            box = VoxIO.readVox(new LittleEndianDataInputStream(WarpTest.class.getResourceAsStream("/dumbcube.vox")));
-            warrior = new VoxelModel(VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("SpaceMarine.vox"))));
+            box = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("Aurora/dumbcube.vox")));
+            warrior = new TurnModel().set(new ArrayModel(maker.shipLargeRandomAurora()));
         } catch (Exception e) {
             e.printStackTrace();
-            box = maker.warriorRandom();
-            warrior = new VoxelModel(maker.warriorRandom());
+            box = maker.shipLargeRandomAurora();
+            warrior = new TurnModel().set(new ArrayModel(maker.shipLargeRandomAurora()));
         }
-        dumbCube = new VoxelModel(box);
+        dumbCube = new TurnModel().set(new ArrayModel(box));
         model = dumbCube;
         Gdx.input.setInputProcessor(inputProcessor());
     }
@@ -85,7 +88,9 @@ public class WarpTest extends ApplicationAdapter {
             WarpDraw.simpleDraw45(model, batchRenderer, voxelColor, outline);
         }
         else {
-            WarpDraw.simpleDraw(model, batchRenderer, voxelColor, outline);
+            pmTexture.draw(WarpDraw.draw(model, pixmapRenderer), 0, 0);
+            batch.draw(pmTexture, 64, 64);
+            //WarpDraw.simpleDraw(model, batchRenderer, voxelColor, outline);
         }
         batch.setColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
         batch.end();
@@ -100,9 +105,9 @@ public class WarpTest extends ApplicationAdapter {
         screenRegion.setRegion(screenTexture);
         screenRegion.flip(false, true);
         batch.draw(screenRegion, 0, 0);
-        font.draw(batch, StringKit.join(", ", model.sizes()) + " (original)", 0, 80);
-        font.draw(batch, model.sizeX() + ", " + model.sizeY() + ", " + model.sizeZ() + " (modified)", 0, 60);
-        font.draw(batch, StringKit.join(", ", model.rotation()) + " (rotation)", 0, 40);
+        //font.draw(batch, model.voxels.length + ", " + model.voxels[0].length + ", " + model.voxels[0][0].length + ", " + " (original)", 0, 80);
+        font.draw(batch, model.sizeX() + ", " + model.sizeY() + ", " + model.sizeZ() + " (sizes)", 0, 60);
+        font.draw(batch, StringKit.join(", ", model.turner().rotation()) + " (rotation)", 0, 40);
         font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 20);
         batch.end();
     }
@@ -199,32 +204,33 @@ public class WarpTest extends ApplicationAdapter {
 
                     // rotate counterclockwise around x
                     case Input.Keys.U:
-                        model.counterX();
+                        model.turner().counterX();
                         break;
                     // rotate counterclockwise around y
                     case Input.Keys.I:
-                        model.counterY();
+                        model.turner().counterY();
                         break;
                     // rotate counterclockwise around z
                     case Input.Keys.O:
-                        model.counterZ();
+                        model.turner().counterZ();
                         break;
                     // rotate clockwise around x
                     case Input.Keys.J:
-                        model.clockX();
+                        model.turner().clockX();
                         break;
                     // rotate clockwise around y
                     case Input.Keys.K:
-                        model.clockY();
+                        model.turner().clockY();
                         break;
                     // rotate clockwise around z
                     case Input.Keys.L:
-                        model.clockZ();
+                        model.turner().clockZ();
                         break;
                     case Input.Keys.B:
                         model = dumbCube;
                         break;
                     case Input.Keys.W:
+                        Tools3D.deepCopyInto(maker.shipLargeRandomAurora(), ((ArrayModel)model.getModel()).voxels);
                         model = warrior;
                         break;
                     case Input.Keys.A:
@@ -233,14 +239,14 @@ public class WarpTest extends ApplicationAdapter {
                     case Input.Keys.S:
                         voxelColor.set(voxelColor.direction().clock());
                         break;
-                    case Input.Keys.F:
+                    case Input.Keys.D:
                         diagonal = !diagonal;
                         break;
                     case  Input.Keys.E: // edges
                         outline = !outline;
                         break;
                     case Input.Keys.R: // reset
-                        model.reset();
+                        model.turner().reset();
                         break;
                     case Input.Keys.ESCAPE:
                         Gdx.app.exit();
