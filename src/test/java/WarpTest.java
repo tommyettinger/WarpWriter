@@ -56,7 +56,7 @@ public class WarpTest extends ApplicationAdapter {
 
         voxelColor = new VoxelColor().set(Twilight.AuroraTwilight);
         batchRenderer = new VoxelSpriteBatchRenderer(batch).setOffset(16, 100);
-        pixmapRenderer = new VoxelPixmapRenderer(new Pixmap(128, 128, Pixmap.Format.RGBA8888), voxelColor);
+        pixmapRenderer = new VoxelPixmapRenderer(new Pixmap(512, 512, Pixmap.Format.RGBA8888), voxelColor);
         pmTexture = new Texture(pixmapRenderer.pixmap);
         maker = new ModelMaker(12345);
         try {
@@ -85,7 +85,9 @@ public class WarpTest extends ApplicationAdapter {
         batch.setProjectionMatrix(worldView.getCamera().combined);
         batch.begin();
         if(diagonal) {
-            WarpDraw.simpleDraw45(model, batchRenderer, voxelColor, outline);
+            pmTexture.draw(WarpDraw.draw45(model, pixmapRenderer), 0, 0);
+            batch.draw(pmTexture, 64, 64);
+//            WarpDraw.simpleDraw45(model, batchRenderer, voxelColor, outline);
         }
         else {
             pmTexture.draw(WarpDraw.draw(model, pixmapRenderer), 0, 0);

@@ -312,7 +312,7 @@ public class WarpDraw {
 //            }
 //        }
 //    }
-    
+
     public static Pixmap draw(IModel model, VoxelPixmapRenderer renderer)
     {
         final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ();
@@ -321,13 +321,34 @@ public class WarpDraw {
                 for (int x = sizeX - 1; x >= 0; x--) {
                     byte v = model.at(x, y, z);
                     if (v != 0) {
-                        renderer.rectRight(y * 3, z * 3, 3, 3, v, 256 + x * 2);
+                        renderer.rectRight(y * 3, z * 3 + 1, 3, 3, v, 256 + x * 2);
                         if (z >= sizeZ - 1 || model.at(x, y, z + 1) == 0)
-                            renderer.rectVertical(y * 3, z * 3 + 3, 3, 1, v, 256 + x * 2);
+                            renderer.rectVertical(y * 3, z * 3 + 4, 3, 1, v, 256 + x * 2);
                     }
                 }
             }
         }
         return renderer.blit(2);
+    }
+
+    public static Pixmap draw45(IModel model, VoxelPixmapRenderer renderer)
+    {
+        final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ();
+        int dep;
+        for (int z = 0; z < sizeZ; z++) {
+            for (int x = 0; x < sizeX; x++) {
+                for (int y = 0; y < sizeY; y++) {
+                    byte v = model.at(x, y, z);
+                    if (v != 0) {
+                        dep = 3 * (x - y) + 256;
+                        renderer.rectLeft((sizeY + x - y) * 2, z * 3 + 1, 2, 3, v, dep);
+                        renderer.rectRight((sizeY + x - y) * 2 + 2, z * 3 + 1, 2, 3, v, dep);
+                        if (z >= sizeZ - 1 || model.at(x, y, z + 1) == 0)
+                            renderer.rectVertical((sizeY + x - y) * 2, z * 3 + 4, 4, 1, v, dep);
+                    }
+                }
+            }
+        }
+        return renderer.blit(5);
     }
 }

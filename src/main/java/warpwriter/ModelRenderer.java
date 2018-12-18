@@ -899,7 +899,7 @@ public class ModelRenderer {
                                     if (working[px + ix][py + iy] == 0)
                                     {
                                         working[px + ix][py + iy] = 3;
-                                        depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 1 only on the right edge of a voxel
+                                        depths[px + ix][py + iy] = d + ((ix ^ ix >>> 1) & 1); // adds 1 only in center of voxel
                                     }
                                 }
                             }
@@ -909,19 +909,19 @@ public class ModelRenderer {
                                     if (ix < 2 && iy < 2)
                                     {
                                         working[px + ix][py + iy] = EYE_LIGHT;
-                                        depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 1 only on the right edge of a voxel
+                                        depths[px + ix][py + iy] = d + ((ix ^ ix >>> 1) & 1); // adds 1 only in center of voxel
                                     }
                                     else
                                     {
                                         working[px + ix][py + iy] = EYE_DARK;
-                                        depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 1 only on the right edge of a voxel
+                                        depths[px + ix][py + iy] = d + ((ix ^ ix >>> 1) & 1); // adds 1 only in center of voxel
                                     }
                                 }
                             }
                         } else {
                             for (int ix = 0; ix < 4; ix++) {
                                 working[px + ix][py] = current - 1;
-                                depths[px + ix][py] = d + (ix & ix >>> 1); // adds 1 only on the right edge of a voxel
+                                depths[px + ix][py] = d + ((ix ^ ix >>> 1) & 1); // adds 1 only in center of voxel
                             }
                             for (int ix = 0; ix < 2; ix++) {
                                 for (int iy = 1; iy < 4; iy++) {
@@ -1740,7 +1740,7 @@ public class ModelRenderer {
                                     if (working[px + ix][py + iy] == 0)
                                     {
                                         working[px + ix][py + iy] = 3;
-                                        depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 1 only on the right edge of a voxel
+                                        depths[px + ix][py + iy] = d + ((ix ^ ix >>> 1) & 1); // adds 1 only in center of voxel
                                     }
                                 }
                             }
@@ -1750,19 +1750,19 @@ public class ModelRenderer {
                                     if (ix < 2 && iy < 2)
                                     {
                                         working[px + ix][py + iy] = EYE_LIGHT;
-                                        depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 1 only on the right edge of a voxel
+                                        depths[px + ix][py + iy] = d + ((ix ^ ix >>> 1) & 1); // adds 1 only in center of voxel
                                     }
                                     else
                                     {
                                         working[px + ix][py + iy] = EYE_DARK;
-                                        depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 1 only on the right edge of a voxel
+                                        depths[px + ix][py + iy] = d + ((ix ^ ix >>> 1) & 1); // adds 1 only in center of voxel
                                     }
                                 }
                             }
                         } else {
                             for (int ix = 0; ix < 4; ix++) {
                                     working[px + ix][py] = current - 1;
-                                    depths[px + ix][py] = d + (ix & ix >>> 1); // adds 1 only on the right edge of a voxel
+                                    depths[px + ix][py] = d + ((ix ^ ix >>> 1) & 1); // adds 1 only in center of voxel
                             }
                             for (int ix = 0; ix < 2; ix++) {
                                 for (int iy = 1; iy < 4; iy++) {
@@ -1997,7 +1997,7 @@ public class ModelRenderer {
                                     if (working[px + ix][py + iy] == 0)
                                     {
                                         working[px + ix][py + iy] = 3;
-                                        depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 1 only on the right edge of a voxel
+                                        depths[px + ix][py + iy] = d + ((ix ^ ix >>> 1) & 1); // adds 1 only in center of voxel
                                     }
                                 }
                             }
@@ -2007,12 +2007,12 @@ public class ModelRenderer {
                                     if (ix < 2 && iy < 2)
                                     {
                                         working[px + ix][py + iy] = EYE_LIGHT;
-                                        depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 1 only on the right edge of a voxel
+                                        depths[px + ix][py + iy] = d + ((ix ^ ix >>> 1) & 1); // adds 1 only in center of voxel
                                     }
                                     else
                                     {
                                         working[px + ix][py + iy] = EYE_DARK;
-                                        depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 1 only on the right edge of a voxel
+                                        depths[px + ix][py + iy] = d + ((ix ^ ix >>> 1) & 1); // adds 1 only in center of voxel
                                     }
                                 }
                             }
@@ -2020,7 +2020,7 @@ public class ModelRenderer {
                             for (int ix = 0; ix < 4; ix++) {
                                 for (int iy = 0; iy < 2; iy++) {
                                     working[px + ix][py + iy] = current - 1;
-                                    depths[px + ix][py + iy] = d + (ix & ix >>> 1); // adds 1 only on the right edge of a voxel
+                                    depths[px + ix][py + iy] = d + ((ix ^ ix >>> 1) & 1); // adds 1 only in center of voxel
                                 }
                             }
                             for (int ix = 0; ix < 2; ix++) {

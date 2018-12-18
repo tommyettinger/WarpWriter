@@ -194,8 +194,10 @@ public class VoxelPixmapRenderer implements IRectangleRenderer {
                 c = working[x - 1][y + 1];
                 d = working[x + 1][y + 1];
                 if (o != 0 && a != 0 && b != 0 && c != 0 && d != 0) {
-                    if (a == d && lightness(a) > lightness(o)) pixmap.drawPixel(x, y, Twilight.RAMP_VALUES[a & 255][1]);
-                    else if (b == c && lightness(b) > lightness(o)) pixmap.drawPixel(x, y, Twilight.RAMP_VALUES[b & 255][1]);
+                    if (a == d && lightness(a) > lightness(o))
+                        pixmap.drawPixel(x, y, Twilight.RAMP_VALUES[a & 255][1]);
+                    else if (b == c && lightness(b) > lightness(o))
+                        pixmap.drawPixel(x, y, Twilight.RAMP_VALUES[b & 255][1]);
                     //else pixmap.drawPixel(x, y, color.twilight().twilight(o));
                 }
                 //else pixmap.drawPixel(x, y, color.twilight().twilight(o));
