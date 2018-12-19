@@ -89,6 +89,11 @@ public class WarpTest extends ApplicationAdapter {
             batch.draw(pmTexture, 64, 64);
 //            WarpDraw.simpleDraw45(model, batchRenderer, voxelColor, outline);
         }
+        else if(angle != 2)
+        {
+            pmTexture.draw(WarpDraw.drawAbove(model, pixmapRenderer), 0, 0);
+            batch.draw(pmTexture, 64, 64);
+        }
         else {
             pmTexture.draw(WarpDraw.draw(model, pixmapRenderer), 0, 0);
             batch.draw(pmTexture, 64, 64);
@@ -134,130 +139,66 @@ public class WarpTest extends ApplicationAdapter {
             @Override
             public boolean keyDown(int keycode) {
                 switch (keycode) {
-//                    case Input.Keys.UP:
-//                        turnModel.turner().set(Turner.Roll.TWELVE);
-//                        break;
-//                    case Input.Keys.DOWN:
-//                        turnModel.turner().set(Turner.Roll.SIX);
-//                        break;
-//                    case Input.Keys.RIGHT:
-//                        turnModel.turner().set(Turner.Roll.THREE);
-//                        break;
-//                    case Input.Keys.LEFT:
-//                        turnModel.turner().set(Turner.Roll.NINE);
-//                        break;
-//                    case Input.Keys.NUMPAD_8:
-//                    case Input.Keys.NUM_8:
-//                        direction = CompassDirection.NORTH;
-//                        turnModel.turner().set(Turner.Face.X_PLUS);
-//                        break;
-//                    case Input.Keys.NUMPAD_6:
-//                    case Input.Keys.NUM_6:
-//                        direction = CompassDirection.EAST;
-//                        turnModel.turner().set(Turner.Face.Y_PLUS);
-//                        break;
-//                    case Input.Keys.NUMPAD_2:
-//                    case Input.Keys.NUM_2:
-//                        direction = CompassDirection.SOUTH;
-//                        turnModel.turner().set(Turner.Face.X_MINUS);
-//                        break;
-//                    case Input.Keys.NUMPAD_4:
-//                    case Input.Keys.NUM_4:
-//                        direction = CompassDirection.WEST;
-//                        turnModel.turner().set(Turner.Face.Y_MINUS);
-//                        break;
-//                    case Input.Keys.SLASH:
-//                        direction = CompassDirection.NORTH;
-//                        turnModel.turner().set(Turner.Face.Z_PLUS);
-//                        break;
-//                    case Input.Keys.STAR:
-//                        direction = CompassDirection.NORTH;
-//                        turnModel.turner().set(Turner.Face.Z_MINUS);
-//                        break;
-//                    case Input.Keys.NUMPAD_7:
-//                    case Input.Keys.NUM_7:
-//                        direction = CompassDirection.NORTH_WEST;
-//                        turnModel.turner().set(Turner.Face.X_PLUS);
-//                        break;
-//                    case Input.Keys.NUMPAD_9:
-//                    case Input.Keys.NUM_9:
-//                        direction = CompassDirection.NORTH_EAST;
-//                        turnModel.turner().set(Turner.Face.Y_PLUS);
-//                        break;
-//                    case Input.Keys.NUMPAD_3:
-//                    case Input.Keys.NUM_3:
-//                        direction = CompassDirection.SOUTH_EAST;
-//                        turnModel.turner().set(Turner.Face.X_MINUS);
-//                        break;
-//                    case Input.Keys.NUMPAD_1:
-//                    case Input.Keys.NUM_1:
-//                        direction = CompassDirection.SOUTH_WEST;
-//                        turnModel.turner().set(Turner.Face.Y_MINUS);
-//                        break;
-//                    case Input.Keys.NUM_0:
-//                        angle = 1;
-//                        break;
-//                    case Input.Keys.MINUS:
-//                        angle = 2;
-//                        break;
-//                    case Input.Keys.EQUALS:
-//                        angle = 3;
-//                        break;
-
-                    // rotate counterclockwise around x
+                    case Input.Keys.NUM_0:
+                        angle = 1;
+                        break;
+                    case Input.Keys.MINUS:
+                        angle = 2;
+                        break;
+                    case Input.Keys.EQUALS:
+                        angle = 3;
+                        break;
                     case Input.Keys.U:
-                        model.turner().counterX();
-                        break;
-                    // rotate counterclockwise around y
-                    case Input.Keys.I:
-                        model.turner().counterY();
-                        break;
-                    // rotate counterclockwise around z
-                    case Input.Keys.O:
-                        model.turner().counterZ();
-                        break;
-                    // rotate clockwise around x
-                    case Input.Keys.J:
                         model.turner().clockX();
                         break;
-                    // rotate clockwise around y
-                    case Input.Keys.K:
+                    case Input.Keys.I:
                         model.turner().clockY();
                         break;
-                    // rotate clockwise around z
+                    case Input.Keys.O:
+                        if(!(diagonal = !diagonal)) 
+                            model.turner().clockZ();
+                        break;
+                    case Input.Keys.J:
+                        model.turner().counterX();
+                        break;
+                    case Input.Keys.K:
+                        model.turner().counterY();
+                        break;
                     case Input.Keys.L:
-                        model.turner().clockZ();
+                        if(diagonal = !diagonal)
+                            model.turner().counterZ();
+                        break;
+                    case Input.Keys.R:
+                        model.turner().reset();
+                        break;
+                    case Input.Keys.P:
+                        Tools3D.deepCopyInto(maker.shipLargeRandomAurora(), ((ArrayModel)model.getModel()).voxels);
+                        model = warrior;
                         break;
                     case Input.Keys.B:
                         model = dumbCube;
                         break;
-                    case Input.Keys.W:
-                        Tools3D.deepCopyInto(maker.shipLargeRandomAurora(), ((ArrayModel)model.getModel()).voxels);
-                        model = warrior;
+                    case Input.Keys.G:
+                        batchRenderer.color().set(batchRenderer.color().direction().counter());
                         break;
-                    case Input.Keys.A:
-                        voxelColor.set(voxelColor.direction().counter());
-                        break;
-                    case Input.Keys.S:
-                        voxelColor.set(voxelColor.direction().clock());
-                        break;
-                    case Input.Keys.D:
-                        diagonal = !diagonal;
+                    case Input.Keys.H:
+                        batchRenderer.color().set(batchRenderer.color().direction().clock());
                         break;
                     case  Input.Keys.E: // edges
                         outline = !outline;
                         break;
-                    case Input.Keys.R: // reset
+                    case Input.Keys.T: // try again
                         model.turner().reset();
+                        diagonal = false;
+                        angle = 2;
                         break;
                     case Input.Keys.ESCAPE:
                         Gdx.app.exit();
-                        break;
-                    default:
                         break;
                 }
                 return true;
             }
         };
     }
+
 }
