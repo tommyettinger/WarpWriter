@@ -23,6 +23,7 @@ public class ModelMaker {
     private byte[][][] ship, shipLarge, warriorMale, sword0, spear0, shield0, shield1;
     private byte[][][][] rightHand, leftHand;
     private int xSize, ySize, zSize;
+    private final PaletteReducer palette = new PaletteReducer();
 
     /**
      * Gets a 64-bit point hash of a 3D point (x, y, and z are all longs) and a state/seed as a long. This point hash
@@ -546,8 +547,8 @@ public class ModelMaker {
         final int halfY = ySize >> 1, smallYSize = ySize - 1;
         int color;
         long seed = rng.nextLong(), current, paint;
-        final byte mainColor = Twilight.RAMPS[determineBounded(seed + 1L, 245) + 11][2],
-                highlightColor = Twilight.RAMPS[Twilight.RAMPS[determineBounded(seed + 333L, 245) + 11][0] & 255][0],
+        final byte mainColor = Twilight.RAMPS[palette.randomColorIndex(rng) & 255][2],
+                highlightColor = Twilight.RAMPS[Twilight.RAMPS[palette.randomColorIndex(rng) & 255][0] & 255][0],
                 cockpitColor = AURORA_COCKPIT_COLORS[determineBounded(seed + 55555L, AURORA_COCKPIT_COLORS.length)];
         int xx, yy, zz;
         for (int x = 0; x < xSize; x++) {
