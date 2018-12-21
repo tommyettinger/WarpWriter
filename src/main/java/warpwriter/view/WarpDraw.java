@@ -315,15 +315,16 @@ public class WarpDraw {
 
     public static Pixmap draw(IModel model, VoxelPixmapRenderer renderer)
     {
-        final int sizeX = model.sizeX() - 1, sizeY = model.sizeY() - 1, sizeZ = model.sizeZ() - 1;
+        final int sizeX = model.sizeX() - 1, sizeY = model.sizeY() - 1, sizeZ = model.sizeZ() - 1,
+                offsetPX = (sizeY >> 1) + 1;
         for (int z = 0; z <= sizeZ; z++) {
             for (int y = 0; y <= sizeY; y++) {
                 for (int x = sizeX; x >= 0; x--) {
                     byte v = model.at(x, y, z);
                     if (v != 0) {
-                        renderer.rectRight(y * 3 + 1, z * 3 + 1, 3, 3, v, 256 + x * 2);
+                        renderer.rectRight(y * 3 + offsetPX, z * 3 + 1, 3, 3, v, 256 + x * 2);
                         if (z >= sizeZ - 1 || model.at(x, y, z + 1) == 0)
-                            renderer.rectVertical(y * 3 + 1, z * 3 + 4, 3, 1, v, 256 + x * 2);
+                            renderer.rectVertical(y * 3 + offsetPX, z * 3 + 4, 3, 1, v, 256 + x * 2);
                     }
                 }
             }
@@ -336,15 +337,15 @@ public class WarpDraw {
         final int sizeX = model.sizeX() - 1, sizeY = model.sizeY() - 1, sizeZ = model.sizeZ() - 1;
         int dep;
         for (int z = 0; z <= sizeZ; z++) {
-            for (int x = 0; x <= sizeX; x++) {
-                for (int y = 0; y <= sizeY; y++) {
+            for (int x = sizeX; x >= 0; x--) {
+                for (int y = sizeY; y >= 0; y--) {
                     byte v = model.at(x, y, z);
                     if (v != 0) {
                         dep = 3 * (x - y) + 256;
-                        renderer.rectLeft((sizeY + x - y) * 2 + 1, z * 3 + 1, 2, 3, v, dep);
-                        renderer.rectRight((sizeY + x - y) * 2 + 3, z * 3 + 1, 2, 3, v, dep);
+                        renderer.rectLeft((sizeX - x + y) * 2 + 1, z * 3 + 1, 2, 3, v, dep);
+                        renderer.rectRight((sizeX - x + y) * 2 + 3, z * 3 + 1, 2, 3, v, dep);
                         if (z >= sizeZ - 1 || model.at(x, y, z + 1) == 0)
-                            renderer.rectVertical((sizeY + x - y) * 2 + 1, z * 3 + 4, 4, 1, v, dep);
+                            renderer.rectVertical((sizeX - x + y) * 2 + 1, z * 3 + 4, 4, 1, v, dep);
                     }
                 }
             }
@@ -353,16 +354,49 @@ public class WarpDraw {
     }
     public static Pixmap drawAbove(IModel model, VoxelPixmapRenderer renderer)
     {
-        final int sizeX = model.sizeX() - 1, sizeY = model.sizeY() - 1, sizeZ = model.sizeZ() - 1;
+        final int sizeX = model.sizeX() - 1, sizeY = model.sizeY() - 1, sizeZ = model.sizeZ() - 1,
+                offsetPX = (sizeY >> 1) + 1, offsetPY = (sizeX >> 1) + 1;
         for (int z = 0; z <= sizeZ; z++) {
             for (int y = 0; y <= sizeY; y++) {
-                for (int x = sizeX, d = 0; x >= 0; x--, d += 5) {
+                for (int x = 0, d = 0; x <= sizeX; x++, d += 5) {
                     byte v = model.at(x, y, z);
                     if (v != 0) {
-                        renderer.rectRight(y * 3 + 1, z * 2 + x * 3 + 1, 3, 2, v, 256 + z * 8 - d);
+                        final int xPos = (sizeY - y) * 3 + offsetPX, yPos = z * 2 + (sizeX - x) * 3 + offsetPY;
+                        renderer.rectRight(xPos, yPos, 3, 2, v, 256 + z * 8 - d);
                         if (z >= sizeZ - 1 || model.at(x, y, z + 1) == 0)
                         {
-                            renderer.rectVertical(y * 3 + 1, z * 2 + x * 3 + 4, 3, 3, v, 255 + z * 8 - d);
+                            renderer.rectVertical(xPos, yPos + 3, 3, 3, v, 255 + z * 8 - d);
+                        }
+                    }
+                }
+            }
+        }
+        return renderer.blit(12);
+    }
+    public static Pixmap drawIso(IModel model, VoxelPixmapRenderer renderer)
+    {
+        final int sizeX = model.sizeX() - 1, sizeY = model.sizeY() - 1, sizeZ = model.sizeZ() - 1;
+        int dep;
+        for (int z = 0; z <= sizeZ; z++) {
+            for (int x = sizeX; x >= 0; x--) {
+                for (int y = 0; y <= sizeY; y++) {
+                    byte v = model.at(x, y, z);
+                    if (v != 0) {
+                        dep = 3 * (x + y + z) + 256;
+                        final int xPos = (sizeY - y + x) * 2 + 1, yPos = (z - x - y + sizeX + sizeY) * 2 + 1;
+                        renderer.rectLeft(xPos, yPos, 2, 2, v, dep);
+                        renderer.rectRight(xPos + 2, yPos, 2, 2, v, dep);
+//                        renderer.depths[xPos+1][yPos]++;
+//                        renderer.depths[xPos+2][yPos]++;
+//                        renderer.depths[xPos+1][yPos+1]++;
+//                        renderer.depths[xPos+2][yPos+1]++;
+                        if (z >= sizeZ - 1 || model.at(x, y, z + 1) == 0)
+                        {
+                            renderer.rectVertical(xPos, yPos + 2, 4, 2, v, dep);
+//                            renderer.depths[xPos+1][yPos+2]++;
+//                            renderer.depths[xPos+2][yPos+2]++;
+//                            renderer.depths[xPos+1][yPos+3]++;
+//                            renderer.depths[xPos+2][yPos+3]++;
                         }
                     }
                 }

@@ -85,21 +85,25 @@ public class WarpTest extends ApplicationAdapter {
         batch.setProjectionMatrix(worldView.getCamera().combined);
         batch.begin();
         if(diagonal) {
-            pmTexture.draw(WarpDraw.draw45(model, pixmapRenderer), 0, 0);
-            batch.draw(pmTexture, 64, 64);
+            if(angle != 2){
+                pmTexture.draw(WarpDraw.drawIso(model, pixmapRenderer), 0, 0);
+            }
+            else 
+            {
+                pmTexture.draw(WarpDraw.draw45(model, pixmapRenderer), 0, 0);
+            }
 //            WarpDraw.simpleDraw45(model, batchRenderer, voxelColor, outline);
         }
         else if(angle != 2)
         {
             pmTexture.draw(WarpDraw.drawAbove(model, pixmapRenderer), 0, 0);
-            batch.draw(pmTexture, 64, 64);
         }
         else {
             pmTexture.draw(WarpDraw.draw(model, pixmapRenderer), 0, 0);
-            batch.draw(pmTexture, 64, 64);
             //WarpDraw.simpleDraw(model, batchRenderer, voxelColor, outline);
         }
-        batch.setColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
+        batch.draw(pmTexture, 64, 64);
+        //batch.setColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
         batch.end();
         buffer.end();
         Gdx.gl.glClearColor(0, 0, 0, 0);
@@ -172,8 +176,8 @@ public class WarpTest extends ApplicationAdapter {
                         model.turner().reset();
                         break;
                     case Input.Keys.P:
-                        Tools3D.deepCopyInto(maker.shipLargeRandomAurora(), ((ArrayModel)model.getModel()).voxels);
                         model = warrior;
+                        Tools3D.deepCopyInto(maker.shipLargeRandomAurora(), ((ArrayModel)model.getModel()).voxels);
                         break;
                     case Input.Keys.B:
                         model = dumbCube;
