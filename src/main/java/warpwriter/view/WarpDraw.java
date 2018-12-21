@@ -319,12 +319,13 @@ public class WarpDraw {
                 offsetPX = (sizeY >> 1) + 1;
         for (int z = 0; z <= sizeZ; z++) {
             for (int y = 0; y <= sizeY; y++) {
-                for (int x = sizeX; x >= 0; x--) {
+                for (int x = 0; x <= sizeX; x++) {
                     byte v = model.at(x, y, z);
                     if (v != 0) {
-                        renderer.rectRight(y * 3 + offsetPX, z * 3 + 1, 3, 3, v, 256 + x * 2);
+                        final int xPos = (sizeY - y) * 3 + offsetPX;
+                        renderer.rectRight(xPos, z * 3 + 1, 3, 3, v, 256 + x * 2);
                         if (z >= sizeZ - 1 || model.at(x, y, z + 1) == 0)
-                            renderer.rectVertical(y * 3 + offsetPX, z * 3 + 4, 3, 1, v, 256 + x * 2);
+                            renderer.rectVertical(xPos, z * 3 + 4, 3, 1, v, 256 + x * 2);
                     }
                 }
             }
@@ -337,15 +338,16 @@ public class WarpDraw {
         final int sizeX = model.sizeX() - 1, sizeY = model.sizeY() - 1, sizeZ = model.sizeZ() - 1;
         int dep;
         for (int z = 0; z <= sizeZ; z++) {
-            for (int x = sizeX; x >= 0; x--) {
-                for (int y = sizeY; y >= 0; y--) {
+            for (int x = 0; x <= sizeX; x++) {
+                for (int y = 0; y <= sizeY; y++) {
                     byte v = model.at(x, y, z);
                     if (v != 0) {
                         dep = 3 * (x - y) + 256;
-                        renderer.rectLeft((sizeX - x + y) * 2 + 1, z * 3 + 1, 2, 3, v, dep);
-                        renderer.rectRight((sizeX - x + y) * 2 + 3, z * 3 + 1, 2, 3, v, dep);
+                        final int xPos = (sizeY + x - y) * 2 + 1;
+                        renderer.rectLeft(xPos, z * 3 + 1, 2, 3, v, dep);
+                        renderer.rectRight(xPos + 2, z * 3 + 1, 2, 3, v, dep);
                         if (z >= sizeZ - 1 || model.at(x, y, z + 1) == 0)
-                            renderer.rectVertical((sizeX - x + y) * 2 + 1, z * 3 + 4, 4, 1, v, dep);
+                            renderer.rectVertical(xPos, z * 3 + 4, 4, 1, v, dep);
                     }
                 }
             }
