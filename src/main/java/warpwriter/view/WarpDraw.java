@@ -316,7 +316,7 @@ public class WarpDraw {
     public static Pixmap draw(IModel model, VoxelPixmapRenderer renderer)
     {
         final int sizeX = model.sizeX() - 1, sizeY = model.sizeY() - 1, sizeZ = model.sizeZ() - 1,
-                offsetPX = (sizeY >> 1) + 1;
+                offsetPX = (sizeY >> 1) + 1, pixelWidth = sizeY * 3 + (sizeY >> 1) + 4, pixelHeight = sizeZ * 3 + 5;
         for (int z = 0; z <= sizeZ; z++) {
             for (int y = 0; y <= sizeY; y++) {
                 for (int x = 0; x <= sizeX; x++) {
@@ -330,12 +330,13 @@ public class WarpDraw {
                 }
             }
         }
-        return renderer.blit(2);
+        return renderer.blit(2, pixelWidth, pixelHeight);
     }
 
     public static Pixmap draw45(IModel model, VoxelPixmapRenderer renderer)
     {
-        final int sizeX = model.sizeX() - 1, sizeY = model.sizeY() - 1, sizeZ = model.sizeZ() - 1;
+        final int sizeX = model.sizeX() - 1, sizeY = model.sizeY() - 1, sizeZ = model.sizeZ() - 1,
+                pixelWidth = (sizeX + sizeY) * 2 + 5, pixelHeight = (sizeZ * 3 + 5);
         int dep;
         for (int z = 0; z <= sizeZ; z++) {
             for (int x = 0; x <= sizeX; x++) {
@@ -352,12 +353,13 @@ public class WarpDraw {
                 }
             }
         }
-        return renderer.blit(5);
+        return renderer.blit(5, pixelWidth, pixelHeight);
     }
     public static Pixmap drawAbove(IModel model, VoxelPixmapRenderer renderer)
     {
         final int sizeX = model.sizeX() - 1, sizeY = model.sizeY() - 1, sizeZ = model.sizeZ() - 1,
-                offsetPX = (sizeY >> 1) + 1, offsetPY = (sizeX >> 1) + 1;
+                offsetPX = (sizeY >> 1) + 1, offsetPY = (sizeX >> 1) + 1,
+                pixelWidth =(sizeY * 3) + (sizeY >> 1) + 4, pixelHeight = sizeZ * 2 + sizeX * 3 + (sizeX >> 1) + 6;
         for (int z = 0; z <= sizeZ; z++) {
             for (int y = 0; y <= sizeY; y++) {
                 for (int x = 0, d = 0; x <= sizeX; x++, d += 5) {
@@ -373,11 +375,12 @@ public class WarpDraw {
                 }
             }
         }
-        return renderer.blit(12);
+        return renderer.blit(12, pixelWidth, pixelHeight);
     }
     public static Pixmap drawIso(IModel model, VoxelPixmapRenderer renderer)
     {
-        final int sizeX = model.sizeX() - 1, sizeY = model.sizeY() - 1, sizeZ = model.sizeZ() - 1;
+        final int sizeX = model.sizeX() - 1, sizeY = model.sizeY() - 1, sizeZ = model.sizeZ() - 1,
+                pixelWidth = (sizeY + sizeX) * 2 + 5, pixelHeight = (sizeX + sizeY + sizeZ) * 2 + 5;
         int dep;
         for (int z = 0; z <= sizeZ; z++) {
             for (int x = sizeX; x >= 0; x--) {
@@ -404,7 +407,7 @@ public class WarpDraw {
                 }
             }
         }
-        return renderer.blit(12);
+        return renderer.blit(12, pixelWidth, pixelHeight);
     }
 
 }

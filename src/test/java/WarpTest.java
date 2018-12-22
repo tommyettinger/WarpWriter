@@ -39,7 +39,7 @@ public class WarpTest extends ApplicationAdapter {
     private VoxelPixmapRenderer pixmapRenderer;
     protected VoxelColor voxelColor;
     protected int angle = 2;
-    protected boolean diagonal = false, outline = true;
+    protected boolean diagonal = false;
     protected byte[][][] box;
 
     @Override
@@ -188,8 +188,11 @@ public class WarpTest extends ApplicationAdapter {
                     case Input.Keys.H:
                         batchRenderer.color().set(batchRenderer.color().direction().clock());
                         break;
-                    case  Input.Keys.E: // edges
-                        outline = !outline;
+                    case Input.Keys.E: // easing
+                        pixmapRenderer.easing = !pixmapRenderer.easing;
+                        break;
+                    case Input.Keys.F: // fringe, affects outline/edge
+                        pixmapRenderer.outline = !pixmapRenderer.outline;
                         break;
                     case Input.Keys.T: // try again
                         model.turner().reset();

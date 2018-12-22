@@ -11,7 +11,7 @@ public class VoxelPixmapRenderer implements IRectangleRenderer {
     public int[][] depths;
     public byte[][] working, render;
     public VoxelColor color;
-    public boolean flipX, flipY, easing = true;
+    public boolean flipX, flipY, easing = true, outline = true;
 
     public VoxelPixmapRenderer() {
         this(new Pixmap(64, 64, Pixmap.Format.RGBA8888));
@@ -49,7 +49,7 @@ public class VoxelPixmapRenderer implements IRectangleRenderer {
         //pixmap.setColor(color);
         //pixmap.fillRectangle(x, y, sizeX, sizeY);
         for (int i = 0; i < sizeX && x < working.length; i++, x++) {
-            for (int j = 0, yy = working[0].length - y - 1; j < sizeY && yy >= 0; j++, yy--) {
+            for (int j = 0, yy = y; j < sizeY && yy < working[0].length; j++, yy++) {
                 working[x][yy] = color;
                 depths[x][yy] = depth;
             }
@@ -148,55 +148,61 @@ public class VoxelPixmapRenderer implements IRectangleRenderer {
         return (color >>> 24) + (color >>> 16 & 0xFF) + (color >>> 8 & 0xFF);
     }
 
-    public Pixmap blit(int threshold) {
+    public Pixmap blit(int threshold, int pixelWidth, int pixelHeight) {
         pixmap.setColor(0);
         pixmap.fill();
-        int xSize = working.length - 1, ySize = working[0].length - 1, dep;
-        for (int x = 0; x < xSize; x++) {
-            System.arraycopy(working[x], 0, render[x], 0, working[x].length);
+        int xSize = Math.min(pixelWidth, working.length) - 1,
+                ySize = Math.min(pixelHeight, working[0].length) - 1,
+                depth;
+        for (int x = 0; x <= xSize; x++) {
+            System.arraycopy(working[x], 0, render[x], 0, ySize);
         }
-        byte w;
-        for (int x = 1; x < xSize; x++) {
-            for (int y = 1; y < ySize; y++) {
-                if ((w = Twilight.RAMPS[working[x][y] & 255][3]) != 0) {
-                    byte o = w;
-                    dep = depths[x][y];
-                    if (working[x - 1][y] == 0 && working[x][y - 1] == 0) {
-                        render[x - 1][y] = o;
-                        render[x][y - 1] = o;
-                        render[x][y] = o;
-                    } else if (working[x + 1][y] == 0 && working[x][y - 1] == 0) {
-                        render[x + 1][y] = o;
-                        render[x][y - 1] = o;
-                        render[x][y] = o;
-                    } else if (working[x - 1][y] == 0 && working[x][y + 1] == 0) {
-                        render[x - 1][y] = o;
-                        render[x][y + 1] = o;
-                        render[x][y] = o;
-                    } else if (working[x + 1][y] == 0 && working[x][y + 1] == 0) {
-                        render[x + 1][y] = o;
-                        render[x][y + 1] = o;
-                        render[x][y] = o;
-                    } else {
-                        if (working[x - 1][y] == 0 || depths[x - 1][y] < dep - threshold) {
+        if(outline) {
+            byte w;
+            for (int x = 1; x < xSize; x++) {
+                for (int y = 1; y < ySize; y++) {
+                    if ((w = Twilight.RAMPS[working[x][y] & 255][3]) != 0) {
+                        byte o = w;
+                        depth = depths[x][y];
+                        if (working[x - 1][y] == 0 && working[x][y - 1] == 0) {
                             render[x - 1][y] = o;
-                        }
-                        if (working[x + 1][y] == 0 || depths[x + 1][y] < dep - threshold) {
-                            render[x + 1][y] = o;
-                        }
-                        if (working[x][y - 1] == 0 || depths[x][y - 1] < dep - threshold) {
                             render[x][y - 1] = o;
-                        }
-                        if (working[x][y + 1] == 0 || depths[x][y + 1] < dep - threshold) {
+                            render[x][y] = o;
+                        } else if (working[x + 1][y] == 0 && working[x][y - 1] == 0) {
+                            render[x + 1][y] = o;
+                            render[x][y - 1] = o;
+                            render[x][y] = o;
+                        } else if (working[x - 1][y] == 0 && working[x][y + 1] == 0) {
+                            render[x - 1][y] = o;
                             render[x][y + 1] = o;
+                            render[x][y] = o;
+                        } else if (working[x + 1][y] == 0 && working[x][y + 1] == 0) {
+                            render[x + 1][y] = o;
+                            render[x][y + 1] = o;
+                            render[x][y] = o;
+                        } else {
+                            if (working[x - 1][y] == 0 || depths[x - 1][y] < depth - threshold) {
+                                render[x - 1][y] = o;
+                            }
+                            if (working[x + 1][y] == 0 || depths[x + 1][y] < depth - threshold) {
+                                render[x + 1][y] = o;
+                            }
+                            if (working[x][y - 1] == 0 || depths[x][y - 1] < depth - threshold) {
+                                render[x][y - 1] = o;
+                            }
+                            if (working[x][y + 1] == 0 || depths[x][y + 1] < depth - threshold) {
+                                render[x][y + 1] = o;
+                            }
                         }
                     }
                 }
             }
         }
+        
+        final int pmh = pixmap.getHeight() - 1;
         for (int x = 0; x < xSize; x++) {
             for (int y = 0; y < ySize; y++) {
-                pixmap.drawPixel(x, y, Twilight.RAMP_VALUES[render[x][y] & 255][1]);
+                pixmap.drawPixel(x, pmh - y, Twilight.RAMP_VALUES[render[x][y] & 255][1]);
             }
         }
 
@@ -218,9 +224,9 @@ public class VoxelPixmapRenderer implements IRectangleRenderer {
                         if (a != 0 && b != 0 && c != 0 && d != 0 && e != 0 && f != 0 && g != 0 && h != 0 && (e != f || g != h)) {
                             lo = lightness(Twilight.RAMP_VALUES[o & 255][1]);
                             if (a == d && lightness(color = Twilight.RAMP_VALUES[a & 255][1]) > lo)
-                                pixmap.drawPixel(x, y, color);
+                                pixmap.drawPixel(x, pmh - y, color);
                             else if (b == c && lightness(color = Twilight.RAMP_VALUES[b & 255][1]) > lo)
-                                pixmap.drawPixel(x, y, color);
+                                pixmap.drawPixel(x, pmh - y, color);
                             //else pixmap.drawPixel(x, y, color.twilight().twilight(o));
                         }
                     }
