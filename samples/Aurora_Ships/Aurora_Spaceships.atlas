@@ -1,0 +1,8966 @@
+
+Aurora_Spaceships.png
+size: 4096,4096
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+AbominableEarl_dir0
+  rotate: false
+  xy: 2428, 3726
+  size: 110, 113
+  orig: 161, 239
+  offset: 25, 34
+  index: 0
+AbominableEarl_dir1
+  rotate: false
+  xy: 1078, 423
+  size: 104, 108
+  orig: 161, 239
+  offset: 38, 30
+  index: 0
+AbominableEarl_dir2
+  rotate: false
+  xy: 1498, 1710
+  size: 101, 117
+  orig: 161, 239
+  offset: 37, 36
+  index: 0
+AbominableEarl_dir3
+  rotate: false
+  xy: 972, 739
+  size: 104, 110
+  orig: 161, 239
+  offset: 38, 50
+  index: 0
+AbominableEarl_dir4
+  rotate: false
+  xy: 2092, 3609
+  size: 110, 113
+  orig: 161, 239
+  offset: 25, 49
+  index: 0
+AbominableEarl_dir5
+  rotate: false
+  xy: 972, 627
+  size: 104, 110
+  orig: 161, 239
+  offset: 20, 50
+  index: 0
+AbominableEarl_dir6
+  rotate: false
+  xy: 1498, 1591
+  size: 101, 117
+  orig: 161, 239
+  offset: 22, 36
+  index: 0
+AbominableEarl_dir7
+  rotate: false
+  xy: 974, 2593
+  size: 104, 108
+  orig: 161, 239
+  offset: 20, 30
+  index: 0
+AlliedBomb_dir0
+  rotate: false
+  xy: 2754, 1205
+  size: 80, 113
+  orig: 161, 239
+  offset: 40, 34
+  index: 0
+AlliedBomb_dir1
+  rotate: false
+  xy: 3922, 1549
+  size: 90, 102
+  orig: 161, 239
+  offset: 46, 36
+  index: 0
+AlliedBomb_dir2
+  rotate: false
+  xy: 2929, 2397
+  size: 98, 91
+  orig: 161, 239
+  offset: 40, 52
+  index: 0
+AlliedBomb_dir3
+  rotate: false
+  xy: 2402, 1631
+  size: 90, 98
+  orig: 161, 239
+  offset: 46, 54
+  index: 0
+AlliedBomb_dir4
+  rotate: false
+  xy: 2573, 25
+  size: 80, 102
+  orig: 161, 239
+  offset: 40, 58
+  index: 0
+AlliedBomb_dir5
+  rotate: false
+  xy: 3914, 1053
+  size: 90, 98
+  orig: 161, 239
+  offset: 26, 54
+  index: 0
+AlliedBomb_dir6
+  rotate: false
+  xy: 1804, 9
+  size: 98, 91
+  orig: 161, 239
+  offset: 22, 52
+  index: 0
+AlliedBomb_dir7
+  rotate: false
+  xy: 3822, 1107
+  size: 90, 102
+  orig: 161, 239
+  offset: 26, 36
+  index: 0
+AlliedDevil_dir0
+  rotate: false
+  xy: 2485, 211
+  size: 86, 111
+  orig: 161, 239
+  offset: 37, 34
+  index: 0
+AlliedDevil_dir1
+  rotate: false
+  xy: 1704, 2010
+  size: 100, 108
+  orig: 161, 239
+  offset: 38, 32
+  index: 0
+AlliedDevil_dir2
+  rotate: false
+  xy: 866, 644
+  size: 104, 101
+  orig: 161, 239
+  offset: 34, 49
+  index: 0
+AlliedDevil_dir3
+  rotate: false
+  xy: 1498, 18
+  size: 100, 110
+  orig: 161, 239
+  offset: 38, 48
+  index: 0
+AlliedDevil_dir4
+  rotate: false
+  xy: 2485, 531
+  size: 86, 120
+  orig: 161, 239
+  offset: 37, 44
+  index: 0
+AlliedDevil_dir5
+  rotate: false
+  xy: 1602, 2490
+  size: 100, 110
+  orig: 161, 239
+  offset: 24, 48
+  index: 0
+AlliedDevil_dir6
+  rotate: false
+  xy: 762, 1745
+  size: 104, 101
+  orig: 161, 239
+  offset: 22, 49
+  index: 0
+AlliedDevil_dir7
+  rotate: false
+  xy: 2027, 2827
+  size: 100, 108
+  orig: 161, 239
+  offset: 24, 32
+  index: 0
+AlliedGenius_dir0
+  rotate: false
+  xy: 2652, 3612
+  size: 110, 123
+  orig: 161, 239
+  offset: 25, 28
+  index: 0
+AlliedGenius_dir1
+  rotate: false
+  xy: 1498, 2492
+  size: 102, 110
+  orig: 161, 239
+  offset: 42, 28
+  index: 0
+AlliedGenius_dir2
+  rotate: false
+  xy: 551, 3132
+  size: 104, 118
+  orig: 161, 239
+  offset: 34, 33
+  index: 0
+AlliedGenius_dir3
+  rotate: false
+  xy: 1290, 166
+  size: 102, 104
+  orig: 161, 239
+  offset: 42, 54
+  index: 0
+AlliedGenius_dir4
+  rotate: false
+  xy: 1529, 3729
+  size: 110, 116
+  orig: 161, 239
+  offset: 25, 46
+  index: 0
+AlliedGenius_dir5
+  rotate: false
+  xy: 1394, 287
+  size: 102, 104
+  orig: 161, 239
+  offset: 18, 54
+  index: 0
+AlliedGenius_dir6
+  rotate: false
+  xy: 763, 2888
+  size: 104, 118
+  orig: 161, 239
+  offset: 22, 33
+  index: 0
+AlliedGenius_dir7
+  rotate: false
+  xy: 1394, 505
+  size: 102, 110
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+AscendantComplacency_dir0
+  rotate: false
+  xy: 1905, 1295
+  size: 98, 119
+  orig: 161, 239
+  offset: 31, 40
+  index: 0
+AscendantComplacency_dir1
+  rotate: false
+  xy: 1503, 2716
+  size: 102, 110
+  orig: 161, 239
+  offset: 40, 30
+  index: 0
+AscendantComplacency_dir2
+  rotate: false
+  xy: 3084, 3899
+  size: 116, 108
+  orig: 161, 239
+  offset: 22, 40
+  index: 0
+AscendantComplacency_dir3
+  rotate: false
+  xy: 1394, 1717
+  size: 102, 102
+  orig: 161, 239
+  offset: 40, 56
+  index: 0
+AscendantComplacency_dir4
+  rotate: false
+  xy: 2306, 1845
+  size: 98, 121
+  orig: 161, 239
+  offset: 31, 40
+  index: 0
+AscendantComplacency_dir5
+  rotate: false
+  xy: 1290, 2484
+  size: 102, 102
+  orig: 161, 239
+  offset: 20, 56
+  index: 0
+AscendantComplacency_dir6
+  rotate: false
+  xy: 3674, 3739
+  size: 116, 108
+  orig: 161, 239
+  offset: 22, 40
+  index: 0
+AscendantComplacency_dir7
+  rotate: false
+  xy: 1186, 1228
+  size: 102, 110
+  orig: 161, 239
+  offset: 20, 30
+  index: 0
+AuthoritativeLady_dir0
+  rotate: false
+  xy: 2, 2371
+  size: 116, 131
+  orig: 161, 239
+  offset: 22, 28
+  index: 0
+AuthoritativeLady_dir1
+  rotate: false
+  xy: 2188, 3377
+  size: 108, 114
+  orig: 161, 239
+  offset: 36, 28
+  index: 0
+AuthoritativeLady_dir2
+  rotate: false
+  xy: 2494, 3841
+  size: 116, 122
+  orig: 161, 239
+  offset: 22, 33
+  index: 0
+AuthoritativeLady_dir3
+  rotate: false
+  xy: 3212, 3014
+  size: 108, 112
+  orig: 161, 239
+  offset: 36, 48
+  index: 0
+AuthoritativeLady_dir4
+  rotate: false
+  xy: 3202, 3963
+  size: 116, 131
+  orig: 161, 239
+  offset: 22, 32
+  index: 0
+AuthoritativeLady_dir5
+  rotate: false
+  xy: 2298, 3273
+  size: 108, 112
+  orig: 161, 239
+  offset: 18, 48
+  index: 0
+AuthoritativeLady_dir6
+  rotate: false
+  xy: 2612, 3745
+  size: 116, 122
+  orig: 161, 239
+  offset: 22, 33
+  index: 0
+AuthoritativeLady_dir7
+  rotate: false
+  xy: 1852, 3117
+  size: 108, 114
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+AuthoritativeMaiden_dir0
+  rotate: false
+  xy: 1404, 3627
+  size: 110, 109
+  orig: 161, 239
+  offset: 25, 34
+  index: 0
+AuthoritativeMaiden_dir1
+  rotate: false
+  xy: 2206, 2298
+  size: 98, 104
+  orig: 161, 239
+  offset: 44, 32
+  index: 0
+AuthoritativeMaiden_dir2
+  rotate: false
+  xy: 2191, 19
+  size: 89, 118
+  orig: 161, 239
+  offset: 46, 36
+  index: 0
+AuthoritativeMaiden_dir3
+  rotate: false
+  xy: 2106, 2355
+  size: 98, 108
+  orig: 161, 239
+  offset: 44, 52
+  index: 0
+AuthoritativeMaiden_dir4
+  rotate: false
+  xy: 1644, 3858
+  size: 110, 112
+  orig: 161, 239
+  offset: 25, 52
+  index: 0
+AuthoritativeMaiden_dir5
+  rotate: false
+  xy: 1906, 1778
+  size: 98, 108
+  orig: 161, 239
+  offset: 20, 52
+  index: 0
+AuthoritativeMaiden_dir6
+  rotate: false
+  xy: 2494, 1616
+  size: 89, 118
+  orig: 161, 239
+  offset: 25, 36
+  index: 0
+AuthoritativeMaiden_dir7
+  rotate: false
+  xy: 1906, 2326
+  size: 98, 104
+  orig: 161, 239
+  offset: 20, 32
+  index: 0
+BlessedMace_dir0
+  rotate: false
+  xy: 445, 3095
+  size: 104, 115
+  orig: 161, 239
+  offset: 28, 34
+  index: 0
+BlessedMace_dir1
+  rotate: false
+  xy: 120, 1157
+  size: 106, 112
+  orig: 161, 239
+  offset: 36, 28
+  index: 0
+BlessedMace_dir2
+  rotate: false
+  xy: 959, 3752
+  size: 110, 117
+  orig: 161, 239
+  offset: 28, 34
+  index: 0
+BlessedMace_dir3
+  rotate: false
+  xy: 120, 1713
+  size: 106, 110
+  orig: 161, 239
+  offset: 36, 48
+  index: 0
+BlessedMace_dir4
+  rotate: false
+  xy: 1184, 12
+  size: 104, 122
+  orig: 161, 239
+  offset: 28, 40
+  index: 0
+BlessedMace_dir5
+  rotate: false
+  xy: 120, 2167
+  size: 106, 110
+  orig: 161, 239
+  offset: 20, 48
+  index: 0
+BlessedMace_dir6
+  rotate: false
+  xy: 3436, 3233
+  size: 110, 117
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+BlessedMace_dir7
+  rotate: false
+  xy: 120, 2505
+  size: 106, 112
+  orig: 161, 239
+  offset: 20, 28
+  index: 0
+BloodstainedMurderer_dir0
+  rotate: false
+  xy: 1078, 778
+  size: 104, 115
+  orig: 161, 239
+  offset: 28, 28
+  index: 0
+BloodstainedMurderer_dir1
+  rotate: false
+  xy: 336, 87
+  size: 104, 110
+  orig: 161, 239
+  offset: 38, 30
+  index: 0
+BloodstainedMurderer_dir2
+  rotate: false
+  xy: 1498, 1477
+  size: 101, 112
+  orig: 161, 239
+  offset: 37, 40
+  index: 0
+BloodstainedMurderer_dir3
+  rotate: false
+  xy: 2398, 2929
+  size: 104, 108
+  orig: 161, 239
+  offset: 38, 50
+  index: 0
+BloodstainedMurderer_dir4
+  rotate: false
+  xy: 974, 1304
+  size: 104, 115
+  orig: 161, 239
+  offset: 28, 49
+  index: 0
+BloodstainedMurderer_dir5
+  rotate: false
+  xy: 550, 2219
+  size: 104, 108
+  orig: 161, 239
+  offset: 20, 50
+  index: 0
+BloodstainedMurderer_dir6
+  rotate: false
+  xy: 1498, 1181
+  size: 101, 112
+  orig: 161, 239
+  offset: 22, 40
+  index: 0
+BloodstainedMurderer_dir7
+  rotate: false
+  xy: 442, 684
+  size: 104, 110
+  orig: 161, 239
+  offset: 20, 30
+  index: 0
+BountifulCannon_dir0
+  rotate: false
+  xy: 972, 514
+  size: 104, 111
+  orig: 161, 239
+  offset: 28, 34
+  index: 0
+BountifulCannon_dir1
+  rotate: false
+  xy: 550, 2329
+  size: 104, 110
+  orig: 161, 239
+  offset: 40, 28
+  index: 0
+BountifulCannon_dir2
+  rotate: false
+  xy: 975, 2930
+  size: 104, 121
+  orig: 161, 239
+  offset: 34, 34
+  index: 0
+BountifulCannon_dir3
+  rotate: false
+  xy: 444, 2756
+  size: 104, 108
+  orig: 161, 239
+  offset: 40, 52
+  index: 0
+BountifulCannon_dir4
+  rotate: false
+  xy: 868, 1456
+  size: 104, 118
+  orig: 161, 239
+  offset: 28, 46
+  index: 0
+BountifulCannon_dir5
+  rotate: false
+  xy: 656, 2804
+  size: 104, 108
+  orig: 161, 239
+  offset: 18, 52
+  index: 0
+BountifulCannon_dir6
+  rotate: false
+  xy: 869, 3182
+  size: 104, 121
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+BountifulCannon_dir7
+  rotate: false
+  xy: 336, 436
+  size: 104, 110
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+BountifulShadow_dir0
+  rotate: false
+  xy: 2331, 2692
+  size: 98, 111
+  orig: 161, 239
+  offset: 31, 28
+  index: 0
+BountifulShadow_dir1
+  rotate: false
+  xy: 2101, 439
+  size: 96, 100
+  orig: 161, 239
+  offset: 44, 30
+  index: 0
+BountifulShadow_dir2
+  rotate: false
+  xy: 3922, 1763
+  size: 92, 110
+  orig: 161, 239
+  offset: 46, 40
+  index: 0
+BountifulShadow_dir3
+  rotate: false
+  xy: 2101, 855
+  size: 96, 108
+  orig: 161, 239
+  offset: 44, 50
+  index: 0
+BountifulShadow_dir4
+  rotate: false
+  xy: 2615, 2373
+  size: 98, 112
+  orig: 161, 239
+  offset: 31, 52
+  index: 0
+BountifulShadow_dir5
+  rotate: false
+  xy: 1817, 2770
+  size: 96, 108
+  orig: 161, 239
+  offset: 22, 50
+  index: 0
+BountifulShadow_dir6
+  rotate: false
+  xy: 2794, 2038
+  size: 92, 110
+  orig: 161, 239
+  offset: 22, 40
+  index: 0
+BountifulShadow_dir7
+  rotate: false
+  xy: 2005, 1173
+  size: 96, 100
+  orig: 161, 239
+  offset: 22, 30
+  index: 0
+BrightAbomination_dir0
+  rotate: false
+  xy: 3202, 3615
+  size: 116, 115
+  orig: 161, 239
+  offset: 22, 28
+  index: 0
+BrightAbomination_dir1
+  rotate: false
+  xy: 3994, 3278
+  size: 100, 110
+  orig: 161, 239
+  offset: 44, 28
+  index: 0
+BrightAbomination_dir2
+  rotate: false
+  xy: 3861, 1875
+  size: 92, 122
+  orig: 161, 239
+  offset: 46, 33
+  index: 0
+BrightAbomination_dir3
+  rotate: false
+  xy: 1703, 492
+  size: 100, 104
+  orig: 161, 239
+  offset: 44, 56
+  index: 0
+BrightAbomination_dir4
+  rotate: false
+  xy: 602, 3751
+  size: 116, 112
+  orig: 161, 239
+  offset: 22, 52
+  index: 0
+BrightAbomination_dir5
+  rotate: false
+  xy: 1703, 924
+  size: 100, 104
+  orig: 161, 239
+  offset: 18, 56
+  index: 0
+BrightAbomination_dir6
+  rotate: false
+  xy: 2391, 769
+  size: 92, 122
+  orig: 161, 239
+  offset: 22, 33
+  index: 0
+BrightAbomination_dir7
+  rotate: false
+  xy: 2129, 2921
+  size: 100, 110
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+BrilliantKindness_dir0
+  rotate: false
+  xy: 2485, 653
+  size: 86, 117
+  orig: 161, 239
+  offset: 37, 28
+  index: 0
+BrilliantKindness_dir1
+  rotate: false
+  xy: 2792, 1823
+  size: 92, 102
+  orig: 161, 239
+  offset: 46, 32
+  index: 0
+BrilliantKindness_dir2
+  rotate: false
+  xy: 762, 2671
+  size: 104, 103
+  orig: 161, 239
+  offset: 34, 46
+  index: 0
+BrilliantKindness_dir3
+  rotate: false
+  xy: 3732, 1451
+  size: 92, 98
+  orig: 161, 239
+  offset: 46, 58
+  index: 0
+BrilliantKindness_dir4
+  rotate: false
+  xy: 2487, 988
+  size: 86, 118
+  orig: 161, 239
+  offset: 37, 46
+  index: 0
+BrilliantKindness_dir5
+  rotate: false
+  xy: 3638, 1515
+  size: 92, 98
+  orig: 161, 239
+  offset: 24, 58
+  index: 0
+BrilliantKindness_dir6
+  rotate: false
+  xy: 760, 713
+  size: 104, 103
+  orig: 161, 239
+  offset: 22, 46
+  index: 0
+BrilliantKindness_dir7
+  rotate: false
+  xy: 3828, 1771
+  size: 92, 102
+  orig: 161, 239
+  offset: 24, 32
+  index: 0
+BrilliantRocket_dir0
+  rotate: false
+  xy: 1905, 1416
+  size: 98, 131
+  orig: 161, 239
+  offset: 31, 28
+  index: 0
+BrilliantRocket_dir1
+  rotate: false
+  xy: 1600, 106
+  size: 100, 112
+  orig: 161, 239
+  offset: 38, 30
+  index: 0
+BrilliantRocket_dir2
+  rotate: false
+  xy: 723, 3864
+  size: 116, 108
+  orig: 161, 239
+  offset: 22, 40
+  index: 0
+BrilliantRocket_dir3
+  rotate: false
+  xy: 1601, 658
+  size: 100, 104
+  orig: 161, 239
+  offset: 38, 48
+  index: 0
+BrilliantRocket_dir4
+  rotate: false
+  xy: 2306, 1968
+  size: 98, 134
+  orig: 161, 239
+  offset: 31, 30
+  index: 0
+BrilliantRocket_dir5
+  rotate: false
+  xy: 1601, 1096
+  size: 100, 104
+  orig: 161, 239
+  offset: 24, 48
+  index: 0
+BrilliantRocket_dir6
+  rotate: false
+  xy: 2, 548
+  size: 116, 108
+  orig: 161, 239
+  offset: 22, 40
+  index: 0
+BrilliantRocket_dir7
+  rotate: false
+  xy: 1601, 1634
+  size: 100, 112
+  orig: 161, 239
+  offset: 24, 30
+  index: 0
+CalmLightning_dir0
+  rotate: false
+  xy: 762, 2308
+  size: 104, 131
+  orig: 161, 239
+  offset: 28, 28
+  index: 0
+CalmLightning_dir1
+  rotate: false
+  xy: 1498, 2160
+  size: 102, 110
+  orig: 161, 239
+  offset: 38, 30
+  index: 0
+CalmLightning_dir2
+  rotate: false
+  xy: 2, 1250
+  size: 116, 116
+  orig: 161, 239
+  offset: 22, 36
+  index: 0
+CalmLightning_dir3
+  rotate: false
+  xy: 1711, 2656
+  size: 102, 112
+  orig: 161, 239
+  offset: 38, 48
+  index: 0
+CalmLightning_dir4
+  rotate: false
+  xy: 656, 2090
+  size: 104, 124
+  orig: 161, 239
+  offset: 28, 40
+  index: 0
+CalmLightning_dir5
+  rotate: false
+  xy: 1505, 2828
+  size: 102, 112
+  orig: 161, 239
+  offset: 22, 48
+  index: 0
+CalmLightning_dir6
+  rotate: false
+  xy: 1432, 3978
+  size: 116, 116
+  orig: 161, 239
+  offset: 22, 36
+  index: 0
+CalmLightning_dir7
+  rotate: false
+  xy: 1290, 272
+  size: 102, 110
+  orig: 161, 239
+  offset: 22, 30
+  index: 0
+CompassionateBlunderbuss_dir0
+  rotate: false
+  xy: 2431, 2688
+  size: 98, 115
+  orig: 161, 239
+  offset: 31, 28
+  index: 0
+CompassionateBlunderbuss_dir1
+  rotate: false
+  xy: 3170, 1806
+  size: 92, 104
+  orig: 161, 239
+  offset: 46, 32
+  index: 0
+CompassionateBlunderbuss_dir2
+  rotate: false
+  xy: 2698, 1757
+  size: 92, 108
+  orig: 161, 239
+  offset: 46, 40
+  index: 0
+CompassionateBlunderbuss_dir3
+  rotate: false
+  xy: 2295, 111
+  size: 92, 100
+  orig: 161, 239
+  offset: 46, 54
+  index: 0
+CompassionateBlunderbuss_dir4
+  rotate: false
+  xy: 2206, 1735
+  size: 98, 111
+  orig: 161, 239
+  offset: 31, 52
+  index: 0
+CompassionateBlunderbuss_dir5
+  rotate: false
+  xy: 3725, 2246
+  size: 92, 100
+  orig: 161, 239
+  offset: 24, 54
+  index: 0
+CompassionateBlunderbuss_dir6
+  rotate: false
+  xy: 3544, 1390
+  size: 92, 108
+  orig: 161, 239
+  offset: 22, 40
+  index: 0
+CompassionateBlunderbuss_dir7
+  rotate: false
+  xy: 3546, 1827
+  size: 92, 104
+  orig: 161, 239
+  offset: 24, 32
+  index: 0
+CompassionateWarden_dir0
+  rotate: false
+  xy: 4028, 3478
+  size: 56, 119
+  orig: 161, 239
+  offset: 52, 28
+  index: 0
+CompassionateWarden_dir1
+  rotate: false
+  xy: 2578, 1453
+  size: 88, 98
+  orig: 161, 239
+  offset: 40, 42
+  index: 0
+CompassionateWarden_dir2
+  rotate: false
+  xy: 548, 585
+  size: 104, 78
+  orig: 161, 239
+  offset: 34, 58
+  index: 0
+CompassionateWarden_dir3
+  rotate: false
+  xy: 2488, 1220
+  size: 88, 96
+  orig: 161, 239
+  offset: 40, 54
+  index: 0
+CompassionateWarden_dir4
+  rotate: false
+  xy: 3070, 1127
+  size: 56, 111
+  orig: 161, 239
+  offset: 52, 52
+  index: 0
+CompassionateWarden_dir5
+  rotate: false
+  xy: 2488, 1318
+  size: 88, 96
+  orig: 161, 239
+  offset: 34, 54
+  index: 0
+CompassionateWarden_dir6
+  rotate: false
+  xy: 445, 3212
+  size: 104, 78
+  orig: 161, 239
+  offset: 22, 58
+  index: 0
+CompassionateWarden_dir7
+  rotate: false
+  xy: 2488, 1416
+  size: 88, 98
+  orig: 161, 239
+  offset: 34, 42
+  index: 0
+ComplacentKingdom_dir0
+  rotate: false
+  xy: 2, 2504
+  size: 116, 123
+  orig: 161, 239
+  offset: 22, 28
+  index: 0
+ComplacentKingdom_dir1
+  rotate: false
+  xy: 1394, 1271
+  size: 102, 108
+  orig: 161, 239
+  offset: 42, 28
+  index: 0
+ComplacentKingdom_dir2
+  rotate: false
+  xy: 1399, 2907
+  size: 104, 122
+  orig: 161, 239
+  offset: 34, 33
+  index: 0
+ComplacentKingdom_dir3
+  rotate: false
+  xy: 1290, 1152
+  size: 102, 110
+  orig: 161, 239
+  offset: 42, 50
+  index: 0
+ComplacentKingdom_dir4
+  rotate: false
+  xy: 2966, 3725
+  size: 116, 124
+  orig: 161, 239
+  offset: 22, 40
+  index: 0
+ComplacentKingdom_dir5
+  rotate: false
+  xy: 1394, 61
+  size: 102, 110
+  orig: 161, 239
+  offset: 18, 50
+  index: 0
+ComplacentKingdom_dir6
+  rotate: false
+  xy: 1080, 1348
+  size: 104, 122
+  orig: 161, 239
+  offset: 22, 33
+  index: 0
+ComplacentKingdom_dir7
+  rotate: false
+  xy: 1290, 2158
+  size: 102, 108
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+ConfederatedThunderbolt_dir0
+  rotate: false
+  xy: 336, 311
+  size: 104, 123
+  orig: 161, 239
+  offset: 28, 34
+  index: 0
+ConfederatedThunderbolt_dir1
+  rotate: false
+  xy: 120, 27
+  size: 106, 112
+  orig: 161, 239
+  offset: 36, 28
+  index: 0
+ConfederatedThunderbolt_dir2
+  rotate: false
+  xy: 365, 3975
+  size: 119, 119
+  orig: 161, 239
+  offset: 19, 34
+  index: 0
+ConfederatedThunderbolt_dir3
+  rotate: false
+  xy: 121, 3175
+  size: 106, 110
+  orig: 161, 239
+  offset: 36, 48
+  index: 0
+ConfederatedThunderbolt_dir4
+  rotate: false
+  xy: 1187, 3204
+  size: 104, 134
+  orig: 161, 239
+  offset: 28, 29
+  index: 0
+ConfederatedThunderbolt_dir5
+  rotate: false
+  xy: 120, 2279
+  size: 106, 110
+  orig: 161, 239
+  offset: 20, 48
+  index: 0
+ConfederatedThunderbolt_dir6
+  rotate: false
+  xy: 486, 3975
+  size: 117, 119
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+ConfederatedThunderbolt_dir7
+  rotate: false
+  xy: 228, 2839
+  size: 106, 112
+  orig: 161, 239
+  offset: 20, 28
+  index: 0
+CryptoGreenery_dir0
+  rotate: false
+  xy: 1417, 3738
+  size: 110, 111
+  orig: 161, 239
+  offset: 25, 40
+  index: 0
+CryptoGreenery_dir1
+  rotate: false
+  xy: 3838, 2810
+  size: 108, 108
+  orig: 161, 239
+  offset: 36, 28
+  index: 0
+CryptoGreenery_dir2
+  rotate: false
+  xy: 1868, 3613
+  size: 110, 121
+  orig: 161, 239
+  offset: 22, 33
+  index: 0
+CryptoGreenery_dir3
+  rotate: false
+  xy: 3322, 3014
+  size: 108, 112
+  orig: 161, 239
+  offset: 36, 46
+  index: 0
+CryptoGreenery_dir4
+  rotate: false
+  xy: 1532, 3847
+  size: 110, 129
+  orig: 161, 239
+  offset: 25, 32
+  index: 0
+CryptoGreenery_dir5
+  rotate: false
+  xy: 2628, 2905
+  size: 108, 112
+  orig: 161, 239
+  offset: 18, 46
+  index: 0
+CryptoGreenery_dir6
+  rotate: false
+  xy: 3306, 3492
+  size: 110, 121
+  orig: 161, 239
+  offset: 28, 33
+  index: 0
+CryptoGreenery_dir7
+  rotate: false
+  xy: 2628, 3019
+  size: 108, 108
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+CryptoNet_dir0
+  rotate: false
+  xy: 2, 1868
+  size: 116, 119
+  orig: 161, 239
+  offset: 22, 28
+  index: 0
+CryptoNet_dir1
+  rotate: false
+  xy: 868, 2599
+  size: 104, 108
+  orig: 161, 239
+  offset: 40, 28
+  index: 0
+CryptoNet_dir2
+  rotate: false
+  xy: 2331, 2805
+  size: 98, 122
+  orig: 161, 239
+  offset: 40, 33
+  index: 0
+CryptoNet_dir3
+  rotate: false
+  xy: 762, 1970
+  size: 104, 110
+  orig: 161, 239
+  offset: 40, 50
+  index: 0
+CryptoNet_dir4
+  rotate: false
+  xy: 2376, 3867
+  size: 116, 113
+  orig: 161, 239
+  offset: 22, 50
+  index: 0
+CryptoNet_dir5
+  rotate: false
+  xy: 657, 3039
+  size: 104, 110
+  orig: 161, 239
+  offset: 18, 50
+  index: 0
+CryptoNet_dir6
+  rotate: false
+  xy: 2406, 1969
+  size: 98, 122
+  orig: 161, 239
+  offset: 22, 33
+  index: 0
+CryptoNet_dir7
+  rotate: false
+  xy: 760, 493
+  size: 104, 108
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+CunningForest_dir0
+  rotate: false
+  xy: 1187, 2973
+  size: 104, 115
+  orig: 161, 239
+  offset: 28, 28
+  index: 0
+CunningForest_dir1
+  rotate: false
+  xy: 3131, 2344
+  size: 98, 104
+  orig: 161, 239
+  offset: 38, 34
+  index: 0
+CunningForest_dir2
+  rotate: false
+  xy: 1498, 450
+  size: 101, 110
+  orig: 161, 239
+  offset: 37, 43
+  index: 0
+CunningForest_dir3
+  rotate: false
+  xy: 2829, 2477
+  size: 98, 108
+  orig: 161, 239
+  offset: 38, 50
+  index: 0
+CunningForest_dir4
+  rotate: false
+  xy: 654, 171
+  size: 104, 115
+  orig: 161, 239
+  offset: 28, 49
+  index: 0
+CunningForest_dir5
+  rotate: false
+  xy: 2429, 2578
+  size: 98, 108
+  orig: 161, 239
+  offset: 26, 50
+  index: 0
+CunningForest_dir6
+  rotate: false
+  xy: 1498, 1069
+  size: 101, 110
+  orig: 161, 239
+  offset: 22, 43
+  index: 0
+CunningForest_dir7
+  rotate: false
+  xy: 3431, 2226
+  size: 98, 104
+  orig: 161, 239
+  offset: 26, 34
+  index: 0
+CutthroatTrident_dir0
+  rotate: false
+  xy: 1805, 861
+  size: 98, 111
+  orig: 161, 239
+  offset: 31, 28
+  index: 0
+CutthroatTrident_dir1
+  rotate: false
+  xy: 1804, 102
+  size: 98, 106
+  orig: 161, 239
+  offset: 42, 30
+  index: 0
+CutthroatTrident_dir2
+  rotate: false
+  xy: 2982, 1965
+  size: 92, 108
+  orig: 161, 239
+  offset: 46, 40
+  index: 0
+CutthroatTrident_dir3
+  rotate: false
+  xy: 3129, 2238
+  size: 98, 104
+  orig: 161, 239
+  offset: 42, 52
+  index: 0
+CutthroatTrident_dir4
+  rotate: false
+  xy: 2306, 1731
+  size: 98, 112
+  orig: 161, 239
+  offset: 31, 52
+  index: 0
+CutthroatTrident_dir5
+  rotate: false
+  xy: 2631, 2597
+  size: 98, 104
+  orig: 161, 239
+  offset: 22, 52
+  index: 0
+CutthroatTrident_dir6
+  rotate: false
+  xy: 2888, 1857
+  size: 92, 108
+  orig: 161, 239
+  offset: 22, 40
+  index: 0
+CutthroatTrident_dir7
+  rotate: false
+  xy: 3131, 2450
+  size: 98, 106
+  orig: 161, 239
+  offset: 22, 30
+  index: 0
+CyberWanderer_dir0
+  rotate: false
+  xy: 2415, 2453
+  size: 98, 123
+  orig: 161, 239
+  offset: 31, 28
+  index: 0
+CyberWanderer_dir1
+  rotate: false
+  xy: 1823, 2994
+  size: 100, 110
+  orig: 161, 239
+  offset: 40, 30
+  index: 0
+CyberWanderer_dir2
+  rotate: false
+  xy: 972, 851
+  size: 104, 108
+  orig: 161, 239
+  offset: 34, 40
+  index: 0
+CyberWanderer_dir3
+  rotate: false
+  xy: 1602, 1856
+  size: 100, 100
+  orig: 161, 239
+  offset: 40, 56
+  index: 0
+CyberWanderer_dir4
+  rotate: false
+  xy: 2006, 2035
+  size: 98, 109
+  orig: 161, 239
+  offset: 31, 52
+  index: 0
+CyberWanderer_dir5
+  rotate: false
+  xy: 1704, 2120
+  size: 100, 100
+  orig: 161, 239
+  offset: 22, 56
+  index: 0
+CyberWanderer_dir6
+  rotate: false
+  xy: 868, 1232
+  size: 104, 108
+  orig: 161, 239
+  offset: 22, 40
+  index: 0
+CyberWanderer_dir7
+  rotate: false
+  xy: 1602, 1958
+  size: 100, 110
+  orig: 161, 239
+  offset: 22, 30
+  index: 0
+DeadlyCrossbow_dir0
+  rotate: false
+  xy: 3331, 2420
+  size: 98, 115
+  orig: 161, 239
+  offset: 31, 28
+  index: 0
+DeadlyCrossbow_dir1
+  rotate: false
+  xy: 2199, 347
+  size: 96, 108
+  orig: 161, 239
+  offset: 44, 30
+  index: 0
+DeadlyCrossbow_dir2
+  rotate: false
+  xy: 3356, 1468
+  size: 92, 112
+  orig: 161, 239
+  offset: 46, 40
+  index: 0
+DeadlyCrossbow_dir3
+  rotate: false
+  xy: 2202, 1523
+  size: 96, 106
+  orig: 161, 239
+  offset: 44, 54
+  index: 0
+DeadlyCrossbow_dir4
+  rotate: false
+  xy: 1906, 2003
+  size: 98, 103
+  orig: 161, 239
+  offset: 31, 58
+  index: 0
+DeadlyCrossbow_dir5
+  rotate: false
+  xy: 2101, 541
+  size: 96, 106
+  orig: 161, 239
+  offset: 22, 54
+  index: 0
+DeadlyCrossbow_dir6
+  rotate: false
+  xy: 3074, 1581
+  size: 92, 112
+  orig: 161, 239
+  offset: 22, 40
+  index: 0
+DeadlyCrossbow_dir7
+  rotate: false
+  xy: 2199, 669
+  size: 96, 108
+  orig: 161, 239
+  offset: 22, 30
+  index: 0
+DeadlyExcruciation_dir0
+  rotate: false
+  xy: 3070, 1240
+  size: 68, 117
+  orig: 161, 239
+  offset: 46, 28
+  index: 0
+DeadlyExcruciation_dir1
+  rotate: false
+  xy: 3730, 1126
+  size: 90, 98
+  orig: 161, 239
+  offset: 42, 38
+  index: 0
+DeadlyExcruciation_dir2
+  rotate: false
+  xy: 550, 1421
+  size: 104, 89
+  orig: 161, 239
+  offset: 34, 52
+  index: 0
+DeadlyExcruciation_dir3
+  rotate: false
+  xy: 3916, 1153
+  size: 90, 96
+  orig: 161, 239
+  offset: 42, 54
+  index: 0
+DeadlyExcruciation_dir4
+  rotate: false
+  xy: 3000, 1260
+  size: 68, 118
+  orig: 161, 239
+  offset: 46, 46
+  index: 0
+DeadlyExcruciation_dir5
+  rotate: false
+  xy: 3638, 1201
+  size: 90, 96
+  orig: 161, 239
+  offset: 30, 54
+  index: 0
+DeadlyExcruciation_dir6
+  rotate: false
+  xy: 444, 1632
+  size: 104, 89
+  orig: 161, 239
+  offset: 22, 52
+  index: 0
+DeadlyExcruciation_dir7
+  rotate: false
+  xy: 3920, 1251
+  size: 90, 98
+  orig: 161, 239
+  offset: 30, 38
+  index: 0
+DeadlyFiend_dir0
+  rotate: false
+  xy: 444, 2197
+  size: 104, 117
+  orig: 161, 239
+  offset: 28, 28
+  index: 0
+DeadlyFiend_dir1
+  rotate: false
+  xy: 228, 1035
+  size: 106, 108
+  orig: 161, 239
+  offset: 38, 30
+  index: 0
+DeadlyFiend_dir2
+  rotate: false
+  xy: 360, 3633
+  size: 104, 112
+  orig: 161, 239
+  offset: 34, 40
+  index: 0
+DeadlyFiend_dir3
+  rotate: false
+  xy: 120, 1271
+  size: 106, 110
+  orig: 161, 239
+  offset: 38, 50
+  index: 0
+DeadlyFiend_dir4
+  rotate: false
+  xy: 550, 1862
+  size: 104, 123
+  orig: 161, 239
+  offset: 28, 40
+  index: 0
+DeadlyFiend_dir5
+  rotate: false
+  xy: 121, 3287
+  size: 106, 110
+  orig: 161, 239
+  offset: 18, 50
+  index: 0
+DeadlyFiend_dir6
+  rotate: false
+  xy: 868, 2150
+  size: 104, 112
+  orig: 161, 239
+  offset: 22, 40
+  index: 0
+DeadlyFiend_dir7
+  rotate: false
+  xy: 228, 2391
+  size: 106, 108
+  orig: 161, 239
+  offset: 18, 30
+  index: 0
+DespisedQuestant_dir0
+  rotate: false
+  xy: 2631, 2811
+  size: 98, 92
+  orig: 161, 239
+  offset: 31, 34
+  index: 0
+DespisedQuestant_dir1
+  rotate: false
+  xy: 3913, 2124
+  size: 92, 98
+  orig: 161, 239
+  offset: 48, 32
+  index: 0
+DespisedQuestant_dir2
+  rotate: false
+  xy: 2659, 392
+  size: 80, 110
+  orig: 161, 239
+  offset: 58, 42
+  index: 0
+DespisedQuestant_dir3
+  rotate: false
+  xy: 3725, 2144
+  size: 92, 100
+  orig: 161, 239
+  offset: 48, 60
+  index: 0
+DespisedQuestant_dir4
+  rotate: false
+  xy: 1806, 1888
+  size: 98, 93
+  orig: 161, 239
+  offset: 31, 70
+  index: 0
+DespisedQuestant_dir5
+  rotate: false
+  xy: 2391, 425
+  size: 92, 100
+  orig: 161, 239
+  offset: 22, 60
+  index: 0
+DespisedQuestant_dir6
+  rotate: false
+  xy: 4014, 1541
+  size: 80, 110
+  orig: 161, 239
+  offset: 22, 42
+  index: 0
+DespisedQuestant_dir7
+  rotate: false
+  xy: 3640, 1739
+  size: 92, 98
+  orig: 161, 239
+  offset: 22, 32
+  index: 0
+DivineCrew_dir0
+  rotate: false
+  xy: 2918, 1326
+  size: 80, 123
+  orig: 161, 239
+  offset: 40, 28
+  index: 0
+DivineCrew_dir1
+  rotate: false
+  xy: 1600, 220
+  size: 100, 106
+  orig: 161, 239
+  offset: 38, 32
+  index: 0
+DivineCrew_dir2
+  rotate: false
+  xy: 3792, 3384
+  size: 116, 95
+  orig: 161, 239
+  offset: 22, 48
+  index: 0
+DivineCrew_dir3
+  rotate: false
+  xy: 1601, 764
+  size: 100, 108
+  orig: 161, 239
+  offset: 38, 48
+  index: 0
+DivineCrew_dir4
+  rotate: false
+  xy: 2737, 94
+  size: 80, 129
+  orig: 161, 239
+  offset: 40, 32
+  index: 0
+DivineCrew_dir5
+  rotate: false
+  xy: 1703, 1362
+  size: 100, 108
+  orig: 161, 239
+  offset: 24, 48
+  index: 0
+DivineCrew_dir6
+  rotate: false
+  xy: 3320, 3742
+  size: 116, 95
+  orig: 161, 239
+  offset: 22, 48
+  index: 0
+DivineCrew_dir7
+  rotate: false
+  xy: 1601, 1748
+  size: 100, 106
+  orig: 161, 239
+  offset: 24, 32
+  index: 0
+DominantEmpress_dir0
+  rotate: false
+  xy: 3140, 1213
+  size: 68, 123
+  orig: 161, 239
+  offset: 46, 28
+  index: 0
+DominantEmpress_dir1
+  rotate: false
+  xy: 2103, 1385
+  size: 96, 102
+  orig: 161, 239
+  offset: 36, 38
+  index: 0
+DominantEmpress_dir2
+  rotate: false
+  xy: 3674, 3535
+  size: 116, 83
+  orig: 161, 239
+  offset: 22, 58
+  index: 0
+DominantEmpress_dir3
+  rotate: false
+  xy: 2005, 1275
+  size: 96, 106
+  orig: 161, 239
+  offset: 36, 46
+  index: 0
+DominantEmpress_dir4
+  rotate: false
+  xy: 3140, 1338
+  size: 68, 129
+  orig: 161, 239
+  offset: 46, 32
+  index: 0
+DominantEmpress_dir5
+  rotate: false
+  xy: 2005, 1491
+  size: 96, 106
+  orig: 161, 239
+  offset: 30, 46
+  index: 0
+DominantEmpress_dir6
+  rotate: false
+  xy: 3084, 3814
+  size: 116, 83
+  orig: 161, 239
+  offset: 22, 58
+  index: 0
+DominantEmpress_dir7
+  rotate: false
+  xy: 2206, 1631
+  size: 96, 102
+  orig: 161, 239
+  offset: 30, 38
+  index: 0
+DominantQueen_dir0
+  rotate: false
+  xy: 1980, 3724
+  size: 110, 126
+  orig: 161, 239
+  offset: 25, 31
+  index: 0
+DominantQueen_dir1
+  rotate: false
+  xy: 974, 2481
+  size: 104, 110
+  orig: 161, 239
+  offset: 40, 28
+  index: 0
+DominantQueen_dir2
+  rotate: false
+  xy: 2, 1128
+  size: 116, 120
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+DominantQueen_dir3
+  rotate: false
+  xy: 866, 1122
+  size: 104, 108
+  orig: 161, 239
+  offset: 40, 52
+  index: 0
+DominantQueen_dir4
+  rotate: false
+  xy: 1292, 3340
+  size: 110, 128
+  orig: 161, 239
+  offset: 25, 34
+  index: 0
+DominantQueen_dir5
+  rotate: false
+  xy: 869, 2841
+  size: 104, 108
+  orig: 161, 239
+  offset: 18, 52
+  index: 0
+DominantQueen_dir6
+  rotate: false
+  xy: 2, 2629
+  size: 116, 120
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+DominantQueen_dir7
+  rotate: false
+  xy: 762, 2196
+  size: 104, 110
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+DominantSnake_dir0
+  rotate: false
+  xy: 760, 818
+  size: 104, 126
+  orig: 161, 239
+  offset: 28, 31
+  index: 0
+DominantSnake_dir1
+  rotate: false
+  xy: 3508, 2768
+  size: 108, 110
+  orig: 161, 239
+  offset: 36, 30
+  index: 0
+DominantSnake_dir2
+  rotate: false
+  xy: 1550, 3978
+  size: 116, 116
+  orig: 161, 239
+  offset: 22, 36
+  index: 0
+DominantSnake_dir3
+  rotate: false
+  xy: 3618, 2837
+  size: 108, 112
+  orig: 161, 239
+  offset: 36, 48
+  index: 0
+DominantSnake_dir4
+  rotate: false
+  xy: 551, 3472
+  size: 104, 130
+  orig: 161, 239
+  offset: 28, 30
+  index: 0
+DominantSnake_dir5
+  rotate: false
+  xy: 3288, 2900
+  size: 108, 112
+  orig: 161, 239
+  offset: 18, 48
+  index: 0
+DominantSnake_dir6
+  rotate: false
+  xy: 2, 886
+  size: 116, 116
+  orig: 161, 239
+  offset: 22, 36
+  index: 0
+DominantSnake_dir7
+  rotate: false
+  xy: 2408, 3039
+  size: 108, 110
+  orig: 161, 239
+  offset: 18, 30
+  index: 0
+DumbAnger_dir0
+  rotate: false
+  xy: 868, 2709
+  size: 104, 130
+  orig: 161, 239
+  offset: 28, 28
+  index: 0
+DumbAnger_dir1
+  rotate: false
+  xy: 3506, 2430
+  size: 106, 110
+  orig: 161, 239
+  offset: 36, 30
+  index: 0
+DumbAnger_dir2
+  rotate: false
+  xy: 123, 3864
+  size: 119, 112
+  orig: 161, 239
+  offset: 19, 41
+  index: 0
+DumbAnger_dir3
+  rotate: false
+  xy: 336, 1365
+  size: 106, 114
+  orig: 161, 239
+  offset: 36, 46
+  index: 0
+DumbAnger_dir4
+  rotate: false
+  xy: 656, 2216
+  size: 104, 132
+  orig: 161, 239
+  offset: 28, 31
+  index: 0
+DumbAnger_dir5
+  rotate: false
+  xy: 336, 2161
+  size: 106, 114
+  orig: 161, 239
+  offset: 20, 46
+  index: 0
+DumbAnger_dir6
+  rotate: false
+  xy: 123, 3633
+  size: 117, 112
+  orig: 161, 239
+  offset: 22, 41
+  index: 0
+DumbAnger_dir7
+  rotate: false
+  xy: 336, 2501
+  size: 106, 110
+  orig: 161, 239
+  offset: 20, 30
+  index: 0
+DynasticCrew_dir0
+  rotate: false
+  xy: 3792, 3975
+  size: 116, 119
+  orig: 161, 239
+  offset: 22, 28
+  index: 0
+DynasticCrew_dir1
+  rotate: false
+  xy: 1186, 2552
+  size: 102, 108
+  orig: 161, 239
+  offset: 42, 28
+  index: 0
+DynasticCrew_dir2
+  rotate: false
+  xy: 3029, 2317
+  size: 98, 122
+  orig: 161, 239
+  offset: 40, 34
+  index: 0
+DynasticCrew_dir3
+  rotate: false
+  xy: 1394, 2037
+  size: 102, 110
+  orig: 161, 239
+  offset: 42, 50
+  index: 0
+DynasticCrew_dir4
+  rotate: false
+  xy: 2730, 3982
+  size: 116, 112
+  orig: 161, 239
+  offset: 22, 52
+  index: 0
+DynasticCrew_dir5
+  rotate: false
+  xy: 1501, 2604
+  size: 102, 110
+  orig: 161, 239
+  offset: 18, 50
+  index: 0
+DynasticCrew_dir6
+  rotate: false
+  xy: 2931, 2490
+  size: 98, 122
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+DynasticCrew_dir7
+  rotate: false
+  xy: 1290, 496
+  size: 102, 108
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+ElectronicHatchet_dir0
+  rotate: false
+  xy: 2823, 372
+  size: 80, 93
+  orig: 161, 239
+  offset: 40, 34
+  index: 0
+ElectronicHatchet_dir1
+  rotate: false
+  xy: 4008, 1155
+  size: 86, 94
+  orig: 161, 239
+  offset: 46, 38
+  index: 0
+ElectronicHatchet_dir2
+  rotate: false
+  xy: 2750, 1460
+  size: 80, 94
+  orig: 161, 239
+  offset: 58, 49
+  index: 0
+ElectronicHatchet_dir3
+  rotate: false
+  xy: 2485, 772
+  size: 86, 100
+  orig: 161, 239
+  offset: 46, 54
+  index: 0
+ElectronicHatchet_dir4
+  rotate: false
+  xy: 2741, 353
+  size: 80, 100
+  orig: 161, 239
+  offset: 40, 64
+  index: 0
+ElectronicHatchet_dir5
+  rotate: false
+  xy: 2485, 109
+  size: 86, 100
+  orig: 161, 239
+  offset: 30, 54
+  index: 0
+ElectronicHatchet_dir6
+  rotate: false
+  xy: 2655, 25
+  size: 80, 94
+  orig: 161, 239
+  offset: 22, 49
+  index: 0
+ElectronicHatchet_dir7
+  rotate: false
+  xy: 4007, 2128
+  size: 86, 94
+  orig: 161, 239
+  offset: 30, 38
+  index: 0
+EnchantedLadyship_dir0
+  rotate: false
+  xy: 3828, 1646
+  size: 92, 123
+  orig: 161, 239
+  offset: 34, 28
+  index: 0
+EnchantedLadyship_dir1
+  rotate: false
+  xy: 3074, 1477
+  size: 92, 102
+  orig: 161, 239
+  offset: 40, 38
+  index: 0
+EnchantedLadyship_dir2
+  rotate: false
+  xy: 1080, 2594
+  size: 104, 101
+  orig: 161, 239
+  offset: 34, 40
+  index: 0
+EnchantedLadyship_dir3
+  rotate: false
+  xy: 3262, 1698
+  size: 92, 100
+  orig: 161, 239
+  offset: 40, 50
+  index: 0
+EnchantedLadyship_dir4
+  rotate: false
+  xy: 3861, 1999
+  size: 92, 123
+  orig: 161, 239
+  offset: 34, 40
+  index: 0
+EnchantedLadyship_dir5
+  rotate: false
+  xy: 3076, 1807
+  size: 92, 100
+  orig: 161, 239
+  offset: 30, 50
+  index: 0
+EnchantedLadyship_dir6
+  rotate: false
+  xy: 975, 3257
+  size: 104, 101
+  orig: 161, 239
+  offset: 22, 40
+  index: 0
+EnchantedLadyship_dir7
+  rotate: false
+  xy: 2886, 1537
+  size: 92, 102
+  orig: 161, 239
+  offset: 30, 38
+  index: 0
+EnsorcelledSultanate_dir0
+  rotate: false
+  xy: 2483, 4
+  size: 86, 103
+  orig: 161, 239
+  offset: 37, 40
+  index: 0
+EnsorcelledSultanate_dir1
+  rotate: false
+  xy: 2573, 454
+  size: 84, 88
+  orig: 161, 239
+  offset: 42, 48
+  index: 0
+EnsorcelledSultanate_dir2
+  rotate: false
+  xy: 2666, 1246
+  size: 86, 94
+  orig: 161, 239
+  offset: 46, 46
+  index: 0
+EnsorcelledSultanate_dir3
+  rotate: false
+  xy: 2573, 544
+  size: 84, 100
+  orig: 161, 239
+  offset: 42, 50
+  index: 0
+EnsorcelledSultanate_dir4
+  rotate: false
+  xy: 2666, 1342
+  size: 86, 109
+  orig: 161, 239
+  offset: 37, 52
+  index: 0
+EnsorcelledSultanate_dir5
+  rotate: false
+  xy: 2573, 646
+  size: 84, 100
+  orig: 161, 239
+  offset: 36, 50
+  index: 0
+EnsorcelledSultanate_dir6
+  rotate: false
+  xy: 2485, 324
+  size: 86, 94
+  orig: 161, 239
+  offset: 28, 46
+  index: 0
+EnsorcelledSultanate_dir7
+  rotate: false
+  xy: 869, 3514
+  size: 84, 88
+  orig: 161, 239
+  offset: 36, 48
+  index: 0
+FatefulDuke_dir0
+  rotate: false
+  xy: 2022, 3977
+  size: 116, 117
+  orig: 161, 239
+  offset: 22, 28
+  index: 0
+FatefulDuke_dir1
+  rotate: false
+  xy: 336, 2613
+  size: 106, 110
+  orig: 161, 239
+  offset: 38, 28
+  index: 0
+FatefulDuke_dir2
+  rotate: false
+  xy: 1505, 2942
+  size: 104, 122
+  orig: 161, 239
+  offset: 34, 33
+  index: 0
+FatefulDuke_dir3
+  rotate: false
+  xy: 228, 2163
+  size: 106, 112
+  orig: 161, 239
+  offset: 38, 48
+  index: 0
+FatefulDuke_dir4
+  rotate: false
+  xy: 724, 3974
+  size: 116, 120
+  orig: 161, 239
+  offset: 22, 44
+  index: 0
+FatefulDuke_dir5
+  rotate: false
+  xy: 228, 2049
+  size: 106, 112
+  orig: 161, 239
+  offset: 18, 48
+  index: 0
+FatefulDuke_dir6
+  rotate: false
+  xy: 548, 6
+  size: 104, 122
+  orig: 161, 239
+  offset: 22, 33
+  index: 0
+FatefulDuke_dir7
+  rotate: false
+  xy: 120, 365
+  size: 106, 110
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+FatefulMoon_dir0
+  rotate: false
+  xy: 3792, 3848
+  size: 116, 125
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+FatefulMoon_dir1
+  rotate: false
+  xy: 3884, 3272
+  size: 108, 110
+  orig: 161, 239
+  offset: 36, 30
+  index: 0
+FatefulMoon_dir2
+  rotate: false
+  xy: 2, 3629
+  size: 119, 122
+  orig: 161, 239
+  offset: 19, 34
+  index: 0
+FatefulMoon_dir3
+  rotate: false
+  xy: 3772, 3146
+  size: 108, 114
+  orig: 161, 239
+  offset: 36, 46
+  index: 0
+FatefulMoon_dir4
+  rotate: false
+  xy: 3320, 3961
+  size: 116, 133
+  orig: 161, 239
+  offset: 22, 31
+  index: 0
+FatefulMoon_dir5
+  rotate: false
+  xy: 3728, 2576
+  size: 108, 114
+  orig: 161, 239
+  offset: 18, 46
+  index: 0
+FatefulMoon_dir6
+  rotate: false
+  xy: 2, 3387
+  size: 117, 122
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+FatefulMoon_dir7
+  rotate: false
+  xy: 3508, 2656
+  size: 108, 110
+  orig: 161, 239
+  offset: 18, 30
+  index: 0
+FederatedBaron_dir0
+  rotate: false
+  xy: 2764, 3510
+  size: 110, 132
+  orig: 161, 239
+  offset: 25, 28
+  index: 0
+FederatedBaron_dir1
+  rotate: false
+  xy: 120, 141
+  size: 106, 110
+  orig: 161, 239
+  offset: 36, 30
+  index: 0
+FederatedBaron_dir2
+  rotate: false
+  xy: 123, 3978
+  size: 119, 116
+  orig: 161, 239
+  offset: 19, 40
+  index: 0
+FederatedBaron_dir3
+  rotate: false
+  xy: 229, 3181
+  size: 106, 112
+  orig: 161, 239
+  offset: 36, 48
+  index: 0
+FederatedBaron_dir4
+  rotate: false
+  xy: 3100, 3229
+  size: 110, 135
+  orig: 161, 239
+  offset: 25, 29
+  index: 0
+FederatedBaron_dir5
+  rotate: false
+  xy: 337, 3065
+  size: 106, 112
+  orig: 161, 239
+  offset: 20, 48
+  index: 0
+FederatedBaron_dir6
+  rotate: false
+  xy: 2, 3511
+  size: 117, 116
+  orig: 161, 239
+  offset: 22, 40
+  index: 0
+FederatedBaron_dir7
+  rotate: false
+  xy: 336, 2839
+  size: 106, 110
+  orig: 161, 239
+  offset: 20, 30
+  index: 0
+FederatedSpark_dir0
+  rotate: false
+  xy: 763, 3008
+  size: 104, 122
+  orig: 161, 239
+  offset: 28, 28
+  index: 0
+FederatedSpark_dir1
+  rotate: false
+  xy: 868, 1919
+  size: 104, 110
+  orig: 161, 239
+  offset: 36, 32
+  index: 0
+FederatedSpark_dir2
+  rotate: false
+  xy: 2540, 3632
+  size: 110, 111
+  orig: 161, 239
+  offset: 28, 42
+  index: 0
+FederatedSpark_dir3
+  rotate: false
+  xy: 1078, 92
+  size: 104, 106
+  orig: 161, 239
+  offset: 36, 48
+  index: 0
+FederatedSpark_dir4
+  rotate: false
+  xy: 760, 1060
+  size: 104, 123
+  orig: 161, 239
+  offset: 28, 40
+  index: 0
+FederatedSpark_dir5
+  rotate: false
+  xy: 1080, 1690
+  size: 104, 106
+  orig: 161, 239
+  offset: 22, 48
+  index: 0
+FederatedSpark_dir6
+  rotate: false
+  xy: 1305, 3738
+  size: 110, 111
+  orig: 161, 239
+  offset: 22, 42
+  index: 0
+FederatedSpark_dir7
+  rotate: false
+  xy: 972, 146
+  size: 104, 110
+  orig: 161, 239
+  offset: 22, 32
+  index: 0
+FertileFather_dir0
+  rotate: false
+  xy: 866, 91
+  size: 104, 124
+  orig: 161, 239
+  offset: 28, 33
+  index: 0
+FertileFather_dir1
+  rotate: false
+  xy: 121, 3513
+  size: 106, 114
+  orig: 161, 239
+  offset: 36, 28
+  index: 0
+FertileFather_dir2
+  rotate: false
+  xy: 1075, 3862
+  size: 113, 118
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+FertileFather_dir3
+  rotate: false
+  xy: 3948, 2802
+  size: 106, 114
+  orig: 161, 239
+  offset: 36, 46
+  index: 0
+FertileFather_dir4
+  rotate: false
+  xy: 762, 1485
+  size: 104, 127
+  orig: 161, 239
+  offset: 28, 34
+  index: 0
+FertileFather_dir5
+  rotate: false
+  xy: 3614, 2489
+  size: 106, 114
+  orig: 161, 239
+  offset: 20, 46
+  index: 0
+FertileFather_dir6
+  rotate: false
+  xy: 3076, 3578
+  size: 113, 118
+  orig: 161, 239
+  offset: 25, 34
+  index: 0
+FertileFather_dir7
+  rotate: false
+  xy: 337, 3179
+  size: 106, 114
+  orig: 161, 239
+  offset: 20, 28
+  index: 0
+FinalGrenade_dir0
+  rotate: false
+  xy: 3548, 3251
+  size: 110, 131
+  orig: 161, 239
+  offset: 25, 28
+  index: 0
+FinalGrenade_dir1
+  rotate: false
+  xy: 228, 2501
+  size: 106, 110
+  orig: 161, 239
+  offset: 36, 32
+  index: 0
+FinalGrenade_dir2
+  rotate: false
+  xy: 3792, 3481
+  size: 116, 115
+  orig: 161, 239
+  offset: 22, 40
+  index: 0
+FinalGrenade_dir3
+  rotate: false
+  xy: 120, 2725
+  size: 106, 112
+  orig: 161, 239
+  offset: 36, 48
+  index: 0
+FinalGrenade_dir4
+  rotate: false
+  xy: 3100, 3366
+  size: 110, 133
+  orig: 161, 239
+  offset: 25, 30
+  index: 0
+FinalGrenade_dir5
+  rotate: false
+  xy: 228, 475
+  size: 106, 112
+  orig: 161, 239
+  offset: 20, 48
+  index: 0
+FinalGrenade_dir6
+  rotate: false
+  xy: 2848, 3759
+  size: 116, 115
+  orig: 161, 239
+  offset: 22, 40
+  index: 0
+FinalGrenade_dir7
+  rotate: false
+  xy: 229, 3521
+  size: 106, 110
+  orig: 161, 239
+  offset: 20, 32
+  index: 0
+FoolishBeast_dir0
+  rotate: false
+  xy: 838, 3728
+  size: 116, 123
+  orig: 161, 239
+  offset: 22, 28
+  index: 0
+FoolishBeast_dir1
+  rotate: false
+  xy: 760, 379
+  size: 104, 112
+  orig: 161, 239
+  offset: 40, 28
+  index: 0
+FoolishBeast_dir2
+  rotate: false
+  xy: 1078, 1001
+  size: 104, 122
+  orig: 161, 239
+  offset: 34, 33
+  index: 0
+FoolishBeast_dir3
+  rotate: false
+  xy: 654, 876
+  size: 104, 110
+  orig: 161, 239
+  offset: 40, 50
+  index: 0
+FoolishBeast_dir4
+  rotate: false
+  xy: 3674, 3620
+  size: 116, 117
+  orig: 161, 239
+  offset: 22, 46
+  index: 0
+FoolishBeast_dir5
+  rotate: false
+  xy: 1622, 3147
+  size: 104, 110
+  orig: 161, 239
+  offset: 18, 50
+  index: 0
+FoolishBeast_dir6
+  rotate: false
+  xy: 974, 1530
+  size: 104, 122
+  orig: 161, 239
+  offset: 22, 33
+  index: 0
+FoolishBeast_dir7
+  rotate: false
+  xy: 550, 2441
+  size: 104, 112
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+ForbiddenAnimist_dir0
+  rotate: false
+  xy: 1404, 3384
+  size: 110, 122
+  orig: 161, 239
+  offset: 25, 34
+  index: 0
+ForbiddenAnimist_dir1
+  rotate: false
+  xy: 3178, 2784
+  size: 108, 114
+  orig: 161, 239
+  offset: 36, 28
+  index: 0
+ForbiddenAnimist_dir2
+  rotate: false
+  xy: 2961, 3601
+  size: 113, 122
+  orig: 161, 239
+  offset: 25, 33
+  index: 0
+ForbiddenAnimist_dir3
+  rotate: false
+  xy: 3398, 2880
+  size: 108, 112
+  orig: 161, 239
+  offset: 36, 48
+  index: 0
+ForbiddenAnimist_dir4
+  rotate: false
+  xy: 2204, 3615
+  size: 110, 119
+  orig: 161, 239
+  offset: 25, 43
+  index: 0
+ForbiddenAnimist_dir5
+  rotate: false
+  xy: 3432, 2994
+  size: 108, 112
+  orig: 161, 239
+  offset: 18, 48
+  index: 0
+ForbiddenAnimist_dir6
+  rotate: false
+  xy: 1190, 3847
+  size: 113, 122
+  orig: 161, 239
+  offset: 22, 33
+  index: 0
+ForbiddenAnimist_dir7
+  rotate: false
+  xy: 2738, 3029
+  size: 108, 114
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+ForbiddenBrotherhood_dir0
+  rotate: false
+  xy: 4016, 1781
+  size: 74, 119
+  orig: 161, 239
+  offset: 43, 28
+  index: 0
+ForbiddenBrotherhood_dir1
+  rotate: false
+  xy: 2615, 2271
+  size: 96, 100
+  orig: 161, 239
+  offset: 38, 40
+  index: 0
+ForbiddenBrotherhood_dir2
+  rotate: false
+  xy: 760, 289
+  size: 104, 88
+  orig: 161, 239
+  offset: 34, 55
+  index: 0
+ForbiddenBrotherhood_dir3
+  rotate: false
+  xy: 2199, 457
+  size: 96, 108
+  orig: 161, 239
+  offset: 38, 48
+  index: 0
+ForbiddenBrotherhood_dir4
+  rotate: false
+  xy: 2897, 960
+  size: 74, 120
+  orig: 161, 239
+  offset: 43, 44
+  index: 0
+ForbiddenBrotherhood_dir5
+  rotate: false
+  xy: 2199, 779
+  size: 96, 108
+  orig: 161, 239
+  offset: 28, 48
+  index: 0
+ForbiddenBrotherhood_dir6
+  rotate: false
+  xy: 444, 2549
+  size: 104, 88
+  orig: 161, 239
+  offset: 22, 55
+  index: 0
+ForbiddenBrotherhood_dir7
+  rotate: false
+  xy: 2003, 217
+  size: 96, 100
+  orig: 161, 239
+  offset: 28, 40
+  index: 0
+ForebodingFiefdom_dir0
+  rotate: false
+  xy: 1187, 2772
+  size: 104, 104
+  orig: 161, 239
+  offset: 28, 33
+  index: 0
+ForebodingFiefdom_dir1
+  rotate: false
+  xy: 1394, 1927
+  size: 102, 108
+  orig: 161, 239
+  offset: 40, 28
+  index: 0
+ForebodingFiefdom_dir2
+  rotate: false
+  xy: 1915, 2669
+  size: 98, 118
+  orig: 161, 239
+  offset: 40, 34
+  index: 0
+ForebodingFiefdom_dir3
+  rotate: false
+  xy: 1290, 1600
+  size: 102, 110
+  orig: 161, 239
+  offset: 40, 50
+  index: 0
+ForebodingFiefdom_dir4
+  rotate: false
+  xy: 1184, 794
+  size: 104, 114
+  orig: 161, 239
+  offset: 28, 50
+  index: 0
+ForebodingFiefdom_dir5
+  rotate: false
+  xy: 1290, 1824
+  size: 102, 110
+  orig: 161, 239
+  offset: 20, 50
+  index: 0
+ForebodingFiefdom_dir6
+  rotate: false
+  xy: 2315, 2362
+  size: 98, 118
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+ForebodingFiefdom_dir7
+  rotate: false
+  xy: 1186, 1674
+  size: 102, 108
+  orig: 161, 239
+  offset: 20, 28
+  index: 0
+GloriousHeroine_dir0
+  rotate: false
+  xy: 762, 2553
+  size: 104, 116
+  orig: 161, 239
+  offset: 28, 31
+  index: 0
+GloriousHeroine_dir1
+  rotate: false
+  xy: 2103, 1069
+  size: 96, 106
+  orig: 161, 239
+  offset: 44, 30
+  index: 0
+GloriousHeroine_dir2
+  rotate: false
+  xy: 1906, 1888
+  size: 98, 113
+  orig: 161, 239
+  offset: 40, 36
+  index: 0
+GloriousHeroine_dir3
+  rotate: false
+  xy: 2199, 241
+  size: 96, 104
+  orig: 161, 239
+  offset: 44, 52
+  index: 0
+GloriousHeroine_dir4
+  rotate: false
+  xy: 656, 1977
+  size: 104, 111
+  orig: 161, 239
+  offset: 28, 52
+  index: 0
+GloriousHeroine_dir5
+  rotate: false
+  xy: 1904, 19
+  size: 96, 104
+  orig: 161, 239
+  offset: 22, 52
+  index: 0
+GloriousHeroine_dir6
+  rotate: false
+  xy: 2406, 2093
+  size: 98, 113
+  orig: 161, 239
+  offset: 22, 36
+  index: 0
+GloriousHeroine_dir7
+  rotate: false
+  xy: 2915, 2289
+  size: 96, 106
+  orig: 161, 239
+  offset: 22, 30
+  index: 0
+GloriousStorm_dir0
+  rotate: false
+  xy: 656, 1858
+  size: 104, 117
+  orig: 161, 239
+  offset: 28, 40
+  index: 0
+GloriousStorm_dir1
+  rotate: false
+  xy: 3658, 2951
+  size: 108, 112
+  orig: 161, 239
+  offset: 36, 30
+  index: 0
+GloriousStorm_dir2
+  rotate: false
+  xy: 2, 318
+  size: 116, 116
+  orig: 161, 239
+  offset: 22, 36
+  index: 0
+GloriousStorm_dir3
+  rotate: false
+  xy: 2958, 2857
+  size: 108, 112
+  orig: 161, 239
+  offset: 36, 48
+  index: 0
+GloriousStorm_dir4
+  rotate: false
+  xy: 548, 1003
+  size: 104, 129
+  orig: 161, 239
+  offset: 28, 34
+  index: 0
+GloriousStorm_dir5
+  rotate: false
+  xy: 2958, 2971
+  size: 108, 112
+  orig: 161, 239
+  offset: 18, 48
+  index: 0
+GloriousStorm_dir6
+  rotate: false
+  xy: 3202, 3845
+  size: 116, 116
+  orig: 161, 239
+  offset: 22, 36
+  index: 0
+GloriousStorm_dir7
+  rotate: false
+  xy: 2518, 3041
+  size: 108, 112
+  orig: 161, 239
+  offset: 18, 30
+  index: 0
+GlowingEmira_dir0
+  rotate: false
+  xy: 242, 3633
+  size: 116, 112
+  orig: 161, 239
+  offset: 22, 31
+  index: 0
+GlowingEmira_dir1
+  rotate: false
+  xy: 2602, 1755
+  size: 94, 104
+  orig: 161, 239
+  offset: 50, 30
+  index: 0
+GlowingEmira_dir2
+  rotate: false
+  xy: 3828, 1522
+  size: 92, 122
+  orig: 161, 239
+  offset: 46, 34
+  index: 0
+GlowingEmira_dir3
+  rotate: false
+  xy: 2602, 2067
+  size: 94, 100
+  orig: 161, 239
+  offset: 50, 60
+  index: 0
+GlowingEmira_dir4
+  rotate: false
+  xy: 720, 3763
+  size: 116, 99
+  orig: 161, 239
+  offset: 22, 64
+  index: 0
+GlowingEmira_dir5
+  rotate: false
+  xy: 2506, 1834
+  size: 94, 100
+  orig: 161, 239
+  offset: 18, 60
+  index: 0
+GlowingEmira_dir6
+  rotate: false
+  xy: 3640, 1615
+  size: 92, 122
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+GlowingEmira_dir7
+  rotate: false
+  xy: 2506, 1936
+  size: 94, 104
+  orig: 161, 239
+  offset: 18, 30
+  index: 0
+GlowingLordship_dir0
+  rotate: false
+  xy: 1805, 412
+  size: 98, 112
+  orig: 161, 239
+  offset: 31, 31
+  index: 0
+GlowingLordship_dir1
+  rotate: false
+  xy: 1905, 651
+  size: 96, 104
+  orig: 161, 239
+  offset: 46, 30
+  index: 0
+GlowingLordship_dir2
+  rotate: false
+  xy: 3673, 2034
+  size: 92, 108
+  orig: 161, 239
+  offset: 46, 41
+  index: 0
+GlowingLordship_dir3
+  rotate: false
+  xy: 2002, 109
+  size: 96, 106
+  orig: 161, 239
+  offset: 46, 52
+  index: 0
+GlowingLordship_dir4
+  rotate: false
+  xy: 1806, 1983
+  size: 98, 112
+  orig: 161, 239
+  offset: 31, 52
+  index: 0
+GlowingLordship_dir5
+  rotate: false
+  xy: 2201, 1099
+  size: 96, 106
+  orig: 161, 239
+  offset: 20, 52
+  index: 0
+GlowingLordship_dir6
+  rotate: false
+  xy: 3922, 1653
+  size: 92, 108
+  orig: 161, 239
+  offset: 22, 41
+  index: 0
+GlowingLordship_dir7
+  rotate: false
+  xy: 2104, 1593
+  size: 96, 104
+  orig: 161, 239
+  offset: 20, 30
+  index: 0
+GlowingRuler_dir0
+  rotate: false
+  xy: 3674, 3849
+  size: 116, 123
+  orig: 161, 239
+  offset: 22, 28
+  index: 0
+GlowingRuler_dir1
+  rotate: false
+  xy: 442, 220
+  size: 104, 110
+  orig: 161, 239
+  offset: 40, 30
+  index: 0
+GlowingRuler_dir2
+  rotate: false
+  xy: 1080, 1472
+  size: 104, 121
+  orig: 161, 239
+  offset: 34, 34
+  index: 0
+GlowingRuler_dir3
+  rotate: false
+  xy: 654, 1077
+  size: 104, 106
+  orig: 161, 239
+  offset: 40, 54
+  index: 0
+GlowingRuler_dir4
+  rotate: false
+  xy: 3792, 3722
+  size: 116, 124
+  orig: 161, 239
+  offset: 22, 40
+  index: 0
+GlowingRuler_dir5
+  rotate: false
+  xy: 551, 3024
+  size: 104, 106
+  orig: 161, 239
+  offset: 18, 54
+  index: 0
+GlowingRuler_dir6
+  rotate: false
+  xy: 974, 1768
+  size: 104, 121
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+GlowingRuler_dir7
+  rotate: false
+  xy: 548, 130
+  size: 104, 110
+  orig: 161, 239
+  offset: 18, 30
+  index: 0
+GodlyDuchy_dir0
+  rotate: false
+  xy: 2988, 3201
+  size: 110, 126
+  orig: 161, 239
+  offset: 25, 31
+  index: 0
+GodlyDuchy_dir1
+  rotate: false
+  xy: 337, 2951
+  size: 106, 112
+  orig: 161, 239
+  offset: 36, 28
+  index: 0
+GodlyDuchy_dir2
+  rotate: false
+  xy: 3438, 3726
+  size: 116, 119
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+GodlyDuchy_dir3
+  rotate: false
+  xy: 229, 2953
+  size: 106, 110
+  orig: 161, 239
+  offset: 36, 48
+  index: 0
+GodlyDuchy_dir4
+  rotate: false
+  xy: 3212, 3361
+  size: 110, 129
+  orig: 161, 239
+  offset: 25, 34
+  index: 0
+GodlyDuchy_dir5
+  rotate: false
+  xy: 228, 1367
+  size: 106, 110
+  orig: 161, 239
+  offset: 20, 48
+  index: 0
+GodlyDuchy_dir6
+  rotate: false
+  xy: 2730, 3861
+  size: 116, 119
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+GodlyDuchy_dir7
+  rotate: false
+  xy: 120, 2391
+  size: 106, 112
+  orig: 161, 239
+  offset: 20, 28
+  index: 0
+GodlyFederation_dir0
+  rotate: false
+  xy: 3076, 1909
+  size: 92, 117
+  orig: 161, 239
+  offset: 34, 34
+  index: 0
+GodlyFederation_dir1
+  rotate: false
+  xy: 1905, 233
+  size: 96, 100
+  orig: 161, 239
+  offset: 38, 38
+  index: 0
+GodlyFederation_dir2
+  rotate: false
+  xy: 866, 337
+  size: 104, 98
+  orig: 161, 239
+  offset: 34, 52
+  index: 0
+GodlyFederation_dir3
+  rotate: false
+  xy: 2003, 749
+  size: 96, 106
+  orig: 161, 239
+  offset: 38, 50
+  index: 0
+GodlyFederation_dir4
+  rotate: false
+  xy: 3732, 1328
+  size: 92, 121
+  orig: 161, 239
+  offset: 34, 40
+  index: 0
+GodlyFederation_dir5
+  rotate: false
+  xy: 2003, 641
+  size: 96, 106
+  orig: 161, 239
+  offset: 28, 50
+  index: 0
+GodlyFederation_dir6
+  rotate: false
+  xy: 1184, 910
+  size: 104, 98
+  orig: 161, 239
+  offset: 22, 52
+  index: 0
+GodlyFederation_dir7
+  rotate: false
+  xy: 1905, 443
+  size: 96, 100
+  orig: 161, 239
+  offset: 28, 38
+  index: 0
+GodlyGlyph_dir0
+  rotate: false
+  xy: 1740, 3468
+  size: 110, 109
+  orig: 161, 239
+  offset: 25, 34
+  index: 0
+GodlyGlyph_dir1
+  rotate: false
+  xy: 1925, 2789
+  size: 100, 108
+  orig: 161, 239
+  offset: 44, 28
+  index: 0
+GodlyGlyph_dir2
+  rotate: false
+  xy: 2297, 213
+  size: 92, 123
+  orig: 161, 239
+  offset: 46, 33
+  index: 0
+GodlyGlyph_dir3
+  rotate: false
+  xy: 1925, 2899
+  size: 100, 104
+  orig: 161, 239
+  offset: 44, 56
+  index: 0
+GodlyGlyph_dir4
+  rotate: false
+  xy: 1516, 3274
+  size: 110, 97
+  orig: 161, 239
+  offset: 25, 64
+  index: 0
+GodlyGlyph_dir5
+  rotate: false
+  xy: 1702, 170
+  size: 100, 104
+  orig: 161, 239
+  offset: 18, 56
+  index: 0
+GodlyGlyph_dir6
+  rotate: false
+  xy: 3262, 1451
+  size: 92, 123
+  orig: 161, 239
+  offset: 22, 33
+  index: 0
+GodlyGlyph_dir7
+  rotate: false
+  xy: 1702, 60
+  size: 100, 108
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+GodlyLordship_dir0
+  rotate: false
+  xy: 2494, 3965
+  size: 116, 129
+  orig: 161, 239
+  offset: 22, 28
+  index: 0
+GodlyLordship_dir1
+  rotate: false
+  xy: 3728, 2692
+  size: 108, 112
+  orig: 161, 239
+  offset: 36, 28
+  index: 0
+GodlyLordship_dir2
+  rotate: false
+  xy: 484, 3763
+  size: 116, 123
+  orig: 161, 239
+  offset: 22, 33
+  index: 0
+GodlyLordship_dir3
+  rotate: false
+  xy: 3068, 2760
+  size: 108, 114
+  orig: 161, 239
+  offset: 36, 46
+  index: 0
+GodlyLordship_dir4
+  rotate: false
+  xy: 1314, 3966
+  size: 116, 128
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+GodlyLordship_dir5
+  rotate: false
+  xy: 1962, 3117
+  size: 108, 114
+  orig: 161, 239
+  offset: 18, 46
+  index: 0
+GodlyLordship_dir6
+  rotate: false
+  xy: 3320, 3617
+  size: 116, 123
+  orig: 161, 239
+  offset: 22, 33
+  index: 0
+GodlyLordship_dir7
+  rotate: false
+  xy: 3068, 2876
+  size: 108, 112
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+GoodGang_dir0
+  rotate: false
+  xy: 1806, 2217
+  size: 98, 106
+  orig: 161, 239
+  offset: 31, 33
+  index: 0
+GoodGang_dir1
+  rotate: false
+  xy: 2101, 337
+  size: 96, 100
+  orig: 161, 239
+  offset: 44, 38
+  index: 0
+GoodGang_dir2
+  rotate: false
+  xy: 2888, 1967
+  size: 92, 106
+  orig: 161, 239
+  offset: 46, 46
+  index: 0
+GoodGang_dir3
+  rotate: false
+  xy: 2201, 1315
+  size: 96, 104
+  orig: 161, 239
+  offset: 44, 56
+  index: 0
+GoodGang_dir4
+  rotate: false
+  xy: 1905, 1081
+  size: 98, 106
+  orig: 161, 239
+  offset: 31, 58
+  index: 0
+GoodGang_dir5
+  rotate: false
+  xy: 2003, 535
+  size: 96, 104
+  orig: 161, 239
+  offset: 22, 56
+  index: 0
+GoodGang_dir6
+  rotate: false
+  xy: 3638, 1407
+  size: 92, 106
+  orig: 161, 239
+  offset: 22, 46
+  index: 0
+GoodGang_dir7
+  rotate: false
+  xy: 2103, 1177
+  size: 96, 100
+  orig: 161, 239
+  offset: 22, 38
+  index: 0
+GrandStar_dir0
+  rotate: false
+  xy: 2076, 3159
+  size: 110, 105
+  orig: 161, 239
+  offset: 25, 28
+  index: 0
+GrandStar_dir1
+  rotate: false
+  xy: 2006, 1599
+  size: 96, 100
+  orig: 161, 239
+  offset: 48, 30
+  index: 0
+GrandStar_dir2
+  rotate: false
+  xy: 3168, 1573
+  size: 92, 115
+  orig: 161, 239
+  offset: 46, 37
+  index: 0
+GrandStar_dir3
+  rotate: false
+  xy: 1905, 335
+  size: 96, 106
+  orig: 161, 239
+  offset: 48, 54
+  index: 0
+GrandStar_dir4
+  rotate: false
+  xy: 2428, 3497
+  size: 110, 105
+  orig: 161, 239
+  offset: 25, 58
+  index: 0
+GrandStar_dir5
+  rotate: false
+  xy: 1905, 757
+  size: 96, 106
+  orig: 161, 239
+  offset: 18, 54
+  index: 0
+GrandStar_dir6
+  rotate: false
+  xy: 2391, 190
+  size: 92, 115
+  orig: 161, 239
+  offset: 22, 37
+  index: 0
+GrandStar_dir7
+  rotate: false
+  xy: 2201, 1421
+  size: 96, 100
+  orig: 161, 239
+  offset: 18, 30
+  index: 0
+GreatFlail_dir0
+  rotate: false
+  xy: 868, 1576
+  size: 104, 117
+  orig: 161, 239
+  offset: 28, 28
+  index: 0
+GreatFlail_dir1
+  rotate: false
+  xy: 120, 1825
+  size: 106, 112
+  orig: 161, 239
+  offset: 38, 28
+  index: 0
+GreatFlail_dir2
+  rotate: false
+  xy: 763, 3244
+  size: 104, 121
+  orig: 161, 239
+  offset: 34, 34
+  index: 0
+GreatFlail_dir3
+  rotate: false
+  xy: 336, 1707
+  size: 106, 110
+  orig: 161, 239
+  offset: 38, 50
+  index: 0
+GreatFlail_dir4
+  rotate: false
+  xy: 1081, 2908
+  size: 104, 117
+  orig: 161, 239
+  offset: 28, 46
+  index: 0
+GreatFlail_dir5
+  rotate: false
+  xy: 228, 2727
+  size: 106, 110
+  orig: 161, 239
+  offset: 18, 50
+  index: 0
+GreatFlail_dir6
+  rotate: false
+  xy: 1080, 2363
+  size: 104, 121
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+GreatFlail_dir7
+  rotate: false
+  xy: 336, 1481
+  size: 106, 112
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+HarmoniousKingdom_dir0
+  rotate: false
+  xy: 2819, 233
+  size: 80, 118
+  orig: 161, 239
+  offset: 40, 33
+  index: 0
+HarmoniousKingdom_dir1
+  rotate: false
+  xy: 1601, 438
+  size: 100, 106
+  orig: 161, 239
+  offset: 36, 34
+  index: 0
+HarmoniousKingdom_dir2
+  rotate: false
+  xy: 3660, 3181
+  size: 110, 95
+  orig: 161, 239
+  offset: 28, 48
+  index: 0
+HarmoniousKingdom_dir3
+  rotate: false
+  xy: 1601, 874
+  size: 100, 108
+  orig: 161, 239
+  offset: 36, 46
+  index: 0
+HarmoniousKingdom_dir4
+  rotate: false
+  xy: 2739, 927
+  size: 80, 124
+  orig: 161, 239
+  offset: 40, 38
+  index: 0
+HarmoniousKingdom_dir5
+  rotate: false
+  xy: 1601, 1306
+  size: 100, 108
+  orig: 161, 239
+  offset: 26, 46
+  index: 0
+HarmoniousKingdom_dir6
+  rotate: false
+  xy: 2876, 3255
+  size: 110, 95
+  orig: 161, 239
+  offset: 22, 48
+  index: 0
+HarmoniousKingdom_dir7
+  rotate: false
+  xy: 1704, 1902
+  size: 100, 106
+  orig: 161, 239
+  offset: 26, 34
+  index: 0
+HarmoniousVengeance_dir0
+  rotate: false
+  xy: 866, 882
+  size: 104, 128
+  orig: 161, 239
+  offset: 28, 28
+  index: 0
+HarmoniousVengeance_dir1
+  rotate: false
+  xy: 1080, 2697
+  size: 104, 104
+  orig: 161, 239
+  offset: 38, 38
+  index: 0
+HarmoniousVengeance_dir2
+  rotate: false
+  xy: 960, 3871
+  size: 113, 112
+  orig: 161, 239
+  offset: 25, 43
+  index: 0
+HarmoniousVengeance_dir3
+  rotate: false
+  xy: 445, 3406
+  size: 104, 108
+  orig: 161, 239
+  offset: 38, 52
+  index: 0
+HarmoniousVengeance_dir4
+  rotate: false
+  xy: 762, 1848
+  size: 104, 120
+  orig: 161, 239
+  offset: 28, 43
+  index: 0
+HarmoniousVengeance_dir5
+  rotate: false
+  xy: 1184, 136
+  size: 104, 108
+  orig: 161, 239
+  offset: 20, 52
+  index: 0
+HarmoniousVengeance_dir6
+  rotate: false
+  xy: 3191, 3501
+  size: 113, 112
+  orig: 161, 239
+  offset: 22, 43
+  index: 0
+HarmoniousVengeance_dir7
+  rotate: false
+  xy: 1184, 586
+  size: 104, 104
+  orig: 161, 239
+  offset: 20, 38
+  index: 0
+HegemonicDeity_dir0
+  rotate: false
+  xy: 2823, 578
+  size: 80, 117
+  orig: 161, 239
+  offset: 40, 34
+  index: 0
+HegemonicDeity_dir1
+  rotate: false
+  xy: 2629, 2487
+  size: 98, 108
+  orig: 161, 239
+  offset: 40, 32
+  index: 0
+HegemonicDeity_dir2
+  rotate: false
+  xy: 1080, 1798
+  size: 104, 103
+  orig: 161, 239
+  offset: 34, 46
+  index: 0
+HegemonicDeity_dir3
+  rotate: false
+  xy: 2731, 2591
+  size: 98, 102
+  orig: 161, 239
+  offset: 40, 54
+  index: 0
+HegemonicDeity_dir4
+  rotate: false
+  xy: 2741, 455
+  size: 80, 118
+  orig: 161, 239
+  offset: 40, 46
+  index: 0
+HegemonicDeity_dir5
+  rotate: false
+  xy: 1804, 210
+  size: 98, 102
+  orig: 161, 239
+  offset: 24, 54
+  index: 0
+HegemonicDeity_dir6
+  rotate: false
+  xy: 1081, 2803
+  size: 104, 103
+  orig: 161, 239
+  offset: 22, 46
+  index: 0
+HegemonicDeity_dir7
+  rotate: false
+  xy: 1805, 974
+  size: 98, 108
+  orig: 161, 239
+  offset: 24, 32
+  index: 0
+HegemonicEye_dir0
+  rotate: false
+  xy: 444, 1837
+  size: 104, 123
+  orig: 161, 239
+  offset: 28, 28
+  index: 0
+HegemonicEye_dir1
+  rotate: false
+  xy: 1184, 472
+  size: 104, 112
+  orig: 161, 239
+  offset: 38, 28
+  index: 0
+HegemonicEye_dir2
+  rotate: false
+  xy: 2258, 3982
+  size: 116, 112
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+HegemonicEye_dir3
+  rotate: false
+  xy: 1078, 895
+  size: 104, 104
+  orig: 161, 239
+  offset: 38, 48
+  index: 0
+HegemonicEye_dir4
+  rotate: false
+  xy: 654, 742
+  size: 104, 132
+  orig: 161, 239
+  offset: 28, 32
+  index: 0
+HegemonicEye_dir5
+  rotate: false
+  xy: 1080, 2257
+  size: 104, 104
+  orig: 161, 239
+  offset: 20, 48
+  index: 0
+HegemonicEye_dir6
+  rotate: false
+  xy: 1078, 3982
+  size: 116, 112
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+HegemonicEye_dir7
+  rotate: false
+  xy: 1399, 3031
+  size: 104, 112
+  orig: 161, 239
+  offset: 20, 28
+  index: 0
+HeinousTorture_dir0
+  rotate: false
+  xy: 3674, 3404
+  size: 116, 129
+  orig: 161, 239
+  offset: 22, 28
+  index: 0
+HeinousTorture_dir1
+  rotate: false
+  xy: 3838, 2696
+  size: 108, 112
+  orig: 161, 239
+  offset: 36, 28
+  index: 0
+HeinousTorture_dir2
+  rotate: false
+  xy: 1668, 3972
+  size: 116, 122
+  orig: 161, 239
+  offset: 22, 33
+  index: 0
+HeinousTorture_dir3
+  rotate: false
+  xy: 2628, 3245
+  size: 108, 112
+  orig: 161, 239
+  offset: 36, 48
+  index: 0
+HeinousTorture_dir4
+  rotate: false
+  xy: 2, 658
+  size: 116, 131
+  orig: 161, 239
+  offset: 22, 32
+  index: 0
+HeinousTorture_dir5
+  rotate: false
+  xy: 2738, 2915
+  size: 108, 112
+  orig: 161, 239
+  offset: 18, 48
+  index: 0
+HeinousTorture_dir6
+  rotate: false
+  xy: 2, 1004
+  size: 116, 122
+  orig: 161, 239
+  offset: 22, 33
+  index: 0
+HeinousTorture_dir7
+  rotate: false
+  xy: 3728, 2806
+  size: 108, 112
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+HorribleMonster_dir0
+  rotate: false
+  xy: 1404, 3268
+  size: 110, 114
+  orig: 161, 239
+  offset: 25, 31
+  index: 0
+HorribleMonster_dir1
+  rotate: false
+  xy: 336, 2725
+  size: 106, 112
+  orig: 161, 239
+  offset: 38, 28
+  index: 0
+HorribleMonster_dir2
+  rotate: false
+  xy: 572, 3626
+  size: 104, 123
+  orig: 161, 239
+  offset: 34, 33
+  index: 0
+HorribleMonster_dir3
+  rotate: false
+  xy: 337, 3407
+  size: 106, 112
+  orig: 161, 239
+  offset: 38, 48
+  index: 0
+HorribleMonster_dir4
+  rotate: false
+  xy: 1980, 3599
+  size: 110, 123
+  orig: 161, 239
+  offset: 25, 40
+  index: 0
+HorribleMonster_dir5
+  rotate: false
+  xy: 228, 245
+  size: 106, 112
+  orig: 161, 239
+  offset: 18, 48
+  index: 0
+HorribleMonster_dir6
+  rotate: false
+  xy: 548, 242
+  size: 104, 123
+  orig: 161, 239
+  offset: 22, 33
+  index: 0
+HorribleMonster_dir7
+  rotate: false
+  xy: 228, 589
+  size: 106, 112
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+IncomprehensibleCommonwealth_dir0
+  rotate: false
+  xy: 3262, 1576
+  size: 92, 120
+  orig: 161, 239
+  offset: 34, 28
+  index: 0
+IncomprehensibleCommonwealth_dir1
+  rotate: false
+  xy: 2299, 1093
+  size: 96, 104
+  orig: 161, 239
+  offset: 36, 38
+  index: 0
+IncomprehensibleCommonwealth_dir2
+  rotate: false
+  xy: 3397, 2657
+  size: 107, 107
+  orig: 161, 239
+  offset: 31, 42
+  index: 0
+IncomprehensibleCommonwealth_dir3
+  rotate: false
+  xy: 2300, 1513
+  size: 96, 110
+  orig: 161, 239
+  offset: 36, 48
+  index: 0
+IncomprehensibleCommonwealth_dir4
+  rotate: false
+  xy: 2980, 1504
+  size: 92, 119
+  orig: 161, 239
+  offset: 34, 43
+  index: 0
+IncomprehensibleCommonwealth_dir5
+  rotate: false
+  xy: 2101, 225
+  size: 96, 110
+  orig: 161, 239
+  offset: 30, 48
+  index: 0
+IncomprehensibleCommonwealth_dir6
+  rotate: false
+  xy: 3288, 2677
+  size: 107, 107
+  orig: 161, 239
+  offset: 22, 42
+  index: 0
+IncomprehensibleCommonwealth_dir7
+  rotate: false
+  xy: 2304, 1625
+  size: 96, 104
+  orig: 161, 239
+  offset: 30, 38
+  index: 0
+IncomprehensibleMindfulness_dir0
+  rotate: false
+  xy: 2431, 2805
+  size: 98, 118
+  orig: 161, 239
+  offset: 31, 33
+  index: 0
+IncomprehensibleMindfulness_dir1
+  rotate: false
+  xy: 1290, 1040
+  size: 102, 110
+  orig: 161, 239
+  offset: 40, 30
+  index: 0
+IncomprehensibleMindfulness_dir2
+  rotate: false
+  xy: 3990, 3159
+  size: 104, 111
+  orig: 161, 239
+  offset: 34, 41
+  index: 0
+IncomprehensibleMindfulness_dir3
+  rotate: false
+  xy: 1394, 1821
+  size: 102, 104
+  orig: 161, 239
+  offset: 40, 54
+  index: 0
+IncomprehensibleMindfulness_dir4
+  rotate: false
+  xy: 2006, 1701
+  size: 98, 118
+  orig: 161, 239
+  offset: 31, 46
+  index: 0
+IncomprehensibleMindfulness_dir5
+  rotate: false
+  xy: 1394, 2471
+  size: 102, 104
+  orig: 161, 239
+  offset: 20, 54
+  index: 0
+IncomprehensibleMindfulness_dir6
+  rotate: false
+  xy: 1078, 200
+  size: 104, 111
+  orig: 161, 239
+  offset: 22, 41
+  index: 0
+IncomprehensibleMindfulness_dir7
+  rotate: false
+  xy: 1290, 2588
+  size: 102, 110
+  orig: 161, 239
+  offset: 20, 30
+  index: 0
+IndescribableForce_dir0
+  rotate: false
+  xy: 4016, 1669
+  size: 74, 110
+  orig: 161, 239
+  offset: 43, 34
+  index: 0
+IndescribableForce_dir1
+  rotate: false
+  xy: 2231, 2832
+  size: 98, 104
+  orig: 161, 239
+  offset: 38, 36
+  index: 0
+IndescribableForce_dir2
+  rotate: false
+  xy: 1498, 1295
+  size: 101, 89
+  orig: 161, 239
+  offset: 37, 54
+  index: 0
+IndescribableForce_dir3
+  rotate: false
+  xy: 1905, 1189
+  size: 98, 104
+  orig: 161, 239
+  offset: 38, 50
+  index: 0
+IndescribableForce_dir4
+  rotate: false
+  xy: 2973, 965
+  size: 74, 115
+  orig: 161, 239
+  offset: 43, 49
+  index: 0
+IndescribableForce_dir5
+  rotate: false
+  xy: 2006, 1821
+  size: 98, 104
+  orig: 161, 239
+  offset: 26, 50
+  index: 0
+IndescribableForce_dir6
+  rotate: false
+  xy: 1498, 1386
+  size: 101, 89
+  orig: 161, 239
+  offset: 22, 54
+  index: 0
+IndescribableForce_dir7
+  rotate: false
+  xy: 2515, 2454
+  size: 98, 104
+  orig: 161, 239
+  offset: 26, 36
+  index: 0
+IndescribableHighwayman_dir0
+  rotate: false
+  xy: 3070, 1359
+  size: 68, 116
+  orig: 161, 239
+  offset: 46, 31
+  index: 0
+IndescribableHighwayman_dir1
+  rotate: false
+  xy: 3193, 2010
+  size: 94, 100
+  orig: 161, 239
+  offset: 40, 38
+  index: 0
+IndescribableHighwayman_dir2
+  rotate: false
+  xy: 444, 1441
+  size: 104, 77
+  orig: 161, 239
+  offset: 34, 64
+  index: 0
+IndescribableHighwayman_dir3
+  rotate: false
+  xy: 3097, 2028
+  size: 94, 102
+  orig: 161, 239
+  offset: 40, 48
+  index: 0
+IndescribableHighwayman_dir4
+  rotate: false
+  xy: 3000, 1380
+  size: 68, 122
+  orig: 161, 239
+  offset: 46, 40
+  index: 0
+IndescribableHighwayman_dir5
+  rotate: false
+  xy: 3001, 2075
+  size: 94, 102
+  orig: 161, 239
+  offset: 28, 48
+  index: 0
+IndescribableHighwayman_dir6
+  rotate: false
+  xy: 1293, 2812
+  size: 104, 77
+  orig: 161, 239
+  offset: 22, 64
+  index: 0
+IndescribableHighwayman_dir7
+  rotate: false
+  xy: 2602, 1965
+  size: 94, 100
+  orig: 161, 239
+  offset: 28, 38
+  index: 0
+LastDeity_dir0
+  rotate: false
+  xy: 2531, 2666
+  size: 98, 119
+  orig: 161, 239
+  offset: 31, 28
+  index: 0
+LastDeity_dir1
+  rotate: false
+  xy: 1186, 2226
+  size: 102, 106
+  orig: 161, 239
+  offset: 38, 34
+  index: 0
+LastDeity_dir2
+  rotate: false
+  xy: 548, 475
+  size: 104, 108
+  orig: 161, 239
+  offset: 34, 42
+  index: 0
+LastDeity_dir3
+  rotate: false
+  xy: 1394, 723
+  size: 102, 108
+  orig: 161, 239
+  offset: 38, 50
+  index: 0
+LastDeity_dir4
+  rotate: false
+  xy: 1806, 1772
+  size: 98, 114
+  orig: 161, 239
+  offset: 31, 46
+  index: 0
+LastDeity_dir5
+  rotate: false
+  xy: 1394, 939
+  size: 102, 108
+  orig: 161, 239
+  offset: 22, 50
+  index: 0
+LastDeity_dir6
+  rotate: false
+  xy: 866, 1012
+  size: 104, 108
+  orig: 161, 239
+  offset: 22, 42
+  index: 0
+LastDeity_dir7
+  rotate: false
+  xy: 1186, 2118
+  size: 102, 106
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+LoathedFiend_dir0
+  rotate: false
+  xy: 2741, 575
+  size: 80, 113
+  orig: 161, 239
+  offset: 40, 34
+  index: 0
+LoathedFiend_dir1
+  rotate: false
+  xy: 1823, 2884
+  size: 100, 108
+  orig: 161, 239
+  offset: 38, 32
+  index: 0
+LoathedFiend_dir2
+  rotate: false
+  xy: 975, 3053
+  size: 104, 94
+  orig: 161, 239
+  offset: 34, 49
+  index: 0
+LoathedFiend_dir3
+  rotate: false
+  xy: 1704, 2330
+  size: 100, 102
+  orig: 161, 239
+  offset: 38, 50
+  index: 0
+LoathedFiend_dir4
+  rotate: false
+  xy: 2743, 808
+  size: 80, 117
+  orig: 161, 239
+  offset: 40, 46
+  index: 0
+LoathedFiend_dir5
+  rotate: false
+  xy: 1602, 2070
+  size: 100, 102
+  orig: 161, 239
+  offset: 24, 50
+  index: 0
+LoathedFiend_dir6
+  rotate: false
+  xy: 869, 3305
+  size: 104, 94
+  orig: 161, 239
+  offset: 22, 49
+  index: 0
+LoathedFiend_dir7
+  rotate: false
+  xy: 1498, 130
+  size: 100, 108
+  orig: 161, 239
+  offset: 24, 32
+  index: 0
+LordlyCommonwealth_dir0
+  rotate: false
+  xy: 3734, 1788
+  size: 92, 111
+  orig: 161, 239
+  offset: 34, 34
+  index: 0
+LordlyCommonwealth_dir1
+  rotate: false
+  xy: 1399, 2795
+  size: 102, 110
+  orig: 161, 239
+  offset: 38, 30
+  index: 0
+LordlyCommonwealth_dir2
+  rotate: false
+  xy: 1081, 3279
+  size: 104, 107
+  orig: 161, 239
+  offset: 34, 40
+  index: 0
+LordlyCommonwealth_dir3
+  rotate: false
+  xy: 1186, 1562
+  size: 102, 110
+  orig: 161, 239
+  offset: 38, 48
+  index: 0
+LordlyCommonwealth_dir4
+  rotate: false
+  xy: 3450, 1602
+  size: 92, 119
+  orig: 161, 239
+  offset: 34, 44
+  index: 0
+LordlyCommonwealth_dir5
+  rotate: false
+  xy: 1186, 1896
+  size: 102, 110
+  orig: 161, 239
+  offset: 22, 48
+  index: 0
+LordlyCommonwealth_dir6
+  rotate: false
+  xy: 868, 2378
+  size: 104, 107
+  orig: 161, 239
+  offset: 22, 40
+  index: 0
+LordlyCommonwealth_dir7
+  rotate: false
+  xy: 1186, 2440
+  size: 102, 110
+  orig: 161, 239
+  offset: 22, 30
+  index: 0
+LuminousBaron_dir0
+  rotate: false
+  xy: 444, 2639
+  size: 104, 115
+  orig: 161, 239
+  offset: 28, 28
+  index: 0
+LuminousBaron_dir1
+  rotate: false
+  xy: 3356, 1366
+  size: 92, 100
+  orig: 161, 239
+  offset: 50, 34
+  index: 0
+LuminousBaron_dir2
+  rotate: false
+  xy: 2794, 1927
+  size: 92, 109
+  orig: 161, 239
+  offset: 46, 46
+  index: 0
+LuminousBaron_dir3
+  rotate: false
+  xy: 3546, 1725
+  size: 92, 100
+  orig: 161, 239
+  offset: 50, 60
+  index: 0
+LuminousBaron_dir4
+  rotate: false
+  xy: 1611, 2924
+  size: 104, 105
+  orig: 161, 239
+  offset: 28, 58
+  index: 0
+LuminousBaron_dir5
+  rotate: false
+  xy: 2297, 672
+  size: 92, 100
+  orig: 161, 239
+  offset: 20, 60
+  index: 0
+LuminousBaron_dir6
+  rotate: false
+  xy: 3358, 1893
+  size: 92, 109
+  orig: 161, 239
+  offset: 22, 46
+  index: 0
+LuminousBaron_dir7
+  rotate: false
+  xy: 3640, 1839
+  size: 92, 100
+  orig: 161, 239
+  offset: 20, 34
+  index: 0
+LushSling_dir0
+  rotate: false
+  xy: 2821, 981
+  size: 74, 119
+  orig: 161, 239
+  offset: 43, 28
+  index: 0
+LushSling_dir1
+  rotate: false
+  xy: 2199, 567
+  size: 96, 100
+  orig: 161, 239
+  offset: 40, 38
+  index: 0
+LushSling_dir2
+  rotate: false
+  xy: 654, 988
+  size: 104, 87
+  orig: 161, 239
+  offset: 34, 54
+  index: 0
+LushSling_dir3
+  rotate: false
+  xy: 2299, 893
+  size: 96, 98
+  orig: 161, 239
+  offset: 40, 52
+  index: 0
+LushSling_dir4
+  rotate: false
+  xy: 2918, 1082
+  size: 74, 118
+  orig: 161, 239
+  offset: 43, 46
+  index: 0
+LushSling_dir5
+  rotate: false
+  xy: 2299, 993
+  size: 96, 98
+  orig: 161, 239
+  offset: 26, 52
+  index: 0
+LushSling_dir6
+  rotate: false
+  xy: 550, 2661
+  size: 104, 87
+  orig: 161, 239
+  offset: 22, 54
+  index: 0
+LushSling_dir7
+  rotate: false
+  xy: 2299, 1411
+  size: 96, 100
+  orig: 161, 239
+  offset: 26, 38
+  index: 0
+MacabreBlood_dir0
+  rotate: false
+  xy: 1904, 3971
+  size: 116, 123
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+MacabreBlood_dir1
+  rotate: false
+  xy: 2518, 2925
+  size: 108, 114
+  orig: 161, 239
+  offset: 36, 28
+  index: 0
+MacabreBlood_dir2
+  rotate: false
+  xy: 838, 3604
+  size: 116, 122
+  orig: 161, 239
+  offset: 22, 33
+  index: 0
+MacabreBlood_dir3
+  rotate: false
+  xy: 2188, 3147
+  size: 108, 114
+  orig: 161, 239
+  offset: 36, 46
+  index: 0
+MacabreBlood_dir4
+  rotate: false
+  xy: 2, 1989
+  size: 116, 132
+  orig: 161, 239
+  offset: 22, 32
+  index: 0
+MacabreBlood_dir5
+  rotate: false
+  xy: 2518, 3155
+  size: 108, 114
+  orig: 161, 239
+  offset: 18, 46
+  index: 0
+MacabreBlood_dir6
+  rotate: false
+  xy: 842, 3972
+  size: 116, 122
+  orig: 161, 239
+  offset: 22, 33
+  index: 0
+MacabreBlood_dir7
+  rotate: false
+  xy: 2408, 3267
+  size: 108, 114
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+MacabreSilence_dir0
+  rotate: false
+  xy: 3556, 3977
+  size: 116, 117
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+MacabreSilence_dir1
+  rotate: false
+  xy: 1717, 2992
+  size: 104, 112
+  orig: 161, 239
+  offset: 40, 28
+  index: 0
+MacabreSilence_dir2
+  rotate: false
+  xy: 657, 2914
+  size: 104, 123
+  orig: 161, 239
+  offset: 34, 33
+  index: 0
+MacabreSilence_dir3
+  rotate: false
+  xy: 1184, 360
+  size: 104, 110
+  orig: 161, 239
+  offset: 40, 50
+  index: 0
+MacabreSilence_dir4
+  rotate: false
+  xy: 2376, 3982
+  size: 116, 112
+  orig: 161, 239
+  offset: 22, 50
+  index: 0
+MacabreSilence_dir5
+  rotate: false
+  xy: 336, 199
+  size: 104, 110
+  orig: 161, 239
+  offset: 18, 50
+  index: 0
+MacabreSilence_dir6
+  rotate: false
+  xy: 974, 1996
+  size: 104, 123
+  orig: 161, 239
+  offset: 22, 33
+  index: 0
+MacabreSilence_dir7
+  rotate: false
+  xy: 1080, 2029
+  size: 104, 112
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+MagicalCannon_dir0
+  rotate: false
+  xy: 1180, 3388
+  size: 110, 131
+  orig: 161, 239
+  offset: 25, 28
+  index: 0
+MagicalCannon_dir1
+  rotate: false
+  xy: 229, 3065
+  size: 106, 114
+  orig: 161, 239
+  offset: 36, 28
+  index: 0
+MagicalCannon_dir2
+  rotate: false
+  xy: 3674, 3974
+  size: 116, 120
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+MagicalCannon_dir3
+  rotate: false
+  xy: 336, 1137
+  size: 106, 112
+  orig: 161, 239
+  offset: 36, 48
+  index: 0
+MagicalCannon_dir4
+  rotate: false
+  xy: 2988, 3329
+  size: 110, 130
+  orig: 161, 239
+  offset: 25, 34
+  index: 0
+MagicalCannon_dir5
+  rotate: false
+  xy: 3938, 2348
+  size: 106, 112
+  orig: 161, 239
+  offset: 20, 48
+  index: 0
+MagicalCannon_dir6
+  rotate: false
+  xy: 3320, 3839
+  size: 116, 120
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+MagicalCannon_dir7
+  rotate: false
+  xy: 3882, 3146
+  size: 106, 114
+  orig: 161, 239
+  offset: 20, 28
+  index: 0
+MagicalMace_dir0
+  rotate: false
+  xy: 3631, 2229
+  size: 92, 117
+  orig: 161, 239
+  offset: 34, 28
+  index: 0
+MagicalMace_dir1
+  rotate: false
+  xy: 1602, 2276
+  size: 100, 110
+  orig: 161, 239
+  offset: 38, 30
+  index: 0
+MagicalMace_dir2
+  rotate: false
+  xy: 548, 367
+  size: 104, 106
+  orig: 161, 239
+  offset: 34, 40
+  index: 0
+MagicalMace_dir3
+  rotate: false
+  xy: 1702, 276
+  size: 100, 106
+  orig: 161, 239
+  offset: 38, 50
+  index: 0
+MagicalMace_dir4
+  rotate: false
+  xy: 2980, 1730
+  size: 92, 118
+  orig: 161, 239
+  offset: 34, 46
+  index: 0
+MagicalMace_dir5
+  rotate: false
+  xy: 1703, 706
+  size: 100, 106
+  orig: 161, 239
+  offset: 24, 50
+  index: 0
+MagicalMace_dir6
+  rotate: false
+  xy: 445, 2987
+  size: 104, 106
+  orig: 161, 239
+  offset: 22, 40
+  index: 0
+MagicalMace_dir7
+  rotate: false
+  xy: 1703, 1138
+  size: 100, 110
+  orig: 161, 239
+  offset: 24, 30
+  index: 0
+MagicalProtector_dir0
+  rotate: false
+  xy: 654, 524
+  size: 104, 110
+  orig: 161, 239
+  offset: 28, 34
+  index: 0
+MagicalProtector_dir1
+  rotate: false
+  xy: 1080, 2143
+  size: 104, 112
+  orig: 161, 239
+  offset: 38, 28
+  index: 0
+MagicalProtector_dir2
+  rotate: false
+  xy: 656, 2561
+  size: 104, 115
+  orig: 161, 239
+  offset: 34, 34
+  index: 0
+MagicalProtector_dir3
+  rotate: false
+  xy: 974, 1192
+  size: 104, 110
+  orig: 161, 239
+  offset: 38, 48
+  index: 0
+MagicalProtector_dir4
+  rotate: false
+  xy: 550, 2097
+  size: 104, 120
+  orig: 161, 239
+  offset: 28, 44
+  index: 0
+MagicalProtector_dir5
+  rotate: false
+  xy: 975, 2818
+  size: 104, 110
+  orig: 161, 239
+  offset: 20, 48
+  index: 0
+MagicalProtector_dir6
+  rotate: false
+  xy: 442, 444
+  size: 104, 115
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+MagicalProtector_dir7
+  rotate: false
+  xy: 868, 1342
+  size: 104, 112
+  orig: 161, 239
+  offset: 20, 28
+  index: 0
+MalevolentHunter_dir0
+  rotate: false
+  xy: 1081, 3148
+  size: 104, 129
+  orig: 161, 239
+  offset: 28, 28
+  index: 0
+MalevolentHunter_dir1
+  rotate: false
+  xy: 228, 2613
+  size: 106, 112
+  orig: 161, 239
+  offset: 36, 28
+  index: 0
+MalevolentHunter_dir2
+  rotate: false
+  xy: 2966, 3851
+  size: 116, 118
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+MalevolentHunter_dir3
+  rotate: false
+  xy: 121, 3059
+  size: 106, 114
+  orig: 161, 239
+  offset: 36, 46
+  index: 0
+MalevolentHunter_dir4
+  rotate: false
+  xy: 866, 437
+  size: 104, 129
+  orig: 161, 239
+  offset: 28, 34
+  index: 0
+MalevolentHunter_dir5
+  rotate: false
+  xy: 363, 3748
+  size: 106, 114
+  orig: 161, 239
+  offset: 20, 46
+  index: 0
+MalevolentHunter_dir6
+  rotate: false
+  xy: 3556, 3857
+  size: 116, 118
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+MalevolentHunter_dir7
+  rotate: false
+  xy: 3986, 2918
+  size: 106, 112
+  orig: 161, 239
+  offset: 20, 28
+  index: 0
+ManifoldTemplar_dir0
+  rotate: false
+  xy: 1078, 659
+  size: 104, 117
+  orig: 161, 239
+  offset: 28, 28
+  index: 0
+ManifoldTemplar_dir1
+  rotate: false
+  xy: 654, 412
+  size: 104, 110
+  orig: 161, 239
+  offset: 38, 30
+  index: 0
+ManifoldTemplar_dir2
+  rotate: false
+  xy: 1184, 1010
+  size: 104, 113
+  orig: 161, 239
+  offset: 34, 36
+  index: 0
+ManifoldTemplar_dir3
+  rotate: false
+  xy: 656, 2451
+  size: 104, 108
+  orig: 161, 239
+  offset: 38, 50
+  index: 0
+ManifoldTemplar_dir4
+  rotate: false
+  xy: 972, 1073
+  size: 104, 117
+  orig: 161, 239
+  offset: 28, 46
+  index: 0
+ManifoldTemplar_dir5
+  rotate: false
+  xy: 550, 1987
+  size: 104, 108
+  orig: 161, 239
+  offset: 20, 50
+  index: 0
+ManifoldTemplar_dir6
+  rotate: false
+  xy: 974, 2703
+  size: 104, 113
+  orig: 161, 239
+  offset: 22, 36
+  index: 0
+ManifoldTemplar_dir7
+  rotate: false
+  xy: 442, 332
+  size: 104, 110
+  orig: 161, 239
+  offset: 20, 30
+  index: 0
+MechanicalMissile_dir0
+  rotate: false
+  xy: 972, 258
+  size: 104, 130
+  orig: 161, 239
+  offset: 28, 28
+  index: 0
+MechanicalMissile_dir1
+  rotate: false
+  xy: 337, 3521
+  size: 106, 110
+  orig: 161, 239
+  offset: 36, 30
+  index: 0
+MechanicalMissile_dir2
+  rotate: false
+  xy: 123, 3747
+  size: 119, 115
+  orig: 161, 239
+  offset: 19, 36
+  index: 0
+MechanicalMissile_dir3
+  rotate: false
+  xy: 121, 3399
+  size: 106, 112
+  orig: 161, 239
+  offset: 36, 46
+  index: 0
+MechanicalMissile_dir4
+  rotate: false
+  xy: 866, 747
+  size: 104, 133
+  orig: 161, 239
+  offset: 28, 31
+  index: 0
+MechanicalMissile_dir5
+  rotate: false
+  xy: 3938, 2462
+  size: 106, 112
+  orig: 161, 239
+  offset: 20, 46
+  index: 0
+MechanicalMissile_dir6
+  rotate: false
+  xy: 244, 3747
+  size: 117, 115
+  orig: 161, 239
+  offset: 22, 36
+  index: 0
+MechanicalMissile_dir7
+  rotate: false
+  xy: 3614, 2377
+  size: 106, 110
+  orig: 161, 239
+  offset: 20, 30
+  index: 0
+MechanicalRazor_dir0
+  rotate: false
+  xy: 1292, 3605
+  size: 110, 131
+  orig: 161, 239
+  offset: 25, 28
+  index: 0
+MechanicalRazor_dir1
+  rotate: false
+  xy: 3618, 2721
+  size: 108, 114
+  orig: 161, 239
+  offset: 36, 28
+  index: 0
+MechanicalRazor_dir2
+  rotate: false
+  xy: 1196, 3971
+  size: 116, 123
+  orig: 161, 239
+  offset: 22, 33
+  index: 0
+MechanicalRazor_dir3
+  rotate: false
+  xy: 2518, 3271
+  size: 108, 112
+  orig: 161, 239
+  offset: 36, 48
+  index: 0
+MechanicalRazor_dir4
+  rotate: false
+  xy: 1756, 3713
+  size: 110, 134
+  orig: 161, 239
+  offset: 25, 30
+  index: 0
+MechanicalRazor_dir5
+  rotate: false
+  xy: 2848, 2911
+  size: 108, 112
+  orig: 161, 239
+  offset: 18, 48
+  index: 0
+MechanicalRazor_dir6
+  rotate: false
+  xy: 2, 1491
+  size: 116, 123
+  orig: 161, 239
+  offset: 22, 33
+  index: 0
+MechanicalRazor_dir7
+  rotate: false
+  xy: 2958, 3085
+  size: 108, 114
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+MechanicalWheellock_dir0
+  rotate: false
+  xy: 956, 3509
+  size: 110, 115
+  orig: 161, 239
+  offset: 25, 28
+  index: 0
+MechanicalWheellock_dir1
+  rotate: false
+  xy: 2003, 319
+  size: 96, 106
+  orig: 161, 239
+  offset: 48, 28
+  index: 0
+MechanicalWheellock_dir2
+  rotate: false
+  xy: 2792, 1592
+  size: 92, 117
+  orig: 161, 239
+  offset: 46, 33
+  index: 0
+MechanicalWheellock_dir3
+  rotate: false
+  xy: 2101, 755
+  size: 96, 98
+  orig: 161, 239
+  offset: 48, 60
+  index: 0
+MechanicalWheellock_dir4
+  rotate: false
+  xy: 3212, 3128
+  size: 110, 106
+  orig: 161, 239
+  offset: 25, 58
+  index: 0
+MechanicalWheellock_dir5
+  rotate: false
+  xy: 2005, 965
+  size: 96, 98
+  orig: 161, 239
+  offset: 18, 60
+  index: 0
+MechanicalWheellock_dir6
+  rotate: false
+  xy: 3544, 1500
+  size: 92, 117
+  orig: 161, 239
+  offset: 22, 33
+  index: 0
+MechanicalWheellock_dir7
+  rotate: false
+  xy: 2005, 1065
+  size: 96, 106
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+MindfulProtector_dir0
+  rotate: false
+  xy: 2764, 3261
+  size: 110, 119
+  orig: 161, 239
+  offset: 25, 28
+  index: 0
+MindfulProtector_dir1
+  rotate: false
+  xy: 868, 2264
+  size: 104, 112
+  orig: 161, 239
+  offset: 40, 28
+  index: 0
+MindfulProtector_dir2
+  rotate: false
+  xy: 974, 2357
+  size: 104, 122
+  orig: 161, 239
+  offset: 34, 34
+  index: 0
+MindfulProtector_dir3
+  rotate: false
+  xy: 442, 110
+  size: 104, 108
+  orig: 161, 239
+  offset: 40, 52
+  index: 0
+MindfulProtector_dir4
+  rotate: false
+  xy: 2876, 3352
+  size: 110, 124
+  orig: 161, 239
+  offset: 25, 40
+  index: 0
+MindfulProtector_dir5
+  rotate: false
+  xy: 444, 1962
+  size: 104, 108
+  orig: 161, 239
+  offset: 18, 52
+  index: 0
+MindfulProtector_dir6
+  rotate: false
+  xy: 336, 548
+  size: 104, 122
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+MindfulProtector_dir7
+  rotate: false
+  xy: 657, 3490
+  size: 104, 112
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+MoralAcumen_dir0
+  rotate: false
+  xy: 2578, 1334
+  size: 86, 117
+  orig: 161, 239
+  offset: 37, 28
+  index: 0
+MoralAcumen_dir1
+  rotate: false
+  xy: 2602, 1861
+  size: 94, 102
+  orig: 161, 239
+  offset: 40, 38
+  index: 0
+MoralAcumen_dir2
+  rotate: false
+  xy: 1187, 2878
+  size: 104, 93
+  orig: 161, 239
+  offset: 34, 48
+  index: 0
+MoralAcumen_dir3
+  rotate: false
+  xy: 2611, 2169
+  size: 94, 100
+  orig: 161, 239
+  offset: 40, 50
+  index: 0
+MoralAcumen_dir4
+  rotate: false
+  xy: 2573, 748
+  size: 86, 124
+  orig: 161, 239
+  offset: 37, 40
+  index: 0
+MoralAcumen_dir5
+  rotate: false
+  xy: 2199, 139
+  size: 94, 100
+  orig: 161, 239
+  offset: 28, 50
+  index: 0
+MoralAcumen_dir6
+  rotate: false
+  xy: 1080, 1595
+  size: 104, 93
+  orig: 161, 239
+  offset: 22, 48
+  index: 0
+MoralAcumen_dir7
+  rotate: false
+  xy: 2506, 2042
+  size: 94, 102
+  orig: 161, 239
+  offset: 28, 38
+  index: 0
+MoralMaiden_dir0
+  rotate: false
+  xy: 445, 3516
+  size: 104, 115
+  orig: 161, 239
+  offset: 28, 28
+  index: 0
+MoralMaiden_dir1
+  rotate: false
+  xy: 3001, 2179
+  size: 94, 108
+  orig: 161, 239
+  offset: 48, 28
+  index: 0
+MoralMaiden_dir2
+  rotate: false
+  xy: 3826, 1405
+  size: 92, 115
+  orig: 161, 239
+  offset: 46, 34
+  index: 0
+MoralMaiden_dir3
+  rotate: false
+  xy: 2713, 2274
+  size: 94, 96
+  orig: 161, 239
+  offset: 48, 62
+  index: 0
+MoralMaiden_dir4
+  rotate: false
+  xy: 1184, 692
+  size: 104, 100
+  orig: 161, 239
+  offset: 28, 64
+  index: 0
+MoralMaiden_dir5
+  rotate: false
+  xy: 2506, 1736
+  size: 94, 96
+  orig: 161, 239
+  offset: 20, 62
+  index: 0
+MoralMaiden_dir6
+  rotate: false
+  xy: 2297, 459
+  size: 92, 115
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+MoralMaiden_dir7
+  rotate: false
+  xy: 2905, 2179
+  size: 94, 108
+  orig: 161, 239
+  offset: 20, 28
+  index: 0
+MoralShield_dir0
+  rotate: false
+  xy: 3049, 981
+  size: 74, 109
+  orig: 161, 239
+  offset: 43, 34
+  index: 0
+MoralShield_dir1
+  rotate: false
+  xy: 2675, 1556
+  size: 88, 94
+  orig: 161, 239
+  offset: 42, 44
+  index: 0
+MoralShield_dir2
+  rotate: false
+  xy: 3673, 1943
+  size: 92, 89
+  orig: 161, 239
+  offset: 46, 54
+  index: 0
+MoralShield_dir3
+  rotate: false
+  xy: 2585, 1553
+  size: 88, 100
+  orig: 161, 239
+  offset: 42, 52
+  index: 0
+MoralShield_dir4
+  rotate: false
+  xy: 2994, 1092
+  size: 74, 108
+  orig: 161, 239
+  offset: 43, 56
+  index: 0
+MoralShield_dir5
+  rotate: false
+  xy: 2397, 945
+  size: 88, 100
+  orig: 161, 239
+  offset: 32, 52
+  index: 0
+MoralShield_dir6
+  rotate: false
+  xy: 3450, 1301
+  size: 92, 89
+  orig: 161, 239
+  offset: 22, 54
+  index: 0
+MoralShield_dir7
+  rotate: false
+  xy: 2397, 1047
+  size: 88, 94
+  orig: 161, 239
+  offset: 32, 44
+  index: 0
+MoronicWhip_dir0
+  rotate: false
+  xy: 2764, 3382
+  size: 110, 126
+  orig: 161, 239
+  offset: 25, 33
+  index: 0
+MoronicWhip_dir1
+  rotate: false
+  xy: 3988, 3032
+  size: 106, 112
+  orig: 161, 239
+  offset: 38, 28
+  index: 0
+MoronicWhip_dir2
+  rotate: false
+  xy: 244, 3971
+  size: 119, 123
+  orig: 161, 239
+  offset: 19, 33
+  index: 0
+MoronicWhip_dir3
+  rotate: false
+  xy: 336, 1251
+  size: 106, 112
+  orig: 161, 239
+  offset: 38, 48
+  index: 0
+MoronicWhip_dir4
+  rotate: false
+  xy: 2652, 3478
+  size: 110, 132
+  orig: 161, 239
+  offset: 25, 29
+  index: 0
+MoronicWhip_dir5
+  rotate: false
+  xy: 336, 1933
+  size: 106, 112
+  orig: 161, 239
+  offset: 18, 48
+  index: 0
+MoronicWhip_dir6
+  rotate: false
+  xy: 2, 3138
+  size: 117, 123
+  orig: 161, 239
+  offset: 22, 33
+  index: 0
+MoronicWhip_dir7
+  rotate: false
+  xy: 120, 815
+  size: 106, 112
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+MurderousAnger_dir0
+  rotate: false
+  xy: 1852, 3500
+  size: 110, 111
+  orig: 161, 239
+  offset: 25, 34
+  index: 0
+MurderousAnger_dir1
+  rotate: false
+  xy: 3878, 2920
+  size: 106, 112
+  orig: 161, 239
+  offset: 38, 28
+  index: 0
+MurderousAnger_dir2
+  rotate: false
+  xy: 763, 3367
+  size: 104, 116
+  orig: 161, 239
+  offset: 34, 33
+  index: 0
+MurderousAnger_dir3
+  rotate: false
+  xy: 229, 3295
+  size: 106, 110
+  orig: 161, 239
+  offset: 38, 48
+  index: 0
+MurderousAnger_dir4
+  rotate: false
+  xy: 2428, 3604
+  size: 110, 120
+  orig: 161, 239
+  offset: 25, 44
+  index: 0
+MurderousAnger_dir5
+  rotate: false
+  xy: 336, 2389
+  size: 106, 110
+  orig: 161, 239
+  offset: 18, 48
+  index: 0
+MurderousAnger_dir6
+  rotate: false
+  xy: 654, 53
+  size: 104, 116
+  orig: 161, 239
+  offset: 22, 33
+  index: 0
+MurderousAnger_dir7
+  rotate: false
+  xy: 336, 2047
+  size: 106, 112
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+MurderousMercenary_dir0
+  rotate: false
+  xy: 2836, 1224
+  size: 80, 99
+  orig: 161, 239
+  offset: 40, 28
+  index: 0
+MurderousMercenary_dir1
+  rotate: false
+  xy: 2809, 2150
+  size: 94, 98
+  orig: 161, 239
+  offset: 46, 34
+  index: 0
+MurderousMercenary_dir2
+  rotate: false
+  xy: 2661, 820
+  size: 80, 100
+  orig: 161, 239
+  offset: 58, 49
+  index: 0
+MurderousMercenary_dir3
+  rotate: false
+  xy: 2809, 2250
+  size: 94, 100
+  orig: 161, 239
+  offset: 46, 58
+  index: 0
+MurderousMercenary_dir4
+  rotate: false
+  xy: 2668, 1458
+  size: 80, 93
+  orig: 161, 239
+  offset: 40, 70
+  index: 0
+MurderousMercenary_dir5
+  rotate: false
+  xy: 3577, 2037
+  size: 94, 100
+  orig: 161, 239
+  offset: 22, 58
+  index: 0
+MurderousMercenary_dir6
+  rotate: false
+  xy: 2575, 1006
+  size: 80, 100
+  orig: 161, 239
+  offset: 22, 49
+  index: 0
+MurderousMercenary_dir7
+  rotate: false
+  xy: 2698, 1965
+  size: 94, 98
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+MurderousTiger_dir0
+  rotate: false
+  xy: 1740, 3215
+  size: 110, 119
+  orig: 161, 239
+  offset: 25, 28
+  index: 0
+MurderousTiger_dir1
+  rotate: false
+  xy: 1186, 2334
+  size: 102, 104
+  orig: 161, 239
+  offset: 40, 34
+  index: 0
+MurderousTiger_dir2
+  rotate: false
+  xy: 3229, 2218
+  size: 98, 120
+  orig: 161, 239
+  offset: 40, 36
+  index: 0
+MurderousTiger_dir3
+  rotate: false
+  xy: 1498, 1946
+  size: 102, 110
+  orig: 161, 239
+  offset: 40, 50
+  index: 0
+MurderousTiger_dir4
+  rotate: false
+  xy: 2092, 3493
+  size: 110, 114
+  orig: 161, 239
+  offset: 25, 50
+  index: 0
+MurderousTiger_dir5
+  rotate: false
+  xy: 1498, 2380
+  size: 102, 110
+  orig: 161, 239
+  offset: 20, 50
+  index: 0
+MurderousTiger_dir6
+  rotate: false
+  xy: 3231, 2435
+  size: 98, 120
+  orig: 161, 239
+  offset: 22, 36
+  index: 0
+MurderousTiger_dir7
+  rotate: false
+  xy: 1609, 2818
+  size: 102, 104
+  orig: 161, 239
+  offset: 20, 34
+  index: 0
+MurderousWarrior_dir0
+  rotate: false
+  xy: 1805, 1215
+  size: 98, 117
+  orig: 161, 239
+  offset: 31, 28
+  index: 0
+MurderousWarrior_dir1
+  rotate: false
+  xy: 1498, 2058
+  size: 102, 100
+  orig: 161, 239
+  offset: 38, 40
+  index: 0
+MurderousWarrior_dir2
+  rotate: false
+  xy: 974, 1891
+  size: 104, 103
+  orig: 161, 239
+  offset: 34, 49
+  index: 0
+MurderousWarrior_dir3
+  rotate: false
+  xy: 1394, 1493
+  size: 102, 110
+  orig: 161, 239
+  offset: 38, 50
+  index: 0
+MurderousWarrior_dir4
+  rotate: false
+  xy: 1806, 2097
+  size: 98, 118
+  orig: 161, 239
+  offset: 31, 46
+  index: 0
+MurderousWarrior_dir5
+  rotate: false
+  xy: 1394, 1605
+  size: 102, 110
+  orig: 161, 239
+  offset: 22, 50
+  index: 0
+MurderousWarrior_dir6
+  rotate: false
+  xy: 1293, 2891
+  size: 104, 103
+  orig: 161, 239
+  offset: 22, 49
+  index: 0
+MurderousWarrior_dir7
+  rotate: false
+  xy: 1186, 1126
+  size: 102, 100
+  orig: 161, 239
+  offset: 22, 40
+  index: 0
+MyriadTiger_dir0
+  rotate: false
+  xy: 760, 172
+  size: 104, 115
+  orig: 161, 239
+  offset: 28, 28
+  index: 0
+MyriadTiger_dir1
+  rotate: false
+  xy: 2715, 2372
+  size: 98, 106
+  orig: 161, 239
+  offset: 46, 30
+  index: 0
+MyriadTiger_dir2
+  rotate: false
+  xy: 3452, 1817
+  size: 92, 114
+  orig: 161, 239
+  offset: 46, 36
+  index: 0
+MyriadTiger_dir3
+  rotate: false
+  xy: 2206, 1848
+  size: 98, 102
+  orig: 161, 239
+  offset: 46, 56
+  index: 0
+MyriadTiger_dir4
+  rotate: false
+  xy: 656, 2350
+  size: 104, 99
+  orig: 161, 239
+  offset: 28, 64
+  index: 0
+MyriadTiger_dir5
+  rotate: false
+  xy: 2106, 1927
+  size: 98, 102
+  orig: 161, 239
+  offset: 18, 56
+  index: 0
+MyriadTiger_dir6
+  rotate: false
+  xy: 3168, 1690
+  size: 92, 114
+  orig: 161, 239
+  offset: 22, 36
+  index: 0
+MyriadTiger_dir7
+  rotate: false
+  xy: 2006, 2146
+  size: 98, 106
+  orig: 161, 239
+  offset: 18, 30
+  index: 0
+NefariousCongress_dir0
+  rotate: false
+  xy: 2988, 3461
+  size: 110, 115
+  orig: 161, 239
+  offset: 25, 28
+  index: 0
+NefariousCongress_dir1
+  rotate: false
+  xy: 3546, 1619
+  size: 92, 104
+  orig: 161, 239
+  offset: 52, 28
+  index: 0
+NefariousCongress_dir2
+  rotate: false
+  xy: 2391, 648
+  size: 92, 119
+  orig: 161, 239
+  offset: 46, 33
+  index: 0
+NefariousCongress_dir3
+  rotate: false
+  xy: 3955, 1902
+  size: 92, 102
+  orig: 161, 239
+  offset: 52, 58
+  index: 0
+NefariousCongress_dir4
+  rotate: false
+  xy: 1516, 3498
+  size: 110, 111
+  orig: 161, 239
+  offset: 25, 52
+  index: 0
+NefariousCongress_dir5
+  rotate: false
+  xy: 3168, 1469
+  size: 92, 102
+  orig: 161, 239
+  offset: 18, 58
+  index: 0
+NefariousCongress_dir6
+  rotate: false
+  xy: 2297, 338
+  size: 92, 119
+  orig: 161, 239
+  offset: 22, 33
+  index: 0
+NefariousCongress_dir7
+  rotate: false
+  xy: 3544, 1284
+  size: 92, 104
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+OccultBrotherhood_dir0
+  rotate: false
+  xy: 2316, 3746
+  size: 110, 119
+  orig: 161, 239
+  offset: 25, 40
+  index: 0
+OccultBrotherhood_dir1
+  rotate: false
+  xy: 228, 359
+  size: 106, 114
+  orig: 161, 239
+  offset: 38, 28
+  index: 0
+OccultBrotherhood_dir2
+  rotate: false
+  xy: 1628, 3259
+  size: 110, 120
+  orig: 161, 239
+  offset: 22, 33
+  index: 0
+OccultBrotherhood_dir3
+  rotate: false
+  xy: 120, 2839
+  size: 106, 112
+  orig: 161, 239
+  offset: 38, 48
+  index: 0
+OccultBrotherhood_dir4
+  rotate: false
+  xy: 2876, 3478
+  size: 110, 121
+  orig: 161, 239
+  offset: 25, 40
+  index: 0
+OccultBrotherhood_dir5
+  rotate: false
+  xy: 3830, 2350
+  size: 106, 112
+  orig: 161, 239
+  offset: 18, 48
+  index: 0
+OccultBrotherhood_dir6
+  rotate: false
+  xy: 1628, 3381
+  size: 110, 120
+  orig: 161, 239
+  offset: 28, 33
+  index: 0
+OccultBrotherhood_dir7
+  rotate: false
+  xy: 228, 129
+  size: 106, 114
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+OminousFighter_dir0
+  rotate: false
+  xy: 2115, 2465
+  size: 98, 123
+  orig: 161, 239
+  offset: 31, 28
+  index: 0
+OminousFighter_dir1
+  rotate: false
+  xy: 1704, 2434
+  size: 100, 110
+  orig: 161, 239
+  offset: 42, 30
+  index: 0
+OminousFighter_dir2
+  rotate: false
+  xy: 869, 3068
+  size: 104, 112
+  orig: 161, 239
+  offset: 34, 40
+  index: 0
+OminousFighter_dir3
+  rotate: false
+  xy: 1602, 2174
+  size: 100, 100
+  orig: 161, 239
+  offset: 42, 60
+  index: 0
+OminousFighter_dir4
+  rotate: false
+  xy: 1815, 2656
+  size: 98, 112
+  orig: 161, 239
+  offset: 31, 52
+  index: 0
+OminousFighter_dir5
+  rotate: false
+  xy: 1498, 348
+  size: 100, 100
+  orig: 161, 239
+  offset: 20, 60
+  index: 0
+OminousFighter_dir6
+  rotate: false
+  xy: 762, 2082
+  size: 104, 112
+  orig: 161, 239
+  offset: 22, 40
+  index: 0
+OminousFighter_dir7
+  rotate: false
+  xy: 1925, 3005
+  size: 100, 110
+  orig: 161, 239
+  offset: 20, 30
+  index: 0
+PeacefulWitch_dir0
+  rotate: false
+  xy: 1868, 3736
+  size: 110, 117
+  orig: 161, 239
+  offset: 25, 40
+  index: 0
+PeacefulWitch_dir1
+  rotate: false
+  xy: 3506, 2542
+  size: 106, 112
+  orig: 161, 239
+  offset: 38, 28
+  index: 0
+PeacefulWitch_dir2
+  rotate: false
+  xy: 2, 1368
+  size: 116, 121
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+PeacefulWitch_dir3
+  rotate: false
+  xy: 120, 589
+  size: 106, 112
+  orig: 161, 239
+  offset: 38, 48
+  index: 0
+PeacefulWitch_dir4
+  rotate: false
+  xy: 1292, 3470
+  size: 110, 133
+  orig: 161, 239
+  offset: 25, 30
+  index: 0
+PeacefulWitch_dir5
+  rotate: false
+  xy: 120, 929
+  size: 106, 112
+  orig: 161, 239
+  offset: 18, 48
+  index: 0
+PeacefulWitch_dir6
+  rotate: false
+  xy: 2, 2248
+  size: 116, 121
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+PeacefulWitch_dir7
+  rotate: false
+  xy: 228, 1479
+  size: 106, 112
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+PhaseMother_dir0
+  rotate: false
+  xy: 2140, 3864
+  size: 116, 123
+  orig: 161, 239
+  offset: 22, 28
+  index: 0
+PhaseMother_dir1
+  rotate: false
+  xy: 1187, 3090
+  size: 104, 112
+  orig: 161, 239
+  offset: 40, 28
+  index: 0
+PhaseMother_dir2
+  rotate: false
+  xy: 336, 793
+  size: 104, 122
+  orig: 161, 239
+  offset: 34, 33
+  index: 0
+PhaseMother_dir3
+  rotate: false
+  xy: 336, 1027
+  size: 104, 108
+  orig: 161, 239
+  offset: 40, 52
+  index: 0
+PhaseMother_dir4
+  rotate: false
+  xy: 3910, 3514
+  size: 116, 118
+  orig: 161, 239
+  offset: 22, 46
+  index: 0
+PhaseMother_dir5
+  rotate: false
+  xy: 656, 1630
+  size: 104, 108
+  orig: 161, 239
+  offset: 18, 52
+  index: 0
+PhaseMother_dir6
+  rotate: false
+  xy: 972, 390
+  size: 104, 122
+  orig: 161, 239
+  offset: 22, 33
+  index: 0
+PhaseMother_dir7
+  rotate: false
+  xy: 550, 1636
+  size: 104, 112
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+PhotonicResistance_dir0
+  rotate: false
+  xy: 2415, 2328
+  size: 98, 123
+  orig: 161, 239
+  offset: 31, 28
+  index: 0
+PhotonicResistance_dir1
+  rotate: false
+  xy: 1290, 1936
+  size: 102, 110
+  orig: 161, 239
+  offset: 40, 30
+  index: 0
+PhotonicResistance_dir2
+  rotate: false
+  xy: 1080, 2486
+  size: 104, 106
+  orig: 161, 239
+  offset: 34, 42
+  index: 0
+PhotonicResistance_dir3
+  rotate: false
+  xy: 1717, 2880
+  size: 102, 110
+  orig: 161, 239
+  offset: 40, 48
+  index: 0
+PhotonicResistance_dir4
+  rotate: false
+  xy: 2306, 2104
+  size: 98, 123
+  orig: 161, 239
+  offset: 31, 40
+  index: 0
+PhotonicResistance_dir5
+  rotate: false
+  xy: 1290, 2268
+  size: 102, 110
+  orig: 161, 239
+  offset: 20, 48
+  index: 0
+PhotonicResistance_dir6
+  rotate: false
+  xy: 975, 3149
+  size: 104, 106
+  orig: 161, 239
+  offset: 22, 42
+  index: 0
+PhotonicResistance_dir7
+  rotate: false
+  xy: 1186, 1784
+  size: 102, 110
+  orig: 161, 239
+  offset: 20, 30
+  index: 0
+PlasmaPoacher_dir0
+  rotate: false
+  xy: 3548, 3134
+  size: 110, 115
+  orig: 161, 239
+  offset: 25, 28
+  index: 0
+PlasmaPoacher_dir1
+  rotate: false
+  xy: 3331, 2314
+  size: 98, 104
+  orig: 161, 239
+  offset: 44, 30
+  index: 0
+PlasmaPoacher_dir2
+  rotate: false
+  xy: 2391, 307
+  size: 92, 116
+  orig: 161, 239
+  offset: 46, 37
+  index: 0
+PlasmaPoacher_dir3
+  rotate: false
+  xy: 3031, 2441
+  size: 98, 102
+  orig: 161, 239
+  offset: 44, 54
+  index: 0
+PlasmaPoacher_dir4
+  rotate: false
+  xy: 3324, 3256
+  size: 110, 100
+  orig: 161, 239
+  offset: 25, 64
+  index: 0
+PlasmaPoacher_dir5
+  rotate: false
+  xy: 2831, 2587
+  size: 98, 102
+  orig: 161, 239
+  offset: 20, 54
+  index: 0
+PlasmaPoacher_dir6
+  rotate: false
+  xy: 3955, 2006
+  size: 92, 116
+  orig: 161, 239
+  offset: 22, 37
+  index: 0
+PlasmaPoacher_dir7
+  rotate: false
+  xy: 2731, 2695
+  size: 98, 104
+  orig: 161, 239
+  offset: 20, 30
+  index: 0
+PoisonousKindness_dir0
+  rotate: false
+  xy: 2316, 3506
+  size: 110, 115
+  orig: 161, 239
+  offset: 25, 28
+  index: 0
+PoisonousKindness_dir1
+  rotate: false
+  xy: 2886, 1749
+  size: 92, 106
+  orig: 161, 239
+  offset: 52, 28
+  index: 0
+PoisonousKindness_dir2
+  rotate: false
+  xy: 2391, 527
+  size: 92, 119
+  orig: 161, 239
+  offset: 46, 33
+  index: 0
+PoisonousKindness_dir3
+  rotate: false
+  xy: 3170, 1912
+  size: 92, 96
+  orig: 161, 239
+  offset: 52, 64
+  index: 0
+PoisonousKindness_dir4
+  rotate: false
+  xy: 1628, 3503
+  size: 110, 93
+  orig: 161, 239
+  offset: 25, 70
+  index: 0
+PoisonousKindness_dir5
+  rotate: false
+  xy: 3826, 1307
+  size: 92, 96
+  orig: 161, 239
+  offset: 18, 64
+  index: 0
+PoisonousKindness_dir6
+  rotate: false
+  xy: 3356, 1582
+  size: 92, 119
+  orig: 161, 239
+  offset: 22, 33
+  index: 0
+PoisonousKindness_dir7
+  rotate: false
+  xy: 3638, 1299
+  size: 92, 106
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+PowerfulGroup_dir0
+  rotate: false
+  xy: 1964, 3366
+  size: 110, 99
+  orig: 161, 239
+  offset: 25, 40
+  index: 0
+PowerfulGroup_dir1
+  rotate: false
+  xy: 1605, 2602
+  size: 100, 106
+  orig: 161, 239
+  offset: 44, 28
+  index: 0
+PowerfulGroup_dir2
+  rotate: false
+  xy: 2397, 1143
+  size: 89, 121
+  orig: 161, 239
+  offset: 46, 34
+  index: 0
+PowerfulGroup_dir3
+  rotate: false
+  xy: 2027, 2937
+  size: 100, 106
+  orig: 161, 239
+  offset: 44, 54
+  index: 0
+PowerfulGroup_dir4
+  rotate: false
+  xy: 2540, 3518
+  size: 110, 112
+  orig: 161, 239
+  offset: 25, 52
+  index: 0
+PowerfulGroup_dir5
+  rotate: false
+  xy: 2129, 2813
+  size: 100, 106
+  orig: 161, 239
+  offset: 18, 54
+  index: 0
+PowerfulGroup_dir6
+  rotate: false
+  xy: 2397, 1266
+  size: 89, 121
+  orig: 161, 239
+  offset: 25, 34
+  index: 0
+PowerfulGroup_dir7
+  rotate: false
+  xy: 1703, 384
+  size: 100, 106
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+PowerfulSentinel_dir0
+  rotate: false
+  xy: 1905, 969
+  size: 98, 110
+  orig: 161, 239
+  offset: 31, 28
+  index: 0
+PowerfulSentinel_dir1
+  rotate: false
+  xy: 3431, 2332
+  size: 98, 96
+  orig: 161, 239
+  offset: 42, 38
+  index: 0
+PowerfulSentinel_dir2
+  rotate: false
+  xy: 3767, 1901
+  size: 92, 112
+  orig: 161, 239
+  offset: 46, 40
+  index: 0
+PowerfulSentinel_dir3
+  rotate: false
+  xy: 2015, 2605
+  size: 98, 108
+  orig: 161, 239
+  offset: 42, 52
+  index: 0
+PowerfulSentinel_dir4
+  rotate: false
+  xy: 1906, 1668
+  size: 98, 108
+  orig: 161, 239
+  offset: 31, 56
+  index: 0
+PowerfulSentinel_dir5
+  rotate: false
+  xy: 2106, 2245
+  size: 98, 108
+  orig: 161, 239
+  offset: 22, 52
+  index: 0
+PowerfulSentinel_dir6
+  rotate: false
+  xy: 3734, 1551
+  size: 92, 112
+  orig: 161, 239
+  offset: 22, 40
+  index: 0
+PowerfulSentinel_dir7
+  rotate: false
+  xy: 1805, 314
+  size: 98, 96
+  orig: 161, 239
+  offset: 22, 38
+  index: 0
+PowerfulVenom_dir0
+  rotate: false
+  xy: 2815, 2352
+  size: 98, 123
+  orig: 161, 239
+  offset: 31, 28
+  index: 0
+PowerfulVenom_dir1
+  rotate: false
+  xy: 1394, 2577
+  size: 102, 108
+  orig: 161, 239
+  offset: 36, 32
+  index: 0
+PowerfulVenom_dir2
+  rotate: false
+  xy: 2612, 3990
+  size: 116, 104
+  orig: 161, 239
+  offset: 22, 42
+  index: 0
+PowerfulVenom_dir3
+  rotate: false
+  xy: 1290, 1712
+  size: 102, 110
+  orig: 161, 239
+  offset: 36, 46
+  index: 0
+PowerfulVenom_dir4
+  rotate: false
+  xy: 2306, 2229
+  size: 98, 131
+  orig: 161, 239
+  offset: 31, 32
+  index: 0
+PowerfulVenom_dir5
+  rotate: false
+  xy: 1293, 2700
+  size: 102, 110
+  orig: 161, 239
+  offset: 24, 46
+  index: 0
+PowerfulVenom_dir6
+  rotate: false
+  xy: 3556, 3751
+  size: 116, 104
+  orig: 161, 239
+  offset: 22, 42
+  index: 0
+PowerfulVenom_dir7
+  rotate: false
+  xy: 1186, 1452
+  size: 102, 108
+  orig: 161, 239
+  offset: 24, 32
+  index: 0
+PropheticStrength_dir0
+  rotate: false
+  xy: 2292, 2938
+  size: 104, 105
+  orig: 161, 239
+  offset: 28, 28
+  index: 0
+PropheticStrength_dir1
+  rotate: false
+  xy: 3031, 2545
+  size: 98, 102
+  orig: 161, 239
+  offset: 46, 28
+  index: 0
+PropheticStrength_dir2
+  rotate: false
+  xy: 3734, 1665
+  size: 92, 121
+  orig: 161, 239
+  offset: 46, 34
+  index: 0
+PropheticStrength_dir3
+  rotate: false
+  xy: 2315, 2482
+  size: 98, 104
+  orig: 161, 239
+  offset: 46, 56
+  index: 0
+PropheticStrength_dir4
+  rotate: false
+  xy: 656, 1185
+  size: 104, 105
+  orig: 161, 239
+  offset: 28, 58
+  index: 0
+PropheticStrength_dir5
+  rotate: false
+  xy: 2529, 2560
+  size: 98, 104
+  orig: 161, 239
+  offset: 18, 56
+  index: 0
+PropheticStrength_dir6
+  rotate: false
+  xy: 3767, 2015
+  size: 92, 121
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+PropheticStrength_dir7
+  rotate: false
+  xy: 1805, 757
+  size: 98, 102
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+RadiantRage_dir0
+  rotate: false
+  xy: 3418, 3488
+  size: 110, 123
+  orig: 161, 239
+  offset: 25, 28
+  index: 0
+RadiantRage_dir1
+  rotate: false
+  xy: 120, 703
+  size: 106, 110
+  orig: 161, 239
+  offset: 38, 30
+  index: 0
+RadiantRage_dir2
+  rotate: false
+  xy: 445, 2866
+  size: 104, 119
+  orig: 161, 239
+  offset: 34, 37
+  index: 0
+RadiantRage_dir3
+  rotate: false
+  xy: 228, 1253
+  size: 106, 112
+  orig: 161, 239
+  offset: 38, 48
+  index: 0
+RadiantRage_dir4
+  rotate: false
+  xy: 956, 3626
+  size: 110, 124
+  orig: 161, 239
+  offset: 25, 40
+  index: 0
+RadiantRage_dir5
+  rotate: false
+  xy: 120, 1599
+  size: 106, 112
+  orig: 161, 239
+  offset: 18, 48
+  index: 0
+RadiantRage_dir6
+  rotate: false
+  xy: 1081, 3027
+  size: 104, 119
+  orig: 161, 239
+  offset: 22, 37
+  index: 0
+RadiantRage_dir7
+  rotate: false
+  xy: 228, 923
+  size: 106, 110
+  orig: 161, 239
+  offset: 18, 30
+  index: 0
+ReveredChaplain_dir0
+  rotate: false
+  xy: 975, 3360
+  size: 104, 123
+  orig: 161, 239
+  offset: 28, 28
+  index: 0
+ReveredChaplain_dir1
+  rotate: false
+  xy: 2846, 2795
+  size: 106, 114
+  orig: 161, 239
+  offset: 36, 28
+  index: 0
+ReveredChaplain_dir2
+  rotate: false
+  xy: 3288, 2557
+  size: 107, 118
+  orig: 161, 239
+  offset: 31, 34
+  index: 0
+ReveredChaplain_dir3
+  rotate: false
+  xy: 120, 253
+  size: 106, 110
+  orig: 161, 239
+  offset: 36, 48
+  index: 0
+ReveredChaplain_dir4
+  rotate: false
+  xy: 866, 217
+  size: 104, 118
+  orig: 161, 239
+  offset: 28, 43
+  index: 0
+ReveredChaplain_dir5
+  rotate: false
+  xy: 3948, 2576
+  size: 106, 110
+  orig: 161, 239
+  offset: 20, 48
+  index: 0
+ReveredChaplain_dir6
+  rotate: false
+  xy: 3397, 2537
+  size: 107, 118
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+ReveredChaplain_dir7
+  rotate: false
+  xy: 3722, 2460
+  size: 106, 114
+  orig: 161, 239
+  offset: 20, 28
+  index: 0
+ReveredWarlock_dir0
+  rotate: false
+  xy: 444, 2072
+  size: 104, 123
+  orig: 161, 239
+  offset: 28, 34
+  index: 0
+ReveredWarlock_dir1
+  rotate: false
+  xy: 1290, 930
+  size: 102, 108
+  orig: 161, 239
+  offset: 36, 32
+  index: 0
+ReveredWarlock_dir2
+  rotate: false
+  xy: 2846, 3644
+  size: 113, 113
+  orig: 161, 239
+  offset: 22, 36
+  index: 0
+ReveredWarlock_dir3
+  rotate: false
+  xy: 1394, 1381
+  size: 102, 110
+  orig: 161, 239
+  offset: 36, 48
+  index: 0
+ReveredWarlock_dir4
+  rotate: false
+  xy: 762, 1614
+  size: 104, 129
+  orig: 161, 239
+  offset: 28, 32
+  index: 0
+ReveredWarlock_dir5
+  rotate: false
+  xy: 1186, 1340
+  size: 102, 110
+  orig: 161, 239
+  offset: 24, 48
+  index: 0
+ReveredWarlock_dir6
+  rotate: false
+  xy: 1305, 3851
+  size: 113, 113
+  orig: 161, 239
+  offset: 25, 36
+  index: 0
+ReveredWarlock_dir7
+  rotate: false
+  xy: 1290, 1376
+  size: 102, 108
+  orig: 161, 239
+  offset: 24, 32
+  index: 0
+RighteousGrenade_dir0
+  rotate: false
+  xy: 2406, 2208
+  size: 98, 118
+  orig: 161, 239
+  offset: 31, 33
+  index: 0
+RighteousGrenade_dir1
+  rotate: false
+  xy: 1290, 384
+  size: 102, 110
+  orig: 161, 239
+  offset: 40, 30
+  index: 0
+RighteousGrenade_dir2
+  rotate: false
+  xy: 1728, 3106
+  size: 104, 107
+  orig: 161, 239
+  offset: 34, 42
+  index: 0
+RighteousGrenade_dir3
+  rotate: false
+  xy: 1394, 617
+  size: 102, 104
+  orig: 161, 239
+  offset: 40, 54
+  index: 0
+RighteousGrenade_dir4
+  rotate: false
+  xy: 1805, 1429
+  size: 98, 115
+  orig: 161, 239
+  offset: 31, 46
+  index: 0
+RighteousGrenade_dir5
+  rotate: false
+  xy: 1394, 833
+  size: 102, 104
+  orig: 161, 239
+  offset: 20, 54
+  index: 0
+RighteousGrenade_dir6
+  rotate: false
+  xy: 974, 1421
+  size: 104, 107
+  orig: 161, 239
+  offset: 22, 42
+  index: 0
+RighteousGrenade_dir7
+  rotate: false
+  xy: 1394, 1049
+  size: 102, 110
+  orig: 161, 239
+  offset: 20, 30
+  index: 0
+RighteousLadyship_dir0
+  rotate: false
+  xy: 2140, 3989
+  size: 116, 105
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+RighteousLadyship_dir1
+  rotate: false
+  xy: 1713, 2770
+  size: 102, 108
+  orig: 161, 239
+  offset: 42, 28
+  index: 0
+RighteousLadyship_dir2
+  rotate: false
+  xy: 2397, 1389
+  size: 89, 122
+  orig: 161, 239
+  offset: 46, 33
+  index: 0
+RighteousLadyship_dir3
+  rotate: false
+  xy: 1290, 54
+  size: 102, 110
+  orig: 161, 239
+  offset: 42, 50
+  index: 0
+RighteousLadyship_dir4
+  rotate: false
+  xy: 960, 3985
+  size: 116, 109
+  orig: 161, 239
+  offset: 22, 52
+  index: 0
+RighteousLadyship_dir5
+  rotate: false
+  xy: 1394, 393
+  size: 102, 110
+  orig: 161, 239
+  offset: 18, 50
+  index: 0
+RighteousLadyship_dir6
+  rotate: false
+  xy: 2100, 93
+  size: 89, 122
+  orig: 161, 239
+  offset: 25, 33
+  index: 0
+RighteousLadyship_dir7
+  rotate: false
+  xy: 1290, 606
+  size: 102, 108
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+RighteousSpark_dir0
+  rotate: false
+  xy: 1852, 3369
+  size: 110, 129
+  orig: 161, 239
+  offset: 25, 28
+  index: 0
+RighteousSpark_dir1
+  rotate: false
+  xy: 656, 1292
+  size: 104, 112
+  orig: 161, 239
+  offset: 40, 28
+  index: 0
+RighteousSpark_dir2
+  rotate: false
+  xy: 2848, 3975
+  size: 116, 119
+  orig: 161, 239
+  offset: 22, 33
+  index: 0
+RighteousSpark_dir3
+  rotate: false
+  xy: 336, 917
+  size: 104, 108
+  orig: 161, 239
+  offset: 40, 50
+  index: 0
+RighteousSpark_dir4
+  rotate: false
+  xy: 1964, 3467
+  size: 110, 130
+  orig: 161, 239
+  offset: 25, 34
+  index: 0
+RighteousSpark_dir5
+  rotate: false
+  xy: 657, 3268
+  size: 104, 108
+  orig: 161, 239
+  offset: 18, 50
+  index: 0
+RighteousSpark_dir6
+  rotate: false
+  xy: 2612, 3869
+  size: 116, 119
+  orig: 161, 239
+  offset: 22, 33
+  index: 0
+RighteousSpark_dir7
+  rotate: false
+  xy: 444, 1208
+  size: 104, 112
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+RoyalGoddess_dir0
+  rotate: false
+  xy: 2231, 2721
+  size: 98, 109
+  orig: 161, 239
+  offset: 31, 31
+  index: 0
+RoyalGoddess_dir1
+  rotate: false
+  xy: 1394, 1161
+  size: 102, 108
+  orig: 161, 239
+  offset: 38, 32
+  index: 0
+RoyalGoddess_dir2
+  rotate: false
+  xy: 1505, 3066
+  size: 104, 107
+  orig: 161, 239
+  offset: 34, 42
+  index: 0
+RoyalGoddess_dir3
+  rotate: false
+  xy: 1394, 2149
+  size: 102, 110
+  orig: 161, 239
+  offset: 38, 48
+  index: 0
+RoyalGoddess_dir4
+  rotate: false
+  xy: 2406, 1850
+  size: 98, 117
+  orig: 161, 239
+  offset: 31, 44
+  index: 0
+RoyalGoddess_dir5
+  rotate: false
+  xy: 1290, 1264
+  size: 102, 110
+  orig: 161, 239
+  offset: 22, 48
+  index: 0
+RoyalGoddess_dir6
+  rotate: false
+  xy: 1080, 1125
+  size: 104, 107
+  orig: 161, 239
+  offset: 22, 42
+  index: 0
+RoyalGoddess_dir7
+  rotate: false
+  xy: 1290, 2048
+  size: 102, 108
+  orig: 161, 239
+  offset: 22, 32
+  index: 0
+SacredArquebus_dir0
+  rotate: false
+  xy: 1915, 2544
+  size: 98, 123
+  orig: 161, 239
+  offset: 31, 28
+  index: 0
+SacredArquebus_dir1
+  rotate: false
+  xy: 2005, 1383
+  size: 96, 106
+  orig: 161, 239
+  offset: 46, 30
+  index: 0
+SacredArquebus_dir2
+  rotate: false
+  xy: 1293, 2996
+  size: 104, 112
+  orig: 161, 239
+  offset: 34, 40
+  index: 0
+SacredArquebus_dir3
+  rotate: false
+  xy: 2003, 857
+  size: 96, 106
+  orig: 161, 239
+  offset: 46, 54
+  index: 0
+SacredArquebus_dir4
+  rotate: false
+  xy: 2729, 2480
+  size: 98, 109
+  orig: 161, 239
+  offset: 31, 52
+  index: 0
+SacredArquebus_dir5
+  rotate: false
+  xy: 2003, 427
+  size: 96, 106
+  orig: 161, 239
+  offset: 20, 54
+  index: 0
+SacredArquebus_dir6
+  rotate: false
+  xy: 550, 1195
+  size: 104, 112
+  orig: 161, 239
+  offset: 22, 40
+  index: 0
+SacredArquebus_dir7
+  rotate: false
+  xy: 2299, 1303
+  size: 96, 106
+  orig: 161, 239
+  offset: 20, 30
+  index: 0
+SacredExplorer_dir0
+  rotate: false
+  xy: 2918, 1202
+  size: 80, 122
+  orig: 161, 239
+  offset: 40, 28
+  index: 0
+SacredExplorer_dir1
+  rotate: false
+  xy: 3920, 1351
+  size: 90, 100
+  orig: 161, 239
+  offset: 44, 38
+  index: 0
+SacredExplorer_dir2
+  rotate: false
+  xy: 1498, 781
+  size: 101, 91
+  orig: 161, 239
+  offset: 37, 54
+  index: 0
+SacredExplorer_dir3
+  rotate: false
+  xy: 3922, 1453
+  size: 90, 94
+  orig: 161, 239
+  offset: 44, 56
+  index: 0
+SacredExplorer_dir4
+  rotate: false
+  xy: 2823, 697
+  size: 80, 109
+  orig: 161, 239
+  offset: 40, 52
+  index: 0
+SacredExplorer_dir5
+  rotate: false
+  xy: 3824, 1211
+  size: 90, 94
+  orig: 161, 239
+  offset: 28, 56
+  index: 0
+SacredExplorer_dir6
+  rotate: false
+  xy: 1498, 976
+  size: 101, 91
+  orig: 161, 239
+  offset: 22, 54
+  index: 0
+SacredExplorer_dir7
+  rotate: false
+  xy: 3732, 1226
+  size: 90, 100
+  orig: 161, 239
+  offset: 28, 38
+  index: 0
+SacredHatchet_dir0
+  rotate: false
+  xy: 2, 791
+  size: 116, 93
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+SacredHatchet_dir1
+  rotate: false
+  xy: 3329, 2210
+  size: 98, 102
+  orig: 161, 239
+  offset: 46, 28
+  index: 0
+SacredHatchet_dir2
+  rotate: false
+  xy: 2655, 121
+  size: 80, 121
+  orig: 161, 239
+  offset: 58, 34
+  index: 0
+SacredHatchet_dir3
+  rotate: false
+  xy: 1805, 1546
+  size: 98, 106
+  orig: 161, 239
+  offset: 46, 54
+  index: 0
+SacredHatchet_dir4
+  rotate: false
+  xy: 720, 3662
+  size: 116, 99
+  orig: 161, 239
+  offset: 22, 64
+  index: 0
+SacredHatchet_dir5
+  rotate: false
+  xy: 2631, 2703
+  size: 98, 106
+  orig: 161, 239
+  offset: 18, 54
+  index: 0
+SacredHatchet_dir6
+  rotate: false
+  xy: 2573, 239
+  size: 80, 121
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+SacredHatchet_dir7
+  rotate: false
+  xy: 2515, 2350
+  size: 98, 102
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+SacredTriumvirate_dir0
+  rotate: false
+  xy: 444, 2316
+  size: 104, 123
+  orig: 161, 239
+  offset: 28, 28
+  index: 0
+SacredTriumvirate_dir1
+  rotate: false
+  xy: 228, 1821
+  size: 106, 112
+  orig: 161, 239
+  offset: 38, 28
+  index: 0
+SacredTriumvirate_dir2
+  rotate: false
+  xy: 974, 2237
+  size: 104, 118
+  orig: 161, 239
+  offset: 34, 34
+  index: 0
+SacredTriumvirate_dir3
+  rotate: false
+  xy: 120, 1939
+  size: 106, 112
+  orig: 161, 239
+  offset: 38, 48
+  index: 0
+SacredTriumvirate_dir4
+  rotate: false
+  xy: 1399, 3145
+  size: 104, 121
+  orig: 161, 239
+  offset: 28, 40
+  index: 0
+SacredTriumvirate_dir5
+  rotate: false
+  xy: 228, 1707
+  size: 106, 112
+  orig: 161, 239
+  offset: 18, 48
+  index: 0
+SacredTriumvirate_dir6
+  rotate: false
+  xy: 1293, 3110
+  size: 104, 118
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+SacredTriumvirate_dir7
+  rotate: false
+  xy: 228, 2277
+  size: 106, 112
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+SacredWanderer_dir0
+  rotate: false
+  xy: 3910, 3979
+  size: 116, 115
+  orig: 161, 239
+  offset: 22, 43
+  index: 0
+SacredWanderer_dir1
+  rotate: false
+  xy: 2298, 3159
+  size: 108, 112
+  orig: 161, 239
+  offset: 36, 28
+  index: 0
+SacredWanderer_dir2
+  rotate: false
+  xy: 3910, 3390
+  size: 116, 122
+  orig: 161, 239
+  offset: 19, 34
+  index: 0
+SacredWanderer_dir3
+  rotate: false
+  xy: 3068, 2990
+  size: 108, 112
+  orig: 161, 239
+  offset: 36, 48
+  index: 0
+SacredWanderer_dir4
+  rotate: false
+  xy: 2, 2878
+  size: 116, 133
+  orig: 161, 239
+  offset: 22, 31
+  index: 0
+SacredWanderer_dir5
+  rotate: false
+  xy: 2188, 3263
+  size: 108, 112
+  orig: 161, 239
+  offset: 18, 48
+  index: 0
+SacredWanderer_dir6
+  rotate: false
+  xy: 2730, 3737
+  size: 114, 122
+  orig: 161, 239
+  offset: 25, 34
+  index: 0
+SacredWanderer_dir7
+  rotate: false
+  xy: 3768, 2920
+  size: 108, 112
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+SereneCommonwealth_dir0
+  rotate: false
+  xy: 1516, 3611
+  size: 110, 116
+  orig: 161, 239
+  offset: 25, 31
+  index: 0
+SereneCommonwealth_dir1
+  rotate: false
+  xy: 228, 1935
+  size: 106, 112
+  orig: 161, 239
+  offset: 38, 28
+  index: 0
+SereneCommonwealth_dir2
+  rotate: false
+  xy: 550, 1512
+  size: 104, 122
+  orig: 161, 239
+  offset: 34, 33
+  index: 0
+SereneCommonwealth_dir3
+  rotate: false
+  xy: 120, 1043
+  size: 106, 112
+  orig: 161, 239
+  offset: 38, 48
+  index: 0
+SereneCommonwealth_dir4
+  rotate: false
+  xy: 1516, 3373
+  size: 110, 123
+  orig: 161, 239
+  offset: 25, 40
+  index: 0
+SereneCommonwealth_dir5
+  rotate: false
+  xy: 3948, 2688
+  size: 106, 112
+  orig: 161, 239
+  offset: 18, 48
+  index: 0
+SereneCommonwealth_dir6
+  rotate: false
+  xy: 3936, 2224
+  size: 104, 122
+  orig: 161, 239
+  offset: 22, 33
+  index: 0
+SereneCommonwealth_dir7
+  rotate: false
+  xy: 228, 1593
+  size: 106, 112
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+SereneResistance_dir0
+  rotate: false
+  xy: 2, 2123
+  size: 116, 123
+  orig: 161, 239
+  offset: 22, 28
+  index: 0
+SereneResistance_dir1
+  rotate: false
+  xy: 1080, 1234
+  size: 104, 112
+  orig: 161, 239
+  offset: 40, 28
+  index: 0
+SereneResistance_dir2
+  rotate: false
+  xy: 760, 48
+  size: 104, 122
+  orig: 161, 239
+  offset: 34, 34
+  index: 0
+SereneResistance_dir3
+  rotate: false
+  xy: 550, 2555
+  size: 104, 104
+  orig: 161, 239
+  offset: 40, 56
+  index: 0
+SereneResistance_dir4
+  rotate: false
+  xy: 2258, 3869
+  size: 116, 111
+  orig: 161, 239
+  offset: 22, 52
+  index: 0
+SereneResistance_dir5
+  rotate: false
+  xy: 762, 1379
+  size: 104, 104
+  orig: 161, 239
+  offset: 18, 56
+  index: 0
+SereneResistance_dir6
+  rotate: false
+  xy: 654, 288
+  size: 104, 122
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+SereneResistance_dir7
+  rotate: false
+  xy: 1184, 246
+  size: 104, 112
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+ServoShuriken_dir0
+  rotate: false
+  xy: 466, 3633
+  size: 104, 113
+  orig: 161, 239
+  offset: 28, 34
+  index: 0
+ServoShuriken_dir1
+  rotate: false
+  xy: 2215, 2404
+  size: 98, 110
+  orig: 161, 239
+  offset: 44, 28
+  index: 0
+ServoShuriken_dir2
+  rotate: false
+  xy: 2531, 2787
+  size: 98, 116
+  orig: 161, 239
+  offset: 40, 34
+  index: 0
+ServoShuriken_dir3
+  rotate: false
+  xy: 2206, 2062
+  size: 98, 100
+  orig: 161, 239
+  offset: 44, 58
+  index: 0
+ServoShuriken_dir4
+  rotate: false
+  xy: 442, 2
+  size: 104, 106
+  orig: 161, 239
+  offset: 28, 58
+  index: 0
+ServoShuriken_dir5
+  rotate: false
+  xy: 2106, 1825
+  size: 98, 100
+  orig: 161, 239
+  offset: 20, 58
+  index: 0
+ServoShuriken_dir6
+  rotate: false
+  xy: 1805, 1654
+  size: 98, 116
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+ServoShuriken_dir7
+  rotate: false
+  xy: 1906, 2432
+  size: 98, 110
+  orig: 161, 239
+  offset: 20, 28
+  index: 0
+ShimmeringPeace_dir0
+  rotate: false
+  xy: 2092, 3724
+  size: 110, 126
+  orig: 161, 239
+  offset: 25, 31
+  index: 0
+ShimmeringPeace_dir1
+  rotate: false
+  xy: 3548, 3018
+  size: 108, 114
+  orig: 161, 239
+  offset: 36, 28
+  index: 0
+ShimmeringPeace_dir2
+  rotate: false
+  xy: 3438, 3847
+  size: 116, 123
+  orig: 161, 239
+  offset: 22, 33
+  index: 0
+ShimmeringPeace_dir3
+  rotate: false
+  xy: 3660, 3065
+  size: 108, 114
+  orig: 161, 239
+  offset: 36, 46
+  index: 0
+ShimmeringPeace_dir4
+  rotate: false
+  xy: 1740, 3579
+  size: 110, 132
+  orig: 161, 239
+  offset: 25, 32
+  index: 0
+ShimmeringPeace_dir5
+  rotate: false
+  xy: 3178, 2668
+  size: 108, 114
+  orig: 161, 239
+  offset: 18, 46
+  index: 0
+ShimmeringPeace_dir6
+  rotate: false
+  xy: 2966, 3971
+  size: 116, 123
+  orig: 161, 239
+  offset: 22, 33
+  index: 0
+ShimmeringPeace_dir7
+  rotate: false
+  xy: 3618, 2605
+  size: 108, 114
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+SloppyCunning_dir0
+  rotate: false
+  xy: 3431, 2440
+  size: 68, 95
+  orig: 161, 239
+  offset: 46, 34
+  index: 0
+SloppyCunning_dir1
+  rotate: false
+  xy: 4012, 1365
+  size: 82, 86
+  orig: 161, 239
+  offset: 50, 46
+  index: 0
+SloppyCunning_dir2
+  rotate: false
+  xy: 2764, 3656
+  size: 80, 79
+  orig: 161, 239
+  offset: 58, 64
+  index: 0
+SloppyCunning_dir3
+  rotate: false
+  xy: 2573, 362
+  size: 82, 90
+  orig: 161, 239
+  offset: 50, 62
+  index: 0
+SloppyCunning_dir4
+  rotate: false
+  xy: 2540, 3746
+  size: 68, 93
+  orig: 161, 239
+  offset: 46, 70
+  index: 0
+SloppyCunning_dir5
+  rotate: false
+  xy: 4012, 1273
+  size: 82, 90
+  orig: 161, 239
+  offset: 30, 62
+  index: 0
+SloppyCunning_dir6
+  rotate: false
+  xy: 4014, 1460
+  size: 80, 79
+  orig: 161, 239
+  offset: 22, 64
+  index: 0
+SloppyCunning_dir7
+  rotate: false
+  xy: 2100, 5
+  size: 82, 86
+  orig: 161, 239
+  offset: 30, 46
+  index: 0
+SmartMafia_dir0
+  rotate: false
+  xy: 3100, 3104
+  size: 110, 123
+  orig: 161, 239
+  offset: 25, 28
+  index: 0
+SmartMafia_dir1
+  rotate: false
+  xy: 120, 2053
+  size: 106, 112
+  orig: 161, 239
+  offset: 36, 28
+  index: 0
+SmartMafia_dir2
+  rotate: false
+  xy: 3772, 3262
+  size: 110, 120
+  orig: 161, 239
+  offset: 28, 34
+  index: 0
+SmartMafia_dir3
+  rotate: false
+  xy: 336, 1595
+  size: 106, 110
+  orig: 161, 239
+  offset: 36, 48
+  index: 0
+SmartMafia_dir4
+  rotate: false
+  xy: 3660, 3278
+  size: 110, 124
+  orig: 161, 239
+  offset: 25, 40
+  index: 0
+SmartMafia_dir5
+  rotate: false
+  xy: 336, 2277
+  size: 106, 110
+  orig: 161, 239
+  offset: 20, 48
+  index: 0
+SmartMafia_dir6
+  rotate: false
+  xy: 3548, 3384
+  size: 110, 120
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+SmartMafia_dir7
+  rotate: false
+  xy: 2738, 2801
+  size: 106, 112
+  orig: 161, 239
+  offset: 20, 28
+  index: 0
+SolarShield_dir0
+  rotate: false
+  xy: 1805, 526
+  size: 98, 119
+  orig: 161, 239
+  offset: 31, 28
+  index: 0
+SolarShield_dir1
+  rotate: false
+  xy: 120, 1491
+  size: 106, 106
+  orig: 161, 239
+  offset: 36, 30
+  index: 0
+SolarShield_dir2
+  rotate: false
+  xy: 2076, 3389
+  size: 110, 102
+  orig: 161, 239
+  offset: 28, 40
+  index: 0
+SolarShield_dir3
+  rotate: false
+  xy: 228, 815
+  size: 106, 106
+  orig: 161, 239
+  offset: 36, 46
+  index: 0
+SolarShield_dir4
+  rotate: false
+  xy: 1806, 2418
+  size: 98, 126
+  orig: 161, 239
+  offset: 31, 38
+  index: 0
+SolarShield_dir5
+  rotate: false
+  xy: 228, 1145
+  size: 106, 106
+  orig: 161, 239
+  offset: 20, 46
+  index: 0
+SolarShield_dir6
+  rotate: false
+  xy: 1180, 3634
+  size: 110, 102
+  orig: 161, 239
+  offset: 22, 40
+  index: 0
+SolarShield_dir7
+  rotate: false
+  xy: 120, 1383
+  size: 106, 106
+  orig: 161, 239
+  offset: 20, 30
+  index: 0
+SoleCunning_dir0
+  rotate: false
+  xy: 3910, 3733
+  size: 116, 120
+  orig: 161, 239
+  offset: 22, 31
+  index: 0
+SoleCunning_dir1
+  rotate: false
+  xy: 2206, 1952
+  size: 98, 108
+  orig: 161, 239
+  offset: 46, 30
+  index: 0
+SoleCunning_dir2
+  rotate: false
+  xy: 656, 2678
+  size: 104, 121
+  orig: 161, 239
+  offset: 34, 34
+  index: 0
+SoleCunning_dir3
+  rotate: false
+  xy: 2106, 2031
+  size: 98, 104
+  orig: 161, 239
+  offset: 46, 56
+  index: 0
+SoleCunning_dir4
+  rotate: false
+  xy: 2, 436
+  size: 116, 110
+  orig: 161, 239
+  offset: 22, 52
+  index: 0
+SoleCunning_dir5
+  rotate: false
+  xy: 2006, 2254
+  size: 98, 104
+  orig: 161, 239
+  offset: 18, 56
+  index: 0
+SoleCunning_dir6
+  rotate: false
+  xy: 442, 561
+  size: 104, 121
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+SoleCunning_dir7
+  rotate: false
+  xy: 1906, 2108
+  size: 98, 108
+  orig: 161, 239
+  offset: 18, 30
+  index: 0
+SoleEmperor_dir0
+  rotate: false
+  xy: 1404, 3508
+  size: 110, 117
+  orig: 161, 239
+  offset: 25, 28
+  index: 0
+SoleEmperor_dir1
+  rotate: false
+  xy: 228, 17
+  size: 106, 110
+  orig: 161, 239
+  offset: 38, 30
+  index: 0
+SoleEmperor_dir2
+  rotate: false
+  xy: 656, 1740
+  size: 104, 116
+  orig: 161, 239
+  offset: 34, 40
+  index: 0
+SoleEmperor_dir3
+  rotate: false
+  xy: 337, 3295
+  size: 106, 110
+  orig: 161, 239
+  offset: 38, 50
+  index: 0
+SoleEmperor_dir4
+  rotate: false
+  xy: 1756, 3849
+  size: 110, 117
+  orig: 161, 239
+  offset: 25, 46
+  index: 0
+SoleEmperor_dir5
+  rotate: false
+  xy: 120, 477
+  size: 106, 110
+  orig: 161, 239
+  offset: 18, 50
+  index: 0
+SoleEmperor_dir6
+  rotate: false
+  xy: 442, 1016
+  size: 104, 116
+  orig: 161, 239
+  offset: 22, 40
+  index: 0
+SoleEmperor_dir7
+  rotate: false
+  xy: 3830, 2464
+  size: 106, 110
+  orig: 161, 239
+  offset: 18, 30
+  index: 0
+SoleMurderer_dir0
+  rotate: false
+  xy: 972, 27
+  size: 104, 117
+  orig: 161, 239
+  offset: 28, 28
+  index: 0
+SoleMurderer_dir1
+  rotate: false
+  xy: 550, 1309
+  size: 104, 110
+  orig: 161, 239
+  offset: 38, 30
+  index: 0
+SoleMurderer_dir2
+  rotate: false
+  xy: 974, 2121
+  size: 104, 114
+  orig: 161, 239
+  offset: 34, 36
+  index: 0
+SoleMurderer_dir3
+  rotate: false
+  xy: 548, 665
+  size: 104, 110
+  orig: 161, 239
+  offset: 38, 48
+  index: 0
+SoleMurderer_dir4
+  rotate: false
+  xy: 1078, 533
+  size: 104, 124
+  orig: 161, 239
+  offset: 28, 40
+  index: 0
+SoleMurderer_dir5
+  rotate: false
+  xy: 444, 1520
+  size: 104, 110
+  orig: 161, 239
+  offset: 20, 48
+  index: 0
+SoleMurderer_dir6
+  rotate: false
+  xy: 550, 2750
+  size: 104, 114
+  orig: 161, 239
+  offset: 22, 36
+  index: 0
+SoleMurderer_dir7
+  rotate: false
+  xy: 972, 961
+  size: 104, 110
+  orig: 161, 239
+  offset: 20, 30
+  index: 0
+SoleNet_dir0
+  rotate: false
+  xy: 2487, 874
+  size: 86, 112
+  orig: 161, 239
+  offset: 37, 31
+  index: 0
+SoleNet_dir1
+  rotate: false
+  xy: 2602, 1655
+  size: 94, 98
+  orig: 161, 239
+  offset: 44, 38
+  index: 0
+SoleNet_dir2
+  rotate: false
+  xy: 2297, 576
+  size: 92, 94
+  orig: 161, 239
+  offset: 46, 52
+  index: 0
+SoleNet_dir3
+  rotate: false
+  xy: 3481, 2037
+  size: 94, 100
+  orig: 161, 239
+  offset: 44, 56
+  index: 0
+SoleNet_dir4
+  rotate: false
+  xy: 2488, 1108
+  size: 86, 110
+  orig: 161, 239
+  offset: 37, 54
+  index: 0
+SoleNet_dir5
+  rotate: false
+  xy: 3385, 2004
+  size: 94, 100
+  orig: 161, 239
+  offset: 24, 56
+  index: 0
+SoleNet_dir6
+  rotate: false
+  xy: 3356, 1703
+  size: 92, 94
+  orig: 161, 239
+  offset: 22, 52
+  index: 0
+SoleNet_dir7
+  rotate: false
+  xy: 3289, 2006
+  size: 94, 98
+  orig: 161, 239
+  offset: 24, 38
+  index: 0
+SorcerousLord_dir0
+  rotate: false
+  xy: 3556, 3631
+  size: 116, 118
+  orig: 161, 239
+  offset: 22, 33
+  index: 0
+SorcerousLord_dir1
+  rotate: false
+  xy: 121, 2953
+  size: 106, 104
+  orig: 161, 239
+  offset: 38, 30
+  index: 0
+SorcerousLord_dir2
+  rotate: false
+  xy: 3792, 3598
+  size: 116, 122
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+SorcerousLord_dir3
+  rotate: false
+  xy: 229, 3407
+  size: 106, 112
+  orig: 161, 239
+  offset: 38, 48
+  index: 0
+SorcerousLord_dir4
+  rotate: false
+  xy: 2, 1616
+  size: 116, 131
+  orig: 161, 239
+  offset: 22, 32
+  index: 0
+SorcerousLord_dir5
+  rotate: false
+  xy: 336, 1819
+  size: 106, 112
+  orig: 161, 239
+  offset: 18, 48
+  index: 0
+SorcerousLord_dir6
+  rotate: false
+  xy: 2, 194
+  size: 116, 122
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+SorcerousLord_dir7
+  rotate: false
+  xy: 120, 2619
+  size: 106, 104
+  orig: 161, 239
+  offset: 18, 30
+  index: 0
+SorcerousWarrior_dir0
+  rotate: false
+  xy: 2836, 1102
+  size: 80, 120
+  orig: 161, 239
+  offset: 40, 31
+  index: 0
+SorcerousWarrior_dir1
+  rotate: false
+  xy: 2006, 1927
+  size: 98, 106
+  orig: 161, 239
+  offset: 38, 34
+  index: 0
+SorcerousWarrior_dir2
+  rotate: false
+  xy: 1516, 3175
+  size: 104, 97
+  orig: 161, 239
+  offset: 34, 46
+  index: 0
+SorcerousWarrior_dir3
+  rotate: false
+  xy: 2106, 2137
+  size: 98, 106
+  orig: 161, 239
+  offset: 38, 48
+  index: 0
+SorcerousWarrior_dir4
+  rotate: false
+  xy: 2836, 1325
+  size: 80, 124
+  orig: 161, 239
+  offset: 40, 40
+  index: 0
+SorcerousWarrior_dir5
+  rotate: false
+  xy: 2006, 2360
+  size: 98, 106
+  orig: 161, 239
+  offset: 26, 48
+  index: 0
+SorcerousWarrior_dir6
+  rotate: false
+  xy: 442, 796
+  size: 104, 97
+  orig: 161, 239
+  offset: 22, 46
+  index: 0
+SorcerousWarrior_dir7
+  rotate: false
+  xy: 1906, 2218
+  size: 98, 106
+  orig: 161, 239
+  offset: 26, 34
+  index: 0
+SorcerousWitch_dir0
+  rotate: false
+  xy: 2819, 107
+  size: 80, 124
+  orig: 161, 239
+  offset: 40, 33
+  index: 0
+SorcerousWitch_dir1
+  rotate: false
+  xy: 1397, 2687
+  size: 102, 106
+  orig: 161, 239
+  offset: 36, 36
+  index: 0
+SorcerousWitch_dir2
+  rotate: false
+  xy: 484, 3888
+  size: 116, 85
+  orig: 161, 239
+  offset: 22, 58
+  index: 0
+SorcerousWitch_dir3
+  rotate: false
+  xy: 1186, 2008
+  size: 102, 108
+  orig: 161, 239
+  offset: 36, 48
+  index: 0
+SorcerousWitch_dir4
+  rotate: false
+  xy: 2754, 1320
+  size: 80, 129
+  orig: 161, 239
+  offset: 40, 34
+  index: 0
+SorcerousWitch_dir5
+  rotate: false
+  xy: 1186, 2662
+  size: 102, 108
+  orig: 161, 239
+  offset: 24, 48
+  index: 0
+SorcerousWitch_dir6
+  rotate: false
+  xy: 3084, 4009
+  size: 116, 85
+  orig: 161, 239
+  offset: 22, 58
+  index: 0
+SorcerousWitch_dir7
+  rotate: false
+  xy: 1498, 2272
+  size: 102, 106
+  orig: 161, 239
+  offset: 24, 36
+  index: 0
+StalkingDominance_dir0
+  rotate: false
+  xy: 2215, 2516
+  size: 98, 99
+  orig: 161, 239
+  offset: 31, 28
+  index: 0
+StalkingDominance_dir1
+  rotate: false
+  xy: 2201, 993
+  size: 96, 104
+  orig: 161, 239
+  offset: 46, 30
+  index: 0
+StalkingDominance_dir2
+  rotate: false
+  xy: 2576, 1110
+  size: 80, 108
+  orig: 161, 239
+  offset: 58, 40
+  index: 0
+StalkingDominance_dir3
+  rotate: false
+  xy: 2201, 889
+  size: 96, 102
+  orig: 161, 239
+  offset: 46, 56
+  index: 0
+StalkingDominance_dir4
+  rotate: false
+  xy: 1806, 2325
+  size: 98, 91
+  orig: 161, 239
+  offset: 31, 68
+  index: 0
+StalkingDominance_dir5
+  rotate: false
+  xy: 2103, 965
+  size: 96, 102
+  orig: 161, 239
+  offset: 20, 56
+  index: 0
+StalkingDominance_dir6
+  rotate: false
+  xy: 2659, 638
+  size: 80, 108
+  orig: 161, 239
+  offset: 22, 40
+  index: 0
+StalkingDominance_dir7
+  rotate: false
+  xy: 1905, 545
+  size: 96, 104
+  orig: 161, 239
+  offset: 20, 30
+  index: 0
+StalkingPriest_dir0
+  rotate: false
+  xy: 3436, 3108
+  size: 110, 123
+  orig: 161, 239
+  offset: 25, 34
+  index: 0
+StalkingPriest_dir1
+  rotate: false
+  xy: 1703, 1684
+  size: 100, 104
+  orig: 161, 239
+  offset: 36, 38
+  index: 0
+StalkingPriest_dir2
+  rotate: false
+  xy: 841, 3853
+  size: 116, 117
+  orig: 161, 239
+  offset: 22, 37
+  index: 0
+StalkingPriest_dir3
+  rotate: false
+  xy: 1601, 546
+  size: 100, 110
+  orig: 161, 239
+  offset: 36, 46
+  index: 0
+StalkingPriest_dir4
+  rotate: false
+  xy: 3324, 3358
+  size: 110, 128
+  orig: 161, 239
+  offset: 25, 34
+  index: 0
+StalkingPriest_dir5
+  rotate: false
+  xy: 1601, 984
+  size: 100, 110
+  orig: 161, 239
+  offset: 26, 46
+  index: 0
+StalkingPriest_dir6
+  rotate: false
+  xy: 2, 75
+  size: 116, 117
+  orig: 161, 239
+  offset: 22, 37
+  index: 0
+StalkingPriest_dir7
+  rotate: false
+  xy: 1601, 1416
+  size: 100, 104
+  orig: 161, 239
+  offset: 26, 38
+  index: 0
+StellarWhip_dir0
+  rotate: false
+  xy: 2540, 3385
+  size: 110, 131
+  orig: 161, 239
+  offset: 25, 28
+  index: 0
+StellarWhip_dir1
+  rotate: false
+  xy: 548, 777
+  size: 104, 114
+  orig: 161, 239
+  offset: 38, 28
+  index: 0
+StellarWhip_dir2
+  rotate: false
+  xy: 3910, 3855
+  size: 116, 122
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+StellarWhip_dir3
+  rotate: false
+  xy: 444, 1723
+  size: 104, 112
+  orig: 161, 239
+  offset: 38, 48
+  index: 0
+StellarWhip_dir4
+  rotate: false
+  xy: 1964, 3233
+  size: 110, 131
+  orig: 161, 239
+  offset: 25, 32
+  index: 0
+StellarWhip_dir5
+  rotate: false
+  xy: 445, 3292
+  size: 104, 112
+  orig: 161, 239
+  offset: 20, 48
+  index: 0
+StellarWhip_dir6
+  rotate: false
+  xy: 3438, 3972
+  size: 116, 122
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+StellarWhip_dir7
+  rotate: false
+  xy: 1611, 3031
+  size: 104, 114
+  orig: 161, 239
+  offset: 20, 28
+  index: 0
+StrongCutlass_dir0
+  rotate: false
+  xy: 3212, 3236
+  size: 110, 123
+  orig: 161, 239
+  offset: 25, 28
+  index: 0
+StrongCutlass_dir1
+  rotate: false
+  xy: 1394, 2367
+  size: 102, 102
+  orig: 161, 239
+  offset: 40, 32
+  index: 0
+StrongCutlass_dir2
+  rotate: false
+  xy: 3084, 3698
+  size: 116, 114
+  orig: 161, 239
+  offset: 22, 40
+  index: 0
+StrongCutlass_dir3
+  rotate: false
+  xy: 1394, 173
+  size: 102, 112
+  orig: 161, 239
+  offset: 40, 48
+  index: 0
+StrongCutlass_dir4
+  rotate: false
+  xy: 1852, 3233
+  size: 110, 134
+  orig: 161, 239
+  offset: 25, 30
+  index: 0
+StrongCutlass_dir5
+  rotate: false
+  xy: 1290, 1486
+  size: 102, 112
+  orig: 161, 239
+  offset: 20, 48
+  index: 0
+StrongCutlass_dir6
+  rotate: false
+  xy: 1904, 3855
+  size: 116, 114
+  orig: 161, 239
+  offset: 22, 40
+  index: 0
+StrongCutlass_dir7
+  rotate: false
+  xy: 1290, 2380
+  size: 102, 102
+  orig: 161, 239
+  offset: 20, 32
+  index: 0
+TotalNature_dir0
+  rotate: false
+  xy: 2406, 1742
+  size: 98, 106
+  orig: 161, 239
+  offset: 31, 33
+  index: 0
+TotalNature_dir1
+  rotate: false
+  xy: 2299, 1199
+  size: 96, 102
+  orig: 161, 239
+  offset: 44, 32
+  index: 0
+TotalNature_dir2
+  rotate: false
+  xy: 3074, 1695
+  size: 92, 110
+  orig: 161, 239
+  offset: 46, 42
+  index: 0
+TotalNature_dir3
+  rotate: false
+  xy: 2201, 1207
+  size: 96, 106
+  orig: 161, 239
+  offset: 44, 54
+  index: 0
+TotalNature_dir4
+  rotate: false
+  xy: 2129, 2702
+  size: 98, 109
+  orig: 161, 239
+  offset: 31, 54
+  index: 0
+TotalNature_dir5
+  rotate: false
+  xy: 1904, 125
+  size: 96, 106
+  orig: 161, 239
+  offset: 22, 54
+  index: 0
+TotalNature_dir6
+  rotate: false
+  xy: 2792, 1711
+  size: 92, 110
+  orig: 161, 239
+  offset: 22, 42
+  index: 0
+TotalNature_dir7
+  rotate: false
+  xy: 1905, 865
+  size: 96, 102
+  orig: 161, 239
+  offset: 22, 32
+  index: 0
+TotalSnake_dir0
+  rotate: false
+  xy: 3062, 2649
+  size: 104, 109
+  orig: 161, 239
+  offset: 28, 34
+  index: 0
+TotalSnake_dir1
+  rotate: false
+  xy: 1290, 716
+  size: 102, 104
+  orig: 161, 239
+  offset: 42, 30
+  index: 0
+TotalSnake_dir2
+  rotate: false
+  xy: 2982, 1850
+  size: 92, 113
+  orig: 161, 239
+  offset: 46, 40
+  index: 0
+TotalSnake_dir3
+  rotate: false
+  xy: 1607, 2710
+  size: 102, 106
+  orig: 161, 239
+  offset: 42, 52
+  index: 0
+TotalSnake_dir4
+  rotate: false
+  xy: 760, 603
+  size: 104, 108
+  orig: 161, 239
+  offset: 28, 56
+  index: 0
+TotalSnake_dir5
+  rotate: false
+  xy: 1290, 822
+  size: 102, 106
+  orig: 161, 239
+  offset: 18, 52
+  index: 0
+TotalSnake_dir6
+  rotate: false
+  xy: 2297, 774
+  size: 92, 113
+  orig: 161, 239
+  offset: 22, 40
+  index: 0
+TotalSnake_dir7
+  rotate: false
+  xy: 1394, 2261
+  size: 102, 104
+  orig: 161, 239
+  offset: 18, 30
+  index: 0
+TranquilFiefdom_dir0
+  rotate: false
+  xy: 1905, 1549
+  size: 98, 117
+  orig: 161, 239
+  offset: 31, 28
+  index: 0
+TranquilFiefdom_dir1
+  rotate: false
+  xy: 1703, 1582
+  size: 100, 100
+  orig: 161, 239
+  offset: 40, 38
+  index: 0
+TranquilFiefdom_dir2
+  rotate: false
+  xy: 654, 636
+  size: 104, 104
+  orig: 161, 239
+  offset: 34, 48
+  index: 0
+TranquilFiefdom_dir3
+  rotate: false
+  xy: 1703, 1250
+  size: 100, 110
+  orig: 161, 239
+  offset: 40, 50
+  index: 0
+TranquilFiefdom_dir4
+  rotate: false
+  xy: 2106, 1699
+  size: 98, 124
+  orig: 161, 239
+  offset: 31, 40
+  index: 0
+TranquilFiefdom_dir5
+  rotate: false
+  xy: 1601, 1522
+  size: 100, 110
+  orig: 161, 239
+  offset: 22, 50
+  index: 0
+TranquilFiefdom_dir6
+  rotate: false
+  xy: 3830, 2244
+  size: 104, 104
+  orig: 161, 239
+  offset: 22, 48
+  index: 0
+TranquilFiefdom_dir7
+  rotate: false
+  xy: 1602, 2388
+  size: 100, 100
+  orig: 161, 239
+  offset: 22, 38
+  index: 0
+TranquilMace_dir0
+  rotate: false
+  xy: 1068, 3608
+  size: 110, 129
+  orig: 161, 239
+  offset: 25, 28
+  index: 0
+TranquilMace_dir1
+  rotate: false
+  xy: 762, 2776
+  size: 104, 110
+  orig: 161, 239
+  offset: 40, 28
+  index: 0
+TranquilMace_dir2
+  rotate: false
+  xy: 2022, 3852
+  size: 116, 123
+  orig: 161, 239
+  offset: 22, 33
+  index: 0
+TranquilMace_dir3
+  rotate: false
+  xy: 974, 1654
+  size: 104, 112
+  orig: 161, 239
+  offset: 40, 48
+  index: 0
+TranquilMace_dir4
+  rotate: false
+  xy: 3436, 3352
+  size: 110, 134
+  orig: 161, 239
+  offset: 25, 30
+  index: 0
+TranquilMace_dir5
+  rotate: false
+  xy: 760, 946
+  size: 104, 112
+  orig: 161, 239
+  offset: 18, 48
+  index: 0
+TranquilMace_dir6
+  rotate: false
+  xy: 3556, 3506
+  size: 116, 123
+  orig: 161, 239
+  offset: 22, 33
+  index: 0
+TranquilMace_dir7
+  rotate: false
+  xy: 656, 1406
+  size: 104, 110
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+TranquilMilitants_dir0
+  rotate: false
+  xy: 2931, 2614
+  size: 98, 129
+  orig: 161, 239
+  offset: 31, 28
+  index: 0
+TranquilMilitants_dir1
+  rotate: false
+  xy: 551, 3360
+  size: 104, 110
+  orig: 161, 239
+  offset: 38, 30
+  index: 0
+TranquilMilitants_dir2
+  rotate: false
+  xy: 3438, 3613
+  size: 116, 111
+  orig: 161, 239
+  offset: 22, 41
+  index: 0
+TranquilMilitants_dir3
+  rotate: false
+  xy: 763, 3132
+  size: 104, 110
+  orig: 161, 239
+  offset: 38, 50
+  index: 0
+TranquilMilitants_dir4
+  rotate: false
+  xy: 1805, 1084
+  size: 98, 129
+  orig: 161, 239
+  offset: 31, 34
+  index: 0
+TranquilMilitants_dir5
+  rotate: false
+  xy: 656, 1518
+  size: 104, 110
+  orig: 161, 239
+  offset: 20, 50
+  index: 0
+TranquilMilitants_dir6
+  rotate: false
+  xy: 3202, 3732
+  size: 116, 111
+  orig: 161, 239
+  offset: 22, 41
+  index: 0
+TranquilMilitants_dir7
+  rotate: false
+  xy: 550, 1750
+  size: 104, 110
+  orig: 161, 239
+  offset: 20, 30
+  index: 0
+TurboPyre_dir0
+  rotate: false
+  xy: 3531, 2139
+  size: 98, 119
+  orig: 161, 239
+  offset: 31, 28
+  index: 0
+TurboPyre_dir1
+  rotate: false
+  xy: 1498, 240
+  size: 100, 106
+  orig: 161, 239
+  offset: 40, 34
+  index: 0
+TurboPyre_dir2
+  rotate: false
+  xy: 868, 2487
+  size: 104, 110
+  orig: 161, 239
+  offset: 34, 42
+  index: 0
+TurboPyre_dir3
+  rotate: false
+  xy: 1704, 1790
+  size: 100, 110
+  orig: 161, 239
+  offset: 40, 50
+  index: 0
+TurboPyre_dir4
+  rotate: false
+  xy: 2115, 2590
+  size: 98, 110
+  orig: 161, 239
+  offset: 31, 52
+  index: 0
+TurboPyre_dir5
+  rotate: false
+  xy: 2027, 2715
+  size: 100, 110
+  orig: 161, 239
+  offset: 22, 50
+  index: 0
+TurboPyre_dir6
+  rotate: false
+  xy: 868, 1807
+  size: 104, 110
+  orig: 161, 239
+  offset: 22, 42
+  index: 0
+TurboPyre_dir7
+  rotate: false
+  xy: 1704, 2222
+  size: 100, 106
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+UltimateLady_dir0
+  rotate: false
+  xy: 2741, 690
+  size: 80, 116
+  orig: 161, 239
+  offset: 40, 34
+  index: 0
+UltimateLady_dir1
+  rotate: false
+  xy: 2101, 649
+  size: 96, 104
+  orig: 161, 239
+  offset: 44, 34
+  index: 0
+UltimateLady_dir2
+  rotate: false
+  xy: 1498, 679
+  size: 101, 100
+  orig: 161, 239
+  offset: 37, 46
+  index: 0
+UltimateLady_dir3
+  rotate: false
+  xy: 2002, 5
+  size: 96, 102
+  orig: 161, 239
+  offset: 44, 54
+  index: 0
+UltimateLady_dir4
+  rotate: false
+  xy: 2823, 467
+  size: 80, 109
+  orig: 161, 239
+  offset: 40, 54
+  index: 0
+UltimateLady_dir5
+  rotate: false
+  xy: 2103, 1489
+  size: 96, 102
+  orig: 161, 239
+  offset: 22, 54
+  index: 0
+UltimateLady_dir6
+  rotate: false
+  xy: 1498, 874
+  size: 101, 100
+  orig: 161, 239
+  offset: 22, 46
+  index: 0
+UltimateLady_dir7
+  rotate: false
+  xy: 2103, 1279
+  size: 96, 104
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+UltimatePyre_dir0
+  rotate: false
+  xy: 4028, 3972
+  size: 62, 122
+  orig: 161, 239
+  offset: 49, 28
+  index: 0
+UltimatePyre_dir1
+  rotate: false
+  xy: 2506, 2146
+  size: 94, 98
+  orig: 161, 239
+  offset: 38, 42
+  index: 0
+UltimatePyre_dir2
+  rotate: false
+  xy: 866, 15
+  size: 104, 74
+  orig: 161, 239
+  offset: 34, 64
+  index: 0
+UltimatePyre_dir3
+  rotate: false
+  xy: 2515, 2246
+  size: 94, 102
+  orig: 161, 239
+  offset: 38, 48
+  index: 0
+UltimatePyre_dir4
+  rotate: false
+  xy: 4028, 3849
+  size: 62, 121
+  orig: 161, 239
+  offset: 49, 40
+  index: 0
+UltimatePyre_dir5
+  rotate: false
+  xy: 2905, 2075
+  size: 94, 102
+  orig: 161, 239
+  offset: 30, 48
+  index: 0
+UltimatePyre_dir6
+  rotate: false
+  xy: 866, 568
+  size: 104, 74
+  orig: 161, 239
+  offset: 22, 64
+  index: 0
+UltimatePyre_dir7
+  rotate: false
+  xy: 2713, 2174
+  size: 94, 98
+  orig: 161, 239
+  offset: 30, 42
+  index: 0
+UnholyExcruciation_dir0
+  rotate: false
+  xy: 1786, 3968
+  size: 116, 126
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+UnholyExcruciation_dir1
+  rotate: false
+  xy: 3398, 2766
+  size: 108, 112
+  orig: 161, 239
+  offset: 36, 28
+  index: 0
+UnholyExcruciation_dir2
+  rotate: false
+  xy: 2, 3847
+  size: 119, 122
+  orig: 161, 239
+  offset: 19, 33
+  index: 0
+UnholyExcruciation_dir3
+  rotate: false
+  xy: 3288, 2786
+  size: 108, 112
+  orig: 161, 239
+  offset: 36, 48
+  index: 0
+UnholyExcruciation_dir4
+  rotate: false
+  xy: 605, 3865
+  size: 116, 135
+  orig: 161, 239
+  offset: 22, 29
+  index: 0
+UnholyExcruciation_dir5
+  rotate: false
+  xy: 3178, 2900
+  size: 108, 112
+  orig: 161, 239
+  offset: 18, 48
+  index: 0
+UnholyExcruciation_dir6
+  rotate: false
+  xy: 2, 3263
+  size: 117, 122
+  orig: 161, 239
+  offset: 22, 33
+  index: 0
+UnholyExcruciation_dir7
+  rotate: false
+  xy: 2298, 3045
+  size: 108, 112
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+UnholyKindness_dir0
+  rotate: false
+  xy: 2737, 225
+  size: 80, 126
+  orig: 161, 239
+  offset: 40, 33
+  index: 0
+UnholyKindness_dir1
+  rotate: false
+  xy: 1293, 3230
+  size: 104, 108
+  orig: 161, 239
+  offset: 36, 32
+  index: 0
+UnholyKindness_dir2
+  rotate: false
+  xy: 2, 3753
+  size: 119, 92
+  orig: 161, 239
+  offset: 19, 49
+  index: 0
+UnholyKindness_dir3
+  rotate: false
+  xy: 551, 2916
+  size: 104, 106
+  orig: 161, 239
+  offset: 36, 48
+  index: 0
+UnholyKindness_dir4
+  rotate: false
+  xy: 2659, 504
+  size: 80, 132
+  orig: 161, 239
+  offset: 40, 31
+  index: 0
+UnholyKindness_dir5
+  rotate: false
+  xy: 551, 3252
+  size: 104, 106
+  orig: 161, 239
+  offset: 22, 48
+  index: 0
+UnholyKindness_dir6
+  rotate: false
+  xy: 605, 4002
+  size: 117, 92
+  orig: 161, 239
+  offset: 22, 49
+  index: 0
+UnholyKindness_dir7
+  rotate: false
+  xy: 3168, 2558
+  size: 104, 108
+  orig: 161, 239
+  offset: 22, 32
+  index: 0
+UnifiedFront_dir0
+  rotate: false
+  xy: 868, 2031
+  size: 104, 117
+  orig: 161, 239
+  offset: 28, 28
+  index: 0
+UnifiedFront_dir1
+  rotate: false
+  xy: 548, 893
+  size: 104, 108
+  orig: 161, 239
+  offset: 38, 30
+  index: 0
+UnifiedFront_dir2
+  rotate: false
+  xy: 657, 3151
+  size: 104, 115
+  orig: 161, 239
+  offset: 34, 40
+  index: 0
+UnifiedFront_dir3
+  rotate: false
+  xy: 762, 2441
+  size: 104, 110
+  orig: 161, 239
+  offset: 38, 50
+  index: 0
+UnifiedFront_dir4
+  rotate: false
+  xy: 1080, 1903
+  size: 104, 124
+  orig: 161, 239
+  offset: 28, 40
+  index: 0
+UnifiedFront_dir5
+  rotate: false
+  xy: 762, 1267
+  size: 104, 110
+  orig: 161, 239
+  offset: 20, 50
+  index: 0
+UnifiedFront_dir6
+  rotate: false
+  xy: 869, 2951
+  size: 104, 115
+  orig: 161, 239
+  offset: 22, 40
+  index: 0
+UnifiedFront_dir7
+  rotate: false
+  xy: 1078, 313
+  size: 104, 108
+  orig: 161, 239
+  offset: 20, 30
+  index: 0
+UnifiedGuard_dir0
+  rotate: false
+  xy: 1644, 3733
+  size: 110, 123
+  orig: 161, 239
+  offset: 25, 28
+  index: 0
+UnifiedGuard_dir1
+  rotate: false
+  xy: 1600, 328
+  size: 100, 108
+  orig: 161, 239
+  offset: 42, 32
+  index: 0
+UnifiedGuard_dir2
+  rotate: false
+  xy: 442, 895
+  size: 104, 119
+  orig: 161, 239
+  offset: 34, 36
+  index: 0
+UnifiedGuard_dir3
+  rotate: false
+  xy: 1703, 598
+  size: 100, 106
+  orig: 161, 239
+  offset: 42, 54
+  index: 0
+UnifiedGuard_dir4
+  rotate: false
+  xy: 1180, 3521
+  size: 110, 111
+  orig: 161, 239
+  offset: 25, 52
+  index: 0
+UnifiedGuard_dir5
+  rotate: false
+  xy: 1703, 1030
+  size: 100, 106
+  orig: 161, 239
+  offset: 20, 54
+  index: 0
+UnifiedGuard_dir6
+  rotate: false
+  xy: 336, 672
+  size: 104, 119
+  orig: 161, 239
+  offset: 22, 36
+  index: 0
+UnifiedGuard_dir7
+  rotate: false
+  xy: 1703, 1472
+  size: 100, 108
+  orig: 161, 239
+  offset: 20, 32
+  index: 0
+UnitedFirearm_dir0
+  rotate: false
+  xy: 2206, 2164
+  size: 98, 132
+  orig: 161, 239
+  offset: 31, 28
+  index: 0
+UnitedFirearm_dir1
+  rotate: false
+  xy: 2831, 2691
+  size: 98, 102
+  orig: 161, 239
+  offset: 36, 38
+  index: 0
+UnitedFirearm_dir2
+  rotate: false
+  xy: 244, 3864
+  size: 119, 105
+  orig: 161, 239
+  offset: 19, 43
+  index: 0
+UnitedFirearm_dir3
+  rotate: false
+  xy: 1805, 647
+  size: 98, 108
+  orig: 161, 239
+  offset: 36, 48
+  index: 0
+UnitedFirearm_dir4
+  rotate: false
+  xy: 2015, 2468
+  size: 98, 135
+  orig: 161, 239
+  offset: 31, 29
+  index: 0
+UnitedFirearm_dir5
+  rotate: false
+  xy: 1809, 2546
+  size: 98, 108
+  orig: 161, 239
+  offset: 28, 48
+  index: 0
+UnitedFirearm_dir6
+  rotate: false
+  xy: 365, 3868
+  size: 117, 105
+  orig: 161, 239
+  offset: 22, 43
+  index: 0
+UnitedFirearm_dir7
+  rotate: false
+  xy: 2229, 2617
+  size: 98, 102
+  orig: 161, 239
+  offset: 28, 38
+  index: 0
+UnlimitedEarl_dir0
+  rotate: false
+  xy: 2204, 3499
+  size: 110, 114
+  orig: 161, 239
+  offset: 25, 33
+  index: 0
+UnlimitedEarl_dir1
+  rotate: false
+  xy: 2954, 2745
+  size: 106, 110
+  orig: 161, 239
+  offset: 38, 30
+  index: 0
+UnlimitedEarl_dir2
+  rotate: false
+  xy: 444, 1322
+  size: 104, 117
+  orig: 161, 239
+  offset: 34, 37
+  index: 0
+UnlimitedEarl_dir3
+  rotate: false
+  xy: 3722, 2348
+  size: 106, 110
+  orig: 161, 239
+  offset: 38, 50
+  index: 0
+UnlimitedEarl_dir4
+  rotate: false
+  xy: 2652, 3359
+  size: 110, 117
+  orig: 161, 239
+  offset: 25, 46
+  index: 0
+UnlimitedEarl_dir5
+  rotate: false
+  xy: 3880, 3034
+  size: 106, 110
+  orig: 161, 239
+  offset: 18, 50
+  index: 0
+UnlimitedEarl_dir6
+  rotate: false
+  xy: 763, 3485
+  size: 104, 117
+  orig: 161, 239
+  offset: 22, 37
+  index: 0
+UnlimitedEarl_dir7
+  rotate: false
+  xy: 228, 703
+  size: 106, 110
+  orig: 161, 239
+  offset: 18, 30
+  index: 0
+UnlimitedSloppiness_dir0
+  rotate: false
+  xy: 2, 1749
+  size: 116, 117
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+UnlimitedSloppiness_dir1
+  rotate: false
+  xy: 3770, 3034
+  size: 108, 110
+  orig: 161, 239
+  offset: 36, 30
+  index: 0
+UnlimitedSloppiness_dir2
+  rotate: false
+  xy: 1068, 3485
+  size: 110, 121
+  orig: 161, 239
+  offset: 28, 34
+  index: 0
+UnlimitedSloppiness_dir3
+  rotate: false
+  xy: 2628, 3129
+  size: 108, 114
+  orig: 161, 239
+  offset: 36, 46
+  index: 0
+UnlimitedSloppiness_dir4
+  rotate: false
+  xy: 2, 2751
+  size: 116, 125
+  orig: 161, 239
+  offset: 22, 38
+  index: 0
+UnlimitedSloppiness_dir5
+  rotate: false
+  xy: 2408, 3151
+  size: 108, 114
+  orig: 161, 239
+  offset: 18, 46
+  index: 0
+UnlimitedSloppiness_dir6
+  rotate: false
+  xy: 2076, 3266
+  size: 110, 121
+  orig: 161, 239
+  offset: 22, 34
+  index: 0
+UnlimitedSloppiness_dir7
+  rotate: false
+  xy: 2298, 3387
+  size: 108, 110
+  orig: 161, 239
+  offset: 18, 30
+  index: 0
+UnspeakableImperium_dir0
+  rotate: false
+  xy: 3531, 2260
+  size: 98, 115
+  orig: 161, 239
+  offset: 31, 28
+  index: 0
+UnspeakableImperium_dir1
+  rotate: false
+  xy: 3358, 1799
+  size: 92, 92
+  orig: 161, 239
+  offset: 44, 40
+  index: 0
+UnspeakableImperium_dir2
+  rotate: false
+  xy: 2980, 1625
+  size: 92, 103
+  orig: 161, 239
+  offset: 46, 49
+  index: 0
+UnspeakableImperium_dir3
+  rotate: false
+  xy: 2389, 86
+  size: 92, 102
+  orig: 161, 239
+  offset: 44, 54
+  index: 0
+UnspeakableImperium_dir4
+  rotate: false
+  xy: 2329, 2588
+  size: 98, 102
+  orig: 161, 239
+  offset: 31, 61
+  index: 0
+UnspeakableImperium_dir5
+  rotate: false
+  xy: 3450, 1392
+  size: 92, 102
+  orig: 161, 239
+  offset: 26, 54
+  index: 0
+UnspeakableImperium_dir6
+  rotate: false
+  xy: 2698, 1652
+  size: 92, 103
+  orig: 161, 239
+  offset: 22, 49
+  index: 0
+UnspeakableImperium_dir7
+  rotate: false
+  xy: 3452, 1723
+  size: 92, 92
+  orig: 161, 239
+  offset: 26, 40
+  index: 0
+UnspeakablePistol_dir0
+  rotate: false
+  xy: 1420, 3851
+  size: 110, 113
+  orig: 161, 239
+  offset: 25, 31
+  index: 0
+UnspeakablePistol_dir1
+  rotate: false
+  xy: 868, 1695
+  size: 104, 110
+  orig: 161, 239
+  offset: 40, 30
+  index: 0
+UnspeakablePistol_dir2
+  rotate: false
+  xy: 1498, 1829
+  size: 101, 115
+  orig: 161, 239
+  offset: 37, 40
+  index: 0
+UnspeakablePistol_dir3
+  rotate: false
+  xy: 869, 3401
+  size: 104, 106
+  orig: 161, 239
+  offset: 40, 54
+  index: 0
+UnspeakablePistol_dir4
+  rotate: false
+  xy: 1183, 3738
+  size: 110, 107
+  orig: 161, 239
+  offset: 25, 54
+  index: 0
+UnspeakablePistol_dir5
+  rotate: false
+  xy: 444, 2441
+  size: 104, 106
+  orig: 161, 239
+  offset: 18, 54
+  index: 0
+UnspeakablePistol_dir6
+  rotate: false
+  xy: 1498, 562
+  size: 101, 115
+  orig: 161, 239
+  offset: 22, 40
+  index: 0
+UnspeakablePistol_dir7
+  rotate: false
+  xy: 657, 3378
+  size: 104, 110
+  orig: 161, 239
+  offset: 18, 30
+  index: 0
+VenomousPriest_dir0
+  rotate: false
+  xy: 2204, 3736
+  size: 110, 126
+  orig: 161, 239
+  offset: 25, 34
+  index: 0
+VenomousPriest_dir1
+  rotate: false
+  xy: 2848, 3025
+  size: 108, 114
+  orig: 161, 239
+  offset: 36, 28
+  index: 0
+VenomousPriest_dir2
+  rotate: false
+  xy: 2, 3971
+  size: 119, 123
+  orig: 161, 239
+  offset: 19, 33
+  index: 0
+VenomousPriest_dir3
+  rotate: false
+  xy: 3838, 2582
+  size: 108, 112
+  orig: 161, 239
+  offset: 36, 48
+  index: 0
+VenomousPriest_dir4
+  rotate: false
+  xy: 1740, 3336
+  size: 110, 130
+  orig: 161, 239
+  offset: 25, 31
+  index: 0
+VenomousPriest_dir5
+  rotate: false
+  xy: 2182, 3033
+  size: 108, 112
+  orig: 161, 239
+  offset: 18, 48
+  index: 0
+VenomousPriest_dir6
+  rotate: false
+  xy: 2, 3013
+  size: 117, 123
+  orig: 161, 239
+  offset: 22, 33
+  index: 0
+VenomousPriest_dir7
+  rotate: false
+  xy: 2738, 3145
+  size: 108, 114
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+VerdantAuthority_dir0
+  rotate: false
+  xy: 2575, 878
+  size: 80, 126
+  orig: 161, 239
+  offset: 40, 31
+  index: 0
+VerdantAuthority_dir1
+  rotate: false
+  xy: 1601, 1202
+  size: 100, 102
+  orig: 161, 239
+  offset: 36, 38
+  index: 0
+VerdantAuthority_dir2
+  rotate: false
+  xy: 2848, 3876
+  size: 116, 97
+  orig: 161, 239
+  offset: 22, 49
+  index: 0
+VerdantAuthority_dir3
+  rotate: false
+  xy: 1707, 2546
+  size: 100, 108
+  orig: 161, 239
+  offset: 36, 46
+  index: 0
+VerdantAuthority_dir4
+  rotate: false
+  xy: 2657, 922
+  size: 80, 129
+  orig: 161, 239
+  offset: 40, 34
+  index: 0
+VerdantAuthority_dir5
+  rotate: false
+  xy: 1703, 814
+  size: 100, 108
+  orig: 161, 239
+  offset: 26, 46
+  index: 0
+VerdantAuthority_dir6
+  rotate: false
+  xy: 3910, 3634
+  size: 116, 97
+  orig: 161, 239
+  offset: 22, 49
+  index: 0
+VerdantAuthority_dir7
+  rotate: false
+  xy: 1600, 2
+  size: 100, 102
+  orig: 161, 239
+  offset: 26, 38
+  index: 0
+VileGaze_dir0
+  rotate: false
+  xy: 3125, 978
+  size: 56, 119
+  orig: 161, 239
+  offset: 52, 28
+  index: 0
+VileGaze_dir1
+  rotate: false
+  xy: 2488, 1516
+  size: 88, 98
+  orig: 161, 239
+  offset: 40, 42
+  index: 0
+VileGaze_dir2
+  rotate: false
+  xy: 2, 7
+  size: 104, 66
+  orig: 161, 239
+  offset: 34, 70
+  index: 0
+VileGaze_dir3
+  rotate: false
+  xy: 2398, 1523
+  size: 88, 100
+  orig: 161, 239
+  offset: 40, 50
+  index: 0
+VileGaze_dir4
+  rotate: false
+  xy: 4028, 3599
+  size: 56, 123
+  orig: 161, 239
+  offset: 52, 40
+  index: 0
+VileGaze_dir5
+  rotate: false
+  xy: 2282, 9
+  size: 88, 100
+  orig: 161, 239
+  offset: 34, 50
+  index: 0
+VileGaze_dir6
+  rotate: false
+  xy: 1078, 24
+  size: 104, 66
+  orig: 161, 239
+  offset: 22, 70
+  index: 0
+VileGaze_dir7
+  rotate: false
+  xy: 4006, 1053
+  size: 88, 98
+  orig: 161, 239
+  offset: 34, 42
+  index: 0
+VileQueen_dir0
+  rotate: false
+  xy: 3324, 3137
+  size: 110, 117
+  orig: 161, 239
+  offset: 25, 40
+  index: 0
+VileQueen_dir1
+  rotate: false
+  xy: 3508, 2880
+  size: 108, 112
+  orig: 161, 239
+  offset: 36, 28
+  index: 0
+VileQueen_dir2
+  rotate: false
+  xy: 2316, 3623
+  size: 110, 121
+  orig: 161, 239
+  offset: 22, 33
+  index: 0
+VileQueen_dir3
+  rotate: false
+  xy: 2848, 3141
+  size: 108, 112
+  orig: 161, 239
+  offset: 36, 48
+  index: 0
+VileQueen_dir4
+  rotate: false
+  xy: 1628, 3598
+  size: 110, 129
+  orig: 161, 239
+  offset: 25, 32
+  index: 0
+VileQueen_dir5
+  rotate: false
+  xy: 2408, 3383
+  size: 108, 112
+  orig: 161, 239
+  offset: 18, 48
+  index: 0
+VileQueen_dir6
+  rotate: false
+  xy: 1071, 3739
+  size: 110, 121
+  orig: 161, 239
+  offset: 28, 33
+  index: 0
+VileQueen_dir7
+  rotate: false
+  xy: 2072, 3045
+  size: 108, 112
+  orig: 161, 239
+  offset: 18, 28
+  index: 0
+WarpTiger_dir0
+  rotate: false
+  xy: 4028, 3724
+  size: 56, 123
+  orig: 161, 239
+  offset: 52, 28
+  index: 0
+WarpTiger_dir1
+  rotate: false
+  xy: 3385, 2106
+  size: 94, 102
+  orig: 161, 239
+  offset: 42, 38
+  index: 0
+WarpTiger_dir2
+  rotate: false
+  xy: 336, 13
+  size: 104, 72
+  orig: 161, 239
+  offset: 34, 64
+  index: 0
+WarpTiger_dir3
+  rotate: false
+  xy: 1081, 3389
+  size: 94, 94
+  orig: 161, 239
+  offset: 42, 58
+  index: 0
+WarpTiger_dir4
+  rotate: false
+  xy: 3128, 1099
+  size: 56, 112
+  orig: 161, 239
+  offset: 52, 52
+  index: 0
+WarpTiger_dir5
+  rotate: false
+  xy: 3577, 1941
+  size: 94, 94
+  orig: 161, 239
+  offset: 26, 58
+  index: 0
+WarpTiger_dir6
+  rotate: false
+  xy: 444, 1134
+  size: 104, 72
+  orig: 161, 239
+  offset: 22, 64
+  index: 0
+WarpTiger_dir7
+  rotate: false
+  xy: 2698, 2065
+  size: 94, 102
+  orig: 161, 239
+  offset: 26, 38
+  index: 0
+WorshippedNinja_dir0
+  rotate: false
+  xy: 2578, 1233
+  size: 86, 99
+  orig: 161, 239
+  offset: 37, 28
+  index: 0
+WorshippedNinja_dir1
+  rotate: false
+  xy: 3264, 1800
+  size: 92, 96
+  orig: 161, 239
+  offset: 44, 34
+  index: 0
+WorshippedNinja_dir2
+  rotate: false
+  xy: 3819, 2138
+  size: 92, 104
+  orig: 161, 239
+  offset: 46, 46
+  index: 0
+WorshippedNinja_dir3
+  rotate: false
+  xy: 2886, 1641
+  size: 92, 106
+  orig: 161, 239
+  offset: 44, 50
+  index: 0
+WorshippedNinja_dir4
+  rotate: false
+  xy: 2485, 420
+  size: 86, 109
+  orig: 161, 239
+  offset: 37, 52
+  index: 0
+WorshippedNinja_dir5
+  rotate: false
+  xy: 3264, 1898
+  size: 92, 106
+  orig: 161, 239
+  offset: 26, 50
+  index: 0
+WorshippedNinja_dir6
+  rotate: false
+  xy: 3450, 1496
+  size: 92, 104
+  orig: 161, 239
+  offset: 22, 46
+  index: 0
+WorshippedNinja_dir7
+  rotate: false
+  xy: 2698, 1867
+  size: 92, 96
+  orig: 161, 239
+  offset: 26, 34
+  index: 0
+WorshippedScythe_dir0
+  rotate: false
+  xy: 2655, 244
+  size: 80, 116
+  orig: 161, 239
+  offset: 40, 31
+  index: 0
+WorshippedScythe_dir1
+  rotate: false
+  xy: 3289, 2106
+  size: 94, 102
+  orig: 161, 239
+  offset: 42, 34
+  index: 0
+WorshippedScythe_dir2
+  rotate: false
+  xy: 1805, 1334
+  size: 98, 93
+  orig: 161, 239
+  offset: 40, 50
+  index: 0
+WorshippedScythe_dir3
+  rotate: false
+  xy: 3193, 2112
+  size: 94, 104
+  orig: 161, 239
+  offset: 42, 52
+  index: 0
+WorshippedScythe_dir4
+  rotate: false
+  xy: 2573, 129
+  size: 80, 108
+  orig: 161, 239
+  offset: 40, 56
+  index: 0
+WorshippedScythe_dir5
+  rotate: false
+  xy: 3097, 2132
+  size: 94, 104
+  orig: 161, 239
+  offset: 26, 52
+  index: 0
+WorshippedScythe_dir6
+  rotate: false
+  xy: 3231, 2340
+  size: 98, 93
+  orig: 161, 239
+  offset: 22, 50
+  index: 0
+WorshippedScythe_dir7
+  rotate: false
+  xy: 3481, 1933
+  size: 94, 102
+  orig: 161, 239
+  offset: 26, 34
+  index: 0

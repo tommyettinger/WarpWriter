@@ -3,14 +3,22 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import squidpony.StringKit;
 import squidpony.Thesaurus;
 import squidpony.squidmath.OrderedSet;
 import squidpony.squidmath.StatefulRNG;
 import squidpony.squidmath.UnorderedSet;
-import warpwriter.*;
+import warpwriter.Coloring;
+import warpwriter.ModelMaker;
+import warpwriter.PNG8;
+import warpwriter.PaletteReducer;
+import warpwriter.model.TurnModel;
+import warpwriter.model.fetch.ArrayModel;
+import warpwriter.view.Twilight;
+import warpwriter.view.VoxelColor;
+import warpwriter.view.VoxelPixmapRenderer;
+import warpwriter.view.WarpDraw;
 
 import java.io.IOException;
 
@@ -25,7 +33,10 @@ public class TestOutput extends ApplicationAdapter {
     private static long initialSeed = determine(System.nanoTime());
     private long seed = initialSeed;
     private ModelMaker mm = new ModelMaker(seed);
-    private ModelRenderer mr = new ModelRenderer();
+    private ArrayModel am;
+    private TurnModel tm;
+//    private ModelRenderer mr = new ModelRenderer();
+    private VoxelPixmapRenderer vpr;
     private byte[][][] voxels;
     private byte[][][][] animatedVoxels;
     private int dir = 1;
@@ -33,7 +44,7 @@ public class TestOutput extends ApplicationAdapter {
     private Pixmap[] pixes = new Pixmap[frames];
     private String pathName, modelName;
     private StatefulRNG srng = new StatefulRNG(initialSeed);
-    private int[] palette = Coloring.RINSED;
+    private int[] palette = Coloring.AURORA;
     private PNG8 png;
     private String makeName(OrderedSet<String> alpha, OrderedSet<String> beta)
     {
@@ -53,17 +64,19 @@ public class TestOutput extends ApplicationAdapter {
     }
     @Override
     public void create() {
-        int[][] rendered = mr.renderIso(mm.shipLargeRandom(), 0);
-        width = rendered.length;
-        height = rendered[0].length;
+        am = new ArrayModel(mm.shipLargeRandomAurora());
+        tm = new TurnModel().set(am);
+        width = WarpDraw.xLimit(tm);
+        height = WarpDraw.yLimit(tm);
         for (int i = 0; i < frames; i++) {
             pixes[i] = new Pixmap(width, height, Pixmap.Format.RGBA8888);
         }
         pix = pixes[0];
-        png = new PNG8(width * height * 3 >> 1);
+        vpr = new VoxelPixmapRenderer(pix, new VoxelColor().set(Twilight.AuroraTwilight));
+        png = new PNG8(width * height);
         png.setFlipY(false);
         png.setCompression(6);
-        png.palette = new PaletteReducer(Coloring.RINSED);
+        png.palette = new PaletteReducer();
         png.palette.setDitherStrength(0.5f);
         pathName = "target/out/" + StringKit.hex(seed);
         Gdx.files.local(pathName).mkdirs();
@@ -90,42 +103,51 @@ public class TestOutput extends ApplicationAdapter {
         Gdx.app.exit();
     }
 
-    public void remakeModel(long newModel) {
-        if (newModel != 0){
-            mm.rng.setState(determine(newModel));
-            voxels = mm.shipRandom();
-            animatedVoxels = mm.animateShip(voxels, frames);
-        }
-        for (int f = 0; f < frames; f++) {
-            pix = pixes[f];
-            pix.setColor(0);
-            pix.fill();
-            int[][] indices = mr.renderIso24x32(animatedVoxels[f], dir);
-                    //dir >= 4 ? mr.renderIso24x32(animatedVoxels[f], dir) : mr.renderOrtho(animatedVoxels[f], dir);
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    pix.drawPixel(x, y, palette[indices[x][y]]);
-                }
-            }
-            PixmapIO.writePNG(Gdx.files.local(pathName + "/" + modelName + "/" + modelName + "_dir" + dir + "_" + f + ".png"), pix);
-        }
-    }
+//    public void remakeModel(long newModel) {
+//        if (newModel != 0){
+//            mm.rng.setState(determine(newModel));
+//            voxels = mm.shipRandom();
+//            animatedVoxels = mm.animateShip(voxels, frames);
+//        }
+//        for (int f = 0; f < frames; f++) {
+//            pix = pixes[f];
+//            pix.setColor(0);
+//            pix.fill();
+//            int[][] indices = mr.renderIso24x32(animatedVoxels[f], dir);
+//                    //dir >= 4 ? mr.renderIso24x32(animatedVoxels[f], dir) : mr.renderOrtho(animatedVoxels[f], dir);
+//            for (int x = 0; x < width; x++) {
+//                for (int y = 0; y < height; y++) {
+//                    pix.drawPixel(x, y, palette[indices[x][y]]);
+//                }
+//            }
+//            PixmapIO.writePNG(Gdx.files.local(pathName + "/" + modelName + "/" + modelName + "_dir" + dir + "_" + f + ".png"), pix);
+//        }
+//    }
 
     public void remakeShip(long newModel) {
         if (newModel != 0) {
             mm.rng.setState(determine(newModel));
-            voxels = mm.shipLargeRandom();
+            am.voxels = mm.shipLargeRandomAurora();
             //animatedVoxels = mm.animateShip(voxels, frames);
         }
 
-        pix = pixes[0];
-        pix.setColor(0);
-        pix.fill();
-        int[][] indices = dir >= 4 ? mr.renderIso(voxels, dir) : mr.renderOrtho(voxels, dir);
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                pix.drawPixel(x, y, palette[indices[x][y]]);
-            }
+//        pix = pixes[0];
+//        pix.setColor(0);
+//        pix.fill();
+//        int[][] indices = dir >= 4 ? mr.renderIso(voxels, dir) : mr.renderOrtho(voxels, dir);
+//        for (int x = 0; x < width; x++) {
+//            for (int y = 0; y < height; y++) {
+//                pix.drawPixel(x, y, palette[indices[x][y]]);
+//            }
+//        }
+        if((dir & 1) == 1)
+        {
+            pix = WarpDraw.drawIso(tm, vpr);
+            tm.turner().clockZ();
+        }
+        else
+        {
+            pix = WarpDraw.drawAbove(tm, vpr);
         }
         try {
             png.writePrecisely(Gdx.files.local(pathName + "/" + modelName + "/" + modelName + "_dir" + dir + "_0.png"), pix, false);

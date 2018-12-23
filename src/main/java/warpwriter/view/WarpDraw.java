@@ -313,6 +313,17 @@ public class WarpDraw {
 //        }
 //    }
 
+    public static int xLimit(IModel model)
+    {
+        final int size = Math.max(model.sizeX(), Math.max(model.sizeY(), model.sizeZ())) - 1;
+        return size * 4 + 5;
+    }
+
+    public static int yLimit(IModel model)
+    {
+        final int size = Math.max(model.sizeX(), Math.max(model.sizeY(), model.sizeZ())) - 1;
+        return Math.max(size * 5 + (size >> 1) + 6, size * 6 + 5);
+    }
     public static Pixmap draw(IModel model, VoxelPixmapRenderer renderer)
     {
         final int sizeX = model.sizeX() - 1, sizeY = model.sizeY() - 1, sizeZ = model.sizeZ() - 1,
@@ -359,7 +370,7 @@ public class WarpDraw {
     {
         final int sizeX = model.sizeX() - 1, sizeY = model.sizeY() - 1, sizeZ = model.sizeZ() - 1,
                 offsetPX = (sizeY >> 1) + 1, offsetPY = (sizeX >> 1) + 1,
-                pixelWidth =(sizeY * 3) + (sizeY >> 1) + 4, pixelHeight = sizeZ * 2 + sizeX * 3 + (sizeX >> 1) + 6;
+                pixelWidth = (sizeY * 3) + (sizeY >> 1) + 4, pixelHeight = sizeZ * 2 + sizeX * 3 + (sizeX >> 1) + 6;
         for (int z = 0; z <= sizeZ; z++) {
             for (int y = 0; y <= sizeY; y++) {
                 for (int x = 0, d = 0; x <= sizeX; x++, d += 5) {
