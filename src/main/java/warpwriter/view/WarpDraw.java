@@ -316,18 +316,18 @@ public class WarpDraw {
     public static int xLimit(IModel model)
     {
         final int size = Math.max(model.sizeX(), Math.max(model.sizeY(), model.sizeZ())) - 1;
-        return size * 4 + 5;
+        return size * 4 + 7;
     }
 
     public static int yLimit(IModel model)
     {
         final int size = Math.max(model.sizeX(), Math.max(model.sizeY(), model.sizeZ())) - 1;
-        return Math.max(size * 5 + (size >> 1) + 6, size * 6 + 5);
+        return Math.max(size * 5 + (size >> 1) + 7, size * 6 + 7);
     }
     public static Pixmap draw(IModel model, VoxelPixmapRenderer renderer)
     {
         final int sizeX = model.sizeX() - 1, sizeY = model.sizeY() - 1, sizeZ = model.sizeZ() - 1,
-                offsetPX = (sizeY >> 1) + 1, pixelWidth = sizeY * 3 + (sizeY >> 1) + 4, pixelHeight = sizeZ * 3 + 5;
+                offsetPX = (sizeY >> 1) + 1, pixelWidth = sizeY * 3 + (sizeY >> 1) + 6, pixelHeight = sizeZ * 3 + 7;
         for (int z = 0; z <= sizeZ; z++) {
             for (int y = 0; y <= sizeY; y++) {
                 for (int x = 0; x <= sizeX; x++) {
@@ -347,7 +347,7 @@ public class WarpDraw {
     public static Pixmap draw45(IModel model, VoxelPixmapRenderer renderer)
     {
         final int sizeX = model.sizeX() - 1, sizeY = model.sizeY() - 1, sizeZ = model.sizeZ() - 1,
-                pixelWidth = (sizeX + sizeY) * 2 + 5, pixelHeight = (sizeZ * 3 + 5);
+                pixelWidth = (sizeX + sizeY) * 2 + 7, pixelHeight = sizeZ * 3 + 7;
         int dep;
         for (int z = 0; z <= sizeZ; z++) {
             for (int x = 0; x <= sizeX; x++) {
@@ -370,7 +370,7 @@ public class WarpDraw {
     {
         final int sizeX = model.sizeX() - 1, sizeY = model.sizeY() - 1, sizeZ = model.sizeZ() - 1,
                 offsetPX = (sizeY >> 1) + 1, offsetPY = (sizeX >> 1) + 1,
-                pixelWidth = (sizeY * 3) + (sizeY >> 1) + 4, pixelHeight = sizeZ * 2 + sizeX * 3 + (sizeX >> 1) + 6;
+                pixelWidth = (sizeY * 3) + (sizeY >> 1) + 6, pixelHeight = sizeZ * 2 + sizeX * 3 + (sizeX >> 1) + 8;
         for (int z = 0; z <= sizeZ; z++) {
             for (int y = 0; y <= sizeY; y++) {
                 for (int x = 0, d = 0; x <= sizeX; x++, d += 5) {
@@ -391,7 +391,7 @@ public class WarpDraw {
     public static Pixmap drawIso(IModel model, VoxelPixmapRenderer renderer)
     {
         final int sizeX = model.sizeX() - 1, sizeY = model.sizeY() - 1, sizeZ = model.sizeZ() - 1,
-                pixelWidth = (sizeY + sizeX) * 2 + 5, pixelHeight = (sizeX + sizeY + sizeZ) * 2 + 5;
+                pixelWidth = (sizeY + sizeX) * 2 + 7, pixelHeight = (sizeX + sizeY + sizeZ) * 2 + 7;
         int dep;
         for (int z = 0; z <= sizeZ; z++) {
             for (int x = sizeX; x >= 0; x--) {
