@@ -127,7 +127,7 @@ public class SimpleTest extends ApplicationAdapter {
             ));
         } catch (FileNotFoundException e) {
             voxelSprite.set(new ArrayModel(maker.warriorRandom()));
-            batchRenderer.set(batchRenderer.color().set(Twilight.RinsedTwilight));
+            batchRenderer.set(batchRenderer.color().set(Twilight.arbitraryTwilight(Coloring.RINSED)));
         }
     }
 
@@ -145,7 +145,7 @@ public class SimpleTest extends ApplicationAdapter {
 
         maker = new ModelMaker(12345);
         batchRenderer = new VoxelSpriteBatchRenderer(batch);
-        batchRenderer.color().set(Twilight.AuroraTwilight); // comment out to use Rinsed
+        //batchRenderer.color().set(Twilight.AuroraTwilight); // comment out to use ArbitraryTwilight
         voxelSprite = new VoxelSprite()
                 .set(batchRenderer)
                 .setOffset(VIRTUAL_WIDTH / 2, 100);
@@ -175,8 +175,8 @@ public class SimpleTest extends ApplicationAdapter {
             //// loads Artillery.vox, which has a palette set in that model; this palette doesn't match Rinsed or Aurora
 //            final byte[][][] arr = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("HasOwnPalette/Artillery.vox")));
             //// set the palette to the one from the vox model, using arbitraryTwilight()
-//            batchRenderer.set(batchRenderer.color().set(Twilight.arbitraryTwilight(VoxIO.lastPalette)));
-            batchRenderer.color().set(Twilight.AuroraTwilight);
+            batchRenderer.set(batchRenderer.color().set(Twilight.arbitraryTwilight(Coloring.AURORA)));
+//            batchRenderer.color().set(Twilight.AuroraTwilight);
 //            batchRenderer.color().set(Twilight.arbitraryTwilight(Coloring.AURORA));
             return new ArrayModel(
                     maker.shipLargeRandomAurora()
@@ -187,7 +187,7 @@ public class SimpleTest extends ApplicationAdapter {
                     //maker.warriorRandom()
             );
         } catch (Exception e) {
-            batchRenderer.color().set(Twilight.RinsedTwilight);
+            batchRenderer.color().set(Twilight.arbitraryTwilight(Coloring.RINSED));
             return new ArrayModel(maker.warriorRandom());
         }
     }
