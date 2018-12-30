@@ -1204,7 +1204,80 @@ public abstract class Twilight implements ITwilight {
             return WARMTH_RAMP_VALUES[voxel & 255][0];
         }
     };
-    
+//// older technique; uses a different lightness calculation that seems inaccurate for deep, bold colors.
+//// calculates YPbPr (or YCbCr) values using the Rec. 709 values, meant for HD displays.
+//// more accurate than the older YCbCr values, but still has issues on deep purple and blue in particular.
+//// if the issue shows up again, you can verify it by checking if bright(), when called on deep purple, looks darker.
+//    public static ITwilight arbitraryTwilight(final int[] rgbaPalette) {
+//        return new Twilight() {
+//            private int[][] RAMP_VALUES = new int[256][4];
+//
+//            {
+//                for (int i = 1; i < 256 && i < rgbaPalette.length; i++) {
+//                    int color = RAMP_VALUES[i][1] = rgbaPalette[i],
+//                            r = (color >>> 24),
+//                            g = (color >>> 16 & 0xFF),
+//                            b = (color >>> 8 & 0xFF);
+//                    // YPbPr conversion from http://www.martinreddy.net/gfx/faqs/colorconv.faq
+//                    float luma = (r * 0.2125f) +
+//                            (g * 0.7154f) +
+//                            (b * 0.0721f),
+//                            cb = ((r * -0.1145f) +
+//                                    (g * -0.3855f) +
+//                                    (b * 0.5f)),
+//                            cr = ((r * 0.5016f) +
+//                                    (g * -0.4556f) +
+//                                    (b * -0.0459f)),
+//                            lumaBright = Math.min(luma * 1.25f, 255f),
+//                            lumaDim = luma * 0.75f,
+//                            lumaDark = luma * 0.5f,
+//                            chromaB,
+//                            chromaR;
+//                    chromaB = cb * 0.875f;
+//                    chromaR = cr * 0.875f;
+//                    RAMP_VALUES[i][2] =
+//                            (int) (MathUtils.clamp(lumaDim + chromaR * 1.5701f, 0f, 255f)) << 24 |
+//                                    (int) (MathUtils.clamp(lumaDim - chromaB * 0.187f - chromaR * 0.4664f, 0f, 255f)) << 16 |
+//                                    (int) (MathUtils.clamp(lumaDim + chromaB * 1.8556f, 0f, 255f)) << 8 | 0xFF;
+//                    chromaB = cb * 0.75f;
+//                    //MathUtils.clamp(cb * (0.9f + (lumaBright - 128f) * 0.0625f), -128f, 128f);
+//                    chromaR = cr * 0.75f;
+//                    //MathUtils.clamp(cr * (0.9f + (lumaBright - 128f) * 0.0625f), -128f, 128f);
+//                    RAMP_VALUES[i][0] =
+//                            (int) (MathUtils.clamp(lumaBright + chromaR * 1.5701f, 0f, 255f)) << 24 |
+//                                    (int) (MathUtils.clamp(lumaBright - chromaB * 0.187f - chromaR * 0.4664f, 0f, 255f)) << 16 |
+//                                    (int) (MathUtils.clamp(lumaBright + chromaB * 1.8556f, 0f, 255f)) << 8 | 0xFF;
+//                    chromaB = cb * 0.825f;
+//                    chromaR = cr * 0.825f;
+//                    RAMP_VALUES[i][3] =
+//                            (int) (MathUtils.clamp(lumaDark + chromaR * 1.5701f, 0f, 255f)) << 24 |
+//                                    (int) (MathUtils.clamp(lumaDark - chromaB * 0.187f - chromaR * 0.4664f, 0f, 255f)) << 16 |
+//                                    (int) (MathUtils.clamp(lumaDark + chromaB * 1.8556f, 0f, 255f)) << 8 | 0xFF;
+//                }
+//            }
+//
+//            @Override
+//            public int dark(byte voxel) {
+//                return RAMP_VALUES[voxel & 255][3];
+//            }
+//
+//            @Override
+//            public int dim(byte voxel) {
+//                return RAMP_VALUES[voxel & 255][2];
+//            }
+//
+//            @Override
+//            public int twilight(byte voxel) {
+//                return RAMP_VALUES[voxel & 255][1];
+//            }
+//
+//            @Override
+//            public int bright(byte voxel) {
+//                return RAMP_VALUES[voxel & 255][0];
+//            }
+//        };
+//    }
+//    
     public static ITwilight arbitraryTwilight(final int[] rgbaPalette) {
         return new Twilight() {
             private int[][] RAMP_VALUES = new int[256][4];
@@ -1215,41 +1288,38 @@ public abstract class Twilight implements ITwilight {
                             r = (color >>> 24),
                             g = (color >>> 16 & 0xFF),
                             b = (color >>> 8 & 0xFF);
-                    // YPbPr conversion from http://www.martinreddy.net/gfx/faqs/colorconv.faq
-                    float luma = (r * 0.2125f) +
-                            (g * 0.7154f) +
-                            (b * 0.0721f),
-                            cb = ((r * -0.1145f) +
-                                    (g * -0.3855f) +
-                                    (b * 0.5f)),
-                            cr = ((r * 0.5016f) +
-                                    (g * -0.4556f) +
-                                    (b * -0.0459f)),
-                            lumaBright = Math.min(luma * 1.25f, 255f),
-                            lumaDim = luma * 0.75f,
-                            lumaDark = luma * 0.5f,
-                            chromaB,
-                            chromaR;
-                    chromaB = cb * 0.875f;
-                    chromaR = cr * 0.875f;
-                    RAMP_VALUES[i][2] =
-                            (int) (MathUtils.clamp(lumaDim + chromaR * 1.5701f, 0f, 255f)) << 24 |
-                                    (int) (MathUtils.clamp(lumaDim - chromaB * 0.187f - chromaR * 0.4664f, 0f, 255f)) << 16 |
-                                    (int) (MathUtils.clamp(lumaDim + chromaB * 1.8556f, 0f, 255f)) << 8 | 0xFF;
-                    chromaB = cb * 0.75f;
-                            //MathUtils.clamp(cb * (0.9f + (lumaBright - 128f) * 0.0625f), -128f, 128f);
-                    chromaR = cr * 0.75f;
-                            //MathUtils.clamp(cr * (0.9f + (lumaBright - 128f) * 0.0625f), -128f, 128f);
+                    int co = r - b, t = b + (co >> 1), cg = g - t, y = t + (cg >> 1),
+                            yBright = y * 21 >> 4, yDim = y * 5 >> 3, yDark = y >> 1, chromO, chromG;
+                    chromO = (co * 3) >> 2;
+                    chromG = (cg * 3) >> 2;
+                    t = yDim - (chromG >> 1);
+                    g = chromG + t;
+                    b = t - (chromO >> 1);
+                    r = b + chromO;
+                    RAMP_VALUES[i][2] = 
+                            MathUtils.clamp(r, 0, 255) << 24 | 
+                                    MathUtils.clamp(g, 0, 255) << 16 | 
+                                    MathUtils.clamp(b, 0, 255) << 8 | 0xFF;
+                    chromO = (co * 3) >> 2;
+                    chromG = (cg * (256 - yBright) * 3) >> 9;
+                    t = yBright - (chromG >> 1);
+                    g = chromG + t;
+                    b = t - (chromO >> 1);
+                    r = b + chromO;
                     RAMP_VALUES[i][0] =
-                            (int) (MathUtils.clamp(lumaBright + chromaR * 1.5701f, 0f, 255f)) << 24 |
-                                    (int) (MathUtils.clamp(lumaBright - chromaB * 0.187f - chromaR * 0.4664f, 0f, 255f)) << 16 |
-                                    (int) (MathUtils.clamp(lumaBright + chromaB * 1.8556f, 0f, 255f)) << 8 | 0xFF;
-                    chromaB = cb * 0.825f;
-                    chromaR = cr * 0.825f;
+                            MathUtils.clamp(r, 0, 255) << 24 |
+                                    MathUtils.clamp(g, 0, 255) << 16 |
+                                    MathUtils.clamp(b, 0, 255) << 8 | 0xFF;
+                    chromO = (co * 13) >> 4;
+                    chromG = (cg * (256 - yDark) * 13) >> 11;
+                    t = yDark - (chromG >> 1);
+                    g = chromG + t;
+                    b = t - (chromO >> 1);
+                    r = b + chromO;
                     RAMP_VALUES[i][3] =
-                            (int) (MathUtils.clamp(lumaDark + chromaR * 1.5701f, 0f, 255f)) << 24 |
-                                    (int) (MathUtils.clamp(lumaDark - chromaB * 0.187f - chromaR * 0.4664f, 0f, 255f)) << 16 |
-                                    (int) (MathUtils.clamp(lumaDark + chromaB * 1.8556f, 0f, 255f)) << 8 | 0xFF;
+                            MathUtils.clamp(r, 0, 255) << 24 |
+                                    MathUtils.clamp(g, 0, 255) << 16 |
+                                    MathUtils.clamp(b, 0, 255) << 8 | 0xFF;
                 }
             }
 

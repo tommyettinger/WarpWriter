@@ -175,7 +175,7 @@ public class SimpleTest extends ApplicationAdapter {
             //// loads Artillery.vox, which has a palette set in that model; this palette doesn't match Rinsed or Aurora
 //            final byte[][][] arr = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("HasOwnPalette/Artillery.vox")));
             //// set the palette to the one from the vox model, using arbitraryTwilight()
-            batchRenderer.set(batchRenderer.color().set(Twilight.arbitraryTwilight(Coloring.AURORA)));
+            batchRenderer.color().set(Twilight.arbitraryTwilight(Coloring.AURORA));
 //            batchRenderer.color().set(Twilight.AuroraTwilight);
 //            batchRenderer.color().set(Twilight.arbitraryTwilight(Coloring.AURORA));
             return new ArrayModel(
@@ -289,6 +289,12 @@ public class SimpleTest extends ApplicationAdapter {
                         break;
                     case Input.Keys.H:
                         batchRenderer.color().set(batchRenderer.color().direction().clock());
+                        break;
+                    case Input.Keys.Y:
+                        if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT))
+                            batchRenderer.color().set(Twilight.arbitraryTwilight(Coloring.AURORA));
+                        else
+                            batchRenderer.color().set(Twilight.AuroraTwilight);
                         break;
                     case Input.Keys.T: // try again
                         voxelSprite.reset();
