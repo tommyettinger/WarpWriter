@@ -59,11 +59,7 @@ public class VoxelPixmapRenderer implements IRectangleRenderer {
 
     @Override
     public IRectangleRenderer rectVertical(int x, int y, int sizeX, int sizeY, byte voxel) {
-        return rect(x, y, sizeX, sizeY,
-                flipY ?
-                        color.bottomFace(voxel)
-                        : color.topFace(voxel)
-        );
+        return rect(x, y, sizeX, sizeY, color.verticalFace(voxel));
     }
 
     @Override

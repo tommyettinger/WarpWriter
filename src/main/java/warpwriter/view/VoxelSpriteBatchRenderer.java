@@ -183,11 +183,7 @@ public class VoxelSpriteBatchRenderer implements IRectangleRenderer, ITriangleRe
 
     @Override
     public IRectangleRenderer rectVertical(int x, int y, int sizeX, int sizeY, byte voxel) {
-        return rect(x, y, sizeX, sizeY,
-                flipY ?
-                        color.bottomFace(voxel)
-                        : color.topFace(voxel)
-        );
+        return rect(x, y, sizeX, sizeY, color.verticalFace(voxel));
     }
 
     @Override
@@ -210,9 +206,7 @@ public class VoxelSpriteBatchRenderer implements IRectangleRenderer, ITriangleRe
 
     @Override
     public ITriangleRenderer drawLeftTriangleVerticalFace(int x, int y, byte voxel) {
-        final int color = flipY ?
-                this.color.bottomFace(voxel)
-                : this.color.topFace(voxel);
+        final int color = this.color.verticalFace(voxel);
         return flipX ?
                 drawRightTriangle(x, y, color)
                 : drawLeftTriangle(x, y, color);
@@ -240,9 +234,7 @@ public class VoxelSpriteBatchRenderer implements IRectangleRenderer, ITriangleRe
 
     @Override
     public ITriangleRenderer drawRightTriangleVerticalFace(int x, int y, byte voxel) {
-        final int color = flipY ?
-                this.color.bottomFace(voxel)
-                : this.color.topFace(voxel);
+        final int color = this.color.verticalFace(voxel);
         return flipX ?
                 drawLeftTriangle(x, y, color)
                 : drawRightTriangle(x, y, color);

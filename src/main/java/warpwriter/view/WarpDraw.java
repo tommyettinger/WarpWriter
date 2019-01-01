@@ -33,7 +33,7 @@ public class WarpDraw {
 //                    //renderer.drawPixel(px, py, Color.rgba8888(Color.RED));
 //                    byte result = model.voxels[sz * (sy * model.temp[0] + model.temp[1]) + model.temp[2]];
 //                    if (result != 0 && result != Coloring.CLEAR) {
-//                        renderer.rect(px, py + 3, 3, 1, color.topFace(result));
+//                        renderer.rect(px, py + 3, 3, 1, color.verticalFace(result));
 //                        renderer.rect(px, py, 3, 3, color.rightFace(result));
 //                        break;
 //                    }
@@ -100,7 +100,7 @@ public class WarpDraw {
                 for (int x = 0; x < sizeX; x++) {
                     byte result = model.at(x, y, z);
                     if (result != 0 && result != Coloring.CLEAR) {
-                        renderer.rect(px, py + 3, 3, 1, color.topFace(result));
+                        renderer.rect(px, py + 3, 3, 1, color.verticalFace(result));
                         renderer.rect(px, py, 3, 3, color.rightFace(result));
                         break;
                     }
@@ -174,7 +174,7 @@ public class WarpDraw {
                     if (!leftDone && vy != 0) {
                         result = model.at(vx, vy - 1, ry);
                         if (result != 0 && result != Coloring.CLEAR) {
-                            renderer.rect(px, py + 3, 2, 1, color.topFace(result));
+                            renderer.rect(px, py + 3, 2, 1, color.verticalFace(result));
                             renderer.rect(px, py, 2, 3, color.rightFace(result));
                             leftDone = true;
                         }
@@ -182,7 +182,7 @@ public class WarpDraw {
                     if (!rightDone && vx > 0) {
                         result = model.at(vx - 1, vy, ry);
                         if (result != 0 && result != Coloring.CLEAR) {
-                            renderer.rect(px + 2, py + 3, 2, 1, color.topFace(result));
+                            renderer.rect(px + 2, py + 3, 2, 1, color.verticalFace(result));
                             renderer.rect(px + 2, py, 2, 3, color.leftFace(result));
                             rightDone = true;
                         }
@@ -191,16 +191,16 @@ public class WarpDraw {
                     result = model.at(vx, vy, ry);
                     if (result != 0 && result != Coloring.CLEAR) {
                         if (!leftDone && !rightDone) {
-                            renderer.rect(px, py + 3, 4, 1, color.topFace(result));
+                            renderer.rect(px, py + 3, 4, 1, color.verticalFace(result));
                             renderer.rect(px, py, 2, 3, color.leftFace(result));
                             renderer.rect(px + 2, py, 2, 3, color.rightFace(result));
                         } else {
                             if (!leftDone) {
-                                renderer.rect(px, py + 3, 2, 1, color.topFace(result));
+                                renderer.rect(px, py + 3, 2, 1, color.verticalFace(result));
                                 renderer.rect(px, py, 2, 3, color.leftFace(result));
                             }
                             if (!rightDone) {
-                                renderer.rect(px + 2, py + 3, 2, 1, color.topFace(result));
+                                renderer.rect(px + 2, py + 3, 2, 1, color.verticalFace(result));
                                 renderer.rect(px + 2, py, 2, 3, color.rightFace(result));
                             }
                         }
@@ -241,7 +241,7 @@ public class WarpDraw {
 //                        model.temp[rx] = vx;
 //                        result = model.voxels[sz * (sy * model.temp[0] + model.temp[1]) + model.temp[2]];
 //                        if (result != 0 && result != Coloring.CLEAR) {
-//                            renderer.rect(px << 1, py + 3, 2, 1, color.topFace(result));
+//                            renderer.rect(px << 1, py + 3, 2, 1, color.verticalFace(result));
 //                            renderer.rect(px << 1, py, 2, 3, color.rightFace(result));
 //                            leftDone = true;
 //                        }
@@ -251,7 +251,7 @@ public class WarpDraw {
 //                        model.temp[rx] = vx - 1;
 //                        result = model.voxels[sz * (sy * model.temp[0] + model.temp[1]) + model.temp[2]];
 //                        if (result != 0 && result != Coloring.CLEAR) {
-//                            renderer.rect((px + 1) << 1, py + 3, 2, 1, color.topFace(result));
+//                            renderer.rect((px + 1) << 1, py + 3, 2, 1, color.verticalFace(result));
 //                            renderer.rect((px + 1) << 1, py, 2, 3, color.leftFace(result));
 //                            rightDone = true;
 //                        }
@@ -262,16 +262,16 @@ public class WarpDraw {
 //                    result = model.voxels[sz * (sy * model.temp[0] + model.temp[1]) + model.temp[2]];
 //                    if (result != 0 && result != Coloring.CLEAR) {
 //                        if (!leftDone && !rightDone) {
-//                            renderer.rect(px << 1, py + 3, 4, 1, color.topFace(result));
+//                            renderer.rect(px << 1, py + 3, 4, 1, color.verticalFace(result));
 //                            renderer.rect(px << 1, py, 2, 3, color.leftFace(result));
 //                            renderer.rect((px + 1) << 1, py, 2, 3, color.rightFace(result));
 //                        } else {
 //                            if (!leftDone) {
-//                                renderer.rect(px << 1, py + 3, 2, 1, color.topFace(result));
+//                                renderer.rect(px << 1, py + 3, 2, 1, color.verticalFace(result));
 //                                renderer.rect(px << 1, py, 2, 3, color.leftFace(result));
 //                            }
 //                            if (!rightDone) {
-//                                renderer.rect((px + 1) << 1, py + 3, 2, 1, color.topFace(result));
+//                                renderer.rect((px + 1) << 1, py + 3, 2, 1, color.verticalFace(result));
 //                                renderer.rect((px + 1) << 1, py, 2, 3, color.rightFace(result));
 //                            }
 //                        }
