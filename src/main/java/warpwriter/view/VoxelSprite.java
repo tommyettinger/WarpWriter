@@ -205,7 +205,7 @@ public class VoxelSprite implements Disposable {
                             .setFlipX(true).setFlipY(true)
                             .setScale(scaleX * 2f, scaleY)
                             .setOffset(
-                                    offsetX + (sizeX - offCenter) * 2,
+                                    offsetX + (offCenter - 1) * 2,
                                     offsetY + (int) (VoxelDraw.isoHeight(turnModel) * scaleY)
                             )
                     );
@@ -218,7 +218,7 @@ public class VoxelSprite implements Disposable {
                             .setFlipX(true).setFlipY(true)
                             .setScale(scaleX, scaleY)
                             .setOffset(
-                                    offsetX + (sizeX - offCenter) * 6,
+                                    offsetX + (offCenter + 1) * 6,
                                     offsetY + (int) ((turnModel.sizeX() + turnModel.sizeZ()) * 4 * scaleY)
                             )
                     );
