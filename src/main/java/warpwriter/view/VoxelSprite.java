@@ -204,7 +204,10 @@ public class VoxelSprite implements Disposable {
                     VoxelDraw.drawIso(turnModel, renderer
                             .setFlipX(true).setFlipY(true)
                             .setScale(scaleX * 2f, scaleY)
-                            .setOffset(offsetX + (sizeX - offCenter) * 2, offsetY + VoxelDraw.isoHeight(turnModel))
+                            .setOffset(
+                                    offsetX + (sizeX - offCenter) * 2,
+                                    offsetY + (int) (VoxelDraw.isoHeight(turnModel) * scaleY)
+                            )
                     );
                     turnModel.turner().counterZ().counterY().counterY();
                     renderer.color().set(renderer.color().direction().flipY());
@@ -214,7 +217,10 @@ public class VoxelSprite implements Disposable {
                     VoxelDraw.drawAbove(turnModel, renderer
                             .setFlipX(true).setFlipY(true)
                             .setScale(scaleX, scaleY)
-                            .setOffset(offsetX + (sizeX - offCenter) * 6, offsetY + (turnModel.sizeX() + turnModel.sizeZ()) * 4)
+                            .setOffset(
+                                    offsetX + (sizeX - offCenter) * 6,
+                                    offsetY + (int) ((turnModel.sizeX() + turnModel.sizeZ()) * 4 * scaleY)
+                            )
                     );
                     turnModel.turner().counterZ().counterZ().counterY().counterY();
                     renderer.color().set(renderer.color().direction().opposite());
