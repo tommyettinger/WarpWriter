@@ -24,7 +24,6 @@ import warpwriter.model.fetch.ArrayModel;
 import warpwriter.model.fetch.BoxModel;
 import warpwriter.model.fetch.ColorFetch;
 import warpwriter.view.Twilight;
-import warpwriter.view.VoxelColor;
 import warpwriter.view.VoxelSprite;
 import warpwriter.view.VoxelSpriteBatchRenderer;
 
@@ -88,7 +87,6 @@ public class SimpleTest extends ApplicationAdapter {
     protected TextureRegion screenRegion;
     protected ModelMaker maker;
     protected VoxelSprite voxelSprite;
-    protected VoxelColor.VoxelColor3D voxelColor;
     protected boolean box = false;
     protected VoxelSpriteBatchRenderer batchRenderer;
     protected ShaderProgram shader;
@@ -146,7 +144,7 @@ public class SimpleTest extends ApplicationAdapter {
         batch.enableBlending();
 
         maker = new ModelMaker(12345);
-        batchRenderer = new VoxelSpriteBatchRenderer(batch).set(voxelColor = new VoxelColor.VoxelColor3D());
+        batchRenderer = new VoxelSpriteBatchRenderer(batch);
         //batchRenderer.color().set(Twilight.AuroraTwilight); // comment out to use ArbitraryTwilight
         voxelSprite = new VoxelSprite()
                 .set(batchRenderer)
@@ -298,8 +296,8 @@ public class SimpleTest extends ApplicationAdapter {
                         else
                             batchRenderer.color().set(Twilight.AuroraTwilight);
                         break;
-                    case Input.Keys.T: // Switch darkSide
-                        voxelColor.set(!voxelColor.darkSide());
+                    case Input.Keys.T: // try again
+                        voxelSprite.reset();
                         break;
                     case Input.Keys.ESCAPE:
                         Gdx.app.exit();
