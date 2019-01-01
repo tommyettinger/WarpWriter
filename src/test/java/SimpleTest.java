@@ -166,30 +166,7 @@ public class SimpleTest extends ApplicationAdapter {
     }
 
     public IModel model() {
-//        return new VoxelText()
-//                .setText(font, FakeLanguageGen.SIMPLISH.word(maker.rng.nextLong(), true))
-//                .setFill(ColorFetch.color(Coloring.rinsed("Powder Blue 3")))
-//                .setOutline(ColorFetch.color(Coloring.rinsed("Red 4")))
-//                .setDepth(5);
-        try {
-            //// loads Artillery.vox, which has a palette set in that model; this palette doesn't match Rinsed or Aurora
-//            final byte[][][] arr = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("HasOwnPalette/Artillery.vox")));
-            //// set the palette to the one from the vox model, using arbitraryTwilight()
-            batchRenderer.color().set(Twilight.arbitraryTwilight(Coloring.AURORA));
-//            batchRenderer.color().set(Twilight.AuroraTwilight);
-//            batchRenderer.color().set(Twilight.arbitraryTwilight(Coloring.AURORA));
-            return new ArrayModel(
-                    maker.shipLargeRandomAurora()
-//                    arr
-                    //// Aurora folder has vox models with a different palette, which involves a different ITwilight.
-                    //VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("Aurora/Warrior_Male_W.vox")))
-                    // If using Rinsed, use the line below instead of the one above.
-                    //maker.warriorRandom()
-            );
-        } catch (Exception e) {
-            batchRenderer.color().set(Twilight.arbitraryTwilight(Coloring.RINSED));
-            return new ArrayModel(maker.warriorRandom());
-        }
+        return new ArrayModel(maker.warriorRandom());
     }
 
     @Override

@@ -314,20 +314,20 @@ public class VoxelColor implements IVoxelColor {
     @Override
     public int bottomFace(byte voxel) {
         switch (lightDirection) {
-            case ABOVE_RIGHT:
-            case ABOVE_LEFT:
-                return twilight.dark(voxel);
-            case RIGHT_ABOVE:
-            case LEFT_ABOVE:
-            default:
-                return twilight.dim(voxel);
-            case LEFT_BELOW:
-            case RIGHT_BELOW:
-                return twilight.twilight(voxel);
             case BELOW_RIGHT:
             case BELOW_LEFT:
                 return twilight.bright(voxel);
+            case RIGHT_BELOW:
+            case LEFT_ABOVE: // seems wrong
+                return twilight.twilight(voxel);
+            case LEFT_BELOW:
+            case RIGHT_ABOVE: // seems wrong
+                return twilight.dim(voxel);
+            case ABOVE_RIGHT:
+            case ABOVE_LEFT:
+                return twilight.dark(voxel);
         }
+        return 0;
     }
 
     /**
