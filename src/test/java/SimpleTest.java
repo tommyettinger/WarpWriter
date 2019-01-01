@@ -145,7 +145,7 @@ public class SimpleTest extends ApplicationAdapter {
 
         maker = new ModelMaker(12345);
         batchRenderer = new VoxelSpriteBatchRenderer(batch);
-        //batchRenderer.color().set(Twilight.AuroraTwilight); // comment out to use ArbitraryTwilight
+        batchRenderer.color().set(Twilight.AuroraTwilight); // comment out to use ArbitraryTwilight
         voxelSprite = new VoxelSprite()
                 .set(batchRenderer)
                 .setOffset(VIRTUAL_WIDTH / 2, 100);
@@ -166,7 +166,8 @@ public class SimpleTest extends ApplicationAdapter {
     }
 
     public IModel model() {
-        return new ArrayModel(maker.warriorRandom());
+        batchRenderer.color().set(Twilight.AuroraTwilight);
+        return new ArrayModel(maker.shipLargeRandomAurora());
     }
 
     @Override

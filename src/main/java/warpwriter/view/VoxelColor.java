@@ -262,16 +262,16 @@ public class VoxelColor implements IVoxelColor {
             case ABOVE_RIGHT:
             case ABOVE_LEFT:
                 return twilight.bright(voxel);
-            case RIGHT_ABOVE:
-            case LEFT_ABOVE:
-            default:
-                return twilight.twilight(voxel);
             case LEFT_BELOW:
             case RIGHT_BELOW:
                 return twilight.dim(voxel);
             case BELOW_RIGHT:
             case BELOW_LEFT:
                 return twilight.dark(voxel);
+            case RIGHT_ABOVE:
+            case LEFT_ABOVE:
+            default:
+                return twilight.twilight(voxel);
         }
     }
 
@@ -281,15 +281,15 @@ public class VoxelColor implements IVoxelColor {
             case RIGHT_ABOVE:
             case RIGHT_BELOW:
                 return twilight.bright(voxel);
+            case ABOVE_LEFT:
+            case BELOW_LEFT:
+            case LEFT_ABOVE:
+                return twilight.dim(voxel);
             case ABOVE_RIGHT:
             case BELOW_RIGHT:
             case LEFT_BELOW:
             default:
                 return twilight.twilight(voxel);
-            case ABOVE_LEFT:
-            case BELOW_LEFT:
-            case LEFT_ABOVE:
-                return twilight.dim(voxel);
         }
     }
 

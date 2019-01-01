@@ -139,11 +139,12 @@ public abstract class Twilight implements ITwilight {
     public static final ITwilight AuroraTwilight = new Twilight() {
         @Override
         public int light(int brightness, byte voxel) {
-            final int length = RAMP_VALUES[voxel & 255].length - 1;
             return RAMP_VALUES[voxel & 255][
-                    brightness < 0 ? 0 :
-                            brightness > length ? length :
-                                    brightness
+                    brightness <= 0
+                            ? 3
+                            : brightness >= 3
+                            ? 0
+                            : 3 - brightness
                     ];
         }
     };
@@ -217,11 +218,12 @@ public abstract class Twilight implements ITwilight {
 
             @Override
             public int light(int brightness, byte voxel) {
-                final int length = RAMP_VALUES[voxel & 255].length - 1;
                 return RAMP_VALUES[voxel & 255][
-                        brightness < 0 ? 0 :
-                                brightness > length ? length :
-                                        brightness
+                        brightness <= 0
+                                ? 3
+                                : brightness >= 3
+                                ? 0
+                                : 3 - brightness
                         ];
             }
         };
