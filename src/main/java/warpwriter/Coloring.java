@@ -639,4 +639,33 @@ public class Coloring {
 //            0x262626FF, 0x666666FF, 0xA5A5A5FF, 0xE5E5E5FF, 0x820743FF, 0x4D4C00FF, 0x00783BFF, 0x4B4CBDFF,
 //            0xBE39D2FF, 0xCB6B1FFF, 0x40C52CFF, 0x4DADF8FF, 0xBC9EFFFF, 0xFCA2B2FF, 0xC1E07EFF, 0x9BF5E5FF,
     };
+
+    /**
+     * A 64-color mix of <a href="https://lospec.com/palette-list/fleja-master-palette">Fleja's Master Palette</a> with
+     * <a href="https://lospec.com/palette-list/resurrect-32">Resurrect 32 by Kerrie Lake</a>. Some very similar colors
+     * have been removed from the overlap, and the range of green coverage has been expanded. I'd say this is a good
+     * option if we want to use less total colors relative to Rinsed or Aurora.
+     * <br>
+     * This isn't sorted very well right now, so the order may change in the future.
+     */
+    public static final int[] FLESURRECT = {
+            0x00000000,
+            0xDE6A38FF, 0xCD683DFF, 0x4C93ADFF, 0x4D9BE6FF,
+            0x9E4539FF, 0xFFE596FF, 0xA884F3FF, 0xFCA790FF,
+            0x68717AFF, 0x4D65B4FF, 0x729446FF, 0xB58057FF,
+            0x1F1833FF, 0x826481FF, 0x91DB69FF, 0xF04F78FF,
+            0x233663FF, 0x4BA14AFF, 0xEAADEDFF, 0xF68181FF,
+            0xB6CBCFFF, 0x484A77FF, 0x966C6CFF, 0x414859FF,
+            0xFFFFFFFF, 0x7A3045FF, 0x90A1A8FF, 0x8FF8E2FF,
+            0x852D66FF, 0xFB6B1DFF, 0x51C43FFF, 0x1EBC73FF,
+            0xB8FDFFFF, 0x3E3546FF, 0x2B2E42FF, 0xFCBF8AFF,
+            0xFFC46BFF, 0x905EA9FF, 0x8A503EFF, 0xB4D645FF,
+            0x236D7AFF, 0xC93038FF, 0xC27182FF, 0xEDD500FF,
+            0x625565FF, 0x6B3E75FF, 0x358510FF, 0x417291FF,
+            0x0B8A8FFF, 0x264F6EFF, 0xF7A48BFF, 0xAB947AFF,
+            0x46275CFF, 0xC32454FF, 0xFBFF86FF, 0x94D2D4FF,
+            0x30E1B9FF, 0xE83B3BFF, 0xE3C896FF, 0x63C2C9FF,
+            0xFF9E17FF, 0x5C3A41FF, 0x8FD3FFFF,
+
+    };
 }
