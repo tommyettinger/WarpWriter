@@ -23,6 +23,7 @@ import warpwriter.model.IModel;
 import warpwriter.model.fetch.ArrayModel;
 import warpwriter.model.fetch.BoxModel;
 import warpwriter.model.fetch.ColorFetch;
+import warpwriter.model.fetch.PaintFetch;
 import warpwriter.view.Twilight;
 import warpwriter.view.VoxelSprite;
 import warpwriter.view.VoxelSpriteBatchRenderer;
@@ -167,7 +168,10 @@ public class SimpleTest extends ApplicationAdapter {
 
     public IModel model() {
         batchRenderer.color().set(Twilight.AuroraToFlesurrectTwilight);
-        return new ArrayModel(maker.shipLargeRandomAurora());
+        return new PaintFetch(ColorFetch.color((byte) 55))
+                .model(
+                        new ArrayModel(maker.shipLargeRandomAurora())
+                );
     }
 
     @Override
@@ -269,7 +273,7 @@ public class SimpleTest extends ApplicationAdapter {
                         batchRenderer.color().set(batchRenderer.color().direction().clock());
                         break;
                     case Input.Keys.Y:
-                        if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT))
+                        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT))
                             batchRenderer.color().set(Twilight.arbitraryTwilight(Coloring.AURORA));
                         else
                             batchRenderer.color().set(Twilight.AuroraToFlesurrectTwilight);

@@ -186,8 +186,26 @@ public abstract class Fetch implements IFetch, IDecide {
         return new FetchModel(this, convenience);
     }
 
-    public IModel model() {
-        return new FetchModel();
+    /**
+     * This method does not chain!
+     *
+     * @param model A FetchModel to display at the end of the chain.
+     * @return A new FetchModel of the chain.
+     */
+    public FetchModel model(FetchModel model) {
+        add(model);
+        return new FetchModel(this, model.sizeX(), model.sizeY(), model.sizeZ());
+    }
+
+    /**
+     * This method does not chain!
+     *
+     * @param model An IModel to display at the end of the chain.
+     * @return A new FetchModel of the chain.
+     */
+    public IModel model(IModel model) {
+        add(new FetchModel(model));
+        return new FetchModel(this, model.sizeX(), model.sizeY(), model.sizeZ());
     }
 
     /**
