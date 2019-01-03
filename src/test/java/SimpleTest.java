@@ -145,7 +145,7 @@ public class SimpleTest extends ApplicationAdapter {
 
         maker = new ModelMaker(12345);
         batchRenderer = new VoxelSpriteBatchRenderer(batch);
-        batchRenderer.color().set(Twilight.AuroraTwilight); // comment out to use ArbitraryTwilight
+        batchRenderer.color().set(Twilight.AuroraToFlesurrectTwilight); // comment out to use ArbitraryTwilight
         voxelSprite = new VoxelSprite()
                 .set(batchRenderer)
                 .setOffset(VIRTUAL_WIDTH / 2, 100);
@@ -166,7 +166,7 @@ public class SimpleTest extends ApplicationAdapter {
     }
 
     public IModel model() {
-        batchRenderer.color().set(Twilight.AuroraTwilight);
+        batchRenderer.color().set(Twilight.AuroraToFlesurrectTwilight);
         return new ArrayModel(maker.shipLargeRandomAurora());
     }
 
@@ -272,7 +272,7 @@ public class SimpleTest extends ApplicationAdapter {
                         if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT))
                             batchRenderer.color().set(Twilight.arbitraryTwilight(Coloring.AURORA));
                         else
-                            batchRenderer.color().set(Twilight.AuroraTwilight);
+                            batchRenderer.color().set(Twilight.AuroraToFlesurrectTwilight);
                         break;
                     case Input.Keys.T: // try again
                         voxelSprite.reset();

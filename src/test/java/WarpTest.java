@@ -54,7 +54,7 @@ public class WarpTest extends ApplicationAdapter {
         screenView.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.enableBlending();
 
-        voxelColor = new VoxelColor().set(Twilight.AuroraTwilight);
+        voxelColor = new VoxelColor().set(Twilight.AuroraToFlesurrectTwilight);
         batchRenderer = new VoxelSpriteBatchRenderer(batch).setOffset(16, 100);
         pixmapRenderer = new VoxelPixmapRenderer(new Pixmap(512, 512, Pixmap.Format.RGBA8888), voxelColor);
         pmTexture = new Texture(pixmapRenderer.pixmap);

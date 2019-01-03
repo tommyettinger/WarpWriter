@@ -646,26 +646,25 @@ public class Coloring {
      * have been removed from the overlap, and the range of green coverage has been expanded. I'd say this is a good
      * option if we want to use less total colors relative to Rinsed or Aurora.
      * <br>
-     * This isn't sorted very well right now, so the order may change in the future.
+     * This is sorted so the first element is transparent, then indices 1 to 9 are grayscale (or close to it), 10 to 13
+     * are brownish-gray and so don't have an especially useful hue, and the rest are sorted by hue (red-green-blue).
      */
     public static final int[] FLESURRECT = {
-            0x00000000,
-            0xDE6A38FF, 0xCD683DFF, 0x4C93ADFF, 0x4D9BE6FF,
-            0x9E4539FF, 0xFFE596FF, 0xA884F3FF, 0xFCA790FF,
-            0x68717AFF, 0x4D65B4FF, 0x729446FF, 0xB58057FF,
-            0x1F1833FF, 0x826481FF, 0x91DB69FF, 0xF04F78FF,
-            0x233663FF, 0x4BA14AFF, 0xEAADEDFF, 0xF68181FF,
-            0xB6CBCFFF, 0x484A77FF, 0x966C6CFF, 0x414859FF,
-            0xFFFFFFFF, 0x7A3045FF, 0x90A1A8FF, 0x8FF8E2FF,
-            0x852D66FF, 0xFB6B1DFF, 0x51C43FFF, 0x1EBC73FF,
-            0xB8FDFFFF, 0x3E3546FF, 0x2B2E42FF, 0xFCBF8AFF,
-            0xFFC46BFF, 0x905EA9FF, 0x8A503EFF, 0xB4D645FF,
-            0x236D7AFF, 0xC93038FF, 0xC27182FF, 0xEDD500FF,
-            0x625565FF, 0x6B3E75FF, 0x358510FF, 0x417291FF,
-            0x0B8A8FFF, 0x264F6EFF, 0xF7A48BFF, 0xAB947AFF,
-            0x46275CFF, 0xC32454FF, 0xFBFF86FF, 0x94D2D4FF,
-            0x30E1B9FF, 0xE83B3BFF, 0xE3C896FF, 0x63C2C9FF,
-            0xFF9E17FF, 0x5C3A41FF, 0x8FD3FFFF,
-
+            0x00000000, 0x1F1833FF, 0x2B2E42FF, 0x3E3546FF,
+            0x414859FF, 0x68717AFF, 0x90A1A8FF, 0xB6CBCFFF,
+            0xD3E5EDFF, 0xFFFFFFFF, 0x5C3A41FF, 0x826481FF,
+            0x966C6CFF, 0xAB947AFF, 0xF68181FF, 0xF53333FF,
+            0xD75748FF, 0xAE4539FF, 0x8A503EFF, 0xCD683DFF,
+            0xDE6A38FF, 0xFB6B1DFF, 0xB58057FF, 0xFCBF8AFF,
+            0xFF9E17FF, 0xFFBF40FF, 0xE3C896FF, 0xFFE596FF,
+            0xEDD500FF, 0xFBFF86FF, 0xB4D645FF, 0x729446FF,
+            0x91DB69FF, 0x358510FF, 0x51C43FFF, 0x4BA14AFF,
+            0x1EBC73FF, 0x30E1B9FF, 0x8FF8E2FF, 0xB8FDFFFF,
+            0x94D2D4FF, 0x0B8A8FFF, 0x63C2C9FF, 0x4C93ADFF,
+            0x417291FF, 0x8FD3FFFF, 0x264F6EFF, 0x4D9BE6FF,
+            0x233663FF, 0x3F4DD0FF, 0x6858F0FF, 0x484A77FF,
+            0x8657CCFF, 0xA884F3FF, 0x621075FF, 0x905EA9FF,
+            0x6B3E75FF, 0xEAADEDFF, 0x852D66FF, 0xC32454FF,
+            0x7A3045FF, 0xF04F78FF, 0xC27182FF, 0xC93038FF,
     };
 }

@@ -2,6 +2,7 @@ package warpwriter.view;
 
 import com.badlogic.gdx.math.MathUtils;
 import warpwriter.Coloring;
+import warpwriter.PaletteReducer;
 
 /**
  * Twilight provides default implementations of bright, twilight, dim and dark which refer to the light method, and a default implementation of the light method which refers to the other four. Extension classes can overload just the light method or alternatively can overload the other four. Either way will work.
@@ -228,6 +229,25 @@ public abstract class Twilight implements ITwilight {
             }
         };
     }
+
+    public static final ITwilight AuroraToFlesurrectTwilight = new Twilight() {
+        private final PaletteReducer reducer = new PaletteReducer(Coloring.FLESURRECT);
+        @Override
+        public int light(int brightness, byte voxel) {
+            if(voxel == 0) return 0;
+            final int color = RAMP_VALUES[voxel & 255][1];
+            return FLESURRECT_RAMP_VALUES[reducer.paletteMapping[
+                    (color >>> 17 & 0x7C00)
+                            | (color >>> 14 & 0x3E0)
+                            | (color >>> 11 & 0x1F)] & 0xFF][
+                    brightness <= 0
+                            ? 3
+                            : brightness >= 3
+                            ? 0
+                            : 3 - brightness
+                    ];
+        }
+    };
 
     /**
      * Bytes that correspond to palette indices to use when shading an Aurora-palette model.
@@ -1300,4 +1320,146 @@ public abstract class Twilight implements ITwilight {
             {0xBF3F3FFF, 0x98344DFF, 0x73413CFF, 0x573B3BFF},
             {0xBD1039FF, 0x911437FF, 0x551937FF, 0x320A46FF},
     };
+
+    /**
+     * An experiment with the 64-color Flesurrect palette and ramps.
+     * <a href="https://i.imgur.com/4MXWw2E.png">View this here</a>.
+     */
+    public static final byte[][] FLESURRECT_RAMPS = new byte[][]{
+            { 0, 0, 0, 0 },
+            { 3, 1, 0, 1 },
+            { 4, 2, 0, 1 },
+            { 51, 3, 1, 0 },
+            { 5, 4, 2, 1 },
+            { 6, 5, 51, 4 },
+            { 7, 6, 5, 51 },
+            { 8, 7, 6, 55 },
+            { 9, 8, 7, 6 },
+            { 9, 9, 8, 7 },
+            { 56, 10, 2, 1 },
+            { 6, 11, 56, 4 },
+            { 62, 12, 18, 10 },
+            { 26, 13, 12, 18 },
+            { 23, 14, 61, 16 },
+            { 61, 15, 60, 10 },
+            { 61, 16, 17, 63 },
+            { 16, 17, 60, 10 },
+            { 12, 18, 10, 1 },
+            { 14, 19, 17, 60 },
+            { 14, 20, 17, 63 },
+            { 24, 21, 15, 63 },
+            { 14, 22, 18, 60 },
+            { 27, 23, 14, 22 },
+            { 25, 24, 21, 20 },
+            { 23, 25, 24, 20 },
+            { 27, 26, 13, 22 },
+            { 9, 27, 26, 23 },
+            { 25, 28, 24, 21 },
+            { 9, 29, 26, 30 },
+            { 26, 30, 22, 31 },
+            { 13, 31, 33, 10 },
+            { 26, 32, 34, 35 },
+            { 35, 33, 3, 2 },
+            { 32, 34, 33, 2 },
+            { 32, 35, 33, 2 },
+            { 37, 36, 41, 46 },
+            { 38, 37, 36, 41 },
+            { 9, 38, 40, 42 },
+            { 9, 39, 38, 40 },
+            { 38, 40, 42, 6 },
+            { 43, 41, 46, 48 },
+            { 40, 42, 43, 41 },
+            { 47, 43, 44, 46 },
+            { 43, 44, 46, 48 },
+            { 39, 45, 42, 47 },
+            { 44, 46, 1, 0 },
+            { 42, 47, 43, 49 },
+            { 51, 48, 1, 0 },
+            { 50, 49, 46, 48 },
+            { 53, 50, 49, 46 },
+            { 44, 51, 48, 2 },
+            { 53, 52, 49, 51 },
+            { 57, 53, 52, 49 },
+            { 56, 54, 1, 0 },
+            { 53, 55, 56, 54 },
+            { 11, 56, 54, 2 },
+            { 8, 57, 53, 55 },
+            { 11, 58, 54, 1 },
+            { 61, 59, 60, 54 },
+            { 12, 60, 1, 0 },
+            { 14, 61, 59, 60 },
+            { 14, 62, 12, 18 },
+            { 16, 63, 60, 10 },
+    };
+    /**
+     * An experiment with the 64-color Flesurrect palette and ramps (this has the RGBA color values).
+     * <a href="https://i.imgur.com/4MXWw2E.png">View this here</a>.
+     */
+    public static final int[][] FLESURRECT_RAMP_VALUES = new int[][]{
+            { 0x00000000, 0x00000000, 0x00000000, 0x00000000 },
+            { 0x3E3546FF, 0x1F1833FF, 0x00000000, 0x1F1833FF },
+            { 0x414859FF, 0x2B2E42FF, 0x00000000, 0x1F1833FF },
+            { 0x484A77FF, 0x3E3546FF, 0x1F1833FF, 0x00000000 },
+            { 0x68717AFF, 0x414859FF, 0x2B2E42FF, 0x1F1833FF },
+            { 0x90A1A8FF, 0x68717AFF, 0x484A77FF, 0x414859FF },
+            { 0xB6CBCFFF, 0x90A1A8FF, 0x68717AFF, 0x484A77FF },
+            { 0xD3E5EDFF, 0xB6CBCFFF, 0x90A1A8FF, 0x905EA9FF },
+            { 0xFFFFFFFF, 0xD3E5EDFF, 0xB6CBCFFF, 0x90A1A8FF },
+            { 0xFFFFFFFF, 0xFFFFFFFF, 0xD3E5EDFF, 0xB6CBCFFF },
+            { 0x6B3E75FF, 0x5C3A41FF, 0x2B2E42FF, 0x1F1833FF },
+            { 0x90A1A8FF, 0x826481FF, 0x6B3E75FF, 0x414859FF },
+            { 0xC27182FF, 0x966C6CFF, 0x8A503EFF, 0x5C3A41FF },
+            { 0xE3C896FF, 0xAB947AFF, 0x966C6CFF, 0x8A503EFF },
+            { 0xFCBF8AFF, 0xF68181FF, 0xF04F78FF, 0xD75748FF },
+            { 0xF04F78FF, 0xF53333FF, 0x7A3045FF, 0x5C3A41FF },
+            { 0xF04F78FF, 0xD75748FF, 0xAE4539FF, 0xC93038FF },
+            { 0xD75748FF, 0xAE4539FF, 0x7A3045FF, 0x5C3A41FF },
+            { 0x966C6CFF, 0x8A503EFF, 0x5C3A41FF, 0x1F1833FF },
+            { 0xF68181FF, 0xCD683DFF, 0xAE4539FF, 0x7A3045FF },
+            { 0xF68181FF, 0xDE6A38FF, 0xAE4539FF, 0xC93038FF },
+            { 0xFF9E17FF, 0xFB6B1DFF, 0xF53333FF, 0xC93038FF },
+            { 0xF68181FF, 0xB58057FF, 0x8A503EFF, 0x7A3045FF },
+            { 0xFFE596FF, 0xFCBF8AFF, 0xF68181FF, 0xB58057FF },
+            { 0xFFBF40FF, 0xFF9E17FF, 0xFB6B1DFF, 0xDE6A38FF },
+            { 0xFCBF8AFF, 0xFFBF40FF, 0xFF9E17FF, 0xDE6A38FF },
+            { 0xFFE596FF, 0xE3C896FF, 0xAB947AFF, 0xB58057FF },
+            { 0xFFFFFFFF, 0xFFE596FF, 0xE3C896FF, 0xFCBF8AFF },
+            { 0xFFBF40FF, 0xEDD500FF, 0xFF9E17FF, 0xFB6B1DFF },
+            { 0xFFFFFFFF, 0xFBFF86FF, 0xE3C896FF, 0xB4D645FF },
+            { 0xE3C896FF, 0xB4D645FF, 0xB58057FF, 0x729446FF },
+            { 0xAB947AFF, 0x729446FF, 0x358510FF, 0x5C3A41FF },
+            { 0xE3C896FF, 0x91DB69FF, 0x51C43FFF, 0x4BA14AFF },
+            { 0x4BA14AFF, 0x358510FF, 0x3E3546FF, 0x2B2E42FF },
+            { 0x91DB69FF, 0x51C43FFF, 0x358510FF, 0x2B2E42FF },
+            { 0x91DB69FF, 0x4BA14AFF, 0x358510FF, 0x2B2E42FF },
+            { 0x30E1B9FF, 0x1EBC73FF, 0x0B8A8FFF, 0x264F6EFF },
+            { 0x8FF8E2FF, 0x30E1B9FF, 0x1EBC73FF, 0x0B8A8FFF },
+            { 0xFFFFFFFF, 0x8FF8E2FF, 0x94D2D4FF, 0x63C2C9FF },
+            { 0xFFFFFFFF, 0xB8FDFFFF, 0x8FF8E2FF, 0x94D2D4FF },
+            { 0x8FF8E2FF, 0x94D2D4FF, 0x63C2C9FF, 0x90A1A8FF },
+            { 0x4C93ADFF, 0x0B8A8FFF, 0x264F6EFF, 0x233663FF },
+            { 0x94D2D4FF, 0x63C2C9FF, 0x4C93ADFF, 0x0B8A8FFF },
+            { 0x4D9BE6FF, 0x4C93ADFF, 0x417291FF, 0x264F6EFF },
+            { 0x4C93ADFF, 0x417291FF, 0x264F6EFF, 0x233663FF },
+            { 0xB8FDFFFF, 0x8FD3FFFF, 0x63C2C9FF, 0x4D9BE6FF },
+            { 0x417291FF, 0x264F6EFF, 0x1F1833FF, 0x00000000 },
+            { 0x63C2C9FF, 0x4D9BE6FF, 0x4C93ADFF, 0x3F4DD0FF },
+            { 0x484A77FF, 0x233663FF, 0x1F1833FF, 0x00000000 },
+            { 0x6858F0FF, 0x3F4DD0FF, 0x264F6EFF, 0x233663FF },
+            { 0xA884F3FF, 0x6858F0FF, 0x3F4DD0FF, 0x264F6EFF },
+            { 0x417291FF, 0x484A77FF, 0x233663FF, 0x2B2E42FF },
+            { 0xA884F3FF, 0x8657CCFF, 0x3F4DD0FF, 0x484A77FF },
+            { 0xEAADEDFF, 0xA884F3FF, 0x8657CCFF, 0x3F4DD0FF },
+            { 0x6B3E75FF, 0x621075FF, 0x1F1833FF, 0x00000000 },
+            { 0xA884F3FF, 0x905EA9FF, 0x6B3E75FF, 0x621075FF },
+            { 0x826481FF, 0x6B3E75FF, 0x621075FF, 0x2B2E42FF },
+            { 0xD3E5EDFF, 0xEAADEDFF, 0xA884F3FF, 0x905EA9FF },
+            { 0x826481FF, 0x852D66FF, 0x621075FF, 0x1F1833FF },
+            { 0xF04F78FF, 0xC32454FF, 0x7A3045FF, 0x621075FF },
+            { 0x966C6CFF, 0x7A3045FF, 0x1F1833FF, 0x00000000 },
+            { 0xF68181FF, 0xF04F78FF, 0xC32454FF, 0x7A3045FF },
+            { 0xF68181FF, 0xC27182FF, 0x966C6CFF, 0x8A503EFF },
+            { 0xD75748FF, 0xC93038FF, 0x7A3045FF, 0x5C3A41FF },
+    };
+
 }
