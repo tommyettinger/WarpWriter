@@ -190,7 +190,7 @@ public abstract class Fetch implements IFetch, IDecide {
      * This method does not chain!
      *
      * @param model A FetchModel to display at the end of the chain.
-     * @return A new FetchModel of the chain.
+     * @return A new FetchModel of the chain with size based on model.
      */
     public FetchModel model(FetchModel model) {
         add(model);
@@ -201,11 +201,10 @@ public abstract class Fetch implements IFetch, IDecide {
      * This method does not chain!
      *
      * @param model An IModel to display at the end of the chain.
-     * @return A new FetchModel of the chain.
+     * @return A new FetchModel of the chain with size based on model.
      */
     public IModel model(IModel model) {
-        add(new FetchModel(model));
-        return new FetchModel(this, model.sizeX(), model.sizeY(), model.sizeZ());
+        return model(new FetchModel(model));
     }
 
     /**
