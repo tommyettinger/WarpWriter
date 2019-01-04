@@ -1,5 +1,6 @@
 package warpwriter.model.fetch;
 
+import squidpony.squidmath.DiverRNG;
 import warpwriter.ModelMaker;
 import warpwriter.model.Fetch;
 
@@ -18,7 +19,7 @@ public class ChaoticFetch extends Fetch {
     }
 
     public ChaoticFetch(byte... colors) {
-        this(0, colors);
+        this(DiverRNG.determine(System.currentTimeMillis()), colors);
     }
 
     public ChaoticFetch(long seed, byte... colors) {
@@ -29,8 +30,9 @@ public class ChaoticFetch extends Fetch {
             this.colors = colors;
     }
 
-    public byte bite(int x, int y, int z) {
-        return colors[ModelMaker.hashBounded(x, y, z, seed, colors.length)];
+    @Override
+    public byte bite() {
+        return colors[ModelMaker.hashBounded(chainX(), chainY(), chainZ(), seed, colors.length)];
     }
 
     /**

@@ -16,7 +16,7 @@ import warpwriter.ModelMaker;
 import warpwriter.Tools3D;
 import warpwriter.VoxIO;
 import warpwriter.model.TurnModel;
-import warpwriter.model.fetch.ArrayModel;
+import warpwriter.model.fetch.*;
 import warpwriter.view.*;
 
 import java.io.FileInputStream;
@@ -41,6 +41,8 @@ public class WarpTest extends ApplicationAdapter {
     protected int angle = 2;
     protected boolean diagonal = false;
     protected byte[][][] box;
+    private byte[][][] voxels;
+    private ChaoticFetch chaos;
 
     @Override
     public void create() {
@@ -61,14 +63,17 @@ public class WarpTest extends ApplicationAdapter {
         maker = new ModelMaker(12345);
         try {
             box = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("Aurora/dumbcube.vox")));
-            warrior = new TurnModel().set(new ArrayModel(maker.shipLargeRandomAurora()));
         } catch (Exception e) {
             e.printStackTrace();
             box = maker.shipLargeRandomAurora();
-            warrior = new TurnModel().set(new ArrayModel(maker.shipLargeRandomAurora()));
         }
+        voxels = maker.shipLargeRandomAurora();
+        chaos = new ChaoticFetch(maker.rng.nextLong(), (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 1);
+        warrior = new TurnModel().set(new ReplaceFetch(ColorFetch.color((byte) 0), (byte) 1)
+                .add(new PaintFetch(chaos, true)).model(
+                new ArrayModel(voxels)));
         dumbCube = new TurnModel().set(new ArrayModel(box));
-        model = dumbCube;
+        model = warrior;
         Gdx.input.setInputProcessor(inputProcessor());
     }
 
@@ -177,7 +182,8 @@ public class WarpTest extends ApplicationAdapter {
                         break;
                     case Input.Keys.P:
                         model = warrior;
-                        Tools3D.deepCopyInto(maker.shipLargeRandomAurora(), ((ArrayModel)model.getModel()).voxels);
+                        chaos.setSeed(maker.rng.nextLong());
+                        Tools3D.deepCopyInto(maker.shipLargeRandomAurora(), voxels);
                         break;
                     case Input.Keys.B:
                         model = dumbCube;
