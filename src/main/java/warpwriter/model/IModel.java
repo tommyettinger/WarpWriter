@@ -1,7 +1,7 @@
 package warpwriter.model;
 
 /**
- * An abstraction for IFetch types that also have limits on their 3D bounds, limiting what values can be passed to
+ * An abstraction for IFetch types that also have limits on their 3D bounds, limiting what values are normally intended to be passed to
  * {@link #at(int, int, int)} to between 0 (inclusive) and the sizeX(), sizeY(), and sizeZ() methods here (exclusive).
  * The limits here are intended to be used to determine the size of rendered images or models, so they shouldn't be used
  * for a different purpose unless the implementation is not meant to be rendered.
