@@ -45,7 +45,7 @@ public class HeightDecide implements IDecide {
     /**
      * A utility function to calculate area of triangle formed by (x1, y1) (x2, y2) and (x3, y3)
      *
-     * @author Arnav Kr. Mandal
+     * Originally written by Arnav Kr. Mandal.
      */
     public static double area(int x1, int y1, int x2, int y2, int x3, int y3) {
         return Math.abs((x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) / 2.0);
@@ -54,7 +54,7 @@ public class HeightDecide implements IDecide {
     /**
      * A function to check whether point P(x, y) lies inside the triangle formed by A(x1, y1), B(x2, y2) and C(x3, y3)
      *
-     * @author Arnav Kr. Mandal
+     * Originally written by Arnav Kr. Mandal.
      */
     public static boolean isInside(int x, int y, int x1, int y1, int x2, int y2, int x3, int y3) {
         /* Calculate area of triangle ABC */

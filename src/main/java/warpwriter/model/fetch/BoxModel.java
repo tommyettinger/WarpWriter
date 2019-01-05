@@ -31,7 +31,7 @@ public class BoxModel extends FetchModel {
     }
 
     /**
-     * @see BoxModel(IModel, Fetch)
+     * @see #BoxModel(IModel, Fetch)
      */
     public BoxModel (Fetch fetch, IModel model) {
         this(model, fetch);

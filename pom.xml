@@ -54,14 +54,14 @@
 	</repositories>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.version>3.7.0</maven.compiler.version>
-        <maven.javadoc.version>3.0.0</maven.javadoc.version>
+        <maven.compiler.version>3.8.0</maven.compiler.version>
+        <maven.javadoc.version>3.0.1</maven.javadoc.version>
         <maven.resources.version>3.1.0</maven.resources.version>
         <maven.source.version>3.0.1</maven.source.version>
         <maven.gpg.version>1.6</maven.gpg.version>
         <jdk.version>1.7</jdk.version>
         <junit.version>4.11</junit.version>
-        <squidlib.version>f09503069e</squidlib.version>
+        <squidlib.version>dd9568985a</squidlib.version>
         <gdx.version>1.9.8</gdx.version>
     </properties>
 
@@ -95,6 +95,21 @@
             <version>${gdx.version}</version>
             <classifier>natives-desktop</classifier>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.aikar.fastutil-lite</groupId>
+            <artifactId>fastutil-base</artifactId>
+            <version>6f751f51e5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.aikar.fastutil-lite</groupId>
+            <artifactId>fastutil-longbase</artifactId>
+            <version>6f751f51e5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.aikar.fastutil-lite</groupId>
+            <artifactId>fastutil-longhashmap</artifactId>
+            <version>6f751f51e5</version>
         </dependency>
     </dependencies>
 

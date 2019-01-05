@@ -403,7 +403,6 @@ public class TestDisplay extends ApplicationAdapter {
         mm.rng.setState(determine(newModel));
         if (font == null) {
             font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
-            //font = new BitmapFont(Gdx.files.internal("tiny.fnt"));
         }
 
         Fetch checkers = Stripes.checkers(
