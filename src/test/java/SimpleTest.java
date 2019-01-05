@@ -19,8 +19,12 @@ import warpwriter.Coloring;
 import warpwriter.LittleEndianDataInputStream;
 import warpwriter.ModelMaker;
 import warpwriter.VoxIO;
+import warpwriter.model.IFetch;
 import warpwriter.model.IModel;
-import warpwriter.model.fetch.*;
+import warpwriter.model.fetch.ArrayModel;
+import warpwriter.model.fetch.BlockModel;
+import warpwriter.model.fetch.BoxModel;
+import warpwriter.model.fetch.ColorFetch;
 import warpwriter.view.Twilight;
 import warpwriter.view.VoxelSprite;
 import warpwriter.view.VoxelSpriteBatchRenderer;
@@ -164,18 +168,16 @@ public class SimpleTest extends ApplicationAdapter {
     }
 
     public IModel model() {
-        batchRenderer.color().set(Twilight.AuroraToFlesurrectTwilight);
-        return new PaintFetch(
-                Stripes.checkers(
-                        ColorFetch.color((byte) 55),
-                        ColorFetch.color((byte) 0),
-                        5, 5, 5
-                )
-                , true
-        )
-                .model(
-                        new ArrayModel(maker.shipLargeRandomAurora())
-                );
+        // batchRenderer.color().set(Twilight.AuroraToFlesurrectTwilight);
+        // return new ArrayModel(maker.shipLargeRandomAurora())
+        IFetch[][][] blocks = new IFetch[3][3][3];
+        for (int x=0; x<blocks.length; x++)
+            for (int y=0; y<blocks[0].length; y++)
+                for (int z=0; z<blocks[0][0].length; z++)
+                    blocks[x][y][z] = ColorFetch.color(maker.randomMainColor());
+        return new BlockModel()
+                .set(8, 8, 8)
+                .setBlocks(blocks);
     }
 
     @Override
