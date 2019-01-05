@@ -17,7 +17,7 @@ import java.util.Comparator;
 /**
  * Data that can be used to limit the colors present in a Pixmap or other image, here with the goal of using 256 or less
  * colors in the image (for saving indexed-mode images).
- * <br>
+ * <p>
  * Created by Tommy Ettinger on 6/23/2018.
  */
 public class PaletteReducer {
@@ -398,7 +398,7 @@ public class PaletteReducer {
      * {@link #analyze(Pixmap)} with {@code pixmap} as its argument, then call this method with the same
      * Pixmap. You may instead want to use a known palette instead of one computed from a Pixmap;
      * {@link #exact(int[])} is the tool for that job.
-     * <br>
+     * <p>
      * This method is not incredibly fast because of the extra calculations it has to do for dithering, but if you can
      * compute the PaletteReducer once and reuse it, that will save some time.
      * @param pixmap a Pixmap that will be modified in place
@@ -534,7 +534,7 @@ public class PaletteReducer {
      * {@link #analyze(Pixmap)} with {@code pixmap} as its argument, then call this method with the same
      * Pixmap. You may instead want to use a known palette instead of one computed from a Pixmap;
      * {@link #exact(int[])} is the tool for that job.
-     * <br>
+     * <p>
      * This method is not incredibly fast because of the extra calculations it has to do for dithering, but if you can
      * compute the PaletteReducer once and reuse it, that will save some time. Burkes dithering causes error to be
      * propagated to more than twice as many pixels as Sierra Lite (7 instead of 3), but both only affect one row ahead
@@ -675,7 +675,7 @@ public class PaletteReducer {
      * {@link #analyze(Pixmap)} with {@code pixmap} as its argument, then call this method with the same
      * Pixmap. You may instead want to use a known palette instead of one computed from a Pixmap;
      * {@link #exact(int[])} is the tool for that job.
-     * <br>
+     * <p>
      * This method is not incredibly fast because of the extra calculations it has to do for dithering, but if you can
      * compute the PaletteReducer once and reuse it, that will save some time. This method is probably slower than
      * {@link #reduceBurkes(Pixmap)} even though Burkes propagates error to more pixels, because this method also has to

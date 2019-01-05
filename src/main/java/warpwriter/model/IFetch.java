@@ -2,7 +2,7 @@ package warpwriter.model;
 
 /**
  * An abstraction for any types that allow querying a 3D position to get a color index (as a byte).
- * <br>
+ * <p>
  * Created by Tommy Ettinger on 10/11/2018.
  *
  * @author Tommy Ettinger

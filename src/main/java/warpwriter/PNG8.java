@@ -35,7 +35,7 @@ import static warpwriter.PaletteReducer.randomXi;
  * {@link #write(FileHandle, Pixmap, boolean, boolean)}, since writePrecisely will attempt to reproduce the exact colors
  * if there are 256 colors or less in the Pixmap, and will automatically change to calling write() if there are more
  * than 256 colors.
- * <br>
+ * <p>
  * From LibGDX in the class PixmapIO, with modifications to support indexed-mode files, dithering, and other features.
  * <pre>
  * Copyright (c) 2007 Matthias Mann - www.matthiasmann.de

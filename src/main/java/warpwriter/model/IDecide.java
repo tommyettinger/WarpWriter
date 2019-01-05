@@ -2,7 +2,7 @@ package warpwriter.model;
 
 /**
  * An abstraction for any types that allow querying a 3D position to get a decision. (as a boolean)
- * <br>
+ * <p>
  * Created by Ben McLean on 2018-10-26
  *
  * @author Ben McLean

@@ -29,14 +29,14 @@ public class ModelMaker {
      * Gets a 64-bit point hash of a 3D point (x, y, and z are all longs) and a state/seed as a long. This point hash
      * has just about the best speed of any algorithms tested, and though its quality is almost certainly bad for
      * traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
-     * <br>
+     * <p>
      * This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random sequences,
      * where each axis is multiplied by a different constant, and the choice of constants depends on the number of axes
      * but is always related to a generalized form of golden ratios, repeatedly dividing 1.0 by the generalized ratio.
      * See <a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/">Roberts' article</a>
      * for some more information on how he uses this, but we do things differently because we want random-seeming
      * results instead of separated sub-random results.
-     * <br>
+     * <p>
      * Should be very similar to {@link squidpony.squidmath.Noise.HastyPointHash#hashAll(long, long, long, long)},
      * if not identical. We have a version here that gets a hash between 0 and a bound, as well.
      * @param x x position; any long
@@ -56,14 +56,14 @@ public class ModelMaker {
      * Gets a 64-bit point hash of a 4D point (x, y, z, and w are all longs) and a state/seed as a long. This point
      * hash has just about the best speed of any algorithms tested, and though its quality is almost certainly bad for
      * traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
-     * <br>
+     * <p>
      * This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random sequences,
      * where each axis is multiplied by a different constant, and the choice of constants depends on the number of axes
      * but is always related to a generalized form of golden ratios, repeatedly dividing 1.0 by the generalized ratio.
      * See <a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/">Roberts' article</a>
      * for some more information on how he uses this, but we do things differently because we want random-seeming
      * results instead of separated sub-random results.
-     * <br>
+     * <p>
      * Should be very similar to {@link squidpony.squidmath.Noise.HastyPointHash#hashAll(long, long, long, long, long)},
      * if not identical. We have a version here that gets a hash between 0 and a bound, as well.
      * @param x x position; any long
@@ -85,14 +85,14 @@ public class ModelMaker {
      * Gets a bounded int point hash of a 3D point (x, y, and z are all longs) and a state/seed as a long. This point
      * hash has just about the best speed of any algorithms tested, and though its quality is almost certainly bad for
      * traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
-     * <br>
+     * <p>
      * This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random sequences,
      * where each axis is multiplied by a different constant, and the choice of constants depends on the number of axes
      * but is always related to a generalized form of golden ratios, repeatedly dividing 1.0 by the generalized ratio.
      * See <a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/">Roberts' article</a>
      * for some more information on how he uses this, but we do things differently because we want random-seeming
      * results instead of separated sub-random results.
-     * <br>
+     * <p>
      * Should be very similar to {@link squidpony.squidmath.Noise.HastyPointHash#hashAll(long, long, long, long)}, but
      * gets a hash between 0 and a bound, instead of a 64-bit long.
      * @param x x position; any long
@@ -115,14 +115,14 @@ public class ModelMaker {
      * Gets a bounded int point hash of a 4D point (x, y, z, and w are all longs) and a state/seed as a long. This point
      * hash has just about the best speed of any algorithms tested, and though its quality is almost certainly bad for
      * traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
-     * <br>
+     * <p>
      * This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random sequences,
      * where each axis is multiplied by a different constant, and the choice of constants depends on the number of axes
      * but is always related to a generalized form of golden ratios, repeatedly dividing 1.0 by the generalized ratio.
      * See <a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/">Roberts' article</a>
      * for some more information on how he uses this, but we do things differently because we want random-seeming
      * results instead of separated sub-random results.
-     * <br>
+     * <p>
      * Should be very similar to {@link squidpony.squidmath.Noise.HastyPointHash#hashAll(long, long, long, long, long)},
      * but gets a hash between 0 and a bound, instead of a 64-bit long.
      * @param x x position; any long

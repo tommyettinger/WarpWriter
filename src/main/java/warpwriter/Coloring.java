@@ -63,7 +63,7 @@ public class Coloring {
      * Yellow also doesn't get quite as dark because very dark yellow looks like an unpleasant brown, and
      * there's more need for light yellows that are more "cream-colored" than there is a need for ugly
      * yellow-gray-brown.
-     * <br>
+     * <p>
      * All 128 of these colors are repeated later to allow priority to be given to some voxels for shading.
      */
     public static final int[] ALT_PALETTE = {
@@ -431,7 +431,7 @@ public class Coloring {
      * characters, and doesn't lack for skin tones like Unseven does. It has a generally good selection of light brown
      * colors, and has been adjusted to add some dark brown colors, as well as vividly saturated purple. Many ramps also
      * become more purple as they go into darker shades.
-     * <br>
+     * <p>
      * This is organized so the colors from index 24 to index 255 inclusive are sorted by hue, from red to orange to
      * yellow to green to blue to purple, while still being organized in blocks of 8 colors at a time from bright to
      * dark. Some almost-grayscale blocks are jumbled in the middle, but they do have a hue and it is always at the
@@ -645,7 +645,7 @@ public class Coloring {
      * <a href="https://lospec.com/palette-list/resurrect-32">Resurrect 32 by Kerrie Lake</a>. Some very similar colors
      * have been removed from the overlap, and the range of green coverage has been expanded. I'd say this is a good
      * option if we want to use less total colors relative to Rinsed or Aurora.
-     * <br>
+     * <p>
      * This is sorted so the first element is transparent, then indices 1 to 9 are grayscale (or close to it), 10 to 13
      * are brownish-gray and so don't have an especially useful hue, and the rest are sorted by hue (red-green-blue).
      */

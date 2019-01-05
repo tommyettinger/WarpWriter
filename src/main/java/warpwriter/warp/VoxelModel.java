@@ -6,7 +6,7 @@ import warpwriter.model.IModel;
  * Trying again; a way of storing voxel models using a 1D array and a more involved method of lookup that should deal
  * correctly with rotation. The idea here is to provide tools for iterating over voxels along certain axes, which is
  * mostly what rendering code needs.
- * <br>
+ * <p>
  * Created by Tommy Ettinger on 11/19/2018.
  */
 public class VoxelModel implements IModel {

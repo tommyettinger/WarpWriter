@@ -7,7 +7,7 @@ import warpwriter.model.IModel;
 /**
  * A simple IModel that wraps a 3D byte array, using its bounds to implement {@link #sizeX()} and its related methods
  * and using its contents to implement {@link #bite()} (out-of-bounds requests are handled by returning 0).
- * <br>
+ * <p>
  * Created by Tommy Ettinger on 10/11/2018.
  *
  * @author Tommy Ettinger
