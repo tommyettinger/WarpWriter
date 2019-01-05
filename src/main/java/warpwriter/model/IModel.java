@@ -5,7 +5,7 @@ package warpwriter.model;
  * {@link #at(int, int, int)} to between 0 (inclusive) and the sizeX(), sizeY(), and sizeZ() methods here (exclusive).
  * The limits here are intended to be used to determine the size of rendered images or models, so they shouldn't be used
  * for a different purpose unless the implementation is not meant to be rendered.
- * <br>
+ * <p>
  * The meanings of x, y, and z are important to clarify here; this uses MagicaVoxel's convention that z is up, and the
  * convention that in arrays, the dimensions are in the order x, y, z. When a fourth dimension is added, e.g. for time,
  * it goes outside x (meaning before it in a 4D array), which allows accessing a 3D element of a 4D array and passing
@@ -26,7 +26,7 @@ package warpwriter.model;
  * be applied in many ways to a 3D model. When additional dimensions are added, just go backwards in the alphabet from
  * z as the first dimension: z for up/down, y for left/right, x for forward/back, w for future/past, v for ana/kata (or
  * whatever hyperdimensional modeling terms you make up for a fifth dimension), etc.
- * <br>
+ * <p>
  * Created by Tommy Ettinger on 10/11/2018.
  *
  * @author Tommy Ettinger
@@ -65,7 +65,7 @@ public interface IModel extends IFetch {
      * @return True if the given coordinate is outside the intended range
      * <p>
      * Recommended (but not required) implementation:
-     * public boolean outside(int x, int y, int z) { return x < 0 || y < 0 || z < 0 || x >= sizeX() || y >= sizeY() || z >= sizeZ(); }
+     * {@code public boolean outside(int x, int y, int z) { return x < 0 || y < 0 || z < 0 || x >= sizeX() || y >= sizeY() || z >= sizeZ(); } }
      */
     boolean outside(int x, int y, int z);
 }
