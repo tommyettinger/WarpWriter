@@ -97,20 +97,35 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.aikar.fastutil-lite</groupId>
+            <groupId>com.github.tommyettinger.fastutil-gwt</groupId>
             <artifactId>fastutil-base</artifactId>
-            <version>6f751f51e5</version>
+            <version>7ef7eece48</version>
         </dependency>
         <dependency>
-            <groupId>com.github.aikar.fastutil-lite</groupId>
-            <artifactId>fastutil-longbase</artifactId>
-            <version>6f751f51e5</version>
+            <groupId>com.github.tommyettinger.fastutil-gwt</groupId>
+            <artifactId>fastutil-intbase</artifactId>
+            <version>7ef7eece48</version>
         </dependency>
         <dependency>
-            <groupId>com.github.aikar.fastutil-lite</groupId>
-            <artifactId>fastutil-longhashmap</artifactId>
-            <version>6f751f51e5</version>
+            <groupId>com.github.tommyettinger.fastutil-gwt</groupId>
+            <artifactId>fastutil-inthashmap</artifactId>
+            <version>7ef7eece48</version>
         </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.github.aikar.fastutil-lite</groupId>-->
+            <!--<artifactId>fastutil-base</artifactId>-->
+            <!--<version>6f751f51e5</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>com.github.aikar.fastutil-lite</groupId>-->
+            <!--<artifactId>fastutil-intbase</artifactId>-->
+            <!--<version>6f751f51e5</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>com.github.aikar.fastutil-lite</groupId>-->
+            <!--<artifactId>fastutil-inthashmap</artifactId>-->
+            <!--<version>6f751f51e5</version>-->
+        <!--</dependency>-->
     </dependencies>
 
     <issueManagement>
