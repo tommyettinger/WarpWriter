@@ -99,17 +99,17 @@
         <dependency>
             <groupId>com.github.tommyettinger.fastutil-gwt</groupId>
             <artifactId>fastutil-base</artifactId>
-            <version>7ef7eece48</version>
+            <version>f154cc3969</version>
         </dependency>
         <dependency>
             <groupId>com.github.tommyettinger.fastutil-gwt</groupId>
             <artifactId>fastutil-intbase</artifactId>
-            <version>7ef7eece48</version>
+            <version>f154cc3969</version>
         </dependency>
         <dependency>
             <groupId>com.github.tommyettinger.fastutil-gwt</groupId>
             <artifactId>fastutil-inthashmap</artifactId>
-            <version>7ef7eece48</version>
+            <version>f154cc3969</version>
         </dependency>
         <!--<dependency>-->
             <!--<groupId>com.github.aikar.fastutil-lite</groupId>-->
