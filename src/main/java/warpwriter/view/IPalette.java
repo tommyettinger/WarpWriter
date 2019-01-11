@@ -1,7 +1,5 @@
 package warpwriter.view;
 
-import squidpony.squidmath.IRNG;
-
 /**
  * An interface to abstract away the complexity of different color palettes
  *
@@ -28,23 +26,13 @@ public interface IPalette { // extends ITwilight
     byte dimmer(byte voxel, int brightness);
 
     /**
-     * @param rng A randomness source
-     * @return A main color chosen at random
+     * @return A list of main colors
      */
-    byte random(IRNG rng);
+    byte[] colors();
 
     /**
-     * @param rng    A randomness source
-     * @param length Desired number of random main colors
-     * @return Color indexes that do not repeat, as large as possible without exceeding length
+     * @param color An RGBA8888 color
+     * @return The nearest available color index in the palette
      */
-    byte[] random(IRNG rng, int length);
-
-    /**
-     * @param rng     A randomness source
-     * @param length  Desired number of random main colors
-     * @param exclude Bytes to exclude from the results
-     * @return Color indexes that do not repeat, as large as possible without exceeding length
-     */
-    byte[] random(IRNG rng, int length, byte[] exclude);
+    byte reduce(int color);
 }
