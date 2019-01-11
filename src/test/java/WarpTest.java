@@ -56,7 +56,7 @@ public class WarpTest extends ApplicationAdapter {
         screenView.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.enableBlending();
 
-        voxelColor = new VoxelColor().set(Twilight.AuroraToFlesurrectTwilight);
+        voxelColor = new VoxelColor().set(Twilight.AuroraTwilight);
         batchRenderer = new VoxelSpriteBatchRenderer(batch).setOffset(16, 100);
         pixmapRenderer = new VoxelPixmapRenderer(new Pixmap(512, 512, Pixmap.Format.RGBA8888), voxelColor);
         pmTexture = new Texture(pixmapRenderer.pixmap);
@@ -68,10 +68,11 @@ public class WarpTest extends ApplicationAdapter {
             box = maker.shipLargeRandomAurora();
         }
         voxels = maker.shipLargeRandomAurora();
-        chaos = new ChaoticFetch(maker.rng.nextLong(), (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 1);
-        warrior = new TurnModel().set(new ReplaceFetch(ColorFetch.color((byte) 0), (byte) 1)
-                .add(new PaintFetch(chaos, true)).model(
-                new ArrayModel(voxels)));
+//        chaos = new ChaoticFetch(maker.rng.nextLong(), (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 1);
+        warrior = new TurnModel().set(
+//                new ReplaceFetch(ColorFetch.color((byte) 0), (byte) 1)
+//                .add(new PaintFetch(chaos, true)).model(
+                new ArrayModel(voxels));
         dumbCube = new TurnModel().set(new ArrayModel(box));
         model = warrior;
         Gdx.input.setInputProcessor(inputProcessor());
