@@ -11,10 +11,10 @@ import java.util.Map;
  * <p>
  * Created by Tommy Ettinger on 1/9/2019.
  */
-public class TileHashMap extends Int2ObjectOpenHashMap<Fetch> {
+public class HashMap3D<T> extends Int2ObjectOpenHashMap<T> {
     /**
      * Combines 3 int components x, y, and z, each between 0 and 1023 inclusive, into one int that can be used as a key
-     * in this TileHashMap. 30 of the 32 bits in the returned int have the potential to be used, allowing about a
+     * in this HashMap3D. 30 of the 32 bits in the returned int have the potential to be used, allowing about a
      * billion possible keys that never produce garbage or need garbage collection (at least for themselves).
      *
      * @param x the x component, between 0 and 1023; this can be extracted with {@link #extractX(int)}
@@ -56,57 +56,55 @@ public class TileHashMap extends Int2ObjectOpenHashMap<Fetch> {
         return fused >>> 20 & 0x000003FF;
     }
 
-    public TileHashMap(int expected, float f) {
+    public HashMap3D(int expected, float f) {
         super(expected, f);
     }
 
-    public TileHashMap(int expected) {
+    public HashMap3D(int expected) {
         super(expected);
     }
 
-    public TileHashMap() {
+    public HashMap3D() {
         super();
     }
 
-    public TileHashMap(Map<? extends Integer, ? extends Fetch> m, float f) {
+    public HashMap3D(Map<? extends Integer, ? extends T> m, float f) {
         super(m, f);
     }
 
-    public TileHashMap(Map<? extends Integer, ? extends Fetch> m) {
+    public HashMap3D(Map<? extends Integer, ? extends T> m) {
         super(m);
     }
 
-    public TileHashMap(Int2ObjectMap<Fetch> m, float f) {
+    public HashMap3D(Int2ObjectMap<T> m, float f) {
         super(m, f);
     }
 
-    public TileHashMap(Int2ObjectMap<Fetch> m) {
+    public HashMap3D(Int2ObjectMap<T> m) {
         super(m);
     }
 
-    public TileHashMap(int[] k, Fetch[] v, float f) {
+    public HashMap3D(int[] k, T[] v, float f) {
         super(k, v, f);
     }
 
-    public TileHashMap(int[] k, Fetch[] v) {
+    public HashMap3D(int[] k, T[] v) {
         super(k, v);
     }
 
-    public Fetch put(final int x, final int y, final int z, Fetch fetch) {
-        return super.put(fuse(x, y, z), fetch);
+    public T put(final int x, final int y, final int z, T t) {
+        return super.put(fuse(x, y, z), t);
     }
 
-    public Fetch remove(final int x, final int y, final int z) {
+    public T remove(final int x, final int y, final int z) {
         return super.remove(fuse(x, y, z));
     }
 
-    public Fetch get(final int x, final int y, final int z) {
+    public T get(final int x, final int y, final int z) {
         return super.get(fuse(x, y, z));
     }
 
     public boolean containsKey(final int x, final int y, final int z) {
         return super.containsKey(fuse(x, y, z));
     }
-
-
 }
