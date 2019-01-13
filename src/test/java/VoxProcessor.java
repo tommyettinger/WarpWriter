@@ -2,7 +2,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import warpwriter.LittleEndianDataInputStream;
+import warpwriter.model.nonvoxel.LittleEndianDataInputStream;
 import warpwriter.VoxIO;
 
 import java.io.InputStream;

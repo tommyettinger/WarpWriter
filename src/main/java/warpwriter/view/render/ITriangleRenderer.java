@@ -1,4 +1,4 @@
-package warpwriter.view;
+package warpwriter.view.render;
 
 /**
  * An ITriangleRenderer understands how to draw triangles where each triangle represents half of one of the diamonds making up one of the three visible faces of a voxel cube from an isometric perspective.

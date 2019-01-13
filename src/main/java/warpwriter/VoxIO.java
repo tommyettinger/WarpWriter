@@ -1,5 +1,7 @@
 package warpwriter;
 
+import warpwriter.model.nonvoxel.LittleEndianDataInputStream;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.FileOutputStream;

@@ -1,7 +1,5 @@
 package warpwriter.model.decide;
 
-import warpwriter.model.IDecide;
-
 /**
  * Inverts the decision of another IDecide
  *

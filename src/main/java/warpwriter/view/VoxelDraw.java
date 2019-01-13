@@ -2,6 +2,8 @@ package warpwriter.view;
 
 import warpwriter.Coloring;
 import warpwriter.model.IModel;
+import warpwriter.view.render.IRectangleRenderer;
+import warpwriter.view.render.ITriangleRenderer;
 
 /**
  * VoxelDraw contains the logic to render voxel models as 2D sprites from various perspectives with a high level of abstraction.

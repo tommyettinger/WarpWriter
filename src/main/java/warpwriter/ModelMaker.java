@@ -3,7 +3,8 @@ package warpwriter;
 import squidpony.squidmath.GWTRNG;
 import squidpony.squidmath.LinnormRNG;
 import squidpony.squidmath.NumberTools;
-import warpwriter.view.Twilight;
+import warpwriter.model.nonvoxel.LittleEndianDataInputStream;
+import warpwriter.view.color.Dimmer;
 
 import java.io.InputStream;
 
@@ -547,8 +548,8 @@ public class ModelMaker {
         final int halfY = ySize >> 1, smallYSize = ySize - 1;
         int color;
         long seed = rng.nextLong(), current, paint;
-        final byte mainColor = Twilight.RAMPS[palette.randomColorIndex(rng) & 255][2],
-                highlightColor = Twilight.RAMPS[Twilight.RAMPS[palette.randomColorIndex(rng) & 255][0] & 255][0],
+        final byte mainColor = Dimmer.RAMPS[palette.randomColorIndex(rng) & 255][2],
+                highlightColor = Dimmer.RAMPS[Dimmer.RAMPS[palette.randomColorIndex(rng) & 255][0] & 255][0],
                 cockpitColor = AURORA_COCKPIT_COLORS[determineBounded(seed + 55555L, AURORA_COCKPIT_COLORS.length)];
         int xx, yy, zz;
         for (int x = 0; x < xSize; x++) {
@@ -570,14 +571,14 @@ public class ModelMaker {
                         if (color < 8) { // checks bottom 6 bits
                             if((current >>> 6 & 0x7L) != 0)
                                 nextShip[x][smallYSize - y][z] = nextShip[x][y][z] =
-                                        Twilight.RAMPS[cockpitColor & 255][3 - (z + 6 >> 3) & 3];
+                                        Dimmer.RAMPS[cockpitColor & 255][3 - (z + 6 >> 3) & 3];
                         } else {
                             nextShip[x][smallYSize - y][z] = nextShip[x][y][z] =
                                     // checks another 6 bits, starting after discarding 6 bits from the bottom
                                     ((current >>> 6 & 0x1FFL) < color * 6)
                                             ? 0
                                             // checks another 6 bits, starting after discarding 12 bits from the bottom
-                                            : ((paint >>> 12 & 0x3FL) < 40L) ? Twilight.RAMPS[10][(int) paint & 3]
+                                            : ((paint >>> 12 & 0x3FL) < 40L) ? Dimmer.RAMPS[10][(int) paint & 3]
                                             // checks another 6 bits, starting after discarding 18 bits from the bottom
                                             : ((paint >>> 18 & 0x3FL) < 8L) ? highlightColor : mainColor;
                         }

@@ -1,7 +1,8 @@
-package warpwriter.view;
+package warpwriter.view.render;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import squidpony.ArrayTools;
+import warpwriter.view.color.VoxelColor;
 
 /**
  * Created by Tommy Ettinger on 12/16/2018.

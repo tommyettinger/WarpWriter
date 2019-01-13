@@ -1,11 +1,11 @@
-package warpwriter.view;
+package warpwriter.view.color;
 
 /**
- * An ITwilight converts from the color index of a voxel to an actual color based on lighting.
+ * An IDimmer converts from the color index of a voxel to an actual color based on lighting.
  *
  * @author Ben McLean
  */
-public interface ITwilight {
+public interface IDimmer {
     int dark(byte voxel);
 
     int dim(byte voxel);

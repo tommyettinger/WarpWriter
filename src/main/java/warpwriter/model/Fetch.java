@@ -1,7 +1,10 @@
 package warpwriter.model;
 
 import squidpony.squidmath.Noise;
+import warpwriter.model.decide.DecideFetch;
+import warpwriter.model.decide.IDecide;
 import warpwriter.model.fetch.*;
+import warpwriter.model.nonvoxel.Turner;
 
 /**
  * This abstract class allows for IFetch implementations to use left-to-right method chaining to defer to other IFetch instances for different coordinates instead of always needing to return a byte themselves.

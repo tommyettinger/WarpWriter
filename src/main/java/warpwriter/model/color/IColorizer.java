@@ -1,4 +1,4 @@
-package warpwriter.view;
+package warpwriter.model.color;
 
 /**
  * An interface to abstract away the complexity of different color palettes

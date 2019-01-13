@@ -17,8 +17,11 @@ import squidpony.squidmath.FastNoise;
 import squidpony.squidmath.Noise;
 import warpwriter.*;
 import warpwriter.model.*;
+import warpwriter.model.decide.DecideFetch;
 import warpwriter.model.decide.HeightDecide;
 import warpwriter.model.fetch.*;
+import warpwriter.model.nonvoxel.CompassDirection;
+import warpwriter.model.nonvoxel.LittleEndianDataInputStream;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

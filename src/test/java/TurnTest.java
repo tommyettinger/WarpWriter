@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import warpwriter.ModelRenderer;
 import warpwriter.WorldMaker;
 import warpwriter.model.fetch.ArrayModel;
-import warpwriter.model.CompassDirection;
+import warpwriter.model.nonvoxel.CompassDirection;
 import warpwriter.model.TurnModel;
 
 public class TurnTest extends ApplicationAdapter {

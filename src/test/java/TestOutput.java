@@ -15,9 +15,9 @@ import warpwriter.PNG8;
 import warpwriter.PaletteReducer;
 import warpwriter.model.TurnModel;
 import warpwriter.model.fetch.ArrayModel;
-import warpwriter.view.Twilight;
-import warpwriter.view.VoxelColor;
-import warpwriter.view.VoxelPixmapRenderer;
+import warpwriter.view.color.Dimmer;
+import warpwriter.view.color.VoxelColor;
+import warpwriter.view.render.VoxelPixmapRenderer;
 import warpwriter.view.WarpDraw;
 
 import java.io.IOException;
@@ -72,7 +72,7 @@ public class TestOutput extends ApplicationAdapter {
             pixes[i] = new Pixmap(width, height, Pixmap.Format.RGBA8888);
         }
         pix = pixes[0];
-        vpr = new VoxelPixmapRenderer(pix, new VoxelColor().set(Twilight.AuroraTwilight));
+        vpr = new VoxelPixmapRenderer(pix, new VoxelColor().set(Dimmer.AuroraTwilight));
         png = new PNG8(width * height);
         png.setFlipY(false);
         png.setCompression(6);

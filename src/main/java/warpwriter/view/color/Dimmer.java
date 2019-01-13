@@ -1,17 +1,17 @@
-package warpwriter.view;
+package warpwriter.view.color;
 
 import com.badlogic.gdx.math.MathUtils;
 import warpwriter.Coloring;
 import warpwriter.PaletteReducer;
 
 /**
- * Twilight provides default implementations of bright, twilight, dim and dark which refer to the light method, and a default implementation of the light method which refers to the other four. Extension classes can overload just the light method or alternatively can overload the other four. Either way will work.
+ * Dimmer provides default implementations of bright, twilight, dim and dark which refer to the light method, and a default implementation of the light method which refers to the other four. Extension classes can overload just the light method or alternatively can overload the other four. Either way will work.
  * <p>
  * Also contained here are various extensions as member classes.
  *
  * @author Ben McLean
  */
-public abstract class Twilight implements ITwilight {
+public abstract class Dimmer implements IDimmer {
     /**
      * Refers to the light method to get the answer.
      */
@@ -70,12 +70,12 @@ public abstract class Twilight implements ITwilight {
     }
 
     /**
-     * Renders arbitrarily brighter or darker using the colors available in another Twilight.
+     * Renders arbitrarily brighter or darker using the colors available in another Dimmer.
      *
      * @author Ben McLean
      */
-    public static class OffsetTwilight extends Twilight {
-        public OffsetTwilight(ITwilight twilight) {
+    public static class OffsetDimmer extends Dimmer {
+        public OffsetDimmer(IDimmer twilight) {
             super();
             set(twilight);
         }
@@ -86,23 +86,23 @@ public abstract class Twilight implements ITwilight {
             return offset;
         }
 
-        public OffsetTwilight set(int offset) {
+        public OffsetDimmer set(int offset) {
             this.offset = offset;
             return this;
         }
 
-        public OffsetTwilight add(int offset) {
+        public OffsetDimmer add(int offset) {
             this.offset += offset;
             return this;
         }
 
-        protected ITwilight twilight;
+        protected IDimmer twilight;
 
-        public ITwilight twilight() {
+        public IDimmer twilight() {
             return twilight;
         }
 
-        public OffsetTwilight set(ITwilight twilight) {
+        public OffsetDimmer set(IDimmer twilight) {
             this.twilight = twilight;
             return this;
         }
@@ -113,7 +113,7 @@ public abstract class Twilight implements ITwilight {
         }
     }
 
-    public static final ITwilight RinsedTwilight = new Twilight() {
+    public static final IDimmer RinsedTwilight = new Dimmer() {
         protected int[] palette = Coloring.RINSED;
 
         @Override
@@ -137,7 +137,7 @@ public abstract class Twilight implements ITwilight {
         }
     };
 
-    public static final ITwilight AuroraTwilight = new Twilight() {
+    public static final IDimmer AuroraTwilight = new Dimmer() {
         @Override
         public int light(int brightness, byte voxel) {
             return RAMP_VALUES[voxel & 255][
@@ -150,7 +150,7 @@ public abstract class Twilight implements ITwilight {
         }
     };
 
-    public static final ITwilight AuroraWarmthTwilight = new Twilight() {
+    public static final IDimmer AuroraWarmthTwilight = new Dimmer() {
         @Override
         public int dark(byte voxel) {
             return WARMTH_RAMP_VALUES[voxel & 255][3];
@@ -172,8 +172,8 @@ public abstract class Twilight implements ITwilight {
         }
     };
 
-    public static ITwilight arbitraryTwilight(final int[] rgbaPalette) {
-        return new Twilight() {
+    public static IDimmer arbitraryTwilight(final int[] rgbaPalette) {
+        return new Dimmer() {
             private int[][] RAMP_VALUES = new int[256][4];
 
             {
@@ -230,7 +230,7 @@ public abstract class Twilight implements ITwilight {
         };
     }
 
-    public static final ITwilight AuroraToFlesurrectTwilight = new Twilight() {
+    public static final IDimmer AuroraToFlesurrectTwilight = new Dimmer() {
         private final PaletteReducer reducer = new PaletteReducer(Coloring.FLESURRECT,
                 "\001\001\001\001\001\001\001\001\001\001\001\001\001\001000000006111111111\001\001\001\001\001\001\001\001\001\001\001\001\0010000000001111111111\001\001\001\001\001\001\001\001\001\001\001\00100000000001111111111\001\001\001\001\001\001\001\001\001\001\001000000000001111111111"+
                         "\001\001\001\001\001\001\001\001\001\001\001000000000011111111111\001\001\001\001\001\001\001\001\001\0020000000000011111111111\001\001\001\001\001\001\001\002\002\0020000000000011111111111\001\001\001\001\001\002\002\002\002000000000...11111111111"+

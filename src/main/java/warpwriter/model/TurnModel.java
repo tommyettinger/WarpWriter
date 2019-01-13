@@ -1,5 +1,7 @@
 package warpwriter.model;
 
+import warpwriter.model.nonvoxel.Turner;
+
 /**
  * Rotates models at 90 degree angles, including their sizes
  *

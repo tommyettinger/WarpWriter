@@ -1,4 +1,4 @@
-package warpwriter.model;
+package warpwriter.model.nonvoxel;
 
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.NumberTools;

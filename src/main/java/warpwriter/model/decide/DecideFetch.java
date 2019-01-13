@@ -1,4 +1,6 @@
-package warpwriter.model;
+package warpwriter.model.decide;
+
+import warpwriter.model.Fetch;
 
 /**
  * Uses an IDecide to make a choice between two different Fetches

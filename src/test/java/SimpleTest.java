@@ -16,17 +16,17 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.StringKit;
 import warpwriter.Coloring;
-import warpwriter.LittleEndianDataInputStream;
+import warpwriter.model.nonvoxel.LittleEndianDataInputStream;
 import warpwriter.ModelMaker;
 import warpwriter.VoxIO;
-import warpwriter.model.DecideFetch;
-import warpwriter.model.HashMap3D;
+import warpwriter.model.decide.DecideFetch;
+import warpwriter.model.nonvoxel.HashMap3D;
 import warpwriter.model.IFetch;
 import warpwriter.model.IModel;
 import warpwriter.model.fetch.*;
-import warpwriter.view.Twilight;
+import warpwriter.view.color.Dimmer;
 import warpwriter.view.VoxelSprite;
-import warpwriter.view.VoxelSpriteBatchRenderer;
+import warpwriter.view.render.VoxelSpriteBatchRenderer;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -118,17 +118,17 @@ public class SimpleTest extends ApplicationAdapter {
             //// loads a file by its full path, which we get via drag+drop
             final byte[][][] arr = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream(name)));
             //// set the palette to the one from the vox model, using arbitraryTwilight()
-            batchRenderer.set(batchRenderer.color().set(Twilight.arbitraryTwilight(VoxIO.lastPalette)));
+            batchRenderer.set(batchRenderer.color().set(Dimmer.arbitraryTwilight(VoxIO.lastPalette)));
             voxelSprite.set(new ArrayModel(
                     arr
-                    //// Aurora folder has vox models with a different palette, which involves a different ITwilight.
+                    //// Aurora folder has vox models with a different palette, which involves a different IDimmer.
                     //VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("Aurora/Warrior_Male_W.vox")))
                     // If using Rinsed, use the line below instead of the one above.
                     //maker.warriorRandom()
             ));
         } catch (FileNotFoundException e) {
             voxelSprite.set(new ArrayModel(maker.warriorRandom()));
-            batchRenderer.set(batchRenderer.color().set(Twilight.arbitraryTwilight(Coloring.RINSED)));
+            batchRenderer.set(batchRenderer.color().set(Dimmer.arbitraryTwilight(Coloring.RINSED)));
         }
     }
 
@@ -146,7 +146,7 @@ public class SimpleTest extends ApplicationAdapter {
 
         maker = new ModelMaker(12345);
         batchRenderer = new VoxelSpriteBatchRenderer(batch);
-        batchRenderer.color().set(Twilight.AuroraToFlesurrectTwilight); // comment out to use ArbitraryTwilight
+        batchRenderer.color().set(Dimmer.AuroraToFlesurrectTwilight); // comment out to use ArbitraryTwilight
         voxelSprite = new VoxelSprite()
                 .set(batchRenderer)
                 .setOffset(VIRTUAL_WIDTH / 2, 100);
@@ -167,7 +167,7 @@ public class SimpleTest extends ApplicationAdapter {
     }
 
     public IModel model() {
-        // batchRenderer.color().set(Twilight.AuroraToFlesurrectTwilight);
+        // batchRenderer.color().set(Dimmer.AuroraToFlesurrectTwilight);
         // return new ArrayModel(maker.shipLargeRandomAurora())
         HashMap3D<IFetch> map = new HashMap3D<>();
 //        for (int x=0; x<3; x++)
@@ -280,9 +280,9 @@ public class SimpleTest extends ApplicationAdapter {
                         break;
                     case Input.Keys.Y:
                         if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT))
-                            batchRenderer.color().set(Twilight.arbitraryTwilight(Coloring.AURORA));
+                            batchRenderer.color().set(Dimmer.arbitraryTwilight(Coloring.AURORA));
                         else
-                            batchRenderer.color().set(Twilight.AuroraToFlesurrectTwilight);
+                            batchRenderer.color().set(Dimmer.AuroraToFlesurrectTwilight);
                         break;
                     case Input.Keys.T: // try again
                         voxelSprite.reset();

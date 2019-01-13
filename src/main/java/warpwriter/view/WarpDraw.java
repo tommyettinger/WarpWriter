@@ -3,6 +3,10 @@ package warpwriter.view;
 import com.badlogic.gdx.graphics.Pixmap;
 import warpwriter.Coloring;
 import warpwriter.model.IModel;
+import warpwriter.view.color.IVoxelColor;
+import warpwriter.view.color.VoxelColor;
+import warpwriter.view.render.IRectangleRenderer;
+import warpwriter.view.render.VoxelPixmapRenderer;
 
 /**
  * Created by Tommy Ettinger on 11/19/2018.

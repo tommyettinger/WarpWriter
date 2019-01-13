@@ -2,7 +2,7 @@ package warpwriter;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import squidpony.ArrayTools;
-import warpwriter.model.CompassDirection;
+import warpwriter.model.nonvoxel.CompassDirection;
 import warpwriter.model.IModel;
 
 import java.util.Arrays;

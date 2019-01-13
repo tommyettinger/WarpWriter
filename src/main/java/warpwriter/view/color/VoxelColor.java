@@ -1,4 +1,4 @@
-package warpwriter.view;
+package warpwriter.view.color;
 
 import warpwriter.Coloring;
 
@@ -245,13 +245,13 @@ public class VoxelColor implements IVoxelColor {
         return this;
     }
 
-    protected ITwilight twilight = Twilight.RinsedTwilight;
+    protected IDimmer twilight = Dimmer.RinsedTwilight;
 
-    public ITwilight twilight() {
+    public IDimmer twilight() {
         return twilight;
     }
 
-    public VoxelColor set(ITwilight twilight) {
+    public VoxelColor set(IDimmer twilight) {
         this.twilight = twilight;
         return this;
     }

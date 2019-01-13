@@ -1,4 +1,4 @@
-package warpwriter.view;
+package warpwriter.view.render;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
 import squidpony.squidmath.NumberTools;
+import warpwriter.view.color.VoxelColor;
 
 /**
  * Renders voxel models to a libGDX SpriteBatch.

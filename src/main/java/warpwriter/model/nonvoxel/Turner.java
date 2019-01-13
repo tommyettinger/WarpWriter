@@ -1,4 +1,4 @@
-package warpwriter.model;
+package warpwriter.model.nonvoxel;
 
 /**
  * Rotates integer coordinates based on right-hand rotation.

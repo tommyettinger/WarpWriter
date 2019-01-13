@@ -1,4 +1,4 @@
-package warpwriter.model;
+package warpwriter.model.decide;
 
 /**
  * An abstraction for any types that allow querying a 3D position to get a decision. (as a boolean)

@@ -17,9 +17,11 @@ import squidpony.squidmath.Noise;
 import warpwriter.ModelMaker;
 import warpwriter.ModelRenderer;
 import warpwriter.model.*;
+import warpwriter.model.decide.DecideFetch;
 import warpwriter.model.decide.DungeonDecide;
 import warpwriter.model.decide.HeightDecide;
 import warpwriter.model.fetch.*;
+import warpwriter.model.nonvoxel.CompassDirection;
 
 public class FetchTest extends ApplicationAdapter {
     public static final int width = 1280;

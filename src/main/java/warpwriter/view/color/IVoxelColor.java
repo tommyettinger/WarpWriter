@@ -1,4 +1,4 @@
-package warpwriter.view;
+package warpwriter.view.color;
 
 /**
  * An IVoxelColor converts from the color index of a voxel to the rgba8888 colors which the visible faces of the cube representing it should be.

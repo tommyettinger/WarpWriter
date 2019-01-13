@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
 import warpwriter.model.IModel;
 import warpwriter.model.TurnModel;
+import warpwriter.view.render.VoxelSpriteBatchRenderer;
 
 /**
  * This class is can be understood as like the Sprite class in libGDX, except it is for rendering voxel models instead of 2D textures.

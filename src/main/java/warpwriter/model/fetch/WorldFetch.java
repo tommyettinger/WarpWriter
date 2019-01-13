@@ -1,7 +1,7 @@
 package warpwriter.model.fetch;
 
 import warpwriter.model.Fetch;
-import warpwriter.model.HashMap3D;
+import warpwriter.model.nonvoxel.HashMap3D;
 import warpwriter.model.IFetch;
 
 public class WorldFetch extends Fetch {

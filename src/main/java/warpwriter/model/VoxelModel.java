@@ -1,6 +1,4 @@
-package warpwriter.warp;
-
-import warpwriter.model.IModel;
+package warpwriter.model;
 
 /**
  * Trying again; a way of storing voxel models using a 1D array and a more involved method of lookup that should deal

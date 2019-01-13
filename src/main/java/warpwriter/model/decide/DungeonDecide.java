@@ -1,7 +1,5 @@
 package warpwriter.model.decide;
 
-import warpwriter.model.IDecide;
-
 public class DungeonDecide implements IDecide {
     boolean[][] dungeon;
     int scale;

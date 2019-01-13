@@ -1,4 +1,4 @@
-package warpwriter;
+package warpwriter.model.nonvoxel;
 
 import java.io.DataInput;
 import java.io.DataInputStream;

@@ -1,7 +1,5 @@
 package warpwriter.model.decide;
 
-import warpwriter.model.IDecide;
-
 /**
  * Draws a balloon shape stretched two points. Discovered by accident!
  *

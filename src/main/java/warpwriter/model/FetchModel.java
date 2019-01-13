@@ -1,6 +1,7 @@
 package warpwriter.model;
 
 import warpwriter.model.fetch.FetchFetch;
+import warpwriter.model.nonvoxel.CompassDirection;
 
 /**
  * Converts a Fetch to a Model with sizes stored in ints
