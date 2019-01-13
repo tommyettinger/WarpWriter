@@ -11,10 +11,7 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.StringKit;
-import warpwriter.LittleEndianDataInputStream;
-import warpwriter.ModelMaker;
-import warpwriter.Tools3D;
-import warpwriter.VoxIO;
+import warpwriter.*;
 import warpwriter.model.TurnModel;
 import warpwriter.model.fetch.*;
 import warpwriter.view.*;
@@ -183,7 +180,7 @@ public class WarpTest extends ApplicationAdapter {
                         break;
                     case Input.Keys.P:
                         model = warrior;
-                        chaos.setSeed(maker.rng.nextLong());
+                        //chaos.setSeed(maker.rng.nextLong());
                         Tools3D.deepCopyInto(maker.shipLargeRandomAurora(), voxels);
                         break;
                     case Input.Keys.B:
@@ -205,6 +202,14 @@ public class WarpTest extends ApplicationAdapter {
                         model.turner().reset();
                         diagonal = false;
                         angle = 2;
+                        break;
+                    case Input.Keys.Y:
+                        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT))
+                            pixmapRenderer.color().set(Twilight.AuroraTwilight);
+                        else if(Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT))
+                            pixmapRenderer.color.set(Twilight.AuroraWarmthTwilight);
+                        else 
+                            pixmapRenderer.color().set(Twilight.AuroraToFlesurrectTwilight);
                         break;
                     case Input.Keys.ESCAPE:
                         Gdx.app.exit();

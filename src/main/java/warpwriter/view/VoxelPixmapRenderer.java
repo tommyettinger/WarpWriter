@@ -8,8 +8,7 @@ import squidpony.ArrayTools;
  */
 public class VoxelPixmapRenderer implements IRectangleRenderer {
     public Pixmap pixmap;
-    public int[][] depths;
-    public byte[][] working, render;
+    public int[][] depths, working, render, outlines;
     public VoxelColor color;
     public boolean flipX, flipY, easing = true, outline = true;
 
@@ -18,18 +17,15 @@ public class VoxelPixmapRenderer implements IRectangleRenderer {
     }
 
     public VoxelPixmapRenderer(Pixmap pixmap) {
-        this.pixmap = pixmap;
-        working = new byte[pixmap.getWidth()][pixmap.getHeight()];
-        render = new byte[pixmap.getWidth()][pixmap.getHeight()];
-        depths = new int[pixmap.getWidth()][pixmap.getHeight()];
-        color = new VoxelColor();
+        this(pixmap, new VoxelColor());
     }
 
     public VoxelPixmapRenderer(Pixmap pixmap, VoxelColor color) {
         this.pixmap = pixmap;
-        working = new byte[pixmap.getWidth()][pixmap.getHeight()];
-        render = new byte[pixmap.getWidth()][pixmap.getHeight()];
+        working = new int[pixmap.getWidth()][pixmap.getHeight()];
+        render = new int[pixmap.getWidth()][pixmap.getHeight()];
         depths = new int[pixmap.getWidth()][pixmap.getHeight()];
+        outlines = new int[pixmap.getWidth()][pixmap.getHeight()];
         this.color = color;
     }
 
@@ -45,13 +41,14 @@ public class VoxelPixmapRenderer implements IRectangleRenderer {
         return this;
     }
 
-    public IRectangleRenderer rect(int x, int y, int sizeX, int sizeY, byte color, int depth) {
+    public IRectangleRenderer rect(int x, int y, int sizeX, int sizeY, int color, int outlineColor, int depth) {
         //pixmap.setColor(color);
         //pixmap.fillRectangle(x, y, sizeX, sizeY);
         for (int i = 0; i < sizeX && x < working.length; i++, x++) {
             for (int j = 0, yy = y; j < sizeY && yy < working[0].length; j++, yy++) {
                 working[x][yy] = color;
                 depths[x][yy] = depth;
+                outlines[x][yy] = outlineColor;
             }
         }
         return this;
@@ -81,15 +78,15 @@ public class VoxelPixmapRenderer implements IRectangleRenderer {
     }
 
     public IRectangleRenderer rectVertical(int x, int y, int sizeX, int sizeY, byte voxel, int depth) {
-        return rect(x, y, sizeX, sizeY, Twilight.RAMPS[voxel & 255][0], depth);
+        return rect(x, y, sizeX, sizeY, color.verticalFace(voxel), color.twilight().dark(voxel), depth);
     }
 
     public IRectangleRenderer rectLeft(int x, int y, int sizeX, int sizeY, byte voxel, int depth) {
-        return rect(x, y, sizeX, sizeY, Twilight.RAMPS[voxel & 255][1], depth);
+        return rect(x, y, sizeX, sizeY, color.leftFace(voxel), color.twilight().dark(voxel), depth);
     }
 
     public IRectangleRenderer rectRight(int x, int y, int sizeX, int sizeY, byte voxel, int depth) {
-        return rect(x, y, sizeX, sizeY, Twilight.RAMPS[voxel & 255][2], depth);
+        return rect(x, y, sizeX, sizeY, color.rightFace(voxel), color.twilight().dark(voxel), depth);
     }
 
     public int getPixel(int x, int y) {
@@ -135,7 +132,7 @@ public class VoxelPixmapRenderer implements IRectangleRenderer {
     public VoxelPixmapRenderer clear() {
         pixmap.setColor(0);
         pixmap.fill();
-        ArrayTools.fill(working, (byte) 0);
+        ArrayTools.fill(working, 0);
         ArrayTools.fill(depths, 0);
         return this;
     }
@@ -154,39 +151,38 @@ public class VoxelPixmapRenderer implements IRectangleRenderer {
             System.arraycopy(working[x], 0, render[x], 0, ySize);
         }
         if(outline) {
-            byte w;
+            int o;
             for (int x = 1; x < xSize; x++) {
                 for (int y = 1; y < ySize; y++) {
-                    if ((w = Twilight.RAMPS[working[x][y] & 255][3]) != 0) {
-                        byte o = w;
+                    if ((o = outlines[x][y]) != 0) {
                         depth = depths[x][y];
-                        if (working[x - 1][y] == 0 && working[x][y - 1] == 0) {
+                        if (outlines[x - 1][y] == 0 && outlines[x][y - 1] == 0) {
                             render[x - 1][y] = o;
                             render[x][y - 1] = o;
                             render[x][y] = o;
-                        } else if (working[x + 1][y] == 0 && working[x][y - 1] == 0) {
+                        } else if (outlines[x + 1][y] == 0 && outlines[x][y - 1] == 0) {
                             render[x + 1][y] = o;
                             render[x][y - 1] = o;
                             render[x][y] = o;
-                        } else if (working[x - 1][y] == 0 && working[x][y + 1] == 0) {
+                        } else if (outlines[x - 1][y] == 0 && outlines[x][y + 1] == 0) {
                             render[x - 1][y] = o;
                             render[x][y + 1] = o;
                             render[x][y] = o;
-                        } else if (working[x + 1][y] == 0 && working[x][y + 1] == 0) {
+                        } else if (outlines[x + 1][y] == 0 && outlines[x][y + 1] == 0) {
                             render[x + 1][y] = o;
                             render[x][y + 1] = o;
                             render[x][y] = o;
                         } else {
-                            if (working[x - 1][y] == 0 || depths[x - 1][y] < depth - threshold) {
+                            if (outlines[x - 1][y] == 0 || depths[x - 1][y] < depth - threshold) {
                                 render[x - 1][y] = o;
                             }
-                            if (working[x + 1][y] == 0 || depths[x + 1][y] < depth - threshold) {
+                            if (outlines[x + 1][y] == 0 || depths[x + 1][y] < depth - threshold) {
                                 render[x + 1][y] = o;
                             }
-                            if (working[x][y - 1] == 0 || depths[x][y - 1] < depth - threshold) {
+                            if (outlines[x][y - 1] == 0 || depths[x][y - 1] < depth - threshold) {
                                 render[x][y - 1] = o;
                             }
-                            if (working[x][y + 1] == 0 || depths[x][y + 1] < depth - threshold) {
+                            if (outlines[x][y + 1] == 0 || depths[x][y + 1] < depth - threshold) {
                                 render[x][y + 1] = o;
                             }
                         }
@@ -198,13 +194,13 @@ public class VoxelPixmapRenderer implements IRectangleRenderer {
         final int pmh = pixmap.getHeight() - 1;
         for (int x = 0; x < xSize; x++) {
             for (int y = 0; y < ySize; y++) {
-                pixmap.drawPixel(x, pmh - y, Twilight.RAMP_VALUES[render[x][y] & 255][1]);
+                pixmap.drawPixel(x, pmh - y, render[x][y]);
             }
         }
 
         if (easing) {
-            byte o, a, b, c, d, e, f, g, h;
-            int lo, color;
+            int o, a, b, c, d, e, f, g, h;
+            int lo;
             for (int x = 1; x < xSize; x++) {
                 for (int y = 1; y < ySize; y++) {
                     o = render[x][y];
@@ -218,11 +214,11 @@ public class VoxelPixmapRenderer implements IRectangleRenderer {
                     h = render[x][y + 1];
                     if (o != 0) {
                         if (a != 0 && b != 0 && c != 0 && d != 0 && e != 0 && f != 0 && g != 0 && h != 0 && (e != f || g != h)) {
-                            lo = lightness(Twilight.RAMP_VALUES[o & 255][1]);
-                            if (a == d && lightness(color = Twilight.RAMP_VALUES[a & 255][1]) > lo)
-                                pixmap.drawPixel(x, pmh - y, color);
-                            else if (b == c && lightness(color = Twilight.RAMP_VALUES[b & 255][1]) > lo)
-                                pixmap.drawPixel(x, pmh - y, color);
+                            lo = lightness(o);
+                            if (a == d && lightness(a) > lo)
+                                pixmap.drawPixel(x, pmh - y, a);
+                            else if (b == c && lightness(b) > lo)
+                                pixmap.drawPixel(x, pmh - y, b);
                             //else pixmap.drawPixel(x, y, color.twilight().twilight(o));
                         }
                     }
@@ -230,9 +226,10 @@ public class VoxelPixmapRenderer implements IRectangleRenderer {
                 }
             }
         }
-        ArrayTools.fill(render, (byte) 0);
-        ArrayTools.fill(working, (byte) 0);
+        ArrayTools.fill(render, 0);
+        ArrayTools.fill(working, 0);
         ArrayTools.fill(depths, 0);
+        ArrayTools.fill(outlines, 0);
         return pixmap;
     }
 
