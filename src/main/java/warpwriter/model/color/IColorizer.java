@@ -14,7 +14,7 @@ public interface IColorizer {
 
     /**
      * @param voxel A color index
-     * @return A darker version of the same color, or black is none is available.
+     * @return A darker version of the same color, or black if none is available.
      */
     byte darken(byte voxel);
 
