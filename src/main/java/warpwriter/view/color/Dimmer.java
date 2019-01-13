@@ -52,7 +52,7 @@ public abstract class Dimmer implements IDimmer {
      * @return An rgba8888 color
      */
     @Override
-    public int light(int brightness, byte voxel) {
+    public int dimmer(int brightness, byte voxel) {
         if (voxel == 0) return 0; // 0 is equivalent to Color.rgba8888(Color.CLEAR)
         switch (brightness) {
             case 0:
@@ -108,8 +108,8 @@ public abstract class Dimmer implements IDimmer {
         }
 
         @Override
-        public int light(int brightness, byte voxel) {
-            return twilight.light(brightness + offset, voxel);
+        public int dimmer(int brightness, byte voxel) {
+            return twilight.dimmer(brightness + offset, voxel);
         }
     }
 
@@ -139,7 +139,7 @@ public abstract class Dimmer implements IDimmer {
 
     public static final IDimmer AuroraTwilight = new Dimmer() {
         @Override
-        public int light(int brightness, byte voxel) {
+        public int dimmer(int brightness, byte voxel) {
             return RAMP_VALUES[voxel & 255][
                     brightness <= 0
                             ? 3
@@ -218,7 +218,7 @@ public abstract class Dimmer implements IDimmer {
             }
 
             @Override
-            public int light(int brightness, byte voxel) {
+            public int dimmer(int brightness, byte voxel) {
                 return RAMP_VALUES[voxel & 255][
                         brightness <= 0
                                 ? 3
@@ -490,7 +490,7 @@ public abstract class Dimmer implements IDimmer {
                         "\034\034\034\034\034\034\031\031\031\031\031\035\035\033\033\033\033\033\033\033\033\033\033\033\033\033\t\t\t\t\t\t\034\034\034\034\034\034\034\031\031\035\035\035\035\035\035\035\033\033\033\033\033\033\033\033\033\t\t\t\t\t\t\t\034\034\034\034\034\034\034\034\035\035\035\035\035\035\035\035\035\035\035\035\033\033\033\033\033\t\t\t\t\t\t\t\034\034\034\034\034\034\034\035\035\035\035\035\035\035\035\035\035\035\035\035\035\035\035\033\t\t\t\t\t\t\t\t"
         );
         @Override
-        public int light(int brightness, byte voxel) {
+        public int dimmer(int brightness, byte voxel) {
             if(voxel == 0) return 0;
             final int color = RAMP_VALUES[voxel & 255][1];
             return FLESURRECT_RAMP_VALUES[reducer.paletteMapping[

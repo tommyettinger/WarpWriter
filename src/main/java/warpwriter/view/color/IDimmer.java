@@ -19,5 +19,5 @@ public interface IDimmer {
      * @param voxel      The color index of a voxel
      * @return An rgba8888 color
      */
-    int light(int brightness, byte voxel);
+    int dimmer(int brightness, byte voxel);
 }

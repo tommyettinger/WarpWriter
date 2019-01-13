@@ -23,7 +23,7 @@ public interface IColorizer {
      * @param brightness An integer representing how many shades brighter (if positive) or darker (if negative) the result should be
      * @return A different shade of the same color
      */
-    byte dimmer(byte voxel, int brightness);
+    byte dimmerByte(byte voxel, int brightness);
 
     /**
      * @return A list of main colors
