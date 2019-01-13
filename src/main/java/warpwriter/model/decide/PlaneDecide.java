@@ -57,6 +57,11 @@ public class PlaneDecide implements IDecide {
         set(slopeX, slopeY, slopeZ, offset);
     }
 
+    public PlaneDecide(double slopeX, double slopeY, double slopeZ, int offset, Condition condition) {
+        this(slopeX, slopeY, slopeZ, offset);
+        set(condition);
+    }
+
     @Override
     public boolean bool(int x, int y, int z) {
         double result = x * slopeX + y * slopeY + z * slopeZ - offset;

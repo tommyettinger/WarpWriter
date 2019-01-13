@@ -19,13 +19,11 @@ import warpwriter.Coloring;
 import warpwriter.LittleEndianDataInputStream;
 import warpwriter.ModelMaker;
 import warpwriter.VoxIO;
+import warpwriter.model.DecideFetch;
 import warpwriter.model.HashMap3D;
 import warpwriter.model.IFetch;
 import warpwriter.model.IModel;
-import warpwriter.model.fetch.ArrayModel;
-import warpwriter.model.fetch.BoxModel;
-import warpwriter.model.fetch.ColorFetch;
-import warpwriter.model.fetch.WorldFetch;
+import warpwriter.model.fetch.*;
 import warpwriter.view.Twilight;
 import warpwriter.view.VoxelSprite;
 import warpwriter.view.VoxelSpriteBatchRenderer;
@@ -79,8 +77,8 @@ public class SimpleTest extends ApplicationAdapter {
     public static final int backgroundColor = Color.rgba8888(Color.DARK_GRAY);
     public static final int SCREEN_WIDTH = 1280;
     public static final int SCREEN_HEIGHT = 720;
-    public static final int VIRTUAL_WIDTH = 640;
-    public static final int VIRTUAL_HEIGHT = 360;
+    public static final int VIRTUAL_WIDTH = 1280;
+    public static final int VIRTUAL_HEIGHT = 720;
     protected SpriteBatch batch;
     protected Viewport worldView;
     protected Viewport screenView;
@@ -172,13 +170,14 @@ public class SimpleTest extends ApplicationAdapter {
         // batchRenderer.color().set(Twilight.AuroraToFlesurrectTwilight);
         // return new ArrayModel(maker.shipLargeRandomAurora())
         HashMap3D<IFetch> map = new HashMap3D<>();
-        for (int x=0; x<3; x++)
-            for (int y=0; y<3; y++)
-                for (int z=0; z<3; z++)
-                    map.put(x, y, z, ColorFetch.color(maker.randomMainColor()));
+//        for (int x=0; x<3; x++)
+//            for (int y=0; y<3; y++)
+//                for (int z=0; z<3; z++)
+//                    map.put(x, y, z, ColorFetch.color(maker.randomMainColor()));
+        map.put(0, 0, 0, new DecideFetch(TileFetch.Slope16x16x16, ColorFetch.color(maker.randomMainColor())));
         return new WorldFetch()
                 .set(map)
-                .model(48, 48, 48);
+                .model(16, 16, 16);
     }
 
     @Override
