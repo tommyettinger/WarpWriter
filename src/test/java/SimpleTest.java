@@ -146,7 +146,7 @@ public class SimpleTest extends ApplicationAdapter {
 
         maker = new ModelMaker(12345);
         batchRenderer = new VoxelSpriteBatchRenderer(batch);
-        batchRenderer.color().set(Dimmer.AuroraToFlesurrectTwilight); // comment out to use ArbitraryTwilight
+        batchRenderer.color().set(Dimmer.arbitraryTwilight(Coloring.AURORA));
         voxelSprite = new VoxelSprite()
                 .set(batchRenderer)
                 .setOffset(VIRTUAL_WIDTH / 2, 100);
@@ -174,7 +174,10 @@ public class SimpleTest extends ApplicationAdapter {
 //            for (int y=0; y<3; y++)
 //                for (int z=0; z<3; z++)
 //                    map.put(x, y, z, ColorFetch.color(maker.randomMainColor()));
-        map.put(0, 0, 0, new DecideFetch(TileFetch.Slope16x16x16, ColorFetch.color(maker.randomMainColor())));
+        map.put(0, 0, 0, new DecideFetch(
+                TileFetch.Diagonal16x16x16,
+                ColorFetch.color((byte) 254)
+                ));
         return new WorldFetch()
                 .set(map)
                 .model(16, 16, 16);
@@ -277,12 +280,6 @@ public class SimpleTest extends ApplicationAdapter {
                         break;
                     case Input.Keys.H:
                         batchRenderer.color().set(batchRenderer.color().direction().clock());
-                        break;
-                    case Input.Keys.Y:
-                        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT))
-                            batchRenderer.color().set(Dimmer.arbitraryTwilight(Coloring.AURORA));
-                        else
-                            batchRenderer.color().set(Dimmer.AuroraToFlesurrectTwilight);
                         break;
                     case Input.Keys.T: // try again
                         voxelSprite.reset();
