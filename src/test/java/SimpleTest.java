@@ -117,8 +117,8 @@ public class SimpleTest extends ApplicationAdapter {
         try {
             //// loads a file by its full path, which we get via drag+drop
             final byte[][][] arr = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream(name)));
-            //// set the palette to the one from the vox model, using arbitraryTwilight()
-            batchRenderer.set(batchRenderer.color().set(Dimmer.arbitraryTwilight(VoxIO.lastPalette)));
+            //// set the palette to the one from the vox model, using arbitraryDimmer()
+            batchRenderer.set(batchRenderer.color().set(Dimmer.arbitraryDimmer(VoxIO.lastPalette)));
             voxelSprite.set(new ArrayModel(
                     arr
                     //// Aurora folder has vox models with a different palette, which involves a different IDimmer.
@@ -128,7 +128,7 @@ public class SimpleTest extends ApplicationAdapter {
             ));
         } catch (FileNotFoundException e) {
             voxelSprite.set(new ArrayModel(maker.warriorRandom()));
-            batchRenderer.set(batchRenderer.color().set(Dimmer.arbitraryTwilight(Coloring.AURORA)));
+            batchRenderer.set(batchRenderer.color().set(Dimmer.arbitraryDimmer(Coloring.AURORA)));
         }
     }
 
@@ -146,7 +146,7 @@ public class SimpleTest extends ApplicationAdapter {
 
         maker = new ModelMaker(12345);
         batchRenderer = new VoxelSpriteBatchRenderer(batch);
-        batchRenderer.color().set(Dimmer.arbitraryTwilight(Coloring.AURORA));
+        batchRenderer.color().set(Dimmer.arbitraryDimmer(Coloring.AURORA));
         voxelSprite = new VoxelSprite()
                 .set(batchRenderer)
                 .setOffset(VIRTUAL_WIDTH / 2, 100);
@@ -167,7 +167,7 @@ public class SimpleTest extends ApplicationAdapter {
     }
 
     public IModel model() {
-        // batchRenderer.color().set(Dimmer.AuroraToFlesurrectTwilight);
+        // batchRenderer.color().set(Dimmer.AuroraToFlesurrectDimmer);
         // return new ArrayModel(maker.shipLargeRandomAurora())
         HashMap3D<IFetch> map = new HashMap3D<>();
 //        for (int x=0; x<3; x++)

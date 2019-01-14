@@ -58,7 +58,7 @@ public class WarpTest extends ApplicationAdapter {
         screenView.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.enableBlending();
 
-        voxelColor = new VoxelColor().set(Dimmer.AuroraTwilight);
+        voxelColor = new VoxelColor().set(Dimmer.AuroraDimmer);
         batchRenderer = new VoxelSpriteBatchRenderer(batch).setOffset(16, 100);
         pixmapRenderer = new VoxelPixmapRenderer(new Pixmap(512, 512, Pixmap.Format.RGBA8888), voxelColor);
         pmTexture = new Texture(pixmapRenderer.pixmap);
@@ -210,11 +210,11 @@ public class WarpTest extends ApplicationAdapter {
                         break;
                     case Input.Keys.Y:
                         if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT))
-                            pixmapRenderer.color().set(Dimmer.AuroraTwilight);
+                            pixmapRenderer.color().set(Dimmer.AuroraDimmer);
                         else if(Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT))
-                            pixmapRenderer.color.set(Dimmer.AuroraWarmthTwilight);
+                            pixmapRenderer.color.set(Dimmer.AuroraWarmthDimmer);
                         else 
-                            pixmapRenderer.color().set(Dimmer.AuroraToFlesurrectTwilight);
+                            pixmapRenderer.color().set(Dimmer.AuroraToFlesurrectDimmer);
                         break;
                     case Input.Keys.ESCAPE:
                         Gdx.app.exit();

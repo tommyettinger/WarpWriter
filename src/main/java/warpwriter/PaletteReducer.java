@@ -1174,6 +1174,23 @@ public class PaletteReducer {
 
     /**
      * Looks up {@code color} as if it was part of an image being color-reduced and finds the closest color to it in the
+     * palette this holds. The parameter is a RGBA8888 int, the returned color is a byte index into the
+     * {@link #paletteArray} (mask it like: {@code paletteArray[reduceIndex(color) & 0xFF]}).
+     * @param color an RGBA8888 int that represents a color this should try to find a similar color for in its palette
+     * @return a byte index that can be used to look up a color from the {@link #paletteArray}
+     */
+    public byte reduceIndex(int color)
+    {
+        if((color & 0x80) == 0) // less visible than half-transparent
+            return 0; // transparent
+        return paletteMapping[
+                (color >>> 17 & 0x7C00) 
+                        | (color >>> 14 & 0x3E0) 
+                        | (color >>> 11 & 0x1F)];
+    }
+
+    /**
+     * Looks up {@code color} as if it was part of an image being color-reduced and finds the closest color to it in the
      * palette this holds. Both the parameter and the returned color are packed float colors, as produced by
      * {@link Color#toFloatBits()} or many methods in SColor.
      * @param packedColor a packed float color this should try to find a similar color for in its palette

@@ -220,10 +220,10 @@ public class VoxelPixmapRenderer implements IRectangleRenderer {
                                 pixmap.drawPixel(x, pmh - y, a);
                             else if (b == c && lightness(b) > lo)
                                 pixmap.drawPixel(x, pmh - y, b);
-                            //else pixmap.drawPixel(x, y, color.twilight().twilight(o));
+                            //else pixmap.drawPixel(x, y, color.dimmer().medium(o));
                         }
                     }
-                    //else pixmap.drawPixel(x, y, color.twilight().twilight(o));
+                    //else pixmap.drawPixel(x, y, color.dimmer().medium(o));
                 }
             }
         }

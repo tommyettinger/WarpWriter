@@ -8,13 +8,13 @@ package warpwriter.model.color;
 public interface IColorizer {
     /**
      * @param voxel A color index
-     * @return A brighter version of the voxel color, or white if none is available.
+     * @return A brighter version of the voxel color, or the lightest color index in the palette if none is available.
      */
     byte brighten(byte voxel);
 
     /**
      * @param voxel A color index
-     * @return A darker version of the same color, or black if none is available.
+     * @return A darker version of the same color, or the darkest color index in the palette if none is available.
      */
     byte darken(byte voxel);
 
@@ -23,16 +23,16 @@ public interface IColorizer {
      * @param brightness An integer representing how many shades brighter (if positive) or darker (if negative) the result should be
      * @return A different shade of the same color
      */
-    byte dimmerByte(byte voxel, int brightness);
+    byte colorize(byte voxel, int brightness);
 
     /**
-     * @return A list of main colors
+     * @return An array of main colors as byte indices, chosen for aesthetic reasons as the primary colors to use.
      */
     byte[] colors();
 
     /**
      * @param color An RGBA8888 color
-     * @return The nearest available color index in the palette
+     * @return The nearest available color index in the palette.
      */
     byte reduce(int color);
 }
