@@ -8,7 +8,7 @@ import warpwriter.model.nonvoxel.Turner;
  * @author Ben McLean
  */
 public class TurnDecide implements IDecide {
-    IDecide decide;
+    protected IDecide decide;
 
     public TurnDecide set(IDecide decide) {
         this.decide = decide;
@@ -19,7 +19,7 @@ public class TurnDecide implements IDecide {
         return decide;
     }
 
-    Turner turner;
+    protected Turner turner;
 
     public Turner turner() {
         return turner;
