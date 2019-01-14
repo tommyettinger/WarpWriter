@@ -245,7 +245,7 @@ public class VoxelColor implements IVoxelColor {
         return this;
     }
 
-    protected IDimmer twilight = Dimmer.RinsedTwilight;
+    protected IDimmer twilight = Dimmer.RinsedDimmer;
 
     public IDimmer twilight() {
         return twilight;
@@ -271,7 +271,7 @@ public class VoxelColor implements IVoxelColor {
             case RIGHT_ABOVE:
             case LEFT_ABOVE:
             default:
-                return twilight.twilight(voxel);
+                return twilight.medium(voxel);
         }
     }
 
@@ -289,7 +289,7 @@ public class VoxelColor implements IVoxelColor {
             case BELOW_RIGHT:
             case LEFT_BELOW:
             default:
-                return twilight.twilight(voxel);
+                return twilight.medium(voxel);
         }
     }
 
@@ -302,7 +302,7 @@ public class VoxelColor implements IVoxelColor {
             case ABOVE_LEFT:
             case BELOW_LEFT:
             case RIGHT_BELOW:
-                return twilight.twilight(voxel);
+                return twilight.medium(voxel);
             default:
             case ABOVE_RIGHT:
             case BELOW_RIGHT:
@@ -362,13 +362,13 @@ public class VoxelColor implements IVoxelColor {
             switch (lightDirection) {
                 case ABOVE_RIGHT:
                 case ABOVE_LEFT:
-                    return darkSide ? twilight.twilight(voxel) : twilight.bright(voxel);
+                    return darkSide ? twilight.medium(voxel) : twilight.bright(voxel);
                 default:
                 case RIGHT_ABOVE:
                 case LEFT_ABOVE:
                 case RIGHT_BELOW:
                 case LEFT_BELOW:
-                    return darkSide ? twilight.dim(voxel) : twilight.twilight(voxel);
+                    return darkSide ? twilight.dim(voxel) : twilight.medium(voxel);
                 case BELOW_RIGHT:
                 case BELOW_LEFT:
                     return darkSide ? twilight.dark(voxel) : twilight.dim(voxel);
@@ -380,9 +380,9 @@ public class VoxelColor implements IVoxelColor {
             switch (lightDirection) {
                 case LEFT_ABOVE:
                 case LEFT_BELOW:
-                    return darkSide ? twilight.twilight(voxel) : twilight.bright(voxel);
+                    return darkSide ? twilight.medium(voxel) : twilight.bright(voxel);
                 default:
-                    return darkSide ? twilight.dim(voxel) : twilight.twilight(voxel);
+                    return darkSide ? twilight.dim(voxel) : twilight.medium(voxel);
             }
         }
 
@@ -391,9 +391,9 @@ public class VoxelColor implements IVoxelColor {
             switch (lightDirection) {
                 case RIGHT_ABOVE:
                 case RIGHT_BELOW:
-                    return darkSide ? twilight.twilight(voxel) : twilight.bright(voxel);
+                    return darkSide ? twilight.medium(voxel) : twilight.bright(voxel);
                 default:
-                    return darkSide ? twilight.dim(voxel) : twilight.twilight(voxel);
+                    return darkSide ? twilight.dim(voxel) : twilight.medium(voxel);
             }
         }
     }
