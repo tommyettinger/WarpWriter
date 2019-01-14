@@ -37,4 +37,18 @@ public class DecideFetch extends Fetch {
     public Fetch fetch() {
         return decide.bool(chainX(), chainY(), chainZ()) ? fetch : getNextFetch();
     }
+
+    public static final IDecide truth = new IDecide() {
+        @Override
+        public boolean bool(int x, int y, int z) {
+            return true;
+        }
+    };
+
+    public static final IDecide falsehood = new IDecide() {
+        @Override
+        public boolean bool(int x, int y, int z) {
+            return false;
+        }
+    };
 }
