@@ -1,5 +1,6 @@
 package warpwriter.model;
 
+import warpwriter.model.decide.IDecideModel;
 import warpwriter.model.fetch.FetchFetch;
 import warpwriter.model.nonvoxel.CompassDirection;
 
@@ -8,7 +9,7 @@ import warpwriter.model.nonvoxel.CompassDirection;
  *
  * @author Ben McLean
  */
-public class FetchModel extends Fetch implements IModel {
+public class FetchModel extends Fetch implements IModel, IDecideModel {
     protected int sizeX, sizeY, sizeZ;
 
     public FetchModel() {
