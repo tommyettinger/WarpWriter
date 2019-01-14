@@ -17,7 +17,7 @@ public abstract class Dimmer implements IDimmer {
      */
     @Override
     public int bright(byte voxel) {
-        return light(3, voxel);
+        return dimmer(3, voxel);
     }
 
     /**
@@ -25,7 +25,7 @@ public abstract class Dimmer implements IDimmer {
      */
     @Override
     public int twilight(byte voxel) {
-        return light(2, voxel);
+        return dimmer(2, voxel);
     }
 
     /**
@@ -33,7 +33,7 @@ public abstract class Dimmer implements IDimmer {
      */
     @Override
     public int dim(byte voxel) {
-        return light(1, voxel);
+        return dimmer(1, voxel);
     }
 
     /**
@@ -41,7 +41,7 @@ public abstract class Dimmer implements IDimmer {
      */
     @Override
     public int dark(byte voxel) {
-        return light(0, voxel);
+        return dimmer(0, voxel);
     }
 
     /**

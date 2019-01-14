@@ -128,7 +128,7 @@ public class SimpleTest extends ApplicationAdapter {
             ));
         } catch (FileNotFoundException e) {
             voxelSprite.set(new ArrayModel(maker.warriorRandom()));
-            batchRenderer.set(batchRenderer.color().set(Dimmer.arbitraryTwilight(Coloring.RINSED)));
+            batchRenderer.set(batchRenderer.color().set(Dimmer.arbitraryTwilight(Coloring.AURORA)));
         }
     }
 
