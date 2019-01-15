@@ -90,11 +90,21 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
                 17,
                 -52,
                 -127
+        }, grays = {
+                1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
         };
-        
+
         @Override
-        public byte[] colors() {
+        public byte[] mainColors() {
             return primary;
+        }
+
+        /**
+         * @return An array of grayscale or close-to-grayscale color indices, with the darkest first and lightest last.
+         */
+        @Override
+        public byte[] grayscale() {
+            return grays;
         }
 
         @Override

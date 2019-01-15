@@ -28,8 +28,12 @@ public interface IColorizer {
     /**
      * @return An array of main colors as byte indices, chosen for aesthetic reasons as the primary colors to use.
      */
-    byte[] colors();
+    byte[] mainColors();
 
+    /**
+     * @return An array of grayscale or close-to-grayscale color indices, with the darkest first and lightest last.
+     */
+    byte[] grayscale();
     /**
      * @param color An RGBA8888 color
      * @return The nearest available color index in the palette.
