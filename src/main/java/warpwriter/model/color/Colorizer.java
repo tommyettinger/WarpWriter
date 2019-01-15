@@ -1,6 +1,7 @@
 package warpwriter.model.color;
 
 import squidpony.squidmath.IRNG;
+import warpwriter.Coloring;
 import warpwriter.PaletteReducer;
 import warpwriter.view.color.Dimmer;
 
@@ -115,6 +116,36 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
         @Override
         public byte darken(byte voxel) {
             return Dimmer.AURORA_RAMPS[voxel & 0xFF][2];
+        }
+    };
+    public static final Colorizer FlesurrectColorizer = new Colorizer(Coloring.FLESURRECT_REDUCER) {
+        private final byte[] primary = {
+                63, 24, 27, 34, 42, 49, 55
+        }, grays = {
+                1, 2, 3, 4, 5, 6, 7, 8, 9
+        };
+
+        @Override
+        public byte[] mainColors() {
+            return primary;
+        }
+
+        /**
+         * @return An array of grayscale or close-to-grayscale color indices, with the darkest first and lightest last.
+         */
+        @Override
+        public byte[] grayscale() {
+            return grays;
+        }
+
+        @Override
+        public byte brighten(byte voxel) {
+            return Dimmer.FLESURRECT_RAMPS[voxel & 0xFF][0];
+        }
+
+        @Override
+        public byte darken(byte voxel) {
+            return Dimmer.FLESURRECT_RAMPS[voxel & 0xFF][2];
         }
     };
 }
