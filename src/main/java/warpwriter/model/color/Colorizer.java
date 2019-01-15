@@ -1,5 +1,6 @@
 package warpwriter.model.color;
 
+import squidpony.squidmath.IRNG;
 import warpwriter.PaletteReducer;
 import warpwriter.view.color.Dimmer;
 
@@ -7,8 +8,15 @@ import warpwriter.view.color.Dimmer;
  * Created by Tommy Ettinger on 1/13/2019.
  */
 public abstract class Colorizer extends Dimmer implements IColorizer {
-    // needed because the reduce() method pretty much requires this
-    public PaletteReducer reducer;
+    private Colorizer()
+    {
+        
+    }
+    protected Colorizer(PaletteReducer reducer)
+    {
+        this.reducer = reducer;
+    }
+    protected PaletteReducer reducer;
 
     /**
      * @param voxel      A color index
@@ -52,8 +60,27 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
     public int dimmer(int brightness, byte voxel) {
         return reducer.paletteArray[colorize(voxel, brightness - 2) & 0xFF];
     }
-    
-    public static final Colorizer AuroraColorizer = new Colorizer() {
+
+    /**
+     * Gets a PaletteReducer that contains the RGBA8888 int colors that the byte indices these deals with correspond to.
+     * This PaletteReducer can be queried for random colors with {@link PaletteReducer#randomColor(IRNG)} (for an int
+     * color) or {@link PaletteReducer#randomColorIndex(IRNG)} (for a byte this can use again).
+     * @return the PaletteReducer this uses to store the corresponding RGBA8888 colors for the palette
+     */
+    public PaletteReducer getReducer() {
+        return reducer;
+    }
+
+    /**
+     * Sets the PaletteReducer this uses.
+     * @param reducer a PaletteReducer that should not be null
+     */
+    protected void setReducer(PaletteReducer reducer) {
+        this.reducer = reducer;
+    }
+
+
+    public static final Colorizer AuroraColorizer = new Colorizer(new PaletteReducer()) {
         private final byte[] primary = {
                 -104,
                 62,
@@ -64,6 +91,7 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
                 -52,
                 -127
         };
+        
         @Override
         public byte[] colors() {
             return primary;
