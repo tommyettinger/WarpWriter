@@ -3,8 +3,8 @@ package warpwriter;
 import squidpony.squidmath.GWTRNG;
 import squidpony.squidmath.LinnormRNG;
 import squidpony.squidmath.NumberTools;
+import warpwriter.model.color.Colorizer;
 import warpwriter.model.nonvoxel.LittleEndianDataInputStream;
-import warpwriter.view.color.Dimmer;
 
 import java.io.InputStream;
 
@@ -24,7 +24,58 @@ public class ModelMaker {
     private byte[][][] ship, shipLarge, warriorMale, sword0, spear0, shield0, shield1;
     private byte[][][][] rightHand, leftHand;
     private int xSize, ySize, zSize;
-    private final PaletteReducer palette = new PaletteReducer();
+
+    private Colorizer colorizer;
+
+    public ModelMaker()
+    {
+        this((long)((Math.random() - 0.5) * 4.503599627370496E15) ^ (long)((Math.random() - 0.5) * 2.0 * -9.223372036854776E18), Colorizer.AuroraColorizer);
+    }
+    public ModelMaker(long seed)
+    {
+        this(seed, Colorizer.AuroraColorizer);
+    }
+    public ModelMaker(long seed, Colorizer colorizer)
+    {
+        rng = new GWTRNG(seed);
+        InputStream is = this.getClass().getResourceAsStream("/ship.vox");
+        ship = VoxIO.readVox(new LittleEndianDataInputStream(is));
+        if(ship == null) ship = new byte[12][12][8];
+        is = this.getClass().getResourceAsStream("/ship_40_40_30.vox");
+        shipLarge = VoxIO.readVox(new LittleEndianDataInputStream(is));
+        if(shipLarge == null) shipLarge = new byte[40][40][30];
+        xSize = ship.length;
+        ySize = ship[0].length;
+        zSize = ship[0][0].length;
+        
+        this.colorizer = colorizer;
+        
+        is = this.getClass().getResourceAsStream((RINSED_PALETTE ? "/Rinsed_" : "/")  + "Warrior_Male_Attach.vox");
+        warriorMale = VoxIO.readVox(new LittleEndianDataInputStream(is));
+        if(warriorMale == null) warriorMale = new byte[12][12][8];
+        is = this.getClass().getResourceAsStream((RINSED_PALETTE ? "/Rinsed_" : "/")  + "Sword_1H_Attach.vox");
+        sword0 = VoxIO.readVox(new LittleEndianDataInputStream(is));
+        if(sword0 == null) sword0 = new byte[12][12][8];
+        is = this.getClass().getResourceAsStream((RINSED_PALETTE ? "/Rinsed_" : "/")  + "Spear_1H_Attach.vox");
+        spear0 = VoxIO.readVox(new LittleEndianDataInputStream(is));
+        if(spear0 == null) spear0 = new byte[12][12][8];
+        is = this.getClass().getResourceAsStream((RINSED_PALETTE ? "/Rinsed_" : "/")  + "Board_Shield_1H_Attach.vox");
+        shield0 = VoxIO.readVox(new LittleEndianDataInputStream(is));
+        if(shield0 == null) shield0 = new byte[12][12][8];
+        is = this.getClass().getResourceAsStream((RINSED_PALETTE ? "/Rinsed_" : "/")  + "Round_Shield_1H_Attach.vox");
+        shield1 = VoxIO.readVox(new LittleEndianDataInputStream(is));
+        if(shield1 == null) shield1 = new byte[12][12][8];
+        
+        rightHand = new byte[][][][]{sword0, spear0};
+        leftHand = new byte[][][][]{shield0, shield1};
+    }
+    public Colorizer getColorizer() {
+        return colorizer;
+    }
+
+    public void setColorizer(Colorizer colorizer) {
+        this.colorizer = colorizer;
+    }
 
     /**
      * Gets a 64-bit point hash of a 3D point (x, y, and z are all longs) and a state/seed as a long. This point hash
@@ -142,133 +193,6 @@ public class ModelMaker {
         x += y * 0x9A69443F36F710E7L;
         s += x * 0x881403B9339BD42DL;
         return (int)((bound * (((s = (s ^ s >>> 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ s >>> 25) & 0xFFFFFFFFL)) >> 32);
-    }
-//
-//    /**
-//     *
-//     * @param x
-//     * @param y
-//     * @param z
-//     * @param state
-//     * @return 64-bit hash of the x,y,z point with the given state
-//     */
-//    public static long hashAll(long x, long y, long z, long state)
-//    {
-//        x += y += z += state += 0x9E3779B97F4A7C15L;
-//        state *= ((y ^= 0xC6BC279692B5CC8BL + x - (x << 35 | x >>> 29))|1);
-//        state ^= state >>> 31;
-//        state *= ((z ^= 0xC6BC279692B5CC8BL + y - (y << 35 | y >>> 29))|1);
-//        state ^= state >>> 31;
-//        state *= ((x ^= 0xC6BC279692B5CC8BL + z - (z << 35 | z >>> 29))|1);
-//        state ^= state >>> 31;
-//        x ^= y ^ z ^ state;
-//        return x ^ x >>> 25;
-//    }
-//
-//    /**
-//     *
-//     * @param x
-//     * @param y
-//     * @param z
-//     * @param w
-//     * @param state
-//     * @return 64-bit hash of the x,y,z,w point with the given state
-//     */
-//    public static long hashAll(long x, long y, long z, long w, long state)
-//    {
-//        x += y += z += w += state += 0x9E3779B97F4A7C15L;
-//        state *= ((y ^= 0xC6BC279692B5CC8BL + x - (x << 35 | x >>> 29))|1);
-//        state ^= state >>> 31;
-//        state *= ((z ^= 0xC6BC279692B5CC8BL + y - (y << 35 | y >>> 29))|1);
-//        state ^= state >>> 31;
-//        state *= ((w ^= 0xC6BC279692B5CC8BL + z - (z << 35 | z >>> 29))|1);
-//        state ^= state >>> 31;
-//        state *= ((x ^= 0xC6BC279692B5CC8BL + w - (w << 35 | w >>> 29))|1);
-//        state ^= state >>> 31;
-//        x ^= y ^ z ^ w ^ state;
-//        return x ^ x >>> 25;
-//    }
-//    /**
-//     *
-//     * @param x
-//     * @param y
-//     * @param z
-//     * @param state
-//     * @param bound outer exclusive bound; may be negative
-//     * @return an int between 0 (inclusive) and bound (exclusive) dependent on the position and state
-//     */
-//    public static int hashBounded(long x, long y, long z, long state, int bound)
-//    {
-//        x += y += z += state += 0x9E3779B97F4A7C15L;
-//        state *= ((y ^= 0xC6BC279692B5CC8BL + x - (x << 35 | x >>> 29))|1);
-//        state ^= state >>> 31;
-//        state *= ((z ^= 0xC6BC279692B5CC8BL + y - (y << 35 | y >>> 29))|1);
-//        state ^= state >>> 31;
-//        state *= ((x ^= 0xC6BC279692B5CC8BL + z - (z << 35 | z >>> 29))|1);
-//        state ^= state >>> 31;
-//        x ^= y ^ z ^ state;
-//        return (int)((bound * ((x ^ x >>> 25) & 0xFFFFFFFFL)) >> 32);
-//    }
-//
-//    /**
-//     *
-//     * @param x
-//     * @param y
-//     * @param z
-//     * @param w
-//     * @param state
-//     * @param bound outer exclusive bound; may be negative
-//     * @return an int between 0 (inclusive) and bound (exclusive) dependent on the position and state
-//     */
-//    public static int hashBounded(long x, long y, long z, long w, long state, int bound)
-//    {
-//        x += y += z += w += state += 0x9E3779B97F4A7C15L;
-//        state *= ((y ^= 0xC6BC279692B5CC8BL + x - (x << 35 | x >>> 29))|1);
-//        state ^= state >>> 31;
-//        state *= ((z ^= 0xC6BC279692B5CC8BL + y - (y << 35 | y >>> 29))|1);
-//        state ^= state >>> 31;
-//        state *= ((w ^= 0xC6BC279692B5CC8BL + z - (z << 35 | z >>> 29))|1);
-//        state ^= state >>> 31;
-//        state *= ((x ^= 0xC6BC279692B5CC8BL + w - (w << 35 | w >>> 29))|1);
-//        state ^= state >>> 31;
-//        x ^= y ^ z ^ w ^ state;
-//        return (int)((bound * ((x ^ x >>> 25) & 0xFFFFFFFFL)) >> 32);
-//    }
-
-    public ModelMaker()
-    {
-        this((long)((Math.random() - 0.5) * 4.503599627370496E15) ^ (long)((Math.random() - 0.5) * 2.0 * -9.223372036854776E18));
-    }
-    public ModelMaker(long seed)
-    {
-        rng = new GWTRNG(seed);
-        InputStream is = this.getClass().getResourceAsStream("/ship.vox");
-        ship = VoxIO.readVox(new LittleEndianDataInputStream(is));
-        if(ship == null) ship = new byte[12][12][8];
-        is = this.getClass().getResourceAsStream("/ship_40_40_30.vox");
-        shipLarge = VoxIO.readVox(new LittleEndianDataInputStream(is));
-        if(shipLarge == null) shipLarge = new byte[40][40][30];
-        xSize = ship.length;
-        ySize = ship[0].length;
-        zSize = ship[0][0].length;
-        is = this.getClass().getResourceAsStream((RINSED_PALETTE ? "/Rinsed_" : "/")  + "Warrior_Male_Attach.vox");
-        warriorMale = VoxIO.readVox(new LittleEndianDataInputStream(is));
-        if(warriorMale == null) warriorMale = new byte[12][12][8];
-        is = this.getClass().getResourceAsStream((RINSED_PALETTE ? "/Rinsed_" : "/")  + "Sword_1H_Attach.vox");
-        sword0 = VoxIO.readVox(new LittleEndianDataInputStream(is));
-        if(sword0 == null) sword0 = new byte[12][12][8];
-        is = this.getClass().getResourceAsStream((RINSED_PALETTE ? "/Rinsed_" : "/")  + "Spear_1H_Attach.vox");
-        spear0 = VoxIO.readVox(new LittleEndianDataInputStream(is));
-        if(spear0 == null) spear0 = new byte[12][12][8];
-        is = this.getClass().getResourceAsStream((RINSED_PALETTE ? "/Rinsed_" : "/")  + "Board_Shield_1H_Attach.vox");
-        shield0 = VoxIO.readVox(new LittleEndianDataInputStream(is));
-        if(shield0 == null) shield0 = new byte[12][12][8];
-        is = this.getClass().getResourceAsStream((RINSED_PALETTE ? "/Rinsed_" : "/")  + "Round_Shield_1H_Attach.vox");
-        shield1 = VoxIO.readVox(new LittleEndianDataInputStream(is));
-        if(shield1 == null) shield1 = new byte[12][12][8];
-        
-        rightHand = new byte[][][][]{sword0, spear0};
-        leftHand = new byte[][][][]{shield0, shield1};
     }
     
     public byte[][][] combine(byte[][][] start, byte[][][]... additional)
@@ -532,14 +456,19 @@ public class ModelMaker {
         //return nextShip;
         //return Tools3D.runCA(nextShip, 1);
     }
+//    /**
+//     * Use <a href="https://i.imgur.com/CrI1LyU.png">This image with Aurora hex codes</a> for reference.
+//     */
+//    private static final byte[] AURORA_COCKPIT_COLORS = {0x69, 0x6A, 0x6B, 0x6C, 0x6D, 0x6E, 0x6F, 0x70, 0x71, 0x72,
+//            0x71, 0x72, 0x73, 0x78, 0x79, 0x7A, 0x7B,
+//            (byte) 0xBC, (byte) 0xBE, (byte) 0xBF, (byte) 0xC1, (byte) 0xC3, (byte) 0xC4, (byte) 0xC5,
+//            (byte) 0xC6, (byte) 0xC7, (byte) 0xCC, (byte) 0xCD, (byte) 0xCF };
+
     /**
-     * Use <a href="https://i.imgur.com/CrI1LyU.png">This image with Aurora hex codes</a> for reference.
+     * Uses the {@link #colorizer}
+     * @return
      */
-    private static final byte[] AURORA_COCKPIT_COLORS = {0x69, 0x6A, 0x6B, 0x6C, 0x6D, 0x6E, 0x6F, 0x70, 0x71, 0x72,
-            0x71, 0x72, 0x73, 0x78, 0x79, 0x7A, 0x7B,
-            (byte) 0xBC, (byte) 0xBE, (byte) 0xBF, (byte) 0xC1, (byte) 0xC3, (byte) 0xC4, (byte) 0xC5,
-            (byte) 0xC6, (byte) 0xC7, (byte) 0xCC, (byte) 0xCD, (byte) 0xCF };
-    public byte[][][] shipLargeRandomAurora()
+    public byte[][][] shipLargeRandomColorized()
     {
         xSize = shipLarge.length;
         ySize = shipLarge[0].length;
@@ -548,9 +477,14 @@ public class ModelMaker {
         final int halfY = ySize >> 1, smallYSize = ySize - 1;
         int color;
         long seed = rng.nextLong(), current, paint;
-        final byte mainColor = Dimmer.AURORA_RAMPS[palette.randomColorIndex(rng) & 255][2],
-                highlightColor = Dimmer.AURORA_RAMPS[Dimmer.AURORA_RAMPS[palette.randomColorIndex(rng) & 255][0] & 255][0],
-                cockpitColor = AURORA_COCKPIT_COLORS[determineBounded(seed + 55555L, AURORA_COCKPIT_COLORS.length)];
+        final byte mainColor = colorizer.darken(colorizer.getReducer().randomColorIndex(rng)), 
+                //Dimmer.AURORA_RAMPS[colorizer.randomColorIndex(rng) & 255][2],
+                highlightColor = colorizer.brighten(colorizer.getReducer().randomColorIndex(rng)),
+                        //Dimmer.AURORA_RAMPS[Dimmer.AURORA_RAMPS[colorizer.randomColorIndex(rng) & 255][0] & 255][0],
+                cockpitColor = colorizer.darken(colorizer.reduce((0x40 + rng.nextSignedInt(0x70) << 24)
+                        | (0xA0 + rng.nextSignedInt(0x60) << 16)
+                        | (0xC0 + rng.nextSignedInt(0x40) << 8) | 0xFF)); 
+                        //AURORA_COCKPIT_COLORS[determineBounded(seed + 55555L, AURORA_COCKPIT_COLORS.length)];
         int xx, yy, zz;
         for (int x = 0; x < xSize; x++) {
             for (int y = 0; y < halfY; y++) {
@@ -571,16 +505,21 @@ public class ModelMaker {
                         if (color < 8) { // checks bottom 6 bits
                             if((current >>> 6 & 0x7L) != 0)
                                 nextShip[x][smallYSize - y][z] = nextShip[x][y][z] =
-                                        Dimmer.AURORA_RAMPS[cockpitColor & 255][3 - (z + 6 >> 3) & 3];
+                                        cockpitColor;
+                                        //Dimmer.AURORA_RAMPS[cockpitColor & 255][3 - (z + 6 >> 3) & 3];
                         } else {
                             nextShip[x][smallYSize - y][z] = nextShip[x][y][z] =
                                     // checks another 6 bits, starting after discarding 6 bits from the bottom
                                     ((current >>> 6 & 0x1FFL) < color * 6)
                                             ? 0
                                             // checks another 6 bits, starting after discarding 12 bits from the bottom
-                                            : ((paint >>> 12 & 0x3FL) < 40L) ? Dimmer.AURORA_RAMPS[10][(int) paint & 3]
+                                            : ((paint >>> 12 & 0x3FL) < 40L)
+                                            ? colorizer.grayscale()[determineBounded(paint, colorizer.grayscale().length - 2) + 1]
+                            // Dimmer.AURORA_RAMPS[10][(int) paint & 3]
                                             // checks another 6 bits, starting after discarding 18 bits from the bottom
-                                            : ((paint >>> 18 & 0x3FL) < 8L) ? highlightColor : mainColor;
+                                            : ((paint >>> 18 & 0x3FL) < 8L)
+                                            ? highlightColor
+                                            : mainColor;
                         }
                     }
                 }

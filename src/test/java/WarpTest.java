@@ -11,12 +11,15 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.StringKit;
-import warpwriter.*;
+import warpwriter.ModelMaker;
+import warpwriter.Tools3D;
+import warpwriter.VoxIO;
 import warpwriter.model.TurnModel;
-import warpwriter.model.fetch.*;
+import warpwriter.model.color.Colorizer;
+import warpwriter.model.fetch.ArrayModel;
+import warpwriter.model.fetch.ChaoticFetch;
 import warpwriter.model.nonvoxel.LittleEndianDataInputStream;
-import warpwriter.view.*;
-import warpwriter.view.color.Dimmer;
+import warpwriter.view.WarpDraw;
 import warpwriter.view.color.VoxelColor;
 import warpwriter.view.render.VoxelPixmapRenderer;
 import warpwriter.view.render.VoxelSpriteBatchRenderer;
@@ -58,18 +61,18 @@ public class WarpTest extends ApplicationAdapter {
         screenView.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.enableBlending();
 
-        voxelColor = new VoxelColor().set(Dimmer.AuroraDimmer);
+        voxelColor = new VoxelColor().set(Colorizer.FlesurrectColorizer);
         batchRenderer = new VoxelSpriteBatchRenderer(batch).setOffset(16, 100);
         pixmapRenderer = new VoxelPixmapRenderer(new Pixmap(512, 512, Pixmap.Format.RGBA8888), voxelColor);
         pmTexture = new Texture(pixmapRenderer.pixmap);
-        maker = new ModelMaker(12345);
+        maker = new ModelMaker(12345, Colorizer.FlesurrectColorizer);
         try {
             box = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("Aurora/dumbcube.vox")));
         } catch (Exception e) {
             e.printStackTrace();
-            box = maker.shipLargeRandomAurora();
+            box = maker.shipLargeRandomColorized();
         }
-        voxels = maker.shipLargeRandomAurora();
+        voxels = maker.shipLargeRandomColorized();
 //        chaos = new ChaoticFetch(maker.rng.nextLong(), (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 1);
         warrior = new TurnModel().set(
 //                new ReplaceFetch(ColorFetch.color((byte) 0), (byte) 1)
@@ -186,7 +189,7 @@ public class WarpTest extends ApplicationAdapter {
                     case Input.Keys.P:
                         model = warrior;
                         //chaos.setSeed(maker.rng.nextLong());
-                        Tools3D.deepCopyInto(maker.shipLargeRandomAurora(), voxels);
+                        Tools3D.deepCopyInto(maker.shipLargeRandomColorized(), voxels);
                         break;
                     case Input.Keys.B:
                         model = dumbCube;
@@ -210,11 +213,17 @@ public class WarpTest extends ApplicationAdapter {
                         break;
                     case Input.Keys.Y:
                         if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT))
-                            pixmapRenderer.color().set(Dimmer.AuroraDimmer);
-                        else if(Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT))
-                            pixmapRenderer.color.set(Dimmer.AuroraWarmthDimmer);
+                        {
+                            pixmapRenderer.color().set(Colorizer.AuroraColorizer);
+                            maker.setColorizer(Colorizer.AuroraColorizer);
+                        }
+//                        else if(Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT))
+//                            pixmapRenderer.color.set(Dimmer.AuroraWarmthDimmer);
                         else 
-                            pixmapRenderer.color().set(Dimmer.AuroraToFlesurrectDimmer);
+                        {
+                            pixmapRenderer.color().set(Colorizer.FlesurrectColorizer);
+                            maker.setColorizer(Colorizer.FlesurrectColorizer);
+                        }
                         break;
                     case Input.Keys.ESCAPE:
                         Gdx.app.exit();

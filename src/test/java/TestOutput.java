@@ -64,7 +64,7 @@ public class TestOutput extends ApplicationAdapter {
     }
     @Override
     public void create() {
-        am = new ArrayModel(mm.shipLargeRandomAurora());
+        am = new ArrayModel(mm.shipLargeRandomColorized());
         tm = new TurnModel().set(am);
         width = WarpDraw.xLimit(tm);
         height = WarpDraw.yLimit(tm);
@@ -127,7 +127,7 @@ public class TestOutput extends ApplicationAdapter {
     public void remakeShip(long newModel) {
         if (newModel != 0) {
             mm.rng.setState(determine(newModel));
-            am.voxels = mm.shipLargeRandomAurora();
+            am.voxels = mm.shipLargeRandomColorized();
             //animatedVoxels = mm.animateShip(voxels, frames);
         }
 

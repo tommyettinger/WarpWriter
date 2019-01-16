@@ -140,12 +140,12 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
 
         @Override
         public byte brighten(byte voxel) {
-            return Dimmer.FLESURRECT_RAMPS[voxel & 0xFF][0];
+            return Dimmer.FLESURRECT_RAMPS[voxel & 0x3F][0]; // uses 0x3F, or 63, as the mask since there are 64 colors
         }
 
         @Override
         public byte darken(byte voxel) {
-            return Dimmer.FLESURRECT_RAMPS[voxel & 0xFF][2];
+            return Dimmer.FLESURRECT_RAMPS[voxel & 0x3F][2]; // uses 0x3F, or 63, as the mask since there are 64 colors
         }
     };
 }
