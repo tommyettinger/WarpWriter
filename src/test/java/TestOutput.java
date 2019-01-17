@@ -188,7 +188,7 @@ public class TestOutput extends ApplicationAdapter {
     public void remakeShip(long newModel) {
         if (newModel != 0) {
             mm.rng.setState(determine(newModel));
-            am.voxels = mm.shipLargeRandomColorized();
+            am.voxels = mm.shipLargeNoiseColorized();
             //animatedVoxels = mm.animateShip(voxels, frames);
         }
 

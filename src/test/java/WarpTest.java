@@ -70,9 +70,9 @@ public class WarpTest extends ApplicationAdapter {
             box = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("Aurora/dumbcube.vox")));
         } catch (Exception e) {
             e.printStackTrace();
-            box = maker.shipLargeRandomColorized();
+            box = maker.shipLargeNoiseColorized();
         }
-        voxels = maker.shipLargeRandomColorized();
+        voxels = maker.shipLargeNoiseColorized();
 //        chaos = new ChaoticFetch(maker.rng.nextLong(), (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 1);
         warrior = new TurnModel().set(
 //                new ReplaceFetch(ColorFetch.color((byte) 0), (byte) 1)
@@ -189,7 +189,7 @@ public class WarpTest extends ApplicationAdapter {
                     case Input.Keys.P:
                         model = warrior;
                         //chaos.setSeed(maker.rng.nextLong());
-                        Tools3D.deepCopyInto(maker.shipLargeRandomColorized(), voxels);
+                        Tools3D.deepCopyInto(maker.shipLargeNoiseColorized(), voxels);
                         break;
                     case Input.Keys.B:
                         model = dumbCube;
