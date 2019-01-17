@@ -643,8 +643,8 @@ public class Coloring {
     /**
      * A 64-color mix of <a href="https://lospec.com/palette-list/fleja-master-palette">Fleja's Master Palette</a> with
      * <a href="https://lospec.com/palette-list/resurrect-32">Resurrect 32 by Kerrie Lake</a>. Some very similar colors
-     * have been removed from the overlap, and the range of green coverage has been expanded. I'd say this is a good
-     * option if we want to use less total colors relative to Rinsed or Aurora.
+     * have been removed from the overlap, and the range of green and purple coverage has been expanded. I'd say this is
+     * a good option if we want to use less total colors relative to Rinsed or Aurora.
      * <p>
      * This is sorted so the first element is transparent, then indices 1 to 9 are grayscale (or close to it), 10 to 13
      * are brownish-gray and so don't have an especially useful hue, and the rest are sorted by hue (red-green-blue).

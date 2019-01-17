@@ -481,9 +481,9 @@ public class ModelMaker {
                 //Dimmer.AURORA_RAMPS[colorizer.randomColorIndex(rng) & 255][2],
                 highlightColor = colorizer.brighten(colorizer.getReducer().randomColorIndex(rng)),
                         //Dimmer.AURORA_RAMPS[Dimmer.AURORA_RAMPS[colorizer.randomColorIndex(rng) & 255][0] & 255][0],
-                cockpitColor = colorizer.darken(colorizer.reduce((0x40 + rng.nextSignedInt(0x70) << 24)
-                        | (0xA0 + rng.nextSignedInt(0x60) << 16)
-                        | (0xC0 + rng.nextSignedInt(0x40) << 8) | 0xFF)); 
+                cockpitColor = colorizer.darken(colorizer.reduce((0x40 + determineBounded(seed + 0x11111L, 0x70) << 24)
+                        | (0xA0 + determineBounded(seed + 0x22222L, 0x60) << 16)
+                        | (0xC0 + determineBounded(seed + 0x33333L, 0x40) << 8) | 0xFF)); 
                         //AURORA_COCKPIT_COLORS[determineBounded(seed + 55555L, AURORA_COCKPIT_COLORS.length)];
         int xx, yy, zz;
         for (int x = 0; x < xSize; x++) {

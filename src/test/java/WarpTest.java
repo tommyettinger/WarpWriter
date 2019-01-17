@@ -211,14 +211,24 @@ public class WarpTest extends ApplicationAdapter {
                         diagonal = false;
                         angle = 2;
                         break;
-                    case Input.Keys.Y:
+                    case Input.Keys.A:
                         if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT))
                         {
-                            pixmapRenderer.color().set(Colorizer.AuroraColorizer);
+                            pixmapRenderer.color().set(Colorizer.AuroraBonusColorizer);
+                            maker.setColorizer(Colorizer.AuroraBonusColorizer);
+                        }
+                        else
+                        {
+                            pixmapRenderer.color.set(Colorizer.AuroraColorizer);
                             maker.setColorizer(Colorizer.AuroraColorizer);
                         }
-//                        else if(Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT))
-//                            pixmapRenderer.color.set(Dimmer.AuroraWarmthDimmer);
+                        break;
+                    case Input.Keys.S: // smaller palette, 64 colors
+                        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT))
+                        {
+                            pixmapRenderer.color().set(Colorizer.FlesurrectBonusColorizer);
+                            maker.setColorizer(Colorizer.FlesurrectBonusColorizer);
+                        }
                         else 
                         {
                             pixmapRenderer.color().set(Colorizer.FlesurrectColorizer);

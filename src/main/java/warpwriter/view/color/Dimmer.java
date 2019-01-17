@@ -177,7 +177,7 @@ public abstract class Dimmer implements IDimmer {
 
             {
                 for (int i = 1; i < 256 && i < rgbaPalette.length; i++) {
-                    int color = RAMP_VALUES[i][1] = rgbaPalette[i],
+                    int color = RAMP_VALUES[i][2] = rgbaPalette[i],
                             r = (color >>> 24),
                             g = (color >>> 16 & 0xFF),
                             b = (color >>> 8 & 0xFF);
@@ -189,7 +189,7 @@ public abstract class Dimmer implements IDimmer {
                     g = chromG + t;
                     b = t - (chromO >> 1);
                     r = b + chromO;
-                    RAMP_VALUES[i][2] =
+                    RAMP_VALUES[i][1] =
                             MathUtils.clamp(r, 0, 255) << 24 |
                                     MathUtils.clamp(g, 0, 255) << 16 |
                                     MathUtils.clamp(b, 0, 255) << 8 | 0xFF;
@@ -199,7 +199,7 @@ public abstract class Dimmer implements IDimmer {
                     g = chromG + t;
                     b = t - (chromO >> 1);
                     r = b + chromO;
-                    RAMP_VALUES[i][0] =
+                    RAMP_VALUES[i][3] =
                             MathUtils.clamp(r, 0, 255) << 24 |
                                     MathUtils.clamp(g, 0, 255) << 16 |
                                     MathUtils.clamp(b, 0, 255) << 8 | 0xFF;
@@ -209,7 +209,7 @@ public abstract class Dimmer implements IDimmer {
                     g = chromG + t;
                     b = t - (chromO >> 1);
                     r = b + chromO;
-                    RAMP_VALUES[i][3] =
+                    RAMP_VALUES[i][0] =
                             MathUtils.clamp(r, 0, 255) << 24 |
                                     MathUtils.clamp(g, 0, 255) << 16 |
                                     MathUtils.clamp(b, 0, 255) << 8 | 0xFF;
@@ -220,10 +220,10 @@ public abstract class Dimmer implements IDimmer {
             public int dimmer(int brightness, byte voxel) {
                 return RAMP_VALUES[voxel & 255][
                         brightness <= 0
-                                ? 3
-                                : brightness >= 3
                                 ? 0
-                                : 3 - brightness
+                                : brightness >= 3
+                                ? 3
+                                : brightness
                         ];
             }
         };
@@ -1321,7 +1321,7 @@ public abstract class Dimmer implements IDimmer {
 
     /**
      * An experiment with the 64-color Flesurrect palette and ramps.
-     * <a href="https://i.imgur.com/XCsEtwy.png">View this here</a>.
+     * <a href="https://i.imgur.com/HV1NDhx.png">View this here</a>.
      */
     public static final byte[][] FLESURRECT_RAMPS = new byte[][]{
             { 0, 0, 0, 0 },
@@ -1392,7 +1392,7 @@ public abstract class Dimmer implements IDimmer {
 
     /**
      * An experiment with the 64-color Flesurrect palette and ramps (this has the RGBA color values).
-     * <a href="https://i.imgur.com/XCsEtwy.png">View this here</a>.
+     * <a href="https://i.imgur.com/HV1NDhx.png">View this here</a>.
      */
     public static final int[][] FLESURRECT_RAMP_VALUES = new int[][]{
             { 0x00000000, 0x00000000, 0x00000000, 0x00000000 },
