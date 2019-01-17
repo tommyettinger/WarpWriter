@@ -8,9 +8,9 @@ import warpwriter.model.color.Colorizer;
 import warpwriter.model.nonvoxel.LittleEndianDataInputStream;
 
 import java.io.InputStream;
+import java.util.Arrays;
 
-import static squidpony.squidmath.DiverRNG.determineBounded;
-import static squidpony.squidmath.DiverRNG.determineFloat;
+import static squidpony.squidmath.DiverRNG.*;
 import static squidpony.squidmath.MathExtras.clamp;
 //import static squidpony.squidmath.Noise.PointHash.hashAll;
 
@@ -479,14 +479,11 @@ public class ModelMaker {
         final int halfY = ySize >> 1, smallYSize = ySize - 1;
         int color;
         long seed = rng.nextLong(), current, paint;
-        final byte mainColor = colorizer.darken(colorizer.getReducer().randomColorIndex(rng)),
-                //Dimmer.AURORA_RAMPS[colorizer.randomColorIndex(rng) & 255][2],
-                highlightColor = colorizer.brighten(colorizer.getReducer().randomColorIndex(rng)),
-                //Dimmer.AURORA_RAMPS[Dimmer.AURORA_RAMPS[colorizer.randomColorIndex(rng) & 255][0] & 255][0],
-                cockpitColor = colorizer.darken(colorizer.reduce((0x40 + determineBounded(seed + 0x11111L, 0x70) << 24)
+        final byte mainColor = colorizer.darken(colorizer.getReducer().paletteMapping[(int) seed & 0x7FFF]), // bottom 15 bits
+                highlightColor = colorizer.brighten(colorizer.getReducer().paletteMapping[(int) seed >>> 17]), // top 15 of 32 bits
+                cockpitColor = colorizer.darken(colorizer.reduce((0x20 + determineBounded(seed + 0x11111L, 0x60) << 24)
                         | (0xA0 + determineBounded(seed + 0x22222L, 0x60) << 16)
-                        | (0xC0 + determineBounded(seed + 0x33333L, 0x40) << 8) | 0xFF));
-        //AURORA_COCKPIT_COLORS[determineBounded(seed + 55555L, AURORA_COCKPIT_COLORS.length)];
+                        | (0xC8 + determineBounded(seed + 0x33333L, 0x38) << 8) | 0xFF));
         int xx, yy, zz;
         for (int x = 0; x < xSize; x++) {
             for (int y = 0; y < halfY; y++) {
@@ -546,11 +543,13 @@ public class ModelMaker {
         final int halfY = ySize >> 1, smallYSize = ySize - 1;
         int color;
         int seed = rng.nextInt(), current, paint;
-        final byte mainColor = colorizer.darken(colorizer.getReducer().randomColorIndex(rng)),
-                highlightColor = colorizer.brighten(colorizer.getReducer().randomColorIndex(rng)),
-                cockpitColor = colorizer.darken(colorizer.reduce((0x40 + determineBounded(seed + 0x11111L, 0x70) << 24)
+        byte mainColor = colorizer.getReducer().paletteMapping[seed & 0x7FFF], // bottom 15 bits
+                highlightColor = colorizer.brighten(colorizer.getReducer().paletteMapping[seed >>> 17]), // top 15 bits
+                cockpitColor = colorizer.darken(colorizer.reduce((0x20 + determineBounded(seed + 0x11111L, 0x60) << 24)
                         | (0xA0 + determineBounded(seed + 0x22222L, 0x60) << 16)
-                        | (0xC0 + determineBounded(seed + 0x33333L, 0x40) << 8) | 0xFF));
+                        | (0xC8 + determineBounded(seed + 0x33333L, 0x38) << 8) | 0xFF));
+        if(Arrays.binarySearch(colorizer.grayscale(), highlightColor) >= 0)
+            highlightColor = colorizer.getReducer().paletteMapping[(int) determine(~seed) & 0x7FFF];
         final FastNoise noiseMid = new FastNoise(~seed, 0x1p-5f);
         int xx, yy, zz;
         for (int x = 0; x < xSize; x++) {
@@ -588,9 +587,9 @@ public class ModelMaker {
                                             ? 0
                                             // checks 6 bits of paint, unusual start
                                             : ((paint >>> 19 & 0x3F) < 36)
-                                            ? colorizer.grayscale()[(int)((noiseMid.getSimplex(x * 0.125f, y * 0.25f, z * 0.5f) * 0.4f + 0.599f) * (colorizer.grayscale().length - 1))]
+                                            ? colorizer.grayscale()[(int)((noiseMid.getSimplex(x * 0.125f, y * 0.2f, z * 0.24f) * 0.4f + 0.599f) * (colorizer.grayscale().length - 1))]
                                             // checks another 6 bits of paint, starting after discarding 6 bits
-                                            : (noiseMid.getSimplex(x * 0.04f, y * 0.07f, z * 0.125f) > 0.1f)
+                                            : (noiseMid.getSimplex(x * 0.04f, y * 0.07f, z * 0.09f) > 0.1f)
                                             ? highlightColor
                                             : mainColor;
                         }

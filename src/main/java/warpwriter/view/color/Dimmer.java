@@ -234,10 +234,7 @@ public abstract class Dimmer implements IDimmer {
         public int dimmer(int brightness, byte voxel) {
             if(voxel == 0) return 0;
             final int color = AURORA_RAMP_VALUES[voxel & 255][1];
-            return FLESURRECT_RAMP_VALUES[Coloring.FLESURRECT_REDUCER.paletteMapping[
-                    (color >>> 17 & 0x7C00)
-                            | (color >>> 14 & 0x3E0)
-                            | (color >>> 11 & 0x1F)] & 0xFF][
+            return FLESURRECT_RAMP_VALUES[Coloring.FLESURRECT_REDUCER.reduceIndex(color) & 0xFF][
                     brightness <= 0
                             ? 3
                             : brightness >= 3
