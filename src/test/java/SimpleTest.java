@@ -168,7 +168,7 @@ public class SimpleTest extends ApplicationAdapter {
 
     public IModel model() {
         // batchRenderer.color().set(Dimmer.AuroraToFlesurrectDimmer);
-        // return new ArrayModel(maker.shipLargeRandomAurora())
+        // return new ArrayModel(maker.shipLargeRandomColorized())
         HashMap3D<IFetch> map = new HashMap3D<>();
 //        for (int x=0; x<3; x++)
 //            for (int y=0; y<3; y++)

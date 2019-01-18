@@ -4,6 +4,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
+import warpwriter.Coloring;
 
 /**
  * Created by Tommy Ettinger on 1/21/2018.
@@ -840,11 +841,11 @@ public class PaletteGenerator extends ApplicationAdapter {
 //            pix.fillRectangle((i & 15) << 3, (i & -16) >>> 1, 8, 8);
 //        }
         Pixmap pix = new Pixmap(256, 1, Pixmap.Format.RGBA8888);
-        for (int i = 0; i < 255; i++) {
-            pix.drawPixel(i, 0, PALETTE[i+1]);
+        for (int i = 0; i < 63; i++) {
+            pix.drawPixel(i, 0, Coloring.FLESURRECT[i+1]);
         }
         pix.drawPixel(255, 0, 0);
-        PixmapIO.writePNG(Gdx.files.local("DB_Aurora.png"), pix);
+        PixmapIO.writePNG(Gdx.files.local("Flesurrect.png"), pix);
         Gdx.app.exit();
     }
 
