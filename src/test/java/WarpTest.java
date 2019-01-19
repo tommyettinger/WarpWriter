@@ -8,28 +8,25 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.StringKit;
 import warpwriter.ModelMaker;
 import warpwriter.Tools3D;
-import warpwriter.VoxIO;
 import warpwriter.model.TurnModel;
 import warpwriter.model.color.Colorizer;
 import warpwriter.model.fetch.ArrayModel;
 import warpwriter.model.fetch.ChaoticFetch;
-import warpwriter.model.nonvoxel.LittleEndianDataInputStream;
 import warpwriter.view.WarpDraw;
 import warpwriter.view.color.VoxelColor;
 import warpwriter.view.render.VoxelPixmapRenderer;
 import warpwriter.view.render.VoxelSpriteBatchRenderer;
 
-import java.io.FileInputStream;
-
 public class WarpTest extends ApplicationAdapter {
-    public static final int SCREEN_WIDTH = 1280;
+    public static final int SCREEN_WIDTH = 640;
     public static final int SCREEN_HEIGHT = 720;
-    public static final int VIRTUAL_WIDTH = 640;
+    public static final int VIRTUAL_WIDTH = 320;
     public static final int VIRTUAL_HEIGHT = 360;
     protected SpriteBatch batch;
     protected Viewport worldView;
@@ -38,14 +35,16 @@ public class WarpTest extends ApplicationAdapter {
     protected FrameBuffer buffer;
     protected Texture screenTexture, pmTexture;
     protected TextureRegion screenRegion;
-    protected TurnModel model, dumbCube, warrior;
+    protected TurnModel model, boom, warrior;
     protected ModelMaker maker;
     private VoxelSpriteBatchRenderer batchRenderer;
     private VoxelPixmapRenderer pixmapRenderer;
     protected VoxelColor voxelColor;
     protected int angle = 2;
+    protected int frame = 0;
     protected boolean diagonal = false;
-    protected byte[][][] box;
+    protected boolean animating = false;
+    protected byte[][][][] explosion;
     private byte[][][] voxels;
     private ChaoticFetch chaos;
 
@@ -65,26 +64,29 @@ public class WarpTest extends ApplicationAdapter {
         batchRenderer = new VoxelSpriteBatchRenderer(batch).setOffset(16, 100);
         pixmapRenderer = new VoxelPixmapRenderer(new Pixmap(512, 512, Pixmap.Format.RGBA8888), voxelColor);
         pmTexture = new Texture(pixmapRenderer.pixmap);
-        maker = new ModelMaker(12345, Colorizer.FlesurrectColorizer);
-        try {
-            box = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("Aurora/dumbcube.vox")));
-        } catch (Exception e) {
-            e.printStackTrace();
-            box = maker.shipLargeNoiseColorized();
-        }
+        maker = new ModelMaker(12345, Colorizer.FlesurrectBonusColorizer);
+//        try {
+//            box = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("Aurora/dumbcube.vox")));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            box = maker.shipLargeNoiseColorized();
+//        }
+        explosion = maker.animateExplosion(16, 40, 40, 30);
         voxels = maker.shipLargeNoiseColorized();
 //        chaos = new ChaoticFetch(maker.rng.nextLong(), (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 1);
         warrior = new TurnModel().set(
 //                new ReplaceFetch(ColorFetch.color((byte) 0), (byte) 1)
 //                .add(new PaintFetch(chaos, true)).model(
                 new ArrayModel(voxels));
-        dumbCube = new TurnModel().set(new ArrayModel(box));
+        boom = new TurnModel().set(new ArrayModel(explosion[frame]));
         model = warrior;
         Gdx.input.setInputProcessor(inputProcessor());
     }
 
     @Override
     public void render() {
+        if(animating)
+            ((ArrayModel)boom.getModel()).voxels = explosion[(int)(TimeUtils.millis() * 21 >>> 11) & 15];
         buffer.begin();
         
         Gdx.gl.glClearColor(0.4f, 0.75f, 0.3f, 1f);
@@ -117,7 +119,7 @@ public class WarpTest extends ApplicationAdapter {
         //batch.setColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
         batch.end();
         buffer.end();
-        Gdx.gl.glClearColor(0, 0, 0, 0);
+        Gdx.gl.glClearColor(0, 0, 0, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         screenView.apply();
         batch.setProjectionMatrix(screenView.getCamera().combined);
@@ -190,9 +192,11 @@ public class WarpTest extends ApplicationAdapter {
                         model = warrior;
                         //chaos.setSeed(maker.rng.nextLong());
                         Tools3D.deepCopyInto(maker.shipLargeNoiseColorized(), voxels);
+                        animating = false;
                         break;
-                    case Input.Keys.B:
-                        model = dumbCube;
+                    case Input.Keys.B: // burn!
+                        model = boom;
+                        animating = true;
                         break;
                     case Input.Keys.G:
                         batchRenderer.color().set(batchRenderer.color().direction().counter());

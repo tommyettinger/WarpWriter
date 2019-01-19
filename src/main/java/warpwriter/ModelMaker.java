@@ -1,8 +1,9 @@
 package warpwriter;
 
+import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.MathUtils;
 import squidpony.squidmath.FastNoise;
 import squidpony.squidmath.GWTRNG;
-import squidpony.squidmath.LinnormRNG;
 import squidpony.squidmath.NumberTools;
 import warpwriter.model.color.Colorizer;
 import warpwriter.model.nonvoxel.LittleEndianDataInputStream;
@@ -1038,7 +1039,7 @@ public class ModelMaker {
      * @return a byte representing a color palette index, randomly chosen
      */
     public static byte randomMainColor(long seed) {
-        return (byte)(LinnormRNG.determineBounded(seed, 30) * 8 + LinnormRNG.determineBounded(~seed, 4) + 18);
+        return (byte)(determineBounded(seed, 30) * 8 + determineBounded(~seed, 4) + 18);
     }
 
     /**
@@ -1048,8 +1049,95 @@ public class ModelMaker {
      */
     public static byte[] randomColorRange(long seed)
     {
-        byte idx = (byte) ((LinnormRNG.determineBounded(seed, 30) << 3) + 17);
+        byte idx = (byte) ((determineBounded(seed, 30) << 3) + 17);
         return new byte[]{idx, (byte) (idx+1), (byte) (idx+2), (byte) (idx+3), (byte) (idx+4)};
+    }
+    
+    public byte[] fireRange()
+    {
+        return new byte[] {
+                (byte)(colorizer.reduce(0xFB6B1DFF) | colorizer.getShadeBit()), 
+                (byte)(colorizer.reduce(0xFF9E17FF) | colorizer.getShadeBit()),
+                (byte)(colorizer.reduce(0xFBFF86FF) | colorizer.getShadeBit()), 
+                (byte)(colorizer.reduce(0x5C3A41FF) | colorizer.getShadeBit()),
+                0
+        };
+    }
+    
+    public byte[][][][] animateExplosion(int frames, int xSize, int ySize, int zSize)
+    {
+        final int sa = rng.stateA, sb = rng.stateB;
+        final byte[] fire = fireRange();
+        final byte[][][][] boom = new byte[frames][xSize][ySize][zSize];
+        int centerX = xSize >> 1, centerY = ySize >> 1;
+        int expandLength = Math.round(frames * 0.25f);
+        int riseLength = Math.round(frames * 0.4f);
+        int smokeLength = frames - riseLength - expandLength;
+        float maxRadius = Math.min(centerX, centerY) * 0.875f;
+        float startRadius = maxRadius * 0.375f;
+        float currentRadius = startRadius;
+        float rad2 = currentRadius * currentRadius;
+        for (int i = 0; i < expandLength && i < frames; i++) {
+            currentRadius = Interpolation.circleIn.apply(startRadius, maxRadius, (float) i / expandLength);
+            rad2 = currentRadius * currentRadius;
+            for (float x = -currentRadius; x <= currentRadius; x++) {
+                for (float y = -currentRadius; y <= currentRadius; y++) {
+                    if(x * x + y * y > rad2)
+                        continue;
+                    for (float z = 0; z < currentRadius; z++) {
+                        if(x * x + y * y + z * z <= rad2 && rng.next(5) < 16 + i) // next(5) is 5 bits, so 0 to 31 are possible
+                        {
+                            boom[i][Math.round(centerX + x)][Math.round(centerY + y)][Math.round(z)] = fire[minIntOf(7, 1 + expandLength - i) >> 1]; 
+                        }
+                    }
+                }
+            }
+        }
+        float startLift = zSize * 0.125f;
+        float currentLift = startLift;
+        startRadius = currentRadius;
+        maxRadius = Math.min(centerX, centerY) - 1;
+        for (int j = 0, i = expandLength; j < riseLength && i < frames; j++, i++) {
+            currentRadius = MathUtils.lerp(startRadius, maxRadius, (float) j / riseLength);
+            rad2 = currentRadius * currentRadius;
+            currentLift = MathUtils.lerp(startLift, zSize * 0.6f, (j + 1f) / riseLength);
+            for (float x = -currentRadius; x <= currentRadius; x++) {
+                for (float y = -currentRadius; y <= currentRadius; y++) {
+                    if(x * x + y * y > rad2)
+                        continue;
+                    for (float z = Math.max(0, currentRadius * -0.875f); z < currentRadius + currentLift && z + 0.5f < zSize; z++) {
+                        if(x * x + y * y + z * z * 0.75f <= rad2 && rng.next(6) < 13 - j) // next(6) is 6 bits, so 0 to 63 are possible
+                        {
+                            boom[i][Math.round(centerX + x)][Math.round(centerY + y)][Math.round(z) ] = fire[Math.round(NumberTools.formCurvedFloat(rng.nextInt()) * 1.6f + 1.5f + 0.1f * j)];
+                        }
+                    }
+                }
+            }
+        }
+        startLift = currentLift;
+        //startRadius = currentRadius;
+        for (int j = 0, i = expandLength + riseLength; i < frames; j++, i++) {
+            currentLift = MathUtils.lerp(startLift, zSize * 0.9f, (float) j / smokeLength);
+            currentRadius = maxRadius;//MathUtils.lerp(startRadius, maxRadius, (j + 1f) / smokeLength);
+            rad2 = currentRadius * currentRadius;
+            for (float x = -currentRadius; x <= currentRadius; x++) {
+                for (float y = -currentRadius; y <= currentRadius; y++) {
+                    if(x * x + y * y > rad2 + rng.next(3))
+                        continue;
+                    for (float z = Math.max(0, currentLift - currentRadius + 0.15f * j * (float) Math.sqrt(x * x + y * y)); z + 0.5f < zSize && z < currentRadius + currentLift; z++) {
+                        if(x * x + y * y + z * z * 0.666f <= rad2 && rng.next(9) < 8 * smokeLength - j * 7) // next(6) is 6 bits, so 0 to 63 are possible
+                        {
+                            boom[i][Math.round(centerX + x)][Math.round(centerY + y)][Math.round(z)] = fire[
+                                    Math.round(NumberTools.formCurvedFloat(rng.nextInt()) * 1.3f + 3f + 0.2f * (j + 1f - smokeLength))
+                                    //maxIntOf(4, 5 + j)
+                                    ];
+                        }
+                    }
+                }
+            }
+        }
+        rng.setState(sa, sb);
+        return boom;
     }
 
 }
