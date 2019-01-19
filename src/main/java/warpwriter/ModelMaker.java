@@ -1070,15 +1070,15 @@ public class ModelMaker {
         final byte[] fire = fireRange();
         final byte[][][][] boom = new byte[frames][xSize][ySize][zSize];
         int centerX = xSize >> 1, centerY = ySize >> 1;
-        int expandLength = Math.round(frames * 0.25f);
-        int riseLength = Math.round(frames * 0.4f);
+        int expandLength = Math.round(frames * 0.2f);
+        int riseLength = Math.round(frames * 0.3f);
         int smokeLength = frames - riseLength - expandLength;
         float maxRadius = Math.min(centerX, centerY) * 0.875f;
         float startRadius = maxRadius * 0.375f;
         float currentRadius = startRadius;
         float rad2 = currentRadius * currentRadius;
         for (int i = 0; i < expandLength && i < frames; i++) {
-            currentRadius = Interpolation.circleIn.apply(startRadius, maxRadius, (float) i / expandLength);
+            currentRadius = Interpolation.pow2InInverse.apply(startRadius, maxRadius, (float) i / expandLength);
             rad2 = currentRadius * currentRadius;
             for (float x = -currentRadius; x <= currentRadius; x++) {
                 for (float y = -currentRadius; y <= currentRadius; y++) {
@@ -1100,15 +1100,15 @@ public class ModelMaker {
         for (int j = 0, i = expandLength; j < riseLength && i < frames; j++, i++) {
             currentRadius = MathUtils.lerp(startRadius, maxRadius, (float) j / riseLength);
             rad2 = currentRadius * currentRadius;
-            currentLift = MathUtils.lerp(startLift, zSize * 0.6f, (j + 1f) / riseLength);
+            currentLift = MathUtils.lerp(startLift, zSize * 0.4f, (float) j / riseLength);
             for (float x = -currentRadius; x <= currentRadius; x++) {
                 for (float y = -currentRadius; y <= currentRadius; y++) {
                     if(x * x + y * y > rad2)
                         continue;
-                    for (float z = Math.max(0, currentRadius * -0.875f); z < currentRadius + currentLift && z + 0.5f < zSize; z++) {
-                        if(x * x + y * y + z * z * 0.75f <= rad2 && rng.next(6) < 13 - j) // next(6) is 6 bits, so 0 to 63 are possible
+                    for (float z = currentRadius * -0.875f; z < currentRadius && z + 0.5f + currentLift < zSize; z++) {
+                        if(z + currentLift >= 0 && x * x + y * y + z * z <= rad2 && rng.next(6) < 13 - j) // next(6) is 6 bits, so 0 to 63 are possible
                         {
-                            boom[i][Math.round(centerX + x)][Math.round(centerY + y)][Math.round(z) ] = fire[Math.round(NumberTools.formCurvedFloat(rng.nextInt()) * 1.6f + 1.5f + 0.1f * j)];
+                            boom[i][Math.round(centerX + x)][Math.round(centerY + y)][Math.round(z + currentLift)] = fire[Math.round(NumberTools.formCurvedFloat(rng.nextInt()) * 1.6f + 1.5f + 0.1f * j)];
                         }
                     }
                 }
@@ -1117,18 +1117,18 @@ public class ModelMaker {
         startLift = currentLift;
         //startRadius = currentRadius;
         for (int j = 0, i = expandLength + riseLength; i < frames; j++, i++) {
-            currentLift = MathUtils.lerp(startLift, zSize * 0.9f, (float) j / smokeLength);
+            currentLift = MathUtils.lerp(startLift, zSize * 0.7f, (float) j / smokeLength);
             currentRadius = maxRadius;//MathUtils.lerp(startRadius, maxRadius, (j + 1f) / smokeLength);
             rad2 = currentRadius * currentRadius;
             for (float x = -currentRadius; x <= currentRadius; x++) {
                 for (float y = -currentRadius; y <= currentRadius; y++) {
                     if(x * x + y * y > rad2 + rng.next(3))
                         continue;
-                    for (float z = Math.max(0, currentLift - currentRadius + 0.15f * j * (float) Math.sqrt(x * x + y * y)); z + 0.5f < zSize && z < currentRadius + currentLift; z++) {
-                        if(x * x + y * y + z * z * 0.666f <= rad2 && rng.next(9) < 8 * smokeLength - j * 7) // next(6) is 6 bits, so 0 to 63 are possible
+                    for (float z = -currentRadius + 0.15f * j * (float) Math.sqrt(x * x + y * y); z + 0.5f + currentLift < zSize; z++) {
+                        if(z + currentLift >= 0 && x * x + y * y + z * z * 0.9f <= rad2 && rng.next(10) < 11 * smokeLength - j * 10) // next(6) is 6 bits, so 0 to 63 are possible
                         {
-                            boom[i][Math.round(centerX + x)][Math.round(centerY + y)][Math.round(z)] = fire[
-                                    Math.round(NumberTools.formCurvedFloat(rng.nextInt()) * 1.3f + 3f + 0.2f * (j + 1f - smokeLength))
+                            boom[i][Math.round(centerX + x)][Math.round(centerY + y)][Math.round(z + currentLift)] = fire[
+                                    Math.round(NumberTools.formCurvedFloat(rng.nextInt()) * 1.4f + 3.45f + 0.2f * (j - smokeLength))
                                     //maxIntOf(4, 5 + j)
                                     ];
                         }
