@@ -19,6 +19,10 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
     }
     protected PaletteReducer reducer;
 
+    public int getShadeBit() {
+        return 0;
+    }
+
     /**
      * @param voxel      A color index
      * @param brightness An integer representing how many shades brighter (if positive) or darker (if negative) the result should be
@@ -140,12 +144,34 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
 
         @Override
         public byte brighten(byte voxel) {
-            return Dimmer.FLESURRECT_RAMPS[voxel & 0x3F][0]; // uses 0x3F, or 63, as the mask since there are 64 colors
+            // the second half of voxels (with bit 0x40 set) don't shade visually, but Colorizer uses this method to
+            // denote a structural change to the voxel's makeup, so this uses the first 64 voxel colors to shade both
+            // halves, then marks voxels from the second half back to being an unshaded voxel as the last step.
+            return (byte) (Dimmer.FLESURRECT_RAMPS[voxel & 0x3F][0] | (voxel & 0x40));
         }
 
         @Override
         public byte darken(byte voxel) {
-            return Dimmer.FLESURRECT_RAMPS[voxel & 0x3F][2]; // uses 0x3F, or 63, as the mask since there are 64 colors
+            // the second half of voxels (with bit 0x40 set) don't shade visually, but Colorizer uses this method to
+            // denote a structural change to the voxel's makeup, so this uses the first 64 voxel colors to shade both
+            // halves, then marks voxels from the second half back to being an unshaded voxel as the last step.
+            return (byte) (Dimmer.FLESURRECT_RAMPS[voxel & 0x3F][2] | (voxel & 0x40));
+        }
+
+        @Override
+        public int dimmer(int brightness, byte voxel) {
+            return Dimmer.FLESURRECT_RAMP_VALUES[voxel & 0x7F][
+                    brightness <= 0
+                            ? 3
+                            : brightness >= 3
+                            ? 0
+                            : 3 - brightness
+                    ];
+        }
+
+        @Override
+        public int getShadeBit() {
+            return 0x40;
         }
     };
     public static final Colorizer AuroraBonusColorizer = new Colorizer(new PaletteReducer()) {
@@ -526,13 +552,20 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
 
         @Override
         public byte brighten(byte voxel) {
-            return Dimmer.FLESURRECT_RAMPS[voxel & 0x3F][0]; // uses 0x3F, or 63, as the mask since there are 64 colors
+            // the second half of voxels (with bit 0x40 set) don't shade visually, but Colorizer uses this method to
+            // denote a structural change to the voxel's makeup, so this uses the first 64 voxel colors to shade both
+            // halves, then marks voxels from the second half back to being an unshaded voxel as the last step.
+            return (byte) (Dimmer.FLESURRECT_RAMPS[voxel & 0x3F][0] | (voxel & 0x40));
         }
 
         @Override
         public byte darken(byte voxel) {
-            return Dimmer.FLESURRECT_RAMPS[voxel & 0x3F][2]; // uses 0x3F, or 63, as the mask since there are 64 colors
+            // the second half of voxels (with bit 0x40 set) don't shade visually, but Colorizer uses this method to
+            // denote a structural change to the voxel's makeup, so this uses the first 64 voxel colors to shade both
+            // halves, then marks voxels from the second half back to being an unshaded voxel as the last step.
+            return (byte) (Dimmer.FLESURRECT_RAMPS[voxel & 0x3F][2] | (voxel & 0x40));
         }
+
         private int[][] RAMP_VALUES = new int[][] {
                 { 0x00000000, 0x00000000, 0x00000000, 0x00000000 },
                 { 0x120023FF, 0x161025FF, 0x1F1833FF, 0x2E1F3DFF },
@@ -598,6 +631,70 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
                 { 0xA40043FF, 0xAB3251FF, 0xF04F78FF, 0xF08F96FF },
                 { 0x6D1339FF, 0x894C59FF, 0xC27182FF, 0xD7A8A7FF },
                 { 0x950020FF, 0x901E24FF, 0xC93038FF, 0xCB525FFF },
+                { 0x00000000, 0x00000000, 0x00000000, 0x00000000, },
+                { 0x00000000, 0x1F1833FF, 0x1F1833FF, 0x1F1833FF, },
+                { 0x00000000, 0x2B2E42FF, 0x2B2E42FF, 0x2B2E42FF, },
+                { 0x00000000, 0x3E3546FF, 0x3E3546FF, 0x3E3546FF, },
+                { 0x00000000, 0x414859FF, 0x414859FF, 0x414859FF, },
+                { 0x00000000, 0x68717AFF, 0x68717AFF, 0x68717AFF, },
+                { 0x00000000, 0x90A1A8FF, 0x90A1A8FF, 0x90A1A8FF, },
+                { 0x00000000, 0xB6CBCFFF, 0xB6CBCFFF, 0xB6CBCFFF, },
+                { 0x00000000, 0xD3E5EDFF, 0xD3E5EDFF, 0xD3E5EDFF, },
+                { 0x00000000, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, },
+                { 0x00000000, 0x5C3A41FF, 0x5C3A41FF, 0x5C3A41FF, },
+                { 0x00000000, 0x826481FF, 0x826481FF, 0x826481FF, },
+                { 0x00000000, 0x966C6CFF, 0x966C6CFF, 0x966C6CFF, },
+                { 0x00000000, 0xAB947AFF, 0xAB947AFF, 0xAB947AFF, },
+                { 0x00000000, 0xF68181FF, 0xF68181FF, 0xF68181FF, },
+                { 0x00000000, 0xF53333FF, 0xF53333FF, 0xF53333FF, },
+                { 0x00000000, 0xFF5A4AFF, 0xFF5A4AFF, 0xFF5A4AFF, },
+                { 0x00000000, 0xAE4539FF, 0xAE4539FF, 0xAE4539FF, },
+                { 0x00000000, 0x8A503EFF, 0x8A503EFF, 0x8A503EFF, },
+                { 0x00000000, 0xCD683DFF, 0xCD683DFF, 0xCD683DFF, },
+                { 0x00000000, 0xFBA458FF, 0xFBA458FF, 0xFBA458FF, },
+                { 0x00000000, 0xFB6B1DFF, 0xFB6B1DFF, 0xFB6B1DFF, },
+                { 0x00000000, 0x9F8562FF, 0x9F8562FF, 0x9F8562FF, },
+                { 0x00000000, 0xFCBF8AFF, 0xFCBF8AFF, 0xFCBF8AFF, },
+                { 0x00000000, 0xFF9E17FF, 0xFF9E17FF, 0xFF9E17FF, },
+                { 0x00000000, 0xF0B628FF, 0xF0B628FF, 0xF0B628FF, },
+                { 0x00000000, 0xE3C896FF, 0xE3C896FF, 0xE3C896FF, },
+                { 0x00000000, 0xFBE626FF, 0xFBE626FF, 0xFBE626FF, },
+                { 0x00000000, 0xEDD500FF, 0xEDD500FF, 0xEDD500FF, },
+                { 0x00000000, 0xFBFF86FF, 0xFBFF86FF, 0xFBFF86FF, },
+                { 0x00000000, 0xB4D645FF, 0xB4D645FF, 0xB4D645FF, },
+                { 0x00000000, 0x729446FF, 0x729446FF, 0x729446FF, },
+                { 0x00000000, 0x91DB69FF, 0x91DB69FF, 0x91DB69FF, },
+                { 0x00000000, 0x358510FF, 0x358510FF, 0x358510FF, },
+                { 0x00000000, 0x51C43FFF, 0x51C43FFF, 0x51C43FFF, },
+                { 0x00000000, 0x4BA14AFF, 0x4BA14AFF, 0x4BA14AFF, },
+                { 0x00000000, 0x1EBC73FF, 0x1EBC73FF, 0x1EBC73FF, },
+                { 0x00000000, 0x30E1B9FF, 0x30E1B9FF, 0x30E1B9FF, },
+                { 0x00000000, 0x7FE0C2FF, 0x7FE0C2FF, 0x7FE0C2FF, },
+                { 0x00000000, 0xB8FDFFFF, 0xB8FDFFFF, 0xB8FDFFFF, },
+                { 0x00000000, 0x039F78FF, 0x039F78FF, 0x039F78FF, },
+                { 0x00000000, 0x63C2C9FF, 0x63C2C9FF, 0x63C2C9FF, },
+                { 0x00000000, 0x4F83BFFF, 0x4F83BFFF, 0x4F83BFFF, },
+                { 0x00000000, 0x216981FF, 0x216981FF, 0x216981FF, },
+                { 0x00000000, 0x7FE8F2FF, 0x7FE8F2FF, 0x7FE8F2FF, },
+                { 0x00000000, 0x3B509FFF, 0x3B509FFF, 0x3B509FFF, },
+                { 0x00000000, 0x4D9BE6FF, 0x4D9BE6FF, 0x4D9BE6FF, },
+                { 0x00000000, 0x28306FFF, 0x28306FFF, 0x28306FFF, },
+                { 0x00000000, 0x4870CFFF, 0x4870CFFF, 0x4870CFFF, },
+                { 0x00000000, 0x4D50D4FF, 0x4D50D4FF, 0x4D50D4FF, },
+                { 0x00000000, 0x180FCFFF, 0x180FCFFF, 0x180FCFFF, },
+                { 0x00000000, 0x53207DFF, 0x53207DFF, 0x53207DFF, },
+                { 0x00000000, 0x8657CCFF, 0x8657CCFF, 0x8657CCFF, },
+                { 0x00000000, 0xA884F3FF, 0xA884F3FF, 0xA884F3FF, },
+                { 0x00000000, 0x630867FF, 0x630867FF, 0x630867FF, },
+                { 0x00000000, 0xA03EB2FF, 0xA03EB2FF, 0xA03EB2FF, },
+                { 0x00000000, 0x8032BCFF, 0x8032BCFF, 0x8032BCFF, },
+                { 0x00000000, 0xE4A8FAFF, 0xE4A8FAFF, 0xE4A8FAFF, },
+                { 0x00000000, 0xB53D86FF, 0xB53D86FF, 0xB53D86FF, },
+                { 0x00000000, 0xF34FE9FF, 0xF34FE9FF, 0xF34FE9FF, },
+                { 0x00000000, 0x7A3045FF, 0x7A3045FF, 0x7A3045FF, },
+                { 0x00000000, 0xF04F78FF, 0xF04F78FF, 0xF04F78FF, },
+                { 0x00000000, 0xC27182FF, 0xC27182FF, 0xC27182FF, },
+                { 0x00000000, 0xC93038FF, 0xC93038FF, 0xC93038FF, },
         };
 
 //        {
@@ -651,7 +748,7 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
 
         @Override
         public int dimmer(int brightness, byte voxel) {
-            return RAMP_VALUES[voxel & 63][
+            return RAMP_VALUES[voxel & 0x7F][
                     brightness <= 0
                             ? 0
                             : brightness >= 3
@@ -660,6 +757,10 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
                     ];
         }
 
+        @Override
+        public int getShadeBit() {
+            return 0x40;
+        }
     };
 
 }
