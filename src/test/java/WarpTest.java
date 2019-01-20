@@ -24,8 +24,8 @@ import warpwriter.view.render.VoxelPixmapRenderer;
 import warpwriter.view.render.VoxelSpriteBatchRenderer;
 
 public class WarpTest extends ApplicationAdapter {
-    public static final int SCREEN_WIDTH = 640;
-    public static final int SCREEN_HEIGHT = 720;
+    public static final int SCREEN_WIDTH = 320;//640;
+    public static final int SCREEN_HEIGHT = 360;//720;
     public static final int VIRTUAL_WIDTH = 320;
     public static final int VIRTUAL_HEIGHT = 360;
     protected SpriteBatch batch;
@@ -71,14 +71,14 @@ public class WarpTest extends ApplicationAdapter {
 //            e.printStackTrace();
 //            box = maker.shipLargeNoiseColorized();
 //        }
-        explosion = maker.animateExplosion(16, 40, 40, 30);
+        
         voxels = maker.shipLargeNoiseColorized();
 //        chaos = new ChaoticFetch(maker.rng.nextLong(), (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 1);
         warrior = new TurnModel().set(
 //                new ReplaceFetch(ColorFetch.color((byte) 0), (byte) 1)
 //                .add(new PaintFetch(chaos, true)).model(
                 new ArrayModel(voxels));
-        boom = new TurnModel().set(new ArrayModel(explosion[frame]));
+        boom = new TurnModel().set(new ArrayModel(new byte[40][40][40]));
         model = warrior;
         Gdx.input.setInputProcessor(inputProcessor());
     }
@@ -195,6 +195,8 @@ public class WarpTest extends ApplicationAdapter {
                         animating = false;
                         break;
                     case Input.Keys.B: // burn!
+                        explosion = maker.animateExplosion(16, 40, 40, 40);
+                        System.out.println(Tools3D.hash(explosion[0]));
                         model = boom;
                         animating = true;
                         break;

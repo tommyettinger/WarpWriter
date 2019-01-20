@@ -1066,7 +1066,9 @@ public class ModelMaker {
     
     public byte[][][][] animateExplosion(int frames, int xSize, int ySize, int zSize)
     {
-        final int sa = rng.stateA, sb = rng.stateB;
+        final int sa = rng.nextInt(), sb = rng.nextInt();
+        FastNoise noise = new FastNoise(sa ^ sb, 0x1.2p-3f, FastNoise.SIMPLEX_FRACTAL, 2);
+        noise.setFractalType(FastNoise.FBM);
         final byte[] fire = fireRange();
         final byte[][][][] boom = new byte[frames][xSize][ySize][zSize];
         int centerX = xSize >> 1, centerY = ySize >> 1;
@@ -1077,15 +1079,16 @@ public class ModelMaker {
         float startRadius = maxRadius * 0.375f;
         float currentRadius = startRadius;
         float rad2 = currentRadius * currentRadius;
-        for (int i = 0; i < expandLength && i < frames; i++) {
+        float w = 0f;
+        for (int i = 0; i < expandLength && i < frames; i++, w += 0.125f) {
             currentRadius = Interpolation.pow2InInverse.apply(startRadius, maxRadius, (float) i / expandLength);
             rad2 = currentRadius * currentRadius;
             for (float x = -currentRadius; x <= currentRadius; x++) {
                 for (float y = -currentRadius; y <= currentRadius; y++) {
-                    if(x * x + y * y > rad2)
+                    if(x * x + y * y > rad2 + 7)
                         continue;
                     for (float z = 0; z < currentRadius; z++) {
-                        if(x * x + y * y + z * z <= rad2 && rng.next(5) < 16 + i) // next(5) is 5 bits, so 0 to 31 are possible
+                        if(x * x + y * y + z * z <= rad2 + rng.next(4) - 8 && noise.getSimplexFractal(x, y, z, w) * 16 + 8 < i)
                         {
                             boom[i][Math.round(centerX + x)][Math.round(centerY + y)][Math.round(z)] = fire[minIntOf(7, 1 + expandLength - i) >> 1]; 
                         }
@@ -1097,16 +1100,16 @@ public class ModelMaker {
         float currentLift = startLift;
         startRadius = currentRadius;
         maxRadius = Math.min(centerX, centerY) - 1;
-        for (int j = 0, i = expandLength; j < riseLength && i < frames; j++, i++) {
+        for (int j = 0, i = expandLength; j < riseLength && i < frames; j++, i++, w += 0.125f) {
             currentRadius = MathUtils.lerp(startRadius, maxRadius, (float) j / riseLength);
             rad2 = currentRadius * currentRadius;
             currentLift = MathUtils.lerp(startLift, zSize * 0.4f, (float) j / riseLength);
             for (float x = -currentRadius; x <= currentRadius; x++) {
                 for (float y = -currentRadius; y <= currentRadius; y++) {
-                    if(x * x + y * y > rad2)
+                    if(x * x + y * y > rad2 + 7)
                         continue;
                     for (float z = currentRadius * -0.875f; z < currentRadius && z + 0.5f + currentLift < zSize; z++) {
-                        if(z + currentLift >= 0 && x * x + y * y + z * z <= rad2 && rng.next(6) < 13 - j) // next(6) is 6 bits, so 0 to 63 are possible
+                        if(z + currentLift >= 0 && x * x + y * y + z * z <= rad2 + rng.next(4) - 8 && noise.getSimplexFractal(x, y, z, w) * 32 + 16 < 13 - j)
                         {
                             boom[i][Math.round(centerX + x)][Math.round(centerY + y)][Math.round(z + currentLift)] = fire[Math.round(NumberTools.formCurvedFloat(rng.nextInt()) * 1.6f + 1.5f + 0.1f * j)];
                         }
@@ -1116,19 +1119,19 @@ public class ModelMaker {
         }
         startLift = currentLift;
         //startRadius = currentRadius;
-        for (int j = 0, i = expandLength + riseLength; i < frames; j++, i++) {
+        for (int j = 0, i = expandLength + riseLength; i < frames; j++, i++, w += 0.125f) {
             currentLift = MathUtils.lerp(startLift, zSize * 0.7f, (float) j / smokeLength);
             currentRadius = maxRadius;//MathUtils.lerp(startRadius, maxRadius, (j + 1f) / smokeLength);
             rad2 = currentRadius * currentRadius;
             for (float x = -currentRadius; x <= currentRadius; x++) {
                 for (float y = -currentRadius; y <= currentRadius; y++) {
-                    if(x * x + y * y > rad2 + rng.next(3))
+                    if(x * x + y * y > rad2 + 7)
                         continue;
                     for (float z = -currentRadius + 0.15f * j * (float) Math.sqrt(x * x + y * y); z + 0.5f + currentLift < zSize; z++) {
-                        if(z + currentLift >= 0 && x * x + y * y + z * z * 0.9f <= rad2 && rng.next(10) < 11 * smokeLength - j * 10) // next(6) is 6 bits, so 0 to 63 are possible
+                        if(z + currentLift >= 0 && x * x + y * y + z * z * 0.9f <= rad2 + rng.next(4) - 8 && noise.getSimplexFractal(x, y, z, w) * 512 + 256 < 11 * smokeLength - j * 10)
                         {
                             boom[i][Math.round(centerX + x)][Math.round(centerY + y)][Math.round(z + currentLift)] = fire[
-                                    Math.round(NumberTools.formCurvedFloat(rng.nextInt()) * 1.4f + 3.45f + 0.2f * (j - smokeLength))
+                                    Math.min(4, Math.round(NumberTools.formCurvedFloat(rng.nextInt()) * 1.4f + 3.45f + 0.2f * (j - smokeLength)))
                                     //maxIntOf(4, 5 + j)
                                     ];
                         }
