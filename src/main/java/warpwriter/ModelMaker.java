@@ -1052,24 +1052,66 @@ public class ModelMaker {
         byte idx = (byte) ((determineBounded(seed, 30) << 3) + 17);
         return new byte[]{idx, (byte) (idx+1), (byte) (idx+2), (byte) (idx+3), (byte) (idx+4)};
     }
-    
-    public byte[] fireRange()
+
+    /**
+     * Gets a range of fire colors given four RGBA8888 ints as targets for this to try to produce. Goes from
+     * {@code early} (which could be bold orange, for the start of a fire) to {@code mid} (which could be light orange,
+     * for the middle of a fire), to {@code bright} (which could be light yellow, for sparks) to {@code smoke} (which
+     * could be gray or brown) to clear (which this always appends as the fifth item, so the fire fades out).
+     * @param early the color for the start of a fire, such as for embers
+     * @param mid the color for the middle of a fire, often lighter than {@code early}
+     * @param bright the color for sparks, often very light
+     * @param smoke the color for smoke near the end of a fire
+     * @return a 5-item array of byte color indices for fire colors
+     */
+    public byte[] fireRange(int early, int mid, int bright, int smoke)
     {
         return new byte[] {
-                (byte)(colorizer.reduce(0xFB6B1DFF) | colorizer.getShadeBit()), 
-                (byte)(colorizer.reduce(0xFF9E17FF) | colorizer.getShadeBit()),
-                (byte)(colorizer.reduce(0xFBFF86FF) | colorizer.getShadeBit()), 
-                (byte)(colorizer.reduce(0x5C3A41FF) | colorizer.getShadeBit()),
+                (byte)(colorizer.reduce(early) | colorizer.getShadeBit()),
+                (byte)(colorizer.reduce(mid) | colorizer.getShadeBit()),
+                (byte)(colorizer.reduce(bright) | colorizer.getShadeBit()),
+                (byte)(colorizer.reduce(smoke) | colorizer.getShadeBit()),
                 0
         };
     }
     
+    /**
+     * Gets a range of fire colors, going from bold orange to light orange to light yellow to brown for smoke to clear.
+     * @return a 5-item array of byte color indices for fire colors
+     */
+    public byte[] fireRange() {
+        return fireRange(0xFB6B1DFF, 0xFF9E17FF, 0xFBFF86FF, 0x5C3A41FF);
+    }
+    public byte[] randomFireRange()
+    {
+        int idx = rng.nextSignedInt(30) * 8 + 16;
+        return fireRange(Coloring.RINSED[idx + 4], Coloring.RINSED[idx + 2], Coloring.RINSED[idx], Coloring.RINSED[idx + 6]);
+    }
+
+    /**
+     * Takes an array of arrays of RGBA8888 ints representing colors, such as
+     * {@link warpwriter.view.color.Dimmer#AURORA_RAMP_VALUES}, and gets a random ramp from it to attempt to construct
+     * a fire range.
+     * @param rampValues a 2D array of RGBA8888 ints, where each interior array must have at least 4 elements and first
+     *                   interior array is ignored (expected to be transparent)
+     * @return a 5-item array of byte color indices for fire colors
+     */
+    public byte[] randomFireRange(int[][] rampValues)
+    {
+        int idx = rng.nextSignedInt(rampValues.length - 1) + 1;
+        if(rampValues[idx][3] == 0)
+            idx >>>= 1;
+        return fireRange(rampValues[idx][2], rampValues[idx][1], rampValues[idx][0], rampValues[idx][3]);
+    }
     public byte[][][][] animateExplosion(int frames, int xSize, int ySize, int zSize)
+    {
+        return animateExplosion(frames, xSize, ySize, zSize, fireRange());
+    }
+    public byte[][][][] animateExplosion(int frames, int xSize, int ySize, int zSize, byte[] fireColors)
     {
         final int sa = rng.nextInt(), sb = rng.nextInt();
         FastNoise noise = new FastNoise(sa ^ sb, 0x1.2p-3f, FastNoise.SIMPLEX_FRACTAL, 2);
         noise.setFractalType(FastNoise.FBM);
-        final byte[] fire = fireRange();
         final byte[][][][] boom = new byte[frames][xSize][ySize][zSize];
         int centerX = xSize >> 1, centerY = ySize >> 1;
         int expandLength = Math.round(frames * 0.2f);
@@ -1090,7 +1132,7 @@ public class ModelMaker {
                     for (float z = 0; z < currentRadius; z++) {
                         if(x * x + y * y + z * z <= rad2 + rng.next(4) - 8 && noise.getSimplexFractal(x, y, z, w) * 16 + 8 < i)
                         {
-                            boom[i][Math.round(centerX + x)][Math.round(centerY + y)][Math.round(z)] = fire[minIntOf(7, 1 + expandLength - i) >> 1]; 
+                            boom[i][Math.round(centerX + x)][Math.round(centerY + y)][Math.round(z)] = fireColors[minIntOf(7, 1 + expandLength - i) >> 1]; 
                         }
                     }
                 }
@@ -1111,7 +1153,7 @@ public class ModelMaker {
                     for (float z = currentRadius * -0.875f; z < currentRadius && z + 0.5f + currentLift < zSize; z++) {
                         if(z + currentLift >= 0 && x * x + y * y + z * z <= rad2 + rng.next(4) - 8 && noise.getSimplexFractal(x, y, z, w) * 32 + 16 < 13 - j)
                         {
-                            boom[i][Math.round(centerX + x)][Math.round(centerY + y)][Math.round(z + currentLift)] = fire[Math.round(NumberTools.formCurvedFloat(rng.nextInt()) * 1.6f + 1.5f + 0.1f * j)];
+                            boom[i][Math.round(centerX + x)][Math.round(centerY + y)][Math.round(z + currentLift)] = fireColors[Math.round(NumberTools.formCurvedFloat(rng.nextInt()) * 1.6f + 1.5f + 0.1f * j)];
                         }
                     }
                 }
@@ -1130,7 +1172,7 @@ public class ModelMaker {
                     for (float z = -currentRadius + 0.15f * j * (float) Math.sqrt(x * x + y * y); z + 0.5f + currentLift < zSize; z++) {
                         if(z + currentLift >= 0 && x * x + y * y + z * z * 0.9f <= rad2 + rng.next(4) - 8 && noise.getSimplexFractal(x, y, z, w) * 512 + 256 < 11 * smokeLength - j * 10)
                         {
-                            boom[i][Math.round(centerX + x)][Math.round(centerY + y)][Math.round(z + currentLift)] = fire[
+                            boom[i][Math.round(centerX + x)][Math.round(centerY + y)][Math.round(z + currentLift)] = fireColors[
                                     Math.min(4, Math.round(NumberTools.formCurvedFloat(rng.nextInt()) * 1.4f + 3.45f + 0.2f * (j - smokeLength)))
                                     //maxIntOf(4, 5 + j)
                                     ];

@@ -196,7 +196,11 @@ public class WarpTest extends ApplicationAdapter {
                         break;
                     case Input.Keys.B: // burn!
                         explosion = maker.animateExplosion(16, 40, 40, 40);
-                        System.out.println(Tools3D.hash(explosion[0]));
+                        model = boom;
+                        animating = true;
+                        break;
+                    case Input.Keys.Z: // zap!
+                        explosion = maker.animateExplosion(16, 40, 40, 40, maker.randomFireRange());
                         model = boom;
                         animating = true;
                         break;
