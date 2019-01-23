@@ -225,11 +225,12 @@ public class ModelMaker {
      * @return 32-bit hash of the x,y,z point with the given state
      */
     public static int hashAll(int x, int y, int z, int s) {
-        z += (s ^ 0x75AE2165) * 0x1B69E1;
-        y += (z ^ 0x03A4615F) * 0x177C0A;
-        x += (y ^ 0xA1FE1575) * 0x141E5D;
-        s += (x ^ 0x7D9ED689) * 0x113C30;
-        return ((s = ((s = (s ^ 0xD1B54A35) * 0x102473) ^ (s << 11 | s >>> 21) ^ (s << 21 | s >>> 11)) * ((s ^ s >>> 15) | 0xFFE00001) + s) ^ s >>> 14);
+        z ^= (s ^ 0x75AE2165) * 0x1B69E1;
+        y ^= (z ^ 0x03A4615F) * 0x177C0A;
+        x ^= (y ^ 0xA1FE1575) * 0x141E5D;
+        s ^= (x ^ 0x7D9ED689) * 0x113C30;
+//        return ((s = ((s = (s ^ 0xD1B54A35) * 0x102473) ^ (s << 11 | s >>> 21) ^ (s << 21 | s >>> 11)) * ((s ^ s >>> 15) | 0xFFE00001) + s) ^ s >>> 14);
+        return ((s = (s ^ (s << 11 | s >>> 21) ^ (s << 21 | s >>> 11)) ^ x ^ y ^ z) ^ s >>> 14);
     }
     /**
      * Gets a 32-bit point hash of a 4D point (x, y, z, and w are all ints) and a state/seed as an int. This point hash
@@ -253,12 +254,13 @@ public class ModelMaker {
      * @return 32-bit hash of the x,y,z,w point with the given state
      */
     public static int hashAll(int x, int y, int z, int w, int s) {
-        w += (s ^ 0x9D42C633) * 0x1C3361;
-        z += (w ^ 0xED0C9631) * 0x18DA3B;
-        y += (z ^ 0xF7518DBB) * 0x15E6DB;
-        x += (y ^ 0x36F710E7) * 0x134D29;
-        s += (x ^ 0x339BD42D) * 0x110281;
-        return (s = ((s = (s ^ 0xD1B54A35) * 0x102473) ^ (s << 11 | s >>> 21) ^ (s << 21 | s >>> 11)) * ((s ^ s >>> 15) | 0xFFE00001) + s) ^ s >>> 14;
+        w ^= (s ^ 0x9D42C633) * 0x1C3361;
+        z ^= (w ^ 0xED0C9631) * 0x18DA3B;
+        y ^= (z ^ 0xF7518DBB) * 0x15E6DB;
+        x ^= (y ^ 0x36F710E7) * 0x134D29;
+        s ^= (x ^ 0x339BD42D) * 0x110281;
+//        return (s = ((s = (s ^ 0xD1B54A35) * 0x102473) ^ (s << 11 | s >>> 21) ^ (s << 21 | s >>> 11)) * ((s ^ s >>> 15) | 0xFFE00001) + s) ^ s >>> 14;
+        return ((s = (s ^ (s << 11 | s >>> 21) ^ (s << 21 | s >>> 11)) ^ x ^ y ^ z ^ w) ^ s >>> 14);
     }
     /**
      * Gets a bounded int point hash of a 3D point (x, y, and z are all ints) and a state/seed as an int. This point
@@ -283,11 +285,11 @@ public class ModelMaker {
      */
     public static int hashBounded(int x, int y, int z, int s, int bound)
     {
-        z += (s ^ 0x75AE2165) * 0x1B69E1;
-        y += (z ^ 0x03A4615F) * 0x177C0A;
-        x += (y ^ 0xA1FE1575) * 0x141E5D;
-        s += (x ^ 0x7D9ED689) * 0x113C30;
-        return (int) (bound * (((s = ((s = (s ^ 0xD1B54A35) * 0x102473) ^ (s << 11 | s >>> 21) ^ (s << 21 | s >>> 11)) * ((s ^ s >>> 15) | 0xFFE00001) + s) ^ s >>> 14) & 0xFFFFFFFFL) >> 32);
+        z ^= (s ^ 0x75AE2165) * 0x1B69E1;
+        y ^= (z ^ 0x03A4615F) * 0x177C0A;
+        x ^= (y ^ 0xA1FE1575) * 0x141E5D;
+        s ^= (x ^ 0x7D9ED689) * 0x113C30;
+        return (int) (bound * (((s = (s ^ (s << 11 | s >>> 21) ^ (s << 21 | s >>> 11)) ^ x ^ y ^ z) ^ s >>> 14) & 0xFFFFFFFFL) >> 32);
     }
 
     /**
@@ -314,16 +316,14 @@ public class ModelMaker {
      */
     public static int hashBounded(int x, int y, int z, int w, int s, int bound)
     {
-        w += (s ^ 0x9D42C633) * 0x1C3361;
-        z += (w ^ 0xED0C9631) * 0x18DA3B;
-        y += (z ^ 0xF7518DBB) * 0x15E6DB;
-        x += (y ^ 0x36F710E7) * 0x134D29;
-        s += (x ^ 0x339BD42D) * 0x110281;
-        return (int) (bound * (((s = ((s = (s ^ 0xD1B54A35) * 0x102473) ^ (s << 11 | s >>> 21) ^ (s << 21 | s >>> 11)) * ((s ^ s >>> 15) | 0xFFE00001) + s) ^ s >>> 14) & 0xFFFFFFFFL) >> 32);
+        w ^= (s ^ 0x9D42C633) * 0x1C3361;
+        z ^= (w ^ 0xED0C9631) * 0x18DA3B;
+        y ^= (z ^ 0xF7518DBB) * 0x15E6DB;
+        x ^= (y ^ 0x36F710E7) * 0x134D29;
+        s ^= (x ^ 0x339BD42D) * 0x110281;
+        return (int) (bound * (((s = (s ^ (s << 11 | s >>> 21) ^ (s << 21 | s >>> 11)) ^ x ^ y ^ z ^ w) ^ s >>> 14) & 0xFFFFFFFFL) >> 32);
     }
-
-
-
+    
     public byte[][][] combine(byte[][][] start, byte[][][]... additional)
     {
         final int xSize = start.length, ySize = start[0].length, zSize = start[0][0].length;
