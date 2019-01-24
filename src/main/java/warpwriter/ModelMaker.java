@@ -201,7 +201,31 @@ public class ModelMaker {
 
 
 
-
+    /**
+     * Gets a 32-bit point hash of a 3D point (x and y are both ints) and a state/seed as an int. This point hash
+     * has just about the best speed of any algorithms tested, and though its quality is almost certainly bad for
+     * traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
+     * <p>
+     * This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random sequences,
+     * where each axis is multiplied by a different constant, and the choice of constants depends on the number of axes
+     * but is always related to a generalized form of golden ratios, repeatedly dividing 1.0 by the generalized ratio.
+     * See <a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/">Roberts' article</a>
+     * for some more information on how he uses this, but we do things differently because we want random-seeming
+     * results instead of separated sub-random results.
+     * <p>
+     * This is a GWT-safe int-math version of {@link squidpony.squidmath.Noise.HastyPointHash#hashAll(long, long, long)}
+     * that returns an int.
+     * @param x x position; any int
+     * @param y y position; any int
+     * @param s the state; any int
+     * @return 32-bit hash of the x,y point with the given state
+     */
+    public static int hashAll(int x, int y, int s) {
+        y ^= (s ^ 0xD192ED03) * 0x1A36A9;
+        x ^= (y ^ 0xFB8FAC03) * 0x157931;
+        s ^= (x ^ 0x2F3D8DD7) * 0x119725;
+        return (s = (s ^ s >>> 11 ^ s >>> 21) * (s | 0xFFE00001) ^ x ^ y) ^ s >>> 13 ^ s >>> 19;
+    }
 
 
     /**
@@ -226,11 +250,11 @@ public class ModelMaker {
      */
     public static int hashAll(int x, int y, int z, int s) {
         z ^= (s ^ 0x75AE2165) * 0x1B69E1;
-        y ^= (z ^ 0x03A4615F) * 0x177C0A;
+        y ^= (z ^ 0x03A4615F) * 0x177C0B;
         x ^= (y ^ 0xA1FE1575) * 0x141E5D;
-        s ^= (x ^ 0x7D9ED689) * 0x113C30;
+        s ^= (x ^ 0x7D9ED689) * 0x113C31;
 //        return ((s = ((s = (s ^ 0xD1B54A35) * 0x102473) ^ (s << 11 | s >>> 21) ^ (s << 21 | s >>> 11)) * ((s ^ s >>> 15) | 0xFFE00001) + s) ^ s >>> 14);
-        return ((s = (s ^ (s << 11 | s >>> 21) ^ (s << 21 | s >>> 11)) ^ x ^ y ^ z) ^ s >>> 14);
+        return (s = (s ^ s >>> 11 ^ s >>> 21) * (s | 0xFFE00001) ^ x ^ y ^ z) ^ s >>> 13 ^ s >>> 19;
     }
     /**
      * Gets a 32-bit point hash of a 4D point (x, y, z, and w are all ints) and a state/seed as an int. This point hash
@@ -260,8 +284,37 @@ public class ModelMaker {
         x ^= (y ^ 0x36F710E7) * 0x134D29;
         s ^= (x ^ 0x339BD42D) * 0x110281;
 //        return (s = ((s = (s ^ 0xD1B54A35) * 0x102473) ^ (s << 11 | s >>> 21) ^ (s << 21 | s >>> 11)) * ((s ^ s >>> 15) | 0xFFE00001) + s) ^ s >>> 14;
-        return ((s = (s ^ (s << 11 | s >>> 21) ^ (s << 21 | s >>> 11)) ^ x ^ y ^ z ^ w) ^ s >>> 14);
+        return (s = (s ^ s >>> 11 ^ s >>> 21) * (s | 0xFFE00001) ^ x ^ y ^ z ^ w) ^ s >>> 13 ^ s >>> 19;
     }
+
+    /**
+     * Gets a bounded int point hash of a 2D point (x and y are both ints) and a state/seed as an int. This point
+     * hash has just about the best speed of any algorithms tested, and though its quality is almost certainly bad for
+     * traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
+     * <p>
+     * This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random sequences,
+     * where each axis is multiplied by a different constant, and the choice of constants depends on the number of axes
+     * but is always related to a generalized form of golden ratios, repeatedly dividing 1.0 by the generalized ratio.
+     * See <a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/">Roberts' article</a>
+     * for some more information on how he uses this, but we do things differently because we want random-seeming
+     * results instead of separated sub-random results.
+     * <p>
+     * Should be very similar to {@link #hashAll(int, int, int)}, but gets a hash between 0 and a bound, instead of
+     * any 32-bit int.
+     * @param x x position; any int
+     * @param y y position; any int
+     * @param s the state; any int
+     * @param bound outer exclusive bound; may be negative
+     * @return an int between 0 (inclusive) and bound (exclusive) dependent on the position and state
+     */
+    public static int hashBounded(int x, int y, int s, int bound) {
+        y ^= (s ^ 0xD192ED03) * 0x1A36A9;
+        x ^= (y ^ 0xFB8FAC03) * 0x157931;
+        s ^= (x ^ 0x2F3D8DD7) * 0x119725;
+        return (int) (bound * (((s = (s ^ s >>> 11 ^ s >>> 21) * (s | 0xFFE00001) ^ x ^ y) ^ s >>> 13 ^ s >>> 19) & 0xFFFFFFFFL) >> 32);
+    }
+
+
     /**
      * Gets a bounded int point hash of a 3D point (x, y, and z are all ints) and a state/seed as an int. This point
      * hash has just about the best speed of any algorithms tested, and though its quality is almost certainly bad for
@@ -286,10 +339,10 @@ public class ModelMaker {
     public static int hashBounded(int x, int y, int z, int s, int bound)
     {
         z ^= (s ^ 0x75AE2165) * 0x1B69E1;
-        y ^= (z ^ 0x03A4615F) * 0x177C0A;
+        y ^= (z ^ 0x03A4615F) * 0x177C0B;
         x ^= (y ^ 0xA1FE1575) * 0x141E5D;
-        s ^= (x ^ 0x7D9ED689) * 0x113C30;
-        return (int) (bound * (((s = (s ^ (s << 11 | s >>> 21) ^ (s << 21 | s >>> 11)) ^ x ^ y ^ z) ^ s >>> 14) & 0xFFFFFFFFL) >> 32);
+        s ^= (x ^ 0x7D9ED689) * 0x113C31;
+        return (int) (bound * (((s = (s ^ s >>> 11 ^ s >>> 21) * (s | 0xFFE00001) ^ x ^ y ^ z) ^ s >>> 13 ^ s >>> 19) & 0xFFFFFFFFL) >> 32);
     }
 
     /**
@@ -321,7 +374,7 @@ public class ModelMaker {
         y ^= (z ^ 0xF7518DBB) * 0x15E6DB;
         x ^= (y ^ 0x36F710E7) * 0x134D29;
         s ^= (x ^ 0x339BD42D) * 0x110281;
-        return (int) (bound * (((s = (s ^ (s << 11 | s >>> 21) ^ (s << 21 | s >>> 11)) ^ x ^ y ^ z ^ w) ^ s >>> 14) & 0xFFFFFFFFL) >> 32);
+        return (int) (bound * (((s = (s ^ s >>> 11 ^ s >>> 21) * (s | 0xFFE00001) ^ x ^ y ^ z ^ w) ^ s >>> 13 ^ s >>> 19) & 0xFFFFFFFFL) >> 32);
     }
     
     public byte[][][] combine(byte[][][] start, byte[][][]... additional)
