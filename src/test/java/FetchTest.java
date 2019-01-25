@@ -16,9 +16,7 @@ import squidpony.squidmath.FastNoise;
 import squidpony.squidmath.Noise;
 import warpwriter.ModelMaker;
 import warpwriter.ModelRenderer;
-import warpwriter.model.*;
-import warpwriter.model.decide.DecideFetch;
-import warpwriter.model.decide.DungeonDecide;
+import warpwriter.model.FetchModel;
 import warpwriter.model.decide.HeightDecide;
 import warpwriter.model.fetch.*;
 import warpwriter.model.nonvoxel.CompassDirection;
@@ -29,7 +27,7 @@ public class FetchTest extends ApplicationAdapter {
     protected SpriteBatch batch;
     protected Viewport view;
     protected BitmapFont font;
-    protected long seed = 0;
+    protected long seed = 1;
     protected FetchModel viewArea;
     protected OffsetModel offset;
     private ModelMaker modelMaker = new ModelMaker(seed);
@@ -45,7 +43,7 @@ public class FetchTest extends ApplicationAdapter {
         batch = new SpriteBatch();
         view = new FitViewport(width, height);
         font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
-        viewArea = new FetchModel(230, 100, 5);
+        viewArea = new FetchModel(230, 100, 32);
         offset = new OffsetModel();
         PacMazeGenerator maze = new PacMazeGenerator(1000, 1000, modelMaker.rng);
         boolean[][] dungeon = maze.create();
@@ -53,13 +51,15 @@ public class FetchTest extends ApplicationAdapter {
                 .add(new BoxModel(viewArea.sizeX(), viewArea.sizeY(), viewArea.sizeZ(),
                         ColorFetch.color(modelMaker.randomMainColor()
                         )))
-                .decideFetch(new HeightDecide(new NoiseHeightMap(new Noise.Layered2D(FastNoise.instance, 2), 0), 3), new NoiseFetch(modelMaker.randomMainColor()))
+                // new NoiseHeightMap(new Noise.Layered2D(FastNoise.instance, 2, 0.125), 0)
+                .decideFetch(new HeightDecide(new TerracedHeightMap(modelMaker.rng.nextInt(), 16), 16), new NoiseFetch(new Noise.Layered3D(FastNoise.instance, 2, 0.25), modelMaker.randomMainColor()))
                 .swapper(Swapper.Swap.zxy)
                 .offsetModel(0, 5, 5)
-                .add(new DecideFetch(
-                        new DungeonDecide(dungeon, 5),
-                        new NoiseFetch(modelMaker.randomMainColor())
-                ));
+//                .add(new DecideFetch(
+//                        new DungeonDecide(dungeon, 5),
+//                        new NoiseFetch(modelMaker.randomMainColor())
+//                ))
+        ;
 
         reDraw();
         Gdx.input.setInputProcessor(new InputAdapter() {

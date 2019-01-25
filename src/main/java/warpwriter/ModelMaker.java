@@ -80,7 +80,29 @@ public class ModelMaker {
     public void setColorizer(Colorizer colorizer) {
         this.colorizer = colorizer;
     }
-
+    /**
+     * Gets a 64-bit point hash of a 2D point (x and y are both longs) and a state/seed as a long. This point
+     * hash has just about the best speed of any algorithms tested, and though its quality is mediocre for
+     * traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
+     * <br>
+     * This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random
+     * sequences, where each axis is multiplied by a different constant, and the choice of constants depends on the
+     * number of axes but is always related to a generalized form of golden ratios, repeatedly dividing 1.0 by the
+     * generalized ratio. See
+     * <a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/">Roberts' article</a>
+     * for some more information on how he uses this, but we do things differently because we want random-seeming
+     * results instead of separated sub-random results.
+     * @param x x position; any long
+     * @param y y position; any long
+     * @param s the state/seed; any long
+     * @return 64-bit hash of the x,y point with the given state
+     */
+    public static long hashAll(long x, long y, long s) {
+        y += s * 0xD1B54A32D192ED03L;
+        x += y * 0xABC98388FB8FAC03L;
+        s += x * 0x8CB92BA72F3D8DD7L;
+        return ((s = (s ^ s >>> 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ s >>> 25);
+    }
     /**
      * Gets a 64-bit point hash of a 3D point (x, y, and z are all longs) and a state/seed as a long. This point hash
      * has just about the best speed of any algorithms tested, and though its quality is almost certainly bad for
