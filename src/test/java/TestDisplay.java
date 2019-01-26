@@ -191,11 +191,13 @@ public class TestDisplay extends ApplicationAdapter {
                     case Input.Keys.C:
                         remakeTerrain(++seed);
                         return true;
-//                    case Input.Keys.O: // output
-//                        name = FakeLanguageGen.SIMPLISH.word(true);
-//                        VoxIO.writeVOX(name + ".vox", voxels, palette);
-//                        VoxIO.writeAnimatedVOX(name + "_Animated.vox", animatedVoxels, palette);
-//                        return true;
+                    case Input.Keys.O: // output
+                        if(voxels instanceof ArrayModel) {
+                            name = FakeLanguageGen.SIMPLISH.word(true);
+                            VoxIO.writeVOX(name + ".vox", ((ArrayModel) voxels).voxels, palette);
+                            //VoxIO.writeAnimatedVOX(name + "_Animated.vox", animatedVoxels, palette);
+                        }
+                        return true;
                     case Input.Keys.SLASH:
                         seed += determine(seed);
                         return true;

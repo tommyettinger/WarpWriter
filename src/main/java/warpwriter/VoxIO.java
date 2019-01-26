@@ -152,11 +152,11 @@ public class VoxIO {
             bin.writeBytes("RGBA");
             writeInt(bin, 1024);
             writeInt(bin,  0);
-            for (int i = 1; i < 4; i++) {
-                bin.writeInt(palette[i]);
-            }
-            bin.writeInt(palette[17]); // special case for eye shine
-            for (int i = 5; i < 256; i++) {
+//            for (int i = 1; i < 4; i++) {
+//                bin.writeInt(palette[i]);
+//            }
+//            bin.writeInt(palette[17]); // special case for eye shine
+            for (int i = 1; i < 256; i++) {
                 bin.writeInt(palette[i]);
             }
             writeInt(bin,  0);
