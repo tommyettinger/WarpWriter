@@ -44,7 +44,7 @@ public class FetchTest extends ApplicationAdapter {
 //        viewArea = new FetchModel(230, 100, 32);
         viewArea = new FetchModel(80, 80, 80);
         offset = new OffsetModel();
-        burst = new BurstFetch(new ArrayModel(modelMaker.shipLargeRandom()), 10, 10, 10, 16, 1);
+        burst = new BurstFetch(new ArrayModel(modelMaker.shipLargeRandom()), 10, 10, 10, 16, 2);
 //        PacMazeGenerator maze = new PacMazeGenerator(1000, 1000, modelMaker.rng);
 //        boolean[][] dungeon = maze.create();
         viewArea.add(offset).add(burst);
@@ -151,6 +151,7 @@ public class FetchTest extends ApplicationAdapter {
 
     @Override
     public void render() {
+        reDraw();
         Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         view.getCamera().position.set(width / 2, height / 2, 0);
@@ -166,6 +167,7 @@ public class FetchTest extends ApplicationAdapter {
         config.setTitle("Fetch Tester");
         config.setWindowedMode(width, height);
         config.setIdleFPS(10);
+        config.useVsync(true);
         final FetchTest app = new FetchTest();
         new Lwjgl3Application(app, config);
     }

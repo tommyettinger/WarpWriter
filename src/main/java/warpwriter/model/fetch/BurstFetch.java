@@ -1,6 +1,5 @@
 package warpwriter.model.fetch;
 
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import squidpony.squidmath.NumberTools;
@@ -96,15 +95,15 @@ public class BurstFetch extends Fetch {
                 //portion = f / (float)duration,
                 rising = f / (strength + 1f), falling = (f - strength - 1f) / (duration - strength - 1f),
                 changeX = MathUtils.cos(angle) * strength * f, changeY = MathUtils.sin(angle) * strength * f,
-                changeZ = (frame <= strength)
-                        ? Math.max(0f, Interpolation.circleOut.apply(z, z + rise * strength * f, rising))
-                        : Math.max(0f, z + falling * strength * f);
+                changeZ = 0;
+//                        (frame <= strength)
+//                        ? Math.max(0f, Interpolation.circleOut.apply(z, z + rise * strength, rising))
+//                        : Math.max(0f, z + rise * strength - falling * strength * 2f);
         x -= Math.round(changeX);
         y -= Math.round(changeY);
         z -= Math.round(changeZ);
         if (debrisSource.bool(x, y, z)) { // if there's debris at this coordinate at this time
-            setChains(x, y, z);
-            return debrisSource;
+            return debrisSource.setChains(x, y, z);
         }
         // if there's no debris at this coordinate at this time
         return getNextFetch();
