@@ -7,23 +7,30 @@ import warpwriter.model.fetch.*;
 import warpwriter.model.nonvoxel.Turner;
 
 /**
- * This abstract class allows for IFetch implementations to use left-to-right method chaining to defer to other IFetch instances for different coordinates instead of always needing to return a byte themselves.
+ * This abstract class allows for IFetch implementations to use left-to-right method chaining to defer to other IFetch
+ * instances for different coordinates instead of always needing to return a byte themselves.
  * <p>
- * DO NOT override byte at(int x, int y, int z).
+ * DO NOT override {@link #at(int, int, int)}; you can't anyway because it is final.
  * <p>
  * Instead, child classes are expected to use at least one of the following two options:
  * <p>
- * 1. Override Fetch fetch() to defer to another Fetch. This will be tried first, and if the result is null then bite() will be called instead. Get the coordinates to evaluate from chainX(), chainY() and chainZ().
+ * 1. Override {@link #fetch()} to defer to another Fetch. This will be tried first, and if the result is null then
+ * {@link #bite()} will be called instead. Get the coordinates to evaluate from {@link #chainX()}, {@link #chainY()},
+ * and {@link #chainZ()}.
  * <p>
- * 2. Override byte bite() to decide what byte to use at the end of a chain. It is recommended to wrap return statements in deferByte(byte result) to guarantee smart transparency. Get the coordinates to evaluate from chainX(), chainY() and chainZ().
+ * 2. Override {@link #bite()} to decide what byte to use at the end of a chain. It is recommended to wrap return
+ * statements in {@link #deferByte(byte)} to guarantee smart transparency. Get the coordinates to evaluate from
+ * {@link #chainX()}, {@link #chainY()}, and {@link #chainZ()}.
  * <p>
- * If both methods are overridden then a Fetch can be used both as a filter for other Fetches and as a final fetch, depending on whether or not it is on the end of its chain.
+ * If both methods are overridden then a Fetch can be used both as a filter for other Fetches and as a final fetch,
+ * depending on whether or not it is on the end of its chain.
  * <p>
  * Failure to implement the required overrides may result in infinite recursion.
  * <p>
- * To defer to the next method in the chain, use getNextFetch().
+ * To defer to the next method in the chain, use {@link #getNextFetch()}.
  * <p>
- * Coordinates to be sent to the next Fetch in the chain can be set through setChains, setChainX, setChainY and setChainZ.
+ * Coordinates to be sent to the next Fetch in the chain can be set through {@link #setChains(int, int, int)},
+ * {@link #setChainX(int)},{@link #setChainY(int)} and {@link #setChainZ(int)}.
  *
  * @author Ben McLean
  */
@@ -31,7 +38,7 @@ public abstract class Fetch implements IFetch, IDecide {
     /**
      * This method is intended to be overridden with a decision about which Fetch to use for the provided coordinate.
      * <p>
-     * Returning null indicates to outside code that bite(x, y, z) should be called instead.
+     * Returning null indicates to outside code that {@link #bite()} should be called instead.
      */
     public Fetch fetch() {
         return getNextFetch();
@@ -40,16 +47,15 @@ public abstract class Fetch implements IFetch, IDecide {
     /**
      * This method is intended to be overridden with a final decision about which byte to return for a given coordinate.
      *
-     * @return A final answer, except that it is recommended to wrap results in deferByte(byte result) to ensure smart transparency in the event of a broken chain or if someone screws up and calls this method in the wrong order.
+     * @return A final answer, except that it is recommended to wrap results in {@link #deferByte(byte)} to ensure smart transparency in the event of a broken chain or if someone screws up and calls this method in the wrong order.
      */
     public byte bite() {
         return deferByte();
     }
 
     /**
-     * Don't override this method or else you'll break the method chaining!
-     * <p>
-     * Override bite(int x, int y, int z) instead!
+     * 
+     * This method is final, so to produce similar behavior that chains correctly, override {@link #bite()} instead.
      */
     @Override
     public final byte at(int x, int y, int z) {
@@ -74,7 +80,7 @@ public abstract class Fetch implements IFetch, IDecide {
     }
 
     /**
-     * @return true if at(x, y, z) returns any value besides 0.
+     * @return true if {@link #at(int, int, int)} given {@code x, y, z} returns any value besides 0.
      */
     @Override
     public boolean bool(int x, int y, int z) {
@@ -159,12 +165,17 @@ public abstract class Fetch implements IFetch, IDecide {
     /**
      * bite() is generally only called by outside code when there is no next fetch.
      * <p>
-     * But just in case someone is naughty and breaks the chain, this method allows for a recovery, starting a new chain if necessary. Wrap the result of your bite(int x, int y, int z) overrides in this instead of returning (byte) 0 to ensure you're transparent.
+     * But just in case someone is naughty and breaks the chain, this method allows for a recovery, starting a new chain
+     * if necessary. Wrap the result of your bite(int x, int y, int z) overrides in this instead of returning (byte) 0
+     * to ensure you're transparent.
      * <p>
-     * This should be the method which ensures that, when no next method is specified in the chain, the background is always transparent.
+     * This should be the method which ensures that, when no next method is specified in the chain, the background is
+     * always transparent.
+     * @param result The byte value to check, and if non-zero, return.
+     * @return If {@code result} is non-zero, returns it as-is, otherwise this wll start a new chain and return its outcome. 
      */
     public byte deferByte(byte result) {
-        return result == (byte) 0 ? deferFetch().at(chainX(), chainY(), chainZ()) : result;
+        return result == 0 ? deferFetch().at(chainX(), chainY(), chainZ()) : result;
     }
 
     public byte deferByte() {
