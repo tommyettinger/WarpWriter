@@ -61,7 +61,8 @@ public class BurstFetch extends Fetch {
     public Fetch fetch() {
         int x = chainX(), y = chainY(), z = chainZ(); // input coordinates
         if (false) { // if there's debris at this cordinate at this time
-            //return debrisSource.setChain(/*WHERE THE DEBRIS COMES FROM*/);
+            //setChain(/*WHERE THE DEBRIS COMES FROM*/);
+            return debrisSource;
         }
         // if there's no debris at this coordinate at this time
         return getNextFetch();
