@@ -11,14 +11,12 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import squidpony.squidgrid.mapping.PacMazeGenerator;
-import squidpony.squidmath.FastNoise;
-import squidpony.squidmath.Noise;
 import warpwriter.ModelMaker;
 import warpwriter.ModelRenderer;
 import warpwriter.model.FetchModel;
-import warpwriter.model.decide.HeightDecide;
-import warpwriter.model.fetch.*;
+import warpwriter.model.fetch.ArrayModel;
+import warpwriter.model.fetch.wip.BurstFetch;
+import warpwriter.model.fetch.OffsetModel;
 import warpwriter.model.nonvoxel.CompassDirection;
 
 public class FetchTest extends ApplicationAdapter {
@@ -30,11 +28,11 @@ public class FetchTest extends ApplicationAdapter {
     protected long seed = 1;
     protected FetchModel viewArea;
     protected OffsetModel offset;
+    protected BurstFetch burst;
     private ModelMaker modelMaker = new ModelMaker(seed);
     private ModelRenderer modelRenderer = new ModelRenderer(false, true);
     private Texture tex;
     private Pixmap pix;
-    //private int[] palette = Coloring.RINSED; // do we need this?
     private CompassDirection direction = CompassDirection.NORTH;
     private int angle = 3;
 
@@ -43,24 +41,26 @@ public class FetchTest extends ApplicationAdapter {
         batch = new SpriteBatch();
         view = new FitViewport(width, height);
         font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
-        viewArea = new FetchModel(230, 100, 32);
+//        viewArea = new FetchModel(230, 100, 32);
+        viewArea = new FetchModel(80, 80, 80);
         offset = new OffsetModel();
-        PacMazeGenerator maze = new PacMazeGenerator(1000, 1000, modelMaker.rng);
-        boolean[][] dungeon = maze.create();
-        viewArea.add(offset)
-                .add(new BoxModel(viewArea.sizeX(), viewArea.sizeY(), viewArea.sizeZ(),
-                        ColorFetch.color(modelMaker.randomMainColor()
-                        )))
-                // new NoiseHeightMap(new Noise.Layered2D(FastNoise.instance, 2, 0.125), 0)
-                .decideFetch(new HeightDecide(new TerracedHeightMap(modelMaker.rng.nextInt(), 16), 16), new NoiseFetch(new Noise.Layered3D(FastNoise.instance, 2, 0.25), modelMaker.randomMainColor()))
-                .swapper(Swapper.Swap.zxy)
-                .offsetModel(0, 5, 5)
-//                .add(new DecideFetch(
-//                        new DungeonDecide(dungeon, 5),
-//                        new NoiseFetch(modelMaker.randomMainColor())
-//                ))
-        ;
-
+        burst = new BurstFetch(0, 0, 0, 10, 16, new ArrayModel(modelMaker.shipLargeRandom()));
+//        PacMazeGenerator maze = new PacMazeGenerator(1000, 1000, modelMaker.rng);
+//        boolean[][] dungeon = maze.create();
+        viewArea.add(offset).add(burst);
+//        viewArea.add(offset)
+//                .add(new BoxModel(viewArea.sizeX(), viewArea.sizeY(), viewArea.sizeZ(),
+//                        ColorFetch.color(modelMaker.randomMainColor()
+//                        )))
+//                // new NoiseHeightMap(new Noise.Layered2D(FastNoise.instance, 2, 0.125), 0)
+//                .decideFetch(new HeightDecide(new TerracedHeightMap(modelMaker.rng.nextInt(), 16), 16), new NoiseFetch(new Noise.Layered3D(FastNoise.instance, 2, 0.25), modelMaker.randomMainColor()))
+//                .swapper(Swapper.Swap.zxy)
+//                .offsetModel(0, 5, 5)
+////                .add(new DecideFetch(
+////                        new DungeonDecide(dungeon, 5),
+////                        new NoiseFetch(modelMaker.randomMainColor())
+////                ))
+//        ;
         reDraw();
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
@@ -141,10 +141,12 @@ public class FetchTest extends ApplicationAdapter {
     }
 
     public void reDraw() {
+        // this SHOULD be changing the burst effect, but no change happens
+        burst.setFrame((int) (System.currentTimeMillis() >> 8) & 15);
         if (pix != null) pix.dispose();
         pix = modelRenderer.renderToPixmap(viewArea, angle, direction);
-        if (tex != null) tex.dispose();
-        tex = new Texture(pix);
+        if (tex != null) tex.draw(pix, 0, 0);
+        else tex = new Texture(pix);
     }
 
     @Override
