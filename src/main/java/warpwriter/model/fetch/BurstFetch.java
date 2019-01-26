@@ -1,21 +1,35 @@
 package warpwriter.model.fetch;
 
+import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
+import squidpony.squidmath.NumberTools;
 import warpwriter.model.Fetch;
-import warpwriter.model.FetchModel;
 
 public class BurstFetch extends Fetch {
-    protected FetchModel debrisSource;
+    protected Fetch debrisSource;
 
-    public BurstFetch set(FetchModel debrisSource) {
+    public BurstFetch(Fetch debrisSource, int centerX, int centerY, int centerZ, int duration, int strength) {
+        this.debrisSource = debrisSource;
+        this.centerX = centerX;
+        this.centerY = centerY;
+        this.centerZ = centerZ;
+        this.strength = strength;
+        this.duration = duration;
+    }
+
+    public BurstFetch set(Fetch debrisSource) {
         this.debrisSource = debrisSource;
         return this;
     }
 
-    public FetchModel getModel() {
+    public Fetch getModel() {
         return debrisSource;
     }
 
-    protected int centerX = 0, centerY = 0, centerZ = 0, time = 0;
+    protected int centerX = 0, centerY = 0, centerZ = 0, frame = 0;
+    protected int strength = 3;
+    protected int duration = 16;
 
     public BurstFetch setX(int x) {
         this.centerX = x;
@@ -36,10 +50,26 @@ public class BurstFetch extends Fetch {
         return setX(x).setY(y).setZ(z);
     }
 
-    public BurstFetch setTime(int time) {
-        this.time = time;
+    public BurstFetch setFrame(int frame) {
+        this.frame = frame;
         return this;
     }
+    public int strength() {
+        return strength;
+    }
+
+    public void setStrength(int strength) {
+        this.strength = strength;
+    }
+
+    public int duration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
 
     public int x() {
         return centerX;
@@ -53,15 +83,27 @@ public class BurstFetch extends Fetch {
         return centerZ;
     }
 
-    public int time() {
-        return time;
+    public int frame() {
+        return frame;
     }
 
     @Override
     public Fetch fetch() {
-        int x = chainX(), y = chainY(), z = chainZ(); // input coordinates
-        if (false) { // if there's debris at this cordinate at this time
-            //setChain(/*WHERE THE DEBRIS COMES FROM*/);
+        int x = chainX(), y = chainY(), z = chainZ(), f = frame + 1;
+        float groundMag = Vector2.len(x - centerX, y - centerY), //mag = Vector3.len(x - centerX, y - centerY, z - centerZ),
+                angle = NumberTools.atan2(y - centerY, x - centerX),
+                rise = MathUtils.sin(NumberTools.atan2(z - centerZ, groundMag)),
+                //portion = f / (float)duration,
+                rising = f / (strength + 1f), falling = (f - strength - 1f) / (duration - strength - 1f),
+                changeX = MathUtils.cos(angle) * strength * f, changeY = MathUtils.sin(angle) * strength * f,
+                changeZ = (frame <= strength)
+                        ? Math.max(0f, Interpolation.circleOut.apply(z, z + rise * strength * f, rising))
+                        : Math.max(0f, z + falling * strength * f);
+        x -= Math.round(changeX);
+        y -= Math.round(changeY);
+        z -= Math.round(changeZ);
+        if (debrisSource.bool(x, y, z)) { // if there's debris at this coordinate at this time
+            setChains(x, y, z);
             return debrisSource;
         }
         // if there's no debris at this coordinate at this time

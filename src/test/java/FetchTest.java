@@ -15,7 +15,7 @@ import warpwriter.ModelMaker;
 import warpwriter.ModelRenderer;
 import warpwriter.model.FetchModel;
 import warpwriter.model.fetch.ArrayModel;
-import warpwriter.model.fetch.wip.BurstFetch;
+import warpwriter.model.fetch.BurstFetch;
 import warpwriter.model.fetch.OffsetModel;
 import warpwriter.model.nonvoxel.CompassDirection;
 
@@ -44,7 +44,7 @@ public class FetchTest extends ApplicationAdapter {
 //        viewArea = new FetchModel(230, 100, 32);
         viewArea = new FetchModel(80, 80, 80);
         offset = new OffsetModel();
-        burst = new BurstFetch(0, 0, 0, 10, 16, new ArrayModel(modelMaker.shipLargeRandom()));
+        burst = new BurstFetch(new ArrayModel(modelMaker.shipLargeRandom()), 10, 10, 10, 16, 1);
 //        PacMazeGenerator maze = new PacMazeGenerator(1000, 1000, modelMaker.rng);
 //        boolean[][] dungeon = maze.create();
         viewArea.add(offset).add(burst);
