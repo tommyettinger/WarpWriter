@@ -6,8 +6,9 @@ import com.badlogic.gdx.math.Vector2;
 import squidpony.squidmath.NumberTools;
 import warpwriter.ModelMaker;
 import warpwriter.model.Fetch;
+import warpwriter.model.ITemporal;
 
-public class BurstFetch extends Fetch {
+public class BurstFetch extends Fetch implements ITemporal {
     protected Fetch debrisSource;
 
     public BurstFetch(Fetch debrisSource, int centerX, int centerY, int centerZ, int duration, int strength) {
@@ -52,8 +53,9 @@ public class BurstFetch extends Fetch {
         return seed;
     }
 
-    public void setSeed(int seed) {
+    public BurstFetch setSeed(int seed) {
         this.seed = seed;
+        return this;
     }
 
     public BurstFetch setCenter(int x, int y, int z) {
@@ -68,16 +70,18 @@ public class BurstFetch extends Fetch {
         return strength;
     }
 
-    public void setStrength(int strength) {
+    public BurstFetch setStrength(int strength) {
         this.strength = strength;
+        return this;
     }
 
     public int duration() {
         return duration;
     }
 
-    public void setDuration(int duration) {
+    public BurstFetch setDuration(int duration) {
         this.duration = duration;
+        return this;
     }
 
 
@@ -100,17 +104,16 @@ public class BurstFetch extends Fetch {
     @Override
     public Fetch fetch() {
         int x = chainX(), y = chainY(), z = chainZ(), f = frame + 1;
-        float groundMag = Vector2.len(x - centerX, y - centerY), //mag = Vector3.len(x - centerX, y - centerY, z - centerZ),
+        float groundMag = Vector2.len(x - centerX, y - centerY),
                 angle = NumberTools.atan2(y - centerY, x - centerX),
-                rise = MathUtils.sin(NumberTools.atan2(z - centerZ, groundMag)),
-                //portion = f / (float)duration,
-                rising = f / (strength + 1f), falling = (f - strength - 1f) / (duration - strength - 1f),
+                rise = MathUtils.sin(NumberTools.atan2(z - centerZ, groundMag)) * strength,
+                rising = f / (strength + 1f), falling = strength * 0.75f * (f - strength - 1f) / (duration - strength - 1f),
                 changeX = MathUtils.cos(angle) * strength * f, changeY = MathUtils.sin(angle) * strength * f,
                 changeZ =
                         (frame <= strength)
                         ? Interpolation.circleOut.apply(0, rise * strength, rising)
-                        : rise * strength - falling * strength * z;
-        int xx = x - Math.round(changeX), yy = y - Math.round(changeY), zz = Math.max(0, z - Math.round(changeZ));
+                        : (rise - falling) * strength;
+        int xx = x - Math.round(changeX), yy = y - Math.round(changeY), zz = z - Math.round(changeZ);
         if (debrisSource.bool(
                 xx,
                 yy,
