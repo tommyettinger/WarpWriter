@@ -1,8 +1,10 @@
 package warpwriter.model.fetch;
 
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import squidpony.squidmath.NumberTools;
+import warpwriter.ModelMaker;
 import warpwriter.model.Fetch;
 
 public class BurstFetch extends Fetch {
@@ -29,6 +31,7 @@ public class BurstFetch extends Fetch {
     protected int centerX = 0, centerY = 0, centerZ = 0, frame = 0;
     protected int strength = 3;
     protected int duration = 16;
+    protected int seed = 424242;
 
     public BurstFetch setX(int x) {
         this.centerX = x;
@@ -43,6 +46,14 @@ public class BurstFetch extends Fetch {
     public BurstFetch setZ(int z) {
         this.centerZ = z;
         return this;
+    }
+
+    public int seed() {
+        return seed;
+    }
+
+    public void setSeed(int seed) {
+        this.seed = seed;
     }
 
     public BurstFetch setCenter(int x, int y, int z) {
@@ -95,20 +106,21 @@ public class BurstFetch extends Fetch {
                 //portion = f / (float)duration,
                 rising = f / (strength + 1f), falling = (f - strength - 1f) / (duration - strength - 1f),
                 changeX = MathUtils.cos(angle) * strength * f, changeY = MathUtils.sin(angle) * strength * f,
-                changeZ = 0;
-//                        (frame <= strength)
-//                        ? Math.max(0f, Interpolation.circleOut.apply(z, z + rise * strength, rising))
-//                        : Math.max(0f, z + rise * strength - falling * strength * 2f);
-        
+                changeZ =
+                        (frame <= strength)
+                        ? Interpolation.circleOut.apply(0, rise * strength, rising)
+                        : rise * strength - falling * strength * z;
+        int xx = x - Math.round(changeX), yy = y - Math.round(changeY), zz = Math.max(0, z - Math.round(changeZ));
         if (debrisSource.bool(
-                x - Math.round(changeX),
-                y - Math.round(changeY),
-                z - Math.round(changeZ)
-        )) { // if there's debris at this coordinate at this time
+                xx,
+                yy,
+                zz) && (ModelMaker.hashAll(xx, yy, zz, seed) >>> -f ^ ModelMaker.hashAll(x, y, z, seed) >>> -f) == 0
+        ) { // if there's debris at this coordinate at this time
             setChains(
-                    x - Math.round(changeX),
-                    y - Math.round(changeY),
-                    z - Math.round(changeZ));
+                    xx,
+                    yy,
+                    zz
+            );
             return debrisSource.setChains(x, y, z);
         }
         // if there's no debris at this coordinate at this time

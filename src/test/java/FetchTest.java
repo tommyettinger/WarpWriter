@@ -45,9 +45,9 @@ public class FetchTest extends ApplicationAdapter {
 //        viewArea = new FetchModel(230, 100, 32);
         viewArea = new FetchModel(120, 120, 80);
         offset = new OffsetModel();
-        byte[][][] bigger = new byte[120][120][80];
-        Tools3D.translateCopyInto(modelMaker.shipLargeRandom(), bigger, 40, 40, 0);
-        burst = new BurstFetch(new ArrayModel(bigger), 60, 60, 4, 16, 3);
+        byte[][][] bigger = new byte[100][100][50];
+        Tools3D.translateCopyInto(modelMaker.shipLargeRandom(), bigger, 30, 30, 10);
+        burst = new BurstFetch(new ArrayModel(bigger), 60, 50, 4, 16, 6);
 //        PacMazeGenerator maze = new PacMazeGenerator(1000, 1000, modelMaker.rng);
 //        boolean[][] dungeon = maze.create();
         viewArea.add(offset).add(burst);
