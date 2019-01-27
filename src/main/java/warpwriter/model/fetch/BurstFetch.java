@@ -99,10 +99,16 @@ public class BurstFetch extends Fetch {
 //                        (frame <= strength)
 //                        ? Math.max(0f, Interpolation.circleOut.apply(z, z + rise * strength, rising))
 //                        : Math.max(0f, z + rise * strength - falling * strength * 2f);
-        x -= Math.round(changeX);
-        y -= Math.round(changeY);
-        z -= Math.round(changeZ);
-        if (debrisSource.bool(x, y, z)) { // if there's debris at this coordinate at this time
+        
+        if (debrisSource.bool(
+                x - Math.round(changeX),
+                y - Math.round(changeY),
+                z - Math.round(changeZ)
+        )) { // if there's debris at this coordinate at this time
+            setChains(
+                    x - Math.round(changeX),
+                    y - Math.round(changeY),
+                    z - Math.round(changeZ));
             return debrisSource.setChains(x, y, z);
         }
         // if there's no debris at this coordinate at this time
