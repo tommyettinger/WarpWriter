@@ -103,21 +103,29 @@ public class BurstFetch extends Fetch implements ITemporal {
 
     @Override
     public Fetch fetch() {
-        int x = chainX(), y = chainY(), z = chainZ(), f = frame + 1;
+        int x = chainX(), y = chainY(), z = chainZ(), f = frame + 1, 
+                h = ModelMaker.hashAll(x >>> 1, y >>> 1, z >>> 1, seed);
         float groundMag = Vector2.len(x - centerX, y - centerY),
                 angle = NumberTools.atan2(y - centerY, x - centerX),
                 rise = MathUtils.sin(NumberTools.atan2(z - centerZ, groundMag)) * strength,
-                rising = f / (strength + 1f), falling = strength * 0.75f * (f - strength - 1f) / (duration - strength - 1f),
-                changeX = MathUtils.cos(angle) * strength * f, changeY = MathUtils.sin(angle) * strength * f,
-                changeZ =
+                rising = f / (strength + 1f), falling = strength * 0.75f * (f - strength - 1f) / (duration - strength - 1f);
+        int changeX = Math.round(MathUtils.cos(angle) * (strength) * f),
+                changeY = Math.round(MathUtils.sin(angle) * (strength) * f),
+                changeZ = Math.round(
                         (frame <= strength)
                         ? Interpolation.circleOut.apply(0, rise * strength, rising)
-                        : (rise - falling) * strength;
-        int xx = x - Math.round(changeX), yy = y - Math.round(changeY), zz = z - Math.round(changeZ);
+                        : (rise - falling) * strength);
+        int xx = x - changeX, yy = y - changeY, zz = z - changeZ;
+        if((h & 3) > 1)
+        {
+            xx = x - changeX * (h & 3);
+            yy = y - changeY * (h & 3);
+            zz = z - changeZ * (h & 3);
+        }
         if (debrisSource.bool(
                 xx,
                 yy,
-                zz) && (ModelMaker.hashAll(xx, yy, zz, seed) >>> -f ^ ModelMaker.hashAll(x, y, z, seed) >>> -f) == 0
+                zz) && (ModelMaker.hashAll(xx, yy, zz, seed) >>> -f ^ h >>> -f) == 0
         ) { // if there's debris at this coordinate at this time
             setChains(
                     xx,

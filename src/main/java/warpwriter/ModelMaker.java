@@ -1338,22 +1338,22 @@ public class ModelMaker {
         int expandLength = Math.round(frames * 0.2f);
         int riseLength = Math.round(frames * 0.3f);
         int smokeLength = frames - riseLength - expandLength;
-        float maxRadius = Math.min(centerX, centerY) * 0.875f;
+        float maxRadius = Math.min(centerX, centerY);
         float startRadius = maxRadius * 0.375f;
         float currentRadius = startRadius;
-        float rad2 = currentRadius * currentRadius;
+        float rad2 = currentRadius * currentRadius * 0.875f;
         float w = 0f;
         for (int i = 0; i < expandLength && i < frames; i++, w += 0.125f) {
             currentRadius = Interpolation.pow2InInverse.apply(startRadius, maxRadius, (float) i / expandLength);
-            rad2 = currentRadius * currentRadius;
+            rad2 = currentRadius * currentRadius * 0.825f;
             for (float x = -currentRadius; x <= currentRadius; x++) {
                 for (float y = -currentRadius; y <= currentRadius; y++) {
                     if(x * x + y * y > rad2 + 7)
                         continue;
                     for (float z = 0; z < currentRadius; z++) {
-                        if(x * x + y * y + z * z <= rad2 + rng.next(4) - 8 && noise.getSimplexFractal(x, y, z, w) * 16 + 8 < i)
-                        {
-                            boom[i][Math.round(centerX + x)][Math.round(centerY + y)][Math.round(z)] = fireColors[minIntOf(7, 1 + expandLength - i) >> 1]; 
+                        float ns = noise.getSimplexFractal(x, y, z, w);
+                        if(x * x + y * y + z * z <= rad2 + rng.next(4) - 16 * (ns + 1.5f) && ns * 16 + 12 < i) {
+                                boom[i][Math.round(centerX + x)][Math.round(centerY + y)][Math.round(z)] = fireColors[minIntOf(7, 1 + expandLength - i) >> 1];
                         }
                     }
                 }
@@ -1362,17 +1362,16 @@ public class ModelMaker {
         float startLift = zSize * 0.125f;
         float currentLift = startLift;
         startRadius = currentRadius;
-        maxRadius = Math.min(centerX, centerY) - 1;
+        maxRadius = Math.min(centerX, centerY) * 1.1f - 1;
         for (int j = 0, i = expandLength; j < riseLength && i < frames; j++, i++, w += 0.125f) {
             currentRadius = MathUtils.lerp(startRadius, maxRadius, (float) j / riseLength);
-            rad2 = currentRadius * currentRadius;
+            rad2 = currentRadius * currentRadius * 0.875f;
             currentLift = MathUtils.lerp(startLift, zSize * 0.4f, (float) j / riseLength);
             for (float x = -currentRadius; x <= currentRadius; x++) {
                 for (float y = -currentRadius; y <= currentRadius; y++) {
-                    if(x * x + y * y > rad2 + 7)
-                        continue;
                     for (float z = currentRadius * -0.875f; z < currentRadius && z + 0.5f + currentLift < zSize; z++) {
-                        if(z + currentLift >= 0 && x * x + y * y + z * z <= rad2 + rng.next(4) - 8 && noise.getSimplexFractal(x, y, z, w) * 32 + 16 < 13 - j)
+                        float ns = noise.getSimplexFractal(x, y, z, w);
+                        if(z + currentLift >= 0 && x * x + y * y + z * z <= rad2 + rng.next(4) - 16 * (ns + 1.5f) && ns * 16 + 11 < i)
                         {
                             boom[i][Math.round(centerX + x)][Math.round(centerY + y)][Math.round(z + currentLift)] = fireColors[Math.round(NumberTools.formCurvedFloat(rng.nextInt()) * 1.6f + 1.5f + 0.1f * j)];
                         }
@@ -1385,15 +1384,14 @@ public class ModelMaker {
         for (int j = 0, i = expandLength + riseLength; i < frames; j++, i++, w += 0.125f) {
             currentLift = MathUtils.lerp(startLift, zSize * 0.7f, (float) j / smokeLength);
             currentRadius = maxRadius;//MathUtils.lerp(startRadius, maxRadius, (j + 1f) / smokeLength);
-            rad2 = currentRadius * currentRadius;
+            rad2 = currentRadius * currentRadius * 0.875f;
             for (float x = -currentRadius; x <= currentRadius; x++) {
                 for (float y = -currentRadius; y <= currentRadius; y++) {
-                    if(x * x + y * y > rad2 + 7)
-                        continue;
                     for (float z = -currentRadius + 0.15f * j * (float) Math.sqrt(x * x + y * y); z + 0.5f + currentLift < zSize; z++) {
-                        if(z + currentLift >= 0 && x * x + y * y + z * z * 0.9f <= rad2 + rng.next(4) - 8 && noise.getSimplexFractal(x, y, z, w) * 512 + 256 < 11 * smokeLength - j * 10)
+                        float ns = noise.getSimplexFractal(x, y, z, w);
+                        if(z + currentLift >= 0 && x * x + y * y + z * z * 0.9f <= rad2 + rng.next(4) - 16 * (ns + 1.5f) && ns * 512 + 230 < 11 * smokeLength - i * 7)
                         {
-                            boom[i][Math.round(centerX + x)][Math.round(centerY + y)][Math.round(z + currentLift)] = fireColors[
+                            boom[i][MathUtils.clamp(Math.round(centerX + x), 0, xSize-1)][MathUtils.clamp(Math.round(centerY + y), 0, ySize-1)][MathUtils.clamp(Math.round(z + currentLift), 0, zSize-1)] = fireColors[
                                     Math.min(4, Math.round(NumberTools.formCurvedFloat(rng.nextInt()) * 1.4f + 3.45f + 0.2f * (j - smokeLength)))
                                     //maxIntOf(4, 5 + j)
                                     ];

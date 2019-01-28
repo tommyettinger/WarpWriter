@@ -70,7 +70,7 @@ public class FetchTest extends ApplicationAdapter {
         screenView.getCamera().position.set(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2, 0);
         screenView.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         voxelColor = new VoxelColor().set(Colorizer.FlesurrectBonusColorizer);
-        pixmapRenderer = new VoxelPixmapRenderer(new Pixmap(512, 512, Pixmap.Format.RGBA8888), voxelColor);
+        pixmapRenderer = new VoxelPixmapRenderer(new Pixmap(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, Pixmap.Format.RGBA8888), voxelColor);
         pmTexture = new Texture(pixmapRenderer.pixmap);
 
 //        view = new FitViewport(width, height);
@@ -81,11 +81,11 @@ public class FetchTest extends ApplicationAdapter {
         offset = new OffsetModel();
         byte[][][] bigger = new byte[100][100][50];
         Tools3D.translateCopyInto(modelMaker.shipLargeNoiseColorized(), bigger, 30, 30, 10);
-        fire = new AnimatedArrayModel(modelMaker.animateExplosion(16, 70, 70, 80));
-        burst = new BurstFetch(new ArrayModel(bigger), 50, 50, 4, 16, 4);
+        fire = new AnimatedArrayModel(modelMaker.animateExplosion(17, 70, 70, 80));
+        burst = new BurstFetch(new ArrayModel(bigger), 50, 50, 4, 16, 3);
 //        PacMazeGenerator maze = new PacMazeGenerator(1000, 1000, modelMaker.rng);
 //        boolean[][] dungeon = maze.create();
-        fm.add(offset).add(burst).add(new OffsetModel(-15, -15, 12).add(fire));
+        fm.add(offset).add(burst).add(new OffsetModel(-15, -15, -14).add(fire));
 //        viewArea.add(offset)
 //                .add(new BoxModel(viewArea.sizeX(), viewArea.sizeY(), viewArea.sizeZ(),
 //                        ColorFetch.color(modelMaker.randomMainColor()
@@ -189,14 +189,14 @@ public class FetchTest extends ApplicationAdapter {
     @Override
     public void render() {
         burst.setFrame((int) (System.currentTimeMillis() >> 8) & 15);
-        fire.setFrame(burst.frame());
+        fire.setFrame(burst.frame() + 1);
 //        if (pix != null) pix.dispose();
 //        pix = modelRenderer.renderToPixmap(viewArea, angle, direction);
 //        if (tex != null) tex.draw(pix, 0, 0);
 //        else tex = new Texture(pix);
         buffer.begin();
 
-        Gdx.gl.glClearColor(0.1f, 0.09f, 0.17f, 1f);
+        Gdx.gl.glClearColor(0.55f, 0.3f, 0.14f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         worldView.apply();
@@ -222,7 +222,7 @@ public class FetchTest extends ApplicationAdapter {
             pmTexture.draw(WarpDraw.draw(viewArea, pixmapRenderer), 0, 0);
             //WarpDraw.simpleDraw(model, batchRenderer, voxelColor, outline);
         }
-        batch.draw(pmTexture, 64, 64);
+        batch.draw(pmTexture, 0, 0);
         //batch.setColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
         batch.end();
         buffer.end();
