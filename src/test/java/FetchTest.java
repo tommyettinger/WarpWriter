@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import warpwriter.ModelMaker;
@@ -80,12 +81,12 @@ public class FetchTest extends ApplicationAdapter {
 //        view = new FitViewport(width, height);
         font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
 //        viewArea = new FetchModel(230, 100, 32);
-        fm = new FetchModel(120, 120, 80);
+        fm = new FetchModel(100, 100, 60);
         viewArea = new TurnModel().set(fm);
         offset = new OffsetModel();
         container = new byte[100][100][50];
         Tools3D.translateCopyInto(modelMaker.shipLargeNoiseColorized(), container, 30, 30, 10);
-        fire = new AnimatedArrayModel(modelMaker.animateExplosion(17, 70, 70, 80));
+        fire = new AnimatedArrayModel(modelMaker.animateExplosion(17, 70, 70, 60));
         burst = new BurstFetch(new ArrayModel(container), 50, 50, 4, 16, 3);
 //        PacMazeGenerator maze = new PacMazeGenerator(1000, 1000, modelMaker.rng);
 //        boolean[][] dungeon = maze.create();
@@ -194,7 +195,7 @@ public class FetchTest extends ApplicationAdapter {
 
     public void redraw() {
         for (int f = 0; f < 16; f++) {
-//            long start = TimeUtils.nanoTime();
+            long start = TimeUtils.nanoTime();
             burst.setFrame(f);
             fire.setFrame(burst.frame() + 1);
 //            buffer.begin();
@@ -219,7 +220,7 @@ public class FetchTest extends ApplicationAdapter {
                 tex[f].draw(WarpDraw.draw(viewArea, pixmapRenderer), 0, 0);
                 //WarpDraw.simpleDraw(model, batchRenderer, voxelColor, outline);
             }
-//            System.out.println(TimeUtils.timeSinceNanos(start) + " nanoseconds to render frame " + f);
+            System.out.println(TimeUtils.timeSinceNanos(start) + " nanoseconds to render frame " + f);
 //            batch.draw(tex[f], 0, 0);
 //            //batch.setColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
 //            batch.end();
