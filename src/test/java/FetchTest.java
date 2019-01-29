@@ -39,7 +39,7 @@ public class FetchTest extends ApplicationAdapter {
     protected Viewport worldView;
     protected Viewport screenView;
     protected FrameBuffer buffer;
-    protected Texture screenTexture, pmTexture;
+    protected Texture screenTexture;
     protected TextureRegion screenRegion;
     protected VoxelPixmapRenderer pixmapRenderer;
     protected VoxelColor voxelColor;
@@ -50,12 +50,13 @@ public class FetchTest extends ApplicationAdapter {
     protected long seed = 1;
     protected TurnModel viewArea;
     protected OffsetModel offset;
+    protected byte[][][] container;
     protected BurstFetch burst;
     protected AnimatedArrayModel fire;
     protected FetchModel fm;
     private ModelMaker modelMaker = new ModelMaker(seed, Colorizer.FlesurrectBonusColorizer);
 //    private ModelRenderer modelRenderer = new ModelRenderer(false, true);
-    private Texture tex;
+    private Texture[] tex;
     private Pixmap pix;
     private CompassDirection direction = CompassDirection.NORTH;
     private int angle = 3;
@@ -70,8 +71,11 @@ public class FetchTest extends ApplicationAdapter {
         screenView.getCamera().position.set(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2, 0);
         screenView.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         voxelColor = new VoxelColor().set(Colorizer.FlesurrectBonusColorizer);
+        tex = new Texture[16];
+        for (int f = 0; f < tex.length; f++) {
+            tex[f] = new Texture(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, Pixmap.Format.RGBA8888);
+        }
         pixmapRenderer = new VoxelPixmapRenderer(new Pixmap(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, Pixmap.Format.RGBA8888), voxelColor);
-        pmTexture = new Texture(pixmapRenderer.pixmap);
 
 //        view = new FitViewport(width, height);
         font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
@@ -79,10 +83,10 @@ public class FetchTest extends ApplicationAdapter {
         fm = new FetchModel(120, 120, 80);
         viewArea = new TurnModel().set(fm);
         offset = new OffsetModel();
-        byte[][][] bigger = new byte[100][100][50];
-        Tools3D.translateCopyInto(modelMaker.shipLargeNoiseColorized(), bigger, 30, 30, 10);
+        container = new byte[100][100][50];
+        Tools3D.translateCopyInto(modelMaker.shipLargeNoiseColorized(), container, 30, 30, 10);
         fire = new AnimatedArrayModel(modelMaker.animateExplosion(17, 70, 70, 80));
-        burst = new BurstFetch(new ArrayModel(bigger), 50, 50, 4, 16, 3);
+        burst = new BurstFetch(new ArrayModel(container), 50, 50, 4, 16, 3);
 //        PacMazeGenerator maze = new PacMazeGenerator(1000, 1000, modelMaker.rng);
 //        boolean[][] dungeon = maze.create();
         fm.add(offset).add(burst).add(new OffsetModel(-15, -15, -14).add(fire));
@@ -99,11 +103,10 @@ public class FetchTest extends ApplicationAdapter {
 ////                        new NoiseFetch(modelMaker.randomMainColor())
 ////                ))
 //        ;
-        //reDraw();
+        redraw();
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
             public boolean keyDown(int keycode) {
-                boolean needRedraw = true;
                 switch (keycode) {
                     case Input.Keys.SPACE:
                         offset.addZ(angle > 1 ? 1 : -1); // Up
@@ -176,65 +179,64 @@ public class FetchTest extends ApplicationAdapter {
                     case Input.Keys.EQUALS:
                         angle = 3;
                         break;
-                    default:
-                        needRedraw = false;
+                    case Input.Keys.P:
+                        Tools3D.fill(container, 0);
+                        Tools3D.translateCopyInto(modelMaker.shipLargeNoiseColorized(), container, 30, 30, 10);
                         break;
+                    default:
+                        return true;
                 }
-                //if (needRedraw) reDraw();
+                redraw();
                 return true;
             }
         });
     }
 
+    public void redraw() {
+        for (int f = 0; f < 16; f++) {
+//            long start = TimeUtils.nanoTime();
+            burst.setFrame(f);
+            fire.setFrame(burst.frame() + 1);
+//            buffer.begin();
+//            Gdx.gl.glClearColor(0.55f, 0.3f, 0.14f, 1f);
+//            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+//            worldView.apply();
+//            worldView.getCamera().position.set(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2, 0);
+//            worldView.update(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
+//            batch.setProjectionMatrix(worldView.getCamera().combined);
+//            batch.begin();
+            if (direction.isDiagonal()) {
+                if (angle != 2) {
+                    tex[f].draw(WarpDraw.drawIso(viewArea, pixmapRenderer), 0, 0);
+                } else {
+                    tex[f].draw(WarpDraw.draw45(viewArea, pixmapRenderer), 0, 0);
+                }
+//            WarpDraw.simpleDraw45(model, batchRenderer, voxelColor, outline);
+            } else if (angle != 2) {
+                tex[f].draw(WarpDraw.drawAbove(viewArea, pixmapRenderer), 0, 0);
+            } else {
+                tex[f].draw(WarpDraw.draw(viewArea, pixmapRenderer), 0, 0);
+                //WarpDraw.simpleDraw(model, batchRenderer, voxelColor, outline);
+            }
+//            System.out.println(TimeUtils.timeSinceNanos(start) + " nanoseconds to render frame " + f);
+//            batch.draw(tex[f], 0, 0);
+//            //batch.setColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
+//            batch.end();
+//            buffer.end();
+        }
+    }
     @Override
     public void render() {
-        burst.setFrame((int) (System.currentTimeMillis() >> 8) & 15);
-        fire.setFrame(burst.frame() + 1);
-//        if (pix != null) pix.dispose();
-//        pix = modelRenderer.renderToPixmap(viewArea, angle, direction);
-//        if (tex != null) tex.draw(pix, 0, 0);
-//        else tex = new Texture(pix);
-        buffer.begin();
-
         Gdx.gl.glClearColor(0.55f, 0.3f, 0.14f, 1f);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        worldView.apply();
-        worldView.getCamera().position.set(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2, 0);
-        worldView.update(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
-        batch.setProjectionMatrix(worldView.getCamera().combined);
-        batch.begin();
-        if(direction.isDiagonal()) {
-            if(angle != 2){
-                pmTexture.draw(WarpDraw.drawIso(viewArea, pixmapRenderer), 0, 0);
-            }
-            else
-            {
-                pmTexture.draw(WarpDraw.draw45(viewArea, pixmapRenderer), 0, 0);
-            }
-//            WarpDraw.simpleDraw45(model, batchRenderer, voxelColor, outline);
-        }
-        else if(angle != 2)
-        {
-            pmTexture.draw(WarpDraw.drawAbove(viewArea, pixmapRenderer), 0, 0);
-        }
-        else {
-            pmTexture.draw(WarpDraw.draw(viewArea, pixmapRenderer), 0, 0);
-            //WarpDraw.simpleDraw(model, batchRenderer, voxelColor, outline);
-        }
-        batch.draw(pmTexture, 0, 0);
-        //batch.setColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
-        batch.end();
-        buffer.end();
-        Gdx.gl.glClearColor(0, 0, 0, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         screenView.apply();
         batch.setProjectionMatrix(screenView.getCamera().combined);
         batch.begin();
-        screenTexture = buffer.getColorBufferTexture();
+        screenTexture = tex[(int) (System.currentTimeMillis() / 90) & 15];
         screenTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         screenRegion.setRegion(screenTexture);
-        screenRegion.flip(false, true);
+        //screenRegion.flip(false, true);
         batch.draw(screenRegion, 0, 0);
         batch.end();
 
