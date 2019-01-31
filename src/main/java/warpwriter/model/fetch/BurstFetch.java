@@ -3,8 +3,8 @@ package warpwriter.model.fetch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import squidpony.squidmath.Noise;
 import squidpony.squidmath.NumberTools;
-import warpwriter.ModelMaker;
 import warpwriter.model.Fetch;
 import warpwriter.model.ITemporal;
 
@@ -104,7 +104,7 @@ public class BurstFetch extends Fetch implements ITemporal {
     @Override
     public Fetch fetch() {
         int x = chainX(), y = chainY(), z = chainZ(), f = frame + 1, 
-                h = ModelMaker.hashAll(x >>> 1, y >>> 1, z >>> 1, seed);
+                h = Noise.IntPointHash.hashAll(x >>> 1, y >>> 1, z >>> 1, seed);
         float groundMag = Vector2.len(x - centerX, y - centerY),
                 angle = NumberTools.atan2(y - centerY, x - centerX),
                 rise = MathUtils.sin(NumberTools.atan2(z - centerZ, groundMag)) * strength,
@@ -125,7 +125,7 @@ public class BurstFetch extends Fetch implements ITemporal {
         if (debrisSource.bool(
                 xx,
                 yy,
-                zz) && (ModelMaker.hashAll(xx, yy, zz, seed) >>> -f ^ h >>> -f) == 0
+                zz) && (Noise.IntPointHash.hashAll(xx, yy, zz, seed) >>> -f ^ h >>> -f) == 0
         ) { // if there's debris at this coordinate at this time
             setChains(
                     xx,
