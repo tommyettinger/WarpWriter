@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.StringKit;
 import warpwriter.Coloring;
+import warpwriter.model.color.Colorizer;
 import warpwriter.model.nonvoxel.LittleEndianDataInputStream;
 import warpwriter.ModelMaker;
 import warpwriter.VoxIO;
@@ -72,6 +73,41 @@ public class SimpleTest extends ApplicationAdapter {
             "   alpha = max(alpha, texture2D( u_texture, v_texCoords - offsety).a);\n" +
             "   gl_FragColor = v_color * texture2D( u_texture, v_texCoords );\n" +
             "   gl_FragColor.a = alpha;\n" +
+            "}";
+    /**
+     * This fragment shader draws a black outline around things.
+     */
+    public static final String fragmentShaderLighterOutline = "#version 150\n" +
+            "varying vec2 v_texCoords;\n" +
+            "varying vec4 v_color;\n" +
+            "uniform float outlineH;\n" +
+            "uniform float outlineW;\n" +
+            "uniform sampler2D u_texture;\n" +
+            "void main()\n" +
+            "{\n" +
+            "   vec2 offsetx;\n" +
+            "   offsetx.x = outlineW;\n" +
+            "   vec2 offsety;\n" +
+            "   offsety.y = outlineH;\n" +
+            "   vec4 self = texture2D( u_texture, v_texCoords );\n" +
+            "   if(self.a > 0.0)\n" +
+            "   {\n" +
+            "     gl_FragColor = v_color * self;\n" +
+            "   }\n" +
+            "   else\n" +
+            "   {\n" +
+            "     vec4 e = texture2D( u_texture, v_texCoords + offsetx * 3.0);\n" +
+            "     vec4 w = texture2D( u_texture, v_texCoords - offsetx * 3.0);\n" +
+            "     vec4 n = texture2D( u_texture, v_texCoords + offsety * 3.0);\n" +
+            "     vec4 s = texture2D( u_texture, v_texCoords - offsety * 3.0);\n" +
+            "     gl_FragColor.rgb = e.rgb * e.a + w.rgb * w.a + n.rgb * n.a + s.rgb * s.a;\n" +
+            "     gl_FragColor.a = 0;\n" +
+            "     if(length(gl_FragColor.rgb) > 0.0)\n" +
+            "     {\n" +
+            "       gl_FragColor.rgb /= (e.a + w.a + n.a + s.a) * 3.0;\n" +
+            "       gl_FragColor.a = 1.0;\n" +
+            "     }\n" +
+            "   }\n" +
             "}";
 
     public static final int backgroundColor = Color.rgba8888(Color.DARK_GRAY);
@@ -146,7 +182,7 @@ public class SimpleTest extends ApplicationAdapter {
 
         maker = new ModelMaker(12345);
         batchRenderer = new VoxelSpriteBatchRenderer(batch);
-        batchRenderer.color().set(Dimmer.arbitraryDimmer(Coloring.AURORA));
+        batchRenderer.color().set(Colorizer.AuroraBonusColorizer);
         voxelSprite = new VoxelSprite()
                 .set(batchRenderer)
                 .setOffset(VIRTUAL_WIDTH / 2, 100);
@@ -154,7 +190,7 @@ public class SimpleTest extends ApplicationAdapter {
         Gdx.input.setInputProcessor(inputProcessor());
 
         defaultShader = SpriteBatch.createDefaultShader();
-        shader = new ShaderProgram(vertexShader, fragmentShader);
+        shader = new ShaderProgram(vertexShader, fragmentShaderLighterOutline);
         if (!shader.isCompiled()) throw new GdxRuntimeException("Couldn't compile shader: " + shader.getLog());
     }
 
@@ -174,9 +210,10 @@ public class SimpleTest extends ApplicationAdapter {
 //            for (int y=0; y<3; y++)
 //                for (int z=0; z<3; z++)
 //                    map.put(x, y, z, ColorFetch.color(maker.randomMainColor()));
+        byte midColor = Colorizer.AuroraBonusColorizer.getReducer().randomColorIndex(maker.rng);
         map.put(0, 0, 0, new DecideFetch(
                 TileFetch.Diagonal16x16x16,
-                ColorFetch.color((byte) 254)
+                new NoiseFetch(Colorizer.AuroraBonusColorizer.darken(midColor), midColor, midColor, Colorizer.AuroraBonusColorizer.brighten(midColor))
                 ));
         return new WorldFetch()
                 .set(map)

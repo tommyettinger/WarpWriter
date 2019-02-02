@@ -62,6 +62,7 @@
         <jdk.version>1.7</jdk.version>
         <junit.version>4.11</junit.version>
         <squidlib.version>4bcd9a3ef8</squidlib.version>
+        <fastutil.version>2727aa9866</fastutil.version>
         <gdx.version>1.9.8</gdx.version>
     </properties>
 
@@ -99,17 +100,17 @@
         <dependency>
             <groupId>com.github.tommyettinger.fastutil-gwt</groupId>
             <artifactId>fastutil-base</artifactId>
-            <version>f154cc3969</version>
+            <version>${fastutil.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.tommyettinger.fastutil-gwt</groupId>
             <artifactId>fastutil-intbase</artifactId>
-            <version>f154cc3969</version>
+            <version>${fastutil.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.tommyettinger.fastutil-gwt</groupId>
             <artifactId>fastutil-inthashmap</artifactId>
-            <version>f154cc3969</version>
+            <version>${fastutil.version}</version>
         </dependency>
         <!--<dependency>-->
             <!--<groupId>com.github.aikar.fastutil-lite</groupId>-->
