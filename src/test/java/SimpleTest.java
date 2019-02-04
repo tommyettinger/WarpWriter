@@ -2,7 +2,6 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3WindowAdapter;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -12,21 +11,23 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.StringKit;
+import squidpony.squidmath.NumberTools;
 import warpwriter.Coloring;
-import warpwriter.model.color.Colorizer;
-import warpwriter.model.nonvoxel.LittleEndianDataInputStream;
 import warpwriter.ModelMaker;
 import warpwriter.VoxIO;
-import warpwriter.model.decide.DecideFetch;
-import warpwriter.model.nonvoxel.HashMap3D;
 import warpwriter.model.IFetch;
 import warpwriter.model.IModel;
+import warpwriter.model.color.Colorizer;
+import warpwriter.model.decide.DecideFetch;
 import warpwriter.model.fetch.*;
-import warpwriter.view.color.Dimmer;
+import warpwriter.model.nonvoxel.HashMap3D;
+import warpwriter.model.nonvoxel.LittleEndianDataInputStream;
 import warpwriter.view.VoxelSprite;
+import warpwriter.view.color.Dimmer;
 import warpwriter.view.render.VoxelSpriteBatchRenderer;
 
 import java.io.FileInputStream;
@@ -96,21 +97,21 @@ public class SimpleTest extends ApplicationAdapter {
             "   }\n" +
             "   else\n" +
             "   {\n" +
-            "     vec4 e = texture2D( u_texture, v_texCoords + offsetx * 3.0);\n" +
-            "     vec4 w = texture2D( u_texture, v_texCoords - offsetx * 3.0);\n" +
-            "     vec4 n = texture2D( u_texture, v_texCoords + offsety * 3.0);\n" +
-            "     vec4 s = texture2D( u_texture, v_texCoords - offsety * 3.0);\n" +
+            "     vec4 e = texture2D( u_texture, v_texCoords + offsetx);\n" +
+            "     vec4 w = texture2D( u_texture, v_texCoords - offsetx);\n" +
+            "     vec4 n = texture2D( u_texture, v_texCoords + offsety);\n" +
+            "     vec4 s = texture2D( u_texture, v_texCoords - offsety);\n" +
             "     gl_FragColor.rgb = e.rgb * e.a + w.rgb * w.a + n.rgb * n.a + s.rgb * s.a;\n" +
             "     gl_FragColor.a = 0;\n" +
             "     if(length(gl_FragColor.rgb) > 0.0)\n" +
             "     {\n" +
-            "       gl_FragColor.rgb /= (e.a + w.a + n.a + s.a) * 3.0;\n" +
+            "       gl_FragColor.rgb /= (e.a + w.a + n.a + s.a) * 1.75;\n" +
             "       gl_FragColor.a = 1.0;\n" +
             "     }\n" +
             "   }\n" +
             "}";
 
-    public static final int backgroundColor = Color.rgba8888(Color.DARK_GRAY);
+    //public static final int backgroundColor = Color.rgba8888(Color.DARK_GRAY);
     public static final int SCREEN_WIDTH = 1280;
     public static final int SCREEN_HEIGHT = 720;
     public static final int VIRTUAL_WIDTH = 1280;
@@ -241,12 +242,13 @@ public class SimpleTest extends ApplicationAdapter {
         batch.setColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
         batch.end();
         buffer.end();
-        Gdx.gl.glClearColor(
-                ((backgroundColor >> 24) & 0xff) / 255f,
-                ((backgroundColor >> 16) & 0xff) / 255f,
-                ((backgroundColor >> 8) & 0xff) / 255f,
-                (backgroundColor & 0xff) / 255f
-        );
+        float bright = NumberTools.swayTight((TimeUtils.millis() & 0xFFFFFF) * 3E-4f) * 0.7f + 0.2f;
+        Gdx.gl.glClearColor(bright, bright, bright, 1f);
+//        ((backgroundColor >> 24) & 0xff) / 255f,
+//                ((backgroundColor >> 16) & 0xff) / 255f,
+//                ((backgroundColor >> 8) & 0xff) / 255f,
+//                (backgroundColor & 0xff) / 255f
+//        );
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         screenView.apply();
         batch.setProjectionMatrix(screenView.getCamera().combined);
