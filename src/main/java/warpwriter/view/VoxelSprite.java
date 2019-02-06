@@ -7,9 +7,11 @@ import warpwriter.model.TurnModel;
 import warpwriter.view.render.VoxelSpriteBatchRenderer;
 
 /**
- * This class is can be understood as like the Sprite class in libGDX, except it is for rendering voxel models instead of 2D textures.
+ * This class is can be understood as like the Sprite class in libGDX, except it is for rendering voxel models instead
+ * of 2D textures.
  * <p>
- * An expected use case would be to make a VoxelSprite for every voxel model that needs to be rendered on screen, but it's possible to also re-use the same instance by rapidly swapping out models and other settings.
+ * An expected use case would be to make a VoxelSprite for every voxel model that needs to be rendered on screen, but
+ * it's possible to also re-use the same instance by rapidly swapping out models and other settings.
  *
  * @author Ben McLean
  */

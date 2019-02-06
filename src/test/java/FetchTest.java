@@ -46,7 +46,6 @@ public class FetchTest extends ApplicationAdapter {
     protected VoxelColor voxelColor;
 
     protected SpriteBatch batch;
-    protected Viewport view;
     protected BitmapFont font;
     protected long seed = 1;
     protected TurnModel viewArea;
@@ -88,9 +87,10 @@ public class FetchTest extends ApplicationAdapter {
         Tools3D.translateCopyInto(modelMaker.shipLargeNoiseColorized(), container, 30, 30, 10);
         fire = new AnimatedArrayModel(modelMaker.animateExplosion(17, 70, 70, 60));
         burst = new BurstFetch(new ArrayModel(container), 50, 50, 4, 16, 3);
+        fm.add(offset).add(burst).add(new OffsetModel(-15, -15, -14).add(fire));
 //        PacMazeGenerator maze = new PacMazeGenerator(1000, 1000, modelMaker.rng);
 //        boolean[][] dungeon = maze.create();
-        fm.add(offset).add(burst).add(new OffsetModel(-15, -15, -14).add(fire));
+
 //        viewArea.add(offset)
 //                .add(new BoxModel(viewArea.sizeX(), viewArea.sizeY(), viewArea.sizeZ(),
 //                        ColorFetch.color(modelMaker.randomMainColor()

@@ -1,7 +1,6 @@
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3WindowAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -16,24 +15,19 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.StringKit;
 import squidpony.squidmath.NumberTools;
-import warpwriter.Coloring;
 import warpwriter.ModelMaker;
-import warpwriter.VoxIO;
-import warpwriter.model.IFetch;
+import warpwriter.Tools3D;
+import warpwriter.model.FetchModel;
 import warpwriter.model.IModel;
 import warpwriter.model.color.Colorizer;
-import warpwriter.model.decide.DecideFetch;
-import warpwriter.model.fetch.*;
-import warpwriter.model.nonvoxel.HashMap3D;
-import warpwriter.model.nonvoxel.LittleEndianDataInputStream;
+import warpwriter.model.fetch.AnimatedArrayModel;
+import warpwriter.model.fetch.ArrayModel;
+import warpwriter.model.fetch.BurstFetch;
+import warpwriter.model.fetch.OffsetModel;
 import warpwriter.view.VoxelSprite;
-import warpwriter.view.color.Dimmer;
 import warpwriter.view.render.VoxelSpriteBatchRenderer;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-
-public class SimpleTest extends ApplicationAdapter {
+public class BurstTest extends ApplicationAdapter {
     /**
      * This is the default vertex shader from libGDX.
      */
@@ -125,10 +119,14 @@ public class SimpleTest extends ApplicationAdapter {
     protected TextureRegion screenRegion;
     protected ModelMaker maker;
     protected VoxelSprite voxelSprite;
-    protected boolean box = false;
     protected VoxelSpriteBatchRenderer batchRenderer;
     protected ShaderProgram shader;
     protected ShaderProgram defaultShader;
+
+    protected byte[][][] container;
+    protected BurstFetch burst;
+    protected AnimatedArrayModel fire;
+    protected long startTime;
 
     public static void main(String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
@@ -136,41 +134,42 @@ public class SimpleTest extends ApplicationAdapter {
         config.setWindowedMode(SCREEN_WIDTH, SCREEN_HEIGHT);
         config.setIdleFPS(10);
         config.useVsync(false);
-        final SimpleTest app = new SimpleTest();
-        config.setWindowListener(new Lwjgl3WindowAdapter() {
-            @Override
-            public void filesDropped(String[] files) {
-                if (files != null && files.length > 0) {
-                    if (files[0].endsWith(".vox"))
-                        app.load(files[0]);
-                }
-            }
-        });
+        final BurstTest app = new BurstTest();
+//        config.setWindowListener(new Lwjgl3WindowAdapter() {
+//            @Override
+//            public void filesDropped(String[] files) {
+//                if (files != null && files.length > 0) {
+//                    if (files[0].endsWith(".vox"))
+//                        app.load(files[0]);
+//                }
+//            }
+//        });
 
         new Lwjgl3Application(app, config);
     }
 
-    public void load(String name) {
-        try {
-            //// loads a file by its full path, which we get via drag+drop
-            final byte[][][] arr = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream(name)));
-            //// set the palette to the one from the vox model, using arbitraryDimmer()
-            batchRenderer.set(batchRenderer.color().set(Dimmer.arbitraryDimmer(VoxIO.lastPalette)));
-            voxelSprite.set(new ArrayModel(
-                    arr
-                    //// Aurora folder has vox models with a different palette, which involves a different IDimmer.
-                    //VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("Aurora/Warrior_Male_W.vox")))
-                    // If using Rinsed, use the line below instead of the one above.
-                    //maker.warriorRandom()
-            ));
-        } catch (FileNotFoundException e) {
-            voxelSprite.set(new ArrayModel(maker.warriorRandom()));
-            batchRenderer.set(batchRenderer.color().set(Dimmer.RinsedDimmer));
-        }
-    }
+//    public void load(String name) {
+//        try {
+//            //// loads a file by its full path, which we get via drag+drop
+//            final byte[][][] arr = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream(name)));
+//            //// set the palette to the one from the vox model, using arbitraryDimmer()
+//            batchRenderer.set(batchRenderer.color().set(Dimmer.arbitraryDimmer(VoxIO.lastPalette)));
+//            voxelSprite.set(new ArrayModel(
+//                    arr
+//                    //// Aurora folder has vox models with a different palette, which involves a different IDimmer.
+//                    //VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("Aurora/Warrior_Male_W.vox")))
+//                    // If using Rinsed, use the line below instead of the one above.
+//                    //maker.warriorRandom()
+//            ));
+//        } catch (FileNotFoundException e) {
+//            voxelSprite.set(new ArrayModel(maker.warriorRandom()));
+//            batchRenderer.set(batchRenderer.color().set(Dimmer.RinsedDimmer));
+//        }
+//    }
 
     @Override
     public void create() {
+        startTime = TimeUtils.millis();
         font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
         batch = new SpriteBatch();
         worldView = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
@@ -181,9 +180,9 @@ public class SimpleTest extends ApplicationAdapter {
         screenView.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.enableBlending();
 
-        maker = new ModelMaker(12345);
+        maker = new ModelMaker(12345, Colorizer.FlesurrectBonusColorizer);
         batchRenderer = new VoxelSpriteBatchRenderer(batch);
-        batchRenderer.color().set(Colorizer.AuroraBonusColorizer);
+        batchRenderer.color().set(Colorizer.FlesurrectBonusColorizer);
         voxelSprite = new VoxelSprite()
                 .set(batchRenderer)
                 .setOffset(VIRTUAL_WIDTH / 2, 100);
@@ -196,40 +195,24 @@ public class SimpleTest extends ApplicationAdapter {
     }
 
     public void makeModel() {
-        voxelSprite.set(
-                box ?
-                        new BoxModel(model(), ColorFetch.color(Coloring.rinsed("Powder Blue 3")))
-                        : model()
-        );
+        voxelSprite.set(model());
     }
 
     public IModel model() {
-        // batchRenderer.color().set(Dimmer.AuroraToFlesurrectDimmer);
-        // return new ArrayModel(maker.shipLargeRandomColorized())
-        HashMap3D<IFetch> map = new HashMap3D<>();
-        for (int x=0; x<3; x++) {
-            for (int y = 0; y < 3; y++)
-//                for (int z=0; z<3; z++)
-//                    map.put(x, y, 0, ColorFetch.color(maker.randomMainColor()));
-            {
-                byte midColor = Colorizer.AuroraBonusColorizer.getReducer().randomColorIndex(maker.rng);
-                map.put(x, y, 0, new DecideFetch(
-                        TileFetch.Diagonal16x16x16,
-                        new NoiseFetch(Colorizer.AuroraBonusColorizer.darken(midColor), midColor, midColor, Colorizer.AuroraBonusColorizer.brighten(midColor))
-                ));
-            }
-        }
-        return new WorldFetch()
-                .set(map)
-                .model(48, 48, 16);
-//        return new DecideFetch(
-//                TileFetch.Diagonal16x16x16,
-//                new NoiseFetch(Colorizer.AuroraBonusColorizer.darken(midColor), midColor, midColor, Colorizer.AuroraBonusColorizer.brighten(midColor))
-//        ).model(16, 16, 16);
+        FetchModel fm = new FetchModel(100, 100, 60);
+        container = new byte[100][100][50];
+        Tools3D.translateCopyInto(maker.shipLargeNoiseColorized(), container, 30, 30, 10);
+        fire = new AnimatedArrayModel(maker.animateExplosion(17, 70, 70, 60));
+        burst = new BurstFetch(new ArrayModel(container), 50, 50, 4, 16, 3);
+        fm.add(burst).add(new OffsetModel(-15, -15, -14).add(fire));
+        return fm;
     }
 
     @Override
     public void render() {
+        burst.setFrame((int)(TimeUtils.timeSinceMillis(startTime) >>> 7 & 15));
+        fire.setFrame(burst.frame() + 1);
+
         buffer.begin();
         Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -315,10 +298,6 @@ public class SimpleTest extends ApplicationAdapter {
                         voxelSprite.reset();
                         break;
                     case Input.Keys.P:
-                        makeModel();
-                        break;
-                    case Input.Keys.B:
-                        box = !box;
                         makeModel();
                         break;
                     case Input.Keys.G:
