@@ -91,7 +91,7 @@ public class PixmapTransparent extends Fetch implements IModel {
     }
 
     /**
-     * @return Ignores the third dimension!
+     * @return Ignores the third dimension! (x, which is depth, is not checked.)
      */
     @Override
     public boolean inside(int x, int y, int z) {
@@ -115,6 +115,6 @@ public class PixmapTransparent extends Fetch implements IModel {
     public boolean bool (int x, int y, int z) {
         return pixmap != null
                 && inside(x, y, z)
-                && (pixmap.getPixel(y, z) & 0xFF) / 255f < threshold;
+                && (pixmap.getPixel(y, z) & 0xFF) < threshold * 255f;
     }
 }

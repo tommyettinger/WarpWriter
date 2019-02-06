@@ -5,7 +5,7 @@ import warpwriter.model.fetch.FetchFetch;
 import warpwriter.model.nonvoxel.CompassDirection;
 
 /**
- * Converts a Fetch to a Model with sizes stored in ints
+ * Converts a Fetch to a Model with sizes stored in ints.
  *
  * @author Ben McLean
  */
@@ -51,7 +51,7 @@ public class FetchModel extends Fetch implements IModel, IDecideModel {
     }
 
     /**
-     * Copies size
+     * Copies the size of {@code convenience}, but does not copy its contents; this uses {@code fetch} for contents.
      *
      * @param convenience An IModel with a size to copy
      * @param fetch       Actual fetch to use

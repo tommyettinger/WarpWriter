@@ -367,12 +367,12 @@ public class Tools3D {
     public static void translateCopyInto(byte[][][] voxels, byte[][][] into, int xMove, int yMove, int zMove)
     {
         int xs, ys, zs;
-        xs = voxels.length;
-        ys = voxels[0].length;
-        zs = voxels[0][0].length;
-        final int xLimit = xs - Math.abs(xMove), xStart = Math.max(0, xMove);
-        final int yLimit = ys - Math.abs(yMove), yStart = Math.max(0, yMove);
-        final int zLimit = zs - Math.abs(zMove), zStart = Math.max(0, zMove);
+        xs = into.length;
+        ys = into[0].length;
+        zs = into[0][0].length;
+        final int xLimit = voxels.length, xStart = Math.max(0, xMove);
+        final int yLimit = voxels[0].length, yStart = Math.max(0, yMove);
+        final int zLimit = voxels[0][0].length, zStart = Math.max(0, zMove);
         for (int x = xStart, xx = 0; x < xs && xx < xLimit && xx < xs; x++, xx++) {
             for (int y = yStart, yy = 0; y < ys && yy < yLimit && yy < ys; y++, yy++) {
                 for (int z = zStart, zz = 0; z < zs && zz < zLimit && zz < zs; z++, zz++) {

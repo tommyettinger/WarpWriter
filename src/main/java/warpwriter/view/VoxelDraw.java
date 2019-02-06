@@ -171,8 +171,8 @@ public class VoxelDraw {
         for (int py = 0; py < sizeZ; py++) { // pixel y
             for (int px = 0; px <= pixelWidth; px += 2) { // pixel x
                 boolean leftDone = false, rightDone = pixelWidth - px < 2;
-                final int startX = px > sizeX - 1 ? 0 : sizeX - px - 1,
-                        startY = px - sizeX + 1 < 0 ? 0 : px - sizeX + 1;
+                final int startX = px >= sizeX ? 0 : sizeX - px - 1,
+                        startY = px < sizeX ? 0 : px - sizeX + 1;
                 for (int vx = startX, vy = startY;
                      vx <= sizeX && vy <= sizeY;
                      vx++, vy++) { // vx is voxel x, vy is voxel y

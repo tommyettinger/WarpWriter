@@ -11,9 +11,11 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import squidpony.FakeLanguageGen;
 import squidpony.StringKit;
 import warpwriter.ModelMaker;
 import warpwriter.Tools3D;
+import warpwriter.VoxIO;
 import warpwriter.model.TurnModel;
 import warpwriter.model.color.Colorizer;
 import warpwriter.model.fetch.ArrayModel;
@@ -60,7 +62,7 @@ public class WarpTest extends ApplicationAdapter {
         screenView.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.enableBlending();
 
-        voxelColor = new VoxelColor().set(Colorizer.FlesurrectColorizer);
+        voxelColor = new VoxelColor().set(Colorizer.FlesurrectBonusColorizer);
         batchRenderer = new VoxelSpriteBatchRenderer(batch).setOffset(16, 100);
         pixmapRenderer = new VoxelPixmapRenderer(new Pixmap(512, 512, Pixmap.Format.RGBA8888), voxelColor);
         pmTexture = new Texture(pixmapRenderer.pixmap);
@@ -244,6 +246,9 @@ public class WarpTest extends ApplicationAdapter {
                             pixmapRenderer.color().set(Colorizer.FlesurrectColorizer);
                             maker.setColorizer(Colorizer.FlesurrectColorizer);
                         }
+                        break;
+                    case Input.Keys.W: // write
+                        VoxIO.writeVOX(FakeLanguageGen.SIMPLISH.word(Tools3D.hash64(voxels), true) + ".vox", voxels, maker.getColorizer().getReducer().paletteArray);
                         break;
                     case Input.Keys.ESCAPE:
                         Gdx.app.exit();
