@@ -124,8 +124,7 @@ public class BurstTest extends ApplicationAdapter {
     protected ShaderProgram defaultShader;
 
     protected byte[][][] container;
-    protected BurstFetch burst;
-    protected AnimatedArrayModel fire;
+    protected AnimatedArrayModel am;
     protected long startTime;
 
     public static void main(String[] arg) {
@@ -202,16 +201,22 @@ public class BurstTest extends ApplicationAdapter {
         FetchModel fm = new FetchModel(100, 100, 60);
         container = new byte[100][100][50];
         Tools3D.translateCopyInto(maker.shipLargeNoiseColorized(), container, 30, 30, 10);
-        fire = new AnimatedArrayModel(maker.animateExplosion(17, 70, 70, 60));
-        burst = new BurstFetch(new ArrayModel(container), 50, 50, 4, 16, 3);
+        AnimatedArrayModel fire = new AnimatedArrayModel(maker.animateExplosion(17, 70, 70, 60));
+        BurstFetch burst = new BurstFetch(new ArrayModel(container), 50, 50, 4, 16, 3);
         fm.add(burst).add(new OffsetModel(-15, -15, -14).add(fire));
-        return fm;
+        byte[][][][] voxelFrames = new byte[16][][][];
+        am = new AnimatedArrayModel(voxelFrames);
+        for (int i = 0; i < 16; i++) {
+            burst.setFrame(i);
+            fire.setFrame(i+1);
+            voxelFrames[i] = new ArrayModel(fm).voxels;
+        }
+        return am;
     }
 
     @Override
     public void render() {
-        burst.setFrame((int)(TimeUtils.timeSinceMillis(startTime) >>> 7 & 15));
-        fire.setFrame(burst.frame() + 1);
+        am.setFrame((int)(TimeUtils.timeSinceMillis(startTime) >>> 7 & 15));
 
         buffer.begin();
         Gdx.gl.glClearColor(0, 0, 0, 0);
