@@ -71,16 +71,16 @@ public class WarpTest extends ApplicationAdapter {
 //            box = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("Aurora/dumbcube.vox")));
 //        } catch (Exception e) {
 //            e.printStackTrace();
-//            box = maker.shipLargeNoiseColorized();
+//            box = maker.shipNoiseColorized();
 //        }
         
-        voxels = maker.shipLargeNoiseColorized();
+        voxels = maker.shipNoiseColorized();
 //        chaos = new ChaoticFetch(maker.rng.nextLong(), (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 1);
         warrior = new TurnModel().set(
 //                new ReplaceFetch(ColorFetch.color((byte) 0), (byte) 1)
 //                .add(new PaintFetch(chaos, true)).model(
                 new ArrayModel(voxels));
-        boom = new TurnModel().set(new ArrayModel(new byte[40][40][40]));
+        boom = new TurnModel().set(new ArrayModel(new byte[12][12][12]));
         model = warrior;
         Gdx.input.setInputProcessor(inputProcessor());
     }
@@ -193,7 +193,7 @@ public class WarpTest extends ApplicationAdapter {
                     case Input.Keys.P:
                         model = warrior;
                         //chaos.setSeed(maker.rng.nextLong());
-                        Tools3D.deepCopyInto(maker.shipLargeNoiseColorized(), voxels);
+                        Tools3D.deepCopyInto(maker.shipNoiseColorized(), voxels);
                         animating = false;
                         break;
                     case Input.Keys.B: // burn!

@@ -744,13 +744,32 @@ public class ModelMaker {
     /**
      * Uses some simplex noise from {@link FastNoise} to make paint patterns and shapes more "flowing" and less
      * haphazard in their placement. Still uses point hashes for a lot of its operations.
-     * @return 3D byte array representing a spaceship
+     * @return a 12x12x8 3D byte array representing a spaceship
+     */
+    public byte[][][] shipNoiseColorized()
+    {
+        return shipNoiseColorized(ship);
+    }
+    /**
+     * Uses some simplex noise from {@link FastNoise} to make paint patterns and shapes more "flowing" and less
+     * haphazard in their placement. Still uses point hashes for a lot of its operations.
+     * @return a larger (40x40x30) 3D byte array representing a spaceship
      */
     public byte[][][] shipLargeNoiseColorized()
     {
-        xSize = shipLarge.length;
-        ySize = shipLarge[0].length;
-        zSize = shipLarge[0][0].length;
+        return Tools3D.largestPart(shipNoiseColorized(shipLarge));
+    }
+    /**
+     * Uses some simplex noise from {@link FastNoise} to make paint patterns and shapes more "flowing" and less
+     * haphazard in their placement. Still uses point hashes for a lot of its operations.
+     * @param ship one of the two ships loaded from resources here, probably, {@link #ship} and {@link #shipLarge}
+     * @return 3D byte array representing a spaceship
+     */
+    private byte[][][] shipNoiseColorized(byte[][][] ship)
+    {
+        xSize = ship.length;
+        ySize = ship[0].length;
+        zSize = ship[0][0].length;
         byte[][][] nextShip = new byte[xSize][ySize][zSize];
         final int halfY = ySize >> 1, smallYSize = ySize - 1;
         int color;
@@ -760,14 +779,15 @@ public class ModelMaker {
                 cockpitColor = colorizer.darken(colorizer.reduce((0x20 + determineBounded(seed + 0x11111, 0x60) << 24)
                         | (0xA0 + determineBounded(seed + 0x22222, 0x60) << 16)
                         | (0xC8 + determineBounded(seed + 0x33333, 0x38) << 8) | 0xFF));
+        // Arrays.binarySearch does not work for all grayscale() results; this may need adjusting
         if(Arrays.binarySearch(colorizer.grayscale(), highlightColor) >= 0)
             highlightColor = colorizer.getReducer().paletteMapping[determineInt(~seed) & 0x7FFF];
-        final FastNoise noiseMid = new FastNoise(~seed, 0x1p-5f);
+        final FastNoise noise = new FastNoise(~seed, 0x1.4p0f / xSize);
         int xx, yy, zz;
         for (int x = 0; x < xSize; x++) {
             for (int y = 0; y < halfY; y++) {
                 for (int z = 0; z < zSize; z++) {
-                    color = (shipLarge[x][y][z] & 255);
+                    color = (ship[x][y][z] & 255);
                     if (color != 0) {
                         // this 4-input-plus-state hash is really a slight modification on LightRNG.determine(), but
                         // it mixes the x, y, and z inputs more thoroughly than other techniques do, and we then use
@@ -779,19 +799,12 @@ public class ModelMaker {
                         yy = y + 1;
                         zz = z / 3;
                         current = hashAll(xx + (xx | zz) >> 3, (yy + (yy | zz)) / 3, zz, color, seed)
-                        + (int) (noiseMid.getSimplex(x * 0.5f, y * 0.75f, z * 0.666f) * 0x800000) + 0x800000;
+                        + (int) (noise.getSimplex(x * 0.5f, y * 0.75f, z * 0.666f) * 0x800000) + 0x800000;
                         paint = hashAll((xx + (xx | z)) / 7, (yy + (yy | z)) / 5, z, color, seed);
-//                        current = (int) (noiseOuter.getSimplex(x * 1.5f, y * 1.75f, z * 1.3666f) * 0x800000)
-//                                + (int) (noiseMid.getSimplex(x * 1.5f, y * 1.75f, z * 1.3666f) * 0x800000) + 0x800000
-//                                + (int) (noiseInner.getSimplex(x * 1.5f, y * 1.75f, z * 1.3666f) * 0x300000) - color;
-//                        paint   = (int) (noiseOuter.getSimplex(x * 0.0625f, y * 0.125f, z * 0.1f) * 0x800000)
-//                                + (int) (noiseMid.getSimplex(x * 0.0625f, y * 0.125f, z * 0.1f) * 0x500000)
-//                                + (int) (noiseInner.getSimplex(x * 0.0625f, y * 0.125f, z * 0.1f) * 0x300000) + color;
                         if (color < 8) {
                             // checks sorta-top 3 bits
                             if((current >>> 21 & 7) != 0)
-                                nextShip[x][smallYSize - y][z] = nextShip[x][y][z] =
-                                        cockpitColor;
+                                nextShip[x][smallYSize - y][z] = nextShip[x][y][z] = cockpitColor;
                         } else {
                             nextShip[x][smallYSize - y][z] = nextShip[x][y][z] =
                                     // checks sorta-top 9 bits, different branch
@@ -799,8 +812,8 @@ public class ModelMaker {
                                             ? 0
                                             // checks 6 bits of paint, unusual start
                                             : ((paint >>> 19 & 0x3F) < 36)
-                                            ? colorizer.grayscale()[(int)((noiseMid.getSimplex(x * 0.125f, y * 0.2f, z * 0.24f) * 0.4f + 0.599f) * (colorizer.grayscale().length - 1))]
-                                            : (noiseMid.getSimplex(x * 0.04f, y * 0.07f, z * 0.09f) > 0.1f)
+                                            ? colorizer.grayscale()[(int)((noise.getSimplex(x * 0.125f, y * 0.2f, z * 0.24f) * 0.4f + 0.599f) * (colorizer.grayscale().length - 1))]
+                                            : (noise.getSimplex(x * 0.04f, y * 0.07f, z * 0.09f) > 0.1f)
                                             ? highlightColor
                                             : mainColor;
                         }
@@ -808,9 +821,7 @@ public class ModelMaker {
                 }
             }
         }
-        return Tools3D.largestPart(nextShip);
-        //return nextShip;
-        //return Tools3D.runCA(nextShip, 1);
+        return nextShip;
     }
 
     public byte[][][][] animateShip(byte[][][] spaceship, final int frameCount)
