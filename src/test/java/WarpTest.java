@@ -16,10 +16,13 @@ import squidpony.StringKit;
 import warpwriter.ModelMaker;
 import warpwriter.Tools3D;
 import warpwriter.VoxIO;
+import warpwriter.model.FetchModel;
 import warpwriter.model.TurnModel;
 import warpwriter.model.color.Colorizer;
+import warpwriter.model.fetch.AnimatedArrayModel;
 import warpwriter.model.fetch.ArrayModel;
-import warpwriter.model.fetch.ChaoticFetch;
+import warpwriter.model.fetch.BurstFetch;
+import warpwriter.model.fetch.OffsetModel;
 import warpwriter.view.WarpDraw;
 import warpwriter.view.color.VoxelColor;
 import warpwriter.view.render.VoxelPixmapRenderer;
@@ -37,7 +40,7 @@ public class WarpTest extends ApplicationAdapter {
     protected FrameBuffer buffer;
     protected Texture screenTexture, pmTexture;
     protected TextureRegion screenRegion;
-    protected TurnModel model, boom, warrior;
+    protected TurnModel model, ship;
     protected ModelMaker maker;
     private VoxelSpriteBatchRenderer batchRenderer;
     private VoxelPixmapRenderer pixmapRenderer;
@@ -47,8 +50,9 @@ public class WarpTest extends ApplicationAdapter {
     protected boolean diagonal = false;
     protected boolean animating = false;
     protected byte[][][][] explosion;
-    private byte[][][] voxels;
-    private ChaoticFetch chaos;
+    protected AnimatedArrayModel boom;
+    private byte[][][] voxels, container;
+//    private ChaoticFetch chaos;
 
     @Override
     public void create() {
@@ -73,22 +77,37 @@ public class WarpTest extends ApplicationAdapter {
 //            e.printStackTrace();
 //            box = maker.shipNoiseColorized();
 //        }
-        
+        makeBoom(maker.fireRange());
         voxels = maker.shipNoiseColorized();
 //        chaos = new ChaoticFetch(maker.rng.nextLong(), (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 1);
-        warrior = new TurnModel().set(
+        ship = new TurnModel().set(
 //                new ReplaceFetch(ColorFetch.color((byte) 0), (byte) 1)
 //                .add(new PaintFetch(chaos, true)).model(
                 new ArrayModel(voxels));
-        boom = new TurnModel().set(new ArrayModel(new byte[12][12][12]));
-        model = warrior;
+        model = new TurnModel().set(ship);
         Gdx.input.setInputProcessor(inputProcessor());
+    }
+    public void makeBoom(byte[] fireColors) {
+        FetchModel fm = new FetchModel(48, 48, 32);
+        container = new byte[48][48][32];
+        long state = maker.rng.getState();
+        Tools3D.translateCopyInto(maker.shipNoiseColorized(), container, 18, 18, 0);
+        AnimatedArrayModel fire = new AnimatedArrayModel(maker.animateExplosion(18, 40, 40, 32, fireColors));
+        BurstFetch burst = new BurstFetch(new ArrayModel(container), 24, 24, 3, 16, 2);
+        fm.add(burst).add(new OffsetModel(-4, -4, -2).add(fire));
+        byte[][][][] voxelFrames = new byte[16][][][];
+        boom = new AnimatedArrayModel(voxelFrames);
+        for (int i = 0; i < 16; i++) {
+            burst.setFrame(i);
+            fire.setFrame(i+2);
+            voxelFrames[i] = new ArrayModel(fm).voxels;
+        }
+        maker.rng.setState(state);
     }
 
     @Override
     public void render() {
-        if(animating)
-            ((ArrayModel)boom.getModel()).voxels = explosion[(int)(TimeUtils.millis() * 21 >>> 11) & 15];
+        boom.setFrame((int)(TimeUtils.millis() * 21 >>> 11) & 15);
         buffer.begin();
         
         Gdx.gl.glClearColor(0.4f, 0.75f, 0.3f, 1f);
@@ -191,19 +210,19 @@ public class WarpTest extends ApplicationAdapter {
                         model.turner().reset();
                         break;
                     case Input.Keys.P:
-                        model = warrior;
+                        model.set(ship);
                         //chaos.setSeed(maker.rng.nextLong());
                         Tools3D.deepCopyInto(maker.shipNoiseColorized(), voxels);
                         animating = false;
                         break;
                     case Input.Keys.B: // burn!
-                        explosion = maker.animateExplosion(16, 40, 40, 40);
-                        model = boom;
+                        makeBoom(maker.fireRange());
+                        model.set(boom);
                         animating = true;
                         break;
                     case Input.Keys.Z: // zap!
-                        explosion = maker.animateExplosion(16, 40, 40, 40, maker.randomFireRange());
-                        model = boom;
+                        makeBoom(maker.randomFireRange());
+                        model.set(boom);
                         animating = true;
                         break;
                     case Input.Keys.G:
