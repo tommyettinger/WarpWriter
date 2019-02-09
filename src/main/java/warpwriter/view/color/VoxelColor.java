@@ -1,5 +1,6 @@
 package warpwriter.view.color;
 
+import squidpony.squidmath.FastNoise;
 import warpwriter.Coloring;
 
 /**
@@ -245,14 +246,24 @@ public class VoxelColor implements IVoxelColor {
         return this;
     }
 
-    protected IDimmer twilight = Dimmer.RinsedDimmer;
-
+    protected IDimmer dimmer = Dimmer.RinsedDimmer;
+    
+    protected int shadeBit = dimmer.getShadeBit();
+    protected int waveBit = dimmer.getWaveBit();
+    protected FastNoise noise = null;
+    
     public IDimmer twilight() {
-        return twilight;
+        return dimmer;
     }
 
     public VoxelColor set(IDimmer twilight) {
-        this.twilight = twilight;
+        this.dimmer = twilight;
+        shadeBit = dimmer.getShadeBit();
+        waveBit = dimmer.getWaveBit();
+        if(waveBit != 0 && waveBit != shadeBit)
+        {
+            noise = new FastNoise(0x1337BEEF, 0.125f, FastNoise.SIMPLEX_FRACTAL, 2);
+        }
         return this;
     }
 
@@ -261,17 +272,17 @@ public class VoxelColor implements IVoxelColor {
         switch (lightDirection) {
             case ABOVE_RIGHT:
             case ABOVE_LEFT:
-                return twilight.bright(voxel);
+                return dimmer.bright(voxel);
             case LEFT_BELOW:
             case RIGHT_BELOW:
-                return twilight.dim(voxel);
+                return dimmer.dim(voxel);
             case BELOW_RIGHT:
             case BELOW_LEFT:
-                return twilight.dark(voxel);
+                return dimmer.dark(voxel);
             case RIGHT_ABOVE:
             case LEFT_ABOVE:
             default:
-                return twilight.medium(voxel);
+                return dimmer.medium(voxel);
         }
     }
 
@@ -280,16 +291,16 @@ public class VoxelColor implements IVoxelColor {
         switch (lightDirection) {
             case RIGHT_ABOVE:
             case RIGHT_BELOW:
-                return twilight.bright(voxel);
+                return dimmer.bright(voxel);
             case ABOVE_LEFT:
             case BELOW_LEFT:
             case LEFT_ABOVE:
-                return twilight.dim(voxel);
+                return dimmer.dim(voxel);
             case ABOVE_RIGHT:
             case BELOW_RIGHT:
             case LEFT_BELOW:
             default:
-                return twilight.medium(voxel);
+                return dimmer.medium(voxel);
         }
     }
 
@@ -298,16 +309,109 @@ public class VoxelColor implements IVoxelColor {
         switch (lightDirection) {
             case LEFT_ABOVE:
             case LEFT_BELOW:
-                return twilight.bright(voxel);
+                return dimmer.bright(voxel);
             case ABOVE_LEFT:
             case BELOW_LEFT:
             case RIGHT_BELOW:
-                return twilight.medium(voxel);
+                return dimmer.medium(voxel);
             default:
             case ABOVE_RIGHT:
             case BELOW_RIGHT:
             case RIGHT_ABOVE:
-                return twilight.dim(voxel);
+                return dimmer.dim(voxel);
+        }
+    }
+
+    @Override
+    public int verticalFace(byte voxel, int x, int y, int z, int time) {
+        if((voxel & waveBit) != 0)
+        {
+            if((voxel & shadeBit) != 0)
+            {
+                final int brightness = (x + y + z + time & 3);
+                return dimmer.dimmer(brightness + 1 - (brightness & (brightness << 1)), voxel);
+            }
+            else
+            {
+                return dimmer.dimmer((int)(noise.getConfiguredNoise(x, y, z, time) * 1.5f + 2.5f), voxel);
+            }
+        }
+        switch (lightDirection) {
+            case ABOVE_RIGHT:
+            case ABOVE_LEFT:
+                return dimmer.bright(voxel);
+            case LEFT_BELOW:
+            case RIGHT_BELOW:
+                return dimmer.dim(voxel);
+            case BELOW_RIGHT:
+            case BELOW_LEFT:
+                return dimmer.dark(voxel);
+            case RIGHT_ABOVE:
+            case LEFT_ABOVE:
+            default:
+                return dimmer.medium(voxel);
+        }
+    }
+
+    @Override
+    public int rightFace(byte voxel, int x, int y, int z, int time) {
+        if((voxel & waveBit) != 0)
+        {
+            if((voxel & shadeBit) != 0)
+            {
+                final int brightness = (x + y + z + time & 3);
+                return dimmer.dimmer(brightness + 1 - (brightness & (brightness << 1)), voxel);
+            }
+            else
+            {
+                return dimmer.dimmer((int)(noise.getConfiguredNoise(x, y, z, time) * 1.5f + 2.5f), voxel);
+            }
+        }
+
+        switch (lightDirection) {
+            case RIGHT_ABOVE:
+            case RIGHT_BELOW:
+                return dimmer.bright(voxel);
+            case ABOVE_LEFT:
+            case BELOW_LEFT:
+            case LEFT_ABOVE:
+                return dimmer.dim(voxel);
+            case ABOVE_RIGHT:
+            case BELOW_RIGHT:
+            case LEFT_BELOW:
+            default:
+                return dimmer.medium(voxel);
+        }
+    }
+
+    @Override
+    public int leftFace(byte voxel, int x, int y, int z, int time) {
+        if((voxel & waveBit) != 0)
+        {
+            if((voxel & shadeBit) != 0)
+            {
+                final int brightness = (x + y + z + time & 3);
+                return dimmer.dimmer(brightness + 1 - (brightness & (brightness << 1)), voxel);
+            }
+            else
+            {
+                return dimmer.dimmer((int)(noise.getConfiguredNoise(x, y, z, time) * 1.5f + 2.5f), voxel);
+            }
+        }
+
+        switch (lightDirection) {
+            case LEFT_ABOVE:
+            case LEFT_BELOW:
+                return dimmer.bright(voxel);
+            case ABOVE_LEFT:
+            case BELOW_LEFT:
+            case RIGHT_BELOW:
+                return dimmer.medium(voxel);
+            default:
+            case ABOVE_RIGHT:
+            case BELOW_RIGHT:
+            case RIGHT_ABOVE:
+                return dimmer.dim(voxel);
         }
     }
 
@@ -333,6 +437,21 @@ public class VoxelColor implements IVoxelColor {
 
         @Override
         public int rightFace(byte voxel) {
+            return simple(voxel);
+        }
+
+        @Override
+        public int verticalFace(byte voxel, int x, int y, int z, int time) {
+            return simple(voxel);
+        }
+
+        @Override
+        public int leftFace(byte voxel, int x, int y, int z, int time) {
+            return simple(voxel);
+        }
+
+        @Override
+        public int rightFace(byte voxel, int x, int y, int z, int time) {
             return simple(voxel);
         }
     }
@@ -362,16 +481,16 @@ public class VoxelColor implements IVoxelColor {
             switch (lightDirection) {
                 case ABOVE_RIGHT:
                 case ABOVE_LEFT:
-                    return darkSide ? twilight.medium(voxel) : twilight.bright(voxel);
+                    return darkSide ? dimmer.medium(voxel) : dimmer.bright(voxel);
                 default:
                 case RIGHT_ABOVE:
                 case LEFT_ABOVE:
                 case RIGHT_BELOW:
                 case LEFT_BELOW:
-                    return darkSide ? twilight.dim(voxel) : twilight.medium(voxel);
+                    return darkSide ? dimmer.dim(voxel) : dimmer.medium(voxel);
                 case BELOW_RIGHT:
                 case BELOW_LEFT:
-                    return darkSide ? twilight.dark(voxel) : twilight.dim(voxel);
+                    return darkSide ? dimmer.dark(voxel) : dimmer.dim(voxel);
             }
         }
 
@@ -380,9 +499,9 @@ public class VoxelColor implements IVoxelColor {
             switch (lightDirection) {
                 case LEFT_ABOVE:
                 case LEFT_BELOW:
-                    return darkSide ? twilight.medium(voxel) : twilight.bright(voxel);
+                    return darkSide ? dimmer.medium(voxel) : dimmer.bright(voxel);
                 default:
-                    return darkSide ? twilight.dim(voxel) : twilight.medium(voxel);
+                    return darkSide ? dimmer.dim(voxel) : dimmer.medium(voxel);
             }
         }
 
@@ -391,9 +510,9 @@ public class VoxelColor implements IVoxelColor {
             switch (lightDirection) {
                 case RIGHT_ABOVE:
                 case RIGHT_BELOW:
-                    return darkSide ? twilight.medium(voxel) : twilight.bright(voxel);
+                    return darkSide ? dimmer.medium(voxel) : dimmer.bright(voxel);
                 default:
-                    return darkSide ? twilight.dim(voxel) : twilight.medium(voxel);
+                    return darkSide ? dimmer.dim(voxel) : dimmer.medium(voxel);
             }
         }
     }

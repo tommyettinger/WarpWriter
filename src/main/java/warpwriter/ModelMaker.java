@@ -775,7 +775,7 @@ public class ModelMaker {
         int color;
         int seed = rng.nextInt(), current, paint;
         byte mainColor = colorizer.getReducer().paletteMapping[seed & 0x7FFF], // bottom 15 bits
-                highlightColor = colorizer.brighten(colorizer.getReducer().paletteMapping[seed >>> 17]), // top 15 bits
+                highlightColor = colorizer.brighten((byte) (colorizer.getReducer().paletteMapping[seed >>> 17] | colorizer.getWaveBit() | colorizer.getShadeBit())), // top 15 bits
                 cockpitColor = colorizer.darken(colorizer.reduce((0x20 + determineBounded(seed + 0x11111, 0x60) << 24)
                         | (0xA0 + determineBounded(seed + 0x22222, 0x60) << 16)
                         | (0xC8 + determineBounded(seed + 0x33333, 0x38) << 8) | 0xFF));
@@ -813,7 +813,7 @@ public class ModelMaker {
                                             // checks 6 bits of paint, unusual start
                                             : ((paint >>> 19 & 0x3F) < 36)
                                             ? colorizer.grayscale()[(int)((noise.getSimplex(x * 0.125f, y * 0.2f, z * 0.24f) * 0.4f + 0.599f) * (colorizer.grayscale().length - 1))]
-                                            : (noise.getSimplex(x * 0.04f, y * 0.07f, z * 0.09f) > 0.1f)
+                                            : (noise.getSimplex(x * 0.04f, y * 0.07f, z * 0.09f) > 0.15f)
                                             ? highlightColor
                                             : mainColor;
                         }

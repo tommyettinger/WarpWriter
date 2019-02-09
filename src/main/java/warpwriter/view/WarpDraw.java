@@ -3,6 +3,7 @@ package warpwriter.view;
 import com.badlogic.gdx.graphics.Pixmap;
 import warpwriter.Coloring;
 import warpwriter.model.IModel;
+import warpwriter.model.ITemporal;
 import warpwriter.view.color.IVoxelColor;
 import warpwriter.view.color.VoxelColor;
 import warpwriter.view.render.IRectangleRenderer;
@@ -330,6 +331,7 @@ public class WarpDraw {
     }
     public static Pixmap draw(IModel model, VoxelPixmapRenderer renderer)
     {
+        final int time = (model instanceof ITemporal) ? ((ITemporal) model).frame() : 0;
         final int sizeX = model.sizeX() - 1, sizeY = model.sizeY() - 1, sizeZ = model.sizeZ() - 1,
                 offsetPX = (sizeY >> 1) + 1, pixelWidth = sizeY * 3 + (sizeY >> 1) + 6, pixelHeight = sizeZ * 3 + 7;
         for (int z = 0; z <= sizeZ; z++) {
@@ -338,9 +340,9 @@ public class WarpDraw {
                     byte v = model.at(x, y, z);
                     if (v != 0) {
                         final int xPos = (sizeY - y) * 3 + offsetPX;
-                        renderer.rectRight(xPos, z * 3 + 1, 3, 3, v, 256 + x * 2);
+                        renderer.rectRight(xPos, z * 3 + 1, 3, 3, v, 256 + x * 2, x, y, z, time);
                         if (z >= sizeZ - 1 || model.at(x, y, z + 1) == 0)
-                            renderer.rectVertical(xPos, z * 3 + 4, 3, 1, v, 256 + x * 2);
+                            renderer.rectVertical(xPos, z * 3 + 4, 3, 1, v, 256 + x * 2, x, y, z, time);
                     }
                 }
             }
@@ -350,6 +352,7 @@ public class WarpDraw {
 
     public static Pixmap draw45(IModel model, VoxelPixmapRenderer renderer)
     {
+        final int time = (model instanceof ITemporal) ? ((ITemporal) model).frame() : 0;
         final int sizeX = model.sizeX() - 1, sizeY = model.sizeY() - 1, sizeZ = model.sizeZ() - 1,
                 pixelWidth = (sizeX + sizeY) * 2 + 7, pixelHeight = sizeZ * 3 + 7;
         int dep;
@@ -360,10 +363,10 @@ public class WarpDraw {
                     if (v != 0) {
                         dep = 3 * (x - y) + 256;
                         final int xPos = (sizeY + x - y) * 2 + 1;
-                        renderer.rectLeft(xPos, z * 3 + 1, 2, 3, v, dep);
-                        renderer.rectRight(xPos + 2, z * 3 + 1, 2, 3, v, dep);
+                        renderer.rectLeft(xPos, z * 3 + 1, 2, 3, v, dep, x, y, z, time);
+                        renderer.rectRight(xPos + 2, z * 3 + 1, 2, 3, v, dep, x, y, z, time);
                         if (z >= sizeZ - 1 || model.at(x, y, z + 1) == 0)
-                            renderer.rectVertical(xPos, z * 3 + 4, 4, 1, v, dep);
+                            renderer.rectVertical(xPos, z * 3 + 4, 4, 1, v, dep, x, y, z, time);
                     }
                 }
             }
@@ -372,6 +375,7 @@ public class WarpDraw {
     }
     public static Pixmap drawAbove(IModel model, VoxelPixmapRenderer renderer)
     {
+        final int time = (model instanceof ITemporal) ? ((ITemporal) model).frame() : 0;
         final int sizeX = model.sizeX() - 1, sizeY = model.sizeY() - 1, sizeZ = model.sizeZ() - 1,
                 offsetPX = (sizeY >> 1) + 1, offsetPY = (sizeX >> 1) + 1,
                 pixelWidth = (sizeY * 3) + (sizeY >> 1) + 6, pixelHeight = sizeZ * 2 + sizeX * 3 + (sizeX >> 1) + 8;
@@ -381,10 +385,10 @@ public class WarpDraw {
                     byte v = model.at(x, y, z);
                     if (v != 0) {
                         final int xPos = (sizeY - y) * 3 + offsetPX, yPos = z * 2 + (sizeX - x) * 3 + offsetPY;
-                        renderer.rectRight(xPos, yPos, 3, 2, v, 256 + z * 8 - d);
+                        renderer.rectRight(xPos, yPos, 3, 2, v, 256 + z * 8 - d, x, y, z, time);
                         if (z >= sizeZ - 1 || model.at(x, y, z + 1) == 0)
                         {
-                            renderer.rectVertical(xPos, yPos + 3, 3, 3, v, 255 + z * 8 - d);
+                            renderer.rectVertical(xPos, yPos + 3, 3, 3, v, 255 + z * 8 - d, x, y, z, time);
                         }
                     }
                 }
@@ -394,6 +398,7 @@ public class WarpDraw {
     }
     public static Pixmap drawIso(IModel model, VoxelPixmapRenderer renderer)
     {
+        final int time = (model instanceof ITemporal) ? ((ITemporal) model).frame() : 0;
         final int sizeX = model.sizeX() - 1, sizeY = model.sizeY() - 1, sizeZ = model.sizeZ() - 1,
                 pixelWidth = (sizeY + sizeX) * 2 + 7, pixelHeight = (sizeX + sizeY + sizeZ) * 2 + 7;
         int dep;
@@ -404,15 +409,15 @@ public class WarpDraw {
                     if (v != 0) {
                         dep = 3 * (x + y + z) + 256;
                         final int xPos = (sizeY - y + x) * 2 + 1, yPos = (z - x - y + sizeX + sizeY) * 2 + 1;
-                        renderer.rectLeft(xPos, yPos, 2, 2, v, dep);
-                        renderer.rectRight(xPos + 2, yPos, 2, 2, v, dep);
+                        renderer.rectLeft(xPos, yPos, 2, 2, v, dep, x, y, z, time);
+                        renderer.rectRight(xPos + 2, yPos, 2, 2, v, dep, x, y, z, time);
 //                        renderer.depths[xPos+1][yPos]++;
 //                        renderer.depths[xPos+2][yPos]++;
 //                        renderer.depths[xPos+1][yPos+1]++;
 //                        renderer.depths[xPos+2][yPos+1]++;
                         if (z >= sizeZ - 1 || model.at(x, y, z + 1) == 0)
                         {
-                            renderer.rectVertical(xPos, yPos + 2, 4, 2, v, dep);
+                            renderer.rectVertical(xPos, yPos + 2, 4, 2, v, dep, x, y, z, time);
 //                            renderer.depths[xPos+1][yPos+2]++;
 //                            renderer.depths[xPos+2][yPos+2]++;
 //                            renderer.depths[xPos+1][yPos+3]++;

@@ -85,6 +85,7 @@ public class WarpTest extends ApplicationAdapter {
 //                .add(new PaintFetch(chaos, true)).model(
                 new ArrayModel(voxels));
         model = new TurnModel().set(ship);
+        model.setDuration(16);
         Gdx.input.setInputProcessor(inputProcessor());
     }
     public void makeBoom(byte[] fireColors) {
@@ -107,7 +108,8 @@ public class WarpTest extends ApplicationAdapter {
 
     @Override
     public void render() {
-        boom.setFrame((int)(TimeUtils.millis() * 21 >>> 11) & 15);
+        model.setFrame((int)(TimeUtils.millis() >>> 7) & 15);
+        boom.setFrame((int)(TimeUtils.millis() >>> 7) & 15);
         buffer.begin();
         
         Gdx.gl.glClearColor(0.4f, 0.75f, 0.3f, 1f);

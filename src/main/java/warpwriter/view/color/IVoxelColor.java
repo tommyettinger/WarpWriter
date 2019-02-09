@@ -11,4 +11,10 @@ public interface IVoxelColor {
     int leftFace(byte voxel);
 
     int rightFace(byte voxel);
+    
+    int verticalFace(byte voxel, int x, int y, int z, int time);
+
+    int leftFace(byte voxel, int x, int y, int z, int time);
+
+    int rightFace(byte voxel, int x, int y, int z, int time);
 }

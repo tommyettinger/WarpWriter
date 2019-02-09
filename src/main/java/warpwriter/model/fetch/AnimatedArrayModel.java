@@ -17,8 +17,7 @@ import warpwriter.model.ITemporal;
  */
 public class AnimatedArrayModel extends Fetch implements IModel, ITemporal {
     public byte[][][][] voxels;
-    protected int frame = 0;
-    
+
     public AnimatedArrayModel() {
         this(new byte[8][12][12][8]);
     }
@@ -56,17 +55,19 @@ public class AnimatedArrayModel extends Fetch implements IModel, ITemporal {
      * @return this for chaining
      */
     @Override
-    public ITemporal setDuration(int duration) {
+    public Fetch setDuration(int duration) {
         return this;
     }
 
+    protected int frame = 0;
+    
     @Override
     public int frame() {
         return frame;
     }
 
     @Override
-    public ITemporal setFrame(int frame) {
+    public Fetch setFrame(int frame) {
         final int d = duration();
         this.frame = ((frame % d) + d) % d;
         return this;

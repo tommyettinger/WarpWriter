@@ -34,7 +34,7 @@ import warpwriter.model.nonvoxel.Turner;
  *
  * @author Ben McLean
  */
-public abstract class Fetch implements IFetch, IDecide {
+public abstract class Fetch implements IFetch, IDecide, ITemporal {
     /**
      * This method is intended to be overridden with a decision about which Fetch to use for the provided coordinate.
      * <p>
@@ -270,6 +270,36 @@ public abstract class Fetch implements IFetch, IDecide {
             default:
                 throw new ArrayIndexOutOfBoundsException();
         }
+    }
+    @Override
+    public int duration() {
+        return duration;
+    }
+
+    /**
+     * This default implementation sets the duration of any time-based effects used in this Fetch. Implementors are
+     * permitted to change this behavior so the duration can be fixed if only some amount of animation frames are
+     * reasonable to generate, but this should always return this Fetch for chaining.
+     * @param duration the new duration of any time-based effects, minimum 1
+     * @return this for chaining
+     */
+    @Override
+    public Fetch setDuration(int duration) {
+        this.duration = Math.max(duration, 1);
+        return this;
+    }
+
+    protected int frame = 0, duration = 1;
+
+    @Override
+    public int frame() {
+        return frame;
+    }
+
+    @Override
+    public Fetch setFrame(int frame) {
+        this.frame = ((frame % duration) + duration) % duration;
+        return this;
     }
 
     public Fetch offsetModel(int sizeX, int sizeY, int sizeZ) {

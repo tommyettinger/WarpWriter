@@ -78,16 +78,16 @@ public class VoxelPixmapRenderer implements IRectangleRenderer {
         );
     }
 
-    public IRectangleRenderer rectVertical(int x, int y, int sizeX, int sizeY, byte voxel, int depth) {
-        return rect(x, y, sizeX, sizeY, color.verticalFace(voxel), color.twilight().dark(voxel), depth);
+    public IRectangleRenderer rectVertical(int x, int y, int sizeX, int sizeY, byte voxel, int depth, int vx, int vy, int vz, int time) {
+        return rect(x, y, sizeX, sizeY, color.verticalFace(voxel, vx, vy, vz, time), color.twilight().dark(voxel), depth);
     }
 
-    public IRectangleRenderer rectLeft(int x, int y, int sizeX, int sizeY, byte voxel, int depth) {
-        return rect(x, y, sizeX, sizeY, color.leftFace(voxel), color.twilight().dark(voxel), depth);
+    public IRectangleRenderer rectLeft(int x, int y, int sizeX, int sizeY, byte voxel, int depth, int vx, int vy, int vz, int time) {
+        return rect(x, y, sizeX, sizeY, color.leftFace(voxel, vx, vy, vz, time), color.twilight().dark(voxel), depth);
     }
 
-    public IRectangleRenderer rectRight(int x, int y, int sizeX, int sizeY, byte voxel, int depth) {
-        return rect(x, y, sizeX, sizeY, color.rightFace(voxel), color.twilight().dark(voxel), depth);
+    public IRectangleRenderer rectRight(int x, int y, int sizeX, int sizeY, byte voxel, int depth, int vx, int vy, int vz, int time) {
+        return rect(x, y, sizeX, sizeY, color.rightFace(voxel, vx, vy, vz, time), color.twilight().dark(voxel), depth);
     }
 
     public int getPixel(int x, int y) {
