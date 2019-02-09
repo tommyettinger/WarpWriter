@@ -36,15 +36,6 @@ public interface IColorizer {
     byte[] grayscale();
 
     /**
-     * Allows implementors to mark whether an IColorizer allows shading to be customized between two variant meanings
-     * for each color index, determined by the status of a specific shade bit. If this returns 0, the palette does not
-     * support custom shading rules. If this returns a power of two between 1 and 128, when
-     * {@code (voxel & getShadeBit()) != 0}, an alternate set of shading rules will be used, passed on in some way to an
-     * {@link warpwriter.view.color.IDimmer} (most IColorizers also implement IDimmer, which makes this easy).
-     * @return 0 if this does not have configurable shading, or a power of two between 1 and 128 when that bit marks special voxels with different shading rules
-     */
-    int getShadeBit();
-    /**
      * @param color An RGBA8888 color
      * @return The nearest available color index in the palette.
      */
