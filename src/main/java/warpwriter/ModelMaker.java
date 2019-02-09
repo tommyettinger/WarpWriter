@@ -15,6 +15,7 @@ import java.util.Arrays;
 import static squidpony.squidmath.GWTRNG.*;
 import static squidpony.squidmath.MathExtras.clamp;
 import static squidpony.squidmath.Noise.HastyPointHash.hashAll;
+import static squidpony.squidmath.Noise.IntPointHash.hash32;
 import static squidpony.squidmath.Noise.IntPointHash.hashAll;
 /**
  * Created by Tommy Ettinger on 11/4/2017.
@@ -773,16 +774,19 @@ public class ModelMaker {
         byte[][][] nextShip = new byte[xSize][ySize][zSize];
         final int halfY = ySize >> 1, smallYSize = ySize - 1;
         int color;
-        int seed = rng.nextInt(), current, paint;
+        int seed = rng.nextInt(), current = seed, paint = seed;
+        byte[] fire = fireRange();
         byte mainColor = colorizer.getReducer().paletteMapping[seed & 0x7FFF], // bottom 15 bits
-                highlightColor = colorizer.brighten((byte) (colorizer.getReducer().paletteMapping[seed >>> 17] | colorizer.getWaveBit() | colorizer.getShadeBit())), // top 15 bits
+                highlightColor = colorizer.brighten(colorizer.getReducer().paletteMapping[seed >>> 17]), // top 15 bits
                 cockpitColor = colorizer.darken(colorizer.reduce((0x20 + determineBounded(seed + 0x11111, 0x60) << 24)
                         | (0xA0 + determineBounded(seed + 0x22222, 0x60) << 16)
-                        | (0xC8 + determineBounded(seed + 0x33333, 0x38) << 8) | 0xFF));
+                        | (0xC8 + determineBounded(seed + 0x33333, 0x38) << 8) | 0xFF)),
+                thrustColor = (byte) (colorizer.brighten(fire[determineInt(seed + 0x44444) & 3]) | colorizer.getWaveBit()), 
+                lightColor = (byte) (colorizer.brighten(colorizer.getReducer().paletteMapping[(seed ^ seed >>> 4 ^ seed >>> 13) & 0x7FFF]) | colorizer.getShadeBit() | colorizer.getWaveBit());
         // Arrays.binarySearch does not work for all grayscale() results; this may need adjusting
         if(Arrays.binarySearch(colorizer.grayscale(), highlightColor) >= 0)
             highlightColor = colorizer.getReducer().paletteMapping[determineInt(~seed) & 0x7FFF];
-        final FastNoise noise = new FastNoise(~seed, 0x1.4p0f / xSize);
+        final FastNoise noise = new FastNoise(seed ^ seed >>> 21 ^ seed << 6, 0x1.4p0f / xSize);
         int xx, yy, zz;
         for (int x = 0; x < xSize; x++) {
             for (int y = 0; y < halfY; y++) {
@@ -800,7 +804,7 @@ public class ModelMaker {
                         zz = z / 3;
                         current = hashAll(xx + (xx | zz) >> 3, (yy + (yy | zz)) / 3, zz, color, seed)
                         + (int) (noise.getSimplex(x * 0.5f, y * 0.75f, z * 0.666f) * 0x800000) + 0x800000;
-                        paint = hashAll((xx + (xx | z)) / 7, (yy + (yy | z)) / 5, z, color, seed);
+                        paint = hashAll((xx + (xx | z)) / 7, (yy + (yy | z)) / 5, z, color, seed + 0x12345);
                         if (color < 8) {
                             // checks sorta-top 3 bits
                             if((current >>> 21 & 7) != 0)
@@ -810,12 +814,38 @@ public class ModelMaker {
                                     // checks sorta-top 9 bits, different branch
                                     ((current >>> 15 & 0x1FF) < color * 6)
                                             ? 0
-                                            // checks 6 bits of paint, unusual start
-                                            : ((paint >>> 19 & 0x3F) < 36)
+                                            // checks 6 bits of paint
+                                            : ((paint & 0x3F) < 36) // is a random number from 0-63 less than 36? 
                                             ? colorizer.grayscale()[(int)((noise.getSimplex(x * 0.125f, y * 0.2f, z * 0.24f) * 0.4f + 0.599f) * (colorizer.grayscale().length - 1))]
                                             : (noise.getSimplex(x * 0.04f, y * 0.07f, z * 0.09f) > 0.15f)
                                             ? highlightColor
                                             : mainColor;
+                        }
+                    }
+                }
+            }
+        }
+        paint ^= paint << 7 ^ paint >>> 23;
+        current ^= current << 5 ^ current >>> 19;
+        for (int y = 0; y < halfY; y++) {
+            for (int z = 0; z < zSize; z++) {
+                if(hash32(z, y, paint) < 7)
+                {
+                    for (int x = xSize - 2; x >= 0; x--) {
+                        if(nextShip[x][y][z] != 0)
+                        {
+                            nextShip[x+1][smallYSize - y][z] = nextShip[x+1][y][z] = lightColor;
+                            break;
+                        }
+                    }
+                }
+                if(hash32(z * 3 >>> 2, y * 5 + (z >>> 1) >>> 3, current) < 15)
+                {
+                    for (int x = 1; x < xSize; x++) {
+                        if(nextShip[x][y][z] != 0)
+                        {
+                            nextShip[x-1][smallYSize - y][z] = nextShip[x-1][y][z] = thrustColor;
+                            break;
                         }
                     }
                 }
