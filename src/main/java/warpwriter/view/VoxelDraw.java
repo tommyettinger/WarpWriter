@@ -13,7 +13,7 @@ import warpwriter.view.render.ITriangleRenderer;
 public class VoxelDraw {
     protected static final BlinkRenderer brenderer = new BlinkRenderer();
 
-    public BlinkRenderer brenderer() {
+    public static BlinkRenderer brenderer() {
         return brenderer;
     }
 
