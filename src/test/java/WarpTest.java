@@ -13,20 +13,25 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.FakeLanguageGen;
 import squidpony.StringKit;
+import squidpony.squidmath.GWTRNG;
 import warpwriter.ModelMaker;
 import warpwriter.Tools3D;
 import warpwriter.VoxIO;
 import warpwriter.model.FetchModel;
+import warpwriter.model.IFetch;
+import warpwriter.model.IModel;
 import warpwriter.model.TurnModel;
 import warpwriter.model.color.Colorizer;
-import warpwriter.model.fetch.AnimatedArrayModel;
-import warpwriter.model.fetch.ArrayModel;
-import warpwriter.model.fetch.BurstFetch;
-import warpwriter.model.fetch.OffsetModel;
+import warpwriter.model.decide.DecideFetch;
+import warpwriter.model.decide.SphereDecide;
+import warpwriter.model.fetch.*;
+import warpwriter.model.nonvoxel.HashMap3D;
 import warpwriter.view.WarpDraw;
 import warpwriter.view.color.VoxelColor;
 import warpwriter.view.render.VoxelPixmapRenderer;
 import warpwriter.view.render.VoxelSpriteBatchRenderer;
+
+import static warpwriter.model.color.Colorizer.FlesurrectBonusColorizer;
 
 public class WarpTest extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 320;//640;
@@ -84,10 +89,32 @@ public class WarpTest extends ApplicationAdapter {
 //                new ReplaceFetch(ColorFetch.color((byte) 0), (byte) 1)
 //                .add(new PaintFetch(chaos, true)).model(
                 new ArrayModel(voxels));
-        model = new TurnModel().set(ship);
+        model = new TurnModel().set(model());
         model.setDuration(16);
         Gdx.input.setInputProcessor(inputProcessor());
     }
+    
+    public IModel model()
+    {
+        HashMap3D<IFetch> map = new HashMap3D<>();
+        for (int x = 0; x < 4; x++) {
+            for (int y = 0; y < 4; y++) {
+                byte midColor = FlesurrectBonusColorizer.getReducer().randomColorIndex(new GWTRNG());
+                if((y & 1) == 1)
+                    midColor |= FlesurrectBonusColorizer.getWaveBit();
+                if(y > 1)
+                    midColor |= FlesurrectBonusColorizer.getShadeBit();
+                map.put(x, y, 0, new DecideFetch(
+                        new SphereDecide(8, 8, 8, 7), ColorFetch.color(midColor)
+                ));
+            }
+        }
+        return new WorldFetch()
+                .set(map)
+                .model(64, 64, 16);
+
+    }
+    
     public void makeBoom(byte[] fireColors) {
         FetchModel fm = new FetchModel(48, 48, 32);
         container = new byte[48][48][32];
@@ -212,9 +239,9 @@ public class WarpTest extends ApplicationAdapter {
                         model.turner().reset();
                         break;
                     case Input.Keys.P:
-                        model.set(ship);
+                        model.set(model());
                         //chaos.setSeed(maker.rng.nextLong());
-                        Tools3D.deepCopyInto(maker.shipNoiseColorized(), voxels);
+                        //Tools3D.deepCopyInto(maker.shipNoiseColorized(), voxels);
                         animating = false;
                         break;
                     case Input.Keys.B: // burn!

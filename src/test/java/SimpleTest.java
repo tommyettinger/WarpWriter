@@ -21,7 +21,6 @@ import warpwriter.ModelMaker;
 import warpwriter.VoxIO;
 import warpwriter.model.IFetch;
 import warpwriter.model.IModel;
-import warpwriter.model.color.Colorizer;
 import warpwriter.model.decide.DecideFetch;
 import warpwriter.model.fetch.*;
 import warpwriter.model.nonvoxel.HashMap3D;
@@ -32,6 +31,8 @@ import warpwriter.view.render.VoxelSpriteBatchRenderer;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+
+import static warpwriter.model.color.Colorizer.FlesurrectBonusColorizer;
 
 public class SimpleTest extends ApplicationAdapter {
     /**
@@ -164,8 +165,8 @@ public class SimpleTest extends ApplicationAdapter {
                     //maker.warriorRandom()
             ));
         } catch (FileNotFoundException e) {
-            voxelSprite.set(new ArrayModel(maker.warriorRandom()));
-            batchRenderer.set(batchRenderer.color().set(Dimmer.RinsedDimmer));
+            voxelSprite.set(new ArrayModel(maker.shipNoiseColorized()));
+            batchRenderer.set(batchRenderer.color().set(FlesurrectBonusColorizer));
         }
     }
 
@@ -181,9 +182,9 @@ public class SimpleTest extends ApplicationAdapter {
         screenView.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.enableBlending();
 
-        maker = new ModelMaker(12345);
+        maker = new ModelMaker(12345, FlesurrectBonusColorizer);
         batchRenderer = new VoxelSpriteBatchRenderer(batch);
-        batchRenderer.color().set(Colorizer.AuroraBonusColorizer);
+        batchRenderer.color().set(FlesurrectBonusColorizer);
         voxelSprite = new VoxelSprite()
                 .set(batchRenderer)
                 .setOffset(VIRTUAL_WIDTH / 2, 100);
@@ -212,10 +213,10 @@ public class SimpleTest extends ApplicationAdapter {
 //                for (int z=0; z<3; z++)
 //                    map.put(x, y, 0, ColorFetch.color(maker.randomMainColor()));
             {
-                byte midColor = Colorizer.AuroraBonusColorizer.getReducer().randomColorIndex(maker.rng);
+                byte midColor = FlesurrectBonusColorizer.getReducer().randomColorIndex(maker.rng);
                 map.put(x, y, 0, new DecideFetch(
                         TileFetch.Diagonal16x16x16,
-                        new NoiseFetch(Colorizer.AuroraBonusColorizer.darken(midColor), midColor, midColor, Colorizer.AuroraBonusColorizer.brighten(midColor))
+                        new NoiseFetch(FlesurrectBonusColorizer.darken(midColor), midColor, midColor, FlesurrectBonusColorizer.brighten(midColor))
                 ));
             }
         }

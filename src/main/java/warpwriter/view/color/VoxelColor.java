@@ -321,6 +321,14 @@ public class VoxelColor implements IVoxelColor {
                 return dimmer.dim(voxel);
         }
     }
+    
+    protected int processNoise(int x, int y, int z, int time)
+    { 
+        float a = noise.getConfiguredNoise(x, y, z, time);
+        a = a * 0.5f + 0.5f;
+        return (int) (a * a * (9.0f - 6.0f * a)) + 1;
+    }
+    
 
     @Override
     public int verticalFace(byte voxel, int x, int y, int z, int time) {
@@ -333,7 +341,7 @@ public class VoxelColor implements IVoxelColor {
             }
             else
             {
-                return dimmer.dimmer((int)(noise.getConfiguredNoise(x, y, z, time) * 1.5f + 2.5f), voxel);
+                return dimmer.dimmer(processNoise(x, y, z, time), voxel);
             }
         }
         switch (lightDirection) {
@@ -364,7 +372,7 @@ public class VoxelColor implements IVoxelColor {
             }
             else
             {
-                return dimmer.dimmer((int)(noise.getConfiguredNoise(x, y, z, time) * 1.5f + 2.5f), voxel);
+                return dimmer.dimmer(processNoise(x, y, z, time), voxel);
             }
         }
 
@@ -395,7 +403,7 @@ public class VoxelColor implements IVoxelColor {
             }
             else
             {
-                return dimmer.dimmer((int)(noise.getConfiguredNoise(x, y, z, time) * 1.5f + 2.5f), voxel);
+                return dimmer.dimmer(processNoise(x, y, z, time), voxel);
             }
         }
 
