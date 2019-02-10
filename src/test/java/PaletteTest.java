@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import squidpony.squidmath.NumberTools;
 import warpwriter.Coloring;
 
 public class PaletteTest extends ApplicationAdapter {
@@ -157,21 +158,22 @@ public class PaletteTest extends ApplicationAdapter {
         batch.setShader(defaultShader);
         for (int x = 0; x < 8; x++)
             for (int y = 0; y < 32; y++) {
-                batch.setColor(color((byte) (x * 32 + y)));
-                batch.draw(one, x * (VIRTUAL_WIDTH / 8), VIRTUAL_HEIGHT - y * 22, VIRTUAL_WIDTH / 8, 22);
+                batch.setColor(NumberTools.reversedIntBitsToFloat(color((byte) (x * 32 + y)) & -2));
+                batch.draw(one, x * (VIRTUAL_WIDTH / 8), VIRTUAL_HEIGHT - y * 22 - 22, VIRTUAL_WIDTH / 8, 22);
             }
         batch.end();
         buffer.end();
         Gdx.gl.glClearColor(
-                ((backgroundColor >> 24) & 0xff) / 255f,
-                ((backgroundColor >> 16) & 0xff) / 255f,
-                ((backgroundColor >> 8) & 0xff) / 255f,
+                ((backgroundColor >>> 24) & 0xff) / 255f,
+                ((backgroundColor >>> 16) & 0xff) / 255f,
+                ((backgroundColor >>> 8) & 0xff) / 255f,
                 (backgroundColor & 0xff) / 255f
         );
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         screenView.apply();
         batch.setProjectionMatrix(screenView.getCamera().combined);
         batch.begin();
+        batch.setColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
         screenTexture = buffer.getColorBufferTexture();
         screenTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         screenRegion.setRegion(screenTexture);
@@ -191,7 +193,6 @@ public class PaletteTest extends ApplicationAdapter {
         batch.setShader(shader);
         shader.setUniformf("outlineH", 1f / VIRTUAL_HEIGHT);
         shader.setUniformf("outlineW", 1f / VIRTUAL_WIDTH);
-        batch.setColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
         for (int x = 0; x < 8; x++)
             for (int y = 0; y < 32; y++)
                 font.draw(batch, Integer.toString(x * 32 + y), x * (VIRTUAL_WIDTH / 8) + 2, VIRTUAL_HEIGHT - y * 22 - 6);
