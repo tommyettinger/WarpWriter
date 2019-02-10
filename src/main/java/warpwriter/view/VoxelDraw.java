@@ -1,6 +1,5 @@
 package warpwriter.view;
 
-import warpwriter.Coloring;
 import warpwriter.model.IModel;
 import warpwriter.view.render.IRectangleRenderer;
 import warpwriter.view.render.ITriangleRenderer;
@@ -566,28 +565,5 @@ public class VoxelDraw {
             }
             // Finish drawing right edge
         }
-    }
-
-    static boolean flash = false;
-    static long time = System.currentTimeMillis();
-    static final long duration = 500; // Milliseconds flashes last
-
-    /**
-     * This enables colors to flash onscreen for debugging purposes.
-     *
-     * @param color Color to show when not flashing
-     * @return White if flash is active, else color.
-     */
-    static byte f(byte color) {
-        final long now = System.currentTimeMillis();
-        if (now - time >= duration) {
-            flash = !flash;
-            time = now;
-        }
-        return flash ? Coloring.rinsed("Gray 0") : color;
-    }
-
-    static byte f() {
-        return f((byte) 0);
     }
 }

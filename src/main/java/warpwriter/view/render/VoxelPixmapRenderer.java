@@ -233,5 +233,4 @@ public class VoxelPixmapRenderer implements IRectangleRenderer {
         ArrayTools.fill(outlines, 0);
         return pixmap;
     }
-
 }
