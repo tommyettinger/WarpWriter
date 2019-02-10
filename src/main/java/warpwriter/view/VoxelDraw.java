@@ -1,6 +1,7 @@
 package warpwriter.view;
 
 import warpwriter.model.IModel;
+import warpwriter.view.render.BlinkRenderer;
 import warpwriter.view.render.IRectangleRenderer;
 import warpwriter.view.render.ITriangleRenderer;
 
@@ -10,6 +11,12 @@ import warpwriter.view.render.ITriangleRenderer;
  * @author Ben McLean
  */
 public class VoxelDraw {
+    protected static final BlinkRenderer brenderer = new BlinkRenderer();
+
+    public BlinkRenderer brenderer() {
+        return brenderer;
+    }
+
     public static void draw(IModel model, IRectangleRenderer renderer) {
         drawRight(model, renderer);
     }
@@ -219,6 +226,7 @@ public class VoxelDraw {
     }
 
     public static void drawAbove(IModel model, IRectangleRenderer renderer, int scaleX, int scaleY) {
+        brenderer.set(renderer);
         final int sizeX = model.sizeX(),
                 sizeY = model.sizeY(),
                 sizeZ = model.sizeZ(),

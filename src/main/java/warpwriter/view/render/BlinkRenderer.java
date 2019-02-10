@@ -1,7 +1,6 @@
 package warpwriter.view.render;
 
 import com.badlogic.gdx.graphics.Color;
-import warpwriter.Coloring;
 
 /**
  * BlinkRenderer will flash a specified color to help identify which part of the code is rendering which pixels onscreen. Uses encapsulation to be compatible with IRectangleRenderer and ITriangleRenderer.
@@ -47,7 +46,7 @@ public class BlinkRenderer implements IRectangleRenderer, ITriangleRenderer {
         return f((int) 0);
     }
 
-    protected byte voxel = Coloring.rinsed("Gray 0");
+    protected byte voxel = 127;
 
     /**
      * @param voxel Sets which voxel color to flash
