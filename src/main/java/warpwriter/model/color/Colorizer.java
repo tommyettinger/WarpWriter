@@ -1,5 +1,7 @@
 package warpwriter.model.color;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.MathUtils;
 import squidpony.squidmath.IRNG;
 import warpwriter.Coloring;
 import warpwriter.PaletteReducer;
@@ -78,6 +80,26 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
      */
     protected void setReducer(PaletteReducer reducer) {
         this.reducer = reducer;
+    }
+
+    private static float luma(final Color color)
+    {
+        return color.r * 0x8.Ap-5f + color.g * 0xF.Fp-5f + color.b * 0x6.1p-5f
+                + 0x1.6p-5f - (Math.max(color.r, Math.max(color.g, color.b))
+                - Math.min(color.r, Math.min(color.g, color.b))) * 0x1.6p-5f;
+    }
+
+    private static float co(final Color color)
+    {
+        return color.r * 0x8p-4f /* + color.g * -0x1p-4f */ + color.b * -0x8p-4f;
+    }
+
+    private static float cg(final Color color)
+    {
+        return color.r * -0x4p-4f + color.g * 0x8p-4f + color.b * -0x4p-4f;
+    }
+    private static double difference(float y1, float co1, float cg1, float y2, float co2, float cg2) {
+        return (y1 - y2) * (y1 - y2) + ((co1 - co2) * (co1 - co2) + (cg1 - cg2) * (cg1 - cg2)) * 0.325;
     }
 
 
@@ -906,7 +928,183 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
         public int getWaveBit() {
             return 0x80;
         }
-
     };
 
+    public static final Colorizer ArbitraryColorizer(final int[] palette) {
+        final int COUNT = palette.length;
+        final double THRESHOLD = 0.011; // threshold controls the "stark-ness" of color changes; must not be negative.
+        final byte[] paletteMapping = new byte[1 << 16];
+        final int[] reverse = new int[COUNT];
+        final byte[][] ramps = new byte[COUNT][4];
+        final float[] lumas = new float[COUNT], cos = new float[COUNT], cgs = new float[COUNT];
+        final int yLim = 63, coLim = 31, cgLim = 31, shift1 = 6, shift2 = 11;
+        Color col = new Color();
+        for (int i = 1; i < COUNT; i++) {
+            col.set(palette[i]);
+            reverse[i] =
+                    (int) ((lumas[i] = luma(col)) * yLim)
+                            | (int) (((cos[i] = co(col)) + 0.5f) * coLim) << shift1
+                            | (int) (((cgs[i] = cg(col)) + 0.5f) * cgLim) << shift2;
+            paletteMapping[reverse[i]] = (byte) i;
+        }
+
+        float cgf, cof, yf;
+        for (int cr = 0; cr <= cgLim; cr++) {
+            cgf = (float) cr / cgLim - 0.5f;
+            for (int cb = 0; cb <= coLim; cb++) {
+                cof = (float) cb / coLim - 0.5f;
+                for (int y = 0; y <= yLim; y++) {
+                    final int c2 = cr << shift2 | cb << shift1 | y;
+                    if (paletteMapping[c2] == 0) {
+                        yf = (float) y / yLim;
+                        double dist = Double.POSITIVE_INFINITY;
+                        for (int i = 1; i < COUNT; i++) {
+                            if (Math.abs(lumas[i] - yf) < 0.2f && dist > (dist = Math.min(dist, difference(lumas[i], cos[i], cgs[i], yf, cof, cgf))))
+                                paletteMapping[c2] = (byte) i;
+                        }
+                    }
+                }
+            }
+        }
+        PaletteReducer reducer = new PaletteReducer(palette);
+
+        final byte[] primary = {
+                reducer.reduceIndex(0xFF0000FF), reducer.reduceIndex(0xFFFF00FF), reducer.reduceIndex(0x00FF00FF),
+                reducer.reduceIndex(0x00FFFFFF), reducer.reduceIndex(0x0000FFFF), reducer.reduceIndex(0xFF00FFFF)
+        }, grays = {
+                reducer.reduceIndex(0x000000FF), reducer.reduceIndex(0x444444FF), reducer.reduceIndex(0x888888FF),
+                reducer.reduceIndex(0xCCCCCCFF), reducer.reduceIndex(0xFFFFFFFF)
+        };
+
+        float adj;
+        int idx2;
+        for (int i = 1; i < COUNT; i++) {
+            int rev = reverse[i], y = rev & yLim, match = i;
+            yf = lumas[i];
+            cof = cos[i];
+            cgf = cgs[i];
+            ramps[i][2] = (byte)i;//Color.rgba8888(DAWNBRINGER_AURORA[i]);
+            ramps[i][3] = grays[4];//15;  //0xFFFFFFFF, white
+            ramps[i][1] = grays[0];//0x010101FF, black
+            ramps[i][0] = grays[0];//0x010101FF, black
+            for (int yy = y + 2, rr = rev + 2; yy <= yLim; yy++, rr++) {
+                if ((idx2 = paletteMapping[rr] & 255) != i && difference(lumas[idx2], cos[idx2], cgs[idx2], yf, cof, cgf) > THRESHOLD) {
+                    ramps[i][3] = paletteMapping[rr];
+                    break;
+                }
+                adj = 1f + ((yLim + 1 >>> 1) - yy) * 0x1p-10f;
+                cof = MathUtils.clamp(cof * adj, -0.5f, 0.5f);
+                cgf = MathUtils.clamp(cgf * adj + 0x1.8p-10f, -0.5f, 0.5f);
+
+                rr = yy
+                        | (int) ((cof + 0.5f) * coLim) << shift1
+                        | (int) ((cgf + 0.5f) * cgLim) << shift2;
+            }
+            cof = cos[i];
+            cgf = cgs[i];
+            for (int yy = y - 2, rr = rev - 2; yy > 0; rr--) {
+                if ((idx2 = paletteMapping[rr] & 255) != i && difference(lumas[idx2], cos[idx2], cgs[idx2], yf, cof, cgf) > THRESHOLD) {
+                    ramps[i][1] = paletteMapping[rr];
+                    rev = rr;
+                    y = yy;
+                    match = paletteMapping[rr] & 255;
+                    break;
+                }
+                adj = 1f + (yy - (yLim + 1 >>> 1)) * 0x1p-10f;
+                cof = MathUtils.clamp(cof * adj, -0.5f, 0.5f);
+                cgf = MathUtils.clamp(cgf * adj - 0x1.8p-10f, -0.5f, 0.5f);
+
+//                cof = (cof - 0.5f) * 0.984375f + 0.5f;
+//                cgf = (cgf + 0.5f) * 0.984375f - 0.5f;
+                rr = yy
+                        | (int) ((cof + 0.5f) * coLim) << shift1
+                        | (int) ((cgf + 0.5f) * cgLim) << shift2;
+
+//                cof = MathUtils.clamp(cof * 0.9375f, -0.5f, 0.5f);
+//                cgf = MathUtils.clamp(cgf * 0.9375f, -0.5f, 0.5f);
+//                rr = yy
+//                        | (int) ((cof + 0.5f) * 63) << 7
+//                        | (int) ((cgf + 0.5f) * 63) << 13;
+                if (--yy == 0) {
+                    match = -1;
+                }
+            }
+            if (match >= 0) {
+                for (int yy = y - 3, rr = rev - 3; yy > 0; yy--, rr--) {
+                    if ((idx2 = paletteMapping[rr] & 255) != match && difference(lumas[idx2], cos[idx2], cgs[idx2], yf, cof, cgf) > THRESHOLD) {
+                        ramps[i][0] = paletteMapping[rr];
+                        break;
+                    }
+                    adj = 1f + (yy - (yLim + 1 >>> 1)) * 0x1p-10f;
+                    cof = MathUtils.clamp(cof * adj, -0.5f, 0.5f);
+                    cgf = MathUtils.clamp(cgf * adj - 0x1.8p-10f, -0.5f, 0.5f);
+
+//                    cof = (cof - 0.5f) * 0.96875f + 0.5f;
+//                    cgf = (cgf + 0.5f) * 0.96875f - 0.5f;
+                    rr = yy
+                            | (int) ((cof + 0.5f) * coLim) << shift1
+                            | (int) ((cgf + 0.5f) * cgLim) << shift2;
+
+//                    cof = MathUtils.clamp(cof * 0.9375f, -0.5f, 0.5f);
+//                    cgf = MathUtils.clamp(cgf * 0.9375f, -0.5f, 0.5f);
+//                    rr = yy
+//                            | (int) ((cof + 0.5f) * 63) << 7
+//                            | (int) ((cgf + 0.5f) * 63) << 13;
+                }
+            }
+        }
+        
+
+        return new Colorizer(reducer) {
+
+            @Override
+            public byte[] mainColors() {
+                return primary;
+            }
+
+            /**
+             * @return An array of grayscale or close-to-grayscale color indices, with the darkest first and lightest last.
+             */
+            @Override
+            public byte[] grayscale() {
+                return grays;
+            }
+
+            @Override
+            public byte brighten(byte voxel) {
+                return ramps[(voxel & 0xFF) % COUNT][3];
+            }
+
+            @Override
+            public byte darken(byte voxel) {
+                // the second half of voxels (with bit 0x40 set) don't shade visually, but Colorizer uses this method to
+                // denote a structural change to the voxel's makeup, so this uses the first 64 voxel colors to shade both
+                // halves, then marks voxels from the second half back to being an unshaded voxel as the last step.
+                return ramps[(voxel & 0xFF) % COUNT][1];
+            }
+
+            @Override
+            public int dimmer(int brightness, byte voxel) {
+                return palette[ramps[(voxel & 0xFF) % COUNT][
+                        brightness <= 0
+                                ? 0
+                                : brightness >= 3
+                                ? 3
+                                : brightness
+                        ] & 0xFF];
+            }
+
+            @Override
+            public int getShadeBit() {
+                return 0;
+            }
+
+            @Override
+            public int getWaveBit() {
+                return 0;
+            }
+        };
+    }
+    
+    
 }

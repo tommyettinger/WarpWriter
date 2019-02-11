@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.FakeLanguageGen;
 import squidpony.StringKit;
 import squidpony.squidmath.GWTRNG;
+import warpwriter.Coloring;
 import warpwriter.ModelMaker;
 import warpwriter.Tools3D;
 import warpwriter.VoxIO;
@@ -30,8 +31,6 @@ import warpwriter.view.WarpDraw;
 import warpwriter.view.color.VoxelColor;
 import warpwriter.view.render.VoxelPixmapRenderer;
 import warpwriter.view.render.VoxelSpriteBatchRenderer;
-
-import static warpwriter.model.color.Colorizer.FlesurrectBonusColorizer;
 
 public class WarpTest extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 320;//640;
@@ -57,6 +56,7 @@ public class WarpTest extends ApplicationAdapter {
     protected byte[][][][] explosion;
     protected AnimatedArrayModel boom;
     private byte[][][] voxels, container;
+    private Colorizer colorizer;
 //    private ChaoticFetch chaos;
 
     @Override
@@ -70,12 +70,13 @@ public class WarpTest extends ApplicationAdapter {
         screenView.getCamera().position.set(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2, 0);
         screenView.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.enableBlending();
+        colorizer = Colorizer.ArbitraryColorizer(Coloring.VGA256);
 
-        voxelColor = new VoxelColor().set(Colorizer.FlesurrectBonusColorizer);
+        voxelColor = new VoxelColor().set(colorizer);
         batchRenderer = new VoxelSpriteBatchRenderer(batch).setOffset(16, 100);
         pixmapRenderer = new VoxelPixmapRenderer(new Pixmap(512, 512, Pixmap.Format.RGBA8888), voxelColor);
         pmTexture = new Texture(pixmapRenderer.pixmap);
-        maker = new ModelMaker(12345, Colorizer.FlesurrectBonusColorizer);
+        maker = new ModelMaker(12345, colorizer);
 //        try {
 //            box = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("Aurora/dumbcube.vox")));
 //        } catch (Exception e) {
@@ -99,11 +100,11 @@ public class WarpTest extends ApplicationAdapter {
         HashMap3D<IFetch> map = new HashMap3D<>();
         for (int x = 0; x < 4; x++) {
             for (int y = 0; y < 4; y++) {
-                byte midColor = FlesurrectBonusColorizer.getReducer().randomColorIndex(new GWTRNG());
+                byte midColor = colorizer.getReducer().randomColorIndex(new GWTRNG());
                 if((y & 1) == 1)
-                    midColor |= FlesurrectBonusColorizer.getWaveBit();
+                    midColor |= colorizer.getWaveBit();
                 if(y > 1)
-                    midColor |= FlesurrectBonusColorizer.getShadeBit();
+                    midColor |= colorizer.getShadeBit();
                 map.put(x, y, 0, new DecideFetch(
                         new SphereDecide(8, 8, 8, 7), ColorFetch.color(midColor)
                 ));
@@ -286,8 +287,8 @@ public class WarpTest extends ApplicationAdapter {
                     case Input.Keys.S: // smaller palette, 64 colors
                         if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT))
                         {
-                            pixmapRenderer.color().set(Colorizer.FlesurrectBonusColorizer);
-                            maker.setColorizer(Colorizer.FlesurrectBonusColorizer);
+                            pixmapRenderer.color().set(colorizer);
+                            maker.setColorizer(colorizer);
                         }
                         else 
                         {
