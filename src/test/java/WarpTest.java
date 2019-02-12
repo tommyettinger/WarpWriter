@@ -70,7 +70,7 @@ public class WarpTest extends ApplicationAdapter {
         screenView.getCamera().position.set(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2, 0);
         screenView.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.enableBlending();
-        colorizer = Colorizer.ArbitraryColorizer(Coloring.VGA256);
+        colorizer = Colorizer.arbitraryColorizer(Coloring.VGA256);
 
         voxelColor = new VoxelColor().set(colorizer);
         batchRenderer = new VoxelSpriteBatchRenderer(batch).setOffset(16, 100);

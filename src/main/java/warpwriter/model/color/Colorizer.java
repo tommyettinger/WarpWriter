@@ -1,6 +1,5 @@
 package warpwriter.model.color;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import squidpony.squidmath.IRNG;
 import warpwriter.Coloring;
@@ -82,24 +81,32 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
         this.reducer = reducer;
     }
 
-    private static float luma(final Color color)
+    private static int luma(final int r, final int g, final int b)
     {
-        return color.r * 0x8.Ap-5f + color.g * 0xF.Fp-5f + color.b * 0x6.1p-5f
-                + 0x1.6p-5f - (Math.max(color.r, Math.max(color.g, color.b))
-                - Math.min(color.r, Math.min(color.g, color.b))) * 0x1.6p-5f;
+        return r * 0x96 + g * 0xB6 + b * 0x65 + 0x4E - (Math.max(r, Math.max(g, b)) - Math.min(r, Math.min(g, b))) * 0x4F;
+//        return color.r * 0x8.Ap-5f + color.g * 0xF.Fp-5f + color.b * 0x6.1p-5f
+//                + 0x1.6p-5f - (Math.max(color.r, Math.max(color.g, color.b))
+//                - Math.min(color.r, Math.min(color.g, color.b))) * 0x1.6p-5f;
+        // r * 0x8A + g * 0xFF + b * 0x61 + 0x15 - (Math.max(r, Math.max(g, b)) - Math.min(r, Math.min(g, b))) * 0x16;
+        // 0x8A + 0xFF + 0x61 + 0x16 - 0x16
     }
 
-    private static float co(final Color color)
-    {
-        return color.r * 0x8p-4f /* + color.g * -0x1p-4f */ + color.b * -0x8p-4f;
-    }
-
-    private static float cg(final Color color)
-    {
-        return color.r * -0x4p-4f + color.g * 0x8p-4f + color.b * -0x4p-4f;
-    }
-    private static double difference(float y1, float co1, float cg1, float y2, float co2, float cg2) {
-        return (y1 - y2) * (y1 - y2) + ((co1 - co2) * (co1 - co2) + (cg1 - cg2) * (cg1 - cg2)) * 0.325;
+    /**
+     * Approximates the "color distance" between two colors defined by their YCoCg values. The luma in parameters y1 and
+     * y2 should be calculated with {@link #luma(int, int, int)}, which is not the standard luminance value for YCoCg;
+     * it will range from 0 to 63 typically. The chrominance orange values co1 and co2, and the chrominance green values
+     * cg1 and cg2, should range from 0 to 31 typically by taking the standard range of -0.5 to 0.5, adding 0.5,
+     * multiplying by 31 and rounding to an int.
+     * @param y1 luma for color 1; from 0 to 63, calculated by {@link #luma(int, int, int)}
+     * @param co1 chrominance orange for color 1; from 0 to 31, usually related to {@code red - blue}
+     * @param cg1 chrominance green for color 1; from 0 to 31, usually related to {@code green - (red + blue) * 0.5}
+     * @param y2 luma for color 2; from 0 to 63, calculated by {@link #luma(int, int, int)}
+     * @param co2 chrominance orange for color 2; from 0 to 31, usually related to {@code red - blue}
+     * @param cg2 chrominance green for color 2; from 0 to 31, usually related to {@code green - (red + blue) * 0.5}
+     * @return a non-negative int that is larger for more-different colors; typically somewhat large
+     */
+    private static int difference(int y1, int co1, int cg1, int y2, int co2, int cg2) {
+        return ((y1 - y2) * (y1 - y2) << 2) + (((co1 - co2) * (co1 - co2) + (cg1 - cg2) * (cg1 - cg2)) * 3);
     }
 
 
@@ -930,42 +937,8 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
         }
     };
 
-    public static final Colorizer ArbitraryColorizer(final int[] palette) {
+    public static Colorizer arbitraryColorizer(final int[] palette) {
         final int COUNT = palette.length;
-        final double THRESHOLD = 0.011; // threshold controls the "stark-ness" of color changes; must not be negative.
-        final byte[] paletteMapping = new byte[1 << 16];
-        final int[] reverse = new int[COUNT];
-        final byte[][] ramps = new byte[COUNT][4];
-        final float[] lumas = new float[COUNT], cos = new float[COUNT], cgs = new float[COUNT];
-        final int yLim = 63, coLim = 31, cgLim = 31, shift1 = 6, shift2 = 11;
-        Color col = new Color();
-        for (int i = 1; i < COUNT; i++) {
-            col.set(palette[i]);
-            reverse[i] =
-                    (int) ((lumas[i] = luma(col)) * yLim)
-                            | (int) (((cos[i] = co(col)) + 0.5f) * coLim) << shift1
-                            | (int) (((cgs[i] = cg(col)) + 0.5f) * cgLim) << shift2;
-            paletteMapping[reverse[i]] = (byte) i;
-        }
-
-        float cgf, cof, yf;
-        for (int cr = 0; cr <= cgLim; cr++) {
-            cgf = (float) cr / cgLim - 0.5f;
-            for (int cb = 0; cb <= coLim; cb++) {
-                cof = (float) cb / coLim - 0.5f;
-                for (int y = 0; y <= yLim; y++) {
-                    final int c2 = cr << shift2 | cb << shift1 | y;
-                    if (paletteMapping[c2] == 0) {
-                        yf = (float) y / yLim;
-                        double dist = Double.POSITIVE_INFINITY;
-                        for (int i = 1; i < COUNT; i++) {
-                            if (Math.abs(lumas[i] - yf) < 0.2f && dist > (dist = Math.min(dist, difference(lumas[i], cos[i], cgs[i], yf, cof, cgf))))
-                                paletteMapping[c2] = (byte) i;
-                        }
-                    }
-                }
-            }
-        }
         PaletteReducer reducer = new PaletteReducer(palette);
 
         final byte[] primary = {
@@ -975,20 +948,55 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
                 reducer.reduceIndex(0x000000FF), reducer.reduceIndex(0x444444FF), reducer.reduceIndex(0x888888FF),
                 reducer.reduceIndex(0xCCCCCCFF), reducer.reduceIndex(0xFFFFFFFF)
         };
+        final int THRESHOLD = 65;//0.011; // threshold controls the "stark-ness" of color changes; must not be negative.
+        final byte[] paletteMapping = new byte[1 << 16];
+        final int[] reverse = new int[COUNT];
+        final byte[][] ramps = new byte[COUNT][4];
+        final int[] lumas = new int[COUNT], cos = new int[COUNT], cgs = new int[COUNT];
+        final int yLim = 63, coLim = 31, cgLim = 31, shift1 = 6, shift2 = 11;
+        int color, r, g, b, co, cg, t;
+        for (int i = 1; i < COUNT; i++) {
+            color = palette[i];
+            r = (color >>> 24);
+            g = (color >>> 16 & 0xFF);
+            b = (color >>> 8 & 0xFF);
+            co = r - b;
+            t = b + (co >> 1);
+            cg = g - t;
+            reverse[i] = 
+                    (lumas[i] = luma(r, g, b) >>> 11)
+                            | (cos[i] = co + 255 >>> 4) << shift1
+                            | (cgs[i] = cg + 255 >>> 4) << shift2;
+            paletteMapping[reverse[i]] = (byte) i;
+        }
 
-        float adj;
+        for (int icg = 0; icg <= cgLim; icg++) {
+            for (int ico = 0; ico <= coLim; ico++) {
+                for (int iy = 0; iy <= yLim; iy++) {
+                    final int c2 = icg << shift2 | ico << shift1 | iy;
+                    if (paletteMapping[c2] == 0) {
+                        int dist = 0x7FFFFFFF;
+                        for (int i = 1; i < COUNT; i++) {
+                            if (Math.abs(lumas[i] - iy) < 28 && dist > (dist = Math.min(dist, difference(lumas[i], cos[i], cgs[i], iy, ico, icg))))
+                                paletteMapping[c2] = (byte) i;
+                        }
+                    }
+                }
+            }
+        }
+
+        float adj, cof, cgf;
         int idx2;
         for (int i = 1; i < COUNT; i++) {
             int rev = reverse[i], y = rev & yLim, match = i;
-            yf = lumas[i];
-            cof = cos[i];
-            cgf = cgs[i];
-            ramps[i][2] = (byte)i;//Color.rgba8888(DAWNBRINGER_AURORA[i]);
+            cof = ((co = cos[i]) - 16) * 0x1.111112p-5f;
+            cgf = ((cg = cgs[i]) - 16) * 0x1.111112p-5f;
+            ramps[i][2] = (byte)i;
             ramps[i][3] = grays[4];//15;  //0xFFFFFFFF, white
             ramps[i][1] = grays[0];//0x010101FF, black
             ramps[i][0] = grays[0];//0x010101FF, black
-            for (int yy = y + 2, rr = rev + 2; yy <= yLim; yy++, rr++) {
-                if ((idx2 = paletteMapping[rr] & 255) != i && difference(lumas[idx2], cos[idx2], cgs[idx2], yf, cof, cgf) > THRESHOLD) {
+            for (int yy = y + 3, rr = rev + 3; yy <= yLim; yy++, rr++) {
+                if ((idx2 = paletteMapping[rr] & 255) != i && difference(lumas[idx2], cos[idx2], cgs[idx2], y, co, cg) > THRESHOLD) {
                     ramps[i][3] = paletteMapping[rr];
                     break;
                 }
@@ -997,13 +1005,13 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
                 cgf = MathUtils.clamp(cgf * adj + 0x1.8p-10f, -0.5f, 0.5f);
 
                 rr = yy
-                        | (int) ((cof + 0.5f) * coLim) << shift1
-                        | (int) ((cgf + 0.5f) * cgLim) << shift2;
+                        | (co = (int) ((cof + 0.5f) * coLim)) << shift1
+                        | (cg = (int) ((cgf + 0.5f) * cgLim)) << shift2;
             }
-            cof = cos[i];
-            cgf = cgs[i];
-            for (int yy = y - 2, rr = rev - 2; yy > 0; rr--) {
-                if ((idx2 = paletteMapping[rr] & 255) != i && difference(lumas[idx2], cos[idx2], cgs[idx2], yf, cof, cgf) > THRESHOLD) {
+            cof = ((co = cos[i]) - 16) * 0x1.111112p-5f;
+            cgf = ((cg = cgs[i]) - 16) * 0x1.111112p-5f;
+            for (int yy = y - 4, rr = rev - 4; yy > 0; rr--) {
+                if ((idx2 = paletteMapping[rr] & 255) != i && difference(lumas[idx2], cos[idx2], cgs[idx2], y, co, cg) > THRESHOLD) {
                     ramps[i][1] = paletteMapping[rr];
                     rev = rr;
                     y = yy;
@@ -1017,8 +1025,8 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
 //                cof = (cof - 0.5f) * 0.984375f + 0.5f;
 //                cgf = (cgf + 0.5f) * 0.984375f - 0.5f;
                 rr = yy
-                        | (int) ((cof + 0.5f) * coLim) << shift1
-                        | (int) ((cgf + 0.5f) * cgLim) << shift2;
+                        | (co = (int) ((cof + 0.5f) * coLim)) << shift1
+                        | (cg = (int) ((cgf + 0.5f) * cgLim)) << shift2;
 
 //                cof = MathUtils.clamp(cof * 0.9375f, -0.5f, 0.5f);
 //                cgf = MathUtils.clamp(cgf * 0.9375f, -0.5f, 0.5f);
@@ -1030,8 +1038,10 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
                 }
             }
             if (match >= 0) {
-                for (int yy = y - 3, rr = rev - 3; yy > 0; yy--, rr--) {
-                    if ((idx2 = paletteMapping[rr] & 255) != match && difference(lumas[idx2], cos[idx2], cgs[idx2], yf, cof, cgf) > THRESHOLD) {
+                co = cos[match];
+                cg = cgs[match];
+                for (int yy = y - 5, rr = rev - 5; yy > 0; yy--, rr--) {
+                    if ((idx2 = paletteMapping[rr] & 255) != match && difference(lumas[idx2], cos[idx2], cgs[idx2], y, co, cg) > THRESHOLD) {
                         ramps[i][0] = paletteMapping[rr];
                         break;
                     }
@@ -1042,8 +1052,8 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
 //                    cof = (cof - 0.5f) * 0.96875f + 0.5f;
 //                    cgf = (cgf + 0.5f) * 0.96875f - 0.5f;
                     rr = yy
-                            | (int) ((cof + 0.5f) * coLim) << shift1
-                            | (int) ((cgf + 0.5f) * cgLim) << shift2;
+                            | (co = (int) ((cof + 0.5f) * coLim)) << shift1
+                            | (cg = (int) ((cgf + 0.5f) * cgLim)) << shift2;
 
 //                    cof = MathUtils.clamp(cof * 0.9375f, -0.5f, 0.5f);
 //                    cgf = MathUtils.clamp(cgf * 0.9375f, -0.5f, 0.5f);
@@ -1053,7 +1063,7 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
                 }
             }
         }
-        
+
 
         return new Colorizer(reducer) {
 
@@ -1105,6 +1115,5 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
             }
         };
     }
-    
     
 }
