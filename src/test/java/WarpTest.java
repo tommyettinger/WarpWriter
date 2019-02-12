@@ -13,7 +13,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.FakeLanguageGen;
 import squidpony.StringKit;
-import squidpony.squidmath.GWTRNG;
 import warpwriter.Coloring;
 import warpwriter.ModelMaker;
 import warpwriter.Tools3D;
@@ -70,6 +69,10 @@ public class WarpTest extends ApplicationAdapter {
         screenView.getCamera().position.set(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2, 0);
         screenView.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.enableBlending();
+//        colorizer = Colorizer.arbitraryColorizer(Coloring.AURORA);
+//        colorizer = Colorizer.arbitraryColorizer(Coloring.GB_GREEN);
+//        colorizer = Colorizer.arbitraryColorizer(Coloring.UNSEVEN);
+//        colorizer = Colorizer.arbitraryColorizer(Coloring.CW_PALETTE);
         colorizer = Colorizer.arbitraryColorizer(Coloring.VGA256);
 
         voxelColor = new VoxelColor().set(colorizer);
@@ -100,7 +103,7 @@ public class WarpTest extends ApplicationAdapter {
         HashMap3D<IFetch> map = new HashMap3D<>();
         for (int x = 0; x < 4; x++) {
             for (int y = 0; y < 4; y++) {
-                byte midColor = colorizer.getReducer().randomColorIndex(new GWTRNG());
+                byte midColor = colorizer.getReducer().randomColorIndex(maker.rng);
                 if((y & 1) == 1)
                     midColor |= colorizer.getWaveBit();
                 if(y > 1)

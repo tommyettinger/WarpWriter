@@ -83,7 +83,7 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
 
     private static int luma(final int r, final int g, final int b)
     {
-        return r * 0x96 + g * 0xB6 + b * 0x65 + 0x4E - (Math.max(r, Math.max(g, b)) - Math.min(r, Math.min(g, b))) * 0x4F;
+        return r * 0x9C + g * 0xF6 + b * 0x65 + 0x18 - (Math.max(r, Math.max(g, b)) - Math.min(r, Math.min(g, b))) * 0x19;
 //        return color.r * 0x8.Ap-5f + color.g * 0xF.Fp-5f + color.b * 0x6.1p-5f
 //                + 0x1.6p-5f - (Math.max(color.r, Math.max(color.g, color.b))
 //                - Math.min(color.r, Math.min(color.g, color.b))) * 0x1.6p-5f;
@@ -948,7 +948,7 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
                 reducer.reduceIndex(0x000000FF), reducer.reduceIndex(0x444444FF), reducer.reduceIndex(0x888888FF),
                 reducer.reduceIndex(0xCCCCCCFF), reducer.reduceIndex(0xFFFFFFFF)
         };
-        final int THRESHOLD = 65;//0.011; // threshold controls the "stark-ness" of color changes; must not be negative.
+        final int THRESHOLD = 64;//0.011; // threshold controls the "stark-ness" of color changes; must not be negative.
         final byte[] paletteMapping = new byte[1 << 16];
         final int[] reverse = new int[COUNT];
         final byte[][] ramps = new byte[COUNT][4];
@@ -995,7 +995,7 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
             ramps[i][3] = grays[4];//15;  //0xFFFFFFFF, white
             ramps[i][1] = grays[0];//0x010101FF, black
             ramps[i][0] = grays[0];//0x010101FF, black
-            for (int yy = y + 3, rr = rev + 3; yy <= yLim; yy++, rr++) {
+            for (int yy = y + 2, rr = rev + 2; yy <= yLim; yy++, rr++) {
                 if ((idx2 = paletteMapping[rr] & 255) != i && difference(lumas[idx2], cos[idx2], cgs[idx2], y, co, cg) > THRESHOLD) {
                     ramps[i][3] = paletteMapping[rr];
                     break;
@@ -1008,9 +1008,9 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
                         | (co = (int) ((cof + 0.5f) * coLim)) << shift1
                         | (cg = (int) ((cgf + 0.5f) * cgLim)) << shift2;
             }
-            cof = ((co = cos[i]) - 16) * 0x1.111112p-5f;
-            cgf = ((cg = cgs[i]) - 16) * 0x1.111112p-5f;
-            for (int yy = y - 4, rr = rev - 4; yy > 0; rr--) {
+            cof = ((co = cos[i]) - 16) * 0x0.Bp-5f;
+            cgf = ((cg = cgs[i]) - 16) * 0x0.Bp-5f;
+            for (int yy = y - 2, rr = rev - 2; yy > 0; rr--) {
                 if ((idx2 = paletteMapping[rr] & 255) != i && difference(lumas[idx2], cos[idx2], cgs[idx2], y, co, cg) > THRESHOLD) {
                     ramps[i][1] = paletteMapping[rr];
                     rev = rr;
@@ -1038,9 +1038,9 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
                 }
             }
             if (match >= 0) {
-                co = cos[match];
-                cg = cgs[match];
-                for (int yy = y - 5, rr = rev - 5; yy > 0; yy--, rr--) {
+                cof = ((co = cos[match]) - 16) * 0x1.111112p-5f;
+                cgf = ((cg = cgs[match]) - 16) * 0x1.111112p-5f;
+                for (int yy = y - 3, rr = rev - 3; yy > 0; yy--, rr--) {
                     if ((idx2 = paletteMapping[rr] & 255) != match && difference(lumas[idx2], cos[idx2], cgs[idx2], y, co, cg) > THRESHOLD) {
                         ramps[i][0] = paletteMapping[rr];
                         break;
