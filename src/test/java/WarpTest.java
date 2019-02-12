@@ -48,9 +48,9 @@ public class WarpTest extends ApplicationAdapter {
     private VoxelSpriteBatchRenderer batchRenderer;
     private VoxelPixmapRenderer pixmapRenderer;
     protected VoxelColor voxelColor;
-    protected int angle = 2;
+    protected int angle = 3;
     protected int frame = 0;
-    protected boolean diagonal = false;
+    protected boolean diagonal = true;
     protected boolean animating = false;
     protected byte[][][][] explosion;
     protected AnimatedArrayModel boom;
@@ -69,11 +69,12 @@ public class WarpTest extends ApplicationAdapter {
         screenView.getCamera().position.set(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2, 0);
         screenView.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.enableBlending();
-//        colorizer = Colorizer.arbitraryColorizer(Coloring.AURORA);
+//        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.AURORA);
 //        colorizer = Colorizer.arbitraryColorizer(Coloring.GB_GREEN);
-//        colorizer = Colorizer.arbitraryColorizer(Coloring.UNSEVEN);
-//        colorizer = Colorizer.arbitraryColorizer(Coloring.CW_PALETTE);
-        colorizer = Colorizer.arbitraryColorizer(Coloring.VGA256);
+//        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.UNSEVEN);
+//        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.CW_PALETTE);
+        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
+//        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.FLESURRECT);
 
         voxelColor = new VoxelColor().set(colorizer);
         batchRenderer = new VoxelSpriteBatchRenderer(batch).setOffset(16, 100);
