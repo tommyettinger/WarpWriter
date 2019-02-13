@@ -181,7 +181,7 @@ public class SimpleTest extends ApplicationAdapter {
         screenView.getCamera().position.set(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2, 0);
         screenView.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.enableBlending();
-
+        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
         maker = new ModelMaker(12345, colorizer);
         batchRenderer = new VoxelSpriteBatchRenderer(batch);
         batchRenderer.color().set(colorizer);

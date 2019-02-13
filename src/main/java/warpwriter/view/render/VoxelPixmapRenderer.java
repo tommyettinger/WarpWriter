@@ -1,6 +1,7 @@
 package warpwriter.view.render;
 
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.utils.IntIntMap;
 import squidpony.ArrayTools;
 import warpwriter.view.color.VoxelColor;
 
@@ -141,7 +142,9 @@ public class VoxelPixmapRenderer implements IRectangleRenderer {
     private int lightness(int color) {
         return (color >>> 24) + (color >>> 16 & 0xFF) + (color >>> 8 & 0xFF);
     }
-
+    
+    private static final IntIntMap counts = new IntIntMap(9);
+    
     public Pixmap blit(int threshold, int pixelWidth, int pixelHeight) {
         pixmap.setColor(0);
         pixmap.fill();
@@ -201,25 +204,41 @@ public class VoxelPixmapRenderer implements IRectangleRenderer {
 
         if (easing) {
             int o, a, b, c, d, e, f, g, h;
-            int lo;
+            int tgt, lo;
             for (int x = 1; x < xSize; x++) {
                 for (int y = 1; y < ySize; y++) {
                     o = render[x][y];
-                    a = render[x - 1][y - 1];
-                    b = render[x + 1][y - 1];
-                    c = render[x - 1][y + 1];
-                    d = render[x + 1][y + 1];
-                    e = render[x - 1][y];
-                    f = render[x + 1][y];
-                    g = render[x][y - 1];
-                    h = render[x][y + 1];
                     if (o != 0) {
-                        if (a != 0 && b != 0 && c != 0 && d != 0 && e != 0 && f != 0 && g != 0 && h != 0 && (e != f || g != h)) {
+                        counts.clear();
+                        //counts.put(o, 2);
+                        counts.getAndIncrement(a = render[x - 1][y - 1], 0, 1);
+                        counts.getAndIncrement(b = render[x + 1][y - 1], 0, 1);
+                        counts.getAndIncrement(c = render[x - 1][y + 1], 0, 1);
+                        counts.getAndIncrement(d = render[x + 1][y + 1], 0, 1);
+                        counts.getAndIncrement(e = render[x - 1][y], 0, 1);
+                        counts.getAndIncrement(f = render[x + 1][y], 0, 1);
+                        counts.getAndIncrement(g = render[x][y - 1], 0, 1);
+                        counts.getAndIncrement(h = render[x][y + 1], 0, 1);
+                        if (a != 0 && b != 0 && c != 0 && d != 0 && e != 0 && f != 0 && g != 0 && h != 0) {
+                            tgt = 0;
                             lo = lightness(o);
-                            if (a == d && lightness(a) > lo)
-                                pixmap.drawPixel(x, pmh - y, a);
-                            else if (b == c && lightness(b) > lo)
-                                pixmap.drawPixel(x, pmh - y, b);
+                            if(counts.get(a, 0) >= 4 && lightness(a) < lo)
+                                tgt = a;
+                            else if(counts.get(b, 0) >= 4 && lightness(b) < lo)
+                                tgt = b;
+                            else if(counts.get(c, 0) >= 4 && lightness(c) < lo)
+                                tgt = c;
+                            else if(counts.get(d, 0) >= 4 && lightness(d) < lo)
+                                tgt = d;
+                            if(tgt != 0) {
+                                pixmap.drawPixel(x, pmh - y, tgt);
+
+//                                lt = lightness(tgt);
+//                                if (a == d && lt < lo)
+//                                    pixmap.drawPixel(x, pmh - y, a);
+//                                else if (b == c && lb < lo)
+//                                    pixmap.drawPixel(x, pmh - y, b);
+                            }
                             //else pixmap.drawPixel(x, y, color.dimmer().medium(o));
                         }
                     }
