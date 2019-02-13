@@ -211,7 +211,7 @@ public class PaletteTest extends ApplicationAdapter {
     }
 
     public int color(byte voxel) {
-        return Coloring.AURORA[voxel & 255];
+        return Coloring.VGA256[voxel & 255];
     }
 
     @Override
