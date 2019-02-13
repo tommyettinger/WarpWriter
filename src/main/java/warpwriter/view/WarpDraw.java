@@ -388,13 +388,13 @@ public class WarpDraw {
                         renderer.rectRight(xPos, yPos, 3, 2, v, 256 + z * 8 - d, x, y, z, time);
                         if (z >= sizeZ - 1 || model.at(x, y, z + 1) == 0)
                         {
-                            renderer.rectVertical(xPos, yPos + 3, 3, 3, v, 255 + z * 8 - d, x, y, z, time);
+                            renderer.rectVertical(xPos, yPos + 3, 3, 3, v, 260 + z * 8 - d, x, y, z, time);
                         }
                     }
                 }
             }
         }
-        return renderer.blit(12, pixelWidth, pixelHeight);
+        return renderer.blit(13, pixelWidth, pixelHeight);
     }
     public static Pixmap drawIso(IModel model, VoxelPixmapRenderer renderer)
     {
@@ -403,7 +403,7 @@ public class WarpDraw {
                 pixelWidth = (sizeY + sizeX) * 2 + 7, pixelHeight = (sizeX + sizeY + sizeZ) * 2 + 7;
         int dep;
         for (int z = 0; z <= sizeZ; z++) {
-            for (int x = sizeX; x >= 0; x--) {
+            for (int x = 0; x <= sizeX; x++) {
                 for (int y = 0; y <= sizeY; y++) {
                     byte v = model.at(x, y, z);
                     if (v != 0) {

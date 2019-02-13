@@ -832,7 +832,7 @@ public class ModelMaker {
                 if(hash32(z, y, paint) < 7)
                 {
                     for (int x = xSize - 2; x >= 0; x--) {
-                        if(nextShip[x][y][z] != 0)
+                        if(nextShip[x][y][z] != 0 && nextShip[x][y][z] != cockpitColor)
                         {
                             nextShip[x+1][smallYSize - y][z] = nextShip[x+1][y][z] = lightColor;
                             break;
@@ -842,7 +842,7 @@ public class ModelMaker {
                 if(hash32(z * 3 >>> 2, y * 5 + (z >>> 1) >>> 3, current) < 15)
                 {
                     for (int x = 1; x < xSize; x++) {
-                        if(nextShip[x][y][z] != 0)
+                        if(nextShip[x][y][z] != 0 && nextShip[x][y][z] != cockpitColor)
                         {
                             nextShip[x-1][smallYSize - y][z] = nextShip[x-1][y][z] = thrustColor;
                             break;

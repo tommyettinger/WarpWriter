@@ -13,7 +13,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.FakeLanguageGen;
 import squidpony.StringKit;
-import warpwriter.Coloring;
 import warpwriter.ModelMaker;
 import warpwriter.Tools3D;
 import warpwriter.VoxIO;
@@ -73,9 +72,9 @@ public class WarpTest extends ApplicationAdapter {
 //        colorizer = Colorizer.arbitraryColorizer(Coloring.GB_GREEN);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.UNSEVEN);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.CW_PALETTE);
-        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
+//        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.FLESURRECT);
-
+        colorizer = Colorizer.FlesurrectBonusColorizer;
         voxelColor = new VoxelColor().set(colorizer);
         batchRenderer = new VoxelSpriteBatchRenderer(batch).setOffset(16, 100);
         pixmapRenderer = new VoxelPixmapRenderer(new Pixmap(512, 512, Pixmap.Format.RGBA8888), voxelColor);
@@ -88,13 +87,13 @@ public class WarpTest extends ApplicationAdapter {
 //            box = maker.shipNoiseColorized();
 //        }
         makeBoom(maker.fireRange());
-        voxels = maker.shipNoiseColorized();
+        voxels = maker.shipLargeNoiseColorized();
 //        chaos = new ChaoticFetch(maker.rng.nextLong(), (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 1);
         ship = new TurnModel().set(
 //                new ReplaceFetch(ColorFetch.color((byte) 0), (byte) 1)
 //                .add(new PaintFetch(chaos, true)).model(
                 new ArrayModel(voxels));
-        model = new TurnModel().set(model());
+        model = new TurnModel().set(ship);
         model.setDuration(16);
         Gdx.input.setInputProcessor(inputProcessor());
     }
@@ -244,9 +243,9 @@ public class WarpTest extends ApplicationAdapter {
                         model.turner().reset();
                         break;
                     case Input.Keys.P:
-                        model.set(model());
-                        //chaos.setSeed(maker.rng.nextLong());
-                        //Tools3D.deepCopyInto(maker.shipNoiseColorized(), voxels);
+//                        model.set(model());
+//                        chaos.setSeed(maker.rng.nextLong());
+                        Tools3D.deepCopyInto(maker.shipLargeNoiseColorized(), voxels);
                         animating = false;
                         break;
                     case Input.Keys.B: // burn!
