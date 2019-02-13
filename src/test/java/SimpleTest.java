@@ -33,8 +33,6 @@ import warpwriter.view.render.VoxelSpriteBatchRenderer;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-import static warpwriter.model.color.Colorizer.FlesurrectBonusColorizer;
-
 public class SimpleTest extends ApplicationAdapter {
     /**
      * This is the default vertex shader from libGDX.
@@ -168,7 +166,7 @@ public class SimpleTest extends ApplicationAdapter {
             ));
         } catch (FileNotFoundException e) {
             voxelSprite.set(new ArrayModel(maker.shipNoiseColorized()));
-            batchRenderer.set(batchRenderer.color().set(FlesurrectBonusColorizer));
+            batchRenderer.set(batchRenderer.color().set(colorizer));
         }
     }
 
@@ -207,7 +205,6 @@ public class SimpleTest extends ApplicationAdapter {
     }
 
     public IModel model() {
-        // batchRenderer.color().set(Dimmer.AuroraToFlesurrectDimmer);
         // return new ArrayModel(maker.shipLargeRandomColorized())
         HashMap3D<IFetch> map = new HashMap3D<>();
         for (int x=0; x<3; x++) {
