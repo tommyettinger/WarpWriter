@@ -1,6 +1,7 @@
 package warpwriter.model.fetch;
 
 import warpwriter.model.Fetch;
+import warpwriter.model.IFetch;
 
 /**
  * Offsets the coordinates of the contained IFetch
@@ -8,9 +9,9 @@ import warpwriter.model.Fetch;
  * @author Ben McLean
  */
 public class OffsetFetch extends Fetch {
-    protected Fetch fetch;
+    protected IFetch fetch;
 
-    public Fetch getFetch() {
+    public IFetch getFetch() {
         return fetch;
     }
 
