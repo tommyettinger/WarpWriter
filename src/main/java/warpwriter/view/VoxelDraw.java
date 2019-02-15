@@ -233,10 +233,8 @@ public class VoxelDraw {
                 pixelHeight = (sizeX + sizeZ) * 2;
         for (int vy = 0; vy < sizeY; vy++) { // voxel y is pixel x
             // Begin bottom row
-            {
-                final byte v = model.at(0, vy, 0);
-                if (v != 0) renderer.rectRight(vy * scaleX, 0, scaleX, scaleY, v);
-            }
+            byte v = model.at(0, vy, 0);
+            if (v != 0) renderer.rectRight(vy * scaleX, 0, scaleX, scaleY, v);
             // Finish bottom row
             // Begin main bulk of model
             for (int py = 1; py < pixelHeight; py += 2) { // pixel y
@@ -244,27 +242,27 @@ public class VoxelDraw {
                 final int startX = (py / 2) > sizeZ - 1 ? (py / 2) - sizeZ + 1 : 0,
                         startZ = (py / 2) > sizeZ - 1 ? sizeZ - 1 : (py / 2);
                 for (int vx = startX, vz = startZ;
-                     vx < sizeX && vz >= 0;
+                     vx <= sizeX && vz >= -1;
                      vx++, vz--) { // vx is voxel x, vz is voxel z
                     if (!above && vz + 1 < sizeZ && vx < sizeX) {
-                        final byte v = model.at(vx, vy, vz + 1);
+                        v = model.at(vx, vy, vz + 1);
                         if (v != 0) {
                             renderer.rectRight(vy * scaleX, (py + 1) * scaleY, scaleX, scaleY, v);
                             above = true;
                         }
                     }
                     if (!below && vx > 0 && vz >= 0) {
-                        final byte v = model.at(vx - 1, vy, vz);
+                        v = model.at(vx - 1, vy, vz);
                         if (v != 0) {
                             renderer.rectVertical(vy * scaleX, py * scaleY, scaleX, scaleY, v);
                             below = true;
                         }
                     }
                     if ((above && below) || vx >= sizeX || vz < 0) break;
-                    final byte v = model.at(vx, vy, vz);
+                    v = model.at(vx, vy, vz);
                     if (v != 0) {
                         if (!above) renderer.rectVertical(vy * scaleX, (py + 1) * scaleY, scaleX, scaleY, v);
-                        if (!below) brenderer.rectRight(vy * scaleX, py * scaleY, scaleX, scaleY, v);
+                        if (!below) renderer.rectRight(vy * scaleX, py * scaleY, scaleX, scaleY, v);
                         break;
                     }
                 }
@@ -282,7 +280,7 @@ public class VoxelDraw {
     public static int isoWidth(IModel model) {
         final int sizeVX = model.sizeX(), sizeVY = model.sizeY();
         return (sizeVX + sizeVY) * 2 -
-                ((sizeVX + sizeVY & 1) << 2); // if sizeVX + sizeVY is odd, this is 4, otherwise it is 0 
+                ((sizeVX + sizeVY & 1) << 2); // if sizeVX + sizeVY is odd, this is 4, otherwise it is 0
     }
 
     public static void drawIso(IModel model, ITriangleRenderer renderer) {
