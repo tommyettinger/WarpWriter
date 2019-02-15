@@ -1,7 +1,6 @@
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3WindowAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -18,22 +17,17 @@ import squidpony.StringKit;
 import squidpony.squidmath.NumberTools;
 import warpwriter.Coloring;
 import warpwriter.ModelMaker;
-import warpwriter.VoxIO;
+import warpwriter.model.FetchModel;
 import warpwriter.model.IFetch;
 import warpwriter.model.IModel;
 import warpwriter.model.color.Colorizer;
 import warpwriter.model.decide.DecideFetch;
 import warpwriter.model.fetch.*;
 import warpwriter.model.nonvoxel.HashMap3D;
-import warpwriter.model.nonvoxel.LittleEndianDataInputStream;
 import warpwriter.view.VoxelSprite;
-import warpwriter.view.color.Dimmer;
 import warpwriter.view.render.VoxelSpriteBatchRenderer;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-
-public class SimpleTest extends ApplicationAdapter {
+public class OneRovingVoxelTest extends ApplicationAdapter {
     /**
      * This is the default vertex shader from libGDX.
      */
@@ -75,41 +69,6 @@ public class SimpleTest extends ApplicationAdapter {
             "   gl_FragColor = v_color * texture2D( u_texture, v_texCoords );\n" +
             "   gl_FragColor.a = alpha;\n" +
             "}";
-    /**
-     * This fragment shader draws a black outline around things.
-     */
-    public static final String fragmentShaderLighterOutline = "#version 150\n" +
-            "varying vec2 v_texCoords;\n" +
-            "varying vec4 v_color;\n" +
-            "uniform float outlineH;\n" +
-            "uniform float outlineW;\n" +
-            "uniform sampler2D u_texture;\n" +
-            "void main()\n" +
-            "{\n" +
-            "   vec2 offsetx;\n" +
-            "   offsetx.x = outlineW;\n" +
-            "   vec2 offsety;\n" +
-            "   offsety.y = outlineH;\n" +
-            "   vec4 self = texture2D( u_texture, v_texCoords );\n" +
-            "   if(self.a > 0.0)\n" +
-            "   {\n" +
-            "     gl_FragColor = v_color * self;\n" +
-            "   }\n" +
-            "   else\n" +
-            "   {\n" +
-            "     vec4 e = texture2D( u_texture, v_texCoords + offsetx);\n" +
-            "     vec4 w = texture2D( u_texture, v_texCoords - offsetx);\n" +
-            "     vec4 n = texture2D( u_texture, v_texCoords + offsety);\n" +
-            "     vec4 s = texture2D( u_texture, v_texCoords - offsety);\n" +
-            "     gl_FragColor.rgb = e.rgb * e.a + w.rgb * w.a + n.rgb * n.a + s.rgb * s.a;\n" +
-            "     gl_FragColor.a = 0;\n" +
-            "     if(length(gl_FragColor.rgb) > 0.0)\n" +
-            "     {\n" +
-            "       gl_FragColor.rgb /= (e.a + w.a + n.a + s.a) * 1.75;\n" +
-            "       gl_FragColor.a = 1.0;\n" +
-            "     }\n" +
-            "   }\n" +
-            "}";
 
     //public static final int backgroundColor = Color.rgba8888(Color.DARK_GRAY);
     public static final int SCREEN_WIDTH = 1280;
@@ -130,44 +89,16 @@ public class SimpleTest extends ApplicationAdapter {
     protected ShaderProgram shader;
     protected ShaderProgram defaultShader;
     protected Colorizer colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
+    protected OneRovingVoxelModel oneRovingVoxelModel = new OneRovingVoxelModel();
 
     public static void main(String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-        config.setTitle("Simple Tester");
+        config.setTitle("One Roving Voxel Test");
         config.setWindowedMode(SCREEN_WIDTH, SCREEN_HEIGHT);
         config.setIdleFPS(10);
         config.useVsync(false);
-        final SimpleTest app = new SimpleTest();
-        config.setWindowListener(new Lwjgl3WindowAdapter() {
-            @Override
-            public void filesDropped(String[] files) {
-                if (files != null && files.length > 0) {
-                    if (files[0].endsWith(".vox"))
-                        app.load(files[0]);
-                }
-            }
-        });
-
+        final OneRovingVoxelTest app = new OneRovingVoxelTest();
         new Lwjgl3Application(app, config);
-    }
-
-    public void load(String name) {
-        try {
-            //// loads a file by its full path, which we get via drag+drop
-            final byte[][][] arr = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream(name)));
-            //// set the palette to the one from the vox model, using arbitraryDimmer()
-            batchRenderer.set(batchRenderer.color().set(Dimmer.arbitraryDimmer(VoxIO.lastPalette)));
-            voxelSprite.set(new ArrayModel(
-                    arr
-                    //// Aurora folder has vox models with a different palette, which involves a different IDimmer.
-                    //VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("Aurora/Warrior_Male_W.vox")))
-                    // If using Rinsed, use the line below instead of the one above.
-                    //maker.warriorRandom()
-            ));
-        } catch (FileNotFoundException e) {
-            voxelSprite.set(new ArrayModel(maker.shipNoiseColorized()));
-            batchRenderer.set(batchRenderer.color().set(colorizer));
-        }
     }
 
     @Override
@@ -197,11 +128,13 @@ public class SimpleTest extends ApplicationAdapter {
     }
 
     public void makeModel() {
-        voxelSprite.set(
-                box ?
-                        new BoxModel(model(), ColorFetch.color(Coloring.rinsed("Powder Blue 3")))
-                        : model()
-        );
+        IModel model = box ?
+                new BoxModel(model(), ColorFetch.color((byte) 9))
+                : model();
+        oneRovingVoxelModel.setVoxel((byte) 40)
+                .setSize(model.sizeX(), model.sizeY(), model.sizeZ())
+                .breakChain(new FetchModel(model));
+        voxelSprite.set(oneRovingVoxelModel);
     }
 
     public IModel model() {
@@ -238,6 +171,8 @@ public class SimpleTest extends ApplicationAdapter {
         worldView.update(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         batch.setProjectionMatrix(worldView.getCamera().combined);
         batch.begin();
+
+        font.draw(batch, StringKit.join(", ", oneRovingVoxelModel.x(), oneRovingVoxelModel.y(), oneRovingVoxelModel.z()) + " (roving voxel)", 0, 100);
 
         font.draw(batch, StringKit.join(", ", voxelSprite.getModel().sizeX(), voxelSprite.getModel().sizeY(), voxelSprite.getModel().sizeZ()) + " (original)", 0, 80);
         font.draw(batch, voxelSprite.turnModel().sizeX() + ", " + voxelSprite.turnModel().sizeY() + ", " + voxelSprite.turnModel().sizeZ() + " (modified)", 0, 60);
@@ -329,6 +264,24 @@ public class SimpleTest extends ApplicationAdapter {
                         break;
                     case Input.Keys.T: // try again
                         voxelSprite.reset();
+                        break;
+                    case Input.Keys.W:
+                        oneRovingVoxelModel.addX(1);
+                        break;
+                    case Input.Keys.S:
+                        oneRovingVoxelModel.addX(-1);
+                        break;
+                    case Input.Keys.A:
+                        oneRovingVoxelModel.addY(-1);
+                        break;
+                    case Input.Keys.D:
+                        oneRovingVoxelModel.addY(1);
+                        break;
+                    case Input.Keys.SPACE:
+                        oneRovingVoxelModel.addZ(1);
+                        break;
+                    case Input.Keys.C:
+                        oneRovingVoxelModel.addZ(-1);
                         break;
                     case Input.Keys.ESCAPE:
                         Gdx.app.exit();

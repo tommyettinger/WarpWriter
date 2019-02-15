@@ -25,7 +25,7 @@ public class FetchModel extends Fetch implements IModel, IDecideModel {
     }
 
     public FetchModel(int sizeX, int sizeY, int sizeZ, Fetch fetch) {
-        set(sizeX, sizeY, sizeZ);
+        setSize(sizeX, sizeY, sizeZ);
         if (fetch != null) add(fetch);
     }
 
@@ -34,7 +34,7 @@ public class FetchModel extends Fetch implements IModel, IDecideModel {
      * @param model Warning: FetchModel size is based on initial model. Does not automatically update FetchModel size if model size changes!
      */
     public FetchModel (IModel model) {
-        set(model.sizeX(), model.sizeY(), model.sizeZ());
+        setSize(model.sizeX(), model.sizeY(), model.sizeZ());
         add(new FetchFetch(model));
     }
 
@@ -79,6 +79,10 @@ public class FetchModel extends Fetch implements IModel, IDecideModel {
         return sizeZ;
     }
 
+    public FetchModel addSize(CompassDirection direction) {
+        return addSizeX(direction.deltaX).addSizeY(direction.deltaY);
+    }
+
     @Override
     public boolean outside(int x, int y, int z) {
         return x < 0 || y < 0 || z < 0 || x >= sizeX() || y >= sizeY() || z >= sizeZ();
@@ -89,44 +93,40 @@ public class FetchModel extends Fetch implements IModel, IDecideModel {
         return !outside(x, y, z);
     }
 
-    public FetchModel add(int x, int y, int z) {
-        return addX(x).addY(y).addZ(z);
+    public FetchModel addSize(int x, int y, int z) {
+        return addSizeX(x).addSizeY(y).addSizeZ(z);
     }
 
-    public FetchModel addX(int x) {
+    public FetchModel addSizeX(int x) {
         sizeX += x;
         return this;
     }
 
-    public FetchModel addY(int y) {
+    public FetchModel addSizeY(int y) {
         sizeY += y;
         return this;
     }
 
-    public FetchModel addZ(int z) {
+    public FetchModel addSizeZ(int z) {
         sizeZ += z;
         return this;
     }
 
-    public FetchModel add(CompassDirection direction) {
-        return addX(direction.deltaX).addY(direction.deltaY);
+    public FetchModel setSize(int x, int y, int z) {
+        return setSizeX(x).setSizeY(y).setSizeZ(z);
     }
 
-    public FetchModel set(int x, int y, int z) {
-        return setX(x).setY(y).setZ(z);
-    }
-
-    public FetchModel setX(int x) {
+    public FetchModel setSizeX(int x) {
         sizeX = x;
         return this;
     }
 
-    public FetchModel setY(int y) {
+    public FetchModel setSizeY(int y) {
         sizeY = y;
         return this;
     }
 
-    public FetchModel setZ(int z) {
+    public FetchModel setSizeZ(int z) {
         sizeZ = z;
         return this;
     }

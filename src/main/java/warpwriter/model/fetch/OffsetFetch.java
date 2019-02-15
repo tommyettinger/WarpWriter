@@ -20,7 +20,7 @@ public class OffsetFetch extends Fetch {
         return this;
     }
 
-    protected int x=0, y=0, z=0;
+    protected int x = 0, y = 0, z = 0;
 
     public int x() {
         return x;
@@ -34,22 +34,22 @@ public class OffsetFetch extends Fetch {
         return z;
     }
 
-    public OffsetFetch setX(int x) {
+    public OffsetFetch setX(final int x) {
         this.x = x;
         return this;
     }
 
-    public OffsetFetch setY(int y) {
+    public OffsetFetch setY(final int y) {
         this.y = y;
         return this;
     }
 
-    public OffsetFetch setZ(int z) {
+    public OffsetFetch setZ(final int z) {
         this.z = z;
         return this;
     }
 
-    public OffsetFetch set(int x, int y, int z) {
+    public OffsetFetch set(final int x, final int y, final int z) {
         return setX(x).setY(y).setZ(z);
     }
 

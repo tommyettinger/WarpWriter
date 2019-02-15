@@ -110,23 +110,23 @@ public class FetchTest extends ApplicationAdapter {
             public boolean keyDown(int keycode) {
                 switch (keycode) {
                     case Input.Keys.SPACE:
-                        offset.addZ(angle > 1 ? 1 : -1); // Up
+                        offset.addSizeZ(angle > 1 ? 1 : -1); // Up
                         break;
                     case Input.Keys.NUMPAD_5:
                     case Input.Keys.NUM_5:
-                        offset.addZ(angle > 1 ? -1 : 1); // Down
+                        offset.addSizeZ(angle > 1 ? -1 : 1); // Down
                         break;
                     case Input.Keys.UP:
-                        offset.add(angle > 1 ? direction.opposite() : direction);
+                        offset.addSize(angle > 1 ? direction.opposite() : direction);
                         break;
                     case Input.Keys.DOWN:
-                        offset.add(angle > 1 ? direction : direction.opposite());
+                        offset.addSize(angle > 1 ? direction : direction.opposite());
                         break;
                     case Input.Keys.RIGHT:
-                        offset.add(angle > 1 ? direction.left() : direction.right());
+                        offset.addSize(angle > 1 ? direction.left() : direction.right());
                         break;
                     case Input.Keys.LEFT:
-                        offset.add(angle > 1 ? direction.right() : direction.left());
+                        offset.addSize(angle > 1 ? direction.right() : direction.left());
                         break;
                     case Input.Keys.NUMPAD_8:
                     case Input.Keys.NUM_8:
@@ -169,7 +169,7 @@ public class FetchTest extends ApplicationAdapter {
                         viewArea.turner().reset().clockZ();
                         break;
                     case Input.Keys.ENTER:
-                        offset.set(0, 0, 0);
+                        offset.setSize(0, 0, 0);
                         break;
                     case Input.Keys.NUM_0:
                         angle = 1;
