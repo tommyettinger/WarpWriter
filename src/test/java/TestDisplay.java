@@ -64,7 +64,7 @@ public class TestDisplay extends ApplicationAdapter {
 
     @Override
     public void create() {
-        reducer = new PaletteReducer(Coloring.RINSED);
+        reducer = new PaletteReducer(Coloring.GRAY8);
         reducer.setDitherStrength(0.25f);
         batch = new SpriteBatch();
 //        pix = new Pixmap(16, 16, Pixmap.Format.RGBA8888);
@@ -249,7 +249,7 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if (dither) reducer.reduceWithNoise(pix); else reducer.reduceSolid(pix);
+            if (dither) reducer.reduceWithNoise(pix); else reducer.reduceWithBlueNoise(pix);
         }
     }
 
@@ -291,7 +291,7 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if (dither) reducer.reduceWithNoise(pix); else reducer.reduceSolid(pix);
+            if (dither) reducer.reduceWithNoise(pix); else reducer.reduceWithBlueNoise(pix);
         }
     }
 
@@ -338,7 +338,7 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if (dither) reducer.reduceWithNoise(pix); else reducer.reduceSolid(pix);
+            if (dither) reducer.reduceWithNoise(pix); else reducer.reduceWithBlueNoise(pix);
         }
     }
 
@@ -395,7 +395,7 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if (dither) reducer.reduceWithNoise(pix); else reducer.reduceSolid(pix);
+            if (dither) reducer.reduceWithNoise(pix); else reducer.reduceWithBlueNoise(pix);
         }
         if (oldWidth != width || oldHeight != height)
             tex = new Texture(width, height, Pixmap.Format.RGBA8888);
@@ -454,7 +454,7 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if (dither) reducer.reduceWithNoise(pix); else reducer.reduceSolid(pix);
+            if (dither) reducer.reduceWithNoise(pix); else reducer.reduceWithBlueNoise(pix);
         }
         if (oldWidth != width || oldHeight != height)
             tex = new Texture(width, height, Pixmap.Format.RGBA8888);
@@ -496,7 +496,7 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if (dither) reducer.reduceWithNoise(pix); else reducer.reduceSolid(pix);
+            if (dither) reducer.reduceWithNoise(pix); else reducer.reduceWithBlueNoise(pix);
         }
     }
 
@@ -546,7 +546,7 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if (dither) reducer.reduceWithNoise(pix); else reducer.reduceSolid(pix);
+            if (dither) reducer.reduceWithNoise(pix); else reducer.reduceWithBlueNoise(pix);
         }
         if (oldWidth != width || oldHeight != height)
             tex = new Texture(width, height, Pixmap.Format.RGBA8888);
@@ -594,7 +594,7 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if (dither) reducer.reduceWithNoise(pix); else reducer.reduceSolid(pix);
+            if (dither) reducer.reduceWithNoise(pix); else reducer.reduceWithBlueNoise(pix);
         }
         if (oldWidth != width || oldHeight != height)
             tex = new Texture(width, height, Pixmap.Format.RGBA8888);
@@ -644,7 +644,7 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if (dither) reducer.reduceWithNoise(pix); else reducer.reduceSolid(pix);
+            if (dither) reducer.reduceWithNoise(pix); else reducer.reduceWithBlueNoise(pix);
         }
         if (oldWidth != width || oldHeight != height)
             tex = new Texture(width, height, Pixmap.Format.RGBA8888);
@@ -698,7 +698,7 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if (dither) reducer.reduceWithNoise(pix); else reducer.reduceSolid(pix);
+            if (dither) reducer.reduceWithNoise(pix); else reducer.reduceWithBlueNoise(pix);
         }
     }
 

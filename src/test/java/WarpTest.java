@@ -93,7 +93,7 @@ public class WarpTest extends ApplicationAdapter {
 //                new ReplaceFetch(ColorFetch.color((byte) 0), (byte) 1)
 //                .add(new PaintFetch(chaos, true)).model(
                 new ArrayModel(voxels));
-        model = new TurnModel().set(ship);
+        model = new TurnModel().set(model());
         model.setDuration(16);
         Gdx.input.setInputProcessor(inputProcessor());
     }
@@ -101,16 +101,18 @@ public class WarpTest extends ApplicationAdapter {
     public IModel model()
     {
         HashMap3D<IFetch> map = new HashMap3D<>();
-        for (int x = 0; x < 4; x++) {
-            for (int y = 0; y < 4; y++) {
-                byte midColor = colorizer.getReducer().randomColorIndex(maker.rng);
-                if((y & 1) == 1)
-                    midColor |= colorizer.getWaveBit();
-                if(y > 1)
-                    midColor |= colorizer.getShadeBit();
-                map.put(x, y, 0, new DecideFetch(
-                        new SphereDecide(8, 8, 8, 7), ColorFetch.color(midColor)
-                ));
+        for (int z = 0; z < 1; z++) {
+            for (int x = 0; x < 4; x++) {
+                for (int y = 0; y < 4; y++) {
+                    byte midColor = colorizer.getReducer().randomColorIndex(maker.rng);
+                    if ((y & 1) == 1)
+                        midColor |= colorizer.getWaveBit();
+                    if ((y & 2) == 2)
+                        midColor |= colorizer.getShadeBit();
+                    map.put(x, y, z, new DecideFetch(
+                            new SphereDecide(8, 8, 8, 7), ColorFetch.color(midColor)
+                    ));
+                }
             }
         }
         return new WorldFetch()
@@ -144,6 +146,8 @@ public class WarpTest extends ApplicationAdapter {
         buffer.begin();
         
         Gdx.gl.glClearColor(0.4f, 0.75f, 0.3f, 1f);
+        // for GB_GREEN palette
+//        Gdx.gl.glClearColor(0xE0 / 255f, 0xF8 / 255f, 0xD0 / 255f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
         worldView.apply();
@@ -183,6 +187,9 @@ public class WarpTest extends ApplicationAdapter {
         screenRegion.setRegion(screenTexture);
         screenRegion.flip(false, true);
         batch.draw(screenRegion, 0, 0);
+        //// for GB_GREEN
+        //font.setColor(0x34 / 255f, 0x68 / 255f, 0x56 / 255f, 1f);
+        font.setColor(0f, 0f, 0f, 1f);
         //font.draw(batch, model.voxels.length + ", " + model.voxels[0].length + ", " + model.voxels[0][0].length + ", " + " (original)", 0, 80);
         font.draw(batch, model.sizeX() + ", " + model.sizeY() + ", " + model.sizeZ() + " (sizes)", 0, 60);
         font.draw(batch, StringKit.join(", ", model.turner().rotation()) + " (rotation)", 0, 40);
@@ -243,9 +250,9 @@ public class WarpTest extends ApplicationAdapter {
                         model.turner().reset();
                         break;
                     case Input.Keys.P:
-//                        model.set(model());
+                        model.set(model());
 //                        chaos.setSeed(maker.rng.nextLong());
-                        Tools3D.deepCopyInto(maker.shipLargeNoiseColorized(), voxels);
+//                        Tools3D.deepCopyInto(maker.shipLargeNoiseColorized(), voxels);
                         animating = false;
                         break;
                     case Input.Keys.B: // burn!
