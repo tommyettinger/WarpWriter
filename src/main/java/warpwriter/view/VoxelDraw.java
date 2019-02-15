@@ -182,7 +182,7 @@ public class VoxelDraw {
                 for (int vx = startX, vy = startY;
                      vx <= sizeX && vy <= sizeY;
                      vx++, vy++) { // vx is voxel x, vy is voxel y
-                    if (!leftDone && vy != 0) {
+                    if (!leftDone && vy > 0 && vx < sizeX) {
                         v = model.at(vx, vy - 1, py);
                         if (v != 0) {
                             renderer.rectRight(px * scaleX, py * scaleY, scaleX, scaleY, v);
@@ -191,7 +191,7 @@ public class VoxelDraw {
                             leftDone = true;
                         }
                     }
-                    if (!rightDone && vx > 0) {
+                    if (!rightDone && vx > 0 && vy < sizeY) {
                         v = model.at(vx - 1, vy, py);
                         if (v != 0) {
                             renderer.rectLeft((px + 1) * scaleX, py * scaleY, scaleX, scaleY, v);
@@ -200,7 +200,7 @@ public class VoxelDraw {
                             rightDone = true;
                         }
                     }
-                    if (leftDone && rightDone) break;
+                    if ((leftDone && rightDone) || vx >= sizeX || vy >= sizeY) break;
                     v = model.at(vx, vy, py);
                     if (v != 0) {
                         boolean peek = py >= sizeZ - 1 || model.at(vx, vy, py + 1) == 0;
@@ -244,21 +244,21 @@ public class VoxelDraw {
                 for (int vx = startX, vz = startZ;
                      vx <= sizeX && vz >= -1;
                      vx++, vz--) { // vx is voxel x, vz is voxel z
-                    if (!above && vz + 1 < sizeZ) {
+                    if (!above && vz + 1 < sizeZ && vx < sizeX) {
                         v = model.at(vx, vy, vz + 1);
                         if (v != 0) {
                             renderer.rectRight(vy * scaleX, (py + 1) * scaleY, scaleX, scaleY, v);
                             above = true;
                         }
                     }
-                    if (!below && vx > 0) {
+                    if (!below && vx > 0 && vz >= 0) {
                         v = model.at(vx - 1, vy, vz);
                         if (v != 0) {
                             renderer.rectVertical(vy * scaleX, py * scaleY, scaleX, scaleY, v);
                             below = true;
                         }
                     }
-                    if (above && below) break;
+                    if ((above && below) || vx >= sizeX || vz < 0) break;
                     v = model.at(vx, vy, vz);
                     if (v != 0) {
                         if (!above) renderer.rectVertical(vy * scaleX, (py + 1) * scaleY, scaleX, scaleY, v);

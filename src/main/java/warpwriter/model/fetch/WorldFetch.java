@@ -53,7 +53,10 @@ public class WorldFetch extends Fetch {
     public byte bite() {
         final int x = chainX(), y = chainY(), z = chainZ();
         if((x | y | z) < 0) // if any of x, y or z are negative
+        {
+//            System.out.println("WorldFetch.bite() requested bad coordinates: " + x + "," + y + "," + z);
             return 0;
+        }
         // the check for negative x, y, or z is needed because `x / blockX` produces 0 for
         // all x values from `-blockX + 1` to `blockX - 1`, making small negative x, y, and
         // z values produce the voxel at 0 for that dimension.
