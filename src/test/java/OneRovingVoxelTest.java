@@ -152,8 +152,10 @@ public class OneRovingVoxelTest extends ApplicationAdapter {
                 ));
             }
         }
-        return new WorldFetch()
+        return //new ArrayModel(
+                new WorldFetch()
                 .set(map)
+//                , 48, 48, 16);
                 .model(48, 48, 16);
 //        return new DecideFetch(
 //                TileFetch.Diagonal16x16x16,

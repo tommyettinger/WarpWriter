@@ -51,8 +51,13 @@ public class WorldFetch extends Fetch {
 
     @Override
     public byte bite() {
-        final int x = chainX(), y = chainY(), z = chainZ(),
-                x2 = x / blockX, y2 = y / blockY, z2 = z / blockZ;
+        final int x = chainX(), y = chainY(), z = chainZ();
+        if((x | y | z) < 0) // if any of x, y or z are negative
+            return 0;
+        // the check for negative x, y, or z is needed because `x / blockX` produces 0 for
+        // all x values from `-blockX + 1` to `blockX - 1`, making small negative x, y, and
+        // z values produce the voxel at 0 for that dimension.
+        final int x2 = x / blockX, y2 = y / blockY, z2 = z / blockZ;
         return map.containsKey(x2, y2, z2) ?
                 map.get(x2, y2, z2)
                 .at(x % blockX, y % blockY, z % blockZ) : 0;
