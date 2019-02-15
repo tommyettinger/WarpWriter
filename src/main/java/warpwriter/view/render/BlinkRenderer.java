@@ -46,7 +46,7 @@ public class BlinkRenderer implements IRectangleRenderer, ITriangleRenderer {
         return f((int) 0);
     }
 
-    protected byte voxel = 127;
+    protected byte voxel = 15;
 
     /**
      * @param voxel Sets which voxel color to flash
