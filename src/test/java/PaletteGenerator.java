@@ -846,7 +846,17 @@ public class PaletteGenerator extends ApplicationAdapter {
         }
         pix.drawPixel(255, 0, 0);
         PixmapIO.writePNG(Gdx.files.local("Flesurrect.png"), pix);
-        Gdx.app.exit();
+
+//        Pixmap pm = new Pixmap(Gdx.files.internal("BlueNoiseBW64.png"));
+//        final byte[] data = new byte[64 * 64];
+//        int n = 0;
+//        for (int x = 0; x < 64; x++) {
+//            for (int y = 0; y < 64; y++) {
+//                data[n++] = (byte)(pm.getPixel(x, y));
+//            }
+//        }
+//        PaletteReducer.print(data);
+        //Gdx.app.exit();
     }
 
     /**
