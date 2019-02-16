@@ -287,7 +287,7 @@ public class PaletteReducer {
             "ªªªª©&&&&&&&:;;;\035\035\035\035Cêêêêªªªªªª©©©©&&&&&&;;;;;\035CCCCêêêªªªªªªª««««©©©&&&&;;;;;;CCCCªªªªªª««««««««©&&&;;;;<<<<<<"+
             "ªªªªª«««««««««««&;;'PPPP<<<<(((((««««««««««««'''''''PP<<\016\016\017\017(((((«««««««««««'''''''''''\016\017\017\017\017((((((««««««««««''''''''''''\017\017\017\017"
             ;
-    protected static byte[] BLUE_NOISE;
+    public static byte[] BLUE_NOISE;
     static {
         try {
             BLUE_NOISE = (
@@ -416,6 +416,8 @@ public class PaletteReducer {
      * @return the difference between the given colors, as a positive int
      */
     public static int difference(final int color1, final int color2) {
+         // if one color is transparent and the other isn't, then this is max-different
+        if(((color1 ^ color2) & 0x80) == 0x80) return 0x7FFFFFFF;
         int rmean = ((color1 >>> 24) + (color2 >>> 24));
         int r = (color1 >>> 24) - (color2 >>> 24);
         int g = (color1 >>> 16 & 0xFF) - (color2 >>> 16 & 0xFF) << 1;
@@ -438,6 +440,7 @@ public class PaletteReducer {
 //        r2 = (r2 << 3 | r2 >>> 2);
 //        g2 = (g2 << 3 | g2 >>> 2);
 //        b2 = (b2 << 3 | b2 >>> 2);
+        if((color1 & 0x80) == 0) return 0x7FFFFFFF; // if a transparent color is being compared, it is always different
         final int rmean = ((color1 >>> 24) + r2),
                 r = (color1 >>> 24) - r2,
                 g = (color1 >>> 16 & 0xFF) - g2 << 1,
@@ -501,8 +504,10 @@ public class PaletteReducer {
         int dist;
         for (int i = 0; i < plen; i++) {
             color = rgbaPalette[i];
-            paletteArray[i] = color;
-            paletteMapping[(color >>> 17 & 0x7C00) | (color >>> 14 & 0x3E0) | (color >>> 11 & 0x1F)] = (byte) i;
+            if ((color & 0x80) != 0) {
+                paletteArray[i] = color;
+                paletteMapping[(color >>> 17 & 0x7C00) | (color >>> 14 & 0x3E0) | (color >>> 11 & 0x1F)] = (byte) i;
+            }
         }
         int rr, gg, bb;
         for (int r = 0; r < 32; r++) {
@@ -1216,10 +1221,11 @@ public class PaletteReducer {
         }
         Pixmap.Blending blending = pixmap.getBlending();
         pixmap.setBlending(Pixmap.Blending.None);
-        int color, used, rdiff, gdiff, bdiff;
+        int color, used;
         byte er, eg, eb, paletteIndex;
-        int noise1, noise2;
-        float w1 = ditherStrength * 0x1.8p-10f, w3 = w1 * 3f, w5 = w1 * 5f, w7 = w1 * 7f;
+        float noise1, noise2, noise3, rdiff, gdiff, bdiff;
+        float w1 = ditherStrength * 0x1p-5f,//0x1.5p-11f,
+                w3 = w1 * 3f, w5 = w1 * 5f, w7 = w1 * 7f;
         for (int y = 0; y < h; y++) {
             int ny = y + 1;
             for (int i = 0; i < lineLen; i++) {
@@ -1248,16 +1254,21 @@ public class PaletteReducer {
                                     | ((bb >>> 3))];
                     used = paletteArray[paletteIndex & 0xFF];
                     pixmap.drawPixel(px, y, used);
-                    rdiff = (color>>>24)-    (used>>>24);
-                    gdiff = (color>>>16&255)-(used>>>16&255);
-                    bdiff = (color>>>8&255)- (used>>>8&255);
+                    noise1 = (BLUE_NOISE[(px & 63) | (y & 63) << 6] + 0.5f) * 0x1p-8f + 0.6f;
+                    noise2 = (BLUE_NOISE[(y + 37 & 63) | (px + 23 & 63) << 6] + 0.5f) * 0x1p-8f + 0.6f;
+                    noise3 = (BLUE_NOISE[(px + 43 & 63) | (y + 11 & 63) << 6] + 0.5f) * 0x1p-8f + 0.6f;
+                    
+                    rdiff = ((color>>>24)-    (used>>>24    )) * noise1;
+                    gdiff = ((color>>>16&255)-(used>>>16&255)) * noise2;
+                    bdiff = ((color>>>8&255)- (used>>>8&255 )) * noise3;
 //                    state += (color + 0x41C64E6D) ^ color >>> 7;
 //                    state = (state << 21 | state >>> 11);
 //                    xi1 = randomXi(state);
 //                    state ^= (state << 5 | state >>> 27) + 0x9E3779B9;
 //                    xi2 = randomXi(state);
-                    noise1 = BLUE_NOISE[(px & 63) | (y & 63) << 6] >>> 2 & 63;
-                    noise2 = BLUE_NOISE[(y + 37 & 63) | (px + 23 & 63) << 6] >>> 2 & 63;  
+                    
+//                    noise1 = (BLUE_NOISE[(px & 63) | (y & 63) << 6] + 128.5f);
+//                    noise2 = (BLUE_NOISE[(y + 37 & 63) | (px + 23 & 63) << 6] + 128.5f);  
 
 //                    state += rdiff ^ rdiff << 9;
 //                    state = (state << 21 | state >>> 11);
@@ -1276,27 +1287,27 @@ public class PaletteReducer {
 //                    xib2 = randomXi(state);
                     if(px < lineLen - 1)
                     {
-                        curErrorRed[px+1]   += rdiff * w7 * (1f + noise1);
-                        curErrorGreen[px+1] += gdiff * w7 * (1f + noise1);
-                        curErrorBlue[px+1]  += bdiff * w7 * (1f + noise1);
+                        curErrorRed[px+1]   += rdiff * w7;
+                        curErrorGreen[px+1] += gdiff * w7;
+                        curErrorBlue[px+1]  += bdiff * w7;
                     }
                     if(ny < h)
                     {
                         if(px > 0)
                         {
-                            nextErrorRed[px-1]   += rdiff * w3 * (1f + noise2);
-                            nextErrorGreen[px-1] += gdiff * w3 * (1f + noise2);
-                            nextErrorBlue[px-1]  += bdiff * w3 * (1f + noise2);
+                            nextErrorRed[px-1]   += rdiff * w3;
+                            nextErrorGreen[px-1] += gdiff * w3;
+                            nextErrorBlue[px-1]  += bdiff * w3;
                         }
                         if(px < lineLen - 1)
                         {
-                            nextErrorRed[px+1]   += rdiff * w1 * (64f - noise2);
-                            nextErrorGreen[px+1] += gdiff * w1 * (64f - noise2);
-                            nextErrorBlue[px+1]  += bdiff * w1 * (64f - noise2);
+                            nextErrorRed[px+1]   += rdiff * w1;
+                            nextErrorGreen[px+1] += gdiff * w1;
+                            nextErrorBlue[px+1]  += bdiff * w1;
                         }
-                        nextErrorRed[px]   += rdiff * w5 * (64f - noise1);
-                        nextErrorGreen[px] += gdiff * w5 * (64f - noise1);
-                        nextErrorBlue[px]  += bdiff * w5 * (64f - noise1);
+                        nextErrorRed[px]   += rdiff * w5;
+                        nextErrorGreen[px] += gdiff * w5;
+                        nextErrorBlue[px]  += bdiff * w5;
                     }
                 }
             }
