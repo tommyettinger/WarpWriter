@@ -336,7 +336,7 @@ public class VoxelColor implements IVoxelColor {
         {
             if((voxel & shadeBit) != 0)
             {
-                final int brightness = (x + y + z + time & 3);
+                final int brightness = (voxel + time & 3);
                 return dimmer.dimmer(brightness + 1 - (brightness & (brightness << 1)), voxel);
             }
             else
@@ -367,7 +367,7 @@ public class VoxelColor implements IVoxelColor {
         {
             if((voxel & shadeBit) != 0)
             {
-                final int brightness = (x + y + z + time & 3);
+                final int brightness = (voxel + time & 3);
                 return dimmer.dimmer(brightness + 1 - (brightness & (brightness << 1)), voxel);
             }
             else
@@ -398,7 +398,7 @@ public class VoxelColor implements IVoxelColor {
         {
             if((voxel & shadeBit) != 0)
             {
-                final int brightness = (x + y + z + time & 3);
+                final int brightness = (voxel + time & 3);
                 return dimmer.dimmer(brightness + 1 - (brightness & (brightness << 1)), voxel);
             }
             else

@@ -1255,12 +1255,12 @@ public class PaletteReducer {
                     used = paletteArray[paletteIndex & 0xFF];
                     pixmap.drawPixel(px, y, used);
                     noise1 = (BLUE_NOISE[(px & 63) | (y & 63) << 6] + 0.5f) * 0x1p-8f + 0.6f;
-                    noise2 = (BLUE_NOISE[(y + 37 & 63) | (px + 23 & 63) << 6] + 0.5f) * 0x1p-8f + 0.6f;
-                    noise3 = (BLUE_NOISE[(px + 43 & 63) | (y + 11 & 63) << 6] + 0.5f) * 0x1p-8f + 0.6f;
+                    //noise2 = (BLUE_NOISE[(y + 37 & 63) | (px + 23 & 63) << 6] + 0.5f) * 0x1p-8f + 0.6f;
+                    //noise3 = (BLUE_NOISE[(px + 43 & 63) | (y + 11 & 63) << 6] + 0.5f) * 0x1p-8f + 0.6f;
                     
                     rdiff = ((color>>>24)-    (used>>>24    )) * noise1;
-                    gdiff = ((color>>>16&255)-(used>>>16&255)) * noise2;
-                    bdiff = ((color>>>8&255)- (used>>>8&255 )) * noise3;
+                    gdiff = ((color>>>16&255)-(used>>>16&255)) * noise1;
+                    bdiff = ((color>>>8&255)- (used>>>8&255 )) * noise1;
 //                    state += (color + 0x41C64E6D) ^ color >>> 7;
 //                    state = (state << 21 | state >>> 11);
 //                    xi1 = randomXi(state);

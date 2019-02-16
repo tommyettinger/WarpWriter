@@ -70,6 +70,8 @@ public class WarpTest extends ApplicationAdapter {
         batch.enableBlending();
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.AURORA);
 //        colorizer = Colorizer.arbitraryColorizer(Coloring.GB_GREEN);
+//        colorizer = Colorizer.arbitraryColorizer(Coloring.DB32);
+//        colorizer = Colorizer.arbitraryColorizer(Coloring.BLK36);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.UNSEVEN);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.CW_PALETTE);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
@@ -93,7 +95,8 @@ public class WarpTest extends ApplicationAdapter {
 //                new ReplaceFetch(ColorFetch.color((byte) 0), (byte) 1)
 //                .add(new PaintFetch(chaos, true)).model(
                 new ArrayModel(voxels));
-        model = new TurnModel().set(model());
+//        model = new TurnModel().set(model());
+        model = new TurnModel().set(ship);
         model.setDuration(16);
         Gdx.input.setInputProcessor(inputProcessor());
     }
@@ -250,9 +253,10 @@ public class WarpTest extends ApplicationAdapter {
                         model.turner().reset();
                         break;
                     case Input.Keys.P:
-                        model.set(model());
+//                        model.set(model());
+                        model.set(ship);
 //                        chaos.setSeed(maker.rng.nextLong());
-//                        Tools3D.deepCopyInto(maker.shipLargeNoiseColorized(), voxels);
+                        Tools3D.deepCopyInto(maker.shipLargeNoiseColorized(), voxels);
                         animating = false;
                         break;
                     case Input.Keys.B: // burn!

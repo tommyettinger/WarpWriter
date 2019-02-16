@@ -775,13 +775,12 @@ public class ModelMaker {
         final int halfY = ySize >> 1, smallYSize = ySize - 1;
         int color;
         int seed = rng.nextInt(), current = seed, paint = seed;
-        byte[] fire = fireRange();
         byte mainColor = colorizer.getReducer().paletteMapping[seed & 0x7FFF], // bottom 15 bits
                 highlightColor = colorizer.brighten(colorizer.getReducer().paletteMapping[seed >>> 17]), // top 15 bits
-                cockpitColor = colorizer.darken(colorizer.reduce((0x20 + determineBounded(seed + 0x11111, 0x60) << 24)
-                        | (0xA0 + determineBounded(seed + 0x22222, 0x60) << 16)
-                        | (0xC8 + determineBounded(seed + 0x33333, 0x38) << 8) | 0xFF)),
-                thrustColor = (byte) (colorizer.brighten(fire[determineInt(seed + 0x44444) & 3]) | colorizer.getWaveBit()), 
+                cockpitColor = colorizer.darken(colorizer.reduce((0x20 + determineBounded(seed ^ 0x11111, 0x60) << 24)
+                        | (0xA0 + determineBounded(seed ^ 0x22222, 0x60) << 16)
+                        | (0xC8 + determineBounded(seed ^ 0x33333, 0x38) << 8) | 0xFF)),
+                thrustColor = (byte) (colorizer.brighten(colorizer.reduce(Coloring.RINSED[randomMainColor(seed ^ 0x44444) & 0xFF])) | colorizer.getWaveBit() | colorizer.getShadeBit()), 
                 lightColor = (byte) (colorizer.brighten(colorizer.getReducer().paletteMapping[(seed ^ seed >>> 4 ^ seed >>> 13) & 0x7FFF]) | colorizer.getShadeBit() | colorizer.getWaveBit());
         // Arrays.binarySearch does not work for all grayscale() results; this may need adjusting
         if(Arrays.binarySearch(colorizer.grayscale(), highlightColor) >= 0)
@@ -829,7 +828,7 @@ public class ModelMaker {
         current ^= current << 5 ^ current >>> 19;
         for (int y = 0; y < halfY; y++) {
             for (int z = 0; z < zSize; z++) {
-                if(hash32(z, y, paint) < 7)
+                if(hash32(z, y, paint) < 3)
                 {
                     for (int x = xSize - 2; x >= 0; x--) {
                         if(nextShip[x][y][z] != 0 && nextShip[x][y][z] != cockpitColor)
