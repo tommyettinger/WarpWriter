@@ -280,7 +280,7 @@ public class VoxelDraw {
     public static int isoWidth(IModel model) {
         final int sizeVX = model.sizeX(), sizeVY = model.sizeY();
         return (sizeVX + sizeVY) * 2 -
-                ((sizeVX + sizeVY & 1) << 2); // if sizeVX + sizeVY is odd, this is 4, otherwise it is 0 
+                ((sizeVX + sizeVY & 1) << 2); // if sizeVX + sizeVY is odd, this is 4, otherwise it is 0
     }
 
     public static void drawIso(IModel model, ITriangleRenderer renderer) {
