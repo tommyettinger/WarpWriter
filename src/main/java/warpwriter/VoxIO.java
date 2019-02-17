@@ -1,5 +1,6 @@
 package warpwriter;
 
+import squidpony.annotation.GwtIncompatible;
 import warpwriter.model.nonvoxel.LittleEndianDataInputStream;
 
 import java.io.ByteArrayOutputStream;
@@ -101,6 +102,7 @@ public class VoxIO {
     {
         bin.writeInt(Integer.reverseBytes(value));
     }
+    @GwtIncompatible
     public static void writeVOX(String filename, byte[][][] voxelData, int[] palette) {
         // check out http://voxel.codeplex.com/wikipage?title=VOX%20Format&referringTitle=Home for the file format used below
         try {
@@ -170,6 +172,7 @@ public class VoxIO {
             e.printStackTrace();
         }
     }
+    @GwtIncompatible
     public static void writeAnimatedVOX(String filename, byte[][][][] voxelData, int[] palette) {
         // check out http://voxel.codeplex.com/wikipage?title=VOX%20Format&referringTitle=Home for the file format used below
         try {
