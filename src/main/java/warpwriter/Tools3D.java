@@ -325,7 +325,10 @@ public class Tools3D {
                 choice = new byte[xs][ys][zs];
         while (fst >= 0) {
             fill(filled, 0);
-            filled[x = fst / (ys * zs)][y = (fst / zs) % ys][z = fst % zs] = voxels[x][y][z];
+            x = fst / (ys * zs);
+            y = (fst / zs) % ys;
+            z = fst % zs;
+            filled[x][y][z] = voxels[x][y][z];
             currentSize = flood(filled, remaining);
             if(currentSize > bestSize)
             {
