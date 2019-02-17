@@ -22,7 +22,7 @@ public class HashMap3D<T> extends Int2ObjectOpenHashMap<T> {
      * @param z the z component, between 0 and 1023; this can be extracted with {@link #extractZ(int)}
      * @return a fused XYZ index that can be used as one key; will be unique for any (x,y,z) triple within range
      */
-    public static int fuse(int x, int y, int z) {
+    public static int fuse(final int x, final int y, final int z) {
         return (z << 20 & 0x3FF00000) | (y << 10 & 0x000FFC00) | (x & 0x000003FF);
     }
 
@@ -32,7 +32,7 @@ public class HashMap3D<T> extends Int2ObjectOpenHashMap<T> {
      * @param fused a fused XYZ index as produced by {@link #fuse(int, int, int)}
      * @return the x component stored in fused
      */
-    public static int extractX(int fused) {
+    public static int extractX(final int fused) {
         return fused & 0x000003FF;
     }
 
@@ -42,7 +42,7 @@ public class HashMap3D<T> extends Int2ObjectOpenHashMap<T> {
      * @param fused a fused XYZ index as produced by {@link #fuse(int, int, int)}
      * @return the y component stored in fused
      */
-    public static int extractY(int fused) {
+    public static int extractY(final int fused) {
         return fused >>> 10 & 0x000003FF;
     }
 
@@ -52,7 +52,7 @@ public class HashMap3D<T> extends Int2ObjectOpenHashMap<T> {
      * @param fused a fused XYZ index as produced by {@link #fuse(int, int, int)}
      * @return the z component stored in fused
      */
-    public static int extractZ(int fused) {
+    public static int extractZ(final int fused) {
         return fused >>> 20 & 0x000003FF;
     }
 
