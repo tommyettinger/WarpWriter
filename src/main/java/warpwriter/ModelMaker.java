@@ -1,5 +1,6 @@
 package warpwriter;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import squidpony.squidmath.*;
@@ -29,7 +30,7 @@ public class ModelMaker {
 
     public ModelMaker()
     {
-        this((long)((Math.random() - 0.5) * 4.503599627370496E15) ^ (long)((Math.random() - 0.5) * 2.0 * -9.223372036854776E18), Colorizer.AuroraColorizer);
+        this((long)((Math.random() - 0.5) * 4.503599627370496E15) ^ (long)((Math.random() - 0.5) * 2.0 * -9.223372036854776E18), Colorizer.RinsedColorizer);
     }
     public ModelMaker(long seed)
     {
@@ -38,10 +39,10 @@ public class ModelMaker {
     public ModelMaker(long seed, Colorizer colorizer)
     {
         rng = new GWTRNG(seed);
-        InputStream is = this.getClass().getResourceAsStream("/ship.vox");
+        InputStream is = Gdx.files.internal("ship.vox").read();
         ship = VoxIO.readVox(new LittleEndianDataInputStream(is));
         if(ship == null) ship = new byte[12][12][8];
-        is = this.getClass().getResourceAsStream("/ship_40_40_30.vox");
+        is = Gdx.files.internal("ship_40_40_30.vox").read();
         shipLarge = VoxIO.readVox(new LittleEndianDataInputStream(is));
         if(shipLarge == null) shipLarge = new byte[40][40][30];
         xSize = ship.length;
@@ -50,19 +51,19 @@ public class ModelMaker {
         
         this.colorizer = colorizer;
         
-        is = this.getClass().getResourceAsStream((RINSED_PALETTE ? "/Rinsed_" : "/")  + "Warrior_Male_Attach.vox");
+        is = Gdx.files.internal((RINSED_PALETTE ? "Rinsed_" : "")  + "Warrior_Male_Attach.vox").read();
         warriorMale = VoxIO.readVox(new LittleEndianDataInputStream(is));
         if(warriorMale == null) warriorMale = new byte[12][12][8];
-        is = this.getClass().getResourceAsStream((RINSED_PALETTE ? "/Rinsed_" : "/")  + "Sword_1H_Attach.vox");
+        is = Gdx.files.internal((RINSED_PALETTE ? "Rinsed_" : "")  + "Sword_1H_Attach.vox").read();
         sword0 = VoxIO.readVox(new LittleEndianDataInputStream(is));
         if(sword0 == null) sword0 = new byte[12][12][8];
-        is = this.getClass().getResourceAsStream((RINSED_PALETTE ? "/Rinsed_" : "/")  + "Spear_1H_Attach.vox");
+        is = Gdx.files.internal((RINSED_PALETTE ? "Rinsed_" : "")  + "Spear_1H_Attach.vox").read();
         spear0 = VoxIO.readVox(new LittleEndianDataInputStream(is));
         if(spear0 == null) spear0 = new byte[12][12][8];
-        is = this.getClass().getResourceAsStream((RINSED_PALETTE ? "/Rinsed_" : "/")  + "Board_Shield_1H_Attach.vox");
+        is = Gdx.files.internal((RINSED_PALETTE ? "Rinsed_" : "")  + "Board_Shield_1H_Attach.vox").read();
         shield0 = VoxIO.readVox(new LittleEndianDataInputStream(is));
         if(shield0 == null) shield0 = new byte[12][12][8];
-        is = this.getClass().getResourceAsStream((RINSED_PALETTE ? "/Rinsed_" : "/")  + "Round_Shield_1H_Attach.vox");
+        is = Gdx.files.internal((RINSED_PALETTE ? "Rinsed_" : "")  + "Round_Shield_1H_Attach.vox").read();
         shield1 = VoxIO.readVox(new LittleEndianDataInputStream(is));
         if(shield1 == null) shield1 = new byte[12][12][8];
         
