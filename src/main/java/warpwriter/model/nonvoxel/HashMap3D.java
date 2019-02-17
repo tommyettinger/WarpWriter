@@ -1,9 +1,6 @@
 package warpwriter.model.nonvoxel;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-
-import java.util.Map;
+import com.badlogic.gdx.utils.IntMap;
 
 /**
  * A hash-map data structure, with keys made from (x,y,z) triples fused into ints, and Fetch values meant to be used as
@@ -11,7 +8,7 @@ import java.util.Map;
  * <p>
  * Created by Tommy Ettinger on 1/9/2019.
  */
-public class HashMap3D<T> extends Int2ObjectOpenHashMap<T> {
+public class HashMap3D<T> extends IntMap<T> {
     /**
      * Combines 3 int components x, y, and z, each between 0 and 1023 inclusive, into one int that can be used as a key
      * in this HashMap3D. 30 of the 32 bits in the returned int have the potential to be used, allowing about a
@@ -68,28 +65,27 @@ public class HashMap3D<T> extends Int2ObjectOpenHashMap<T> {
         super();
     }
 
-    public HashMap3D(Map<? extends Integer, ? extends T> m, float f) {
-        super(m, f);
+    public HashMap3D(IntMap<T> m, float f) {
+        super(m.size, f);
+        putAll(m);
     }
 
-    public HashMap3D(Map<? extends Integer, ? extends T> m) {
-        super(m);
-    }
-
-    public HashMap3D(Int2ObjectMap<T> m, float f) {
-        super(m, f);
-    }
-
-    public HashMap3D(Int2ObjectMap<T> m) {
+    public HashMap3D(IntMap<T> m) {
         super(m);
     }
 
     public HashMap3D(int[] k, T[] v, float f) {
-        super(k, v, f);
+        super(k.length, f);
+        for (int i = 0; i < k.length && i < v.length; i++) {
+            put(k[i], v[i]);
+        }
     }
 
     public HashMap3D(int[] k, T[] v) {
-        super(k, v);
+        super(k.length);
+        for (int i = 0; i < k.length && i < v.length; i++) {
+            put(k[i], v[i]);
+        }
     }
 
     public T put(final int x, final int y, final int z, T t) {
