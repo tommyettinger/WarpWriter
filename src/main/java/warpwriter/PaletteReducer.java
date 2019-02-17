@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ByteArray;
 import com.badlogic.gdx.utils.IntIntMap;
-import squidpony.squidmath.CrossHash;
+import squidpony.StringKit;
 import squidpony.squidmath.IRNG;
 import squidpony.squidmath.NumberTools;
 
@@ -440,7 +440,7 @@ public class PaletteReducer {
 //        r2 = (r2 << 3 | r2 >>> 2);
 //        g2 = (g2 << 3 | g2 >>> 2);
 //        b2 = (b2 << 3 | b2 >>> 2);
-        if((color1 & 0x80) == 0) return 0x7FFFFFFF; // if a transparent color is being compared, it is always different
+        if((color1 & 0x80) == 0) return 0x70000000; // if a transparent color is being compared, it is always different
         final int rmean = ((color1 >>> 24) + r2),
                 r = (color1 >>> 24) - r2,
                 g = (color1 >>> 16 & 0xFF) - g2 << 1,
@@ -507,6 +507,7 @@ public class PaletteReducer {
             if ((color & 0x80) != 0) {
                 paletteArray[i] = color;
                 paletteMapping[(color >>> 17 & 0x7C00) | (color >>> 14 & 0x3E0) | (color >>> 11 & 0x1F)] = (byte) i;
+//                System.out.printf("%03d: %08X\n", i, color);
             }
         }
         int rr, gg, bb;
@@ -527,10 +528,16 @@ public class PaletteReducer {
                 }
             }
         }
-        //print(paletteMapping);
+//        generatePreloadCode(paletteMapping);
     }
-    
-    static void print(final byte[] data){
+
+    /**
+     * Given a byte array, this writes a file containing a code snippet that can be pasted into Java code as the preload
+     * data used by {@link #exact(int[], String)}; this is almost never needed by external code. When using this for
+     * preload data, the byte array should be {@link #paletteMapping}.
+     * @param data the bytes to use as preload data, usually the {@link #paletteMapping} of a PaletteReducer
+     */
+    public static void generatePreloadCode(final byte[] data){
         StringBuilder sb = new StringBuilder(data.length);
         for (int i = 0; i < data.length;) {
             sb.append('"');
@@ -565,13 +572,15 @@ public class PaletteReducer {
                 sb.append('+');
             sb.append('\n');
         }
-        Gdx.files.local("bytes_" + CrossHash.hash(data) + ".txt").writeString(sb.toString(), false, "ISO-8859-1");
+        String filename = "bytes_" + StringKit.hexHash(data) + ".txt";
+        Gdx.files.local(filename).writeString(sb.toString(), false, "ISO-8859-1");
+        System.out.println("Wrote code snippet to " + filename);
     }
     /**
      * Builds the palette information this PaletteReducer stores from the given array of RGBA8888 ints as a palette (see
      * {@link #exact(int[])} for more info) and an encoded String to use to look up pre-loaded color data. The encoded
      * string is going to be hard to produce if you intend to do this from outside WarpWriter, but there is a
-     * package-private print() method in this class if you're hacking on WarpWriter. For external code, there's slightly
+     * generatePreloadCode() method in this class if you're hacking on WarpWriter. For external code, there's slightly
      * more startup time spent when initially calling {@link #exact(int[])}, but it will produce the same result. 
      *
      * @param palette an array of RGBA8888 ints to use as a palette
@@ -579,7 +588,11 @@ public class PaletteReducer {
      */
     public void exact(int[] palette, String preload)
     {
-        System.arraycopy(palette, 0, paletteArray, 0, Math.min(palette.length, 256));
+        for (int i = 0; i < 256 & i < palette.length; i++) {
+            int color = palette[i];
+            if((color & 0x80) != 0)
+                paletteArray[i] = color;
+        }
         try {
             paletteMapping = preload.getBytes("ISO-8859-1"); // don't use StandardCharsets; not supported on GWT
         } catch (UnsupportedEncodingException e) {

@@ -350,11 +350,11 @@ public abstract class Fetch implements IFetch, IDecide, ITemporal {
         return stripes(widths, stripes);
     }
 
-    public Fetch chaoticFetch(long seed, byte mainColor) {
+    public Fetch chaoticFetch(int seed, byte mainColor) {
         return add(new ChaoticFetch(seed, mainColor));
     }
 
-    public Fetch chaoticFetch(long seed, byte... colors) {
+    public Fetch chaoticFetch(int seed, byte... colors) {
         return add(new ChaoticFetch(seed, colors));
     }
 

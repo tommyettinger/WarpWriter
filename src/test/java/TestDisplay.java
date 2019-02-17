@@ -18,6 +18,7 @@ import squidpony.squidmath.Noise;
 import warpwriter.*;
 import warpwriter.model.Fetch;
 import warpwriter.model.IModel;
+import warpwriter.model.color.Colorizer;
 import warpwriter.model.decide.DecideFetch;
 import warpwriter.model.decide.HeightDecide;
 import warpwriter.model.fetch.*;
@@ -42,7 +43,7 @@ public class TestDisplay extends ApplicationAdapter {
     private Pixmap pix;
     private long seed = 12345L;
     private int width = 52, height = 64, frames = 8;
-    private ModelMaker mm = new ModelMaker(seed);
+    private ModelMaker mm;
     private ModelRenderer mr = new ModelRenderer(true, true); // change to (false, true) to disable easing
     private PaletteReducer reducer;
     //    private byte[][][] voxels;
@@ -65,7 +66,12 @@ public class TestDisplay extends ApplicationAdapter {
 
     @Override
     public void create() {
-        reducer = new PaletteReducer(Coloring.GB_GREEN);//Coloring.FLESURRECT_REDUCER; //Colorizer.FlesurrectBonusPalette
+//        PaletteReducer arb = Colorizer.arbitraryColorizer(Coloring.RINSED).getReducer();
+//        System.out.println(Arrays.equals(Colorizer.RinsedColorizer.getReducer().paletteMapping, arb.paletteMapping));
+//        System.out.println(Arrays.equals(Colorizer.RinsedColorizer.getReducer().paletteMapping, new PaletteReducer(Coloring.RINSED).paletteMapping));
+        mm = new ModelMaker(seed, Colorizer.RinsedColorizer);//arbitraryColorizer(Coloring.RINSED)
+        reducer = mm.getColorizer().getReducer();//Coloring.FLESURRECT_REDUCER; //Colorizer.FlesurrectBonusPalette
+        //PaletteReducer.generatePreloadCode(reducer.paletteMapping);
         reducer.setDitherStrength(0.25f);
         batch = new SpriteBatch();
 //        pix = new Pixmap(16, 16, Pixmap.Format.RGBA8888);
@@ -504,7 +510,7 @@ public class TestDisplay extends ApplicationAdapter {
     public void remakeShip(long newModel) {
         if (newModel != 0) {
             mm.rng.setState(determine(newModel));
-            voxels = new ArrayModel(large ? mm.shipLargeRandom() : mm.shipRandom());
+            voxels = new ArrayModel(large ? mm.shipLargeNoiseColorized() : mm.shipNoiseColorized());
             byte[][][][] anim = mm.animateShip(((ArrayModel) voxels).voxels, frames);
             for (int i = 0; i < frames; i++) {
                 animatedVoxels[i] = new ArrayModel(anim[i]);

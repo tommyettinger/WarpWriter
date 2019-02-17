@@ -10,19 +10,19 @@ import warpwriter.model.Fetch;
  * continuous like {@link NoiseFetch} (that Fetch changes smoothly, this doesn't).
  */
 public class ChaoticFetch extends Fetch {
-    protected long seed;
+    protected int seed;
     protected byte[] colors;
 
-    public ChaoticFetch (long seed) {
+    public ChaoticFetch (int seed) {
         setSeed(seed);
         setColors(ModelMaker.randomColorRange(seed));
     }
 
     public ChaoticFetch(byte... colors) {
-        this(DiverRNG.determine(System.currentTimeMillis()), colors);
+        this((int)DiverRNG.determine(System.currentTimeMillis()), colors);
     }
 
-    public ChaoticFetch(long seed, byte... colors) {
+    public ChaoticFetch(int seed, byte... colors) {
         this.seed = seed;
         if (colors.length == 1)
             this.colors = ModelMaker.colorRange(colors[0]);
@@ -62,7 +62,7 @@ public class ChaoticFetch extends Fetch {
         return this;
     }
 
-    public ChaoticFetch setSeed(long seed) {
+    public ChaoticFetch setSeed(int seed) {
         this.seed = seed;
         return this;
     }
