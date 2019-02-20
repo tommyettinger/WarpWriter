@@ -325,7 +325,10 @@ public class Tools3D {
                 choice = new byte[xs][ys][zs];
         while (fst >= 0) {
             fill(filled, 0);
-            filled[x = fst / (ys * zs)][y = (fst / zs) % ys][z = fst % zs] = voxels[x][y][z];
+            x = fst / (ys * zs);
+            y = (fst / zs) % ys;
+            z = fst % zs;
+            filled[x][y][z] = voxels[x][y][z];
             currentSize = flood(filled, remaining);
             if(currentSize > bestSize)
             {
@@ -383,34 +386,41 @@ public class Tools3D {
         }
     }
 
-    private static long hash64(final byte[] data) {
-        long result = 0x1A976FDF6BF60B8EL, z = 0x60642E2A34326F15L;
-        final int len = data.length;
-        for (int i = 0; i < len; i++) {
-            result ^= (z += (data[i] ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L);
-        }
-        result += (z ^ z >>> 26) * 0x632BE59BD9B4E019L;
-        result ^= result >>> 25 ^ z ^ z >>> 29;
-//        result = (result ^ result >>> 33) * 0xFF51AFD7ED558CCDL;
-//        result = (result ^ result >>> 33) * 0xC4CEB9FE1A85EC53L;
-        return (result ^ result >>> 33);
-    }
-
-    private static long hash64(final byte[][] data) {
-        long result = 0x9E3779B97F4A7C15L, z = 0xC6BC279692B5CC83L;
-        final int len = data.length;
-        for (int i = 0; i < len; i++) {
-            result ^= (z += hash64(data[i]) + i);
-        }
-        result += (z ^ z >>> 26) * 0x632BE59BD9B4E019L;
-        result ^= result >>> 25 ^ z ^ z >>> 29;
-//        result = (result ^ result >>> 33) * 0xFF51AFD7ED558CCDL;
-//        result = (result ^ result >>> 33) * 0xC4CEB9FE1A85EC53L;
-        return (result ^ result >>> 33);
-    }
+//    private static long hash64(final byte[] data) {
+//        long result = 0x1A976FDF6BF60B8EL, z = 0x60642E2A34326F15L;
+//        final int len = data.length;
+//        for (int i = 0; i < len; i++) {
+//            result ^= (z += (data[i] ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L);
+//        }
+//        result += (z ^ z >>> 26) * 0x632BE59BD9B4E019L;
+//        result ^= result >>> 25 ^ z ^ z >>> 29;
+////        result = (result ^ result >>> 33) * 0xFF51AFD7ED558CCDL;
+////        result = (result ^ result >>> 33) * 0xC4CEB9FE1A85EC53L;
+//        return (result ^ result >>> 33);
+//    }
+//
+//    private static long hash64(final byte[][] data) {
+//        long result = 0x9E3779B97F4A7C15L, z = 0xC6BC279692B5CC83L;
+//        final int len = data.length;
+//        for (int i = 0; i < len; i++) {
+//            result ^= (z += hash64(data[i]) + i);
+//        }
+//        result += (z ^ z >>> 26) * 0x632BE59BD9B4E019L;
+//        result ^= result >>> 25 ^ z ^ z >>> 29;
+////        result = (result ^ result >>> 33) * 0xFF51AFD7ED558CCDL;
+////        result = (result ^ result >>> 33) * 0xC4CEB9FE1A85EC53L;
+//        return (result ^ result >>> 33);
+//    }
     /**
      * Gets a 64-bit high-quality hash of the given 3D byte array. When GWT is a possible target, you should prefer
      * {@link #hash(byte[][][])} if possible, since it's quite a lot faster to work with ints there.
+     * <br>
+     * This algorithm passes SMHasher on byte inputs in unusual patterns. The finalization step of this is based loosely
+     * on a work-in-progress unary hash in the vein of Pelle Evensen's rrxmrrxmsx_0, but with less rotations and more
+     * right-shifts. The unary hash is a "work-in-progress" because it's only gone through a week so far of testing
+     * using the setup here http://mostlymangling.blogspot.com/2019/01/better-stronger-mixer-and-test-procedure.html ,
+     * though it is promising because it hasn't had a failure on any test. This code interleaves changes to two
+     * variables with the rrxmrrxmsx_0-like step to increase mixing of the hash.
      * @param data a 3D byte array; if null this returns 0, but if any sub-arrays are null this will throw an exception
      * @return a 64-bit hash of the given data, with all bits approximately equally likely to be set
      */
@@ -418,16 +428,20 @@ public class Tools3D {
     {
         if (data == null)
             return 0L;
-        long result = 0x60642E2A34326F1EL, z = 0x1A976FDF6BF60B85L;
-        final int len = data.length;
-        for (int i = 0; i < len; i++) {
-            result ^= (z += hash64(data[i]) ^ i);
+        final int sizeX = data.length, sizeY = data[0].length, sizeZ = data[0][0].length;
+        long run = 0x1A976FDF6BF60B85L ^ sizeX * 0xD1B54A32D192ED03L + sizeY * 0xABC98388FB8FAC03L + sizeZ * 0x8CB92BA72F3D8DD7L, result = 0x60642E2A34326F1EL ^ (run << 30 | run >>> 34);
+        byte[] current;
+        for (int x = 0; x < sizeX; x++) {
+            for (int y = 0; y < sizeY; y++) {
+                current = data[x][y];
+                for (int z = 0; z < sizeZ; z++) {
+                    result ^= (run += (current[z] ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L);
+                }
+            }
         }
-        result += (z ^ z >>> 26) * 0x632BE59BD9B4E019L;
-        result ^= result >>> 25 ^ z ^ z >>> 29;
-        result = (result ^ result >>> 33) * 0xFF51AFD7ED558CCDL;
-        result = (result ^ result >>> 33) * 0xC4CEB9FE1A85EC53L;
-        return (result ^ result >>> 33);
+        run ^= (result ^ (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47)) * 0xAEF17502108EF2D9L;
+        result += (run ^ run >>> 43 ^ run >>> 31 ^ run >>> 23) * 0xDB4F0B9175AE2165L;
+        return (result ^ result >>> 28);
     }
     private static int hash(final byte[] data) {
         int result = 0x1A976FDF, z = 0x60642E25;

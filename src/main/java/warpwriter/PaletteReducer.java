@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ByteArray;
 import com.badlogic.gdx.utils.IntIntMap;
 import squidpony.StringKit;
+import squidpony.annotation.GwtIncompatible;
 import squidpony.squidmath.IRNG;
 import squidpony.squidmath.NumberTools;
 
@@ -537,6 +538,7 @@ public class PaletteReducer {
      * preload data, the byte array should be {@link #paletteMapping}.
      * @param data the bytes to use as preload data, usually the {@link #paletteMapping} of a PaletteReducer
      */
+    @GwtIncompatible
     public static void generatePreloadCode(final byte[] data){
         StringBuilder sb = new StringBuilder(data.length);
         for (int i = 0; i < data.length;) {

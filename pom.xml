@@ -62,7 +62,7 @@
         <jdk.version>1.7</jdk.version>
         <junit.version>4.11</junit.version>
         <squidlib.version>bcae6a4718</squidlib.version>
-        <fastutil.version>2727aa9866</fastutil.version>
+        <!--<fastutil.version>2727aa9866</fastutil.version>-->
         <gdx.version>1.9.8</gdx.version>
     </properties>
 
@@ -97,21 +97,21 @@
             <classifier>natives-desktop</classifier>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.github.tommyettinger.fastutil-gwt</groupId>
-            <artifactId>fastutil-base</artifactId>
-            <version>${fastutil.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.tommyettinger.fastutil-gwt</groupId>
-            <artifactId>fastutil-intbase</artifactId>
-            <version>${fastutil.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.tommyettinger.fastutil-gwt</groupId>
-            <artifactId>fastutil-inthashmap</artifactId>
-            <version>${fastutil.version}</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.github.tommyettinger.fastutil-gwt</groupId>-->
+            <!--<artifactId>fastutil-base</artifactId>-->
+            <!--<version>${fastutil.version}</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>com.github.tommyettinger.fastutil-gwt</groupId>-->
+            <!--<artifactId>fastutil-intbase</artifactId>-->
+            <!--<version>${fastutil.version}</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>com.github.tommyettinger.fastutil-gwt</groupId>-->
+            <!--<artifactId>fastutil-inthashmap</artifactId>-->
+            <!--<version>${fastutil.version}</version>-->
+        <!--</dependency>-->
         <!--<dependency>-->
             <!--<groupId>com.github.aikar.fastutil-lite</groupId>-->
             <!--<artifactId>fastutil-base</artifactId>-->

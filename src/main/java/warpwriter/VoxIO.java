@@ -1,12 +1,12 @@
 package warpwriter;
 
+import squidpony.annotation.GwtIncompatible;
 import warpwriter.model.nonvoxel.LittleEndianDataInputStream;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 
 /**
@@ -54,20 +54,22 @@ public class VoxIO {
             byte[] chunkId = new byte[4];
             if (4 != stream.read(chunkId))
                 return null;
-            int version = stream.readInt();
-            int xSize = 16, ySize = 16, zSize = 8;
+            //int version = 
+                    stream.readInt();
+            //int xSize = 16, ySize = 16, zSize = 8;
             // a MagicaVoxel .vox file starts with a 'magic' 4 character 'VOX ' identifier
             if (chunkId[0] == 'V' && chunkId[1] == 'O' && chunkId[2] == 'X' && chunkId[3] == ' ') {
                 while (stream.available() > 0) {
                     // each chunk has an ID, size and child chunks
                     stream.read(chunkId);
                     int chunkSize = stream.readInt();
-                    int childChunks = stream.readInt();
-                    String chunkName = new String(chunkId, StandardCharsets.US_ASCII);
+                    //int childChunks = 
+                            stream.readInt();
+                    String chunkName = new String(chunkId); // assumes default charset is compatible with ASCII
 
                     // there are only 3 chunks we only care about, and they are SIZE, XYZI, and RGBA
                     if (chunkName.equals("SIZE")) {
-                        voxelData = new byte[xSize = stream.readInt()][ySize = stream.readInt()][zSize = stream.readInt()];
+                        voxelData = new byte[stream.readInt()][stream.readInt()][stream.readInt()];
                         stream.skipBytes(chunkSize - 4 * 3);
                     } else if (chunkName.equals("XYZI") && voxelData != null) {
                         // XYZI contains n voxels
@@ -100,6 +102,7 @@ public class VoxIO {
     {
         bin.writeInt(Integer.reverseBytes(value));
     }
+    @GwtIncompatible
     public static void writeVOX(String filename, byte[][][] voxelData, int[] palette) {
         // check out http://voxel.codeplex.com/wikipage?title=VOX%20Format&referringTitle=Home for the file format used below
         try {
@@ -169,6 +172,7 @@ public class VoxIO {
             e.printStackTrace();
         }
     }
+    @GwtIncompatible
     public static void writeAnimatedVOX(String filename, byte[][][][] voxelData, int[] palette) {
         // check out http://voxel.codeplex.com/wikipage?title=VOX%20Format&referringTitle=Home for the file format used below
         try {
