@@ -2263,6 +2263,10 @@ public class VoxelSeq implements Serializable, Cloneable {
     {
         return get(fuse(x, y, z));
     }
+    public boolean containsKey(final int x, final int y, final int z)
+    {
+        return containsKey(fuse(x, y, z));
+    }
     public byte remove(final int x, final int y, final int z)
     {
         return remove(fuse(x, y, z));

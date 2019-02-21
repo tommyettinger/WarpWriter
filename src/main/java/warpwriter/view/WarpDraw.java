@@ -4,6 +4,9 @@ import com.badlogic.gdx.graphics.Pixmap;
 import warpwriter.Coloring;
 import warpwriter.model.IModel;
 import warpwriter.model.ITemporal;
+import warpwriter.model.VoxelSeq;
+import warpwriter.model.nonvoxel.HashMap3D;
+import warpwriter.model.nonvoxel.IntComparator;
 import warpwriter.view.color.IVoxelColor;
 import warpwriter.view.color.VoxelColor;
 import warpwriter.view.render.IRectangleRenderer;
@@ -428,6 +431,29 @@ public class WarpDraw {
             }
         }
         return renderer.blit(12, pixelWidth, pixelHeight);
+    }
+    public static Pixmap draw(VoxelSeq seq, VoxelPixmapRenderer renderer, int sizeX, int sizeY, int sizeZ)
+    {
+        final int time = (seq instanceof ITemporal) ? ((ITemporal) seq).frame() : 0;
+        final int len = seq.size(),
+                offsetPX = (sizeY >> 1) + 1, pixelWidth = sizeY * 3 + (sizeY >> 1) + 6, pixelHeight = sizeZ * 3 + 7;
+        seq.sort(IntComparator.side);
+        int xyz, x, y, z;
+        byte v;
+        for (int i = 0; i < len; i++) {
+            xyz = seq.keyAt(i);
+            x = HashMap3D.extractX(xyz);
+            y = HashMap3D.extractY(xyz);
+            z = HashMap3D.extractZ(xyz);
+            v = seq.getAt(i);
+            if (v != 0) {
+                final int xPos = (sizeY - y) * 3 + offsetPX;
+                renderer.rectRight(xPos, z * 3 + 1, 3, 3, v, 256 + x, x, y, z, time);
+                if (z >= sizeZ - 1 || !seq.containsKey(x, y, z + 1))
+                    renderer.rectVertical(xPos, z * 3 + 4, 3, 1, v, 256 + x, x, y, z, time);
+            }
+        }
+        return renderer.blit(2, pixelWidth, pixelHeight);
     }
 
 }
