@@ -87,7 +87,7 @@ public class IntSort {
 
 	/** Asserts have been placed in if-statements for performance. To enable them, set this field to true and enable them in VM with
 	 * a command line flag. If you modify this class, please do test the asserts! */
-	private static final boolean DEBUG = true;
+	private static final boolean DEBUG = false;
 
 	IntSort() {
 		tmp = new int[INITIAL_TMP_STORAGE_LENGTH];
@@ -121,7 +121,7 @@ public class IntSort {
 	}
 
 	/*
-	 * The next two methods (which are package private and static) constitute the entire API of this class. Each of these methods
+	 * The next two methods (which are static) constitute the entire API of this class. Each of these methods
 	 * obeys the contract of the public method with the same signature in java.util.Arrays.
 	 */
 

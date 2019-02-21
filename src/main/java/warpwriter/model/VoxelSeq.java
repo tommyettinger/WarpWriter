@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package warpwriter.model.nonvoxel;
+package warpwriter.model;
 
 import squidpony.annotation.GwtIncompatible;
 import squidpony.squidmath.*;
+import warpwriter.model.nonvoxel.IntComparator;
+import warpwriter.model.nonvoxel.IntSort;
 
 import java.io.Serializable;
 import java.util.*;
@@ -52,12 +54,12 @@ import static warpwriter.model.nonvoxel.HashMap3D.fuse;
  * iteration order). Note that this order has nothing in common with the natural order of the keys. The order is kept by means of a int-specialized list, {@link IntVLA}, and is modifiable with this
  * class' {@link #reorder(int...)} and {@link #shuffle(IRNG)} methods, among other tools. It may be preferable to avoid instantiating an Iterator object and instead
  * use a normal int-based for loop with {@link #getAt(int)} called in each iteration. Though this doesn't allow easy deletion of items during iteration, it may be the
- * fastest way to iterate through an OrderedMap.
+ * fastest way to iterate through an VoxelSeq.
  * <br>
  * This class allows approximately constant-time lookup of keys or values by their index in the ordering, which can
  * allow some novel usage of the data structure. {@link OrderedSet} can be used like a list of unique elements, keeping
- * order like a list does but also allowing rapid checks for whether an item exists in the OrderedSet, and OrderedMap
- * can be used like that but with values associated as well (where OrderedSet uses contains(), OrderedMap uses
+ * order like a list does but also allowing rapid checks for whether an item exists in the OrderedSet, and VoxelSeq
+ * can be used like that but with values associated as well (where OrderedSet uses contains(), VoxelSeq uses
  * containsKey()). You can also set the key and value at a position with {@link #putAt(int, byte, int)}, or alter
  * the key while keeping its value and index the same with {@link #alter(int, int)}. Reordering works here too,
  * both with completely random orders from {@link #shuffle(IRNG)} or with a previously-generated ordering from
@@ -74,7 +76,7 @@ import static warpwriter.model.nonvoxel.HashMap3D.fuse;
  * @author Sebastiano Vigna (responsible for all the hard parts)
  * @author Tommy Ettinger (mostly responsible for squashing several layers of parent classes into one monster class)
  */
-public class IntByteOrderedMap implements Serializable, Cloneable {
+public class VoxelSeq implements Serializable, Cloneable {
     private static final long serialVersionUID = 0L;
     /**
      * The array of keys.
@@ -156,7 +158,7 @@ public class IntByteOrderedMap implements Serializable, Cloneable {
     }
 
     /**
-     * Creates a new OrderedMap.
+     * Creates a new VoxelSeq.
      * <p>
      * <p>The actual table size will be the least power of two greater than <code>expected</code>/<code>f</code>.
      *
@@ -165,7 +167,7 @@ public class IntByteOrderedMap implements Serializable, Cloneable {
      */
 
     @SuppressWarnings("unchecked")
-    public IntByteOrderedMap(final int expected, final float f) {
+    public VoxelSeq(final int expected, final float f) {
         if (f <= 0 || f > 1)
             throw new IllegalArgumentException("Load factor must be greater than 0 and smaller than or equal to 1");
         if (expected < 0) throw new IllegalArgumentException("The expected number of elements must be nonnegative");
@@ -180,50 +182,50 @@ public class IntByteOrderedMap implements Serializable, Cloneable {
     }
 
     /**
-     * Creates a new OrderedMap with 0.75f as load factor.
+     * Creates a new VoxelSeq with 0.75f as load factor.
      *
-     * @param expected the expected number of elements in the OrderedMap.
+     * @param expected the expected number of elements in the VoxelSeq.
      */
-    public IntByteOrderedMap(final int expected) {
+    public VoxelSeq(final int expected) {
         this(expected, DEFAULT_LOAD_FACTOR);
     }
 
     /**
-     * Creates a new OrderedMap with initial expected 16 entries and 0.75f as load factor.
+     * Creates a new VoxelSeq with initial expected 16 entries and 0.75f as load factor.
      */
-    public IntByteOrderedMap() {
+    public VoxelSeq() {
         this(DEFAULT_INITIAL_SIZE, DEFAULT_LOAD_FACTOR);
     }
 
     /**
-     * Creates a new OrderedMap copying a given one.
+     * Creates a new VoxelSeq copying a given one.
      *
-     * @param m a {@link Map} to be copied into the new OrderedMap.
+     * @param m a {@link Map} to be copied into the new VoxelSeq.
      * @param f the load factor.
      */
-    public IntByteOrderedMap(final IntByteOrderedMap m, final float f) {
+    public VoxelSeq(final VoxelSeq m, final float f) {
         this(m.size(), f);
         putAll(m);
     }
 
     /**
-     * Creates a new OrderedMap with 0.75f as load factor copying a given one.
+     * Creates a new VoxelSeq with 0.75f as load factor copying a given one.
      *
-     * @param m a {@link Map} to be copied into the new OrderedMap.
+     * @param m a {@link Map} to be copied into the new VoxelSeq.
      */
-    public IntByteOrderedMap(final IntByteOrderedMap m) {
+    public VoxelSeq(final VoxelSeq m) {
         this(m, m.f);
     }
 
     /**
-     * Creates a new OrderedMap using the elements of two parallel arrays.
+     * Creates a new VoxelSeq using the elements of two parallel arrays.
      *
-     * @param keyArray the array of keys of the new OrderedMap.
-     * @param valueArray the array of corresponding values in the new OrderedMap.
+     * @param keyArray the array of keys of the new VoxelSeq.
+     * @param valueArray the array of corresponding values in the new VoxelSeq.
      * @param f the load factor.
      * @throws IllegalArgumentException if <code>k</code> and <code>v</code> have different lengths.
      */
-    public IntByteOrderedMap(final int[] keyArray, final byte[] valueArray, final float f) {
+    public VoxelSeq(final int[] keyArray, final byte[] valueArray, final float f) {
         this(keyArray.length, f);
         if (keyArray.length != valueArray.length)
             throw new IllegalArgumentException("The key array and the value array have different lengths (" + keyArray.length + " and " + valueArray.length + ")");
@@ -232,14 +234,47 @@ public class IntByteOrderedMap implements Serializable, Cloneable {
     }
 
     /**
-     * Creates a new OrderedMap with 0.75f as load factor using the elements of two parallel arrays.
+     * Creates a new VoxelSeq with 0.75f as load factor using the elements of two parallel arrays.
      *
-     * @param keyArray the array of keys of the new OrderedMap.
-     * @param valueArray the array of corresponding values in the new OrderedMap.
+     * @param keyArray the array of keys of the new VoxelSeq.
+     * @param valueArray the array of corresponding values in the new VoxelSeq.
      * @throws IllegalArgumentException if <code>k</code> and <code>v</code> have different lengths.
      */
-    public IntByteOrderedMap(final int[] keyArray, final byte[] valueArray) {
+    public VoxelSeq(final int[] keyArray, final byte[] valueArray) {
         this(keyArray, valueArray, DEFAULT_LOAD_FACTOR);
+    }
+    
+    public void putSurface(byte[][][] voxels)
+    {
+        final int sizeX = voxels.length, sizeY = voxels[0].length, sizeZ = voxels[0][0].length;
+        for (int y = 0; y < sizeY; y++) {
+            for (int z = 0; z < sizeZ; z++) {
+                if(voxels[0][y][z] != 0)
+                    put(0, y, z, voxels[0][y][z]);
+                if(voxels[sizeX - 1][y][z] != 0)
+                    put(sizeX - 1, y, z, voxels[sizeX - 1][y][z]);
+            }
+        }
+        for (int x = 1; x < sizeX - 1; x++) {
+            for (int z = 0; z < sizeZ; z++) {
+                if(voxels[x][0][z] != 0)
+                    put(x, 0, z, voxels[x][0][z]);
+                if(voxels[x][sizeY - 1][z] != 0)
+                    put(x, sizeY - 1, z, voxels[x][sizeY - 1][z]);
+            }
+            for (int y = 1; y < sizeY - 1; y++) {
+                if(voxels[x][y][0] != 0)
+                    put(x, y, 0, voxels[x][y][0]);
+                if(voxels[x][y][sizeZ - 1] != 0)
+                    put(x, y, sizeZ - 1, voxels[x][y][sizeZ - 1]);
+                for (int z = 1; z < sizeZ - 1; z++) {
+                    if(voxels[x][y][z] != 0 && (voxels[x - 1][y][z] == 0 || voxels[x + 1][y][z] == 0 ||
+                            voxels[x][y - 1][z] == 0 || voxels[x][y + 1][z] == 0 ||
+                            voxels[x][y][z - 1] == 0 || voxels[x][y][z + 1] == 0))
+                        put(x, y, z, voxels[x][y][z]);
+                }
+            }
+        }
     }
     private int realSize() {
         return containsNullKey ? size - 1 : size;
@@ -295,15 +330,15 @@ public class IntByteOrderedMap implements Serializable, Cloneable {
     }
 
     /**
-     * Puts all key-value pairs in the Map m into this OrderedMap.
+     * Puts all key-value pairs in the Map m into this VoxelSeq.
      * The entries are all appended to the end of the iteration order, unless a key was already present. Then,
      * its value is changed at the existing position in the iteration order. This can take any kind of Map,
      * including unordered HashMap objects; if the Map does not have stable ordering, the order in which entries
-     * will be appended is not stable either. For this reason, OrderedMap, LinkedHashMap, and TreeMap (or other
+     * will be appended is not stable either. For this reason, VoxelSeq, LinkedHashMap, and TreeMap (or other
      * SortedMap implementations) will work best when order matters.
      * @param m an IntIntOrderedMap to add into this
      */
-    public void putAll(IntByteOrderedMap m) {
+    public void putAll(VoxelSeq m) {
         if (f <= .5)
             ensureCapacity(m.size()); // The resulting map will be sized for m.size() elements
         else
@@ -544,7 +579,7 @@ public class IntByteOrderedMap implements Serializable, Cloneable {
      * (e.g. {@link Arrangement} can access ordering position very quickly but doesn't store other values on its own).
      * Returns a value that is at least 0 if it found k, or -1 if k was not present.
      * @param k a key or possible key that this should find the index of
-     * @return the index of k, if present, or -1 if it is not present in this OrderedMap
+     * @return the index of k, if present, or -1 if it is not present in this VoxelSeq
      */
     public int indexOf(final int k)
     {
@@ -556,9 +591,9 @@ public class IntByteOrderedMap implements Serializable, Cloneable {
      * Swaps the positions in the ordering for the given items, if they are both present. Returns true if the ordering
      * changed as a result of this call, or false if it stayed the same (which can be because left or right was not
      * present, or because left and right are the same reference (so swapping would do nothing)).
-     * @param left an item that should be present in this OrderedMap
-     * @param right an item that should be present in this OrderedMap
-     * @return true if this OrderedMap changed in ordering as a result of this call, or false otherwise
+     * @param left an item that should be present in this VoxelSeq
+     * @param right an item that should be present in this VoxelSeq
+     * @return true if this VoxelSeq changed in ordering as a result of this call, or false otherwise
      */
     public boolean swap(final int left, final int right)
     {
@@ -574,9 +609,9 @@ public class IntByteOrderedMap implements Serializable, Cloneable {
      * Swaps the given indices in the ordering, if they are both valid int indices. Returns true if the ordering
      * changed as a result of this call, or false if it stayed the same (which can be because left or right referred to
      * an out-of-bounds index, or because left and right are equal (so swapping would do nothing)).
-     * @param left an index of an item in this OrderedMap, at least 0 and less than {@link #size()}
-     * @param right an index of an item in this OrderedMap, at least 0 and less than {@link #size()}
-     * @return true if this OrderedMap changed in ordering as a result of this call, or false otherwise
+     * @param left an index of an item in this VoxelSeq, at least 0 and less than {@link #size()}
+     * @param right an index of an item in this VoxelSeq, at least 0 and less than {@link #size()}
+     * @return true if this VoxelSeq changed in ordering as a result of this call, or false otherwise
      */
     public boolean swapIndices(final int left, final int right)
     {
@@ -689,7 +724,7 @@ public class IntByteOrderedMap implements Serializable, Cloneable {
     }
 
     /**
-     * The entry class for a OrderedMap does not record key and value, but rather the position in the hash table of the corresponding entry. This is necessary so that calls to
+     * The entry class for a VoxelSeq does not record key and value, but rather the position in the hash table of the corresponding entry. This is necessary so that calls to
      * {@link MapEntry#setValue(byte)} are reflected in the map
      */
     public final class MapEntry {
@@ -788,10 +823,10 @@ public class IntByteOrderedMap implements Serializable, Cloneable {
         return key[order.items[order.size-1]];
     }
     /**
-     * A list iterator over a OrderedMap.
+     * A list iterator over a VoxelSeq.
      *
      * <P>
-     * This class provides a list iterator over a OrderedMap. The
+     * This class provides a list iterator over a VoxelSeq. The
      * constructor runs in constant time.
      */
     private class MapIterator {
@@ -936,7 +971,7 @@ public class IntByteOrderedMap implements Serializable, Cloneable {
                 containsNullKey = false;
             } else {
                 int curr;
-                final int[] key = IntByteOrderedMap.this.key;
+                final int[] key = VoxelSeq.this.key;
                 // We have to horribly duplicate the shiftKeys() code because we
                 // need to update next/prev.
                 for (;;) {
@@ -1061,7 +1096,7 @@ public class IntByteOrderedMap implements Serializable, Cloneable {
             if (k == 0)
                 return containsNullKey && (value[n] == v);
             int curr;
-            final int[] key = IntByteOrderedMap.this.key;
+            final int[] key = VoxelSeq.this.key;
             int pos;
             // The starting point.
             if ((curr = key[pos = (HashCommon.mix(k)) & mask]) == 0)
@@ -1091,7 +1126,7 @@ public class IntByteOrderedMap implements Serializable, Cloneable {
                 return false;
             }
             int curr;
-            final int[] key = IntByteOrderedMap.this.key;
+            final int[] key = VoxelSeq.this.key;
             int pos;
             // The starting point.
             if ((curr = key[pos = (HashCommon.mix(k)) & mask]) == 0)
@@ -1118,7 +1153,7 @@ public class IntByteOrderedMap implements Serializable, Cloneable {
             return size;
         }
         public void clear() {
-            IntByteOrderedMap.this.clear();
+            VoxelSeq.this.clear();
         }
 
         public FastEntryIterator fastIterator() {
@@ -1298,7 +1333,7 @@ public class IntByteOrderedMap implements Serializable, Cloneable {
         }
 
         public void clear() {
-            IntByteOrderedMap.this.clear();
+            VoxelSeq.this.clear();
         }
 
         public Integer first() {
@@ -1591,7 +1626,7 @@ public class IntByteOrderedMap implements Serializable, Cloneable {
             return v instanceof Byte && containsValue((Byte)v);
         }
         public void clear() {
-            IntByteOrderedMap.this.clear();
+            VoxelSeq.this.clear();
         }
     }
     public Collection<Byte> values() {
@@ -1700,7 +1735,7 @@ public class IntByteOrderedMap implements Serializable, Cloneable {
      * Returns a deep copy of this map.
      *
      * <P>
-     * This method performs a deep copy of this OrderedMap; the data stored in the
+     * This method performs a deep copy of this VoxelSeq; the data stored in the
      * map, however, is not cloned. Note that this makes a difference only for
      * object keys.
      *
@@ -1708,10 +1743,10 @@ public class IntByteOrderedMap implements Serializable, Cloneable {
      */
     @SuppressWarnings("unchecked")
     @GwtIncompatible
-    public IntByteOrderedMap clone() {
-        IntByteOrderedMap c;
+    public VoxelSeq clone() {
+        VoxelSeq c;
         try {
-            c = (IntByteOrderedMap) super.clone();
+            c = (VoxelSeq) super.clone();
             c.key = new int[n + 1];
             System.arraycopy(key, 0, c.key, 0, n + 1);
             c.value = new byte[n + 1];
@@ -1848,7 +1883,7 @@ public class IntByteOrderedMap implements Serializable, Cloneable {
         final StringBuilder s = new StringBuilder();
         int n = size(), i = 0;
         boolean first = true;
-        s.append("IntByteOrderedMap{");
+        s.append("VoxelSeq{");
         while (i < n) {
             if (first) first = false;
             else s.append(", ");
@@ -1861,9 +1896,9 @@ public class IntByteOrderedMap implements Serializable, Cloneable {
     public boolean equals(Object o) {
         if (o == this)
             return true;
-        if (!(o instanceof IntByteOrderedMap))
+        if (!(o instanceof VoxelSeq))
             return false;
-        IntByteOrderedMap m = (IntByteOrderedMap) o;
+        VoxelSeq m = (VoxelSeq) o;
         if (m.size() != size())
             return false;
         return entrySet().containsAll(m.entrySet());
@@ -1971,9 +2006,9 @@ public class IntByteOrderedMap implements Serializable, Cloneable {
         return removeEntry(pos);
     }
     /**
-     * Gets a random value from this OrderedMap in constant time, using the given IRNG to generate a random number.
+     * Gets a random value from this VoxelSeq in constant time, using the given IRNG to generate a random number.
      * @param rng used to generate a random index for a value
-     * @return a random value from this OrderedMap
+     * @return a random value from this VoxelSeq
      */
     public byte randomValue(IRNG rng)
     {
@@ -1981,9 +2016,9 @@ public class IntByteOrderedMap implements Serializable, Cloneable {
     }
 
     /**
-     * Gets a random key from this OrderedMap in constant time, using the given IRNG to generate a random number.
+     * Gets a random key from this VoxelSeq in constant time, using the given IRNG to generate a random number.
      * @param rng used to generate a random index for a key
-     * @return a random key from this OrderedMap
+     * @return a random key from this VoxelSeq
      */
     public int randomKey(IRNG rng)
     {
@@ -1991,9 +2026,9 @@ public class IntByteOrderedMap implements Serializable, Cloneable {
     }
 
     /**
-     * Gets a random entry from this OrderedMap in constant time, using the given IRNG to generate a random number.
+     * Gets a random entry from this VoxelSeq in constant time, using the given IRNG to generate a random number.
      * @param rng used to generate a random index for a entry
-     * @return a random key-value entry from this OrderedMap
+     * @return a random key-value entry from this VoxelSeq
      */
     public MapEntry randomEntry(IRNG rng)
     {
@@ -2001,11 +2036,11 @@ public class IntByteOrderedMap implements Serializable, Cloneable {
     }
 
     /**
-     * Randomly alters the iteration order for this OrderedMap using the given IRNG to shuffle.
+     * Randomly alters the iteration order for this VoxelSeq using the given IRNG to shuffle.
      * @param rng used to generate a random ordering
      * @return this for chaining
      */
-    public IntByteOrderedMap shuffle(IRNG rng)
+    public VoxelSeq shuffle(IRNG rng)
     {
         if(size < 2)
             return this;
@@ -2014,7 +2049,7 @@ public class IntByteOrderedMap implements Serializable, Cloneable {
     }
 
     /**
-     * Given an array or varargs of replacement indices for this OrderedMap's iteration order, reorders this so the
+     * Given an array or varargs of replacement indices for this VoxelSeq's iteration order, reorders this so the
      * first item in the returned version is the same as {@code getAt(ordering[0])} (with some care taken for negative
      * or too-large indices), the second item in the returned version is the same as {@code getAt(ordering[1])}, etc.
      * <br>
@@ -2024,12 +2059,12 @@ public class IntByteOrderedMap implements Serializable, Cloneable {
      * affected as {@code size()}, and reversed distances are measured from the end of this Map's entries instead of
      * the end of ordering. Duplicate values in ordering will produce duplicate values in the returned Map.
      * <br>
-     * This method modifies this OrderedMap in-place and also returns it for chaining.
+     * This method modifies this VoxelSeq in-place and also returns it for chaining.
      * @param ordering an array or varargs of int indices, where the nth item in ordering changes the nth item in this
      *                 Map to have the value currently in this Map at the index specified by the value in ordering
      * @return this for chaining, after modifying it in-place
      */
-    public IntByteOrderedMap reorder(int... ordering)
+    public VoxelSeq reorder(int... ordering)
     {
         order.reorder(ordering);
         return this;
@@ -2049,8 +2084,8 @@ public class IntByteOrderedMap implements Serializable, Cloneable {
     /**
      * Swaps a key, original, for another key, replacement, while keeping replacement at the same point in the iteration
      * order as original and keeping it associated with the same value (which also keeps its iteration index). Unlike
-     * the similar method {@link #alter(int, int)}, this will not change this OrderedMap if replacement is already
-     * present. To contrast, alter() can reduce the size of the OrderedMap if both original and replacement are already
+     * the similar method {@link #alter(int, int)}, this will not change this VoxelSeq if replacement is already
+     * present. To contrast, alter() can reduce the size of the VoxelSeq if both original and replacement are already
      * in the Map. If replacement is found, this returns the default return value, otherwise it switches out original
      * for replacement and returns whatever was associated with original.
      * @param original the key to find and swap out
@@ -2066,7 +2101,7 @@ public class IntByteOrderedMap implements Serializable, Cloneable {
     /**
      * Swaps a key, original, for another key, replacement, while keeping replacement at the same point in the iteration
      * order as original and keeping it associated with the same value (which also keeps its iteration index).
-     * Be aware that if both original and replacement are present in the OrderedMap, this will still replace original
+     * Be aware that if both original and replacement are present in the VoxelSeq, this will still replace original
      * with replacement but will also remove the other occurrence of replacement to avoid duplicate keys. This can throw
      * off the expected order because the duplicate could be at any point in the ordering when it is removed. You may
      * want to prefer {@link #alterCarefully(int, int)} if you don't feel like checking by hand for whether
@@ -2128,7 +2163,7 @@ public class IntByteOrderedMap implements Serializable, Cloneable {
     }
     /**
      * Changes the int at the given index to replacement while keeping replacement at the same point in the ordering.
-     * Be aware that if replacement is present in the OrderedMap, this will still replace the given index
+     * Be aware that if replacement is present in the VoxelSeq, this will still replace the given index
      * with replacement but will also remove the other occurrence of replacement to avoid duplicate keys. This can throw
      * off the expected order because the duplicate could be at any point in the ordering when it is removed. You may
      * want to prefer {@link #alterAtCarefully(int, int)} if you don't feel like checking by hand for whether
@@ -2143,8 +2178,8 @@ public class IntByteOrderedMap implements Serializable, Cloneable {
     }
     /**
      * Changes the int at the given index to replacement while keeping replacement at the same point in the ordering.
-     * Unlike the similar method {@link #alterAt(int, int)}, this will not change this OrderedMap if replacement is
-     * already present. To contrast, alterAt() can reduce the size of the OrderedMap if replacement is already
+     * Unlike the similar method {@link #alterAt(int, int)}, this will not change this VoxelSeq if replacement is
+     * already present. To contrast, alterAt() can reduce the size of the VoxelSeq if replacement is already
      * in the Map. If replacement is found, this returns the default return value, otherwise it switches out the index
      * for replacement and returns whatever value was at the index before.
      * @param index       an index to replace the int key at
@@ -2237,7 +2272,7 @@ public class IntByteOrderedMap implements Serializable, Cloneable {
         return put(fuse(x, y, z), val);
     }
     /**
-     * Sorts this whole OrderedMap on its keys using the supplied Comparator.
+     * Sorts this whole VoxelSeq on its keys using the supplied Comparator.
      * @param comparator a Comparator that can be used on the same type this uses for its keys (may need wildcards)
      */
     public void sort(IntComparator comparator)
@@ -2246,7 +2281,7 @@ public class IntByteOrderedMap implements Serializable, Cloneable {
     }
 
     /**
-     * Sorts a sub-range of this OrderedMap on its keys from what is currently the index {@code start} up to (but not
+     * Sorts a sub-range of this VoxelSeq on its keys from what is currently the index {@code start} up to (but not
      * including) the index {@code end}, using the supplied Comparator.
      * @param comparator a Comparator that can be used on the same type this uses for its keys (may need wildcards)
      * @param start the first index of a key to sort (the index can change after this)
