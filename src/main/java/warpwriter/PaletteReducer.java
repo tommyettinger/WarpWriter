@@ -1272,7 +1272,7 @@ public class PaletteReducer {
                     noise1 = (BLUE_NOISE[(px & 63) | (y & 63) << 6] + 0.5f) * 0x1p-8f + 0.6f;
                     //noise2 = (BLUE_NOISE[(y + 37 & 63) | (px + 23 & 63) << 6] + 0.5f) * 0x1p-8f + 0.6f;
                     //noise3 = (BLUE_NOISE[(px + 43 & 63) | (y + 11 & 63) << 6] + 0.5f) * 0x1p-8f + 0.6f;
-                    
+
                     rdiff = ((color>>>24)-    (used>>>24    )) * noise1;
                     gdiff = ((color>>>16&255)-(used>>>16&255)) * noise1;
                     bdiff = ((color>>>8&255)- (used>>>8&255 )) * noise1;
@@ -1281,7 +1281,7 @@ public class PaletteReducer {
 //                    xi1 = randomXi(state);
 //                    state ^= (state << 5 | state >>> 27) + 0x9E3779B9;
 //                    xi2 = randomXi(state);
-                    
+
 //                    noise1 = (BLUE_NOISE[(px & 63) | (y & 63) << 6] + 128.5f);
 //                    noise2 = (BLUE_NOISE[(y + 37 & 63) | (px + 23 & 63) << 6] + 128.5f);  
 
@@ -1361,6 +1361,41 @@ public class PaletteReducer {
 
     }
 
+    public Pixmap reduceWithRoberts (Pixmap pixmap) {
+        boolean hasTransparent = (paletteArray[0] == 0);
+        final int lineLen = pixmap.getWidth(), h = pixmap.getHeight();
+        Pixmap.Blending blending = pixmap.getBlending();
+        pixmap.setBlending(Pixmap.Blending.None);
+        int color, used, adj;
+        byte paletteIndex;
+        for (int y = 0; y < h; y++) {
+            int ny = y + 1;
+            for (int px = 0; px < lineLen; px++) {
+                color = pixmap.getPixel(px, y) & 0xF8F8F880;
+                if ((color & 0x80) == 0 && hasTransparent)
+                    pixmap.drawPixel(px, y, 0);
+                else {
+                    adj = (int)(px * 0xC13FA9A902A6328FL + y * 0x91E10DA5C79E7B1DL >> 60);
+                    adj ^= adj >> 31;
+                    //adj = (-(adj >>> 4 & 1) ^ adj) & 7;
+                    adj -= 4;
+                    color |= (color >>> 5 & 0x07070700) | 0xFE;
+                    int rr = MathUtils.clamp(((color >>> 24)       ) + (adj), 0, 0xFF);
+                    int gg = MathUtils.clamp(((color >>> 16) & 0xFF) + (adj), 0, 0xFF);
+                    int bb = MathUtils.clamp(((color >>> 8)  & 0xFF) + (adj), 0, 0xFF);
+                    paletteIndex =
+                            paletteMapping[((rr << 7) & 0x7C00)
+                                    | ((gg << 2) & 0x3E0)
+                                    | ((bb >>> 3))];
+                    used = paletteArray[paletteIndex & 0xFF];
+                    pixmap.drawPixel(px, y, used);
+                }
+            }
+
+        }
+        pixmap.setBlending(blending);
+        return pixmap;
+    }
 
     /**
      * Retrieves a random non-0 color index for the palette this would reduce to, with a higher likelihood for colors
