@@ -455,5 +455,29 @@ public class WarpDraw {
         }
         return renderer.blit(2, pixelWidth, pixelHeight);
     }
+    public static Pixmap draw45(VoxelSeq seq, VoxelPixmapRenderer renderer, int sizeX, int sizeY, int sizeZ) {
+        final int time = (seq instanceof ITemporal) ? ((ITemporal) seq).frame() : 0;
+        final int len = seq.size(), pixelWidth = (sizeX + sizeY) * 2 + 7, pixelHeight = sizeZ * 3 + 7;
+        int dep;
+        seq.sort(IntComparator.side45);
+        int xyz, x, y, z;
+        byte v;
+        for (int i = 0; i < len; i++) {
+            xyz = seq.keyAt(i);
+            x = HashMap3D.extractX(xyz);
+            y = HashMap3D.extractY(xyz);
+            z = HashMap3D.extractZ(xyz);
+            v = seq.getAt(i);
+            if (v != 0) {
+                dep = 3 * (x - y) + 256;
+                final int xPos = (sizeY + x - y) * 2 + 1;
+                renderer.rectLeft(xPos, z * 3 + 1, 2, 3, v, dep, x, y, z, time);
+                renderer.rectRight(xPos + 2, z * 3 + 1, 2, 3, v, dep, x, y, z, time);
+                if (z >= sizeZ - 1 || !seq.containsKey(x, y, z + 1))
+                    renderer.rectVertical(xPos, z * 3 + 4, 4, 1, v, dep, x, y, z, time);
+            }
+        }
+        return renderer.blit(5, pixelWidth, pixelHeight);
+    }
 
 }

@@ -126,7 +126,10 @@ public class SeqTest extends ApplicationAdapter {
         worldView.update(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         batch.setProjectionMatrix(worldView.getCamera().combined);
         batch.begin();
-        pmTexture.draw(WarpDraw.draw(seq, pixmapRenderer, voxels.length, voxels[0].length, voxels[0][0].length), 0, 0);
+        if(diagonal)
+            pmTexture.draw(WarpDraw.draw45(seq, pixmapRenderer, voxels.length, voxels[0].length, voxels[0][0].length), 0, 0);
+        else 
+            pmTexture.draw(WarpDraw.draw(seq, pixmapRenderer, voxels.length, voxels[0].length, voxels[0][0].length), 0, 0);
 //        if(diagonal) {
 //            if(angle != 2){
 //                pmTexture.draw(WarpDraw.drawIso(model, pixmapRenderer), 0, 0);
@@ -135,7 +138,6 @@ public class SeqTest extends ApplicationAdapter {
 //            {
 //                pmTexture.draw(WarpDraw.draw45(model, pixmapRenderer), 0, 0);
 //            }
-////            WarpDraw.simpleDraw45(model, batchRenderer, voxelColor, outline);
 //        }
 //        else if(angle != 2)
 //        {
@@ -143,7 +145,6 @@ public class SeqTest extends ApplicationAdapter {
 //        }
 //        else {
 //            pmTexture.draw(WarpDraw.draw(model, pixmapRenderer), 0, 0);
-//            //WarpDraw.simpleDraw(model, batchRenderer, voxelColor, outline);
 //        }
         batch.draw(pmTexture, 64, 64);
         //batch.setColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
@@ -214,7 +215,10 @@ public class SeqTest extends ApplicationAdapter {
 //                    case Input.Keys.K:
 //                        model.turner().counterY();
 //                        break;
-//                    case Input.Keys.L:
+                    case Input.Keys.O:
+                    case Input.Keys.L:
+                        diagonal = !diagonal;
+                        break;
 //                        if(diagonal = !diagonal)
 //                            model.turner().counterZ();
 //                        break;
