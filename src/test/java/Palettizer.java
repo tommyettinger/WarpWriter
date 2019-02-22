@@ -10,9 +10,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import warpwriter.Coloring;
 import warpwriter.PNG8;
 import warpwriter.PaletteReducer;
-import warpwriter.model.color.Colorizer;
 
 import java.io.IOException;
 
@@ -50,11 +50,23 @@ public class Palettizer extends ApplicationAdapter {
     public void load(String name) {
         try {
             //// loads a file by its full path, which we get via drag+drop
-            Pixmap pm = new Pixmap(Gdx.files.absolute(name));
-            FileHandle next = Gdx.files.local(
-                    name.substring(Math.max(name.lastIndexOf('/'), name.lastIndexOf('\\')) + 1, name.lastIndexOf('.'))
-                    + "_FlesurrectBonus.png");
-            png8.write(next, pm, false, true);
+            Pixmap pm;
+            String subname = name.substring(Math.max(name.lastIndexOf('/'), name.lastIndexOf('\\')) + 1, name.lastIndexOf('.'));
+            pm = reducer.reduceWithNoise(new Pixmap(Gdx.files.absolute(name)));
+            png8.writePrecisely(Gdx.files.local(subname + "_FloydSteinbergHu.png"), pm, false);
+            pm = reducer.reduceWithBlueNoise(new Pixmap(Gdx.files.absolute(name)));
+            png8.writePrecisely(Gdx.files.local(subname + "_BlueNoise.png"), pm, false);
+            pm = reducer.reduceBurkes(new Pixmap(Gdx.files.absolute(name)));
+            png8.writePrecisely(Gdx.files.local(subname + "_Burkes.png"), pm, false);
+            pm = reducer.reduce(new Pixmap(Gdx.files.absolute(name)));
+            png8.writePrecisely(Gdx.files.local(subname + "_SierraLite.png"), pm, false);
+            pm = reducer.reduceSolid(new Pixmap(Gdx.files.absolute(name)));
+            png8.writePrecisely(Gdx.files.local(subname + "_Solid.png"), pm, false);
+            pm = reducer.reduceWithRoberts(new Pixmap(Gdx.files.absolute(name)));
+            png8.writePrecisely(Gdx.files.local(subname + "_Roberts.png"), pm, false);
+            pm = reducer.reduceRobertsMul(new Pixmap(Gdx.files.absolute(name)));
+            FileHandle next = Gdx.files.local(subname + "_RobertsMul.png");
+            png8.writePrecisely(next, pm, false);
             screenTexture = new Texture(next);
         } catch (IOException ignored) {
         }
@@ -64,7 +76,8 @@ public class Palettizer extends ApplicationAdapter {
     public void create() {
         font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
         batch = new SpriteBatch();
-        reducer = new PaletteReducer(Colorizer.FlesurrectBonusPalette);
+        reducer = new PaletteReducer(Coloring.FLESURRECT);
+        reducer.setDitherStrength(1f);
         png8 = new PNG8();
         png8.palette = reducer;
         png8.setFlipY(false);
