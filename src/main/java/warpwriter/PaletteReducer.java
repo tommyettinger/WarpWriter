@@ -1375,10 +1375,10 @@ public class PaletteReducer {
                 if ((color & 0x80) == 0 && hasTransparent)
                     pixmap.drawPixel(px, y, 0);
                 else {
-                    adj = (int)(px * 0xC13FA9A902A6328FL + y * 0x91E10DA5C79E7B1DL >> 60);
+                    adj = (int)((px * 0xC13FA9A902A6328FL + y * 0x91E10DA5C79E7B1DL >> 59) * ditherStrength);
                     adj ^= adj >> 31;
                     //adj = (-(adj >>> 4 & 1) ^ adj) & 7;
-                    adj -= 4;
+                    adj -= 8 * ditherStrength;
                     color |= (color >>> 5 & 0x07070700) | 0xFE;
                     int rr = MathUtils.clamp(((color >>> 24)       ) + (adj), 0, 0xFF);
                     int gg = MathUtils.clamp(((color >>> 16) & 0xFF) + (adj), 0, 0xFF);
