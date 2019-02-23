@@ -279,8 +279,8 @@ public class SeqTest extends ApplicationAdapter {
                     case Input.Keys.S: // smaller palette, 64 colors
                         if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT))
                         {
-                            pixmapRenderer.color().set(colorizer);
-                            maker.setColorizer(colorizer);
+                            pixmapRenderer.color().set(Colorizer.FlesurrectBonusColorizer);
+                            maker.setColorizer(Colorizer.FlesurrectBonusColorizer);
                         }
                         else 
                         {
