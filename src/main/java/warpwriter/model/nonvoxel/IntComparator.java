@@ -5,13 +5,36 @@ package warpwriter.model.nonvoxel;
  */
 public interface IntComparator {
     int compare(int left, int right);
-    IntComparator side = new IntComparator() {
-        @Override
-        public int compare(int left, int right) {
-            // values x as 4096 times more important than z, and y is irrelevant
-            return ((left << 12 | left >>> 20) & 0x3FFFFF) - ((right << 12 | right >>> 20) & 0x3FFFFF);
-        }
-    };
+    IntComparator[] side = {
+            new IntComparator() {
+                @Override
+                public int compare(int left, int right) {
+                    // values x as 4096 times more important than z, and y is irrelevant
+                    return ((left << 12 | left >>> 20) & 0x3FFFFF) - ((right << 12 | right >>> 20) & 0x3FFFFF);
+                }
+            },
+            new IntComparator() {
+                @Override
+                public int compare(int left, int right) {
+                    // values y as many times more important than z, and x is irrelevant
+//                    return ((left << 12 | left >>> 20) & 0xFFC003FF) - ((right << 12 | right >>> 20) & 0xFFC003FF);
+                    return (left & 0xFFC00) - (right & 0xFFC00) + (left >>> 20) - (right >>> 20);
+                }
+            },
+            new IntComparator() {
+                @Override
+                public int compare(int left, int right) {
+                    // values x as 4096 times more important than z, and y is irrelevant; reversed for x
+                    return (right << 12 & 0x3FF000) - (left << 12 & 0x3FF000) + (left >>> 20) - (right >>> 20);
+                }
+            },
+            new IntComparator() {
+                @Override
+                public int compare(int left, int right) {
+                    // values y as 1024 times more important than z, and x is irrelevant; reversed for y
+                    return (right & 0xFFC00) - (left & 0xFFC00) + (left >>> 20) - (right >>> 20);
+                }
+            }};
     IntComparator side45 = new IntComparator() {
         @Override
         public int compare(int left, int right) {

@@ -432,16 +432,16 @@ public class WarpDraw {
         }
         return renderer.blit(12, pixelWidth, pixelHeight);
     }
-    public static Pixmap draw(VoxelSeq seq, VoxelPixmapRenderer renderer, int sizeX, int sizeY, int sizeZ)
+    public static Pixmap draw(VoxelSeq seq, VoxelPixmapRenderer renderer)
     {
         final int time = (seq instanceof ITemporal) ? ((ITemporal) seq).frame() : 0;
-        final int len = seq.size(),
+        final int len = seq.size(), sizeX = seq.sizeX,  sizeY = seq.sizeY, sizeZ = seq.sizeZ,
                 offsetPX = (sizeY >> 1) + 1, pixelWidth = sizeY * 3 + (sizeY >> 1) + 6, pixelHeight = sizeZ * 3 + 7;
-        seq.sort(IntComparator.side);
+        seq.sort(IntComparator.side[seq.rotation]);
         int xyz, x, y, z;
         byte v;
         for (int i = 0; i < len; i++) {
-            xyz = seq.keyAt(i);
+            xyz = seq.keyAtRotated(i);
             x = HashMap3D.extractX(xyz);
             y = HashMap3D.extractY(xyz);
             z = HashMap3D.extractZ(xyz);
@@ -455,9 +455,10 @@ public class WarpDraw {
         }
         return renderer.blit(2, pixelWidth, pixelHeight);
     }
-    public static Pixmap draw45(VoxelSeq seq, VoxelPixmapRenderer renderer, int sizeX, int sizeY, int sizeZ) {
+    public static Pixmap draw45(VoxelSeq seq, VoxelPixmapRenderer renderer) {
         final int time = (seq instanceof ITemporal) ? ((ITemporal) seq).frame() : 0;
-        final int len = seq.size(), pixelWidth = (sizeX + sizeY) * 2 + 7, pixelHeight = sizeZ * 3 + 7;
+        final int len = seq.size(), sizeX = seq.sizeX,  sizeY = seq.sizeY, sizeZ = seq.sizeZ, 
+                pixelWidth = (sizeX + sizeY) * 2 + 7, pixelHeight = sizeZ * 3 + 7;
         int dep;
         seq.sort(IntComparator.side45);
         int xyz, x, y, z;

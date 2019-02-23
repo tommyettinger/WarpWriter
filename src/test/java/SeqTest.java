@@ -66,7 +66,7 @@ public class SeqTest extends ApplicationAdapter {
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.CW_PALETTE);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.FLESURRECT);
-        colorizer = Colorizer.FlesurrectBonusColorizer;
+        colorizer = Colorizer.AuroraBonusColorizer;
         voxelColor = new VoxelColor().set(colorizer);
         pixmapRenderer = new VoxelPixmapRenderer(new Pixmap(512, 512, Pixmap.Format.RGBA8888), voxelColor);
         pmTexture = new Texture(pixmapRenderer.pixmap);
@@ -127,9 +127,9 @@ public class SeqTest extends ApplicationAdapter {
         batch.setProjectionMatrix(worldView.getCamera().combined);
         batch.begin();
         if(diagonal)
-            pmTexture.draw(WarpDraw.draw45(seq, pixmapRenderer, voxels.length, voxels[0].length, voxels[0][0].length), 0, 0);
+            pmTexture.draw(WarpDraw.draw45(seq, pixmapRenderer), 0, 0);
         else 
-            pmTexture.draw(WarpDraw.draw(seq, pixmapRenderer, voxels.length, voxels[0].length, voxels[0][0].length), 0, 0);
+            pmTexture.draw(WarpDraw.draw(seq, pixmapRenderer), 0, 0);
 //        if(diagonal) {
 //            if(angle != 2){
 //                pmTexture.draw(WarpDraw.drawIso(model, pixmapRenderer), 0, 0);
@@ -216,10 +216,13 @@ public class SeqTest extends ApplicationAdapter {
 //                        model.turner().counterY();
 //                        break;
                     case Input.Keys.O:
-                    case Input.Keys.L:
-                        diagonal = !diagonal;
+                        if(diagonal = !diagonal)
+                            seq.rotation = seq.rotation - 1 & 3;
                         break;
-//                        if(diagonal = !diagonal)
+                    case Input.Keys.L:
+                        if(diagonal = !diagonal)
+                            seq.rotation = seq.rotation + 1 & 3;
+                        break;
 //                            model.turner().counterZ();
 //                        break;
 //                    case Input.Keys.R:

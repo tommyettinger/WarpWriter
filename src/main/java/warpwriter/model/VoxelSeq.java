@@ -111,6 +111,27 @@ public class VoxelSeq implements Serializable, Cloneable {
      * Number of entries in the set (including the key zero, if present).
      */
     protected int size;
+
+    /**
+     * Maximum size on the x-dimension for keys.
+     */
+    public int sizeX = 40;
+
+    /**
+     * Maximum size on the y-dimension for keys.
+     */
+    public int sizeY = 40;
+
+    /**
+     * Maximum size on the z-dimension for keys.
+     */
+    public int sizeZ = 30;
+
+    /**
+     * Index into a rotation array, which should almost always have 24 items, so this should be between 0-23 inclusive.
+     */
+    public int rotation = 0;
+    
     /**
      * The acceptable load factor.
      */
@@ -246,7 +267,9 @@ public class VoxelSeq implements Serializable, Cloneable {
     
     public void putSurface(byte[][][] voxels)
     {
-        final int sizeX = voxels.length, sizeY = voxels[0].length, sizeZ = voxels[0][0].length;
+        final int sizeX = (this.sizeX = voxels.length);
+        final int sizeY = (this.sizeY = voxels[0].length);
+        final int sizeZ = (this.sizeZ = voxels[0][0].length);
         for (int y = 0; y < sizeY; y++) {
             for (int z = 0; z < sizeZ; z++) {
                 if(voxels[0][y][z] != 0)
@@ -2294,6 +2317,24 @@ public class VoxelSeq implements Serializable, Cloneable {
     public void sort(IntComparator comparator, int start, int end)
     {
         IntSort.sort(key, order, start, end, comparator);
+    }
+    /**
+     * Gets the key at the given index in the iteration order in constant time (random-access).
+     * @param idx the index in the iteration order of the key to fetch
+     * @return the key at the index, if the index is valid, otherwise 0
+     */
+    public int keyAtRotated(final int idx) {
+        if (idx < 0 || idx >= order.size)
+            return 0;
+        // The starting point.
+        final int k = key[order.get(idx)];
+        switch (rotation)
+        {
+            case 0: return k;
+            case 1: return (k & 0xFFF00000) | sizeX - (k & 0x3FF) << 10 | (k >>> 10 & 0x3FF);
+            case 2: return (k & 0xFFF00000) | (sizeY << 10) - (k & 0xFFC00) | sizeX - (k & 0x3FF);
+            default: return (k & 0xFFF00000) | (k & 0x3FF) << 10 | (sizeY - (k >>> 10 & 0x3FF));
+        }
     }
 
 }
