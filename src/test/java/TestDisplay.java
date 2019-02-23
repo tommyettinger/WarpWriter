@@ -76,7 +76,7 @@ public class TestDisplay extends ApplicationAdapter {
         ); 
                 //Coloring.FLESURRECT_REDUCER; //Colorizer.FlesurrectBonusPalette
         //PaletteReducer.generatePreloadCode(reducer.paletteMapping);
-        reducer.setDitherStrength(1f);
+        reducer.setDitherStrength(0.5f);
         batch = new SpriteBatch();
 //        pix = new Pixmap(16, 16, Pixmap.Format.RGBA8888);
 //        tex = new Texture(16, 16, Pixmap.Format.RGBA8888);
@@ -260,7 +260,7 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if (dither) reducer.reduceWithRoberts(pix);
+            if (dither) reducer.reduceRobertsMul(pix);
         }
     }
 
@@ -302,7 +302,7 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if (dither) reducer.reduceWithRoberts(pix);
+            if (dither) reducer.reduceRobertsMul(pix);
         }
     }
 
@@ -349,7 +349,7 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if (dither) reducer.reduceWithRoberts(pix);
+            if (dither) reducer.reduceRobertsMul(pix);
         }
     }
 
@@ -406,7 +406,7 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if (dither) reducer.reduceWithRoberts(pix);
+            if (dither) reducer.reduceRobertsMul(pix);
         }
         if (oldWidth != width || oldHeight != height)
             tex = new Texture(width, height, Pixmap.Format.RGBA8888);
@@ -465,7 +465,7 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if (dither) reducer.reduceWithRoberts(pix);
+            if (dither) reducer.reduceRobertsMul(pix);
         }
         if (oldWidth != width || oldHeight != height)
             tex = new Texture(width, height, Pixmap.Format.RGBA8888);
@@ -507,7 +507,7 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if (dither) reducer.reduceWithRoberts(pix);
+            if (dither) reducer.reduceRobertsMul(pix);
         }
     }
 
@@ -557,7 +557,7 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if (dither) reducer.reduceWithRoberts(pix);
+            if (dither) reducer.reduceRobertsMul(pix);
         }
         if (oldWidth != width || oldHeight != height)
             tex = new Texture(width, height, Pixmap.Format.RGBA8888);
@@ -605,7 +605,7 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if (dither) reducer.reduceWithRoberts(pix);
+            if (dither) reducer.reduceRobertsMul(pix);
         }
         if (oldWidth != width || oldHeight != height)
             tex = new Texture(width, height, Pixmap.Format.RGBA8888);
@@ -655,7 +655,7 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if (dither) reducer.reduceWithRoberts(pix);
+            if (dither) reducer.reduceRobertsMul(pix);
         }
         if (oldWidth != width || oldHeight != height)
             tex = new Texture(width, height, Pixmap.Format.RGBA8888);
@@ -709,7 +709,7 @@ public class TestDisplay extends ApplicationAdapter {
                     pix.drawPixel(x, y, palette[indices[x][y]]);
                 }
             }
-            if (dither) reducer.reduceWithRoberts(pix);
+            if (dither) reducer.reduceRobertsMul(pix);
         }
     }
 

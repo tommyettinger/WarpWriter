@@ -54,8 +54,8 @@ public class Palettizer extends ApplicationAdapter {
             String subname = name.substring(Math.max(name.lastIndexOf('/'), name.lastIndexOf('\\')) + 1, name.lastIndexOf('.'));
             pm = reducer.reduceWithNoise(new Pixmap(Gdx.files.absolute(name)));
             png8.writePrecisely(Gdx.files.local(subname + "_FloydSteinbergHu.png"), pm, false);
-            pm = reducer.reduceWithBlueNoise(new Pixmap(Gdx.files.absolute(name)));
-            png8.writePrecisely(Gdx.files.local(subname + "_BlueNoise.png"), pm, false);
+//            pm = reducer.reduceWithBlueNoise(new Pixmap(Gdx.files.absolute(name)));
+//            png8.writePrecisely(Gdx.files.local(subname + "_BlueNoise.png"), pm, false);
             pm = reducer.reduceBurkes(new Pixmap(Gdx.files.absolute(name)));
             png8.writePrecisely(Gdx.files.local(subname + "_Burkes.png"), pm, false);
             pm = reducer.reduce(new Pixmap(Gdx.files.absolute(name)));
