@@ -2348,7 +2348,20 @@ public class VoxelSeq implements Serializable, Cloneable {
         if (idx < 0 || idx >= order.size)
             return 0;
         // The starting point.
-        final int k = key[order.get(idx)];
+        return rotate(key[order.get(idx)], rotation);
+    }
+
+    public byte getRotated(final int key, final int rotation)
+    {
+        return get(rotate(key, -rotation & 3));
+    }
+    public byte getRotated(final int x, final int y, final int z, final int rotation)
+    {
+        return get(rotate(fuse(x, y, z), -rotation & 3));
+    }
+    
+    public int rotate(final int k, final int rotation)
+    {
         switch (rotation)
         {
             case 0: return k;
@@ -2356,6 +2369,7 @@ public class VoxelSeq implements Serializable, Cloneable {
             case 2: return (k & 0xFFF00000) | (sizeY << 10) - (k & 0xFFC00) | sizeX - (k & 0x3FF);
             default: return (k & 0xFFF00000) | (k & 0x3FF) << 10 | (sizeY - (k >>> 10 & 0x3FF));
         }
+
     }
 
 }
