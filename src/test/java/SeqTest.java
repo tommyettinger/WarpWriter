@@ -216,11 +216,11 @@ public class SeqTest extends ApplicationAdapter {
 //                        model.turner().counterY();
 //                        break;
                     case Input.Keys.O:
-                        if(diagonal = !diagonal)
+                        if(!(diagonal = !diagonal))
                             seq.rotation = seq.rotation - 1 & 3;
                         break;
                     case Input.Keys.L:
-                        if(diagonal = !diagonal)
+                        if(!(diagonal = !diagonal))
                             seq.rotation = seq.rotation + 1 & 3;
                         break;
 //                            model.turner().counterZ();

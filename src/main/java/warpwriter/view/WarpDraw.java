@@ -460,11 +460,11 @@ public class WarpDraw {
         final int len = seq.size(), sizeX = seq.sizeX,  sizeY = seq.sizeY, sizeZ = seq.sizeZ, 
                 pixelWidth = (sizeX + sizeY) * 2 + 7, pixelHeight = sizeZ * 3 + 7;
         int dep;
-        seq.sort(IntComparator.side45[seq.rotation - 1 & 3]);
+        seq.sort(IntComparator.side45[seq.rotation & 3]);
         int xyz, x, y, z;
         byte v;
         for (int i = 0; i < len; i++) {
-            xyz = seq.keyAtRotated(i, seq.rotation - 1 & 3);
+            xyz = seq.keyAtRotated(i, seq.rotation & 3);
             x = HashMap3D.extractX(xyz);
             y = HashMap3D.extractY(xyz);
             z = HashMap3D.extractZ(xyz);
