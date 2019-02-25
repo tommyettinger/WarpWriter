@@ -8,12 +8,15 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.FakeLanguageGen;
 import warpwriter.ModelMaker;
 import warpwriter.Tools3D;
 import warpwriter.VoxIO;
+import warpwriter.model.AnimatedVoxelSeq;
+import warpwriter.model.ITemporal;
 import warpwriter.model.IVoxelSeq;
 import warpwriter.model.VoxelSeq;
 import warpwriter.model.color.Colorizer;
@@ -67,7 +70,7 @@ public class SeqTest extends ApplicationAdapter {
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.CW_PALETTE);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.FLESURRECT);
-        colorizer = Colorizer.AuroraBonusColorizer;
+        colorizer = Colorizer.FlesurrectBonusColorizer;
         voxelColor = new VoxelColor().set(colorizer);
         pixmapRenderer = new VoxelPixmapRenderer(new Pixmap(512, 512, Pixmap.Format.RGBA8888), voxelColor);
         pmTexture = new Texture(pixmapRenderer.pixmap);
@@ -80,8 +83,9 @@ public class SeqTest extends ApplicationAdapter {
 //        }
 //        makeBoom(maker.fireRange());
         voxels = maker.shipLargeNoiseColorized();
-        seq = new VoxelSeq(1024);
-        seq.putSurface(voxels);
+        VoxelSeq vs = new VoxelSeq(1024);
+        vs.putSurface(voxels);
+        seq = new AnimatedVoxelSeq(vs, 4);
 //        chaos = new ChaoticFetch(maker.rng.nextLong(), (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 1);
 //        ship = new TurnModel().set(
 ////                new ReplaceFetch(ColorFetch.color((byte) 0), (byte) 1)
@@ -92,29 +96,19 @@ public class SeqTest extends ApplicationAdapter {
 //        model.setDuration(16);
         Gdx.input.setInputProcessor(inputProcessor());
     }
-//    
-//    public void makeBoom(byte[] fireColors) {
-//        FetchModel fm = new FetchModel(48, 48, 32);
-//        container = new byte[48][48][32];
-//        long state = maker.rng.getState();
-//        Tools3D.translateCopyInto(maker.shipNoiseColorized(), container, 18, 18, 0);
-//        AnimatedArrayModel fire = new AnimatedArrayModel(maker.animateExplosion(18, 40, 40, 32, fireColors));
-//        BurstFetch burst = new BurstFetch(new ArrayModel(container), 24, 24, 3, 16, 2);
-//        fm.add(burst).add(new OffsetModel(-4, -4, -2).add(fire));
-//        byte[][][][] voxelFrames = new byte[16][][][];
-//        boom = new AnimatedArrayModel(voxelFrames);
-//        for (int i = 0; i < 16; i++) {
-//            burst.setFrame(i);
-//            fire.setFrame(i+2);
-//            voxelFrames[i] = new ArrayModel(fm).voxels;
-//        }
-//        maker.rng.setState(state);
-//    }
+
+    public void makeBoom(byte[] fireColors) {
+        long state = maker.rng.getState();
+        seq = new AnimatedVoxelSeq(maker.animateExplosion(18, 40, 40, 32, fireColors));
+        maker.rng.setState(state);
+    }
 
     @Override
     public void render() {
 //        model.setFrame((int)(TimeUtils.millis() >>> 7) & 15);
 //        boom.setFrame((int)(TimeUtils.millis() >>> 7) & 15);
+        if(seq instanceof ITemporal)
+            ((ITemporal) seq).setFrame((int)(TimeUtils.millis() * 3 >>> 8));
         buffer.begin();
         
         Gdx.gl.glClearColor(0.4f, 0.75f, 0.3f, 1f);
@@ -226,12 +220,12 @@ public class SeqTest extends ApplicationAdapter {
 //                        model.turner().counterY();
 //                        break;
                     case Input.Keys.O:
-                        if(!(diagonal = !diagonal))
-                            seq.setRotation(seq.getRotation() - 1 & 3);
+                        if((diagonal = !diagonal))
+                            seq.rotate(seq.rotation() - 1 & 3);
                         break;
                     case Input.Keys.L:
                         if(!(diagonal = !diagonal))
-                            seq.setRotation(seq.getRotation() + 1 & 3);
+                            seq.rotate(seq.rotation() + 1 & 3);
                         break;
 //                            model.turner().counterZ();
 //                        break;
@@ -247,16 +241,14 @@ public class SeqTest extends ApplicationAdapter {
                         seq.putSurface(voxels);
                         animating = false;
                         break;
-//                    case Input.Keys.B: // burn!
-//                        makeBoom(maker.fireRange());
-//                        model.set(boom);
-//                        animating = true;
-//                        break;
-//                    case Input.Keys.Z: // zap!
-//                        makeBoom(maker.randomFireRange());
-//                        model.set(boom);
-//                        animating = true;
-//                        break;
+                    case Input.Keys.B: // burn!
+                        makeBoom(maker.fireRange());
+                        animating = true;
+                        break;
+                    case Input.Keys.Z: // zap!
+                        makeBoom(maker.randomFireRange());
+                        animating = true;
+                        break;
                     case Input.Keys.G:
                         voxelColor.set(voxelColor.direction().counter());
                         break;

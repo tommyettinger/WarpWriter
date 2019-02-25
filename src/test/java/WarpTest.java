@@ -47,10 +47,8 @@ public class WarpTest extends ApplicationAdapter {
     private VoxelPixmapRenderer pixmapRenderer;
     protected VoxelColor voxelColor;
     protected int angle = 3;
-    protected int frame = 0;
     protected boolean diagonal = true;
     protected boolean animating = false;
-    protected byte[][][][] explosion;
     protected AnimatedArrayModel boom;
     private byte[][][] voxels, container;
     private Colorizer colorizer;

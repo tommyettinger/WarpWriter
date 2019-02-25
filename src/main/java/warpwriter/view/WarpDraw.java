@@ -435,9 +435,9 @@ public class WarpDraw {
     public static Pixmap draw(IVoxelSeq seq, VoxelPixmapRenderer renderer)
     {
         final int time = (seq instanceof ITemporal) ? ((ITemporal) seq).frame() : 0;
-        final int len = seq.size(), sizeX = seq.getSizeX(), sizeY = seq.getSizeY(), sizeZ = seq.getSizeZ(),
+        final int len = seq.size(), sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ(),
                 offsetPX = (sizeY - 1 >> 1) + 1, pixelWidth = sizeY * 3 + (sizeY - 1 >> 1) + 3, pixelHeight = sizeZ * 3 + 4;
-        seq.sort(IntComparator.side[seq.getRotation()]);
+        seq.sort(IntComparator.side[seq.rotation()]);
         int xyz, x, y, z;
         byte v;
         for (int i = 0; i < len; i++) {
@@ -457,10 +457,10 @@ public class WarpDraw {
     }
     public static Pixmap draw45(IVoxelSeq seq, VoxelPixmapRenderer renderer) {
         final int time = (seq instanceof ITemporal) ? ((ITemporal) seq).frame() : 0;
-        final int len = seq.size(), sizeX = seq.getSizeX(), sizeY = seq.getSizeY(), sizeZ = seq.getSizeZ(), 
+        final int len = seq.size(), sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ(), 
                 pixelWidth = (sizeX + sizeY) * 2 + 3, pixelHeight = sizeZ * 3 + 4;
         int dep;
-        seq.sort(IntComparator.side45[seq.getRotation() & 3]);
+        seq.sort(IntComparator.side45[seq.rotation() & 3]);
         int xyz, x, y, z;
         byte v;
         for (int i = 0; i < len; i++) {
@@ -483,10 +483,10 @@ public class WarpDraw {
     public static Pixmap drawAbove(IVoxelSeq seq, VoxelPixmapRenderer renderer)
     {
         final int time = (seq instanceof ITemporal) ? ((ITemporal) seq).frame() : 0;
-        final int len = seq.size(), sizeX = seq.getSizeX(), sizeY = seq.getSizeY(), sizeZ = seq.getSizeZ(),
+        final int len = seq.size(), sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ(),
                 offsetPX = (sizeY >> 1) + 1, offsetPY = (sizeX >> 1) + 1,
                 pixelWidth = (sizeY * 3) + (sizeY >> 1) + 6, pixelHeight = sizeZ * 2 + sizeX * 3 + (sizeX >> 1) + 8;
-        seq.sort(IntComparator.above[seq.getRotation()]);
+        seq.sort(IntComparator.above[seq.rotation()]);
         int xyz, x, y, z;
         byte v;
         for (int i = 0; i < len; i++) {
@@ -508,10 +508,10 @@ public class WarpDraw {
     public static Pixmap drawIso(IVoxelSeq seq, VoxelPixmapRenderer renderer)
     {
         final int time = (seq instanceof ITemporal) ? ((ITemporal) seq).frame() : 0;
-        final int len = seq.size(), sizeX = seq.getSizeX(), sizeY = seq.getSizeY(), sizeZ = seq.getSizeZ(),
+        final int len = seq.size(), sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ(),
                 pixelWidth = (sizeY + sizeX) * 2 + 7, pixelHeight = (sizeX + sizeY + sizeZ) * 2 + 7;
         int dep;
-        seq.sort(IntComparator.above45[seq.getRotation()]);
+        seq.sort(IntComparator.above45[seq.rotation()]);
         int xyz, x, y, z;
         byte v;
         for (int i = 0; i < len; i++) {

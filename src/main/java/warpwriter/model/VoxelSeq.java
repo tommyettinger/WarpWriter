@@ -132,23 +132,23 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
      */
     public int rotation = 0;
 
-    public int getSizeX() {
+    public int sizeX() {
         return sizeX;
     }
 
-    public void setSizeX(int sizeX) {
+    public void sizeX(int sizeX) {
         this.sizeX = sizeX;
     }
 
-    public int getSizeY() {
+    public int sizeY() {
         return sizeY;
     }
 
-    public void setSizeY(int sizeY) {
+    public void sizeY(int sizeY) {
         this.sizeY = sizeY;
     }
 
-    public int getSizeZ() {
+    public int sizeZ() {
         return sizeZ;
     }
 
@@ -156,11 +156,11 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
         this.sizeZ = sizeZ;
     }
 
-    public int getRotation() {
+    public int rotation() {
         return rotation;
     }
 
-    public void setRotation(int rotation) {
+    public void rotate(int rotation) {
         this.rotation = rotation;
     }
 
