@@ -102,5 +102,41 @@ public interface IntComparator {
                 }
             }
     };
+    IntComparator[] above45 = {
+            new IntComparator() {
+                @Override
+                public int compare(int left, int right) {
+                    // values x and y equally, either as 1024 times less important than z
+                    return (left << 10 & 0xFFC00) - (right  << 10 & 0xFFC00)
+                            + (left & 0x3FFFFC00) - (right & 0x3FFFFC00);
+                }
+            },
+            new IntComparator() {
+                @Override
+                public int compare(int left, int right) {
+                    // values x and y equally, either as 4096 times more important than z; reversed x
+                    return (right << 10 & 0xFFC00) - (left << 10 & 0xFFC00)
+                            + (left & 0x3FFFFC00) - (right & 0x3FFFFC00);
+                }
+            },
+            new IntComparator() {
+                @Override
+                public int compare(int left, int right) {
+                    // values x and y equally, either as 4096 times more important than z
+                    return (left & 0x3FF00000) - (right & 0x3FF00000)
+                            + (right & 0xFFC00) - (left & 0xFFC00)
+                            + (right << 10 & 0xFFC00) - (left << 10 & 0xFFC00);
+                }
+            },
+            new IntComparator() {
+                @Override
+                public int compare(int left, int right) {
+                    // values x and y equally, either as 4096 times more important than z
+                    return (left & 0x3FF00000) - (right & 0x3FF00000)
+                            + (right & 0xFFC00) - (left & 0xFFC00)
+                            + (left << 10 & 0xFFC00) - (right << 10 & 0xFFC00);
+                }
+            },
+    };
 
 }

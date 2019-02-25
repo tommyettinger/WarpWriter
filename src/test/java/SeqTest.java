@@ -127,11 +127,18 @@ public class SeqTest extends ApplicationAdapter {
         batch.setProjectionMatrix(worldView.getCamera().combined);
         batch.begin();
         if(angle > 2)
-            pmTexture.draw(WarpDraw.drawAbove(seq, pixmapRenderer), 0, 0);
-        else if(diagonal)
-            pmTexture.draw(WarpDraw.draw45(seq, pixmapRenderer), 0, 0);
-        else 
-            pmTexture.draw(WarpDraw.draw(seq, pixmapRenderer), 0, 0);
+        {
+            if(diagonal)
+                pmTexture.draw(WarpDraw.drawIso(seq, pixmapRenderer), 0, 0);
+            else 
+                pmTexture.draw(WarpDraw.drawAbove(seq, pixmapRenderer), 0, 0);
+        }
+        else{
+            if(diagonal)
+                pmTexture.draw(WarpDraw.draw45(seq, pixmapRenderer), 0, 0);
+            else
+                pmTexture.draw(WarpDraw.draw(seq, pixmapRenderer), 0, 0);
+        }
 //        if(diagonal) {
 //            if(angle != 2){
 //                pmTexture.draw(WarpDraw.drawIso(model, pixmapRenderer), 0, 0);

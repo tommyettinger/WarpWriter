@@ -505,5 +505,32 @@ public class WarpDraw {
         }
         return renderer.blit(13, pixelWidth, pixelHeight);
     }
+    public static Pixmap drawIso(VoxelSeq seq, VoxelPixmapRenderer renderer)
+    {
+        final int time = (seq instanceof ITemporal) ? ((ITemporal) seq).frame() : 0;
+        final int len = seq.size(), sizeX = seq.sizeX, sizeY = seq.sizeY, sizeZ = seq.sizeZ,
+                pixelWidth = (sizeY + sizeX) * 2 + 7, pixelHeight = (sizeX + sizeY + sizeZ) * 2 + 7;
+        int dep;
+        seq.sort(IntComparator.above45[seq.rotation]);
+        int xyz, x, y, z;
+        byte v;
+        for (int i = 0; i < len; i++) {
+            v = seq.getAt(i);
+            if (v != 0) {
+                xyz = seq.keyAtRotated(i, seq.rotation & 3);
+                x = HashMap3D.extractX(xyz);
+                y = HashMap3D.extractY(xyz);
+                z = HashMap3D.extractZ(xyz);
+                dep = 3 * (x + y + z) + 256;
+                final int xPos = (sizeY - y + x) * 2 + 1, yPos = (z - x - y + sizeX + sizeY) * 2 + 1;
+                renderer.rectLeft(xPos, yPos, 2, 2, v, dep, x, y, z, time);
+                renderer.rectRight(xPos + 2, yPos, 2, 2, v, dep, x, y, z, time);
+                if (z >= sizeZ - 1 || seq.getRotated(x, y, z + 1, seq.rotation) == 0) {
+                    renderer.rectVertical(xPos, yPos + 2, 4, 2, v, dep, x, y, z, time);
+                }
+            }
+        }
+        return renderer.blit(12, pixelWidth, pixelHeight);
+    }
 
 }
