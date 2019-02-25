@@ -76,7 +76,7 @@ import static warpwriter.model.nonvoxel.HashMap3D.fuse;
  * @author Sebastiano Vigna (responsible for all the hard parts)
  * @author Tommy Ettinger (mostly responsible for squashing several layers of parent classes into one monster class)
  */
-public class VoxelSeq implements Serializable, Cloneable {
+public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
     private static final long serialVersionUID = 0L;
     /**
      * The array of keys.
@@ -131,7 +131,39 @@ public class VoxelSeq implements Serializable, Cloneable {
      * Index into a rotation array, which should almost always have 24 items, so this should be between 0-23 inclusive.
      */
     public int rotation = 0;
-    
+
+    public int getSizeX() {
+        return sizeX;
+    }
+
+    public void setSizeX(int sizeX) {
+        this.sizeX = sizeX;
+    }
+
+    public int getSizeY() {
+        return sizeY;
+    }
+
+    public void setSizeY(int sizeY) {
+        this.sizeY = sizeY;
+    }
+
+    public int getSizeZ() {
+        return sizeZ;
+    }
+
+    public void setSizeZ(int sizeZ) {
+        this.sizeZ = sizeZ;
+    }
+
+    public int getRotation() {
+        return rotation;
+    }
+
+    public void setRotation(int rotation) {
+        this.rotation = rotation;
+    }
+
     /**
      * The acceptable load factor.
      */
@@ -2325,17 +2357,7 @@ public class VoxelSeq implements Serializable, Cloneable {
      * @return the key at the index, if the index is valid, otherwise 0
      */
     public int keyAtRotated(final int idx) {
-        if (idx < 0 || idx >= order.size)
-            return 0;
-        // The starting point.
-        final int k = key[order.get(idx)];
-        switch (rotation)
-        {
-            case 0: return k;
-            case 1: return (k & 0xFFF00000) | sizeX - (k & 0x3FF) << 10 | (k >>> 10 & 0x3FF);
-            case 2: return (k & 0xFFF00000) | (sizeY << 10) - (k & 0xFFC00) | sizeX - (k & 0x3FF);
-            default: return (k & 0xFFF00000) | (k & 0x3FF) << 10 | (sizeY - (k >>> 10 & 0x3FF));
-        }
+        return keyAtRotated(idx, rotation);
     }
     /**
      * Gets the key at the given index in the iteration order in constant time, rotating the x, y, and z components of
@@ -2351,9 +2373,17 @@ public class VoxelSeq implements Serializable, Cloneable {
         return rotate(key[order.get(idx)], rotation);
     }
 
+    public byte getRotated(final int key)
+    {
+        return getRotated(key, rotation);
+    }
     public byte getRotated(final int key, final int rotation)
     {
         return get(rotate(key, -rotation & 3));
+    }
+    public byte getRotated(final int x, final int y, final int z)
+    {
+        return get(rotate(fuse(x, y, z), -rotation & 3));
     }
     public byte getRotated(final int x, final int y, final int z, final int rotation)
     {

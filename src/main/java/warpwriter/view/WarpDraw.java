@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import warpwriter.Coloring;
 import warpwriter.model.IModel;
 import warpwriter.model.ITemporal;
-import warpwriter.model.VoxelSeq;
+import warpwriter.model.IVoxelSeq;
 import warpwriter.model.nonvoxel.HashMap3D;
 import warpwriter.model.nonvoxel.IntComparator;
 import warpwriter.view.color.IVoxelColor;
@@ -432,12 +432,12 @@ public class WarpDraw {
         }
         return renderer.blit(12, pixelWidth, pixelHeight);
     }
-    public static Pixmap draw(VoxelSeq seq, VoxelPixmapRenderer renderer)
+    public static Pixmap draw(IVoxelSeq seq, VoxelPixmapRenderer renderer)
     {
         final int time = (seq instanceof ITemporal) ? ((ITemporal) seq).frame() : 0;
-        final int len = seq.size(), sizeX = seq.sizeX,  sizeY = seq.sizeY, sizeZ = seq.sizeZ,
+        final int len = seq.size(), sizeX = seq.getSizeX(), sizeY = seq.getSizeY(), sizeZ = seq.getSizeZ(),
                 offsetPX = (sizeY - 1 >> 1) + 1, pixelWidth = sizeY * 3 + (sizeY - 1 >> 1) + 3, pixelHeight = sizeZ * 3 + 4;
-        seq.sort(IntComparator.side[seq.rotation]);
+        seq.sort(IntComparator.side[seq.getRotation()]);
         int xyz, x, y, z;
         byte v;
         for (int i = 0; i < len; i++) {
@@ -449,24 +449,24 @@ public class WarpDraw {
                 z = HashMap3D.extractZ(xyz);
                 final int xPos = (sizeY - y) * 3 + offsetPX;
                 renderer.rectRight(xPos, z * 3 + 1, 3, 3, v, 256 + x, x, y, z, time);
-                if (z >= sizeZ - 1 || seq.getRotated(x, y, z + 1, seq.rotation) == 0)
+                if (z >= sizeZ - 1 || seq.getRotated(x, y, z + 1) == 0)
                     renderer.rectVertical(xPos, z * 3 + 4, 3, 1, v, 256 + x, x, y, z, time);
             }
         }
         return renderer.blit(2, pixelWidth, pixelHeight);
     }
-    public static Pixmap draw45(VoxelSeq seq, VoxelPixmapRenderer renderer) {
+    public static Pixmap draw45(IVoxelSeq seq, VoxelPixmapRenderer renderer) {
         final int time = (seq instanceof ITemporal) ? ((ITemporal) seq).frame() : 0;
-        final int len = seq.size(), sizeX = seq.sizeX,  sizeY = seq.sizeY, sizeZ = seq.sizeZ, 
+        final int len = seq.size(), sizeX = seq.getSizeX(), sizeY = seq.getSizeY(), sizeZ = seq.getSizeZ(), 
                 pixelWidth = (sizeX + sizeY) * 2 + 3, pixelHeight = sizeZ * 3 + 4;
         int dep;
-        seq.sort(IntComparator.side45[seq.rotation & 3]);
+        seq.sort(IntComparator.side45[seq.getRotation() & 3]);
         int xyz, x, y, z;
         byte v;
         for (int i = 0; i < len; i++) {
             v = seq.getAt(i);
             if (v != 0) {
-                xyz = seq.keyAtRotated(i, seq.rotation & 3);
+                xyz = seq.keyAtRotated(i);
                 x = HashMap3D.extractX(xyz);
                 y = HashMap3D.extractY(xyz);
                 z = HashMap3D.extractZ(xyz);
@@ -474,50 +474,50 @@ public class WarpDraw {
                 final int xPos = (sizeY + x - y) * 2 + 1;
                 renderer.rectLeft(xPos, z * 3 + 1, 2, 3, v, dep, x, y, z, time);
                 renderer.rectRight(xPos + 2, z * 3 + 1, 2, 3, v, dep, x, y, z, time);
-                if (z >= sizeZ - 1 || seq.getRotated(x, y, z + 1, seq.rotation) == 0)
+                if (z >= sizeZ - 1 || seq.getRotated(x, y, z + 1) == 0)
                     renderer.rectVertical(xPos, z * 3 + 4, 4, 1, v, dep, x, y, z, time);
             }
         }
         return renderer.blit(5, pixelWidth, pixelHeight);
     }
-    public static Pixmap drawAbove(VoxelSeq seq, VoxelPixmapRenderer renderer)
+    public static Pixmap drawAbove(IVoxelSeq seq, VoxelPixmapRenderer renderer)
     {
         final int time = (seq instanceof ITemporal) ? ((ITemporal) seq).frame() : 0;
-        final int len = seq.size(), sizeX = seq.sizeX, sizeY = seq.sizeY, sizeZ = seq.sizeZ,
+        final int len = seq.size(), sizeX = seq.getSizeX(), sizeY = seq.getSizeY(), sizeZ = seq.getSizeZ(),
                 offsetPX = (sizeY >> 1) + 1, offsetPY = (sizeX >> 1) + 1,
                 pixelWidth = (sizeY * 3) + (sizeY >> 1) + 6, pixelHeight = sizeZ * 2 + sizeX * 3 + (sizeX >> 1) + 8;
-        seq.sort(IntComparator.above[seq.rotation]);
+        seq.sort(IntComparator.above[seq.getRotation()]);
         int xyz, x, y, z;
         byte v;
         for (int i = 0; i < len; i++) {
             v = seq.getAt(i);
             if (v != 0) {
-                xyz = seq.keyAtRotated(i, seq.rotation & 3);
+                xyz = seq.keyAtRotated(i);
                 x = HashMap3D.extractX(xyz);
                 y = HashMap3D.extractY(xyz);
                 z = HashMap3D.extractZ(xyz);
                 final int xPos = (sizeY - y) * 3 + offsetPX, yPos = z * 2 + (sizeX - x) * 3 + offsetPY;
                 renderer.rectRight(xPos, yPos, 3, 2, v, 256 + z * 8 - x * 5, x, y, z, time);
-                if (z >= sizeZ - 1 || seq.getRotated(x, y, z + 1, seq.rotation) == 0) {
+                if (z >= sizeZ - 1 || seq.getRotated(x, y, z + 1) == 0) {
                     renderer.rectVertical(xPos, yPos + 3, 3, 3, v, 260 + z * 8 - x * 5, x, y, z, time);
                 }
             }
         }
         return renderer.blit(13, pixelWidth, pixelHeight);
     }
-    public static Pixmap drawIso(VoxelSeq seq, VoxelPixmapRenderer renderer)
+    public static Pixmap drawIso(IVoxelSeq seq, VoxelPixmapRenderer renderer)
     {
         final int time = (seq instanceof ITemporal) ? ((ITemporal) seq).frame() : 0;
-        final int len = seq.size(), sizeX = seq.sizeX, sizeY = seq.sizeY, sizeZ = seq.sizeZ,
+        final int len = seq.size(), sizeX = seq.getSizeX(), sizeY = seq.getSizeY(), sizeZ = seq.getSizeZ(),
                 pixelWidth = (sizeY + sizeX) * 2 + 7, pixelHeight = (sizeX + sizeY + sizeZ) * 2 + 7;
         int dep;
-        seq.sort(IntComparator.above45[seq.rotation]);
+        seq.sort(IntComparator.above45[seq.getRotation()]);
         int xyz, x, y, z;
         byte v;
         for (int i = 0; i < len; i++) {
             v = seq.getAt(i);
             if (v != 0) {
-                xyz = seq.keyAtRotated(i, seq.rotation & 3);
+                xyz = seq.keyAtRotated(i);
                 x = HashMap3D.extractX(xyz);
                 y = HashMap3D.extractY(xyz);
                 z = HashMap3D.extractZ(xyz);
@@ -525,7 +525,7 @@ public class WarpDraw {
                 final int xPos = (sizeY - y + x) * 2 + 1, yPos = (z - x - y + sizeX + sizeY) * 2 + 1;
                 renderer.rectLeft(xPos, yPos, 2, 2, v, dep, x, y, z, time);
                 renderer.rectRight(xPos + 2, yPos, 2, 2, v, dep, x, y, z, time);
-                if (z >= sizeZ - 1 || seq.getRotated(x, y, z + 1, seq.rotation) == 0) {
+                if (z >= sizeZ - 1 || seq.getRotated(x, y, z + 1) == 0) {
                     renderer.rectVertical(xPos, yPos + 2, 4, 2, v, dep, x, y, z, time);
                 }
             }

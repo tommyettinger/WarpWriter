@@ -14,6 +14,7 @@ import squidpony.FakeLanguageGen;
 import warpwriter.ModelMaker;
 import warpwriter.Tools3D;
 import warpwriter.VoxIO;
+import warpwriter.model.IVoxelSeq;
 import warpwriter.model.VoxelSeq;
 import warpwriter.model.color.Colorizer;
 import warpwriter.view.WarpDraw;
@@ -43,7 +44,7 @@ public class SeqTest extends ApplicationAdapter {
 //    protected AnimatedArrayModel boom;
     private byte[][][] voxels;
 //    private byte[][][] container;
-    private VoxelSeq seq;
+    private IVoxelSeq seq;
     private Colorizer colorizer;
 //    private ChaoticFetch chaos;
 
@@ -226,11 +227,11 @@ public class SeqTest extends ApplicationAdapter {
 //                        break;
                     case Input.Keys.O:
                         if(!(diagonal = !diagonal))
-                            seq.rotation = seq.rotation - 1 & 3;
+                            seq.setRotation(seq.getRotation() - 1 & 3);
                         break;
                     case Input.Keys.L:
                         if(!(diagonal = !diagonal))
-                            seq.rotation = seq.rotation + 1 & 3;
+                            seq.setRotation(seq.getRotation() + 1 & 3);
                         break;
 //                            model.turner().counterZ();
 //                        break;
