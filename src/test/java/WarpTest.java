@@ -15,14 +15,16 @@ import squidpony.FakeLanguageGen;
 import warpwriter.ModelMaker;
 import warpwriter.Tools3D;
 import warpwriter.VoxIO;
-import warpwriter.model.FetchModel;
 import warpwriter.model.IFetch;
 import warpwriter.model.IModel;
 import warpwriter.model.TurnModel;
 import warpwriter.model.color.Colorizer;
 import warpwriter.model.decide.DecideFetch;
 import warpwriter.model.decide.SphereDecide;
-import warpwriter.model.fetch.*;
+import warpwriter.model.fetch.AnimatedArrayModel;
+import warpwriter.model.fetch.ArrayModel;
+import warpwriter.model.fetch.ColorFetch;
+import warpwriter.model.fetch.WorldFetch;
 import warpwriter.model.nonvoxel.HashMap3D;
 import warpwriter.view.WarpDraw;
 import warpwriter.view.color.VoxelColor;
@@ -122,20 +124,21 @@ public class WarpTest extends ApplicationAdapter {
     }
     
     public void makeBoom(byte[] fireColors) {
-        FetchModel fm = new FetchModel(48, 48, 32);
-        container = new byte[48][48][32];
+//        FetchModel fm = new FetchModel(48, 48, 32);
+//        container = new byte[48][48][32];
         long state = maker.rng.getState();
-        Tools3D.translateCopyInto(maker.shipNoiseColorized(), container, 18, 18, 0);
-        AnimatedArrayModel fire = new AnimatedArrayModel(maker.animateExplosion(18, 40, 40, 32, fireColors));
-        BurstFetch burst = new BurstFetch(new ArrayModel(container), 24, 24, 3, 16, 2);
-        fm.add(burst).add(new OffsetModel(-4, -4, -2).add(fire));
-        byte[][][][] voxelFrames = new byte[16][][][];
-        boom = new AnimatedArrayModel(voxelFrames);
-        for (int i = 0; i < 16; i++) {
-            burst.setFrame(i);
-            fire.setFrame(i+2);
-            voxelFrames[i] = new ArrayModel(fm).voxels;
-        }
+//        Tools3D.translateCopyInto(maker.shipNoiseColorized(), container, 18, 18, 0);
+//        AnimatedArrayModel fire = new AnimatedArrayModel(maker.animateExplosion(18, 40, 40, 32, fireColors));
+//        BurstFetch burst = new BurstFetch(new ArrayModel(container), 24, 24, 3, 16, 2);
+//        fm.add(burst).add(new OffsetModel(-4, -4, -2).add(fire));
+//        byte[][][][] voxelFrames = new byte[16][][][];
+//        boom = new AnimatedArrayModel(voxelFrames);
+//        for (int i = 0; i < 16; i++) {
+//            burst.setFrame(i);
+//            fire.setFrame(i+2);
+//            voxelFrames[i] = new ArrayModel(fm).voxels;
+//        }
+        boom = new AnimatedArrayModel(maker.animateExplosion(18, 40, 40, 32, fireColors));
         maker.rng.setState(state);
     }
 

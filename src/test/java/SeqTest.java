@@ -17,7 +17,6 @@ import warpwriter.Tools3D;
 import warpwriter.VoxIO;
 import warpwriter.model.AnimatedVoxelSeq;
 import warpwriter.model.ITemporal;
-import warpwriter.model.IVoxelSeq;
 import warpwriter.model.VoxelSeq;
 import warpwriter.model.color.Colorizer;
 import warpwriter.view.WarpDraw;
@@ -47,7 +46,7 @@ public class SeqTest extends ApplicationAdapter {
 //    protected AnimatedArrayModel boom;
     private byte[][][] voxels;
 //    private byte[][][] container;
-    private IVoxelSeq seq;
+    private AnimatedVoxelSeq seq;
     private Colorizer colorizer;
 //    private ChaoticFetch chaos;
 
@@ -237,8 +236,10 @@ public class SeqTest extends ApplicationAdapter {
 //                        model.set(ship);
 //                        chaos.setSeed(maker.rng.nextLong());
                         Tools3D.deepCopyInto(maker.shipLargeNoiseColorized(), voxels);
+                        seq.setFrame(0);
                         seq.clear();
                         seq.putSurface(voxels);
+                        seq = new AnimatedVoxelSeq(seq.seqs[0], 4);
                         animating = false;
                         break;
                     case Input.Keys.B: // burn!
