@@ -71,12 +71,12 @@ public class TestDisplay extends ApplicationAdapter {
 //        System.out.println(Arrays.equals(Colorizer.RinsedColorizer.getReducer().paletteMapping, new PaletteReducer(Coloring.RINSED).paletteMapping));
         mm = new ModelMaker(seed, Colorizer.RinsedColorizer);//arbitraryColorizer(Coloring.RINSED)
         reducer = new PaletteReducer(
-                Coloring.DB32
+                Coloring.FLESURRECT
                 //new int[]{0, 255, -1}
         ); 
                 //Coloring.FLESURRECT_REDUCER; //Colorizer.FlesurrectBonusPalette
         //PaletteReducer.generatePreloadCode(reducer.paletteMapping);
-        reducer.setDitherStrength(0.5f);
+        reducer.setDitherStrength(1f);
         batch = new SpriteBatch();
 //        pix = new Pixmap(16, 16, Pixmap.Format.RGBA8888);
 //        tex = new Texture(16, 16, Pixmap.Format.RGBA8888);

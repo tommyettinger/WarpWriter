@@ -50,9 +50,10 @@ public class Palettizer extends ApplicationAdapter {
     public void load(String name) {
         try {
             //// loads a file by its full path, which we get via drag+drop
-            Pixmap pm;
+            Pixmap pm = new Pixmap(Gdx.files.absolute(name));
+//            reducer.analyze(pm, 1600, 32);
             String subname = name.substring(Math.max(name.lastIndexOf('/'), name.lastIndexOf('\\')) + 1, name.lastIndexOf('.'));
-            pm = reducer.reduceWithNoise(new Pixmap(Gdx.files.absolute(name)));
+            pm = reducer.reduceWithNoise(pm);
             png8.writePrecisely(Gdx.files.local(subname + "_FloydSteinbergHu.png"), pm, false);
 //            pm = reducer.reduceWithBlueNoise(new Pixmap(Gdx.files.absolute(name)));
 //            png8.writePrecisely(Gdx.files.local(subname + "_BlueNoise.png"), pm, false);
@@ -76,7 +77,10 @@ public class Palettizer extends ApplicationAdapter {
     public void create() {
         font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
         batch = new SpriteBatch();
-        reducer = new PaletteReducer(Coloring.FLESURRECT);
+        reducer = Coloring.FLESURRECT_REDUCER;
+                //Colorizer.AuroraColorizer.getReducer();
+                //Colorizer.RinsedColorizer.getReducer();
+                // new PaletteReducer(Coloring.RINSED);
         reducer.setDitherStrength(1f);
         png8 = new PNG8();
         png8.palette = reducer;
@@ -86,6 +90,10 @@ public class Palettizer extends ApplicationAdapter {
         screenView.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.enableBlending();
         Gdx.input.setInputProcessor(inputProcessor());
+
+        load("D:/Painting_by_Henri_Biva.jpg");
+        load("D:/Sierra_Nevadas.jpg");
+        load("D:/Mona_Lisa.jpg");
     }
 
 

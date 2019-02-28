@@ -106,7 +106,7 @@ public class SeqTest extends ApplicationAdapter {
     public void render() {
 //        model.setFrame((int)(TimeUtils.millis() >>> 7) & 15);
 //        boom.setFrame((int)(TimeUtils.millis() >>> 7) & 15);
-        if(seq instanceof ITemporal)
+        if(seq != null)
             ((ITemporal) seq).setFrame((int)(TimeUtils.millis() * 3 >>> 8));
         buffer.begin();
         

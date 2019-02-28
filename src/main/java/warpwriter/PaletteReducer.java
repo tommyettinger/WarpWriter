@@ -376,7 +376,7 @@ public class PaletteReducer {
      */
     public static int difference(final int color1, final int color2) {
          // if one color is transparent and the other isn't, then this is max-different
-        if(((color1 ^ color2) & 0x80) == 0x80) return 0x7FFFFFFF;
+        if(((color1 ^ color2) & 0x80) == 0x80) return 0x70000000;
         int rmean = ((color1 >>> 24) + (color2 >>> 24));
         int r = (color1 >>> 24) - (color2 >>> 24);
         int g = (color1 >>> 16 & 0xFF) - (color2 >>> 16 & 0xFF) << 1;
@@ -665,13 +665,33 @@ public class PaletteReducer {
      * @param threshold a minimum color difference as produced by {@link #difference(int, int)}; usually between 250 and 1000, 400 is a good default
      */
     public void analyze(Pixmap pixmap, int threshold) {
+        analyze(pixmap, threshold, 256);
+    }
+    /**
+     * Analyzes {@code pixmap} for color count and frequency, building a palette with at most 256 colors if there are
+     * too many colors to store in a PNG-8 palette. If there are 256 or less colors, this uses the exact colors
+     * (although with at most one transparent color, and no alpha for other colors); if there are more than 256 colors
+     * or any colors have 50% or less alpha, it will reserve a palette entry for transparent (even if the image has no
+     * transparency). Because calling {@link #reduce(Pixmap)} (or any of PNG8's write methods) will dither colors that
+     * aren't exact, and dithering works better when the palette can choose colors that are sufficiently different, this
+     * takes a threshold value to determine whether it should permit a less-common color into the palette, and if the
+     * second color is different enough (as measured by {@link #difference(int, int)}) by a value of at least
+     * {@code threshold}, it is allowed in the palette, otherwise it is kept out for being too similar to existing
+     * colors. The threshold is usually between 250 and 1000, and 400 is a good default. This doesn't return a value but
+     * instead stores the palette info in this object; a PaletteReducer can be assigned to the {@link PNG8#palette}
+     * field or can be used directly to {@link #reduce(Pixmap)} a Pixmap.
+     *
+     * @param pixmap    a Pixmap to analyze, making a palette which can be used by this to {@link #reduce(Pixmap)} or by PNG8
+     * @param threshold a minimum color difference as produced by {@link #difference(int, int)}; usually between 250 and 1000, 400 is a good default
+     */
+    public void analyze(Pixmap pixmap, int threshold, int limit) {
         Arrays.fill(paletteArray, 0);
         Arrays.fill(paletteMapping, (byte) 0);
         int color;
         final int width = pixmap.getWidth(), height = pixmap.getHeight();
-        IntIntMap counts = new IntIntMap(256);
+        IntIntMap counts = new IntIntMap(limit);
         int hasTransparent = 0;
-        int[] reds = new int[256], greens = new int[256], blues = new int[256];
+        int[] reds = new int[limit], greens = new int[limit], blues = new int[limit];
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 color = pixmap.getPixel(x, y);
@@ -684,9 +704,18 @@ public class PaletteReducer {
             }
         }
         final int cs = counts.size;
-        if (cs + hasTransparent <= 256) {
+        ArrayList<IntIntMap.Entry> es = new ArrayList<>(cs);
+        for(IntIntMap.Entry e : counts)
+        {
+            IntIntMap.Entry e2 = new IntIntMap.Entry();
+            e2.key = e.key;
+            e2.value = e.value;
+            es.add(e2);
+        }
+        Collections.sort(es, entryComparator);
+        if (cs + hasTransparent <= limit) {
             int i = hasTransparent;
-            for(IntIntMap.Entry e : counts) {
+            for(IntIntMap.Entry e : es) {
                 color = e.key;
                 paletteArray[i] = color;
                 color = (color >>> 17 & 0x7C00) | (color >>> 14 & 0x3E0) | (color >>> 11 & 0x1F);
@@ -698,18 +727,9 @@ public class PaletteReducer {
             }
         } else // reduce color count
         {
-            ArrayList<IntIntMap.Entry> es = new ArrayList<>(cs);
-            for(IntIntMap.Entry e : counts)
-            {
-                IntIntMap.Entry e2 = new IntIntMap.Entry();
-                e2.key = e.key;
-                e2.value = e.value;
-                es.add(e2);
-            }
-            Collections.sort(es, entryComparator);
             int i = 1, c = 0;
             PER_BEST:
-            for (; i < 256 && c < cs;) {
+            for (; i < limit && c < cs;) {
                 color = es.get(c++).key;
                 for (int j = 1; j < i; j++) {
                     if (difference(color, paletteArray[j]) < threshold)
@@ -731,7 +751,7 @@ public class PaletteReducer {
                     c2 = r << 10 | g << 5 | b;
                     if (paletteMapping[c2] == 0) {
                         dist = 0x7FFFFFFF;
-                        for (int i = 1; i < 256; i++) {
+                        for (int i = 1; i < limit; i++) {
                             if (dist > (dist = Math.min(dist, difference(reds[i], r, greens[i], g, blues[i], b))))
                                 paletteMapping[c2] = (byte) i;
                         }
@@ -1208,25 +1228,37 @@ public class PaletteReducer {
         Pixmap.Blending blending = pixmap.getBlending();
         pixmap.setBlending(Pixmap.Blending.None);
         int color, used;
-        float adj;
-        byte paletteIndex;
+        float adj, str = ditherStrength * (256f / paletteArray.length) * 0x2.5p-27f;
+        long pos;
         for (int y = 0; y < h; y++) {
             for (int px = 0; px < lineLen; px++) {
                 color = pixmap.getPixel(px, y) & 0xF8F8F880;
                 if ((color & 0x80) == 0 && hasTransparent)
                     pixmap.drawPixel(px, y, 0);
                 else {
-                    adj = (((px * 0xC13FA9A902A6328FL + y * 0x91E10DA5C79E7B1DL >> 40) * 0x1.Fp-26f) * ditherStrength) + 1f;
+//                    adj = (((px * 0xC13FA9A902A6328FL + y * 0x91E10DA5C79E7B1DL >> 40) * 0x1.Fp-26f) * ditherStrength) + 1f;
+//                    color |= (color >>> 5 & 0x07070700) | 0xFE;
+//                    int rr = MathUtils.clamp((int) (((color >>> 24)       ) * adj), 0, 0xFF);
+//                    int gg = MathUtils.clamp((int) (((color >>> 16) & 0xFF) * adj), 0, 0xFF);
+//                    int bb = MathUtils.clamp((int) (((color >>> 8)  & 0xFF) * adj), 0, 0xFF);
+                    //0xD1B54A32D192ED03L, 0xABC98388FB8FAC03L, 0x8CB92BA72F3D8DD7L
+//                    adj = (((px * 0xC13FA9A902A6328FL + y * 0x91E10DA5C79E7B1DL) >> 40) * str);
                     color |= (color >>> 5 & 0x07070700) | 0xFE;
-                    int rr = MathUtils.clamp((int) (((color >>> 24)       ) * adj), 0, 0xFF);
-                    int gg = MathUtils.clamp((int) (((color >>> 16) & 0xFF) * adj), 0, 0xFF);
-                    int bb = MathUtils.clamp((int) (((color >>> 8)  & 0xFF) * adj), 0, 0xFF);
-                    paletteIndex =
-                            paletteMapping[((rr << 7) & 0x7C00)
-                                    | ((gg << 2) & 0x3E0)
-                                    | ((bb >>> 3))];
-                    used = paletteArray[paletteIndex & 0xFF];
-                    pixmap.drawPixel(px, y, used);
+                    int rr = ((color >>> 24)       );//MathUtils.clamp((int) (rr * (1f + adj)), 0, 0xFF);
+                    int gg = ((color >>> 16) & 0xFF);//MathUtils.clamp((int) (gg * (1f + adj)), 0, 0xFF);
+                    int bb = ((color >>> 8)  & 0xFF);//MathUtils.clamp((int) (bb * (1f + adj)), 0, 0xFF);
+                    used = paletteArray[paletteMapping[((rr << 7) & 0x7C00)
+                            | ((gg << 2) & 0x3E0)
+                            | ((bb >>> 3))] & 0xFF];
+                    pos = (px * 0xC13FA9A902A6328FL - y * 0x91E10DA5C79E7B1DL);
+                    pos ^= pos >>> 1;
+                    adj = ((pos >> 40) * str);
+                    rr = MathUtils.clamp((int) (rr * (1f + adj * ((used >>> 24) - rr >> 3))), 0, 0xFF);
+                    gg = MathUtils.clamp((int) (gg * (1f + adj * ((used >>> 16 & 0xFF) - gg >> 3))), 0, 0xFF);
+                    bb = MathUtils.clamp((int) (bb * (1f + adj * ((used >>> 8 & 0xFF) - bb >> 3))), 0, 0xFF);
+                    pixmap.drawPixel(px, y, paletteArray[paletteMapping[((rr << 7) & 0x7C00)
+                            | ((gg << 2) & 0x3E0)
+                            | ((bb >>> 3))] & 0xFF]);
                 }
             }
 
