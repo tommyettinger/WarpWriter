@@ -589,14 +589,16 @@ public class ModelMaker {
         final int halfY = ySize >> 1, smallYSize = ySize - 1;
         int color;
         int seed = rng.nextInt(), current = seed, paint = seed;
+        int thrust = Coloring.RINSED[randomMainColor(seed ^ 0x44444) & 0xFF];
         byte[] grays = colorizer.grayscale();
         byte mainColor = colorizer.getReducer().paletteMapping[seed & 0x7FFF], // bottom 15 bits
                 highlightColor = colorizer.brighten(colorizer.getReducer().paletteMapping[seed >>> 17]), // top 15 bits
                 cockpitColor = colorizer.darken(colorizer.reduce((0x20 + determineBounded(seed ^ 0x11111, 0x60) << 24)
                         | (0xA0 + determineBounded(seed ^ 0x22222, 0x60) << 16)
                         | (0xC8 + determineBounded(seed ^ 0x33333, 0x38) << 8) | 0xFF)),
-                thrustColor = (byte) (colorizer.brighten(colorizer.reduce(Coloring.RINSED[randomMainColor(seed ^ 0x44444) & 0xFF])) | colorizer.getWaveBit() | colorizer.getShadeBit()), 
+                thrustColor = colorizer.reduce(thrust), 
                 lightColor = (byte) (colorizer.brighten(colorizer.getReducer().paletteMapping[(seed ^ seed >>> 4 ^ seed >>> 13) & 0x7FFF]) | colorizer.getShadeBit() | colorizer.getWaveBit());
+        thrustColor = (byte) (colorizer.brighten(thrustColor) | colorizer.getWaveBit() | colorizer.getShadeBit());
         for (int i = 0; i < grays.length; i++) {
             if(highlightColor == grays[i])
             {
@@ -1123,12 +1125,12 @@ public class ModelMaker {
     }
     /**
      * Gets a random color palette index, always using {@link Coloring#RINSED}. It will always be in the middle of the
-     * color range, but can lean towards darker colors more often than lighter ones.
+     * color range, leaning toward lighter colors (but never the lightest color in a group of similar Rinsed colors).
      * @param seed a long seed that should be different every time this is called
      * @return a byte representing a color palette index, randomly chosen
      */
     public static byte randomMainColor(int seed) {
-        return (byte)((determineBounded(seed, 240) & 0xFB) + 18);
+        return (byte)((determineBounded(seed, 29) << 3) + 25);
     }
 
     /**

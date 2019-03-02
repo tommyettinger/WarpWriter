@@ -75,7 +75,7 @@ public class WarpTest extends ApplicationAdapter {
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.CW_PALETTE);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.FLESURRECT);
-        colorizer = Colorizer.FlesurrectBonusColorizer;
+        colorizer = Colorizer.FlesurrectColorizer;
         voxelColor = new VoxelColor().set(colorizer);
         batchRenderer = new VoxelSpriteBatchRenderer(batch).setOffset(16, 100);
         pixmapRenderer = new VoxelPixmapRenderer(new Pixmap(512, 512, Pixmap.Format.RGBA8888), voxelColor);
