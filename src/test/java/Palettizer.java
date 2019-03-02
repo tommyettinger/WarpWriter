@@ -91,6 +91,7 @@ public class Palettizer extends ApplicationAdapter {
         batch.enableBlending();
         Gdx.input.setInputProcessor(inputProcessor());
 
+        // if you don't have these files on this absolute path, that's fine, and they will be ignored
         load("D:/Painting_by_Henri_Biva.jpg");
         load("D:/Sierra_Nevadas.jpg");
         load("D:/Mona_Lisa.jpg");
