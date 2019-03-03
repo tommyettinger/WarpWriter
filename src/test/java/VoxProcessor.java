@@ -15,7 +15,7 @@ import java.io.InputStream;
 public class VoxProcessor extends ApplicationAdapter {
     @Override
     public void create() {
-        InputStream is = VoxProcessor.class.getResourceAsStream("/lambda.vox");
+        InputStream is = VoxProcessor.class.getResourceAsStream("/other/lambda.vox");
         byte[][][] thing = VoxIO.readVox(new LittleEndianDataInputStream(is));
         if(thing == null)
             return;
