@@ -66,7 +66,9 @@ public class Palettizer extends ApplicationAdapter {
             pm = reducer.reduceWithRoberts(new Pixmap(Gdx.files.absolute(name)));
             png8.writePrecisely(Gdx.files.local(subname + "_Roberts.png"), pm, false);
             pm = reducer.reduceRobertsMul(new Pixmap(Gdx.files.absolute(name)));
-            FileHandle next = Gdx.files.local(subname + "_RobertsMul.png");
+            png8.writePrecisely(Gdx.files.local(subname + "_RobertsMul.png"), pm, false);
+            pm = reducer.reduceRobertsEdit(new Pixmap(Gdx.files.absolute(name)));
+            FileHandle next = Gdx.files.local(subname + "_RobertsEdit.png");
             png8.writePrecisely(next, pm, false);
             screenTexture = new Texture(next);
         } catch (IOException ignored) {

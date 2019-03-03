@@ -1267,6 +1267,61 @@ public class PaletteReducer {
         return pixmap;
     }
 
+    public Pixmap reduceRobertsEdit (Pixmap pixmap) {
+        boolean hasTransparent = (paletteArray[0] == 0);
+        final int lineLen = pixmap.getWidth(), h = pixmap.getHeight();
+        Pixmap.Blending blending = pixmap.getBlending();
+        pixmap.setBlending(Pixmap.Blending.None);
+        int color, used;
+        float adj, str = ditherStrength * 0x1p-24f; // * (256f / paletteArray.length)
+        for (int y = 0; y < h; y++) {
+            for (int px = 0; px < lineLen; px++) {
+                color = pixmap.getPixel(px, y) & 0xF8F8F880;
+                if ((color & 0x80) == 0 && hasTransparent)
+                    pixmap.drawPixel(px, y, 0);
+                else {
+//                    adj = (((px * 0xC13FA9A902A6328FL + y * 0x91E10DA5C79E7B1DL >> 40) * 0x1.Fp-26f) * ditherStrength) + 1f;
+//                    color |= (color >>> 5 & 0x07070700) | 0xFE;
+//                    int rr = MathUtils.clamp((int) (((color >>> 24)       ) * adj), 0, 0xFF);
+//                    int gg = MathUtils.clamp((int) (((color >>> 16) & 0xFF) * adj), 0, 0xFF);
+//                    int bb = MathUtils.clamp((int) (((color >>> 8)  & 0xFF) * adj), 0, 0xFF);
+                    //0xD1B54A32D192ED03L, 0xABC98388FB8FAC03L, 0x8CB92BA72F3D8DD7L
+//                    adj = (((px * 0xC13FA9A902A6328FL + y * 0x91E10DA5C79E7B1DL) >> 40) * str);
+                    color |= (color >>> 5 & 0x07070700) | 0xFE;
+                    int rr = ((color >>> 24)       );//MathUtils.clamp((int) (rr * (1f + adj)), 0, 0xFF);
+                    int gg = ((color >>> 16) & 0xFF);//MathUtils.clamp((int) (gg * (1f + adj)), 0, 0xFF);
+                    int bb = ((color >>> 8)  & 0xFF);//MathUtils.clamp((int) (bb * (1f + adj)), 0, 0xFF);
+                    used = paletteArray[paletteMapping[((rr << 7) & 0x7C00)
+                            | ((gg << 2) & 0x3E0)
+                            | ((bb >>> 3))] & 0xFF];
+                    long pos = (px * 0xC13FA9A902A6328FL + y * 0x91E10DA5C79E7B1DL);
+                    pos ^= pos >>> 1 ^ pos >>> 3 ^ pos >>> 4;
+                    //0xE60E2B722B53AEEBL, 0xCEBD76D9EDB6A8EFL, 0xB9C9AA3A51D00B65L, 0xA6F5777F6F88983FL, 0x9609C71EB7D03F7BL, 
+                    //0x86D516E50B04AB1BL
+//                    long pr = (px * 0xE60E2B722B53AEEBL - y * 0x86D516E50B04AB1BL),
+//                         pg = (px * 0xCEBD76D9EDB6A8EFL + y * 0x9609C71EB7D03F7BL),
+//                         pb = (y * 0xB9C9AA3A51D00B65L - px * 0xA6F5777F6F88983FL);
+//                    str * ((pr ^ pr >>> 1 ^ pr >>> 3 ^ pr >>> 4) >> 40)
+//                    str * ((pg ^ pg >>> 1 ^ pg >>> 3 ^ pg >>> 4) >> 40)
+//                    str * ((pb ^ pb >>> 1 ^ pb >>> 3 ^ pb >>> 4) >> 40)
+                    //(px + y) * 1.6180339887498949f
+                    adj = ((pos >>> 40) * -0x2.28p-25f);
+                    adj = (adj * adj * adj + 0.0625f) * ditherStrength;
+                    // + NumberTools.sway(y * 0.7548776662466927f + px * 0.5698402909980532f) * 0.0625f;
+                    rr = MathUtils.clamp((int) (rr + (adj * 1.12f * (((used >>> 24) - rr)))), 0, 0xFF); //  * 17 >> 4
+                    gg = MathUtils.clamp((int) (gg + (adj * 1.07f * (((used >>> 16 & 0xFF) - gg)))), 0, 0xFF); //  * 23 >> 4
+                    bb = MathUtils.clamp((int) (bb + (adj * 1.16f * (((used >>> 8 & 0xFF) - bb)))), 0, 0xFF); // * 5 >> 4
+                    pixmap.drawPixel(px, y, paletteArray[paletteMapping[((rr << 7) & 0x7C00)
+                            | ((gg << 2) & 0x3E0)
+                            | ((bb >>> 3))] & 0xFF]);
+                }
+            }
+
+        }
+        pixmap.setBlending(blending);
+        return pixmap;
+    }
+
     /**
      * Retrieves a random non-0 color index for the palette this would reduce to, with a higher likelihood for colors
      * that are used more often in reductions (those with few similar colors). The index is returned as a byte that,
