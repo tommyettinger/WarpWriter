@@ -212,19 +212,20 @@ public class SeqTest extends ApplicationAdapter {
 //                        if(!(diagonal = !diagonal)) 
 //                            model.turner().clockZ();
 //                        break;
-//                    case Input.Keys.J:
-//                        model.turner().counterX();
-//                        break;
+                    case Input.Keys.U:
+                    case Input.Keys.J:
+                        seq.rotate(seq.rotation() ^ 4);
+                        break;
 //                    case Input.Keys.K:
 //                        model.turner().counterY();
 //                        break;
                     case Input.Keys.O:
-                        if((diagonal = !diagonal))
-                            seq.rotate(seq.rotation() - 1 & 3);
+                        //if((diagonal = !diagonal))
+                            seq.rotate(((seq.rotation() & 3) - 1 & 3) | (seq.rotation() & 4));
                         break;
                     case Input.Keys.L:
-                        if(!(diagonal = !diagonal))
-                            seq.rotate(seq.rotation() + 1 & 3);
+                        //if(!(diagonal = !diagonal))
+                            seq.rotate(((seq.rotation() & 3) + 1 & 3) | (seq.rotation() & 4));
                         break;
 //                            model.turner().counterZ();
 //                        break;

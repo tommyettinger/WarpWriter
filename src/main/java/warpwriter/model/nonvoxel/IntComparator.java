@@ -33,7 +33,36 @@ public interface IntComparator {
                     // values y as 1024 times more important than z, and x is irrelevant; reversed for y
                     return (right & 0xFFC00) - (left & 0xFFC00) + (left >>> 20) - (right >>> 20);
                 }
-            }
+            },
+            new IntComparator() {
+                @Override
+                public int compare(int left, int right) {
+                    // values x as 4096 times more important than reversed y, and z is irrelevant
+                    return (right & 0xFFC00) - (left & 0xFFC00) + ((left & 0x3FF) - (right & 0x3FF) << 20);
+                }
+            },
+            new IntComparator() {
+                @Override
+                public int compare(int left, int right) {
+                    // values y as 4096 times more important than x, and z is irrelevant
+                    return (left & 0xFFC00) - (right & 0xFFC00) + ((left & 0x3FF) - (right & 0x3FF));
+                }
+            },
+            new IntComparator() {
+                @Override
+                public int compare(int left, int right) {
+                    // values reversed x as 4096 times more important than y, and z is irrelevant
+                    return (left & 0xFFC00) - (right & 0xFFC00) + ((right & 0x3FF) - (left & 0x3FF) << 20);
+                }
+            },
+            new IntComparator() {
+                @Override
+                public int compare(int left, int right) {
+                    // values reversed y as 4096 times more important than reversed x, and z is irrelevant
+                    return (right & 0xFFC00) - (left & 0xFFC00) + ((right & 0x3FF) - (left & 0x3FF));
+                }
+            },
+
     };
     IntComparator[] side45 = {
             new IntComparator() {

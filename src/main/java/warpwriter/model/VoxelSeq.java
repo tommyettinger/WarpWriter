@@ -23,6 +23,7 @@ import warpwriter.model.nonvoxel.IntSort;
 import java.io.Serializable;
 import java.util.*;
 
+import static squidpony.squidmath.HashCommon.mix;
 import static warpwriter.model.nonvoxel.HashMap3D.fuse;
 
 /**
@@ -125,7 +126,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
     /**
      * Maximum size on the z-dimension for keys.
      */
-    public int sizeZ = 30;
+    public int sizeZ = 40;
 
     /**
      * Index into a rotation array, which should almost always have 24 items, so this should be between 0-23 inclusive.
@@ -299,9 +300,10 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
     
     public void putSurface(byte[][][] voxels)
     {
-        final int sizeX = (this.sizeX = voxels.length);
-        final int sizeY = (this.sizeY = voxels[0].length);
-        final int sizeZ = (this.sizeZ = voxels[0][0].length);
+        final int sizeX = (voxels.length);
+        final int sizeY = (voxels[0].length);
+        final int sizeZ = (voxels[0][0].length);
+        this.sizeX = this.sizeY = this.sizeZ = Math.max(sizeX, Math.max(sizeY, sizeZ));
         for (int y = 0; y < sizeY; y++) {
             for (int z = 0; z < sizeZ; z++) {
                 if(voxels[0][y][z] != 0)
@@ -414,7 +416,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
             int curr;
             final int[] key = this.key;
             // The starting point.
-            if ((curr = key[pos = (HashCommon.mix(k)) & mask]) != 0) {
+            if ((curr = key[pos = (mix(k)) & mask]) != 0) {
                 if (curr == k)
                     return pos;
                 while ((curr = key[pos = (pos + 1) & mask]) != 0)
@@ -444,7 +446,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
             int curr;
             final int[] key = this.key;
             // The starting point.
-            if ((curr = key[pos = (HashCommon.mix(k)) & mask]) != 0) {
+            if ((curr = key[pos = (mix(k)) & mask]) != 0) {
                 if (curr == k)
                 {
                     fixOrder(pos);
@@ -502,7 +504,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
                     key[last] = 0;
                     return;
                 }
-                slot = (HashCommon.mix(curr))
+                slot = (mix(curr))
                         & mask;
                 if (last <= pos ? last >= slot || slot > pos : last >= slot
                         && slot > pos)
@@ -525,7 +527,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
         final int[] key = this.key;
         int pos;
         // The starting point.
-        if ((curr = key[pos = (HashCommon.mix(k)) & mask]) == 0)
+        if ((curr = key[pos = (mix(k)) & mask]) == 0)
             return defRetValue;
         if (k == curr)
             return removeEntry(pos);
@@ -570,7 +572,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
         final int[] key = this.key;
         int pos;
         // The starting point.
-        if ((curr = key[pos = (HashCommon.mix(k)) & mask]) == 0)
+        if ((curr = key[pos = (mix(k)) & mask]) == 0)
             return defRetValue;
         if (k == curr)
             return value[pos];
@@ -591,7 +593,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
         final int[] key = this.key;
         int pos;
         // The starting point.
-        if ((curr = key[pos = (HashCommon.mix(k)) & mask]) == 0)
+        if ((curr = key[pos = (mix(k)) & mask]) == 0)
             return defaultValue;
         if (k == curr)
             return value[pos];
@@ -616,7 +618,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
         final int[] key = this.key;
         int pos;
         // The starting point.
-        if ((curr = key[pos = (HashCommon.mix(k)) & mask]) == 0)
+        if ((curr = key[pos = (mix(k)) & mask]) == 0)
             return -1;
         if (k == curr)
             return pos;
@@ -683,7 +685,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
         final int[] key = this.key;
         int pos;
         // The starting point.
-        if ((curr = key[pos = (HashCommon.mix(k)) & mask]) == 0)
+        if ((curr = key[pos = (mix(k)) & mask]) == 0)
             return false;
         if (k == curr)
             return true;
@@ -751,7 +753,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
         final int[] key = this.key;
         int pos;
         // The starting point.
-        if ((curr = key[pos = (HashCommon.mix(k)) & mask]) == 0)
+        if ((curr = key[pos = (mix(k)) & mask]) == 0)
         {
             put(k, (byte)(defRetValue + increment));
             return defRetValue;
@@ -811,8 +813,8 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
                     && (value[index] == e.getValue());
         }
         public int hashCode() {
-            return HashCommon.mix(key[index])
-                    ^ HashCommon.mix(value[index]);
+            return mix(key[index])
+                    ^ mix(value[index]);
         }
         @Override
         public String toString() {
@@ -1036,7 +1038,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
                             key[last] = 0;
                             return;
                         }
-                        slot = (HashCommon.mix(curr)) & mask;
+                        slot = (mix(curr)) & mask;
                         if (last <= pos
                                 ? last >= slot || slot > pos
                                 : last >= slot && slot > pos)
@@ -1154,7 +1156,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
             final int[] key = VoxelSeq.this.key;
             int pos;
             // The starting point.
-            if ((curr = key[pos = (HashCommon.mix(k)) & mask]) == 0)
+            if ((curr = key[pos = (mix(k)) & mask]) == 0)
                 return false;
             if (k == curr)
                 return value[pos] == v;
@@ -1184,7 +1186,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
             final int[] key = VoxelSeq.this.key;
             int pos;
             // The starting point.
-            if ((curr = key[pos = (HashCommon.mix(k)) & mask]) == 0)
+            if ((curr = key[pos = (mix(k)) & mask]) == 0)
                 return false;
             if (curr == k) {
                 if (value[pos] == v) {
@@ -1772,7 +1774,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
             if ((k = key[i]) == 0)
                 pos = newN;
             else {
-                pos = (HashCommon.mix(k)) & mask;
+                pos = (mix(k)) & mask;
                 while (newKey[pos] != 0)
                     pos = (pos + 1) & mask;
             }
@@ -1823,14 +1825,14 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
         for (int j = realSize(), i = 0, t = 0; j-- != 0;) {
             while (key[i] == 0)
                 i++;             
-            t = HashCommon.mix(key[i]) ^ HashCommon.mix(
+            t = mix(key[i]) ^ mix(
                     value[i] ^ HashCommon.INV_INT_PHI);
             h += t;
             i++;
         }
         // Zero / null keys have hash zero.
         if (containsNullKey)
-            h += HashCommon.mix(value[n] ^ HashCommon.INV_INT_PHI);
+            h += mix(value[n] ^ HashCommon.INV_INT_PHI);
         return h;
     }
 
@@ -1992,7 +1994,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
                 pos = n;
                 containsNullKey = true;
             } else {
-                pos = (HashCommon.mix(k))
+                pos = (mix(k))
                         & mask;
                 while (!(key[pos] == 0))
                     pos = (pos + 1) & mask;
@@ -2183,7 +2185,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
         final int[] key = this.key;
         int pos;
         // The starting point.
-        if ((curr = key[pos = (HashCommon.mix(original)) & mask]) == 0)
+        if ((curr = key[pos = (mix(original)) & mask]) == 0)
             return defRetValue;
         if (original == curr)
         {
@@ -2379,24 +2381,31 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
     }
     public byte getRotated(final int key, final int rotation)
     {
-        return get(rotate(key, -rotation & 3));
+        return get(rotate(key, -rotation & 7));
     }
     public byte getRotated(final int x, final int y, final int z)
     {
-        return get(rotate(fuse(x, y, z), -rotation & 3));
+        return get(rotate(fuse(x, y, z), -rotation & 7));
     }
     public byte getRotated(final int x, final int y, final int z, final int rotation)
     {
-        return get(rotate(fuse(x, y, z), -rotation & 3));
+        return get(rotate(fuse(x, y, z), -rotation & 7));
     }
     
     public int rotate(final int k, final int rotation)
     {
         switch (rotation)
         {
+            // 0-3 have z pointing towards z+ and the voxels rotating on that axis
             case 0: return k;
             case 1: return (k & 0xFFF00000) | sizeX - (k & 0x3FF) << 10 | (k >>> 10 & 0x3FF);
             case 2: return (k & 0xFFF00000) | (sizeY << 10) - (k & 0xFFC00) | sizeX - (k & 0x3FF);
+            case 3: return (k & 0xFFF00000) | (k & 0x3FF) << 10 | (sizeY - (k >>> 10 & 0x3FF));
+            // 4-7 have z pointing towards y+ and the voxels rotating on that axis
+            case 4: return (k >>> 10 & 0x000FFC00) | (sizeY << 10) - (k & 0x000FFC00) << 10 | (k & 0x3FF);
+            case 5: return (k >>> 10 & 0x000FFC00) | (k & 0x3FF) << 20 | (k >>> 10 & 0x3FF);
+            case 6: return (k >>> 10 & 0x000FFC00) | (k & 0x000FFC00) << 10 | sizeX - (k & 0x3FF);
+            case 7: return (k >>> 10 & 0x000FFC00) | (sizeX - (k & 0x3FF) << 20) | sizeY - (k >>> 10 & 0x3FF);
             default: return (k & 0xFFF00000) | (k & 0x3FF) << 10 | (sizeY - (k >>> 10 & 0x3FF));
         }
 
