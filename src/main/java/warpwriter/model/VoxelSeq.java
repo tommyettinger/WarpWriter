@@ -23,7 +23,6 @@ import warpwriter.model.nonvoxel.IntSort;
 import java.io.Serializable;
 import java.util.*;
 
-import static squidpony.squidmath.HashCommon.mix;
 import static warpwriter.model.nonvoxel.HashMap3D.fuse;
 
 /**
@@ -163,6 +162,17 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
 
     public void rotate(int rotation) {
         this.rotation = rotation;
+    }
+
+    /**
+     * A fast alternative to HashCommon's mix() implementation; still GWT-safe. Since this a purely  bitwise-math
+     * method, it may perform a bit better on GWT (the bitwise-heavy xoroshiro generator tends to significantly outpace
+     * multiplication-dependent random number generators on GWT, so xoroshiro is used by GWTRNG).
+     * @param n the number to mix, usually for a hash
+     * @return the number with bits mixed; this is a bijection but I don't know how to reverse it (just that it can be done)
+     */
+    private static int mix(final int n){
+        return n ^ n >>> 12 ^ n >>> 22 ^ n >>> 16;
     }
 
     /**
