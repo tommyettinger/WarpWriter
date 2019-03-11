@@ -216,12 +216,11 @@ public class SeqTest extends ApplicationAdapter {
                     case Input.Keys.J:
                         switch (seq.rotation() & 12)
                         {
-                            case 0: seq.rotate(seq.rotation() ^ 4);
+                            case 0:
+                            case 8: seq.rotate(seq.rotation() ^ 4);
                                 break;
                             case 12:
                             case 4: seq.rotate(seq.rotation() ^ 12);
-                                break;
-                            case 8: seq.rotate(seq.rotation() ^ 8);
                                 break;
                         }
                         break;
