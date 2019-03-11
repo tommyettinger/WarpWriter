@@ -2391,15 +2391,15 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
     }
     public byte getRotated(final int key, final int rotation)
     {
-        return get(rotate(key, -rotation & 7));
+        return get(rotate(key, 12-rotation));
     }
     public byte getRotated(final int x, final int y, final int z)
     {
-        return get(rotate(fuse(x, y, z), -rotation & 7));
+        return get(rotate(fuse(x, y, z), 12-rotation));
     }
     public byte getRotated(final int x, final int y, final int z, final int rotation)
     {
-        return get(rotate(fuse(x, y, z), -rotation & 7));
+        return get(rotate(fuse(x, y, z), 12 - rotation));
     }
     
     public int rotate(final int k, final int rotation)
@@ -2407,6 +2407,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
         switch (rotation)
         {
             // 0-3 have z pointing towards z+ and the voxels rotating on that axis
+            case 12:
             case 0: return k;
             case 1: return (k & 0xFFF00000) | sizeX - (k & 0x3FF) << 10 | (k >>> 10 & 0x3FF);
             case 2: return (k & 0xFFF00000) | (sizeY << 10) - (k & 0xFFC00) | sizeX - (k & 0x3FF);
@@ -2416,6 +2417,11 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
             case 5: return (k >>> 10 & 0x000FFC00) | (k & 0x3FF) << 20 | (k >>> 10 & 0x3FF);
             case 6: return (k >>> 10 & 0x000FFC00) | (k & 0x000FFC00) << 10 | sizeX - (k & 0x3FF);
             case 7: return (k >>> 10 & 0x000FFC00) | (sizeX - (k & 0x3FF) << 20) | sizeY - (k >>> 10 & 0x3FF);
+            // 8-11 have z pointing towards z-
+            case 8: return (sizeZ << 20) - (k & 0xFFF00000) | (sizeY << 10) - (k & 0xFFC00) | (k & 0x3FF);
+            case 9: return (sizeZ << 20) - (k & 0xFFF00000) | (sizeY) - (k >>> 10 & 0x3FF) | (k & 0x3FF) << 10;
+            case 10: return (sizeZ << 20) - (k & 0xFFF00000) | (k & 0xFFC00) | sizeX - (k & 0x3FF);
+            case 11: return (sizeZ << 20) - (k & 0xFFF00000) |(k >>> 10 & 0x3FF) | sizeX - (k & 0x3FF) << 10;
             default: return (k & 0xFFF00000) | (k & 0x3FF) << 10 | (sizeY - (k >>> 10 & 0x3FF));
         }
 

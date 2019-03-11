@@ -214,18 +214,27 @@ public class SeqTest extends ApplicationAdapter {
 //                        break;
                     case Input.Keys.U:
                     case Input.Keys.J:
-                        seq.rotate(seq.rotation() ^ 4);
+                        switch (seq.rotation() & 12)
+                        {
+                            case 0: seq.rotate(seq.rotation() ^ 4);
+                                break;
+                            case 12:
+                            case 4: seq.rotate(seq.rotation() ^ 12);
+                                break;
+                            case 8: seq.rotate(seq.rotation() ^ 8);
+                                break;
+                        }
                         break;
 //                    case Input.Keys.K:
 //                        model.turner().counterY();
 //                        break;
                     case Input.Keys.O:
                         //if((diagonal = !diagonal))
-                            seq.rotate(((seq.rotation() & 3) - 1 & 3) | (seq.rotation() & 4));
+                            seq.rotate(((seq.rotation() & 3) - 1 & 3) | (seq.rotation() & 12));
                         break;
                     case Input.Keys.L:
                         //if(!(diagonal = !diagonal))
-                            seq.rotate(((seq.rotation() & 3) + 1 & 3) | (seq.rotation() & 4));
+                            seq.rotate(((seq.rotation() & 3) + 1 & 3) | (seq.rotation() & 12));
                         break;
 //                            model.turner().counterZ();
 //                        break;
