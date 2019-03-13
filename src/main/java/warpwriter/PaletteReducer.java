@@ -1294,8 +1294,8 @@ public class PaletteReducer {
                     used = paletteArray[paletteMapping[((rr << 7) & 0x7C00)
                             | ((gg << 2) & 0x3E0)
                             | ((bb >>> 3))] & 0xFF];
-                    long pos = (px * 0xC13FA9A902A6328FL + y * 0x91E10DA5C79E7B1DL);
-                    pos ^= pos >>> 1 ^ pos >>> 3 ^ pos >>> 4;
+                    long pos = (px * 0xC13FA9A902A6328FL - y * 0x91E10DA5C79E7B1DL);
+                    //pos ^= pos >>> 1 ^ pos >>> 3 ^ pos >>> 4;
                     //0xE60E2B722B53AEEBL, 0xCEBD76D9EDB6A8EFL, 0xB9C9AA3A51D00B65L, 0xA6F5777F6F88983FL, 0x9609C71EB7D03F7BL, 
                     //0x86D516E50B04AB1BL
 //                    long pr = (px * 0xE60E2B722B53AEEBL - y * 0x86D516E50B04AB1BL),
@@ -1305,12 +1305,12 @@ public class PaletteReducer {
 //                    str * ((pg ^ pg >>> 1 ^ pg >>> 3 ^ pg >>> 4) >> 40)
 //                    str * ((pb ^ pb >>> 1 ^ pb >>> 3 ^ pb >>> 4) >> 40)
                     //(px + y) * 1.6180339887498949f
-                    adj = ((pos >>> 40) * -0x2.28p-25f);
-                    adj = (adj * adj * adj + 0.0625f) * ditherStrength;
+                    adj = ((pos >>> 40) * -0x1.518p-24f);
+                    adj = (adj * adj * adj + 0x5p-6f) * ditherStrength;
                     // + NumberTools.sway(y * 0.7548776662466927f + px * 0.5698402909980532f) * 0.0625f;
-                    rr = MathUtils.clamp((int) (rr + (adj * 1.12f * (((used >>> 24) - rr)))), 0, 0xFF); //  * 17 >> 4
-                    gg = MathUtils.clamp((int) (gg + (adj * 1.07f * (((used >>> 16 & 0xFF) - gg)))), 0, 0xFF); //  * 23 >> 4
-                    bb = MathUtils.clamp((int) (bb + (adj * 1.16f * (((used >>> 8 & 0xFF) - bb)))), 0, 0xFF); // * 5 >> 4
+                    rr = MathUtils.clamp((int) (rr + (adj * 1.39f * (((used >>> 24) - rr)))), 0, 0xFF); //  * 17 >> 4
+                    gg = MathUtils.clamp((int) (gg + (adj * 1.09f * (((used >>> 16 & 0xFF) - gg)))), 0, 0xFF); //  * 23 >> 4
+                    bb = MathUtils.clamp((int) (bb + (adj * 1.75f * (((used >>> 8 & 0xFF) - bb)))), 0, 0xFF); // * 5 >> 4
                     pixmap.drawPixel(px, y, paletteArray[paletteMapping[((rr << 7) & 0x7C00)
                             | ((gg << 2) & 0x3E0)
                             | ((bb >>> 3))] & 0xFF]);
