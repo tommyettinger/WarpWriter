@@ -1104,9 +1104,6 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
 
             @Override
             public byte darken(byte voxel) {
-                // the second half of voxels (with bit 0x40 set) don't shade visually, but Colorizer uses this method to
-                // denote a structural change to the voxel's makeup, so this uses the first 64 voxel colors to shade both
-                // halves, then marks voxels from the second half back to being an unshaded voxel as the last step.
                 return ramps[(voxel & 0xFF) % COUNT][1];
             }
 
@@ -1285,6 +1282,210 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
                     rr = yy
                             | (co = (int) ((cof + 0.5f) * coLim)) << shift1
                             | (cg = (int) ((cgf + 0.5f) * cgLim)) << shift2;
+                }
+            }
+        }
+
+
+        return new Colorizer(reducer) {
+
+            @Override
+            public byte[] mainColors() {
+                return primary;
+            }
+
+            /**
+             * @return An array of grayscale or close-to-grayscale color indices, with the darkest first and lightest last.
+             */
+            @Override
+            public byte[] grayscale() {
+                return grays;
+            }
+
+            @Override
+            public byte brighten(byte voxel) {
+                return ramps[(voxel & 0xFF) % COUNT][3];
+            }
+
+            @Override
+            public byte darken(byte voxel) {
+                return ramps[(voxel & 0xFF) % COUNT][1];
+            }
+
+            @Override
+            public int dimmer(int brightness, byte voxel) {
+                return values[voxel & 0xFF][
+                        brightness <= 0
+                                ? 0
+                                : brightness >= 3
+                                ? 3
+                                : brightness
+                        ];
+            }
+
+            @Override
+            public int getShadeBit() {
+                return 0;
+            }
+
+            @Override
+            public int getWaveBit() {
+                return 0;
+            }
+        };
+    }
+    public static Colorizer arbitraryWarmingColorizer(final int[] palette) {
+        final int COUNT = palette.length;
+        PaletteReducer reducer = new PaletteReducer(palette);
+
+        final byte[] primary = {
+                reducer.reduceIndex(0xFF0000FF), reducer.reduceIndex(0xFFFF00FF), reducer.reduceIndex(0x00FF00FF),
+                reducer.reduceIndex(0x00FFFFFF), reducer.reduceIndex(0x0000FFFF), reducer.reduceIndex(0xFF00FFFF)
+        }, grays = {
+                reducer.reduceIndex(0x000000FF), reducer.reduceIndex(0x444444FF), reducer.reduceIndex(0x888888FF),
+                reducer.reduceIndex(0xCCCCCCFF), reducer.reduceIndex(0xFFFFFFFF)
+        };
+        final int THRESHOLD = 64;//0.011; // threshold controls the "stark-ness" of color changes; must not be negative.
+        final byte[] paletteMapping = new byte[1 << 16];
+        final int[] reverse = new int[COUNT];
+        final byte[][] ramps = new byte[COUNT][4];
+        final int[][] values = new int[COUNT][4];
+
+        final int[] lumas = new int[COUNT], cws = new int[COUNT], cms = new int[COUNT];
+        final int yLim = 63, cwLim = 31, cmLim = 31, shift1 = 6, shift2 = 11;
+        int color, r, g, b, cw, cm, t;
+        for (int i = 1; i < COUNT; i++) {
+            color = palette[i];
+            if((color & 0x80) == 0)
+            {
+                lumas[i] = -0x70000000; // very very negative, blocks transparent colors from mixing into opaque ones
+                continue;
+            }
+            r = (color >>> 24);
+            g = (color >>> 16 & 0xFF);
+            b = (color >>> 8 & 0xFF);
+            cw = r - b;
+            cm = g - b;
+            paletteMapping[
+                    reverse[i] =
+                            (lumas[i] = luma(r, g, b) >>> 11)
+                                    | (cws[i] = cw + 255 >>> 4) << shift1
+                                    | (cms[i] = cm + 255 >>> 4) << shift2] = (byte) i;
+        }
+
+        for (int icw = 0; icw <= cmLim; icw++) {
+            for (int icm = 0; icm <= cwLim; icm++) {
+                for (int iy = 0; iy <= yLim; iy++) {
+                    final int c2 = iy | icw << shift1 | icm << shift2;
+                    if (paletteMapping[c2] == 0) {
+                        int dist = 0x7FFFFFFF;
+                        for (int i = 1; i < COUNT; i++) {
+                            if (dist > (dist = Math.min(dist, difference(lumas[i], cws[i], cms[i], iy, icw, icm))))
+                                paletteMapping[c2] = (byte) i;
+                        }
+                    }
+                }
+            }
+        }
+
+        float adj, cwf, cmf;
+        int idx2;
+        for (int i = 1; i < COUNT; i++) {
+            int rev = reverse[i], y = rev & yLim, match = i,
+                    yBright = y * 13 >> 1, yDim = y * 3, yDark = y << 1;
+            float luma, warm, mild;
+
+            cwf = ((cw = cws[i]) - 15.5f) * 0x1.08421p-4f;
+            cmf = ((cm = cms[i]) - 15.5f) * 0x1.08421p-4f;
+
+            //values[i][0] = values[i][1] = values[i][3] = 
+            values[i][2] = palette[i];
+
+            warm = cwf - 0.175f;
+            mild = cmf;
+            luma = yDim * 0x1p-8f;
+            g = (int)((luma + mild * 0.5f - warm * 0.375f) * 255);
+            b = (int)((luma - warm * 0.375f - mild * 0.5f) * 255);
+            r = (int)((luma + warm * 0.625f - mild * 0.5f) * 255);
+            values[i][1] =
+                    MathUtils.clamp(r, 0, 255) << 24 |
+                            MathUtils.clamp(g, 0, 255) << 16 |
+                            MathUtils.clamp(b, 0, 255) << 8 | 0xFF;
+            warm = cwf + 0.375f;
+            mild = cmf;
+            luma = yBright * 0x1p-8f;
+            g = (int)((luma + mild * 0.5f - warm * 0.375f) * 255);
+            b = (int)((luma - warm * 0.375f - mild * 0.5f) * 255);
+            r = (int)((luma + warm * 0.625f - mild * 0.5f) * 255);
+            values[i][3] =
+                    MathUtils.clamp(r, 0, 255) << 24 |
+                            MathUtils.clamp(g, 0, 255) << 16 |
+                            MathUtils.clamp(b, 0, 255) << 8 | 0xFF;
+            warm = cwf - 0.375f;
+            mild = cmf;
+            luma = yDark * 0x1p-8f;
+            g = (int)((luma + mild * 0.5f - warm * 0.375f) * 255);
+            b = (int)((luma - warm * 0.375f - mild * 0.5f) * 255);
+            r = (int)((luma + warm * 0.625f - mild * 0.5f) * 255);
+            values[i][0] =
+                    MathUtils.clamp(r, 0, 255) << 24 |
+                            MathUtils.clamp(g, 0, 255) << 16 |
+                            MathUtils.clamp(b, 0, 255) << 8 | 0xFF;
+
+            ramps[i][2] = (byte)i;
+            ramps[i][3] = grays[4];//15;  //0xFFFFFFFF, white
+            ramps[i][1] = grays[0];//0x010101FF, black
+            ramps[i][0] = grays[0];//0x010101FF, black
+            for (int yy = y + 2, rr = rev + 2; yy <= yLim; yy++, rr++) {
+                if ((idx2 = paletteMapping[rr] & 255) != i && difference(lumas[idx2], cws[idx2], cms[idx2], y, cw, cm) > THRESHOLD) {
+                    ramps[i][3] = paletteMapping[rr];
+                    break;
+                }
+                adj = 1f + ((yLim + 1 >>> 1) - yy) * 0x1p-10f;
+                cwf = MathUtils.clamp(cwf * adj + 0x1.8p-8f, -1f, 1f);
+                cmf = MathUtils.clamp(cmf * adj, -1f, 1f);
+
+                rr = yy
+                        | (cw = (int) ((cwf * 0.5f + 0.5f) * cwLim)) << shift1
+                        | (cm = (int) ((cmf * 0.5f + 0.5f) * cmLim)) << shift2;
+            }
+            cwf = (cw - 15.5f) * 0x1.08421p-4f;
+            cmf = (cm - 15.5f) * 0x1.08421p-4f;
+            for (int yy = y - 2, rr = rev - 2; yy > 0; rr--) {
+                if ((idx2 = paletteMapping[rr] & 255) != i && difference(lumas[idx2], cws[idx2], cms[idx2], y, cw, cm) > THRESHOLD) {
+                    ramps[i][1] = paletteMapping[rr];
+                    rev = rr;
+                    y = yy;
+                    match = paletteMapping[rr] & 255;
+                    break;
+                }
+                adj = 1f + (yy - (yLim + 1 >>> 1)) * 0x1p-10f;
+                cwf = MathUtils.clamp(cwf * adj - 0x1.8p-8f, -1f, 1f);
+                cmf = MathUtils.clamp(cmf * adj, -1f, 1f);
+
+                rr = yy
+                        | (cw = (int) ((cwf * 0.5f + 0.5f) * cwLim)) << shift1
+                        | (cm = (int) ((cmf * 0.5f + 0.5f) * cmLim)) << shift2;
+
+                if (--yy == 0) {
+                    match = -1;
+                }
+            }
+            if (match >= 0) {
+                cwf = ((cw = cws[match]) - 15.5f) * 0x1.08421p-4f;
+                cmf = ((cm = cms[match]) - 15.5f) * 0x1.08421p-4f;
+                for (int yy = y - 3, rr = rev - 3; yy > 0; yy--, rr--) {
+                    if ((idx2 = paletteMapping[rr] & 255) != match && difference(lumas[idx2], cws[idx2], cms[idx2], y, cw, cm) > THRESHOLD) {
+                        ramps[i][0] = paletteMapping[rr];
+                        break;
+                    }
+                    adj = 1f + (yy - (yLim + 1 >>> 1)) * 0x1p-10f;
+                    cwf = MathUtils.clamp(cwf * adj - 0x1.8p-8f, -1f, 1f);
+                    cmf = MathUtils.clamp(cmf * adj, -1f, 1f);
+
+                    rr = yy
+                            | (cw = (int) ((cwf * 0.5f + 0.5f) * cwLim)) << shift1
+                            | (cm = (int) ((cmf * 0.5f + 0.5f) * cmLim)) << shift2;
                 }
             }
         }

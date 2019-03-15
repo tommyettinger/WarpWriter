@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.FakeLanguageGen;
+import warpwriter.Coloring;
 import warpwriter.ModelMaker;
 import warpwriter.Tools3D;
 import warpwriter.VoxIO;
@@ -75,7 +76,8 @@ public class WarpTest extends ApplicationAdapter {
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.CW_PALETTE);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.FLESURRECT);
-        colorizer = Colorizer.FlesurrectColorizer;
+        colorizer = Colorizer.arbitraryWarmingColorizer(Coloring.FLESURRECT);
+//        colorizer = Colorizer.FlesurrectColorizer;
         voxelColor = new VoxelColor().set(colorizer);
         batchRenderer = new VoxelSpriteBatchRenderer(batch).setOffset(16, 100);
         pixmapRenderer = new VoxelPixmapRenderer(new Pixmap(512, 512, Pixmap.Format.RGBA8888), voxelColor);
@@ -271,10 +273,10 @@ public class WarpTest extends ApplicationAdapter {
                         animating = true;
                         break;
                     case Input.Keys.G:
-                        batchRenderer.color().set(batchRenderer.color().direction().counter());
+                        pixmapRenderer.color().set(pixmapRenderer.color().direction().counter());
                         break;
                     case Input.Keys.H:
-                        batchRenderer.color().set(batchRenderer.color().direction().clock());
+                        pixmapRenderer.color().set(pixmapRenderer.color().direction().clock());
                         break;
                     case Input.Keys.E: // easing
                         pixmapRenderer.easing = !pixmapRenderer.easing;
