@@ -5,6 +5,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3WindowAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -63,17 +64,21 @@ public class TestDisplay extends ApplicationAdapter {
     private Pixmap[] pixes = new Pixmap[frames];
     private int[][] indices;
     private int[] palette = Coloring.RINSED;
+    private BitmapFont font;
 
     @Override
     public void create() {
 //        PaletteReducer arb = Colorizer.arbitraryColorizer(Coloring.RINSED).getReducer();
 //        System.out.println(Arrays.equals(Colorizer.RinsedColorizer.getReducer().paletteMapping, arb.paletteMapping));
 //        System.out.println(Arrays.equals(Colorizer.RinsedColorizer.getReducer().paletteMapping, new PaletteReducer(Coloring.RINSED).paletteMapping));
+        font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
+        font.setColor(Color.BLACK);
         mm = new ModelMaker(seed, Colorizer.RinsedColorizer);//arbitraryColorizer(Coloring.RINSED)
-        reducer = new PaletteReducer(
-                Coloring.FLESURRECT
-                //new int[]{0, 255, -1}
-        ); 
+        reducer = Coloring.FLESURRECT_REDUCER; 
+//                new PaletteReducer(
+//                        Coloring.FLESURRECT
+//                //new int[]{0, 255, -1}
+//        ); 
                 //Coloring.FLESURRECT_REDUCER; //Colorizer.FlesurrectBonusPalette
         //PaletteReducer.generatePreloadCode(reducer.paletteMapping);
         reducer.setDitherStrength(0.333f);
@@ -101,9 +106,9 @@ public class TestDisplay extends ApplicationAdapter {
                     case Input.Keys.P:
                         playing = !playing;
                         return true;
-                    case Input.Keys.R:
-                        rotating = !rotating;
-                        return true;
+//                    case Input.Keys.R:
+//                        rotating = !rotating;
+//                        return true;
                     case Input.Keys.L:
                         large = !large;
                         return true;
@@ -111,7 +116,7 @@ public class TestDisplay extends ApplicationAdapter {
                         mr.hardOutline = !mr.hardOutline;
                         remakeShip(0);
                         return true;
-                    case Input.Keys.D: // dither, toggles between Hu or Burkes dithering
+                    case Input.Keys.D: // dither, toggles dither on or off
                         dither = !dither;
                         remakeShip(0);
                         return true;
@@ -119,7 +124,7 @@ public class TestDisplay extends ApplicationAdapter {
                         mr.easing = !mr.easing;
                         remakeShip(0);
                         return true;
-                    case Input.Keys.T:
+                    case Input.Keys.R: // randomized dither
                         errorDiffusion = !errorDiffusion;
                         remakeShip(0);
                         return true;
@@ -413,13 +418,9 @@ public class TestDisplay extends ApplicationAdapter {
     }
 
     private VoxelText voxelText = new VoxelText();
-    private BitmapFont font;
 
     public void remakeText(long newModel) {
         mm.rng.setState(determine(newModel));
-        if (font == null) {
-            font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
-        }
 
         Fetch checkers = Stripes.checkers(
                 ColorFetch.color(mm.randomMainColor()),
@@ -741,8 +742,9 @@ public class TestDisplay extends ApplicationAdapter {
         batch.draw(tex, width >> 1, 250 - (width >> 1), width, height);
         batch.draw(tex, width * 5 >> 1, 250 - (width), width << 1, height << 1);
         batch.draw(tex, width * 10 >> 1, 250 - (width << 1), width << 2, height << 2);
-        batch.draw(tex, width * 19 >> 1, 250 - (width << 2), width << 3, height << 3);
-
+        //batch.draw(tex, width * 19 >> 1, 250 - (width << 2), width << 3, height << 3);
+        
+        font.draw(batch, "Dither " + (dither ? (errorDiffusion ? "Diffusing" : "Ordered") : "Off"), 16, 24);
 //        batch.draw(tex, 64 - 8, 240 - 8, 16, 16);
 //        batch.draw(tex, 192 - 16, 240 - 16, 32, 32);
 //        batch.draw(tex, 320 - 32, 240 - 32, 64, 64);
