@@ -80,8 +80,8 @@ public class TestDisplay extends ApplicationAdapter {
 //                //new int[]{0, 255, -1}
 //        ); 
                 //Coloring.FLESURRECT_REDUCER; //Colorizer.FlesurrectBonusPalette
-        //PaletteReducer.generatePreloadCode(reducer.paletteMapping);
-        reducer.setDitherStrength(0.333f);
+        PaletteReducer.generatePreloadCode(reducer.paletteMapping);
+        reducer.setDitherStrength(0.25f);
         batch = new SpriteBatch();
 //        pix = new Pixmap(16, 16, Pixmap.Format.RGBA8888);
 //        tex = new Texture(16, 16, Pixmap.Format.RGBA8888);
