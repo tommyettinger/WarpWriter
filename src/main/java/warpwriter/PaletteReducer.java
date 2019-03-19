@@ -399,9 +399,6 @@ public class PaletteReducer {
      * @return the difference between the given colors, as a positive int
      */
     public static int difference(final int color1, int r2, int g2, int b2) {
-//        r2 = (r2 << 3 | r2 >>> 2);
-//        g2 = (g2 << 3 | g2 >>> 2);
-//        b2 = (b2 << 3 | b2 >>> 2);
         if((color1 & 0x80) == 0) return 0x70000000; // if a transparent color is being compared, it is always different
         final int 
                 r1 = (color1 >>> 24),
@@ -1283,7 +1280,7 @@ public class PaletteReducer {
         pixmap.setBlending(Pixmap.Blending.None);
         int color, used;
         int pos;
-        float adj, str = ditherStrength * 0x1p-24f; // * (256f / paletteArray.length)
+        float adj, str = -0x3.Fp-20f * ditherStrength;
         for (int y = 0; y < h; y++) {
             for (int px = 0; px < lineLen; px++) {
                 color = pixmap.getPixel(px, y) & 0xF8F8F880;
@@ -1315,7 +1312,7 @@ public class PaletteReducer {
 //                    str * ((pg ^ pg >>> 1 ^ pg >>> 3 ^ pg >>> 4) >> 40)
 //                    str * ((pb ^ pb >>> 1 ^ pb >>> 3 ^ pb >>> 4) >> 40)
                     //(px + y) * 1.6180339887498949f
-                    adj = ((pos >> 8) * -0x3.Bp-24f) * ditherStrength;
+                    adj = (pos >> 12) * str;
                     //adj = adj * ditherStrength; //(adj * adj * adj + 0x5p-6f)
                     // + NumberTools.sway(y * 0.7548776662466927f + px * 0.5698402909980532f) * 0.0625f;
                     rr = MathUtils.clamp((int) (rr + (adj * (((used >>> 24) - rr)))), 0, 0xFF); //  * 17 >> 4

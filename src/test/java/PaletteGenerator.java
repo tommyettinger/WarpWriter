@@ -3,8 +3,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.PixmapIO;
 import warpwriter.Coloring;
+import warpwriter.PNG8;
+import warpwriter.PaletteReducer;
+
+import java.io.IOException;
 
 /**
  * Created by Tommy Ettinger on 1/21/2018.
@@ -845,8 +848,31 @@ public class PaletteGenerator extends ApplicationAdapter {
             pix.drawPixel(i, 0, Coloring.FLESURRECT[i+1]);
         }
         pix.drawPixel(255, 0, 0);
-        PixmapIO.writePNG(Gdx.files.local("Flesurrect.png"), pix);
+        PNG8 png8 = new PNG8();
+        png8.palette = new PaletteReducer(Coloring.FLESURRECT);
+        try {
+            png8.writePrecisely(Gdx.files.local("Flesurrect.png"), pix, false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+        Pixmap p2 = new Pixmap(1024, 32, Pixmap.Format.RGBA8888);
+        for (int r = 0; r < 32; r++) {
+            for (int b = 0; b < 32; b++) {
+                for (int g = 0; g < 32; g++) {
+                    p2.drawPixel(r << 5 | b, g, Coloring.FLESURRECT[png8.palette.paletteMapping[
+                            ((r << 10) & 0x7C00)
+                            | ((g << 5) & 0x3E0)
+                            | b] & 0xFF]);
+                }
+            }
+        }
+        try {
+            png8.writePrecisely(Gdx.files.local("Flesurrect_GLSL.png"), p2, false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
 //        Pixmap pm = new Pixmap(Gdx.files.internal("BlueNoiseBW64.png"));
 //        final byte[] data = new byte[64 * 64];
 //        int n = 0;
