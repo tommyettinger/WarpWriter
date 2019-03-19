@@ -4,10 +4,11 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -30,36 +31,74 @@ import warpwriter.model.nonvoxel.HashMap3D;
 import warpwriter.view.WarpDraw;
 import warpwriter.view.color.VoxelColor;
 import warpwriter.view.render.VoxelPixmapRenderer;
-import warpwriter.view.render.VoxelSpriteBatchRenderer;
 
 public class WarpTest extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 320;//640;
     public static final int SCREEN_HEIGHT = 360;//720;
     public static final int VIRTUAL_WIDTH = 320;
     public static final int VIRTUAL_HEIGHT = 360;
+
+    /**
+     * This is the default vertex shader from libGDX.
+     */
+    public static final String vertexShader = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" //
+            + "attribute vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" //
+            + "attribute vec2 " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" //
+            + "uniform mat4 u_projTrans;\n" //
+            + "varying vec4 v_color;\n" //
+            + "varying vec2 v_texCoords;\n" //
+            + "\n" //
+            + "void main()\n" //
+            + "{\n" //
+            + "   v_color = " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" //
+            + "   v_color.a = v_color.a * (255.0/254.0);\n" //
+            + "   v_texCoords = " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" //
+            + "   gl_Position =  u_projTrans * " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" //
+            + "}\n";
+
+    /**
+     * This fragment shader substitutes colors with ones from a palette, dithering as needed.
+     */
+    public static final String fragmentShader = "#version 150\n" +
+            "varying vec2 v_texCoords;\n" +
+            "varying vec4 v_color;\n" +
+            "uniform sampler2D u_texture;\n" +
+            "uniform sampler2D u_palette;\n" +
+            "void main()\n" +
+            "{\n" +
+            "   vec4 tgt = texture2D( u_texture, v_texCoords );\n" +
+//            "   vec4 used = texture2D(u_palette, vec2((tgt.b + floor(tgt.r * 31.99999)) * 0.03125, tgt.g));\n" +
+//            "   float adj = sin(gl_FragCoord.x * 4.743036261279236 - gl_FragCoord.y * 3.580412143837574) * 1.875;\n" +
+//            "   tgt.rgb = clamp(tgt.rgb + (tgt.rgb - used.rgb) * adj, 0.0, 1.0);\n" +
+            "   gl_FragColor = texture2D(u_palette, vec2((tgt.b + floor(tgt.r * 31.99999)) * 0.03125, tgt.g));\n" + //(tgt.b + floor(tgt.r * 32.0)) * 0.03125, tgt.g
+            "   gl_FragColor.a = tgt.a;\n" +
+            "}";
+
+
     protected SpriteBatch batch;
     protected Viewport worldView;
     protected Viewport screenView;
-    protected BitmapFont font;
+//    protected BitmapFont font;
     protected FrameBuffer buffer;
     protected Texture screenTexture, pmTexture;
     protected TextureRegion screenRegion;
     protected TurnModel model, ship;
     protected ModelMaker maker;
-    private VoxelSpriteBatchRenderer batchRenderer;
     private VoxelPixmapRenderer pixmapRenderer;
     protected VoxelColor voxelColor;
     protected int angle = 3;
     protected boolean diagonal = true;
     protected boolean animating = false;
     protected AnimatedArrayModel boom;
-    private byte[][][] voxels, container;
+    private byte[][][] voxels;
     private Colorizer colorizer;
+    private ShaderProgram shader, defaultShader;
+    private Texture palette;
 //    private ChaoticFetch chaos;
 
     @Override
     public void create() {
-        font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
+//        font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
         batch = new SpriteBatch();
         worldView = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         screenView = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
@@ -76,10 +115,9 @@ public class WarpTest extends ApplicationAdapter {
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.CW_PALETTE);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.FLESURRECT);
-        colorizer = Colorizer.arbitraryWarmingColorizer(Coloring.FLESURRECT);
+        colorizer = Colorizer.arbitraryWarmingColorizer(Coloring.AURORA);
 //        colorizer = Colorizer.FlesurrectColorizer;
         voxelColor = new VoxelColor().set(colorizer);
-        batchRenderer = new VoxelSpriteBatchRenderer(batch).setOffset(16, 100);
         pixmapRenderer = new VoxelPixmapRenderer(new Pixmap(512, 512, Pixmap.Format.RGBA8888), voxelColor);
         pmTexture = new Texture(pixmapRenderer.pixmap);
         maker = new ModelMaker(12345, colorizer);
@@ -100,6 +138,11 @@ public class WarpTest extends ApplicationAdapter {
         model = new TurnModel().set(ship);
         model.setDuration(16);
         Gdx.input.setInputProcessor(inputProcessor());
+        
+        palette = new Texture(Gdx.files.local("palettes/Unseven_GLSL.png"), Pixmap.Format.RGBA8888, false);
+        defaultShader = SpriteBatch.createDefaultShader();
+        shader = new ShaderProgram(vertexShader, fragmentShader);
+        if (!shader.isCompiled()) throw new GdxRuntimeException("Couldn't compile shader: " + shader.getLog());
     }
     
     public IModel model()
@@ -159,7 +202,11 @@ public class WarpTest extends ApplicationAdapter {
         worldView.getCamera().position.set(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2, 0);
         worldView.update(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         batch.setProjectionMatrix(worldView.getCamera().combined);
+        batch.setShader(shader);
+        batch.setColor(-0x1.fffffep126f);
         batch.begin();
+        palette.bind(0);
+        shader.setUniformi("u_palette", 0);
         if(diagonal) {
             if(angle != 2){
                 pmTexture.draw(WarpDraw.drawIso(model, pixmapRenderer), 0, 0);
@@ -178,28 +225,33 @@ public class WarpTest extends ApplicationAdapter {
             pmTexture.draw(WarpDraw.draw(model, pixmapRenderer), 0, 0);
             //WarpDraw.simpleDraw(model, batchRenderer, voxelColor, outline);
         }
-        batch.draw(pmTexture, 64, 64);
         //batch.setColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
+        batch.draw(pmTexture, 64, 64);
         batch.end();
         buffer.end();
         Gdx.gl.glClearColor(0, 0, 0, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         screenView.apply();
         batch.setProjectionMatrix(screenView.getCamera().combined);
+//        batch.setColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
+//        batch.setColor(Color.RED);
+        batch.setShader(defaultShader);
         batch.begin();
         screenTexture = buffer.getColorBufferTexture();
         screenTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        screenTexture.bind();
         screenRegion.setRegion(screenTexture);
         screenRegion.flip(false, true);
         batch.draw(screenRegion, 0, 0);
         //// for GB_GREEN
         //font.setColor(0x34 / 255f, 0x68 / 255f, 0x56 / 255f, 1f);
-        font.setColor(0f, 0f, 0f, 1f);
+        batch.setColor(-0x1.fffffep126f);
+//        font.setColor(0f, 0f, 0f, 1f);
         //font.draw(batch, model.voxels.length + ", " + model.voxels[0].length + ", " + model.voxels[0][0].length + ", " + " (original)", 0, 80);
         
 //        font.draw(batch, model.sizeX() + ", " + model.sizeY() + ", " + model.sizeZ() + " (sizes)", 0, 60);
 //        font.draw(batch, StringKit.join(", ", model.turner().rotation()) + " (rotation)", 0, 40);
-        font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 20);
+//        font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 20);
         batch.end();
     }
 

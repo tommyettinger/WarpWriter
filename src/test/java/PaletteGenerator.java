@@ -843,24 +843,25 @@ public class PaletteGenerator extends ApplicationAdapter {
 //            pix.setColor(PALETTE[i]);
 //            pix.fillRectangle((i & 15) << 3, (i & -16) >>> 1, 8, 8);
 //        }
+        PALETTE = Coloring.UNSEVEN;
         Pixmap pix = new Pixmap(256, 1, Pixmap.Format.RGBA8888);
-        for (int i = 0; i < 63; i++) {
-            pix.drawPixel(i, 0, Coloring.FLESURRECT[i+1]);
+        for (int i = 0; i < PALETTE.length - 1; i++) {
+            pix.drawPixel(i, 0, PALETTE[i+1]);
         }
-        pix.drawPixel(255, 0, 0);
+        //pix.drawPixel(255, 0, 0);
         PNG8 png8 = new PNG8();
-        png8.palette = new PaletteReducer(Coloring.FLESURRECT);
-        try {
-            png8.writePrecisely(Gdx.files.local("Flesurrect.png"), pix, false);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        png8.palette = new PaletteReducer(PALETTE);
+//        try {
+//            png8.writePrecisely(Gdx.files.local("Unseven.png"), pix, false);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         Pixmap p2 = new Pixmap(1024, 32, Pixmap.Format.RGBA8888);
         for (int r = 0; r < 32; r++) {
             for (int b = 0; b < 32; b++) {
                 for (int g = 0; g < 32; g++) {
-                    p2.drawPixel(r << 5 | b, g, Coloring.FLESURRECT[png8.palette.paletteMapping[
+                    p2.drawPixel(r << 5 | b, g, PALETTE[png8.palette.paletteMapping[
                             ((r << 10) & 0x7C00)
                             | ((g << 5) & 0x3E0)
                             | b] & 0xFF]);
@@ -868,7 +869,7 @@ public class PaletteGenerator extends ApplicationAdapter {
             }
         }
         try {
-            png8.writePrecisely(Gdx.files.local("Flesurrect_GLSL.png"), p2, false);
+            png8.writePrecisely(Gdx.files.local("Unseven_GLSL.png"), p2, false);
         } catch (IOException e) {
             e.printStackTrace();
         }

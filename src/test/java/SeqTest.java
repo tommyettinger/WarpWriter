@@ -70,7 +70,7 @@ public class SeqTest extends ApplicationAdapter {
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.CW_PALETTE);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.FLESURRECT);
-        colorizer = Colorizer.arbitraryWarmingColorizer(Coloring.FLESURRECT);
+        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.AURORA);
         voxelColor = new VoxelColor().set(colorizer);
         pixmapRenderer = new VoxelPixmapRenderer(new Pixmap(512, 512, Pixmap.Format.RGBA8888), voxelColor);
         pmTexture = new Texture(pixmapRenderer.pixmap);
@@ -109,7 +109,7 @@ public class SeqTest extends ApplicationAdapter {
 //        boom.setFrame((int)(TimeUtils.millis() >>> 7) & 15);
         if(seq != null)
             ((ITemporal) seq).setFrame((int)(TimeUtils.millis() * 3 >>> 8));
-//        buffer.begin();
+        buffer.begin();
         
         Gdx.gl.glClearColor(0.4f, 0.75f, 0.3f, 1f);
         // for GB_GREEN palette
@@ -152,18 +152,18 @@ public class SeqTest extends ApplicationAdapter {
 //        }
         batch.draw(pmTexture, 64, 64);
         //batch.setColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
-//        batch.end();
-//        buffer.end();
-//        Gdx.gl.glClearColor(0, 0, 0, 1f);
-//        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-//        screenView.apply();
-//        batch.setProjectionMatrix(screenView.getCamera().combined);
-//        batch.begin();
-//        screenTexture = buffer.getColorBufferTexture();
-//        screenTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
-//        screenRegion.setRegion(screenTexture);
-//        screenRegion.flip(false, true);
-//        batch.draw(screenRegion, 0, 0);
+        batch.end();
+        buffer.end();
+        Gdx.gl.glClearColor(0, 0, 0, 1f);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        screenView.apply();
+        batch.setProjectionMatrix(screenView.getCamera().combined);
+        batch.begin();
+        screenTexture = buffer.getColorBufferTexture();
+        screenTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        screenRegion.setRegion(screenTexture);
+        screenRegion.flip(false, true);
+        batch.draw(screenRegion, 0, 0);
         //// for GB_GREEN
         //font.setColor(0x34 / 255f, 0x68 / 255f, 0x56 / 255f, 1f);
         font.setColor(0f, 0f, 0f, 1f);
