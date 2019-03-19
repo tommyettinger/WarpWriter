@@ -67,10 +67,11 @@ public class WarpTest extends ApplicationAdapter {
             "void main()\n" +
             "{\n" +
             "   vec4 tgt = texture2D( u_texture, v_texCoords );\n" +
-//            "   vec4 used = texture2D(u_palette, vec2((tgt.b + floor(tgt.r * 31.99999)) * 0.03125, tgt.g));\n" +
-//            "   float adj = sin(gl_FragCoord.x * 4.743036261279236 - gl_FragCoord.y * 3.580412143837574) * 1.875;\n" +
-//            "   tgt.rgb = clamp(tgt.rgb + (tgt.rgb - used.rgb) * adj, 0.0, 1.0);\n" +
-            "   gl_FragColor = texture2D(u_palette, vec2((tgt.b + floor(tgt.r * 31.99999)) * 0.03125, tgt.g));\n" + //(tgt.b + floor(tgt.r * 32.0)) * 0.03125, tgt.g
+            "   vec4 used = texture2D(u_palette, vec2((tgt.b + floor(tgt.r * 31.99999)) * 0.03125, 1.0 - tgt.g));\n" +
+            "   float adj = sin(gl_FragCoord.x * 4.743036261279236 + gl_FragCoord.y * 3.580412143837574) * 0.5 + 0.5;\n" +
+//            "   float adj = sin(gl_FragCoord.x * 4.743036261279236 - gl_FragCoord.y * 3.580412143837574) * 0.25 + 0.125;\n" +
+            "   tgt.rgb = clamp(tgt.rgb + (used.rgb - tgt.rgb) * adj, 0.0, 1.0);\n" +
+            "   gl_FragColor = texture2D(u_palette, vec2((tgt.b + floor(tgt.r * 31.99999)) * 0.03125, 1.0 - tgt.g));\n" + //(tgt.b + floor(tgt.r * 32.0)) * 0.03125, tgt.g
             "   gl_FragColor.a = tgt.a;\n" +
             "}";
 
@@ -115,7 +116,7 @@ public class WarpTest extends ApplicationAdapter {
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.CW_PALETTE);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.FLESURRECT);
-        colorizer = Colorizer.arbitraryWarmingColorizer(Coloring.AURORA);
+        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.AURORA); // 1020 possible colors, will be reduced to 63
 //        colorizer = Colorizer.FlesurrectColorizer;
         voxelColor = new VoxelColor().set(colorizer);
         pixmapRenderer = new VoxelPixmapRenderer(new Pixmap(512, 512, Pixmap.Format.RGBA8888), voxelColor);
@@ -138,8 +139,12 @@ public class WarpTest extends ApplicationAdapter {
         model = new TurnModel().set(ship);
         model.setDuration(16);
         Gdx.input.setInputProcessor(inputProcessor());
+
+        ////choose palette here
+        palette = new Texture(Gdx.files.local("palettes/Flesurrect_GLSL.png"), Pixmap.Format.RGBA8888, false);
+//        palette = new Texture(Gdx.files.local("palettes/DB8_GLSL.png"), Pixmap.Format.RGBA8888, false);
+//        palette = new Texture(Gdx.files.local("palettes/Unseven_GLSL.png"), Pixmap.Format.RGBA8888, false);
         
-        palette = new Texture(Gdx.files.local("palettes/Unseven_GLSL.png"), Pixmap.Format.RGBA8888, false);
         defaultShader = SpriteBatch.createDefaultShader();
         shader = new ShaderProgram(vertexShader, fragmentShader);
         if (!shader.isCompiled()) throw new GdxRuntimeException("Couldn't compile shader: " + shader.getLog());
@@ -204,9 +209,11 @@ public class WarpTest extends ApplicationAdapter {
         batch.setProjectionMatrix(worldView.getCamera().combined);
         batch.setShader(shader);
         batch.setColor(-0x1.fffffep126f);
+        Gdx.gl.glActiveTexture(GL20.GL_TEXTURE1);
+        palette.bind();
         batch.begin();
-        palette.bind(0);
-        shader.setUniformi("u_palette", 0);
+        shader.setUniformi("u_palette", 1);
+        Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
         if(diagonal) {
             if(angle != 2){
                 pmTexture.draw(WarpDraw.drawIso(model, pixmapRenderer), 0, 0);

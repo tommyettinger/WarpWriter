@@ -843,7 +843,7 @@ public class PaletteGenerator extends ApplicationAdapter {
 //            pix.setColor(PALETTE[i]);
 //            pix.fillRectangle((i & 15) << 3, (i & -16) >>> 1, 8, 8);
 //        }
-        PALETTE = Coloring.UNSEVEN;
+        PALETTE = Coloring.DB8;
         Pixmap pix = new Pixmap(256, 1, Pixmap.Format.RGBA8888);
         for (int i = 0; i < PALETTE.length - 1; i++) {
             pix.drawPixel(i, 0, PALETTE[i+1]);
@@ -851,11 +851,11 @@ public class PaletteGenerator extends ApplicationAdapter {
         //pix.drawPixel(255, 0, 0);
         PNG8 png8 = new PNG8();
         png8.palette = new PaletteReducer(PALETTE);
-//        try {
-//            png8.writePrecisely(Gdx.files.local("Unseven.png"), pix, false);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            png8.writePrecisely(Gdx.files.local("DB8.png"), pix, false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         Pixmap p2 = new Pixmap(1024, 32, Pixmap.Format.RGBA8888);
         for (int r = 0; r < 32; r++) {
@@ -869,7 +869,7 @@ public class PaletteGenerator extends ApplicationAdapter {
             }
         }
         try {
-            png8.writePrecisely(Gdx.files.local("Unseven_GLSL.png"), p2, false);
+            png8.writePrecisely(Gdx.files.local("DB8_GLSL.png"), p2, false);
         } catch (IOException e) {
             e.printStackTrace();
         }
