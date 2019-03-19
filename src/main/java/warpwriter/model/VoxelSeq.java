@@ -2391,15 +2391,15 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
     }
     public byte getRotated(final int key, final int rotation)
     {
-        return get(rotate(key, 16-rotation));
+        return get(rotate(key, ((-rotation) & 3) | rotation & -4));
     }
     public byte getRotated(final int x, final int y, final int z)
     {
-        return get(rotate(fuse(x, y, z), 16-rotation));
+        return get(rotate(fuse(x, y, z), ((-rotation) & 3) | rotation & -4));
     }
     public byte getRotated(final int x, final int y, final int z, final int rotation)
     {
-        return get(rotate(fuse(x, y, z), 16 - rotation));
+        return get(rotate(fuse(x, y, z), ((-rotation) & 3) | rotation & -4));
     }
     
     public int rotate(final int k, final int rotation)
@@ -2407,7 +2407,6 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
         switch (rotation)
         {
             // 0-3 have z pointing towards z+ and the voxels rotating on that axis
-            case 16:
             case 0: return k;
             case 1: return (k & 0xFFF00000) | sizeX - (k & 0x3FF) << 10 | (k >>> 10 & 0x3FF);
             case 2: return (k & 0xFFF00000) | (sizeY << 10) - (k & 0xFFC00) | sizeX - (k & 0x3FF);
@@ -2427,7 +2426,9 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
             case 13: return (sizeZ << 10) - (k >>> 10 & 0x000FFC00) | sizeX - (k & 0x3FF) << 20 | (k >>> 10 & 0x3FF);
             case 14: return (sizeZ << 10) - (k >>> 10 & 0x000FFC00) | (sizeY << 20) - (k << 10 & 0x3FF00000) | sizeX - (k & 0x3FF);
             case 15: return (sizeZ << 10) - (k >>> 10 & 0x000FFC00) | (k & 0x3FF) << 20 | sizeY - (k >>> 10 & 0x3FF);
-            default: return (k & 0xFFF00000) | (k & 0x3FF) << 10 | (sizeY - (k >>> 10 & 0x3FF));
+            default:
+//                System.out.println("this shouldn't be happening! " + k);
+                return (k & 0xFFF00000) | (k & 0x3FF) << 10 | (sizeY - (k >>> 10 & 0x3FF));
         }
 
     }

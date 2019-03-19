@@ -169,21 +169,21 @@ public interface IntComparator {
                 @Override
                 public int compare(int left, int right) {
                     // values y equally to z, and x is irrelevant
-                    return (left >>> 10 & 0x3FF) - (right >>> 10 & 0x3FF) + (left >>> 10 & 0xFFC00) - (right >>> 10 & 0xFFC00);
+                    return (left & 0xFFC00) - (right & 0xFFC00) + (left >>> 10 & 0xFFC00) - (right >>> 10 & 0xFFC00);
                 }
             },
             new IntComparator() {
                 @Override
                 public int compare(int left, int right) {
                     // values x equally to z, and y is irrelevant; reversed for x
-                    return (right & 0x3FF) - (left & 0x3FF) + (left >>> 10 & 0xFFC00) - (right >>> 10 & 0xFFC00);
+                    return (right & 0x3FF) - (left & 0x3FF) + (left >>> 20 & 0x3FF) - (right >>> 20 & 0x3FF);
                 }
             },
             new IntComparator() {
                 @Override
                 public int compare(int left, int right) {
                     // values y equally to z, and x is irrelevant; reversed for y
-                    return (right >>> 10 & 0x3FF) - (left >>> 10 & 0x3FF) + (left >>> 10 & 0xFFC00) - (right >>> 10 & 0xFFC00);
+                    return (right & 0xFFC00) - (left & 0xFFC00) + (left >>> 10 & 0xFFC00) - (right >>> 10 & 0xFFC00);
                 }
             }
     };
