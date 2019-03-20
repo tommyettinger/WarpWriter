@@ -68,11 +68,10 @@ public class WarpTest extends ApplicationAdapter {
             "{\n" +
             "   vec4 tgt = texture2D( u_texture, v_texCoords );\n" +
             "   vec4 used = texture2D(u_palette, vec2((tgt.b + floor(tgt.r * 31.99999)) * 0.03125, 1.0 - tgt.g));\n" +
-            "   float adj = sin(gl_FragCoord.x * 4.743036261279236 + gl_FragCoord.y * 3.580412143837574) * 0.5 + 0.5;\n" +
-//            "   float adj = sin(gl_FragCoord.x * 4.743036261279236 - gl_FragCoord.y * 3.580412143837574) * 0.25 + 0.125;\n" +
+            "   float adj = sin(gl_FragCoord.x * 4.743036261279236 + gl_FragCoord.y * 3.580412143837574) * 0.75 + 0.5;\n" +
             "   tgt.rgb = clamp(tgt.rgb + (used.rgb - tgt.rgb) * adj, 0.0, 1.0);\n" +
-            "   gl_FragColor = texture2D(u_palette, vec2((tgt.b + floor(tgt.r * 31.99999)) * 0.03125, 1.0 - tgt.g));\n" + //(tgt.b + floor(tgt.r * 32.0)) * 0.03125, tgt.g
-            "   gl_FragColor.a = tgt.a;\n" +
+            "   gl_FragColor = v_color * texture2D(u_palette, vec2((tgt.b + floor(tgt.r * 31.99999)) * 0.03125, 1.0 - tgt.g));\n" + //(tgt.b + floor(tgt.r * 32.0)) * 0.03125, tgt.g
+            "   gl_FragColor.a = v_color.a * tgt.a;\n" +
             "}";
 
 
