@@ -563,69 +563,69 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
     public static final int[] FlesurrectBonusPalette = new int[256];
     private static final int[][] FLESURRECT_BONUS_RAMP_VALUES = new int[][] {
             { 0x00000000, 0x00000000, 0x00000000, 0x00000000 },
-            { 0x120023FF, 0x161025FF, 0x1F1833FF, 0x2E1F3DFF },
-            { 0x100C23FF, 0x1C1F2EFF, 0x2B2E42FF, 0x3D3D4FFF },
-            { 0x1D0C24FF, 0x2A2330FF, 0x3E3546FF, 0x514657FF },
-            { 0x151729FF, 0x2B303DFF, 0x414859FF, 0x5B5F6DFF },
-            { 0x232A32FF, 0x464D54FF, 0x68717AFF, 0x8D949BFF },
-            { 0x2E3E42FF, 0x626E74FF, 0x90A1A8FF, 0xC6D0D8FF },
-            { 0x3B4F50FF, 0x7C8B8FFF, 0xB6CBCFFF, 0xFBFFFFFF },
-            { 0x47575DFF, 0x909DA4FF, 0xD3E5EDFF, 0xFFFFFFFF },
-            { 0x5F5F5FFF, 0xAFAFAFFF, 0xFFFFFFFF, 0xFFFFFFFF },
-            { 0x330A1EFF, 0x40272CFF, 0x5C3A41FF, 0x6D4F59FF },
-            { 0x3E163EFF, 0x594359FF, 0x826481FF, 0x9F8C9FFF },
-            { 0x4C1E2AFF, 0x69494AFF, 0x966C6CFF, 0xB19492FF },
-            { 0x4A3823FF, 0x776653FF, 0xAB947AFF, 0xD2C0AEFF },
-            { 0x901731FF, 0xAE5657FF, 0xF68181FF, 0xFFC7ADFF },
-            { 0xB8001BFF, 0xB22021FF, 0xF53333FF, 0xEF5D5EFF },
-            { 0x4A0007FF, 0x410503FF, 0x5A0A07FF, 0x5E0E20FF },
-            { 0x730214FF, 0x7D2E26FF, 0xAE4539FF, 0xB76660FF },
-            { 0x4F1312FF, 0x623629FF, 0x8A503EFF, 0x9C6E63FF },
-            { 0x7B1806FF, 0x924626FF, 0xCD683DFF, 0xD9916DFF },
-            { 0x843B00FF, 0xB17037FF, 0xFBA458FF, 0xFFD89DFF },
-            { 0x9E1800FF, 0xB4480EFF, 0xFB6B1DFF, 0xFE9858FF },
-            { 0x463315FF, 0x6F5B42FF, 0x9F8562FF, 0xC0AB93FF },
-            { 0x73482AFF, 0xAE886BFF, 0xF9C79FFF, 0xFFFFE6FF },
-            { 0x864A00FF, 0xB57205FF, 0xFFA514FF, 0xFFCB6AFF },
-            { 0x6C5E00FF, 0xA47F02FF, 0xE8B710FF, 0xFFD26EFF },
-            { 0x604F22FF, 0x9E8A65FF, 0xE3C896FF, 0xFFFEE2FF },
-            { 0x6B7900FF, 0xB0A011FF, 0xFBE626FF, 0xFFF8A4FF },
-            { 0x4C6700FF, 0x877E03FF, 0xC0B510FF, 0xEDCA69FF },
-            { 0x617602FF, 0xAEB157FF, 0xFBFF86FF, 0xFFFFFFFF },
-            { 0x357600FF, 0x7D962AFF, 0xB4D645FF, 0xFEE6ABFF },
-            { 0x1A5300FF, 0x4E672DFF, 0x729446FF, 0x9EAD7DFF },
-            { 0x177900FF, 0x629944FF, 0x91DB69FF, 0xE8EACAFF },
-            { 0x006600FF, 0x225E07FF, 0x358510FF, 0x509735FF },
-            { 0x008300FF, 0x358B28FF, 0x51C43FFF, 0x99CC8CFF },
-            { 0x004000FF, 0x083401FF, 0x0E4904FF, 0x135B0CFF },
-            { 0x006600FF, 0x307130FF, 0x4BA14AFF, 0x7FB37FFF },
-            { 0x007D07FF, 0x0E854EFF, 0x1EBC73FF, 0x6DC7ADFF },
-            { 0x008235FF, 0x199D80FF, 0x30E1B9FF, 0xA2EAFFFF },
-            { 0x086D3FFF, 0x539C86FF, 0x7FE0C2FF, 0xE3FDFFFF },
-            { 0x296A63FF, 0x7BAFB1FF, 0xB8FDFFFF, 0xFFFFFFFF },
-            { 0x006C17FF, 0x007053FF, 0x039F78FF, 0x44B09CFF },
-            { 0x005B50FF, 0x40878DFF, 0x63C2C9FF, 0xB8E5FFFF },
-            { 0x003339FF, 0x12485AFF, 0x216981FF, 0x4D8395FF },
-            { 0x046962FF, 0x52A1A9FF, 0x7FE8F2FF, 0xE9FFFFFF },
-            { 0x0F0F61FF, 0x263571FF, 0x3B509FFF, 0x6270ADFF },
-            { 0x003A77FF, 0x306AA3FF, 0x4D9BE6FF, 0x91CAFFFF },
-            { 0x0E0248FF, 0x191F4FFF, 0x28306FFF, 0x434279FF },
-            { 0x182169FF, 0x3C4F87FF, 0x5C76BFFF, 0x8AA3D5FF },
-            { 0x1F008DFF, 0x323598FF, 0x4D50D4FF, 0x757FDBFF },
-            { 0x1800ADFF, 0x0D0797FF, 0x180FCFFF, 0x4323CDFF },
-            { 0x3D0060FF, 0x391359FF, 0x53207DFF, 0x6D368DFF },
-            { 0x4B0084FF, 0x5D3992FF, 0x8657CCFF, 0xA493D9FF },
-            { 0x4E128BFF, 0x7358ACFF, 0xA884F3FF, 0xC8D4FFFF },
-            { 0x58005CFF, 0x47024AFF, 0x630867FF, 0x78137BFF },
-            { 0x6D007CFF, 0x71277FFF, 0xA03EB2FF, 0xB175BFFF },
-            { 0x6E009FFF, 0x610E8EFF, 0x881AC4FF, 0x9E49CBFF },
-            { 0x6C237EFF, 0x9E70AFFF, 0xE4A8FAFF, 0xFFFFFFFF },
-            { 0x7D0057FF, 0x80265DFF, 0xB53D86FF, 0xC16F9EFF },
-            { 0xA3009BFF, 0xAC30A5FF, 0xF34FE9FF, 0xEAB8E3FF },
-            { 0x530028FF, 0x561E2FFF, 0x7A3045FF, 0x884761FF },
-            { 0xA40043FF, 0xAB3251FF, 0xF04F78FF, 0xF08F96FF },
-            { 0x6D1339FF, 0x894C59FF, 0xC27182FF, 0xD7A8A7FF },
-            { 0x950020FF, 0x901E24FF, 0xC93038FF, 0xCB525FFF },
+            { 0x0A0A23FF, 0x11112AFF, 0x1F1833FF, 0x292942FF },
+            { 0x12122BFF, 0x1D1D36FF, 0x2B2E42FF, 0x43435CFF },
+            { 0x23122BFF, 0x312039FF, 0x3E3546FF, 0x61516AFF },
+            { 0x1E1E37FF, 0x2F2F48FF, 0x414859FF, 0x6A6A83FF },
+            { 0x2A3A43FF, 0x45555EFF, 0x68717AFF, 0xA3B3BBFF },
+            { 0x405059FF, 0x66767EFF, 0x90A1A8FF, 0xEAFBFFFF },
+            { 0x54646CFF, 0x84949CFF, 0xB6CBCFFF, 0xFFFFFFFF },
+            { 0x607078FF, 0x96A6AEFF, 0xD3E5EDFF, 0xFFFFFFFF },
+            { 0x7A7A82FF, 0xB8B8C0FF, 0xFFFFFFFF, 0xFFFFFFFF },
+            { 0x33121AFF, 0x43222AFF, 0x5C3A41FF, 0x7B5A62FF },
+            { 0x47263FFF, 0x624159FF, 0x826481FF, 0xBF9EB7FF },
+            { 0x57262EFF, 0x74434BFF, 0x966C6CFF, 0xD9A7AFFF },
+            { 0x392820FF, 0x503F37FF, 0x715A56FF, 0x9F8F87FF },
+            { 0x5F3E25FF, 0x836249FF, 0xAB947AFF, 0xFFDFC7FF },
+            { 0x9E1B23FF, 0xC5424AFF, 0xF68181FF, 0xFFC9D1FF },
+            { 0xB40000FF, 0xCC0000FF, 0xF53333FF, 0xFF4A52FF },
+            { 0x420000FF, 0x490000FF, 0x5A0A07FF, 0x610F06FF },
+            { 0x740100FF, 0x8A170FFF, 0xAE4539FF, 0xD7645CFF },
+            { 0x4D1C03FF, 0x633219FF, 0x8A503EFF, 0xB07F66FF },
+            { 0x7C1900FF, 0x99360DFF, 0xCD683DFF, 0xFE9B72FF },
+            { 0x983500FF, 0xC15E14FF, 0xFBA458FF, 0xFFEDA3FF },
+            { 0xA10D00FF, 0xBF2B00FF, 0xFB6B1DFF, 0xFF9349FF },
+            { 0x735239FF, 0xA18067FF, 0xDDBBA4FF, 0xFFFFFFFF },
+            { 0x8B5A31FF, 0xBF8E64FF, 0xFDD7AAFF, 0xFFFFFFFF },
+            { 0x903E00FF, 0xB56300FF, 0xFFA514FF, 0xFFE347FF },
+            { 0x69380FFF, 0x8C5B32FF, 0xC29162FF, 0xFFD4ABFF },
+            { 0x7E4C00FF, 0xA37100FF, 0xE8B710FF, 0xFFF245FF },
+            { 0x876600FF, 0xB59400FF, 0xFBE626FF, 0xFFFF77FF },
+            { 0x5B5B00FF, 0x7E7E00FF, 0xC0B510FF, 0xF7F74AFF },
+            { 0x7B7B00FF, 0xB0B035FF, 0xFBFF86FF, 0xFFFFF1FF },
+            { 0x467700FF, 0x6FA004FF, 0xB4D645FF, 0xFDFF92FF },
+            { 0x2C4D03FF, 0x48691FFF, 0x729446FF, 0xA9CA80FF },
+            { 0x56774DFF, 0x88A980FF, 0xC8E4BEFF, 0xFFFFFFFF },
+            { 0x00A100FF, 0x0DC200FF, 0x45F520FF, 0x7FFF56FF },
+            { 0x077A00FF, 0x26990DFF, 0x51C43FFF, 0x91FF79FF },
+            { 0x003300FF, 0x003C00FF, 0x0E4904FF, 0x195B11FF },
+            { 0x009227FF, 0x25B94EFF, 0x55F084FF, 0xACFFD5FF },
+            { 0x007E34FF, 0x009A50FF, 0x1EBC73FF, 0x57FCB2FF },
+            { 0x009269FF, 0x02B78EFF, 0x30E1B9FF, 0x83FFFFFF },
+            { 0x1D7F67FF, 0x48AB92FF, 0x7FE0C2FF, 0xE2FFFFFF },
+            { 0x45878FFF, 0x7DBEC7FF, 0xB8FDFFFF, 0xFFFFFFFF },
+            { 0x007047FF, 0x00875EFF, 0x039F78FF, 0x32D7AEFF },
+            { 0x0E7179FF, 0x3598A0FF, 0x63C2C9FF, 0xBDFFFFFF },
+            { 0x00435CFF, 0x055770FF, 0x216981FF, 0x4A9DB5FF },
+            { 0x168992FF, 0x46B9C1FF, 0x7FE8F2FF, 0xEDFFFFFF },
+            { 0x1C2CB8FF, 0x3748D4FF, 0x5369EFFF, 0x99A9FFFF },
+            { 0x0557A1FF, 0x2578C2FF, 0x4D9BE6FF, 0x98EAFFFF },
+            { 0x081852FF, 0x15255FFF, 0x28306FFF, 0x42528CFF },
+            { 0x1B3C86FF, 0x3859A3FF, 0x5C76BFFF, 0x9DBEFFFF },
+            { 0x1C1C97FF, 0x3232ADFF, 0x4D44C0FF, 0x7F7FFAFF },
+            { 0x0600C3FF, 0x1100CEFF, 0x180FCFFF, 0x3726F4FF },
+            { 0x31005AFF, 0x400F69FF, 0x53207DFF, 0x74429DFF },
+            { 0x491793FF, 0x6634B0FF, 0x8657CCFF, 0xCA99FFFF },
+            { 0x54339EFF, 0x7B5AC5FF, 0xA884F3FF, 0xFFE2FFFF },
+            { 0x400048FF, 0x4B0054FF, 0x630867FF, 0x75237EFF },
+            { 0x64017CFF, 0x7E1C97FF, 0xA03EB2FF, 0xDC79F5FF },
+            { 0x5C0095FF, 0x7100AAFF, 0x881AC4FF, 0xB946F3FF },
+            { 0x7D3B96FF, 0xAD6BC5FF, 0xE4A8FAFF, 0xFFFFFFFF },
+            { 0x720049FF, 0x8C1963FF, 0xB53D86FF, 0xE773BDFF },
+            { 0x9C0094FF, 0xC11DB9FF, 0xF34FE9FF, 0xFF9DFFFF },
+            { 0x520018FF, 0x631029FF, 0x7A3045FF, 0x9D4B64FF },
+            { 0x9F0024FF, 0xBE1942FF, 0xF04F78FF, 0xFF85AEFF },
+            { 0x8F0000FF, 0xA40008FF, 0xC93038FF, 0xED4850FF },
             { 0x00000000, 0x00000000, 0x00000000, 0x00000000 },
             { 0x1F1833FF, 0x1F1833FF, 0x1F1833FF, 0x2E1F3DFF },
             { 0x2B2E42FF, 0x2B2E42FF, 0x2B2E42FF, 0x3D3D4FFF },
@@ -639,234 +639,189 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
             { 0x5C3A41FF, 0x5C3A41FF, 0x5C3A41FF, 0x6D4F59FF },
             { 0x826481FF, 0x826481FF, 0x826481FF, 0x9F8C9FFF },
             { 0x966C6CFF, 0x966C6CFF, 0x966C6CFF, 0xB19492FF },
-            { 0xAB947AFF, 0xAB947AFF, 0xAB947AFF, 0xD2C0AEFF },
-            { 0xF68181FF, 0xF68181FF, 0xF68181FF, 0xFFC7ADFF },
-            { 0xF53333FF, 0xF53333FF, 0xF53333FF, 0xEF5D5EFF },
-            { 0x5A0A07FF, 0x5A0A07FF, 0x5A0A07FF, 0x5E0E20FF },
-            { 0xAE4539FF, 0xAE4539FF, 0xAE4539FF, 0xB76660FF },
-            { 0x8A503EFF, 0x8A503EFF, 0x8A503EFF, 0x9C6E63FF },
-            { 0xCD683DFF, 0xCD683DFF, 0xCD683DFF, 0xD9916DFF },
-            { 0xFBA458FF, 0xFBA458FF, 0xFBA458FF, 0xFFD89DFF },
-            { 0xFB6B1DFF, 0xFB6B1DFF, 0xFB6B1DFF, 0xFE9858FF },
-            { 0x9F8562FF, 0x9F8562FF, 0x9F8562FF, 0xC0AB93FF },
-            { 0xF9C79FFF, 0xF9C79FFF, 0xF9C79FFF, 0xFFFFE6FF },
-            { 0xFFA514FF, 0xFFA514FF, 0xFFA514FF, 0xFFCB6AFF },
-            { 0xE8B710FF, 0xE8B710FF, 0xE8B710FF, 0xFFD26EFF },
-            { 0xE3C896FF, 0xE3C896FF, 0xE3C896FF, 0xFFFEE2FF },
-            { 0xFBE626FF, 0xFBE626FF, 0xFBE626FF, 0xFFF8A4FF },
-            { 0xC0B510FF, 0xC0B510FF, 0xC0B510FF, 0xEDCA69FF },
-            { 0xFBFF86FF, 0xFBFF86FF, 0xFBFF86FF, 0xFFFFFFFF },
-            { 0xB4D645FF, 0xB4D645FF, 0xB4D645FF, 0xFEE6ABFF },
-            { 0x729446FF, 0x729446FF, 0x729446FF, 0x9EAD7DFF },
-            { 0x91DB69FF, 0x91DB69FF, 0x91DB69FF, 0xE8EACAFF },
-            { 0x358510FF, 0x358510FF, 0x358510FF, 0x509735FF },
-            { 0x51C43FFF, 0x51C43FFF, 0x51C43FFF, 0x99CC8CFF },
-            { 0x0E4904FF, 0x0E4904FF, 0x0E4904FF, 0x135B0CFF },
-            { 0x4BA14AFF, 0x4BA14AFF, 0x4BA14AFF, 0x7FB37FFF },
-            { 0x1EBC73FF, 0x1EBC73FF, 0x1EBC73FF, 0x6DC7ADFF },
-            { 0x30E1B9FF, 0x30E1B9FF, 0x30E1B9FF, 0xA2EAFFFF },
-            { 0x7FE0C2FF, 0x7FE0C2FF, 0x7FE0C2FF, 0xE3FDFFFF },
-            { 0xB8FDFFFF, 0xB8FDFFFF, 0xB8FDFFFF, 0xFFFFFFFF },
-            { 0x039F78FF, 0x039F78FF, 0x039F78FF, 0x44B09CFF },
-            { 0x63C2C9FF, 0x63C2C9FF, 0x63C2C9FF, 0xB8E5FFFF },
-            { 0x216981FF, 0x216981FF, 0x216981FF, 0x4D8395FF },
-            { 0x7FE8F2FF, 0x7FE8F2FF, 0x7FE8F2FF, 0xE9FFFFFF },
-            { 0x3B509FFF, 0x3B509FFF, 0x3B509FFF, 0x6270ADFF },
-            { 0x4D9BE6FF, 0x4D9BE6FF, 0x4D9BE6FF, 0x91CAFFFF },
-            { 0x28306FFF, 0x28306FFF, 0x28306FFF, 0x434279FF },
-            { 0x5C76BFFF, 0x5C76BFFF, 0x5C76BFFF, 0x8AA3D5FF },
-            { 0x4D50D4FF, 0x4D50D4FF, 0x4D50D4FF, 0x757FDBFF },
-            { 0x180FCFFF, 0x180FCFFF, 0x180FCFFF, 0x4323CDFF },
-            { 0x53207DFF, 0x53207DFF, 0x53207DFF, 0x6D368DFF },
-            { 0x8657CCFF, 0x8657CCFF, 0x8657CCFF, 0xA493D9FF },
-            { 0xA884F3FF, 0xA884F3FF, 0xA884F3FF, 0xC8D4FFFF },
-            { 0x630867FF, 0x630867FF, 0x630867FF, 0x78137BFF },
-            { 0xA03EB2FF, 0xA03EB2FF, 0xA03EB2FF, 0xB175BFFF },
-            { 0x881AC4FF, 0x881AC4FF, 0x881AC4FF, 0x9E49CBFF },
-            { 0xE4A8FAFF, 0xE4A8FAFF, 0xE4A8FAFF, 0xFFFFFFFF },
-            { 0xB53D86FF, 0xB53D86FF, 0xB53D86FF, 0xC16F9EFF },
-            { 0xF34FE9FF, 0xF34FE9FF, 0xF34FE9FF, 0xEAB8E3FF },
-            { 0x7A3045FF, 0x7A3045FF, 0x7A3045FF, 0x884761FF },
-            { 0xF04F78FF, 0xF04F78FF, 0xF04F78FF, 0xF08F96FF },
-            { 0xC27182FF, 0xC27182FF, 0xC27182FF, 0xD7A8A7FF },
+            { 0x715A56FF, 0x715A56FF, 0x715A56FF, 0xD2C0AEFF },
+            { 0xAB947AFF, 0xAB947AFF, 0xAB947AFF, 0xFFC7ADFF },
+            { 0xF68181FF, 0xF68181FF, 0xF68181FF, 0xEF5D5EFF },
+            { 0xF53333FF, 0xF53333FF, 0xF53333FF, 0x5E0E20FF },
+            { 0x5A0A07FF, 0x5A0A07FF, 0x5A0A07FF, 0xB76660FF },
+            { 0xAE4539FF, 0xAE4539FF, 0xAE4539FF, 0x9C6E63FF },
+            { 0x8A503EFF, 0x8A503EFF, 0x8A503EFF, 0xD9916DFF },
+            { 0xCD683DFF, 0xCD683DFF, 0xCD683DFF, 0xFFD89DFF },
+            { 0xFBA458FF, 0xFBA458FF, 0xFBA458FF, 0xFE9858FF },
+            { 0xFB6B1DFF, 0xFB6B1DFF, 0xFB6B1DFF, 0xC0AB93FF },
+            { 0xDDBBA4FF, 0xDDBBA4FF, 0xDDBBA4FF, 0xFFFFE6FF },
+            { 0xFDD7AAFF, 0xFDD7AAFF, 0xFDD7AAFF, 0xFFCB6AFF },
+            { 0xFFA514FF, 0xFFA514FF, 0xFFA514FF, 0xFFD26EFF },
+            { 0xC29162FF, 0xC29162FF, 0xC29162FF, 0xFFFEE2FF },
+            { 0xE8B710FF, 0xE8B710FF, 0xE8B710FF, 0xFFF8A4FF },
+            { 0xFBE626FF, 0xFBE626FF, 0xFBE626FF, 0xEDCA69FF },
+            { 0xC0B510FF, 0xC0B510FF, 0xC0B510FF, 0xFFFFFFFF },
+            { 0xFBFF86FF, 0xFBFF86FF, 0xFBFF86FF, 0xFEE6ABFF },
+            { 0xB4D645FF, 0xB4D645FF, 0xB4D645FF, 0x9EAD7DFF },
+            { 0x729446FF, 0x729446FF, 0x729446FF, 0xE8EACAFF },
+            { 0xC8E4BEFF, 0xC8E4BEFF, 0xC8E4BEFF, 0x509735FF },
+            { 0x45F520FF, 0x45F520FF, 0x45F520FF, 0x99CC8CFF },
+            { 0x51C43FFF, 0x51C43FFF, 0x51C43FFF, 0x135B0CFF },
+            { 0x0E4904FF, 0x0E4904FF, 0x0E4904FF, 0x7FB37FFF },
+            { 0x55F084FF, 0x55F084FF, 0x55F084FF, 0x6DC7ADFF },
+            { 0x1EBC73FF, 0x1EBC73FF, 0x1EBC73FF, 0xA2EAFFFF },
+            { 0x30E1B9FF, 0x30E1B9FF, 0x30E1B9FF, 0xE3FDFFFF },
+            { 0x7FE0C2FF, 0x7FE0C2FF, 0x7FE0C2FF, 0xFFFFFFFF },
+            { 0xB8FDFFFF, 0xB8FDFFFF, 0xB8FDFFFF, 0x44B09CFF },
+            { 0x039F78FF, 0x039F78FF, 0x039F78FF, 0xB8E5FFFF },
+            { 0x63C2C9FF, 0x63C2C9FF, 0x63C2C9FF, 0x4D8395FF },
+            { 0x216981FF, 0x216981FF, 0x216981FF, 0xE9FFFFFF },
+            { 0x7FE8F2FF, 0x7FE8F2FF, 0x7FE8F2FF, 0x6270ADFF },
+            { 0x5369EFFF, 0x5369EFFF, 0x5369EFFF, 0x91CAFFFF },
+            { 0x4D9BE6FF, 0x4D9BE6FF, 0x4D9BE6FF, 0x434279FF },
+            { 0x28306FFF, 0x28306FFF, 0x28306FFF, 0x8AA3D5FF },
+            { 0x5C76BFFF, 0x5C76BFFF, 0x5C76BFFF, 0x757FDBFF },
+            { 0x4D44C0FF, 0x4D44C0FF, 0x4D44C0FF, 0x4323CDFF },
+            { 0x180FCFFF, 0x180FCFFF, 0x180FCFFF, 0x6D368DFF },
+            { 0x53207DFF, 0x53207DFF, 0x53207DFF, 0xA493D9FF },
+            { 0x8657CCFF, 0x8657CCFF, 0x8657CCFF, 0xC8D4FFFF },
+            { 0xA884F3FF, 0xA884F3FF, 0xA884F3FF, 0x78137BFF },
+            { 0x630867FF, 0x630867FF, 0x630867FF, 0xB175BFFF },
+            { 0xA03EB2FF, 0xA03EB2FF, 0xA03EB2FF, 0x9E49CBFF },
+            { 0x881AC4FF, 0x881AC4FF, 0x881AC4FF, 0xFFFFFFFF },
+            { 0xE4A8FAFF, 0xE4A8FAFF, 0xE4A8FAFF, 0xC16F9EFF },
+            { 0xB53D86FF, 0xB53D86FF, 0xB53D86FF, 0xEAB8E3FF },
+            { 0xF34FE9FF, 0xF34FE9FF, 0xF34FE9FF, 0x884761FF },
+            { 0x7A3045FF, 0x7A3045FF, 0x7A3045FF, 0xF08F96FF },
+            { 0xF04F78FF, 0xF04F78FF, 0xF04F78FF, 0xD7A8A7FF },
             { 0xC93038FF, 0xC93038FF, 0xC93038FF, 0xCB525FFF },
             { 0x00000000, 0x00000000, 0x00000000, 0x00000000 },
-            { 0x120023FF, 0x161025FF, 0x1F1833FF, 0x2E1F3DFF },
-            { 0x100C23FF, 0x1C1F2EFF, 0x2B2E42FF, 0x3D3D4FFF },
-            { 0x1D0C24FF, 0x2A2330FF, 0x3E3546FF, 0x514657FF },
-            { 0x151729FF, 0x2B303DFF, 0x414859FF, 0x5B5F6DFF },
-            { 0x232A32FF, 0x464D54FF, 0x68717AFF, 0x8D949BFF },
-            { 0x2E3E42FF, 0x626E74FF, 0x90A1A8FF, 0xC6D0D8FF },
-            { 0x3B4F50FF, 0x7C8B8FFF, 0xB6CBCFFF, 0xFBFFFFFF },
-            { 0x47575DFF, 0x909DA4FF, 0xD3E5EDFF, 0xFFFFFFFF },
-            { 0x5F5F5FFF, 0xAFAFAFFF, 0xFFFFFFFF, 0xFFFFFFFF },
-            { 0x330A1EFF, 0x40272CFF, 0x5C3A41FF, 0x6D4F59FF },
-            { 0x3E163EFF, 0x594359FF, 0x826481FF, 0x9F8C9FFF },
-            { 0x4C1E2AFF, 0x69494AFF, 0x966C6CFF, 0xB19492FF },
-            { 0x4A3823FF, 0x776653FF, 0xAB947AFF, 0xD2C0AEFF },
-            { 0x901731FF, 0xAE5657FF, 0xF68181FF, 0xFFC7ADFF },
-            { 0xB8001BFF, 0xB22021FF, 0xF53333FF, 0xEF5D5EFF },
-            { 0x4A0007FF, 0x410503FF, 0x5A0A07FF, 0x5E0E20FF },
-            { 0x730214FF, 0x7D2E26FF, 0xAE4539FF, 0xB76660FF },
-            { 0x4F1312FF, 0x623629FF, 0x8A503EFF, 0x9C6E63FF },
-            { 0x7B1806FF, 0x924626FF, 0xCD683DFF, 0xD9916DFF },
-            { 0x843B00FF, 0xB17037FF, 0xFBA458FF, 0xFFD89DFF },
-            { 0x9E1800FF, 0xB4480EFF, 0xFB6B1DFF, 0xFE9858FF },
-            { 0x463315FF, 0x6F5B42FF, 0x9F8562FF, 0xC0AB93FF },
-            { 0x73482AFF, 0xAE886BFF, 0xF9C79FFF, 0xFFFFE6FF },
-            { 0x864A00FF, 0xB57205FF, 0xFFA514FF, 0xFFCB6AFF },
-            { 0x6C5E00FF, 0xA47F02FF, 0xE8B710FF, 0xFFD26EFF },
-            { 0x604F22FF, 0x9E8A65FF, 0xE3C896FF, 0xFFFEE2FF },
-            { 0x6B7900FF, 0xB0A011FF, 0xFBE626FF, 0xFFF8A4FF },
-            { 0x4C6700FF, 0x877E03FF, 0xC0B510FF, 0xEDCA69FF },
-            { 0x617602FF, 0xAEB157FF, 0xFBFF86FF, 0xFFFFFFFF },
-            { 0x357600FF, 0x7D962AFF, 0xB4D645FF, 0xFEE6ABFF },
-            { 0x1A5300FF, 0x4E672DFF, 0x729446FF, 0x9EAD7DFF },
-            { 0x177900FF, 0x629944FF, 0x91DB69FF, 0xE8EACAFF },
-            { 0x006600FF, 0x225E07FF, 0x358510FF, 0x509735FF },
-            { 0x008300FF, 0x358B28FF, 0x51C43FFF, 0x99CC8CFF },
-            { 0x004000FF, 0x083401FF, 0x0E4904FF, 0x135B0CFF },
-            { 0x006600FF, 0x307130FF, 0x4BA14AFF, 0x7FB37FFF },
-            { 0x007D07FF, 0x0E854EFF, 0x1EBC73FF, 0x6DC7ADFF },
-            { 0x008235FF, 0x199D80FF, 0x30E1B9FF, 0xA2EAFFFF },
-            { 0x086D3FFF, 0x539C86FF, 0x7FE0C2FF, 0xE3FDFFFF },
-            { 0x296A63FF, 0x7BAFB1FF, 0xB8FDFFFF, 0xFFFFFFFF },
-            { 0x006C17FF, 0x007053FF, 0x039F78FF, 0x44B09CFF },
-            { 0x005B50FF, 0x40878DFF, 0x63C2C9FF, 0xB8E5FFFF },
-            { 0x003339FF, 0x12485AFF, 0x216981FF, 0x4D8395FF },
-            { 0x046962FF, 0x52A1A9FF, 0x7FE8F2FF, 0xE9FFFFFF },
-            { 0x0F0F61FF, 0x263571FF, 0x3B509FFF, 0x6270ADFF },
-            { 0x003A77FF, 0x306AA3FF, 0x4D9BE6FF, 0x91CAFFFF },
-            { 0x0E0248FF, 0x191F4FFF, 0x28306FFF, 0x434279FF },
-            { 0x182169FF, 0x3C4F87FF, 0x5C76BFFF, 0x8AA3D5FF },
-            { 0x1F008DFF, 0x323598FF, 0x4D50D4FF, 0x757FDBFF },
-            { 0x1800ADFF, 0x0D0797FF, 0x180FCFFF, 0x4323CDFF },
-            { 0x3D0060FF, 0x391359FF, 0x53207DFF, 0x6D368DFF },
-            { 0x4B0084FF, 0x5D3992FF, 0x8657CCFF, 0xA493D9FF },
-            { 0x4E128BFF, 0x7358ACFF, 0xA884F3FF, 0xC8D4FFFF },
-            { 0x58005CFF, 0x47024AFF, 0x630867FF, 0x78137BFF },
-            { 0x6D007CFF, 0x71277FFF, 0xA03EB2FF, 0xB175BFFF },
-            { 0x6E009FFF, 0x610E8EFF, 0x881AC4FF, 0x9E49CBFF },
-            { 0x6C237EFF, 0x9E70AFFF, 0xE4A8FAFF, 0xFFFFFFFF },
-            { 0x7D0057FF, 0x80265DFF, 0xB53D86FF, 0xC16F9EFF },
-            { 0xA3009BFF, 0xAC30A5FF, 0xF34FE9FF, 0xEAB8E3FF },
-            { 0x530028FF, 0x561E2FFF, 0x7A3045FF, 0x884761FF },
-            { 0xA40043FF, 0xAB3251FF, 0xF04F78FF, 0xF08F96FF },
-            { 0x6D1339FF, 0x894C59FF, 0xC27182FF, 0xD7A8A7FF },
-            { 0x950020FF, 0x901E24FF, 0xC93038FF, 0xCB525FFF },
+            { 0x0A0A23FF, 0x11112AFF, 0x1F1833FF, 0x292942FF },
+            { 0x12122BFF, 0x1D1D36FF, 0x2B2E42FF, 0x43435CFF },
+            { 0x23122BFF, 0x312039FF, 0x3E3546FF, 0x61516AFF },
+            { 0x1E1E37FF, 0x2F2F48FF, 0x414859FF, 0x6A6A83FF },
+            { 0x2A3A43FF, 0x45555EFF, 0x68717AFF, 0xA3B3BBFF },
+            { 0x405059FF, 0x66767EFF, 0x90A1A8FF, 0xEAFBFFFF },
+            { 0x54646CFF, 0x84949CFF, 0xB6CBCFFF, 0xFFFFFFFF },
+            { 0x607078FF, 0x96A6AEFF, 0xD3E5EDFF, 0xFFFFFFFF },
+            { 0x7A7A82FF, 0xB8B8C0FF, 0xFFFFFFFF, 0xFFFFFFFF },
+            { 0x33121AFF, 0x43222AFF, 0x5C3A41FF, 0x7B5A62FF },
+            { 0x47263FFF, 0x624159FF, 0x826481FF, 0xBF9EB7FF },
+            { 0x57262EFF, 0x74434BFF, 0x966C6CFF, 0xD9A7AFFF },
+            { 0x392820FF, 0x503F37FF, 0x715A56FF, 0x9F8F87FF },
+            { 0x5F3E25FF, 0x836249FF, 0xAB947AFF, 0xFFDFC7FF },
+            { 0x9E1B23FF, 0xC5424AFF, 0xF68181FF, 0xFFC9D1FF },
+            { 0xB40000FF, 0xCC0000FF, 0xF53333FF, 0xFF4A52FF },
+            { 0x420000FF, 0x490000FF, 0x5A0A07FF, 0x610F06FF },
+            { 0x740100FF, 0x8A170FFF, 0xAE4539FF, 0xD7645CFF },
+            { 0x4D1C03FF, 0x633219FF, 0x8A503EFF, 0xB07F66FF },
+            { 0x7C1900FF, 0x99360DFF, 0xCD683DFF, 0xFE9B72FF },
+            { 0x983500FF, 0xC15E14FF, 0xFBA458FF, 0xFFEDA3FF },
+            { 0xA10D00FF, 0xBF2B00FF, 0xFB6B1DFF, 0xFF9349FF },
+            { 0x735239FF, 0xA18067FF, 0xDDBBA4FF, 0xFFFFFFFF },
+            { 0x8B5A31FF, 0xBF8E64FF, 0xFDD7AAFF, 0xFFFFFFFF },
+            { 0x903E00FF, 0xB56300FF, 0xFFA514FF, 0xFFE347FF },
+            { 0x69380FFF, 0x8C5B32FF, 0xC29162FF, 0xFFD4ABFF },
+            { 0x7E4C00FF, 0xA37100FF, 0xE8B710FF, 0xFFF245FF },
+            { 0x876600FF, 0xB59400FF, 0xFBE626FF, 0xFFFF77FF },
+            { 0x5B5B00FF, 0x7E7E00FF, 0xC0B510FF, 0xF7F74AFF },
+            { 0x7B7B00FF, 0xB0B035FF, 0xFBFF86FF, 0xFFFFF1FF },
+            { 0x467700FF, 0x6FA004FF, 0xB4D645FF, 0xFDFF92FF },
+            { 0x2C4D03FF, 0x48691FFF, 0x729446FF, 0xA9CA80FF },
+            { 0x56774DFF, 0x88A980FF, 0xC8E4BEFF, 0xFFFFFFFF },
+            { 0x00A100FF, 0x0DC200FF, 0x45F520FF, 0x7FFF56FF },
+            { 0x077A00FF, 0x26990DFF, 0x51C43FFF, 0x91FF79FF },
+            { 0x003300FF, 0x003C00FF, 0x0E4904FF, 0x195B11FF },
+            { 0x009227FF, 0x25B94EFF, 0x55F084FF, 0xACFFD5FF },
+            { 0x007E34FF, 0x009A50FF, 0x1EBC73FF, 0x57FCB2FF },
+            { 0x009269FF, 0x02B78EFF, 0x30E1B9FF, 0x83FFFFFF },
+            { 0x1D7F67FF, 0x48AB92FF, 0x7FE0C2FF, 0xE2FFFFFF },
+            { 0x45878FFF, 0x7DBEC7FF, 0xB8FDFFFF, 0xFFFFFFFF },
+            { 0x007047FF, 0x00875EFF, 0x039F78FF, 0x32D7AEFF },
+            { 0x0E7179FF, 0x3598A0FF, 0x63C2C9FF, 0xBDFFFFFF },
+            { 0x00435CFF, 0x055770FF, 0x216981FF, 0x4A9DB5FF },
+            { 0x168992FF, 0x46B9C1FF, 0x7FE8F2FF, 0xEDFFFFFF },
+            { 0x1C2CB8FF, 0x3748D4FF, 0x5369EFFF, 0x99A9FFFF },
+            { 0x0557A1FF, 0x2578C2FF, 0x4D9BE6FF, 0x98EAFFFF },
+            { 0x081852FF, 0x15255FFF, 0x28306FFF, 0x42528CFF },
+            { 0x1B3C86FF, 0x3859A3FF, 0x5C76BFFF, 0x9DBEFFFF },
+            { 0x1C1C97FF, 0x3232ADFF, 0x4D44C0FF, 0x7F7FFAFF },
+            { 0x0600C3FF, 0x1100CEFF, 0x180FCFFF, 0x3726F4FF },
+            { 0x31005AFF, 0x400F69FF, 0x53207DFF, 0x74429DFF },
+            { 0x491793FF, 0x6634B0FF, 0x8657CCFF, 0xCA99FFFF },
+            { 0x54339EFF, 0x7B5AC5FF, 0xA884F3FF, 0xFFE2FFFF },
+            { 0x400048FF, 0x4B0054FF, 0x630867FF, 0x75237EFF },
+            { 0x64017CFF, 0x7E1C97FF, 0xA03EB2FF, 0xDC79F5FF },
+            { 0x5C0095FF, 0x7100AAFF, 0x881AC4FF, 0xB946F3FF },
+            { 0x7D3B96FF, 0xAD6BC5FF, 0xE4A8FAFF, 0xFFFFFFFF },
+            { 0x720049FF, 0x8C1963FF, 0xB53D86FF, 0xE773BDFF },
+            { 0x9C0094FF, 0xC11DB9FF, 0xF34FE9FF, 0xFF9DFFFF },
+            { 0x520018FF, 0x631029FF, 0x7A3045FF, 0x9D4B64FF },
+            { 0x9F0024FF, 0xBE1942FF, 0xF04F78FF, 0xFF85AEFF },
+            { 0x8F0000FF, 0xA40008FF, 0xC93038FF, 0xED4850FF },
             { 0x00000000, 0x00000000, 0x00000000, 0x00000000 },
-            { 0x1F1833FF, 0x161025FF, 0x1F1833FF, 0x2E1F3DFF },
-            { 0x2B2E42FF, 0x1C1F2EFF, 0x2B2E42FF, 0x3D3D4FFF },
-            { 0x3E3546FF, 0x2A2330FF, 0x3E3546FF, 0x514657FF },
-            { 0x414859FF, 0x2B303DFF, 0x414859FF, 0x5B5F6DFF },
-            { 0x68717AFF, 0x464D54FF, 0x68717AFF, 0x8D949BFF },
-            { 0x90A1A8FF, 0x626E74FF, 0x90A1A8FF, 0xC6D0D8FF },
-            { 0xB6CBCFFF, 0x7C8B8FFF, 0xB6CBCFFF, 0xFBFFFFFF },
-            { 0xD3E5EDFF, 0x909DA4FF, 0xD3E5EDFF, 0xFFFFFFFF },
-            { 0xFFFFFFFF, 0xAFAFAFFF, 0xFFFFFFFF, 0xFFFFFFFF },
-            { 0x5C3A41FF, 0x40272CFF, 0x5C3A41FF, 0x6D4F59FF },
-            { 0x826481FF, 0x594359FF, 0x826481FF, 0x9F8C9FFF },
-            { 0x966C6CFF, 0x69494AFF, 0x966C6CFF, 0xB19492FF },
-            { 0xAB947AFF, 0x776653FF, 0xAB947AFF, 0xD2C0AEFF },
-            { 0xF68181FF, 0xAE5657FF, 0xF68181FF, 0xFFC7ADFF },
-            { 0xF53333FF, 0xB22021FF, 0xF53333FF, 0xEF5D5EFF },
-            { 0x5A0A07FF, 0x410503FF, 0x5A0A07FF, 0x5E0E20FF },
-            { 0xAE4539FF, 0x7D2E26FF, 0xAE4539FF, 0xB76660FF },
-            { 0x8A503EFF, 0x623629FF, 0x8A503EFF, 0x9C6E63FF },
-            { 0xCD683DFF, 0x924626FF, 0xCD683DFF, 0xD9916DFF },
-            { 0xFBA458FF, 0xB17037FF, 0xFBA458FF, 0xFFD89DFF },
-            { 0xFB6B1DFF, 0xB4480EFF, 0xFB6B1DFF, 0xFE9858FF },
-            { 0x9F8562FF, 0x6F5B42FF, 0x9F8562FF, 0xC0AB93FF },
-            { 0xF9C79FFF, 0xAE886BFF, 0xF9C79FFF, 0xFFFFE6FF },
-            { 0xFFA514FF, 0xB57205FF, 0xFFA514FF, 0xFFCB6AFF },
-            { 0xE8B710FF, 0xA47F02FF, 0xE8B710FF, 0xFFD26EFF },
-            { 0xE3C896FF, 0x9E8A65FF, 0xE3C896FF, 0xFFFEE2FF },
-            { 0xFBE626FF, 0xB0A011FF, 0xFBE626FF, 0xFFF8A4FF },
-            { 0xC0B510FF, 0x877E03FF, 0xC0B510FF, 0xEDCA69FF },
-            { 0xFBFF86FF, 0xAEB157FF, 0xFBFF86FF, 0xFFFFFFFF },
-            { 0xB4D645FF, 0x7D962AFF, 0xB4D645FF, 0xFEE6ABFF },
-            { 0x729446FF, 0x4E672DFF, 0x729446FF, 0x9EAD7DFF },
-            { 0x91DB69FF, 0x629944FF, 0x91DB69FF, 0xE8EACAFF },
-            { 0x358510FF, 0x225E07FF, 0x358510FF, 0x509735FF },
-            { 0x51C43FFF, 0x358B28FF, 0x51C43FFF, 0x99CC8CFF },
-            { 0x0E4904FF, 0x083401FF, 0x0E4904FF, 0x135B0CFF },
-            { 0x4BA14AFF, 0x307130FF, 0x4BA14AFF, 0x7FB37FFF },
-            { 0x1EBC73FF, 0x0E854EFF, 0x1EBC73FF, 0x6DC7ADFF },
-            { 0x30E1B9FF, 0x199D80FF, 0x30E1B9FF, 0xA2EAFFFF },
-            { 0x7FE0C2FF, 0x539C86FF, 0x7FE0C2FF, 0xE3FDFFFF },
-            { 0xB8FDFFFF, 0x7BAFB1FF, 0xB8FDFFFF, 0xFFFFFFFF },
-            { 0x039F78FF, 0x007053FF, 0x039F78FF, 0x44B09CFF },
-            { 0x63C2C9FF, 0x40878DFF, 0x63C2C9FF, 0xB8E5FFFF },
-            { 0x216981FF, 0x12485AFF, 0x216981FF, 0x4D8395FF },
-            { 0x7FE8F2FF, 0x52A1A9FF, 0x7FE8F2FF, 0xE9FFFFFF },
-            { 0x3B509FFF, 0x263571FF, 0x3B509FFF, 0x6270ADFF },
-            { 0x4D9BE6FF, 0x306AA3FF, 0x4D9BE6FF, 0x91CAFFFF },
-            { 0x28306FFF, 0x191F4FFF, 0x28306FFF, 0x434279FF },
-            { 0x5C76BFFF, 0x3C4F87FF, 0x5C76BFFF, 0x8AA3D5FF },
-            { 0x4D50D4FF, 0x323598FF, 0x4D50D4FF, 0x757FDBFF },
-            { 0x180FCFFF, 0x0D0797FF, 0x180FCFFF, 0x4323CDFF },
-            { 0x53207DFF, 0x391359FF, 0x53207DFF, 0x6D368DFF },
-            { 0x8657CCFF, 0x5D3992FF, 0x8657CCFF, 0xA493D9FF },
-            { 0xA884F3FF, 0x7358ACFF, 0xA884F3FF, 0xC8D4FFFF },
-            { 0x630867FF, 0x47024AFF, 0x630867FF, 0x78137BFF },
-            { 0xA03EB2FF, 0x71277FFF, 0xA03EB2FF, 0xB175BFFF },
-            { 0x881AC4FF, 0x610E8EFF, 0x881AC4FF, 0x9E49CBFF },
-            { 0xE4A8FAFF, 0x9E70AFFF, 0xE4A8FAFF, 0xFFFFFFFF },
-            { 0xB53D86FF, 0x80265DFF, 0xB53D86FF, 0xC16F9EFF },
-            { 0xF34FE9FF, 0xAC30A5FF, 0xF34FE9FF, 0xEAB8E3FF },
-            { 0x7A3045FF, 0x561E2FFF, 0x7A3045FF, 0x884761FF },
-            { 0xF04F78FF, 0xAB3251FF, 0xF04F78FF, 0xF08F96FF },
-            { 0xC27182FF, 0x894C59FF, 0xC27182FF, 0xD7A8A7FF },
-            { 0xC93038FF, 0x901E24FF, 0xC93038FF, 0xCB525FFF },
+            { 0x1F1833FF, 0x11112AFF, 0x1F1833FF, 0x292942FF },
+            { 0x2B2E42FF, 0x1D1D36FF, 0x2B2E42FF, 0x43435CFF },
+            { 0x3E3546FF, 0x312039FF, 0x3E3546FF, 0x61516AFF },
+            { 0x414859FF, 0x2F2F48FF, 0x414859FF, 0x6A6A83FF },
+            { 0x68717AFF, 0x45555EFF, 0x68717AFF, 0xA3B3BBFF },
+            { 0x90A1A8FF, 0x66767EFF, 0x90A1A8FF, 0xEAFBFFFF },
+            { 0xB6CBCFFF, 0x84949CFF, 0xB6CBCFFF, 0xFFFFFFFF },
+            { 0xD3E5EDFF, 0x96A6AEFF, 0xD3E5EDFF, 0xFFFFFFFF },
+            { 0xFFFFFFFF, 0xB8B8C0FF, 0xFFFFFFFF, 0xFFFFFFFF },
+            { 0x5C3A41FF, 0x43222AFF, 0x5C3A41FF, 0x7B5A62FF },
+            { 0x826481FF, 0x624159FF, 0x826481FF, 0xBF9EB7FF },
+            { 0x966C6CFF, 0x74434BFF, 0x966C6CFF, 0xD9A7AFFF },
+            { 0x715A56FF, 0x503F37FF, 0x715A56FF, 0x9F8F87FF },
+            { 0xAB947AFF, 0x836249FF, 0xAB947AFF, 0xFFDFC7FF },
+            { 0xF68181FF, 0xC5424AFF, 0xF68181FF, 0xFFC9D1FF },
+            { 0xF53333FF, 0xCC0000FF, 0xF53333FF, 0xFF4A52FF },
+            { 0x5A0A07FF, 0x490000FF, 0x5A0A07FF, 0x610F06FF },
+            { 0xAE4539FF, 0x8A170FFF, 0xAE4539FF, 0xD7645CFF },
+            { 0x8A503EFF, 0x633219FF, 0x8A503EFF, 0xB07F66FF },
+            { 0xCD683DFF, 0x99360DFF, 0xCD683DFF, 0xFE9B72FF },
+            { 0xFBA458FF, 0xC15E14FF, 0xFBA458FF, 0xFFEDA3FF },
+            { 0xFB6B1DFF, 0xBF2B00FF, 0xFB6B1DFF, 0xFF9349FF },
+            { 0xDDBBA4FF, 0xA18067FF, 0xDDBBA4FF, 0xFFFFFFFF },
+            { 0xFDD7AAFF, 0xBF8E64FF, 0xFDD7AAFF, 0xFFFFFFFF },
+            { 0xFFA514FF, 0xB56300FF, 0xFFA514FF, 0xFFE347FF },
+            { 0xC29162FF, 0x8C5B32FF, 0xC29162FF, 0xFFD4ABFF },
+            { 0xE8B710FF, 0xA37100FF, 0xE8B710FF, 0xFFF245FF },
+            { 0xFBE626FF, 0xB59400FF, 0xFBE626FF, 0xFFFF77FF },
+            { 0xC0B510FF, 0x7E7E00FF, 0xC0B510FF, 0xF7F74AFF },
+            { 0xFBFF86FF, 0xB0B035FF, 0xFBFF86FF, 0xFFFFF1FF },
+            { 0xB4D645FF, 0x6FA004FF, 0xB4D645FF, 0xFDFF92FF },
+            { 0x729446FF, 0x48691FFF, 0x729446FF, 0xA9CA80FF },
+            { 0xC8E4BEFF, 0x88A980FF, 0xC8E4BEFF, 0xFFFFFFFF },
+            { 0x45F520FF, 0x0DC200FF, 0x45F520FF, 0x7FFF56FF },
+            { 0x51C43FFF, 0x26990DFF, 0x51C43FFF, 0x91FF79FF },
+            { 0x0E4904FF, 0x003C00FF, 0x0E4904FF, 0x195B11FF },
+            { 0x55F084FF, 0x25B94EFF, 0x55F084FF, 0xACFFD5FF },
+            { 0x1EBC73FF, 0x009A50FF, 0x1EBC73FF, 0x57FCB2FF },
+            { 0x30E1B9FF, 0x02B78EFF, 0x30E1B9FF, 0x83FFFFFF },
+            { 0x7FE0C2FF, 0x48AB92FF, 0x7FE0C2FF, 0xE2FFFFFF },
+            { 0xB8FDFFFF, 0x7DBEC7FF, 0xB8FDFFFF, 0xFFFFFFFF },
+            { 0x039F78FF, 0x00875EFF, 0x039F78FF, 0x32D7AEFF },
+            { 0x63C2C9FF, 0x3598A0FF, 0x63C2C9FF, 0xBDFFFFFF },
+            { 0x216981FF, 0x055770FF, 0x216981FF, 0x4A9DB5FF },
+            { 0x7FE8F2FF, 0x46B9C1FF, 0x7FE8F2FF, 0xEDFFFFFF },
+            { 0x5369EFFF, 0x3748D4FF, 0x5369EFFF, 0x99A9FFFF },
+            { 0x4D9BE6FF, 0x2578C2FF, 0x4D9BE6FF, 0x98EAFFFF },
+            { 0x28306FFF, 0x15255FFF, 0x28306FFF, 0x42528CFF },
+            { 0x5C76BFFF, 0x3859A3FF, 0x5C76BFFF, 0x9DBEFFFF },
+            { 0x4D44C0FF, 0x3232ADFF, 0x4D44C0FF, 0x7F7FFAFF },
+            { 0x180FCFFF, 0x1100CEFF, 0x180FCFFF, 0x3726F4FF },
+            { 0x53207DFF, 0x400F69FF, 0x53207DFF, 0x74429DFF },
+            { 0x8657CCFF, 0x6634B0FF, 0x8657CCFF, 0xCA99FFFF },
+            { 0xA884F3FF, 0x7B5AC5FF, 0xA884F3FF, 0xFFE2FFFF },
+            { 0x630867FF, 0x4B0054FF, 0x630867FF, 0x75237EFF },
+            { 0xA03EB2FF, 0x7E1C97FF, 0xA03EB2FF, 0xDC79F5FF },
+            { 0x881AC4FF, 0x7100AAFF, 0x881AC4FF, 0xB946F3FF },
+            { 0xE4A8FAFF, 0xAD6BC5FF, 0xE4A8FAFF, 0xFFFFFFFF },
+            { 0xB53D86FF, 0x8C1963FF, 0xB53D86FF, 0xE773BDFF },
+            { 0xF34FE9FF, 0xC11DB9FF, 0xF34FE9FF, 0xFF9DFFFF },
+            { 0x7A3045FF, 0x631029FF, 0x7A3045FF, 0x9D4B64FF },
+            { 0xF04F78FF, 0xBE1942FF, 0xF04F78FF, 0xFF85AEFF },
+            { 0xC93038FF, 0xA40008FF, 0xC93038FF, 0xED4850FF },
     };
     
     //        public final int[] ALL_COLORS = new int[256];
-    static {
-        for (int i = 0; i < 64; i++) {
-//                for (int j = 0; j < 4; j++) {
-//                    FlesurrectBonusPalette[i << 2 | j] = FLESURRECT_BONUS_RAMP_VALUES[i][j];
-//                }
-            System.arraycopy(FLESURRECT_BONUS_RAMP_VALUES[i], 0, FlesurrectBonusPalette, i << 2, 4);
-        }
-    }
-    //new PaletteReducer(FlesurrectBonusPalette)
-    public static final Colorizer FlesurrectBonusColorizer = new Colorizer(Coloring.FLESURRECT_REDUCER) {
-        private final byte[] primary = {
-                63, 24, 27, 34, 42, 49, 55
-        }, grays = {
-                1, 2, 3, 4, 5, 6, 7, 8, 9
-        };
-
-        @Override
-        public byte[] mainColors() {
-            return primary;
-        }
-
-        /**
-         * @return An array of grayscale or close-to-grayscale color indices, with the darkest first and lightest last.
-         */
-        @Override
-        public byte[] grayscale() {
-            return grays;
-        }
-
-        @Override
-        public byte brighten(byte voxel) {
-            // the second half of voxels (with bit 0x40 set) don't shade visually, but Colorizer uses this method to
-            // denote a structural change to the voxel's makeup, so this uses the first 64 voxel colors to shade both
-            // halves, then marks voxels from the second half back to being an unshaded voxel as the last step.
-            return (byte) (Dimmer.FLESURRECT_RAMPS[voxel & 0x3F][3] | (voxel & 0xC0));
-        }
-
-        @Override
-        public byte darken(byte voxel) {
-            // the second half of voxels (with bit 0x40 set) don't shade visually, but Colorizer uses this method to
-            // denote a structural change to the voxel's makeup, so this uses the first 64 voxel colors to shade both
-            // halves, then marks voxels from the second half back to being an unshaded voxel as the last step.
-            return (byte) (Dimmer.FLESURRECT_RAMPS[voxel & 0x3F][1] | (voxel & 0xC0));
-        }
-
-
+    static {         
 //        {
 //            for (int i = 1; i < 64; i++) {
 //                int color = FLESURRECT_BONUS_RAMP_VALUES[i|128][2] = FLESURRECT_BONUS_RAMP_VALUES[i][2] = 
@@ -925,6 +880,119 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
 //            System.out.println(sb.append("};"));
 //        }
 
+
+
+//        {
+//            for (int i = 1; i < 64; i++) {
+//                int color = FLESURRECT_BONUS_RAMP_VALUES[i | 128][2] = FLESURRECT_BONUS_RAMP_VALUES[i][2] =
+//                        Coloring.FLESURRECT[i],
+//                        r = (color >>> 24),
+//                        g = (color >>> 16 & 0xFF),
+//                        b = (color >>> 8 & 0xFF);
+//                FLESURRECT_BONUS_RAMP_VALUES[i | 64][0] = FLESURRECT_BONUS_RAMP_VALUES[i | 64][1] =
+//                        FLESURRECT_BONUS_RAMP_VALUES[i | 64][2] = FLESURRECT_BONUS_RAMP_VALUES[i | 64][2] = color;
+//                FLESURRECT_BONUS_RAMP_VALUES[i | 192][0] = FLESURRECT_BONUS_RAMP_VALUES[i | 192][2] = color;
+//                int y = luma(r, g, b) >>> 11, match = i,
+//                        yBright = y * 13 >> 1, yDim = y * 3, yDark = y << 1;
+//                float luma, warm, mild;
+//                float cw = r - b + 255 >>> 4;
+//                float cm = g - b + 255 >>> 4;
+//
+//                float cwf = (cw - 15.5f) * 0x1.08421p-4f;
+//                float cmf = (cm - 15.5f) * 0x1.08421p-4f;
+//                
+//                warm = cwf;
+//                mild = cmf;
+//                luma = yDim * 0x1p-8f;
+//                g = (int) ((luma + mild * 0.5f - warm * 0.375f) * 255);
+//                b = (int) ((luma - warm * 0.375f - mild * 0.5f) * 255);
+//                r = (int) ((luma + warm * 0.625f - mild * 0.5f) * 255);
+//                FLESURRECT_BONUS_RAMP_VALUES[i|192][1] = FLESURRECT_BONUS_RAMP_VALUES[i|128][1] =
+//                        FLESURRECT_BONUS_RAMP_VALUES[i][1] =
+//                        MathUtils.clamp(r, 0, 255) << 24 |
+//                                MathUtils.clamp(g, 0, 255) << 16 |
+//                                MathUtils.clamp(b, 0, 255) << 8 | 0xFF;
+//                warm = cwf;
+//                mild = cmf;
+//                luma = yBright * 0x1p-8f;
+//                g = (int) ((luma + mild * 0.5f - warm * 0.375f) * 255);
+//                b = (int) ((luma - warm * 0.375f - mild * 0.5f) * 255);
+//                r = (int) ((luma + warm * 0.625f - mild * 0.5f) * 255);
+//                FLESURRECT_BONUS_RAMP_VALUES[i|192][3] = FLESURRECT_BONUS_RAMP_VALUES[i|128][3] =
+//                        FLESURRECT_BONUS_RAMP_VALUES[i][3] =
+//                        MathUtils.clamp(r, 0, 255) << 24 |
+//                                MathUtils.clamp(g, 0, 255) << 16 |
+//                                MathUtils.clamp(b, 0, 255) << 8 | 0xFF;
+//                warm = cwf;
+//                mild = cmf;
+//                luma = yDark * 0x1p-8f;
+//                g = (int) ((luma + mild * 0.5f - warm * 0.375f) * 255);
+//                b = (int) ((luma - warm * 0.375f - mild * 0.5f) * 255);
+//                r = (int) ((luma + warm * 0.625f - mild * 0.5f) * 255);
+//                FLESURRECT_BONUS_RAMP_VALUES[i|128][0] = FLESURRECT_BONUS_RAMP_VALUES[i][0] =
+//                        MathUtils.clamp(r, 0, 255) << 24 |
+//                                MathUtils.clamp(g, 0, 255) << 16 |
+//                                MathUtils.clamp(b, 0, 255) << 8 | 0xFF;
+//
+//            }
+//            StringBuilder sb = new StringBuilder(1024).append("private static final int[][] FLESURRECT_BONUS_RAMP_VALUES = new int[][] {\n");
+//            for (int i = 0; i < 256; i++) {
+//                sb.append("{ 0x");
+//                StringKit.appendHex(sb, FLESURRECT_BONUS_RAMP_VALUES[i][0]);
+//                StringKit.appendHex(sb.append(", 0x"), FLESURRECT_BONUS_RAMP_VALUES[i][1]);
+//                StringKit.appendHex(sb.append(", 0x"), FLESURRECT_BONUS_RAMP_VALUES[i][2]);
+//                StringKit.appendHex(sb.append(", 0x"), FLESURRECT_BONUS_RAMP_VALUES[i][3]);
+//                sb.append(" },\n");
+//
+//            }
+//            System.out.println(sb.append("};"));
+//
+//        }
+
+        for (int i = 0; i < 64; i++) {
+//                for (int j = 0; j < 4; j++) {
+//                    FlesurrectBonusPalette[i << 2 | j] = FLESURRECT_BONUS_RAMP_VALUES[i][j];
+//                }
+            System.arraycopy(FLESURRECT_BONUS_RAMP_VALUES[i], 0, FlesurrectBonusPalette, i << 2, 4);
+        }
+    }
+    //new PaletteReducer(FlesurrectBonusPalette)
+    public static final Colorizer FlesurrectBonusColorizer = new Colorizer(Coloring.FLESURRECT_REDUCER) {
+        private final byte[] primary = {
+                63, 24, 27, 34, 42, 49, 55
+        }, grays = {
+                1, 2, 3, 4, 5, 6, 7, 8, 9
+        };
+
+        @Override
+        public byte[] mainColors() {
+            return primary;
+        }
+
+        /**
+         * @return An array of grayscale or close-to-grayscale color indices, with the darkest first and lightest last.
+         */
+        @Override
+        public byte[] grayscale() {
+            return grays;
+        }
+
+        @Override
+        public byte brighten(byte voxel) {
+            // the second half of voxels (with bit 0x40 set) don't shade visually, but Colorizer uses this method to
+            // denote a structural change to the voxel's makeup, so this uses the first 64 voxel colors to shade both
+            // halves, then marks voxels from the second half back to being an unshaded voxel as the last step.
+            return (byte) (Dimmer.FLESURRECT_RAMPS[voxel & 0x3F][3] | (voxel & 0xC0));
+        }
+
+        @Override
+        public byte darken(byte voxel) {
+            // the second half of voxels (with bit 0x40 set) don't shade visually, but Colorizer uses this method to
+            // denote a structural change to the voxel's makeup, so this uses the first 64 voxel colors to shade both
+            // halves, then marks voxels from the second half back to being an unshaded voxel as the last step.
+            return (byte) (Dimmer.FLESURRECT_RAMPS[voxel & 0x3F][1] | (voxel & 0xC0));
+        }
+        
         @Override
         public int dimmer(int brightness, byte voxel) {
             return FLESURRECT_BONUS_RAMP_VALUES[voxel & 0xFF][
@@ -1334,7 +1402,20 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
             }
         };
     }
-    public static Colorizer arbitraryWarmingColorizer(final int[] palette) {
+
+    /**
+     * Gets a Colorizer that can produce all of the colors in {@code palette} as well as an equal amount of lighter
+     * colors that usually tend to have warmer hues, and twice as many cooler colors that usually tend to have cooler
+     * hues (half of these are somewhat darker and half are much darker). The {@code heat} parameter is usually
+     * {@code 1.0f} to make lighter colors warmer (matching the artistic effect of a yellow, orange, or red light
+     * source), {@link 0.0f} to keep the warmth as-is, {@code -1.0f} to make lighter colors cooler (matching the effect
+     * of a very blue-green light source such as exaggerated fluorescent lighting), or some other values between or just
+     * outside that range. The {@code heat} should usually not be greater than {@code 2.0f} or less than {@code -2.0f}.
+     * @param palette an int array of RGBA8888 colors, as found in {@link Coloring} 
+     * @param heat typically between -1.0f and 1.0f, with positive values making lighter colors use warmer hues
+     * @return a new Colorizer that will use a palette 4 times the size of the given {@code palette}
+     */
+    public static Colorizer arbitraryWarmingColorizer(final int[] palette, float heat) {
         final int COUNT = palette.length;
         PaletteReducer reducer = new PaletteReducer(palette);
 
@@ -1401,7 +1482,7 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
             //values[i][0] = values[i][1] = values[i][3] = 
             values[i][2] = palette[i];
 
-            warm = cwf - 0.175f;
+            warm = cwf - 0.175f * heat;
             mild = cmf;
             luma = yDim * 0x1p-8f;
             g = (int)((luma + mild * 0.5f - warm * 0.375f) * 255);
@@ -1411,7 +1492,7 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
                     MathUtils.clamp(r, 0, 255) << 24 |
                             MathUtils.clamp(g, 0, 255) << 16 |
                             MathUtils.clamp(b, 0, 255) << 8 | 0xFF;
-            warm = cwf + 0.375f;
+            warm = cwf + 0.375f * heat;
             mild = cmf;
             luma = yBright * 0x1p-8f;
             g = (int)((luma + mild * 0.5f - warm * 0.375f) * 255);
@@ -1421,7 +1502,7 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
                     MathUtils.clamp(r, 0, 255) << 24 |
                             MathUtils.clamp(g, 0, 255) << 16 |
                             MathUtils.clamp(b, 0, 255) << 8 | 0xFF;
-            warm = cwf - 0.375f;
+            warm = cwf - 0.375f * heat;
             mild = cmf;
             luma = yDark * 0x1p-8f;
             g = (int)((luma + mild * 0.5f - warm * 0.375f) * 255);
@@ -1431,7 +1512,8 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
                     MathUtils.clamp(r, 0, 255) << 24 |
                             MathUtils.clamp(g, 0, 255) << 16 |
                             MathUtils.clamp(b, 0, 255) << 8 | 0xFF;
-
+            
+            heat = (heat + 2f) * 0x1p-9f;
             ramps[i][2] = (byte)i;
             ramps[i][3] = grays[4];//15;  //0xFFFFFFFF, white
             ramps[i][1] = grays[0];//0x010101FF, black
@@ -1442,7 +1524,7 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
                     break;
                 }
                 adj = 1f + ((yLim + 1 >>> 1) - yy) * 0x1p-10f;
-                cwf = MathUtils.clamp(cwf * adj + 0x1.8p-8f, -1f, 1f);
+                cwf = MathUtils.clamp(cwf * adj + heat, -1f, 1f);
                 cmf = MathUtils.clamp(cmf * adj, -1f, 1f);
 
                 rr = yy
@@ -1460,7 +1542,7 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
                     break;
                 }
                 adj = 1f + (yy - (yLim + 1 >>> 1)) * 0x1p-10f;
-                cwf = MathUtils.clamp(cwf * adj - 0x1.8p-8f, -1f, 1f);
+                cwf = MathUtils.clamp(cwf * adj - heat, -1f, 1f);
                 cmf = MathUtils.clamp(cmf * adj, -1f, 1f);
 
                 rr = yy
@@ -1480,7 +1562,7 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
                         break;
                     }
                     adj = 1f + (yy - (yLim + 1 >>> 1)) * 0x1p-10f;
-                    cwf = MathUtils.clamp(cwf * adj - 0x1.8p-8f, -1f, 1f);
+                    cwf = MathUtils.clamp(cwf * adj - heat, -1f, 1f);
                     cmf = MathUtils.clamp(cmf * adj, -1f, 1f);
 
                     rr = yy

@@ -50,12 +50,9 @@ public class ShaderPalettizer extends ApplicationAdapter {
             "{\n" +
             "   vec4 tgt = texture2D( u_texture, v_texCoords );\n" +
             "   vec4 used = texture2D(u_palette, vec2((tgt.b + floor(tgt.r * 31.99999)) * 0.03125, 1.0 - tgt.g));\n" +
-//            "   float adj = sin(dot(gl_FragCoord.xy, vec2(0.7548776662466927, 0.5698402909980532) * 3.141592653589793));\n" +
-//            "   float adj = fract(dot(gl_FragCoord.xy, vec2(0.7548776662466927, 0.5698402909980532))) * 2.15 - 1.1;\n" +
             "   float adj = sin(dot(gl_FragCoord.xy, vec2(4.743036261279236, 3.580412143837574))) * 1.1 + 0.05;\n" +
-//            "   float adj = sin(dot(gl_FragCoord.xy, vec2(2.371518130639618, 1.7902060719189539)));\n" +
             "   tgt.rgb = clamp(tgt.rgb + (used.rgb - tgt.rgb) * adj, 0.0, 1.0);\n" +
-            "   gl_FragColor = v_color * texture2D(u_palette, vec2((tgt.b + floor(tgt.r * 31.99999)) * 0.03125, 1.0 - tgt.g));\n" + //(tgt.b + floor(tgt.r * 32.0)) * 0.03125, tgt.g
+            "   gl_FragColor.rgb = v_color.rgb * texture2D(u_palette, vec2((tgt.b + floor(tgt.r * 31.99999)) * 0.03125, 1.0 - tgt.g)).rgb;\n" + //(tgt.b + floor(tgt.r * 32.0)) * 0.03125, tgt.g
             "   gl_FragColor.a = v_color.a * tgt.a;\n" +
             "}";
     private ShaderProgram defaultShader;
