@@ -216,92 +216,96 @@ public class SeqTest extends ApplicationAdapter {
 //                        break;
                     case Input.Keys.U:
                         if(angle == 2) {
-                            switch (seq.rotation() & 28) {
-                                case 4:
-                                case 12:
-                                    seq.rotate(seq.rotation() ^ 4);
-                                    break;
-                                case 0:
-                                case 8:
-                                    seq.rotate(seq.rotation() ^ 12);
-                                    break;
-                                case 16:
-                                    seq.rotate((seq.rotation() - 1 & 3) | 16);
-                                    break;
-                                case 20:
-                                    seq.rotate((seq.rotation() + 1 & 3) | 20);
-                                    break;
-                            }
+                            seq.counterX();
+//                            switch (seq.rotation() & 28) {
+//                                case 4:
+//                                case 12:
+//                                    seq.rotate(seq.rotation() ^ 4);
+//                                    break;
+//                                case 0:
+//                                case 8:
+//                                    seq.rotate(seq.rotation() ^ 12);
+//                                    break;
+//                                case 16:
+//                                    seq.rotate((seq.rotation() - 1 & 3) | 16);
+//                                    break;
+//                                case 20:
+//                                    seq.rotate((seq.rotation() + 1 & 3) | 20);
+//                                    break;
+//                            }
                         }
                         System.out.println("Current rotation: " + seq.rotation());
                         break;
                     case Input.Keys.J:
                         if(angle == 2) {
-                            switch (seq.rotation() & 28) { // 16, 8, 4
-                                case 0:
-                                case 8:
-                                    seq.rotate(seq.rotation() ^ 4);
-                                    break;
-                                case 12:
-                                case 4:
-                                    seq.rotate(seq.rotation() ^ 12);
-                                    break;
-                                case 16:
-                                    seq.rotate((seq.rotation() + 1 & 3) | 16);
-                                    break;
-                                case 20:
-                                    seq.rotate((seq.rotation() - 1 & 3) | 20);
-                                    break;
-                            }
+                            seq.clockX();
+//                            switch (seq.rotation() & 28) { // 16, 8, 4
+//                                case 0:
+//                                case 8:
+//                                    seq.rotate(seq.rotation() ^ 4);
+//                                    break;
+//                                case 12:
+//                                case 4:
+//                                    seq.rotate(seq.rotation() ^ 12);
+//                                    break;
+//                                case 16:
+//                                    seq.rotate((seq.rotation() + 1 & 3) | 16);
+//                                    break;
+//                                case 20:
+//                                    seq.rotate((seq.rotation() - 1 & 3) | 20);
+//                                    break;
+//                            }
                         }
                         System.out.println("Current rotation: " + seq.rotation());
                         break;
                     case Input.Keys.I:
-                        switch (seq.rotation() & 28) // 16, 8, and 4 can each be set.
-                        {
-                            case 0:
-                                seq.rotate((seq.rotation() + 2 & 3) | 20);
-                                break;
-                            case 4:
-                                seq.rotate((seq.rotation() - 1 & 3) | (seq.rotation() & 12));
-                                break;
-                            case 8:
-                                seq.rotate((seq.rotation() + 2 & 3) | 16);
-                                break;
-                            case 12:
-                                seq.rotate((seq.rotation() + 1 & 3) | (seq.rotation() & 12));
-                                break;
-                            case 16:
-                                seq.rotate(seq.rotation() & 3);
-                                break;
-                            case 20:
-                                seq.rotate((seq.rotation() & 3) | 8);
-                                break;
-                        }
+                        seq.counterY();
+//                        switch (seq.rotation() & 28) // 16, 8, and 4 can each be set.
+//                        {
+//                            case 0:
+//                                seq.rotate((seq.rotation() + 2 & 3) | 20);
+//                                break;
+//                            case 4:
+//                                seq.rotate((seq.rotation() - 1 & 3) | (seq.rotation() & 12));
+//                                break;
+//                            case 8:
+//                                seq.rotate((seq.rotation() + 2 & 3) | 16);
+//                                break;
+//                            case 12:
+//                                seq.rotate((seq.rotation() + 1 & 3) | (seq.rotation() & 12));
+//                                break;
+//                            case 16:
+//                                seq.rotate(seq.rotation() & 3);
+//                                break;
+//                            case 20:
+//                                seq.rotate((seq.rotation() & 3) | 8);
+//                                break;
+//                        }
                         System.out.println("Current rotation: " + seq.rotation());
                         break;
                     case Input.Keys.K:
-                        switch (seq.rotation() & 28) // 16, 8, and 4 can each be set.
-                        {
-                            case 0:
-                                seq.rotate((seq.rotation() + 2 & 3) | 16);
-                                break;
-                            case 4:
-                                seq.rotate((seq.rotation() + 1 & 3) | (seq.rotation() & 12));
-                                break;
-                            case 8:
-                                seq.rotate((seq.rotation() + 2 & 3) | 20);
-                                break;
-                            case 12:
-                                seq.rotate((seq.rotation() - 1 & 3) | (seq.rotation() & 12));
-                                break;
-                            case 16:
-                                seq.rotate((seq.rotation() & 3) | 8);
-                                break;
-                            case 20:
-                                seq.rotate(seq.rotation() & 3);
-                                break;
-                        }
+                        seq.clockY();
+//                        switch (seq.rotation() & 28) // 16, 8, and 4 can each be set.
+//                        {
+//                            case 0:
+//                                seq.rotate((seq.rotation() + 2 & 3) | 16);
+//                                break;
+//                            case 4:
+//                                seq.rotate((seq.rotation() + 1 & 3) | (seq.rotation() & 12));
+//                                break;
+//                            case 8:
+//                                seq.rotate((seq.rotation() + 2 & 3) | 20);
+//                                break;
+//                            case 12:
+//                                seq.rotate((seq.rotation() - 1 & 3) | (seq.rotation() & 12));
+//                                break;
+//                            case 16:
+//                                seq.rotate((seq.rotation() & 3) | 8);
+//                                break;
+//                            case 20:
+//                                seq.rotate(seq.rotation() & 3);
+//                                break;
+//                        }
                         System.out.println("Current rotation: " + seq.rotation());
                         break;
 //                    case Input.Keys.K:
@@ -309,12 +313,14 @@ public class SeqTest extends ApplicationAdapter {
 //                        break;
                     case Input.Keys.O:
                         //if((diagonal = !diagonal))
-                            seq.rotate(((seq.rotation() & 3) - 1 & 3) | (seq.rotation() & 28));
+                        seq.counterZ();
+//                            seq.rotate(((seq.rotation() & 3) - 1 & 3) | (seq.rotation() & 28));
                         System.out.println("Current rotation: " + seq.rotation());
                         break;
                     case Input.Keys.L:
                         //if(!(diagonal = !diagonal))
-                            seq.rotate(((seq.rotation() & 3) + 1 & 3) | (seq.rotation() & 28));
+                        seq.clockZ();
+//                            seq.rotate(((seq.rotation() & 3) + 1 & 3) | (seq.rotation() & 28));
                         System.out.println("Current rotation: " + seq.rotation());
                         break;
 //                            model.turner().counterZ();

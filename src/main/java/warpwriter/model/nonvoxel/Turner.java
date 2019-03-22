@@ -5,7 +5,7 @@ package warpwriter.model.nonvoxel;
  *
  * @author Ben McLean
  */
-public class Turner {
+public class Turner implements ITurner {
     public Turner() {
     }
 
@@ -32,6 +32,7 @@ public class Turner {
         return this;
     }
 
+    @Override
     public Turner counterX() {
         final int y = ~rotation[2], z = rotation[1];
         rotation[1] = y;
@@ -39,6 +40,7 @@ public class Turner {
         return this;
     }
 
+    @Override
     public Turner counterY() {
         final int x = rotation[2], z = ~rotation[0];
         rotation[0] = x;
@@ -46,6 +48,7 @@ public class Turner {
         return this;
     }
 
+    @Override
     public Turner counterZ() {
         final int x = ~rotation[1], y = rotation[0];
         rotation[0] = x;
@@ -53,6 +56,7 @@ public class Turner {
         return this;
     }
 
+    @Override
     public Turner clockX() {
         final int y = rotation[2], z = ~rotation[1];
         rotation[1] = y;
@@ -60,6 +64,7 @@ public class Turner {
         return this;
     }
 
+    @Override
     public Turner clockY() {
         final int x = ~rotation[2], z = rotation[0];
         rotation[0] = x;
@@ -67,6 +72,7 @@ public class Turner {
         return this;
     }
 
+    @Override
     public Turner clockZ() {
         final int x = rotation[1], y = ~rotation[0];
         rotation[0] = x;
@@ -79,6 +85,7 @@ public class Turner {
      *
      * @return this
      */
+    @Override
     public Turner reset() {
         rotation[0] = -1;
         rotation[1] = 1;
