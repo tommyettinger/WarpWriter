@@ -2426,9 +2426,19 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
             case 13: return (sizeZ << 10) - (k >>> 10 & 0x000FFC00) | sizeX - (k & 0x3FF) << 20 | (k >>> 10 & 0x3FF);
             case 14: return (sizeZ << 10) - (k >>> 10 & 0x000FFC00) | (sizeY << 20) - (k << 10 & 0x3FF00000) | sizeX - (k & 0x3FF);
             case 15: return (sizeZ << 10) - (k >>> 10 & 0x000FFC00) | (k & 0x3FF) << 20 | sizeY - (k >>> 10 & 0x3FF);
+            // 16-19 have z pointing towards x+ and the voxels rotating on that axis
+            case 16: return (k >>> 20 & 0x3FF) | (k & 0x000FFC00) | (sizeX - (k & 0x3FF)) << 20;
+            case 17: return (k >>> 20 & 0x3FF) | (k << 10 & 0x3FF00000) | (k & 0x3FF) << 10;
+            case 18: return (k >>> 20 & 0x3FF) | (sizeY << 10) - (k & 0x000FFC00) | (k & 0x3FF) << 20;
+            case 19: return (k >>> 20 & 0x3FF) | (sizeY << 20) - (k << 10 & 0x3FF00000) | (sizeX - (k & 0x3FF) << 10);
+            // 20-23 have z pointing towards x- and the voxels rotating on that axis
+            case 20: return sizeZ - (k >>> 20 & 0x3FF) | (k & 0x000FFC00) | (k & 0x3FF) << 20;
+            case 21: return sizeZ - (k >>> 20 & 0x3FF) | (k << 10 & 0x3FF00000) | (sizeX - (k & 0x3FF) << 10);
+            case 22: return sizeZ - (k >>> 20 & 0x3FF) | (sizeY << 10) - (k & 0x000FFC00) | (sizeX - (k & 0x3FF)) << 20;
+            case 23: return sizeZ - (k >>> 20 & 0x3FF) | (sizeY << 20) - (k << 10 & 0x3FF00000) | (k & 0x3FF) << 10;
             default:
 //                System.out.println("this shouldn't be happening! " + k);
-                return (k & 0xFFF00000) | (k & 0x3FF) << 10 | (sizeY - (k >>> 10 & 0x3FF));
+                return 0;
         }
 
     }

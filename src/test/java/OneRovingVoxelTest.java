@@ -57,10 +57,8 @@ public class OneRovingVoxelTest extends ApplicationAdapter {
             "uniform sampler2D u_texture;\n" +
             "void main()\n" +
             "{\n" +
-            "   vec2 offsetx;\n" +
-            "   offsetx.x = outlineW;\n" +
-            "   vec2 offsety;\n" +
-            "   offsety.y = outlineH;\n" +
+            "   vec2 offsetx = vec2(outlineW, 0.0);\n" +
+            "   vec2 offsety = vec2(0.0, outlineH);\n" +
             "   float alpha = texture2D( u_texture, v_texCoords ).a;\n" +
             "   alpha = max(alpha, texture2D( u_texture, v_texCoords + offsetx).a);\n" +
             "   alpha = max(alpha, texture2D( u_texture, v_texCoords - offsetx).a);\n" +
@@ -203,8 +201,8 @@ public class OneRovingVoxelTest extends ApplicationAdapter {
         screenRegion.flip(false, true);
 
         batch.setShader(shader);
-        shader.setUniformf("outlineH", 1f / VIRTUAL_HEIGHT);
-        shader.setUniformf("outlineW", 1f / VIRTUAL_WIDTH);
+        shader.setUniformf("outlineH", 1f/VIRTUAL_HEIGHT);
+        shader.setUniformf("outlineW", 1f/VIRTUAL_WIDTH);
 
         batch.draw(screenRegion, 0, 0);
         batch.setShader(defaultShader);
