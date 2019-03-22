@@ -260,13 +260,13 @@ public class SeqTest extends ApplicationAdapter {
                         switch (seq.rotation() & 28) // 16, 8, and 4 can each be set.
                         {
                             case 0:
-                                seq.rotate((seq.rotation() & 3) | 20);
+                                seq.rotate((seq.rotation() + 2 & 3) | 20);
                                 break;
                             case 4:
-                                seq.rotate(((seq.rotation() & 3) - 1 & 3) | (seq.rotation() & 12));
+                                seq.rotate((seq.rotation() - 1 & 3) | (seq.rotation() & 12));
                                 break;
                             case 8:
-                                seq.rotate((seq.rotation() & 3) | 16);
+                                seq.rotate((seq.rotation() + 2 & 3) | 16);
                                 break;
                             case 12:
                                 seq.rotate((seq.rotation() + 1 & 3) | (seq.rotation() & 12));
@@ -284,13 +284,13 @@ public class SeqTest extends ApplicationAdapter {
                         switch (seq.rotation() & 28) // 16, 8, and 4 can each be set.
                         {
                             case 0:
-                                seq.rotate((seq.rotation() & 3) | 16);
+                                seq.rotate((seq.rotation() + 2 & 3) | 16);
                                 break;
                             case 4:
-                                seq.rotate(((seq.rotation() & 3) + 1 & 3) | (seq.rotation() & 12));
+                                seq.rotate((seq.rotation() + 1 & 3) | (seq.rotation() & 12));
                                 break;
                             case 8:
-                                seq.rotate((seq.rotation() & 3) | 20);
+                                seq.rotate((seq.rotation() + 2 & 3) | 20);
                                 break;
                             case 12:
                                 seq.rotate((seq.rotation() - 1 & 3) | (seq.rotation() & 12));
