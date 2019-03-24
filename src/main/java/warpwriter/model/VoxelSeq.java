@@ -2471,22 +2471,22 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
         switch (r & 28) // 16, 8, and 4 can each be set.
         {
             case 0:
-                rotate((r + 2 & 3) | 20);
+                rotate((r & 3) | 20);
                 break;
             case 4:
                 rotate((r - 1 & 3) | (r & 12));
                 break;
             case 8:
-                rotate((r + 2 & 3) | 16);
+                rotate((2-r & 3) | 16);
                 break;
             case 12:
                 rotate((r + 1 & 3) | (r & 12));
                 break;
             case 16:
-                rotate(r & 3);
+                rotate(-r & 3);
                 break;
             case 20:
-                rotate((r & 3) | 8);
+                rotate((2+r & 3) | 8);
                 break;
         }
         return this;
@@ -2525,19 +2525,19 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
         switch (r & 28) // 16, 8, and 4 can each be set.
         {
             case 0:
-                rotate((r + 2 & 3) | 16);
+                rotate((-r & 3) | 16);
                 break;
             case 4:
                 rotate((r + 1 & 3) | (r & 12));
                 break;
             case 8:
-                rotate((r + 2 & 3) | 20);
+                rotate((2+r & 3) | 20);
                 break;
             case 12:
                 rotate((r - 1 & 3) | (r & 12));
                 break;
             case 16:
-                rotate((r & 3) | 8);
+                rotate((2-r & 3) | 8);
                 break;
             case 20:
                 rotate(r & 3);

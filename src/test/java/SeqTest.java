@@ -202,7 +202,6 @@ public class SeqTest extends ApplicationAdapter {
                         break;
                     case Input.Keys.EQUALS:
                         angle = 3;
-                        seq.rotate(seq.rotation() & 3);
                         break;
 //                    case Input.Keys.U:
 //                        model.turner().clockX();
@@ -215,7 +214,6 @@ public class SeqTest extends ApplicationAdapter {
 //                            model.turner().clockZ();
 //                        break;
                     case Input.Keys.U:
-                        if(angle == 2) {
                             seq.counterX();
 //                            switch (seq.rotation() & 28) {
 //                                case 4:
@@ -233,11 +231,9 @@ public class SeqTest extends ApplicationAdapter {
 //                                    seq.rotate((seq.rotation() + 1 & 3) | 20);
 //                                    break;
 //                            }
-                        }
                         System.out.println("Current rotation: " + seq.rotation());
                         break;
                     case Input.Keys.J:
-                        if(angle == 2) {
                             seq.clockX();
 //                            switch (seq.rotation() & 28) { // 16, 8, 4
 //                                case 0:
@@ -255,7 +251,6 @@ public class SeqTest extends ApplicationAdapter {
 //                                    seq.rotate((seq.rotation() - 1 & 3) | 20);
 //                                    break;
 //                            }
-                        }
                         System.out.println("Current rotation: " + seq.rotation());
                         break;
                     case Input.Keys.I:

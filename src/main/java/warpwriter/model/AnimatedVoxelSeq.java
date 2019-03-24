@@ -182,110 +182,36 @@ public class AnimatedVoxelSeq implements IVoxelSeq, ITemporal, Serializable {
 
     @Override
     public AnimatedVoxelSeq counterX() {
-        final int r = rotation();
-        switch (r & 28) { // 16, 8, 4
-            case 0:
-            case 8:
-                rotate(r ^ 4);
-                break;
-            case 12:
-            case 4:
-                rotate(r ^ 12);
-                break;
-            case 16:
-                rotate((r + 1 & 3) | 16);
-                break;
-            case 20:
-                rotate((r - 1 & 3) | 20);
-                break;
-        }
+        seqs[frame].counterX();
         return this;
     }
 
     @Override
     public AnimatedVoxelSeq counterY() {
-        final int r = rotation();
-        switch (r & 28) // 16, 8, and 4 can each be set.
-        {
-            case 0:
-                rotate((r + 2 & 3) | 20);
-                break;
-            case 4:
-                rotate((r - 1 & 3) | (r & 12));
-                break;
-            case 8:
-                rotate((r + 2 & 3) | 16);
-                break;
-            case 12:
-                rotate((r + 1 & 3) | (r & 12));
-                break;
-            case 16:
-                rotate(r & 3);
-                break;
-            case 20:
-                rotate((r & 3) | 8);
-                break;
-        }
+        seqs[frame].counterY();
         return this;
     }
 
     @Override
     public AnimatedVoxelSeq counterZ() {
-        rotate((rotation() - 1 & 3) | (rotation() & 28));
+        seqs[frame].counterZ();
         return this;
     }
     @Override
     public AnimatedVoxelSeq clockX() {
-        final int r = rotation();
-        switch (r & 28) {
-            case 4:
-            case 12:
-                rotate(r ^ 4);
-                break;
-            case 0:
-            case 8:
-                rotate(r ^ 12);
-                break;
-            case 16:
-                rotate((r - 1 & 3) | 16);
-                break;
-            case 20:
-                rotate((r + 1 & 3) | 20);
-                break;
-        }
+        seqs[frame].clockX();
         return this;
     }
     
     @Override
     public AnimatedVoxelSeq clockY() {
-        final int r = rotation();
-        switch (r & 28) // 16, 8, and 4 can each be set.
-        {
-            case 0:
-                rotate((r + 2 & 3) | 16);
-                break;
-            case 4:
-                rotate((r + 1 & 3) | (r & 12));
-                break;
-            case 8:
-                rotate((r + 2 & 3) | 20);
-                break;
-            case 12:
-                rotate((r - 1 & 3) | (r & 12));
-                break;
-            case 16:
-                rotate((r & 3) | 8);
-                break;
-            case 20:
-                rotate(r & 3);
-                break;
-        }
+        seqs[frame].clockY();
         return this;
     }
 
     @Override
     public AnimatedVoxelSeq clockZ() {
-        rotate((rotation() + 1 & 3) | (rotation() & 28));
+        seqs[frame].clockZ();
         return this;
     }
 
