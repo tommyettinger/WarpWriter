@@ -220,12 +220,12 @@ public class SeqTest extends ApplicationAdapter {
                         System.out.println("Current rotation: " + seq.rotation());
                         break;
                     case Input.Keys.O:
-                        if(!(diagonal = !diagonal)) 
+                        if((seq.rotation() & 28) == 0 ^ (diagonal = !diagonal)) 
                             seq.clockZ();
                         System.out.println("Current rotation: " + seq.rotation());
                         break;
                     case Input.Keys.L:
-                        if((diagonal = !diagonal)) 
+                        if((seq.rotation() & 28) != 0 ^ (diagonal = !diagonal)) 
                             seq.counterZ();
                         System.out.println("Current rotation: " + seq.rotation());
                         break;
