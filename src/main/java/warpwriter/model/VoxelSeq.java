@@ -2417,10 +2417,10 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
             case 6: return (k >>> 10 & 0x000FFC00) | (k & 0x000FFC00) << 10 | sizeX - (k & 0x3FF);
             case 7: return (k >>> 10 & 0x000FFC00) | (sizeX - (k & 0x3FF) << 20) | sizeY - (k >>> 10 & 0x3FF);
             // 8-11 have z pointing towards z-
-            case 8: return (sizeZ << 20) - (k & 0xFFF00000) | (sizeY << 10) - (k & 0xFFC00) | (k & 0x3FF);
-            case 9: return (sizeZ << 20) - (k & 0xFFF00000) | (sizeY) - (k >>> 10 & 0x3FF) | (k & 0x3FF) << 10;
-            case 10: return (sizeZ << 20) - (k & 0xFFF00000) | (k & 0xFFC00) | sizeX - (k & 0x3FF);
-            case 11: return (sizeZ << 20) - (k & 0xFFF00000) |(k >>> 10 & 0x3FF) | sizeX - (k & 0x3FF) << 10;
+            case 8: return (sizeZ << 20) - (k & 0xFFF00000) | (k & 0xFFC00) | (k & 0x3FF);
+            case 9: return (sizeZ << 20) - (k & 0xFFF00000) | (k >>> 10 & 0x3FF) | sizeX - (k & 0x3FF) << 10;
+            case 10: return (sizeZ << 20) - (k & 0xFFF00000) | (sizeY << 10) - (k & 0xFFC00) | sizeX - (k & 0x3FF);
+            case 11: return (sizeZ << 20) - (k & 0xFFF00000) |(sizeY) - (k >>> 10 & 0x3FF) | (k & 0x3FF) << 10;
             // 12-15 have z pointing towards y-
             case 12: return (sizeZ << 10) - (k >>> 10 & 0x000FFC00) | (k & 0x000FFC00) << 10 | (k & 0x3FF);
             case 13: return (sizeZ << 10) - (k >>> 10 & 0x000FFC00) | sizeX - (k & 0x3FF) << 20 | (k >>> 10 & 0x3FF);

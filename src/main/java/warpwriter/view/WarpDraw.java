@@ -460,7 +460,7 @@ public class WarpDraw {
         final int len = seq.size(), sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ(), 
                 pixelWidth = (sizeX + sizeY) * 2 + 3, pixelHeight = sizeZ * 3 + 4;
         int dep;
-        seq.sort(IntComparator.side45[seq.rotation() & 3]);
+        seq.sort(IntComparator.side45[seq.rotation() & 15]);
         int xyz, x, y, z;
         byte v;
         for (int i = 0; i < len; i++) {
