@@ -212,11 +212,11 @@ public class SeqTest extends ApplicationAdapter {
                         System.out.println("Current rotation: " + seq.rotation());
                         break;
                     case Input.Keys.I:
-//                        seq.clockY();
+                        seq.clockY();
                         System.out.println("Current rotation: " + seq.rotation());
                         break;
                     case Input.Keys.K:
-//                        seq.counterY();
+                        seq.counterY();
                         System.out.println("Current rotation: " + seq.rotation());
                         break;
                     case Input.Keys.O:
