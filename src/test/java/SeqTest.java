@@ -201,6 +201,7 @@ public class SeqTest extends ApplicationAdapter {
                         angle = 2;
                         break;
                     case Input.Keys.EQUALS:
+                        diagonal = false;
                         angle = 3;
                         break;
                     case Input.Keys.U:
@@ -220,12 +221,12 @@ public class SeqTest extends ApplicationAdapter {
                         System.out.println("Current rotation: " + seq.rotation());
                         break;
                     case Input.Keys.O:
-                        if((seq.rotation() & 28) == 0 ^ (diagonal = !diagonal)) 
+                        if(angle == 3 || (seq.rotation() & 28) == 0 ^ (diagonal = !diagonal)) 
                             seq.clockZ();
                         System.out.println("Current rotation: " + seq.rotation());
                         break;
                     case Input.Keys.L:
-                        if((seq.rotation() & 28) != 0 ^ (diagonal = !diagonal)) 
+                        if(angle == 3 || (seq.rotation() & 28) != 0 ^ (diagonal = !diagonal)) 
                             seq.counterZ();
                         System.out.println("Current rotation: " + seq.rotation());
                         break;
