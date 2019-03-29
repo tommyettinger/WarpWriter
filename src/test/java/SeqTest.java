@@ -12,7 +12,6 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.FakeLanguageGen;
-import warpwriter.Coloring;
 import warpwriter.ModelMaker;
 import warpwriter.Tools3D;
 import warpwriter.VoxIO;
@@ -70,7 +69,7 @@ public class SeqTest extends ApplicationAdapter {
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.CW_PALETTE);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.FLESURRECT);
-        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.AURORA);
+        colorizer = Colorizer.FlesurrectBonusColorizer;
         voxelColor = new VoxelColor().set(colorizer);
         pixmapRenderer = new VoxelPixmapRenderer(new Pixmap(512, 512, Pixmap.Format.RGBA8888), voxelColor);
         pmTexture = new Texture(pixmapRenderer.pixmap);
@@ -108,7 +107,7 @@ public class SeqTest extends ApplicationAdapter {
 //        model.setFrame((int)(TimeUtils.millis() >>> 7) & 15);
 //        boom.setFrame((int)(TimeUtils.millis() >>> 7) & 15);
         if(seq != null)
-            ((ITemporal) seq).setFrame((int)(TimeUtils.millis() * 3 >>> 8));
+            ((ITemporal) seq).setFrame((int)(TimeUtils.millis() * 5 >>> 9));
         buffer.begin();
         
         Gdx.gl.glClearColor(0.4f, 0.75f, 0.3f, 1f);
@@ -134,22 +133,6 @@ public class SeqTest extends ApplicationAdapter {
             else
                 pmTexture.draw(WarpDraw.draw(seq, pixmapRenderer), 0, 0);
         }
-//        if(diagonal) {
-//            if(angle != 2){
-//                pmTexture.draw(WarpDraw.drawIso(model, pixmapRenderer), 0, 0);
-//            }
-//            else 
-//            {
-//                pmTexture.draw(WarpDraw.draw45(model, pixmapRenderer), 0, 0);
-//            }
-//        }
-//        else if(angle != 2)
-//        {
-//            pmTexture.draw(WarpDraw.drawAbove(model, pixmapRenderer), 0, 0);
-//        }
-//        else {
-//            pmTexture.draw(WarpDraw.draw(model, pixmapRenderer), 0, 0);
-//        }
         batch.draw(pmTexture, 64, 64);
         //batch.setColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
         batch.end();
