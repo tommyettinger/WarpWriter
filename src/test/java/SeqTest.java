@@ -83,7 +83,8 @@ public class SeqTest extends ApplicationAdapter {
 //        makeBoom(maker.fireRange());
         voxels = maker.shipLargeNoiseColorized();
         VoxelSeq vs = new VoxelSeq(1024);
-        vs.putSurface(voxels);
+        vs.putArray(voxels);
+        vs.hollow();
         seq = new AnimatedVoxelSeq(vs, 4);
 //        chaos = new ChaoticFetch(maker.rng.nextLong(), (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 1);
 //        ship = new TurnModel().set(

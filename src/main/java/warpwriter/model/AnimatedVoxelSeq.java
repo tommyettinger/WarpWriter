@@ -100,6 +100,11 @@ public class AnimatedVoxelSeq implements IVoxelSeq, ITemporal, Serializable {
     public void clear() {
         seqs[frame].clear();
     }
+    
+    @Override
+    public void hollow() {
+        seqs[frame].hollow();
+    }
 
     @Override
     public void sizeX(int i) {
@@ -138,6 +143,11 @@ public class AnimatedVoxelSeq implements IVoxelSeq, ITemporal, Serializable {
     @Override
     public byte getAt(int index) {
         return seqs[frame].getAt(index);
+    }
+
+    @Override
+    public byte getAtHollow(int index) {
+        return seqs[frame].getAtHollow(index);
     }
 
     @Override

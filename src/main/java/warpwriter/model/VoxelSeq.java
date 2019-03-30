@@ -23,7 +23,7 @@ import warpwriter.model.nonvoxel.IntSort;
 import java.io.Serializable;
 import java.util.*;
 
-import static warpwriter.model.nonvoxel.HashMap3D.fuse;
+import static warpwriter.model.nonvoxel.HashMap3D.*;
 
 /**
  * An int-key and int-value insertion-ordered hash map with with a fast implementation, originally from fastutil as
@@ -96,9 +96,17 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
     protected boolean containsNullKey;
     /**
      * An IntVLA (variable-length int sequence) that stores the positions in the key array of specific keys, with the
-     * positions in insertion order. The order can be changed with {@link #reorder(int...)} and other methods.
+     * positions in insertion order. The order can be changed with {@link #reorder(int...)} and other methods. This
+     * IntVLA tracks only voxels that touch a boundary or empty space; use {@link #full} for the order of all voxels.
      */
     protected IntVLA order;
+    /**
+     * An IntVLA (variable-length int sequence) that stores the positions in the key array of all keys, with the
+     * positions in insertion order. The order can be changed with {@link #reorder(int...)} and other methods. This
+     * IntVLA tracks all voxels; many operations instead operate only on voxels that are potentially visible, which are
+     * in the IntVLA {@link #order}.
+     */
+    protected IntVLA full;
     /**
      * The current table size.
      */
@@ -226,10 +234,9 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
      * <p>
      * <p>The actual table size will be the least power of two greater than <code>expected</code>/<code>f</code>.
      *
-     * @param expected the expected number of elements in the hash set.
+     * @param expected the expected number of voxels in the whole VoxelSeq, including non-visible ones
      * @param f        the load factor.
      */
-
     @SuppressWarnings("unchecked")
     public VoxelSeq(final int expected, final float f) {
         if (f <= 0 || f > 1)
@@ -241,8 +248,8 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
         maxFill = maxFill(n, f);
         key = new int[n + 1];
         value = new byte[n + 1];
-        //link = new long[n + 1];
-        order = new IntVLA(expected);
+        order = new IntVLA(expected * 3 >>> 2);
+        full = new IntVLA(expected);
     }
 
     /**
@@ -307,7 +314,23 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
     public VoxelSeq(final int[] keyArray, final byte[] valueArray) {
         this(keyArray, valueArray, DEFAULT_LOAD_FACTOR);
     }
-    
+
+    public void putArray(byte[][][] voxels)
+    {
+        final int sizeX = (voxels.length);
+        final int sizeY = (voxels[0].length);
+        final int sizeZ = (voxels[0][0].length);
+        this.sizeX = this.sizeY = this.sizeZ = Math.max(sizeX, Math.max(sizeY, sizeZ));
+        for (int x = 0; x < sizeX; x++) {
+            for (int y = 0; y < sizeY; y++) {
+                for (int z = 0; z < sizeZ; z++) {
+                    if(voxels[x][y][z] != 0)
+                        put(x, y, z, voxels[x][y][z]);
+                }
+            }
+        }
+    }
+
     public void putSurface(byte[][][] voxels)
     {
         final int sizeX = (voxels.length);
@@ -341,6 +364,31 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
                         put(x, y, z, voxels[x][y][z]);
                 }
             }
+        }
+        order.clear();
+        order.addAll(full);
+    }
+
+    /**
+     * Resets the order of potentially-visible voxels as used by the rotation-related methods; since this order is not
+     * changed by normal {@link #put(int, byte)} and {@link #remove(int)}, this method must be used to complete any
+     * changes to the structure of the VoxelSeq.
+     */
+    public void hollow()
+    {
+        order.clear();
+        final int sz = full.size;
+        int k, x, y, z, item;
+        for (int i = 0; i < sz; i++) {
+            k = key[item = full.items[i]];
+            x = extractX(k);
+            y = extractY(k);
+            z = extractZ(k);
+            if(x <= 0 || x >= sizeX - 1 || y <= 0 || y >= sizeY -1 || z <= 0 || z >= sizeZ - 1 ||
+                    !containsKey(x - 1, y, z) || !containsKey(x + 1, y, z) ||
+                    !containsKey(x, y - 1, z) || !containsKey(x, y + 1, z) ||
+                    !containsKey(x, y, z - 1) || !containsKey(x, y, z + 1))
+                order.add(item);
         }
     }
     private int realSize() {
@@ -436,7 +484,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
         }
         key[pos] = k;
         value[pos] = v;
-        order.add(pos);
+        full.add(pos);
         if (size++ >= maxFill)
             rehash(arraySize(size + 1, f));
         return -1;
@@ -447,7 +495,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
             if (containsNullKey)
             {
                 fixOrder(n);
-                order.insert(idx, n);
+                full.insert(idx, n);
                 return n;
             }
             containsNullKey = true;
@@ -460,21 +508,21 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
                 if (curr == k)
                 {
                     fixOrder(pos);
-                    order.insert(idx, pos);
+                    full.insert(idx, pos);
                     return pos;
                 }
                 while ((curr = key[pos = (pos + 1) & mask]) != 0)
                     if (curr == k)
                     {
                         fixOrder(pos);
-                        order.insert(idx, pos);
+                        full.insert(idx, pos);
                         return pos;
                     }
             }
         }
         key[pos] = k;
         value[pos] = v;
-        order.insert(idx, pos);
+        full.insert(idx, pos);
         if (size++ >= maxFill)
             rehash(arraySize(size + 1, f));
         return -1;
@@ -553,28 +601,6 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
         value[pos] = v;
         return oldValue;
     }
-    /**
-     * Removes the mapping associated with the first key in iteration order.
-     *
-     * @return the value previously associated with the first key in iteration
-     *         order.
-     * @throws NoSuchElementException
-     *             is this map is empty.
-     */
-    public byte removeFirst() {
-        return removeAt(0);
-    }
-    /**
-     * Removes the mapping associated with the last key in iteration order.
-     *
-     * @return the value previously associated with the last key in iteration
-     *         order.
-     * @throws NoSuchElementException
-     *             is this map is empty.
-     */
-    public byte removeLast() {
-        return removeAt(size-1);
-    }
     public byte get(final int k) {
         if (k == 0)
             return containsNullKey ? value[n] : defRetValue;
@@ -651,7 +677,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
     public int indexOf(final int k)
     {
         int pos = positionOf(k);
-        return (pos < 0) ? -1 : order.indexOf(pos);
+        return (pos < 0) ? -1 : full.indexOf(pos);
     }
 
     /**
@@ -669,7 +695,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
         if(l < 0) return false;
         int r = indexOf(right);
         if(r < 0) return false;
-        order.swap(l, r);
+        full.swap(l, r);
         return true;
     }
     /**
@@ -682,8 +708,8 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
      */
     public boolean swapIndices(final int left, final int right)
     {
-        if(left < 0 || right < 0 || left >= order.size || right >= order.size || left == right) return false;
-        order.swap(left, right);
+        if(left < 0 || right < 0 || left >= full.size || right >= full.size || left == right) return false;
+        full.swap(left, right);
         return true;
     }
 
@@ -729,9 +755,13 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
         size = 0;
         containsNullKey = false;
         Arrays.fill(key, 0);
+        full.clear();
         order.clear();
     }
 
+    public int hollowSize() {
+        return order.size;
+    }
     public int size() {
         return size;
     }
@@ -840,10 +870,10 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
      */
     protected int fixOrder(final int i) {
         if (size == 0) {
-            order.clear();
+            full.clear();
             return -1;
         }
-        return order.removeValue(i);
+        return full.removeValue(i);
     }
 
     /**
@@ -857,15 +887,15 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
     protected void fixOrder(int s, int d) {
         if(size == 0)
             return;
-        if (size == 1 || order.items[0] == s) {
-            order.set(0, d);
+        if (size == 1 || full.items[0] == s) {
+            full.set(0, d);
         }
-        else if (order.items[order.size-1] == s) {
-            order.set(order.size - 1, d);
+        else if (full.items[full.size-1] == s) {
+            full.set(full.size - 1, d);
         }
         else
         {
-            order.set(order.indexOf(s), d);
+            full.set(full.indexOf(s), d);
         }
     }
 
@@ -877,7 +907,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
     public int firstKey() {
         if (size == 0)
             throw new NoSuchElementException();
-        return key[order.items[0]];
+        return key[full.items[0]];
     }
     /**
      * Returns the last key of this map in iteration order.
@@ -887,7 +917,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
     public int lastKey() {
         if (size == 0)
             throw new NoSuchElementException();
-        return key[order.items[order.size-1]];
+        return key[full.items[full.size-1]];
     }
     /**
      * A list iterator over a VoxelSeq.
@@ -1775,10 +1805,10 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
         final int mask = newN - 1; // Note that this is used by the hashing macro
         final int[] newKey = new int[newN + 1];
         final byte[] newValue = new byte[newN + 1];
-        final int sz = order.size;
+        final int sz = full.size;
         int k;
         int i, pos;
-        final int[] oi = order.items;
+        final int[] oi = full.items;
         for (int q = 0; q < sz; q++) {
             i = oi[q];
             if ((k = key[i]) == 0)
@@ -1819,6 +1849,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
             c.value = new byte[n + 1];
             System.arraycopy(value, 0, c.value, 0, n + 1);
             c.order = order.copy();
+            c.full = full.copy();
             return c;
         } catch (Exception cantHappen) {
             throw new UnsupportedOperationException(cantHappen + (cantHappen.getMessage() != null ?
@@ -2012,7 +2043,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
 
             key[pos] = k;
             value[pos] = v;
-            order.add(pos);
+            full.add(pos);
         }
     }
 
@@ -2022,6 +2053,62 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
      * @return the value at the index, if the index is valid, otherwise the default return value
      */
     public byte getAt(final int idx) {
+        int pos;
+        if (idx < 0 || idx >= full.size)
+            return defRetValue;
+        // The starting point.
+        if (key[pos = full.get(idx)] == 0)
+            return containsNullKey ? value[n] : defRetValue;
+        return value[pos];
+    }
+    /**
+     * Gets the key at the given index in the iteration order in constant time (random-access).
+     * @param idx the index in the iteration order of the key to fetch
+     * @return the key at the index, if the index is valid, otherwise 0
+     */
+    public int keyAt(final int idx) {
+        if (idx < 0 || idx >= full.size)
+            return 0;
+        // The starting point.
+        return key[full.get(idx)];
+    }
+
+    /**
+     * Gets the key-value Map.Entry at the given index in the iteration order in constant time (random-access).
+     * @param idx the index in the iteration order of the entry to fetch
+     * @return the key-value entry at the index, if the index is valid, otherwise null
+     */
+    public MapEntry entryAt(final int idx)
+    {
+        if (idx < 0 || idx >= full.size)
+            return null;
+        return new MapEntry(full.get(idx));
+    }
+
+    /**
+     * Removes the key and value at the given index in the iteration order in not-exactly constant time (though it still
+     * should be efficient).
+     * @param idx the index in the iteration order of the key and value to remove
+     * @return the value removed, if there was anything removed, or the default return value otherwise (often null)
+     */
+    public byte removeAt(final int idx) {
+
+        if (idx < 0 || idx >= full.size)
+            return defRetValue;
+        int pos = full.get(idx);
+        if (key[pos] == 0) {
+            if (containsNullKey)
+                return removeNullEntry();
+            return defRetValue;
+        }
+        return removeEntry(pos);
+    }
+    /**
+     * Gets the value at the given index in the iteration order in constant time (random-access).
+     * @param idx the index in the iteration order of the value to fetch
+     * @return the value at the index, if the index is valid, otherwise the default return value
+     */
+    public byte getAtHollow(final int idx) {
         int pos;
         if (idx < 0 || idx >= order.size)
             return defRetValue;
@@ -2035,7 +2122,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
      * @param idx the index in the iteration order of the key to fetch
      * @return the key at the index, if the index is valid, otherwise 0
      */
-    public int keyAt(final int idx) {
+    public int keyAtHollow(final int idx) {
         if (idx < 0 || idx >= order.size)
             return 0;
         // The starting point.
@@ -2047,7 +2134,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
      * @param idx the index in the iteration order of the entry to fetch
      * @return the key-value entry at the index, if the index is valid, otherwise null
      */
-    public MapEntry entryAt(final int idx)
+    public MapEntry entryAtHollow(final int idx)
     {
         if (idx < 0 || idx >= order.size)
             return null;
@@ -2060,9 +2147,9 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
      * @param idx the index in the iteration order of the key and value to remove
      * @return the value removed, if there was anything removed, or the default return value otherwise (often null)
      */
-    public byte removeAt(final int idx) {
+    public byte removeAtHollow(final int idx) {
 
-        if (idx < 0 || idx >= order.size)
+        if (idx < 0 || idx >= full.size)
             return defRetValue;
         int pos = order.get(idx);
         if (key[pos] == 0) {
@@ -2079,7 +2166,8 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
      */
     public byte randomValue(IRNG rng)
     {
-        return getAt(rng.nextInt(order.size));
+        return value[full.getRandomElement(rng)];
+//        return getAt(rng.nextInt(order.size));
     }
 
     /**
@@ -2089,7 +2177,8 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
      */
     public int randomKey(IRNG rng)
     {
-        return keyAt(rng.nextInt(order.size));
+        return key[full.getRandomElement(rng)];
+//        return keyAt(rng.nextInt(order.size));
     }
 
     /**
@@ -2133,7 +2222,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
      */
     public VoxelSeq reorder(int... ordering)
     {
-        order.reorder(ordering);
+        full.reorder(ordering);
         return this;
     }
     private int alterEntry(final int pos) {
@@ -2348,12 +2437,12 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
      */
     public void sort(IntComparator comparator)
     {
-        sort(comparator, 0, size);
+        sort(comparator, 0, order.size);
     }
 
     /**
      * Sorts a sub-range of this VoxelSeq on its keys from what is currently the index {@code start} up to (but not
-     * including) the index {@code end}, using the supplied Comparator.
+     * including) the index {@code end}, using the supplied Comparator. Only sorts potentially-visible voxels.
      * @param comparator a Comparator that can be used on the same type this uses for its keys (may need wildcards)
      * @param start the first index of a key to sort (the index can change after this)
      * @param end the exclusive bound on the indices to sort; often this is just {@link #size()}
@@ -2365,7 +2454,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
     /**
      * Gets the key at the given index in the iteration order in constant time, rotating the x, y, and z components of
      * the key to match {@link #rotation}.
-     * @param idx the index in the iteration order of the key to fetch
+     * @param idx the index in the potentially-visible-voxel order of the key to fetch
      * @return the key at the index, if the index is valid, otherwise 0
      */
     public int keyAtRotated(final int idx) {
@@ -2374,7 +2463,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
     /**
      * Gets the key at the given index in the iteration order in constant time, rotating the x, y, and z components of
      * the key to match {@code rotation} (a parameter, not the {@link #rotation} field of this class).
-     * @param idx the index in the iteration order of the key to fetch
+     * @param idx the index in the potentially-visible-voxel order of the key to fetch
      * @param rotation the rotation to use to edit the key; should be between 0 and 23 inclusive
      * @return the key at the index, if the index is valid, otherwise 0
      */

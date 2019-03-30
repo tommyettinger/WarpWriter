@@ -9,6 +9,7 @@ import warpwriter.model.nonvoxel.IntComparator;
 public interface IVoxelSeq extends ITurner {
     int size();
     void clear();
+    void hollow();
     int sizeX();
     void sizeX(int i);
     int sizeY();
@@ -20,6 +21,7 @@ public interface IVoxelSeq extends ITurner {
     byte get(int x, int y, int z);
     int keyAt(int index);
     byte getAt(int index);
+    byte getAtHollow(int index);
     byte getRotated(int x, int y, int z);
     byte getRotated(int x, int y, int z, int rotation);
     int keyAtRotated(int index);
