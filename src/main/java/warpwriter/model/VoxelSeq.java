@@ -2497,34 +2497,34 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
         {
             // 0-3 have z pointing towards z+ and the voxels rotating on that axis
             case 0: return k;
-            case 1: return (k & 0xFFF00000) | sizeX - (k & 0x3FF) << 10 | (k >>> 10 & 0x3FF);
-            case 2: return (k & 0xFFF00000) | (sizeY << 10) - (k & 0xFFC00) | sizeX - (k & 0x3FF);
-            case 3: return (k & 0xFFF00000) | (k & 0x3FF) << 10 | (sizeY - (k >>> 10 & 0x3FF));
+            case 1: return (k & 0x3FF00000) | sizeX - (k & 0x3FF) << 10 | (k >>> 10 & 0x3FF);
+            case 2: return (k & 0x3FF00000) | (sizeY << 10) - (k & 0xFFC00) | sizeX - (k & 0x3FF);
+            case 3: return (k & 0x3FF00000) | (k & 0x3FF) << 10 | (sizeY - (k >>> 10 & 0x3FF));
             // 4-7 have z pointing towards y+ and the voxels rotating on that axis
             case 4: return (k >>> 10 & 0x000FFC00) | (sizeY << 10) - (k & 0x000FFC00) << 10 | (k & 0x3FF);
             case 5: return (k >>> 10 & 0x000FFC00) | (k & 0x3FF) << 20 | (k >>> 10 & 0x3FF);
             case 6: return (k >>> 10 & 0x000FFC00) | (k & 0x000FFC00) << 10 | sizeX - (k & 0x3FF);
             case 7: return (k >>> 10 & 0x000FFC00) | (sizeX - (k & 0x3FF) << 20) | sizeY - (k >>> 10 & 0x3FF);
             // 8-11 have z pointing towards z-
-            case 8: return (sizeZ << 20) - (k & 0xFFF00000) | (k & 0xFFC00) | (k & 0x3FF);
-            case 9: return (sizeZ << 20) - (k & 0xFFF00000) |(sizeY) - (k >>> 10 & 0x3FF) | (k & 0x3FF) << 10;
-            case 10: return (sizeZ << 20) - (k & 0xFFF00000) | (sizeY << 10) - (k & 0xFFC00) | sizeX - (k & 0x3FF);
-            case 11: return (sizeZ << 20) - (k & 0xFFF00000) | (k >>> 10 & 0x3FF) | sizeX - (k & 0x3FF) << 10;
+            case 8: return (sizeZ << 20) - (k & 0x3FF00000) | (k & 0xFFC00) | (k & 0x3FF);
+            case 9: return (sizeZ << 20) - (k & 0x3FF00000) |(sizeY) - (k >>> 10 & 0x3FF) | (k & 0x3FF) << 10;
+            case 10: return (sizeZ << 20) - (k & 0x3FF00000) | (sizeY << 10) - (k & 0xFFC00) | sizeX - (k & 0x3FF);
+            case 11: return (sizeZ << 20) - (k & 0x3FF00000) | (k >>> 10 & 0x3FF) | sizeX - (k & 0x3FF) << 10;
             // 12-15 have z pointing towards y-
             case 12: return (sizeZ << 10) - (k >>> 10 & 0x000FFC00) | (k & 0x000FFC00) << 10 | (k & 0x3FF);
             case 13: return (sizeZ << 10) - (k >>> 10 & 0x000FFC00) | sizeX - (k & 0x3FF) << 20 | (k >>> 10 & 0x3FF);
             case 14: return (sizeZ << 10) - (k >>> 10 & 0x000FFC00) | (sizeY << 20) - (k << 10 & 0x3FF00000) | sizeX - (k & 0x3FF);
             case 15: return (sizeZ << 10) - (k >>> 10 & 0x000FFC00) | (k & 0x3FF) << 20 | sizeY - (k >>> 10 & 0x3FF);
             // 16-19 have z pointing towards x+ and the voxels rotating on that axis
-            case 16: return (k >>> 20 & 0x3FF) | (k & 0x000FFC00) | (sizeX - (k & 0x3FF)) << 20;
-            case 17: return (k >>> 20 & 0x3FF) | (sizeY << 20) - (k << 10 & 0x3FF00000) | (sizeX - (k & 0x3FF) << 10);
-            case 18: return (k >>> 20 & 0x3FF) | (sizeY << 10) - (k & 0x000FFC00) | (k & 0x3FF) << 20;
-            case 19: return (k >>> 20 & 0x3FF) | (k << 10 & 0x3FF00000) | (k << 10 & 0x000FFC00);
+            case 16: return (k >>> 20 & 0x3FF) | (k & 0x000FFC00) | (k & 0x3FF) << 20;
+            case 17: return (k >>> 20 & 0x3FF) | (k << 10 & 0x3FF00000) | (sizeX - (k & 0x3FF) << 10);
+            case 18: return (k >>> 20 & 0x3FF) | (sizeY << 10) - (k & 0x000FFC00) | (sizeX - (k & 0x3FF)) << 20;
+            case 19: return (k >>> 20 & 0x3FF) | (sizeY << 20) - (k << 10 & 0x3FF00000) | (k << 10 & 0x000FFC00);
             // 20-23 have z pointing towards x- and the voxels rotating on that axis
-            case 23: return sizeZ - (k >>> 20 & 0x3FF) | (sizeY << 20) - (k << 10 & 0x3FF00000) | (k << 10 & 0x000FFC00);
             case 20: return sizeZ - (k >>> 20 & 0x3FF) | (k & 0x000FFC00) | (k << 20 & 0x3FF00000);
             case 21: return sizeZ - (k >>> 20 & 0x3FF) | (k << 10 & 0x3FF00000) | (sizeX - (k & 0x3FF) << 10);
             case 22: return sizeZ - (k >>> 20 & 0x3FF) | (sizeY << 10) - (k & 0x000FFC00) | (sizeX - (k & 0x3FF)) << 20;
+            case 23: return sizeZ - (k >>> 20 & 0x3FF) | (sizeY << 20) - (k << 10 & 0x3FF00000) | (k << 10 & 0x000FFC00);
             default:
 //                System.out.println("this shouldn't be happening! " + k);
                 return 0;

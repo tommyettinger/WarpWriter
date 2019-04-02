@@ -72,6 +72,7 @@ public class SeqTest extends ApplicationAdapter {
         colorizer = Colorizer.FlesurrectBonusColorizer;
         voxelColor = new VoxelColor().set(colorizer);
         pixmapRenderer = new VoxelPixmapRenderer(new Pixmap(512, 512, Pixmap.Format.RGBA8888), voxelColor);
+        pixmapRenderer.easing = false;
         pmTexture = new Texture(pixmapRenderer.pixmap);
         maker = new ModelMaker(12345, colorizer);
 //        try {
