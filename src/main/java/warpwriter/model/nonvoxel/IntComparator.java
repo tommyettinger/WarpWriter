@@ -302,24 +302,6 @@ public interface IntComparator {
             new IntComparator() {
                 @Override
                 public int compare(int left, int right) {
-                    // values reversed y and reversed z equally, either as many times more important than reversed x
-                    return (right << 10 & 0x3FF00000) - (left << 10 & 0x3FF00000) +
-                            (right & 0x3FF) - (left & 0x3FF) +
-                            (right & 0x3FF00000) - (left & 0x3FF00000);
-                }
-            },
-            new IntComparator() {
-                @Override
-                public int compare(int left, int right) {
-                    // values x and reversed z equally, either as 1024 times more important than reversed y
-                    return (left << 20 & 0x3FF00000) - (right << 20 & 0x3FF00000) + 
-                            (right & 0xFFC00) - (left & 0xFFC00) +
-                            (right & 0x3FF00000) - (left & 0x3FF00000);
-                }
-            },
-            new IntComparator() {
-                @Override
-                public int compare(int left, int right) {
                     // values y and reversed z equally, either as many times more important than x
                     return (left << 10 & 0x3FF00000) - (right << 10 & 0x3FF00000) +
                             (left & 0x3FF) - (right & 0x3FF) +
@@ -335,9 +317,25 @@ public interface IntComparator {
                             (right & 0x3FF00000) - (left & 0x3FF00000);
                 }
             },
-
-
-
+            new IntComparator() {
+                @Override
+                public int compare(int left, int right) {
+                    // values reversed y and reversed z equally, either as many times more important than reversed x
+                    return (right << 10 & 0x3FF00000) - (left << 10 & 0x3FF00000) +
+                            (right & 0x3FF) - (left & 0x3FF) +
+                            (right & 0x3FF00000) - (left & 0x3FF00000);
+                }
+            },
+            new IntComparator() {
+                @Override
+                public int compare(int left, int right) {
+                    // values x and reversed z equally, either as 1024 times more important than reversed y
+                    return (left << 20 & 0x3FF00000) - (right << 20 & 0x3FF00000) +
+                            (right & 0xFFC00) - (left & 0xFFC00) +
+                            (right & 0x3FF00000) - (left & 0x3FF00000);
+                }
+            },
+            
             //16
             new IntComparator() {
                 @Override
