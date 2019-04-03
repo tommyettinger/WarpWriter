@@ -49,10 +49,15 @@ public class ShaderPalettizer extends ApplicationAdapter {
             "void main()\n" +
             "{\n" +
             "   vec4 tgt = texture2D( u_texture, v_texCoords );\n" +
-            "   vec4 used = texture2D(u_palette, vec2((tgt.b + floor(tgt.r * 31.99999)) * 0.03125, 1.0 - tgt.g));\n" +
-            "   float adj = sin(dot(gl_FragCoord.xy, vec2(4.743036261279236, 3.580412143837574))) * 1.1 + 0.05;\n" +
-            "   tgt.rgb = clamp(tgt.rgb + (used.rgb - tgt.rgb) * adj, 0.0, 1.0);\n" +
-            "   gl_FragColor.rgb = v_color.rgb * texture2D(u_palette, vec2((tgt.b + floor(tgt.r * 31.99999)) * 0.03125, 1.0 - tgt.g)).rgb;\n" + //(tgt.b + floor(tgt.r * 32.0)) * 0.03125, tgt.g
+            "   vec4 used = texture2D(u_palette, vec2((tgt.b + floor(tgt.r * 31.999)) * 0.03125, 1.0 - tgt.g));\n" +
+            //2.371518130639618, 1.7902060719189539
+            //4.743036261279236, 3.580412143837574
+            //7.114554391918853, 5.370618215756862
+            //9.486072522558471, 7.1608242876758155
+            "   float len = length(tgt.rgb) * 0.75;\n" + 
+            "   float adj = sin(dot(gl_FragCoord.xy, vec2(4.743036261279236, 3.580412143837574)) + len) * (len * len + 0.175);\n" +
+            "   tgt.rgb = clamp(tgt.rgb + (tgt.rgb - used.rgb) * adj, 0.0, 1.0);\n" +
+            "   gl_FragColor.rgb = v_color.rgb * texture2D(u_palette, vec2((tgt.b + floor(tgt.r * 31.999)) * 0.03125, 1.0 - tgt.g)).rgb;\n" + //(tgt.b + floor(tgt.r * 32.0)) * 0.03125, tgt.g
             "   gl_FragColor.a = v_color.a * tgt.a;\n" +
             "}";
     private ShaderProgram defaultShader;
@@ -86,7 +91,7 @@ public class ShaderPalettizer extends ApplicationAdapter {
 
     @Override
     public void create() {
-        palette = new Texture(Gdx.files.local("palettes/Flesurrect_GLSL.png"), Pixmap.Format.RGBA8888, false);
+        palette = new Texture(Gdx.files.local("palettes/FlesurrectBonus_GLSL.png"), Pixmap.Format.RGBA8888, false);
         font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
         defaultShader = SpriteBatch.createDefaultShader();
         shader = new ShaderProgram(vertexShader, fragmentShader);
@@ -100,8 +105,8 @@ public class ShaderPalettizer extends ApplicationAdapter {
         Gdx.input.setInputProcessor(inputProcessor());
 
         // if you don't have these files on this absolute path, that's fine, and they will be ignored
-        load("D:/Painting_by_Henri_Biva.jpg");
-        load("D:/Sierra_Nevadas.jpg");
+//        load("D:/Painting_by_Henri_Biva.jpg");
+//        load("D:/Sierra_Nevadas.jpg");
         load("D:/Mona_Lisa.jpg");
     }
 
