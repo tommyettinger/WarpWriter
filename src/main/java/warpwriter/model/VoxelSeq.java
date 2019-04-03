@@ -2516,7 +2516,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
             case 14: return (sizeZ << 10) - (k >>> 10 & 0x000FFC00) | (sizeY << 20) - (k << 10 & 0x3FF00000) | sizeX - (k & 0x3FF);
             case 15: return (sizeZ << 10) - (k >>> 10 & 0x000FFC00) | (k & 0x3FF) << 20 | sizeY - (k >>> 10 & 0x3FF);
             // 16-19 have z pointing towards x+ and the voxels rotating on that axis
-            case 16: return (k >>> 20 & 0x3FF) | (k & 0x000FFC00) | (k & 0x3FF) << 20;
+            case 16: return (k >>> 20 & 0x3FF) | (k & 0x000FFC00) | (k << 20 & 0x3FF00000);
             case 17: return (k >>> 20 & 0x3FF) | (k << 10 & 0x3FF00000) | (sizeX - (k & 0x3FF) << 10);
             case 18: return (k >>> 20 & 0x3FF) | (sizeY << 10) - (k & 0x000FFC00) | (sizeX - (k & 0x3FF)) << 20;
             case 19: return (k >>> 20 & 0x3FF) | (sizeY << 20) - (k << 10 & 0x3FF00000) | (k << 10 & 0x000FFC00);

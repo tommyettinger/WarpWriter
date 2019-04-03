@@ -498,7 +498,7 @@ public class WarpDraw {
                 z = HashMap3D.extractZ(xyz);
                 final int xPos = (sizeY - y) * 3 + offsetPX, yPos = z * 2 + (sizeX - x) * 3 + offsetPY;
                 renderer.rectRight(xPos, yPos, 3, 2, v, 256 + z * 8 - x * 5, x, y, z, time);
-                if (z >= sizeZ - 1 || seq.getRotated(x, y, z + 1) == 0)
+                //if (z >= sizeZ - 1 || seq.getRotated(x, y, z + 1) == 0)
                     renderer.rectVertical(xPos, yPos + 3, 3, 3, v, 260 + z * 8 - x * 5, x, y, z, time);
             }
         }
@@ -524,7 +524,7 @@ public class WarpDraw {
                 final int xPos = (sizeY - y + x) * 2 + 1, yPos = (z - x - y + sizeX + sizeY) * 2 + 1;
                 renderer.rectLeft(xPos, yPos, 2, 2, v, dep, x, y, z, time);
                 renderer.rectRight(xPos + 2, yPos, 2, 2, v, dep, x, y, z, time);
-                if (z >= sizeZ - 1 || seq.getRotated(x, y, z + 1) == 0)
+                //if (z >= sizeZ - 1 || seq.getRotated(x, y, z + 1) == 0)
                     renderer.rectVertical(xPos, yPos + 2, 4, 2, v, dep, x, y, z, time);
             }
         }
