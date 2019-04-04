@@ -344,21 +344,7 @@ public class VoxelColor implements IVoxelColor {
                 return dimmer.dimmer(processNoise(x, y, z, time), voxel);
             }
         }
-        switch (lightDirection) {
-            case ABOVE_RIGHT:
-            case ABOVE_LEFT:
-                return dimmer.bright(voxel);
-            case LEFT_BELOW:
-            case RIGHT_BELOW:
-                return dimmer.dim(voxel);
-            case BELOW_RIGHT:
-            case BELOW_LEFT:
-                return dimmer.dark(voxel);
-            case RIGHT_ABOVE:
-            case LEFT_ABOVE:
-            default:
-                return dimmer.medium(voxel);
-        }
+        return verticalFace(voxel);
     }
 
     @Override
@@ -375,21 +361,7 @@ public class VoxelColor implements IVoxelColor {
                 return dimmer.dimmer(processNoise(x, y, z, time), voxel);
             }
         }
-
-        switch (lightDirection) {
-            case RIGHT_ABOVE:
-            case RIGHT_BELOW:
-                return dimmer.bright(voxel);
-            case ABOVE_LEFT:
-            case BELOW_LEFT:
-            case LEFT_ABOVE:
-                return dimmer.dim(voxel);
-            case ABOVE_RIGHT:
-            case BELOW_RIGHT:
-            case LEFT_BELOW:
-            default:
-                return dimmer.medium(voxel);
-        }
+        return rightFace(voxel);
     }
 
     @Override
@@ -406,21 +378,7 @@ public class VoxelColor implements IVoxelColor {
                 return dimmer.dimmer(processNoise(x, y, z, time), voxel);
             }
         }
-
-        switch (lightDirection) {
-            case LEFT_ABOVE:
-            case LEFT_BELOW:
-                return dimmer.bright(voxel);
-            case ABOVE_LEFT:
-            case BELOW_LEFT:
-            case RIGHT_BELOW:
-                return dimmer.medium(voxel);
-            default:
-            case ABOVE_RIGHT:
-            case BELOW_RIGHT:
-            case RIGHT_ABOVE:
-                return dimmer.dim(voxel);
-        }
+        return leftFace(voxel);
     }
 
     /**
