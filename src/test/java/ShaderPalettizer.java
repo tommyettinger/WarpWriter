@@ -106,8 +106,8 @@ public class ShaderPalettizer extends ApplicationAdapter {
 
         // if you don't have these files on this absolute path, that's fine, and they will be ignored
 //        load("D:/Painting_by_Henri_Biva.jpg");
-//        load("D:/Sierra_Nevadas.jpg");
-        load("D:/Mona_Lisa.jpg");
+        load("D:/Sierra_Nevadas.jpg");
+//        load("D:/Mona_Lisa.jpg");
     }
 
 
@@ -118,14 +118,16 @@ public class ShaderPalettizer extends ApplicationAdapter {
 
         batch.setProjectionMatrix(screenView.getCamera().combined);
         if(screenTexture != null) {
-            batch.setShader(shader);
-            batch.setColor(-0x1.fffffep126f);
-            Gdx.gl.glActiveTexture(GL20.GL_TEXTURE1);
-            palette.bind();
-            batch.begin();
-            shader.setUniformi("u_palette", 1);
-            Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
-
+            if(batch.getShader().equals(shader)) {
+                batch.setColor(-0x1.fffffep126f);
+                Gdx.gl.glActiveTexture(GL20.GL_TEXTURE1);
+                palette.bind();
+                batch.begin();
+                shader.setUniformi("u_palette", 1);
+                Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
+            }
+            else
+                batch.begin();
             batch.draw(screenTexture, 0, 0);
         }
         else {

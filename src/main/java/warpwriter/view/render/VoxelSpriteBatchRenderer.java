@@ -206,6 +206,21 @@ public class VoxelSpriteBatchRenderer implements IRectangleRenderer, ITriangleRe
     }
 
     @Override
+    public IRectangleRenderer rectVertical(int px, int py, int sizeX, int sizeY, byte voxel, int depth, int vx, int vy, int vz, int time) {
+        return rect(px, py, sizeX, sizeY, color.verticalFace(voxel, vx, vy, vz, time));
+    }
+
+    @Override
+    public IRectangleRenderer rectLeft(int px, int py, int sizeX, int sizeY, byte voxel, int depth, int vx, int vy, int vz, int time) {
+        return rect(px, py, sizeX, sizeY, color.leftFace(voxel, vx, vy, vz, time));
+    }
+
+    @Override
+    public IRectangleRenderer rectRight(int px, int py, int sizeX, int sizeY, byte voxel, int depth, int vx, int vy, int vz, int time) {
+        return rect(px, py, sizeX, sizeY, color.rightFace(voxel, vx, vy, vz, time));
+    }
+
+    @Override
     public ITriangleRenderer drawLeftTriangleVerticalFace(int x, int y, byte voxel) {
         final int color = this.color.verticalFace(voxel);
         return flipX ?

@@ -118,6 +118,21 @@ public class BlinkRenderer implements IRectangleRenderer, ITriangleRenderer {
     }
 
     @Override
+    public IRectangleRenderer rectVertical(int px, int py, int sizeX, int sizeY, byte voxel, int depth, int vx, int vy, int vz, int time) {
+        return rect.rectVertical(px, py, sizeX, sizeY, voxel, depth, vx, vy, vz, time);
+    }
+
+    @Override
+    public IRectangleRenderer rectLeft(int px, int py, int sizeX, int sizeY, byte voxel, int depth, int vx, int vy, int vz, int time) {
+        return rect.rectLeft(px, py, sizeX, sizeY, voxel, depth, vx, vy, vz, time);
+    }
+
+    @Override
+    public IRectangleRenderer rectRight(int px, int py, int sizeX, int sizeY, byte voxel, int depth, int vx, int vy, int vz, int time) {
+        return rect.rectRight(px, py, sizeX, sizeY, voxel, depth, vx, vy, vz, time);
+    }
+
+    @Override
     public ITriangleRenderer drawLeftTriangle(int x, int y, int color) {
         return tri.drawLeftTriangle(x, y, f(color));
     }

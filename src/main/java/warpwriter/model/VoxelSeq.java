@@ -275,7 +275,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
      * @param f the load factor.
      */
     public VoxelSeq(final VoxelSeq m, final float f) {
-        this(m.size(), f);
+        this(m.size, f);
         putAll(m);
     }
 
@@ -455,10 +455,10 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
      */
     public void putAll(VoxelSeq m) {
         if (f <= .5)
-            ensureCapacity(m.size()); // The resulting map will be sized for m.size() elements
+            ensureCapacity(m.size); // The resulting map will be sized for m.size() elements
         else
-            tryCapacity(size() + m.size()); // The resulting map will be size() +  m.size() elements
-        int n = m.size();
+            tryCapacity(size + m.size); // The resulting map will be size() +  m.size() elements
+        int n = m.size;
         for (int i = 0; i < n; i++) {             
             put(m.keyAt(i), m.getAt(i));
         }
@@ -759,11 +759,11 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
         order.clear();
     }
 
-    public int hollowSize() {
-        return order.size;
+    public int fullSize() {
+        return size;
     }
     public int size() {
-        return size;
+        return order.size;
     }
 
     public boolean isEmpty() {
@@ -1979,7 +1979,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
     @Override
     public String toString() {
         final StringBuilder s = new StringBuilder();
-        int n = size(), i = 0;
+        int n = size, i = 0;
         boolean first = true;
         s.append("VoxelSeq{");
         while (i < n) {
@@ -1997,7 +1997,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
         if (!(o instanceof VoxelSeq))
             return false;
         VoxelSeq m = (VoxelSeq) o;
-        if (m.size() != size())
+        if (m.size != size)
             return false;
         return entrySet().containsAll(m.entrySet());
     }
