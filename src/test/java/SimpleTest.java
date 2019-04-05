@@ -19,12 +19,11 @@ import squidpony.squidmath.NumberTools;
 import warpwriter.Coloring;
 import warpwriter.ModelMaker;
 import warpwriter.VoxIO;
-import warpwriter.model.IFetch;
 import warpwriter.model.IModel;
 import warpwriter.model.color.Colorizer;
-import warpwriter.model.decide.DecideFetch;
-import warpwriter.model.fetch.*;
-import warpwriter.model.nonvoxel.HashMap3D;
+import warpwriter.model.fetch.ArrayModel;
+import warpwriter.model.fetch.BoxModel;
+import warpwriter.model.fetch.ColorFetch;
 import warpwriter.model.nonvoxel.LittleEndianDataInputStream;
 import warpwriter.view.VoxelSprite;
 import warpwriter.view.color.Dimmer;
@@ -205,27 +204,27 @@ public class SimpleTest extends ApplicationAdapter {
     }
 
     public IModel model() {
-        // return new ArrayModel(maker.shipLargeRandomColorized())
-        HashMap3D<IFetch> map = new HashMap3D<>();
-        for (int x=0; x<3; x++) {
-            for (int y = 0; y < 3; y++)
-//                for (int z=0; z<3; z++)
-//                    map.put(x, y, 0, ColorFetch.color(maker.randomMainColor()));
-            {
-                byte midColor = colorizer.getReducer().randomColorIndex(maker.rng);
-                map.put(x, y, 0, new DecideFetch(
-                        TileFetch.Diagonal16x16x16,
-                        new NoiseFetch(colorizer.darken(midColor), midColor, midColor, colorizer.brighten(midColor))
-                ));
-            }
-        }
-        return new WorldFetch()
-                .set(map)
-                .model(48, 48, 16);
-//        return new DecideFetch(
-//                TileFetch.Diagonal16x16x16,
-//                new NoiseFetch(Colorizer.AuroraBonusColorizer.darken(midColor), midColor, midColor, Colorizer.AuroraBonusColorizer.brighten(midColor))
-//        ).model(16, 16, 16);
+         return new ArrayModel(maker.shipLargeNoiseColorized());
+//        HashMap3D<IFetch> map = new HashMap3D<>();
+//        for (int x=0; x<3; x++) {
+//            for (int y = 0; y < 3; y++)
+////                for (int z=0; z<3; z++)
+////                    map.put(x, y, 0, ColorFetch.color(maker.randomMainColor()));
+//            {
+//                byte midColor = colorizer.getReducer().randomColorIndex(maker.rng);
+//                map.put(x, y, 0, new DecideFetch(
+//                        TileFetch.Diagonal16x16x16,
+//                        new NoiseFetch(colorizer.darken(midColor), midColor, midColor, colorizer.brighten(midColor))
+//                ));
+//            }
+//        }
+//        return new WorldFetch()
+//                .set(map)
+//                .model(48, 48, 16);
+////        return new DecideFetch(
+////                TileFetch.Diagonal16x16x16,
+////                new NoiseFetch(Colorizer.AuroraBonusColorizer.darken(midColor), midColor, midColor, Colorizer.AuroraBonusColorizer.brighten(midColor))
+////        ).model(16, 16, 16);
     }
 
     @Override
