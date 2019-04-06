@@ -91,7 +91,7 @@ public class ShaderPalettizer extends ApplicationAdapter {
 
     @Override
     public void create() {
-        palette = new Texture(Gdx.files.local("palettes/FlesurrectBonus_GLSL.png"), Pixmap.Format.RGBA8888, false);
+        palette = new Texture(Gdx.files.local("palettes/Quorum64_GLSL.png"), Pixmap.Format.RGBA8888, false);
         font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
         defaultShader = SpriteBatch.createDefaultShader();
         shader = new ShaderProgram(vertexShader, fragmentShader);
@@ -106,8 +106,8 @@ public class ShaderPalettizer extends ApplicationAdapter {
 
         // if you don't have these files on this absolute path, that's fine, and they will be ignored
 //        load("D:/Painting_by_Henri_Biva.jpg");
-        load("D:/Sierra_Nevadas.jpg");
-//        load("D:/Mona_Lisa.jpg");
+//        load("D:/Sierra_Nevadas.jpg");
+        load("D:/Mona_Lisa.jpg");
     }
 
 
