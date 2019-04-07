@@ -324,7 +324,7 @@ public class PNG8 implements Disposable {
             int py = flipY ? (h - y - 1) : y;
             for (int px = 0; px < w; px++) {
                 color = pixmap.getPixel(px, py);
-                if((color & 0xFE) != 0xFE) {
+                if((color & 0xFE) != 0xFE && !colorToIndex.containsKey(color)) {
                     if(hasTransparent == 0 && colorToIndex.size >= 256)                     
                     {
                         write(output, pixmap, true, ditherFallback, threshold);

@@ -381,11 +381,11 @@ public class PaletteReducer {
                 r2 = (color2 >>> 24), g2 = (color2 >>> 16 & 0xFF), b2 = (color2 >>> 8 & 0xFF),
                 rmean = r1 + r2,
                 r = r1 - r2,
-                g = g1 - g2 << 1,
+                g = g1 - g2,
                 b = b1 - b2,
                 y = Math.max(r1, Math.max(g1, b1)) - Math.max(r2, Math.max(g2, b2));
 //        return (((512 + rmean) * r * r) >> 8) + g * g + (((767 - rmean) * b * b) >> 8);
-        return (((1024 + rmean) * r * r) >> 9) + g * g + (((1534 - rmean) * b * b) >> 9) + y * y * 5;
+        return (((1024 + rmean) * r * r) >> 7) + g * g * 12 + (((1534 - rmean) * b * b) >> 8) + y * y * 14;
     }
 
     /**
@@ -406,11 +406,24 @@ public class PaletteReducer {
                 b1 = (color1 >>> 8 & 0xFF),
                 rmean = (r1 + r2),
                 r = r1 - r2,
-                g = g1 - g2 << 1,
+                g = g1 - g2,
                 b = b1 - b2,
                 y = Math.max(r1, Math.max(g1, b1)) - Math.max(r2, Math.max(g2, b2));
-        return (((1024 + rmean) * r * r) >> 9) + g * g + (((1534 - rmean) * b * b) >> 9) + y * y * 5;
+        return (((1024 + rmean) * r * r) >> 7) + g * g * 12 + (((1534 - rmean) * b * b) >> 8) + y * y * 14;
     }
+//    public static int difference(final int color1, int r2, int g2, int b2) {
+//        if((color1 & 0x80) == 0) return 0x70000000; // if a transparent color is being compared, it is always different
+//        final int 
+//                r1 = (color1 >>> 24),
+//                g1 = (color1 >>> 16 & 0xFF),
+//                b1 = (color1 >>> 8 & 0xFF),
+//                rmean = (r1 + r2),
+//                r = r1 - r2,
+//                g = g1 - g2 << 1,
+//                b = b1 - b2,
+//                y = Math.max(r1, Math.max(g1, b1)) - Math.max(r2, Math.max(g2, b2));
+//        return (((1024 + rmean) * r * r) >> 9) + g * g + (((1534 - rmean) * b * b) >> 9) + y * y * 5;
+//    }
 
     /**
      * Color difference metric; returns large numbers even for smallish differences.
@@ -431,7 +444,8 @@ public class PaletteReducer {
                 b = b1 - b2,
                 y = Math.max(r1, Math.max(g1, b1)) - Math.max(r2, Math.max(g2, b2));
 //        return (((512 + rmean) * r * r) >> 8) + g * g + (((767 - rmean) * b * b) >> 8);
-        return (((1024 + rmean) * r * r) >> 9) + g * g + (((1534 - rmean) * b * b) >> 9) + y * y * 5;
+//        return (((1024 + rmean) * r * r) >> 9) + g * g + (((1534 - rmean) * b * b) >> 9) + y * y * 5;
+        return (((1024 + rmean) * r * r) >> 7) + g * g * 12 + (((1534 - rmean) * b * b) >> 8) + y * y * 14;
     }
 
     /**
