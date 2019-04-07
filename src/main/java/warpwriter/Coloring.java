@@ -994,10 +994,10 @@ public class Coloring {
 
     /**
      * An auto-generated palette made by churning out over a thousand random colors and repeatedly merging the most
-     * similar pair of colors, until it reached 63 colors (plus transparent, for 64 total). {@link #QUORUM128} is a
-     * similar palette that uses 128 total colors.
+     * similar pair of colors, until it reached 63 colors (plus transparent, for 64 total); this uses an earlier
+     * version of the algorithm used by {@link #QUORUM64} and {@link #QUORUM128}.
      */
-    public static final int[] QUORUM64 = {
+    public static final int[] QUORUM64_ALPHA = {
             0x00000000, 0x010101FF, 0x1B2933FF, 0x4E5762FF, 0x7B7B7BFF, 0xA29B8BFF, 0xC1C1C1FF, 0xD2CEE9FF,
             0xF7F8FFFF, 0x70101CFF, 0x293300FF, 0x293383FF, 0x003A5AFF, 0x0A5B35FF, 0x573E0AFF, 0x007A15FF,
             0x049244FF, 0x9A0A32FF, 0x5F0E4AFF, 0xB31D6CFF, 0x1B6101FF, 0x501E95FF, 0x007562FF, 0x7B5C0EFF,
@@ -1006,6 +1006,21 @@ public class Coloring {
             0x9F729EFF, 0xFA6DA7FF, 0xA88E4BFF, 0x9A85C0FF, 0x6DB58BFF, 0xA6B657FF, 0xD08659FF, 0x87ABEBFF,
             0xB475DDFF, 0x33FBA8FF, 0xD87E9AFF, 0x55DEB9FF, 0x86D77FFF, 0x71E1EBFF, 0x71F897FF, 0xEAB66CFF,
             0xFFB09FFF, 0xE1A8BAFF, 0xCADE8EFF, 0xF298F5FF, 0xF8DF7AFF, 0xAEFBE0FF, 0xF2F8BAFF, 0xC2FFA9FF,
+    };
+    /**
+     * An auto-generated palette made by churning out over a thousand random colors and repeatedly merging the most
+     * similar pair of colors, until it reached 63 colors (plus transparent, for 64 total). {@link #QUORUM128} is a
+     * similar palette that uses 128 total colors.
+     */
+    public static final int[] QUORUM64 = {
+            0x00000000, 0x010101FF, 0x2D2D2DFF, 0x555555FF, 0x7B7B7BFF, 0x9F9F9FFF, 0xC1C1C1FF, 0xE1E1E1FF,
+            0xFFFFFFFF, 0x412F64FF, 0x097304FF, 0x6D0575FF, 0x572E08FF, 0x98065AFF, 0x00A800FF, 0x812E25FF,
+            0x314B34FF, 0xE7003BFF, 0x2273B3FF, 0x2D8124FF, 0x594885FF, 0x2C766FFF, 0x6A513AFF, 0xBA354FFF,
+            0x98299FFF, 0xD92760FF, 0xAC30BDFF, 0x3DA035FF, 0x708321FF, 0x5B836AFF, 0x90555CFF, 0x657BE6FF,
+            0x2FB4B5FF, 0xCC5C61FF, 0x72A655FF, 0x9A9235FF, 0xD24AB4FF, 0x67CB4AFF, 0x8D7C99FF, 0x649AB7FF,
+            0xA572B4FF, 0xDD7797FF, 0x3CE6EEFF, 0xCF66E8FF, 0xBD9437FF, 0x6DCDD4FF, 0x9FA4EDFF, 0x9DAE9AFF,
+            0xD1A1BAFF, 0xD8AF6BFF, 0xFA6AA3FF, 0xAFC8C1FF, 0xFABA57FF, 0x9DDBF1FF, 0xAEE18CFF, 0xEFA9BDFF,
+            0x98F991FF, 0xF0E859FF, 0xE591F8FF, 0xD0D1D8FF, 0xAAFFFCFF, 0xFED3A2FF, 0xF8C1F9FF, 0xDFF8D4FF,
     };
     /**
      * An auto-generated palette made by churning out over a thousand random colors and repeatedly merging the most
