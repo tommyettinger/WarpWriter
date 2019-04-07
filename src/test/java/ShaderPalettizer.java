@@ -106,8 +106,8 @@ public class ShaderPalettizer extends ApplicationAdapter {
 
         // if you don't have these files on this absolute path, that's fine, and they will be ignored
 //        load("D:/Painting_by_Henri_Biva.jpg");
-        load("D:/Sierra_Nevadas.jpg");
-//        load("D:/Mona_Lisa.jpg");
+//        load("D:/Sierra_Nevadas.jpg");
+        load("D:/Mona_Lisa.jpg");
     }
 
 
@@ -151,6 +151,27 @@ public class ShaderPalettizer extends ApplicationAdapter {
                     case Input.Keys.Q:
                     case Input.Keys.ESCAPE:
                         Gdx.app.exit();
+                        break;
+                    case Input.Keys.NUM_1:
+                    case Input.Keys.NUMPAD_1:
+                        palette = new Texture(Gdx.files.local("palettes/Quorum64_GLSL.png"), Pixmap.Format.RGBA8888, false);
+                        break;
+                    case Input.Keys.NUM_2:
+                    case Input.Keys.NUMPAD_2:
+                        palette = new Texture(Gdx.files.local("palettes/Quorum128_GLSL.png"), Pixmap.Format.RGBA8888, false);
+                        break;
+                    case Input.Keys.NUM_3:
+                    case Input.Keys.NUMPAD_3:
+                        palette = new Texture(Gdx.files.local("palettes/Quorum256_GLSL.png"), Pixmap.Format.RGBA8888, false);
+                        break;
+                    case Input.Keys.M:                         
+                        load("D:/Mona_Lisa.jpg");
+                        break;
+                    case Input.Keys.S: 
+                        load("D:/Sierra_Nevadas.jpg");
+                        break;
+                    case Input.Keys.B:                         
+                        load("D:/Painting_by_Henri_Biva.jpg");
                         break;
                     default:
                         if(batch.getShader().equals(defaultShader))
