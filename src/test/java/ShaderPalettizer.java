@@ -46,20 +46,26 @@ public class ShaderPalettizer extends ApplicationAdapter {
             "varying vec4 v_color;\n" +
             "uniform sampler2D u_texture;\n" +
             "uniform sampler2D u_palette;\n" +
+            "const float b_adj = 31.0 / 32.0;\n" +
+            "const float rb_adj = 32.0 / 1023.0;\n" +
             "void main()\n" +
             "{\n" +
             "   vec4 tgt = texture2D( u_texture, v_texCoords );\n" +
-            "   vec4 used = texture2D(u_palette, vec2((tgt.b + floor(tgt.r * 31.999)) * 0.03125, 1.0 - tgt.g));\n" +
-            //2.371518130639618, 1.7902060719189539
-            //4.743036261279236, 3.580412143837574
-            //7.114554391918853, 5.370618215756862
-            //9.486072522558471, 7.1608242876758155
+//            "   gl_FragColor = texture2D(u_palette, vec2((tgt.b * b_adj + floor(tgt.r * 31.999)) * rb_adj, 1.0 - tgt.g));\n" + //solid shading
+            "   vec4 used = texture2D(u_palette, vec2((tgt.b * b_adj + floor(tgt.r * 31.999)) * rb_adj, 1.0 - tgt.g));\n" +
             "   float len = length(tgt.rgb) * 0.75;\n" + 
             "   float adj = sin(dot(gl_FragCoord.xy, vec2(4.743036261279236, 3.580412143837574)) + len) * (len * len + 0.175);\n" +
             "   tgt.rgb = clamp(tgt.rgb + (tgt.rgb - used.rgb) * adj, 0.0, 1.0);\n" +
-            "   gl_FragColor.rgb = v_color.rgb * texture2D(u_palette, vec2((tgt.b + floor(tgt.r * 31.999)) * 0.03125, 1.0 - tgt.g)).rgb;\n" + //(tgt.b + floor(tgt.r * 32.0)) * 0.03125, tgt.g
+            "   gl_FragColor.rgb = v_color.rgb * texture2D(u_palette, vec2((tgt.b * b_adj + floor(tgt.r * 31.999)) * rb_adj, 1.0 - tgt.g)).rgb;\n" +
             "   gl_FragColor.a = v_color.a * tgt.a;\n" +
             "}";
+
+    //2.371518130639618, 1.7902060719189539
+    //4.743036261279236, 3.580412143837574
+    //7.114554391918853, 5.370618215756862
+    //9.486072522558471, 7.1608242876758155
+
+
     private ShaderProgram defaultShader;
     private ShaderProgram shader;
     private Texture palette;
@@ -87,16 +93,17 @@ public class ShaderPalettizer extends ApplicationAdapter {
     public void load(String name) {
         //// loads a file by its full path, which we get via drag+drop
         screenTexture = new Texture(Gdx.files.absolute(name));
+        screenTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
     }
 
     @Override
     public void create() {
         palette = new Texture(Gdx.files.local("palettes/Quorum256_GLSL.png"), Pixmap.Format.RGBA8888, false);
+        palette.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
         defaultShader = SpriteBatch.createDefaultShader();
         shader = new ShaderProgram(vertexShader, fragmentShader);
         if (!shader.isCompiled()) throw new GdxRuntimeException("Couldn't compile shader: " + shader.getLog());
-
         batch = new SpriteBatch(1000, defaultShader);
         screenView = new ScreenViewport();
         screenView.getCamera().position.set(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0);
@@ -164,6 +171,22 @@ public class ShaderPalettizer extends ApplicationAdapter {
                     case Input.Keys.NUMPAD_3:
                         palette = new Texture(Gdx.files.local("palettes/Quorum256_GLSL.png"), Pixmap.Format.RGBA8888, false);
                         break;
+                    case Input.Keys.NUM_4:
+                    case Input.Keys.NUMPAD_4:
+                        palette = new Texture(Gdx.files.local("palettes/DB_Aurora_GLSL.png"), Pixmap.Format.RGBA8888, false);
+                        break;
+                    case Input.Keys.NUM_5:
+                    case Input.Keys.NUMPAD_5:
+                        palette = new Texture(Gdx.files.local("palettes/Flesurrect_GLSL.png"), Pixmap.Format.RGBA8888, false);
+                        break;
+                    case Input.Keys.NUM_6:
+                    case Input.Keys.NUMPAD_6:
+                        palette = new Texture(Gdx.files.local("palettes/FlesurrectBonus_GLSL.png"), Pixmap.Format.RGBA8888, false);
+                        break;
+//                    case Input.Keys.NUM_0:
+//                    case Input.Keys.NUMPAD_0:
+//                        palette = new Texture(Gdx.files.local("Quorum64_GLSL.png"), Pixmap.Format.RGBA8888, false);
+//                        break;
                     case Input.Keys.M:                         
                         load("D:/Mona_Lisa.jpg");
                         break;
@@ -173,6 +196,15 @@ public class ShaderPalettizer extends ApplicationAdapter {
                     case Input.Keys.B:                         
                         load("D:/Painting_by_Henri_Biva.jpg");
                         break;
+                    case Input.Keys.C:
+                        load("D:/Color_Guard.png");
+                        break;
+                    case Input.Keys.P:
+                        load("D:/Quorum64_GLSL.png");
+                        break;
+                    case Input.Keys.O:
+                        load("D:/Quorum128_GLSL.png");
+                        break;
                     default:
                         if(batch.getShader().equals(defaultShader))
                             batch.setShader(shader);
@@ -180,6 +212,7 @@ public class ShaderPalettizer extends ApplicationAdapter {
                             batch.setShader(defaultShader);
                         break;
                 }
+                palette.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
                 return true;
             }
         };
