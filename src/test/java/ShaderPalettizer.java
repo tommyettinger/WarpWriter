@@ -185,7 +185,7 @@ public class ShaderPalettizer extends ApplicationAdapter {
                         break;
 //                    case Input.Keys.NUM_0:
 //                    case Input.Keys.NUMPAD_0:
-//                        palette = new Texture(Gdx.files.local("Quorum64_GLSL.png"), Pixmap.Format.RGBA8888, false);
+//                        palette = new Texture(Gdx.files.local("Mash64_GLSL.png"), Pixmap.Format.RGBA8888, false);
 //                        break;
                     case Input.Keys.M:                         
                         load("D:/Mona_Lisa.jpg");

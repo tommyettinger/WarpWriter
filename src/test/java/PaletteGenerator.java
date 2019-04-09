@@ -3,13 +3,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.math.MathUtils;
 import squidpony.StringKit;
 import squidpony.squidmath.IntVLA;
-import squidpony.squidmath.MiniMover64RNG;
 import squidpony.squidmath.RandomnessSource;
+import warpwriter.Coloring;
 import warpwriter.PNG8;
 import warpwriter.PaletteReducer;
+import warpwriter.model.color.Colorizer;
 
 import java.io.IOException;
 
@@ -59,7 +59,8 @@ public class PaletteGenerator extends ApplicationAdapter {
                 b = b1 - b2,
                 y = Math.max(r1, Math.max(g1, b1)) - Math.max(r2, Math.max(g2, b2));
 //        return (((512 + rmean) * r * r) >> 8) + g * g + (((767 - rmean) * b * b) >> 8);
-        return (((0x500 + rmean) * r * r) >> 7) + g * g * 12 + (((0x5FF - rmean) * b * b) >> 8) + y * y * 12;
+//        return (((0x580 + rmean) * r * r) >> 7) + g * g * 12 + (((0x5FF - rmean) * b * b) >> 8) + y * y * 8;
+        return (((1024 + rmean) * r * r) >> 7) + g * g * 12 + (((1534 - rmean) * b * b) >> 8) + y * y * 14;
     }
 
     public final double fastGaussian(RandomnessSource random) {
@@ -68,8 +69,8 @@ public class PaletteGenerator extends ApplicationAdapter {
         b = (b & 0x0003FF003FF003FFL) + ((b & 0x0FFC00FFC00FFC00L) >>> 10);
         a = (a & 0x000000007FF007FFL) + ((a & 0x0007FF0000000000L) >>> 40);
         b = (b & 0x000000007FF007FFL) + ((b & 0x0007FF0000000000L) >>> 40);
-        return (((a & 0x0000000000000FFFL) + ((a & 0x000000007FF00000L) >>> 20))
-                - ((b & 0x0000000000000FFFL) + ((b & 0x000000007FF00000L) >>> 20))) * (0x1p-10);
+        return ((((a & 0x0000000000000FFFL) + ((a & 0x000000007FF00000L) >>> 20))
+                - ((b & 0x0000000000000FFFL) + ((b & 0x000000007FF00000L) >>> 20))) * 0x1p-10);
     }
 
 
@@ -97,43 +98,54 @@ public class PaletteGenerator extends ApplicationAdapter {
 //                0x9F9F9FFF, 0xC1C1C1FF, 0xE1E1E1FF, 0xFFFFFFFF};
         base.addAll(grayscale);
 //        DiverRNG rng = new DiverRNG("sixty-four");
-        MiniMover64RNG rng = new MiniMover64RNG(64);
-        for (int i = 1; i <= 0x700; i++) {
-//            double luma = Math.pow(i * 0x1.c7p-11, 0.875), // 0 to 1, more often near 1 than near 0
-            double luma = i / 1720.0, mild = 0.0, warm = 0.0;// 0 to a little over 1
-            //0xC13FA9A902A6328FL * i
-            //0x91E10DA5C79E7B1DL * i
-//                    mild = ((DiverRNG.determineDouble(i) + DiverRNG.randomizeDouble(-i) - DiverRNG.randomizeDouble(123456789L - i) - DiverRNG.determineDouble(987654321L + i) + 0.5 - DiverRNG.randomizeDouble(123456789L + i)) * 0.4), // -1 to 1, curved random
-//                    warm = ((DiverRNG.determineDouble(-i) + DiverRNG.randomizeDouble((i^12345L)*i) - DiverRNG.randomizeDouble((i^99999L)*i) - DiverRNG.determineDouble((987654321L - i)*i) + 0.5  - DiverRNG.randomizeDouble((123456789L - i)*i)) * 0.4); // -1 to 1, curved random
-//                    mild = ((DiverRNG.determineDouble(i) + DiverRNG.randomizeDouble(-i) + DiverRNG.randomizeDouble(987654321L - i) - DiverRNG.randomizeDouble(123456789L - i) - DiverRNG.randomizeDouble(987654321L + i) - DiverRNG.determineDouble(1234567890L + i)) / 3.0), // -1 to 1, curved random
-//                    warm = ((DiverRNG.determineDouble(-i) + DiverRNG.randomizeDouble((i^12345L)*i) + DiverRNG.randomizeDouble((i^54321L)*i) - DiverRNG.randomizeDouble((i^99999L)*i) - DiverRNG.randomizeDouble((987654321L - i)*i) - DiverRNG.determineDouble((1234567890L - i)*i)) / 3.0); // -1 to 1, curved random
+//        MiniMover64RNG rng = new MiniMover64RNG(64);
+//        for (int i = 1; i <= 0x700; i++) {
+////            double luma = Math.pow(i * 0x1.c7p-11, 0.875), // 0 to 1, more often near 1 than near 0
+//            double luma = i / 1720.0, mild = 0.0, warm = 0.0;// 0 to a little over 1
+//            //0xC13FA9A902A6328FL * i
+//            //0x91E10DA5C79E7B1DL * i
+////                    mild = ((DiverRNG.determineDouble(i) + DiverRNG.randomizeDouble(-i) - DiverRNG.randomizeDouble(123456789L - i) - DiverRNG.determineDouble(987654321L + i) + 0.5 - DiverRNG.randomizeDouble(123456789L + i)) * 0.4), // -1 to 1, curved random
+////                    warm = ((DiverRNG.determineDouble(-i) + DiverRNG.randomizeDouble((i^12345L)*i) - DiverRNG.randomizeDouble((i^99999L)*i) - DiverRNG.determineDouble((987654321L - i)*i) + 0.5  - DiverRNG.randomizeDouble((123456789L - i)*i)) * 0.4); // -1 to 1, curved random
+////                    mild = ((DiverRNG.determineDouble(i) + DiverRNG.randomizeDouble(-i) + DiverRNG.randomizeDouble(987654321L - i) - DiverRNG.randomizeDouble(123456789L - i) - DiverRNG.randomizeDouble(987654321L + i) - DiverRNG.determineDouble(1234567890L + i)) / 3.0), // -1 to 1, curved random
+////                    warm = ((DiverRNG.determineDouble(-i) + DiverRNG.randomizeDouble((i^12345L)*i) + DiverRNG.randomizeDouble((i^54321L)*i) - DiverRNG.randomizeDouble((i^99999L)*i) - DiverRNG.randomizeDouble((987654321L - i)*i) - DiverRNG.determineDouble((1234567890L - i)*i)) / 3.0); // -1 to 1, curved random
+//
+//            final double v1 = fastGaussian(rng), v2 = fastGaussian(rng), v3 = fastGaussian(rng);
+////            double mag = v1 * v1 + v2 * v2 + v3 * v3 + 1.0 / (1.0 - ((rng.nextLong() & 0x1FFFFFFFFFFFFFL) * 0x1p-53) * ((rng.nextLong() & 0x1FFFFFFFFFFFFFL) * 0x1p-53) * ((rng.nextLong() & 0x1FFFFFFFFFFFFFL) * 0x1p-53)) - 1.0;
+////            double mag = v1 * v1 + v2 * v2 + v3 * v3 + 1.0 / (1.0 - ((rng.nextLong() & 0x1FFFFFFFFFFFFFL) * 0x1p-53) * ((rng.nextLong() & 0x1FFFFFFFFFFFFFL) * 0x1p-53)) - 0.5;
+//            double mag = v1 * v1 + v2 * v2 + v3 * v3 - 2.0 * Math.log(((rng.nextLong() & 0x1FFFFFFFFFFFFFL) * 0x1p-53));
+////            final long t = rng.nextLong(), s = rng.nextLong(), angle = t >>> 48;
+////            float mag = (((t & 0xFFFFFFL)) * 0x0.7p-24f + (0x1.9p0f - ((s & 0xFFFFFFL) * 0x1.4p-24f) * ((s >>> 40) * 0x1.4p-24f))) * 0.555555f;
+////            mild = MathUtils.sin(angle) * mag;
+////            warm = MathUtils.cos(angle) * mag;
+////            double mag = ((t & 0xFFFFFFL) + (t >>> 40) + (s & 0xFFFFFFL) + (s >>> 40)) * 0x1p-26;
+//            if (mag != 0.0) {
+//                mag = 1.0 / Math.sqrt(mag);
+//                mild = v1 * mag;
+//                warm = v2 * mag;
+//            }
+//
+////                    mild = (rng.nextDouble() + rng.nextDouble() + rng.nextDouble() + rng.nextDouble() + rng.nextDouble() + rng.nextDouble()
+////                            - rng.nextDouble() - rng.nextDouble() - rng.nextDouble() - rng.nextDouble() - rng.nextDouble() - rng.nextDouble()) / 6.0, // -1 to 1, curved random
+////                    warm = (rng.nextDouble() + rng.nextDouble() + rng.nextDouble() + rng.nextDouble() + rng.nextDouble() + rng.nextDouble()
+////                            - rng.nextDouble() - rng.nextDouble()- rng.nextDouble() - rng.nextDouble() - rng.nextDouble() - rng.nextDouble()) / 6.0; // -1 to 1, curved random
+//            mild = Math.signum(mild) * Math.pow(Math.abs(mild), 1.05);
+//            warm = Math.signum(warm) * Math.pow(Math.abs(warm), 0.8);
+//            if (mild > 0 && warm < 0) warm += mild * 1.666;
+//            else if (mild < -0.6) warm *= 0.4 - mild;
+//            int g = (int) ((luma + mild * 0.5 - warm * 0.375) * 255);
+//            int b = (int) ((luma - warm * 0.375 - mild * 0.5) * 255);
+//            int r = (int) ((luma + warm * 0.625 - mild * 0.5) * 255);
+//            base.add(
+//                    MathUtils.clamp(r, 0, 255) << 24 |
+//                            MathUtils.clamp(g, 0, 255) << 16 |
+//                            MathUtils.clamp(b, 0, 255) << 8 | 0xFF);
+//        }
 
-            final double v1 = fastGaussian(rng), v2 = fastGaussian(rng), v3 = fastGaussian(rng), v4 = fastGaussian(rng);
-//            double mag = v1 * v1 + v2 * v2 + v3 * v3 + 1.0 / (1.0 - ((rng.nextLong() & 0x1FFFFFFFFFFFFFL) * 0x1p-53) * ((rng.nextLong() & 0x1FFFFFFFFFFFFFL) * 0x1p-53) * ((rng.nextLong() & 0x1FFFFFFFFFFFFFL) * 0x1p-53)) - 1.0;
-//            double mag = v1 * v1 + v2 * v2 + v3 * v3 + 1.0 / (1.0 - ((rng.nextLong() & 0x1FFFFFFFFFFFFFL) * 0x1p-53) * ((rng.nextLong() & 0x1FFFFFFFFFFFFFL) * 0x1p-53)) - 0.5;
-            double mag = v1 * v1 + v2 * v2 + v3 * v3 - 2.0 * Math.log(((rng.nextLong() & 0x1FFFFFFFFFFFFFL) * 0x1p-53));
-            if (mag != 0.0) {
-                mag = 1.5 * v3 / Math.sqrt(mag);
-                mild = v1 * mag;
-                warm = v2 * mag;
-            }
-
-//                    mild = (rng.nextDouble() + rng.nextDouble() + rng.nextDouble() + rng.nextDouble() + rng.nextDouble() + rng.nextDouble()
-//                            - rng.nextDouble() - rng.nextDouble() - rng.nextDouble() - rng.nextDouble() - rng.nextDouble() - rng.nextDouble()) / 6.0, // -1 to 1, curved random
-//                    warm = (rng.nextDouble() + rng.nextDouble() + rng.nextDouble() + rng.nextDouble() + rng.nextDouble() + rng.nextDouble()
-//                            - rng.nextDouble() - rng.nextDouble()- rng.nextDouble() - rng.nextDouble() - rng.nextDouble() - rng.nextDouble()) / 6.0; // -1 to 1, curved random
-            mild = Math.signum(mild) * Math.pow(Math.abs(mild), 1.05);
-            warm = Math.signum(warm) * Math.pow(Math.abs(warm), 0.8);
-            if (mild > 0 && warm < 0) warm += mild * 1.666;
-            else if (mild < -0.6) warm *= 0.4 - mild;
-            int g = (int) ((luma + mild * 0.5 - warm * 0.375) * 255);
-            int b = (int) ((luma - warm * 0.375 - mild * 0.5) * 255);
-            int r = (int) ((luma + warm * 0.625 - mild * 0.5) * 255);
-            base.add(
-                    MathUtils.clamp(r, 0, 255) << 24 |
-                            MathUtils.clamp(g, 0, 255) << 16 |
-                            MathUtils.clamp(b, 0, 255) << 8 | 0xFF);
-        }
+        base.addAll(Coloring.AURORA);
+        base.addAll(Colorizer.FlesurrectBonusPalette);
+        base.addAll(Coloring.VGA256);
+        base.addAll(Coloring.RINSED);
+        
 //        for (int r = 0, rr = 0; r < 16; r++, rr += 0x11000000) {
 //            for (int g = 0, gg = 0; g < 16; g++, gg += 0x110000) {
 //                for (int b = 0, bb = 0; b < 16; b++, bb += 0x1100) {
@@ -158,14 +170,14 @@ public class PaletteGenerator extends ApplicationAdapter {
             ca = base.get(ca);
             t = base.get(cb);
             int ra = (ca >>> 24), ga = (ca >>> 16 & 0xFF), ba = (ca >>> 8 & 0xFF),
-                    rb = (t >>> 24), gb = (t >>> 16 & 0xFF), bb = (t >>> 8 & 0xFF),
-                    maxa = Math.max(ra, Math.max(ga, ba)), mina = Math.min(ra, Math.min(ga, ba)),
-                    maxb = Math.max(rb, Math.max(gb, bb)), minb = Math.min(rb, Math.min(gb, bb));
-            if (maxa - mina > 100)
-                base.set(cb, ca);
-            else if (maxb - minb > 100)
-                base.set(cb, t);
-            else
+                    rb = (t >>> 24), gb = (t >>> 16 & 0xFF), bb = (t >>> 8 & 0xFF);
+//                    maxa = Math.max(ra, Math.max(ga, ba)), mina = Math.min(ra, Math.min(ga, ba)),
+//                    maxb = Math.max(rb, Math.max(gb, bb)), minb = Math.min(rb, Math.min(gb, bb));
+//            if (maxa - mina > 100)
+//                base.set(cb, ca);
+//            else if (maxb - minb > 100)
+//                base.set(cb, t);
+//            else
                 base.set(cb,
                         (ra + rb + 1 << 23 & 0xFF000000)
                                 | (ga + gb + 1 << 15 & 0xFF0000)
@@ -254,7 +266,7 @@ public class PaletteGenerator extends ApplicationAdapter {
         PNG8 png8 = new PNG8();
         png8.palette = new PaletteReducer(PALETTE);
         try {
-            png8.writePrecisely(Gdx.files.local("Quorum64.png"), pix, false);
+            png8.writePrecisely(Gdx.files.local("Mash64.png"), pix, false);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -271,7 +283,7 @@ public class PaletteGenerator extends ApplicationAdapter {
             }
         }
         try {
-            png8.writePrecisely(Gdx.files.local("Quorum64_GLSL.png"), p2, false);
+            png8.writePrecisely(Gdx.files.local("Mash64_GLSL.png"), p2, false);
         } catch (IOException e) {
             e.printStackTrace();
         }
