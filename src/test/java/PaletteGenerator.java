@@ -3,13 +3,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.math.MathUtils;
 import squidpony.StringKit;
 import squidpony.squidmath.IntVLA;
 import squidpony.squidmath.RandomnessSource;
-import warpwriter.Coloring;
 import warpwriter.PNG8;
 import warpwriter.PaletteReducer;
-import warpwriter.model.color.Colorizer;
 
 import java.io.IOException;
 
@@ -72,8 +71,14 @@ public class PaletteGenerator extends ApplicationAdapter {
         return ((((a & 0x0000000000000FFFL) + ((a & 0x000000007FF00000L) >>> 20))
                 - ((b & 0x0000000000000FFFL) + ((b & 0x000000007FF00000L) >>> 20))) * 0x1p-10);
     }
-
-
+    
+    private long state = 64L;
+    
+    private double nextDouble()
+    {
+        return ((state = (state << 29 | state >>> 35) * 0xAC564B05L) * 0x818102004182A025L & 0x1FFFFFFFFFFFFFL) * 0x1p-53;
+    }
+    
     public void create() {
 //        final float[] hues = {0.0f, 0.07179487f, 0.07749468f, 0.098445594f, 0.09782606f, 0.14184391f, 0.16522992f,
 //                0.20281118f, 0.20285714f, 0.21867621f, 0.25163394f, 0.3141666f, 0.3715499f, 0.37061405f, 0.44054055f,
@@ -94,57 +99,65 @@ public class PaletteGenerator extends ApplicationAdapter {
 //                0x9F9F9FFF, 0xB0B0B0FF, 0xC1C1C1FF, 0xD1D1D1FF, 0xE1E1E1FF, 0xF0F0F0FF, 0xFFFFFFFF};
         int[] grayscale = {0x010101FF, 0x212121FF, 0x414141FF, 0x616161FF,
                 0x818181FF, 0xA1A1A1FF, 0xC1C1C1FF, 0xE1E1E1FF, 0xFFFFFFFF};
+//        int[] grayscale = {0x010101FF, 0x414141FF,
+//                0x818181FF, 0xC1C1C1FF, 0xFFFFFFFF};
 //        int[] grayscale = {0x010101FF, 0x2D2D2DFF, 0x555555FF, 0x7B7B7BFF,
 //                0x9F9F9FFF, 0xC1C1C1FF, 0xE1E1E1FF, 0xFFFFFFFF};
         base.addAll(grayscale);
 //        DiverRNG rng = new DiverRNG("sixty-four");
 //        MiniMover64RNG rng = new MiniMover64RNG(64);
-//        for (int i = 1; i <= 0x700; i++) {
-////            double luma = Math.pow(i * 0x1.c7p-11, 0.875), // 0 to 1, more often near 1 than near 0
-//            double luma = i / 1720.0, mild = 0.0, warm = 0.0;// 0 to a little over 1
-//            //0xC13FA9A902A6328FL * i
-//            //0x91E10DA5C79E7B1DL * i
-////                    mild = ((DiverRNG.determineDouble(i) + DiverRNG.randomizeDouble(-i) - DiverRNG.randomizeDouble(123456789L - i) - DiverRNG.determineDouble(987654321L + i) + 0.5 - DiverRNG.randomizeDouble(123456789L + i)) * 0.4), // -1 to 1, curved random
-////                    warm = ((DiverRNG.determineDouble(-i) + DiverRNG.randomizeDouble((i^12345L)*i) - DiverRNG.randomizeDouble((i^99999L)*i) - DiverRNG.determineDouble((987654321L - i)*i) + 0.5  - DiverRNG.randomizeDouble((123456789L - i)*i)) * 0.4); // -1 to 1, curved random
-////                    mild = ((DiverRNG.determineDouble(i) + DiverRNG.randomizeDouble(-i) + DiverRNG.randomizeDouble(987654321L - i) - DiverRNG.randomizeDouble(123456789L - i) - DiverRNG.randomizeDouble(987654321L + i) - DiverRNG.determineDouble(1234567890L + i)) / 3.0), // -1 to 1, curved random
-////                    warm = ((DiverRNG.determineDouble(-i) + DiverRNG.randomizeDouble((i^12345L)*i) + DiverRNG.randomizeDouble((i^54321L)*i) - DiverRNG.randomizeDouble((i^99999L)*i) - DiverRNG.randomizeDouble((987654321L - i)*i) - DiverRNG.determineDouble((1234567890L - i)*i)) / 3.0); // -1 to 1, curved random
-//
+        for (int i = 1; i <= 0x8C0; i++) {
+//            double luma = Math.pow(i * 0x1.c7p-11, 0.875), // 0 to 1, more often near 1 than near 0
+            double luma = i / 8.75;//, mild = 0.0, warm = 0.0;// 0 to a little over 1
+            //0xC13FA9A902A6328FL * i
+            //0x91E10DA5C79E7B1DL * i
+//                    mild = ((DiverRNG.determineDouble(i) + DiverRNG.randomizeDouble(-i) - DiverRNG.randomizeDouble(123456789L - i) - DiverRNG.determineDouble(987654321L + i) + 0.5 - DiverRNG.randomizeDouble(123456789L + i)) * 0.4), // -1 to 1, curved random
+//                    warm = ((DiverRNG.determineDouble(-i) + DiverRNG.randomizeDouble((i^12345L)*i) - DiverRNG.randomizeDouble((i^99999L)*i) - DiverRNG.determineDouble((987654321L - i)*i) + 0.5  - DiverRNG.randomizeDouble((123456789L - i)*i)) * 0.4); // -1 to 1, curved random
+//                    mild = ((DiverRNG.determineDouble(i) + DiverRNG.randomizeDouble(-i) + DiverRNG.randomizeDouble(987654321L - i) - DiverRNG.randomizeDouble(123456789L - i) - DiverRNG.randomizeDouble(987654321L + i) - DiverRNG.determineDouble(1234567890L + i)) / 3.0), // -1 to 1, curved random
+//                    warm = ((DiverRNG.determineDouble(-i) + DiverRNG.randomizeDouble((i^12345L)*i) + DiverRNG.randomizeDouble((i^54321L)*i) - DiverRNG.randomizeDouble((i^99999L)*i) - DiverRNG.randomizeDouble((987654321L - i)*i) - DiverRNG.determineDouble((1234567890L - i)*i)) / 3.0); // -1 to 1, curved random
+
 //            final double v1 = fastGaussian(rng), v2 = fastGaussian(rng), v3 = fastGaussian(rng);
-////            double mag = v1 * v1 + v2 * v2 + v3 * v3 + 1.0 / (1.0 - ((rng.nextLong() & 0x1FFFFFFFFFFFFFL) * 0x1p-53) * ((rng.nextLong() & 0x1FFFFFFFFFFFFFL) * 0x1p-53) * ((rng.nextLong() & 0x1FFFFFFFFFFFFFL) * 0x1p-53)) - 1.0;
-////            double mag = v1 * v1 + v2 * v2 + v3 * v3 + 1.0 / (1.0 - ((rng.nextLong() & 0x1FFFFFFFFFFFFFL) * 0x1p-53) * ((rng.nextLong() & 0x1FFFFFFFFFFFFFL) * 0x1p-53)) - 0.5;
+//            double mag = v1 * v1 + v2 * v2 + v3 * v3 + 1.0 / (1.0 - ((rng.nextLong() & 0x1FFFFFFFFFFFFFL) * 0x1p-53) * ((rng.nextLong() & 0x1FFFFFFFFFFFFFL) * 0x1p-53) * ((rng.nextLong() & 0x1FFFFFFFFFFFFFL) * 0x1p-53)) - 1.0;
+//            double mag = v1 * v1 + v2 * v2 + v3 * v3 + 1.0 / (1.0 - ((rng.nextLong() & 0x1FFFFFFFFFFFFFL) * 0x1p-53) * ((rng.nextLong() & 0x1FFFFFFFFFFFFFL) * 0x1p-53)) - 0.5;
 //            double mag = v1 * v1 + v2 * v2 + v3 * v3 - 2.0 * Math.log(((rng.nextLong() & 0x1FFFFFFFFFFFFFL) * 0x1p-53));
-////            final long t = rng.nextLong(), s = rng.nextLong(), angle = t >>> 48;
-////            float mag = (((t & 0xFFFFFFL)) * 0x0.7p-24f + (0x1.9p0f - ((s & 0xFFFFFFL) * 0x1.4p-24f) * ((s >>> 40) * 0x1.4p-24f))) * 0.555555f;
-////            mild = MathUtils.sin(angle) * mag;
-////            warm = MathUtils.cos(angle) * mag;
-////            double mag = ((t & 0xFFFFFFL) + (t >>> 40) + (s & 0xFFFFFFL) + (s >>> 40)) * 0x1p-26;
+//            final long t = rng.nextLong(), s = rng.nextLong(), angle = t >>> 48;
+//            float mag = (((t & 0xFFFFFFL)) * 0x0.7p-24f + (0x1.9p0f - ((s & 0xFFFFFFL) * 0x1.4p-24f) * ((s >>> 40) * 0x1.4p-24f))) * 0.555555f;
+//            mild = MathUtils.sin(angle) * mag;
+//            warm = MathUtils.cos(angle) * mag;
+//            double mag = ((t & 0xFFFFFFL) + (t >>> 40) + (s & 0xFFFFFFL) + (s >>> 40)) * 0x1p-26;
 //            if (mag != 0.0) {
 //                mag = 1.0 / Math.sqrt(mag);
 //                mild = v1 * mag;
 //                warm = v2 * mag;
 //            }
-//
-////                    mild = (rng.nextDouble() + rng.nextDouble() + rng.nextDouble() + rng.nextDouble() + rng.nextDouble() + rng.nextDouble()
-////                            - rng.nextDouble() - rng.nextDouble() - rng.nextDouble() - rng.nextDouble() - rng.nextDouble() - rng.nextDouble()) / 6.0, // -1 to 1, curved random
-////                    warm = (rng.nextDouble() + rng.nextDouble() + rng.nextDouble() + rng.nextDouble() + rng.nextDouble() + rng.nextDouble()
-////                            - rng.nextDouble() - rng.nextDouble()- rng.nextDouble() - rng.nextDouble() - rng.nextDouble() - rng.nextDouble()) / 6.0; // -1 to 1, curved random
+
+//            double mild = (nextDouble() + nextDouble() + nextDouble() + nextDouble() + nextDouble() + nextDouble()
+//                    - nextDouble() - nextDouble() - nextDouble() - nextDouble() - nextDouble() - nextDouble()) * 0.17 % 1.0, // -1 to 1, curved random
+//                    warm = (nextDouble() + nextDouble() + nextDouble() + nextDouble() + nextDouble() + nextDouble()
+//                            - nextDouble() - nextDouble()- nextDouble() - nextDouble() - nextDouble() - nextDouble()) * 0.17 % 1.0; // -1 to 1, curved random
+            double co = (nextDouble() + nextDouble() + nextDouble() + nextDouble() * nextDouble() + nextDouble() * nextDouble()
+                    - nextDouble() - nextDouble() - nextDouble() - nextDouble() * nextDouble() - nextDouble() * nextDouble()) * 52.0 % 256.0, // -256.0 to 256.0, curved random
+                    cg = (nextDouble() + nextDouble() + nextDouble() + nextDouble() * nextDouble() + nextDouble() * nextDouble()
+                            - nextDouble() - nextDouble()- nextDouble() - nextDouble() * nextDouble() - nextDouble() * nextDouble()) * 52.0 % 256.0; // -256.0 to 256.0, curved random
 //            mild = Math.signum(mild) * Math.pow(Math.abs(mild), 1.05);
 //            warm = Math.signum(warm) * Math.pow(Math.abs(warm), 0.8);
 //            if (mild > 0 && warm < 0) warm += mild * 1.666;
 //            else if (mild < -0.6) warm *= 0.4 - mild;
+            final double t = luma - cg;
+
 //            int g = (int) ((luma + mild * 0.5 - warm * 0.375) * 255);
 //            int b = (int) ((luma - warm * 0.375 - mild * 0.5) * 255);
 //            int r = (int) ((luma + warm * 0.625 - mild * 0.5) * 255);
-//            base.add(
-//                    MathUtils.clamp(r, 0, 255) << 24 |
-//                            MathUtils.clamp(g, 0, 255) << 16 |
-//                            MathUtils.clamp(b, 0, 255) << 8 | 0xFF);
-//        }
+            base.add(
+                    (int) MathUtils.clamp(t + co, 0.0, 255.0) << 24 |
+                            (int) MathUtils.clamp(luma + cg, 0.0, 255.0) << 16 |
+                            (int) MathUtils.clamp(t - co, 0.0, 255.0) << 8 | 0xFF);
+        }
 
-        base.addAll(Coloring.AURORA);
-        base.addAll(Colorizer.FlesurrectBonusPalette);
-        base.addAll(Coloring.VGA256);
-        base.addAll(Coloring.RINSED);
+//        base.addAll(Coloring.AURORA);
+//        base.addAll(Colorizer.FlesurrectBonusPalette);
+//        base.addAll(Coloring.VGA256);
+//        base.addAll(Coloring.RINSED);
         
 //        for (int r = 0, rr = 0; r < 16; r++, rr += 0x11000000) {
 //            for (int g = 0, gg = 0; g < 16; g++, gg += 0x110000) {
