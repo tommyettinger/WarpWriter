@@ -95,10 +95,10 @@ public class PaletteGenerator extends ApplicationAdapter {
 //        base.addAll(Coloring.AURORA, 1, 255);
 //        base.addAll(0x010101FF, 0x2D2D2DFF, 0x555555FF, 0x7B7B7BFF,
 //                0x9F9F9FFF, 0xC1C1C1FF, 0xE1E1E1FF, 0xFFFFFFFF);
-//        int[] grayscale = {0x010101FF, 0x171717FF, 0x2D2D2DFF, 0x555555FF, 0x686868FF, 0x7B7B7BFF, 0x8D8D8DFF,
-//                0x9F9F9FFF, 0xB0B0B0FF, 0xC1C1C1FF, 0xD1D1D1FF, 0xE1E1E1FF, 0xF0F0F0FF, 0xFFFFFFFF};
-        int[] grayscale = {0x010101FF, 0x212121FF, 0x414141FF, 0x616161FF,
-                0x818181FF, 0xA1A1A1FF, 0xC1C1C1FF, 0xE1E1E1FF, 0xFFFFFFFF};
+        int[] grayscale = {0x010101FF, 0x171717FF, 0x2D2D2DFF, 0x555555FF, 0x686868FF, 0x7B7B7BFF, 0x8D8D8DFF,
+                0x9F9F9FFF, 0xB0B0B0FF, 0xC1C1C1FF, 0xD1D1D1FF, 0xE1E1E1FF, 0xF0F0F0FF, 0xFFFFFFFF};
+//        int[] grayscale = {0x010101FF, 0x212121FF, 0x414141FF, 0x616161FF,
+//                0x818181FF, 0xA1A1A1FF, 0xC1C1C1FF, 0xE1E1E1FF, 0xFFFFFFFF};
 //        int[] grayscale = {0x010101FF, 0x414141FF,
 //                0x818181FF, 0xC1C1C1FF, 0xFFFFFFFF};
 //        int[] grayscale = {0x010101FF, 0x2D2D2DFF, 0x555555FF, 0x7B7B7BFF,
@@ -106,9 +106,10 @@ public class PaletteGenerator extends ApplicationAdapter {
         base.addAll(grayscale);
 //        DiverRNG rng = new DiverRNG("sixty-four");
 //        MiniMover64RNG rng = new MiniMover64RNG(64);
-        for (int i = 1; i <= 0x8C0; i++) {
+        for (int i = 1; i <= 2240; i++) {
 //            double luma = Math.pow(i * 0x1.c7p-11, 0.875), // 0 to 1, more often near 1 than near 0
-            double luma = i / 8.75;//, mild = 0.0, warm = 0.0;// 0 to a little over 1
+            double luma = i / 2240.0;//, mild = 0.0, warm = 0.0;// 0.0 to 1.0
+            luma = (Math.sqrt(luma) + luma) * 128.0;
             //0xC13FA9A902A6328FL * i
             //0x91E10DA5C79E7B1DL * i
 //                    mild = ((DiverRNG.determineDouble(i) + DiverRNG.randomizeDouble(-i) - DiverRNG.randomizeDouble(123456789L - i) - DiverRNG.determineDouble(987654321L + i) + 0.5 - DiverRNG.randomizeDouble(123456789L + i)) * 0.4), // -1 to 1, curved random
@@ -136,9 +137,9 @@ public class PaletteGenerator extends ApplicationAdapter {
 //                    warm = (nextDouble() + nextDouble() + nextDouble() + nextDouble() + nextDouble() + nextDouble()
 //                            - nextDouble() - nextDouble()- nextDouble() - nextDouble() - nextDouble() - nextDouble()) * 0.17 % 1.0; // -1 to 1, curved random
             double co = (nextDouble() + nextDouble() + nextDouble() + nextDouble() * nextDouble() + nextDouble() * nextDouble()
-                    - nextDouble() - nextDouble() - nextDouble() - nextDouble() * nextDouble() - nextDouble() * nextDouble()) * 52.0 % 256.0, // -256.0 to 256.0, curved random
+                    - nextDouble() - nextDouble() - nextDouble() - nextDouble() * nextDouble() - nextDouble() * nextDouble()) * 32.0 % 128.0, // -256.0 to 256.0, curved random
                     cg = (nextDouble() + nextDouble() + nextDouble() + nextDouble() * nextDouble() + nextDouble() * nextDouble()
-                            - nextDouble() - nextDouble()- nextDouble() - nextDouble() * nextDouble() - nextDouble() * nextDouble()) * 52.0 % 256.0; // -256.0 to 256.0, curved random
+                            - nextDouble() - nextDouble()- nextDouble() - nextDouble() * nextDouble() - nextDouble() * nextDouble()) * 32.0 % 128.0; // -256.0 to 256.0, curved random
 //            mild = Math.signum(mild) * Math.pow(Math.abs(mild), 1.05);
 //            warm = Math.signum(warm) * Math.pow(Math.abs(warm), 0.8);
 //            if (mild > 0 && warm < 0) warm += mild * 1.666;
@@ -166,7 +167,7 @@ public class PaletteGenerator extends ApplicationAdapter {
 //                }
 //            }
 //        }
-        while (base.size >= 64) {
+        while (base.size >= 256) {
             int t, ca = 0, cb = 1, d = 0xFFFFFF;
             for (int i = 0; i < base.size; i++) {
                 int a = base.get(i);
@@ -243,8 +244,8 @@ public class PaletteGenerator extends ApplicationAdapter {
 //        Gdx.files.local("DawnBringer_Aurora_Official.hex").writeString(sbs, false);
 //        sb.setLength(0);
 
-        StringBuilder sb = new StringBuilder((1 + 12 * 8) * 8);
-        for (int i = 0; i < 8; i++) {
+        StringBuilder sb = new StringBuilder((1 + 12 * 8) * (PALETTE.length >>> 3));
+        for (int i = 0; i < (PALETTE.length >>> 3); i++) {
             for (int j = 0; j < 8; j++) {
                 sb.append("0x").append(StringKit.hex(PALETTE[i << 3 | j]).toUpperCase()).append(", ");
             }
@@ -279,7 +280,7 @@ public class PaletteGenerator extends ApplicationAdapter {
         PNG8 png8 = new PNG8();
         png8.palette = new PaletteReducer(PALETTE);
         try {
-            png8.writePrecisely(Gdx.files.local("Mash64.png"), pix, false);
+            png8.writePrecisely(Gdx.files.local("Mash"+PALETTE.length+".png"), pix, false);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -296,7 +297,7 @@ public class PaletteGenerator extends ApplicationAdapter {
             }
         }
         try {
-            png8.writePrecisely(Gdx.files.local("Mash64_GLSL.png"), p2, false);
+            png8.writePrecisely(Gdx.files.local("Mash"+PALETTE.length+"_GLSL.png"), p2, false);
         } catch (IOException e) {
             e.printStackTrace();
         }
