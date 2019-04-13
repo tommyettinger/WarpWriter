@@ -79,16 +79,16 @@ public class VoxelPixmapRenderer implements IRectangleRenderer {
         );
     }
 
-    public IRectangleRenderer rectVertical(int px, int py, int sizeX, int sizeY, byte voxel, int depth, int vx, int vy, int vz, int time) {
-        return rect(px, py, sizeX, sizeY, color.verticalFace(voxel, vx, vy, vz, time), color.twilight().dark(voxel), depth);
+    public IRectangleRenderer rectVertical(int px, int py, int sizeX, int sizeY, byte voxel, int depth, int vx, int vy, int vz) {
+        return rect(px, py, sizeX, sizeY, color.verticalFace(voxel, vx, vy, vz), color.twilight().dark(voxel), depth);
     }
 
-    public IRectangleRenderer rectLeft(int px, int py, int sizeX, int sizeY, byte voxel, int depth, int vx, int vy, int vz, int time) {
-        return rect(px, py, sizeX, sizeY, color.leftFace(voxel, vx, vy, vz, time), color.twilight().dark(voxel), depth);
+    public IRectangleRenderer rectLeft(int px, int py, int sizeX, int sizeY, byte voxel, int depth, int vx, int vy, int vz) {
+        return rect(px, py, sizeX, sizeY, color.leftFace(voxel, vx, vy, vz), color.twilight().dark(voxel), depth);
     }
 
-    public IRectangleRenderer rectRight(int px, int py, int sizeX, int sizeY, byte voxel, int depth, int vx, int vy, int vz, int time) {
-        return rect(px, py, sizeX, sizeY, color.rightFace(voxel, vx, vy, vz, time), color.twilight().dark(voxel), depth);
+    public IRectangleRenderer rectRight(int px, int py, int sizeX, int sizeY, byte voxel, int depth, int vx, int vy, int vz) {
+        return rect(px, py, sizeX, sizeY, color.rightFace(voxel, vx, vy, vz), color.twilight().dark(voxel), depth);
     }
 
     public int getPixel(int x, int y) {

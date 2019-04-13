@@ -322,60 +322,60 @@ public class VoxelColor implements IVoxelColor {
         }
     }
     
-    protected int processNoise(int x, int y, int z, int time)
+    protected int processNoise(int x, int y, int z)
     { 
-        float a = noise.getConfiguredNoise(x, y, z, time);
+        float a = noise.getConfiguredNoise(x, y, z);
         a = a * 0.5f + 0.5f;
         return (int) (a * a * (9.0f - 6.0f * a)) + 1;
     }
     
 
     @Override
-    public int verticalFace(byte voxel, int x, int y, int z, int time) {
+    public int verticalFace(byte voxel, int x, int y, int z) {
         if((voxel & waveBit) != 0)
         {
             if((voxel & shadeBit) != 0)
             {
-                final int brightness = (voxel + time & 3);
+                final int brightness = (voxel + 0 & 3); // TODO: Fix this
                 return dimmer.dimmer(brightness + 1 - (brightness & (brightness << 1)), voxel);
             }
             else
             {
-                return dimmer.dimmer(processNoise(x, y, z, time), voxel);
+                return dimmer.dimmer(processNoise(x, y, z), voxel);
             }
         }
         return verticalFace(voxel);
     }
 
     @Override
-    public int rightFace(byte voxel, int x, int y, int z, int time) {
+    public int rightFace(byte voxel, int x, int y, int z) {
         if((voxel & waveBit) != 0)
         {
             if((voxel & shadeBit) != 0)
             {
-                final int brightness = (voxel + time & 3);
+                final int brightness = (voxel + 0 & 3); // TODO: Fix this
                 return dimmer.dimmer(brightness + 1 - (brightness & (brightness << 1)), voxel);
             }
             else
             {
-                return dimmer.dimmer(processNoise(x, y, z, time), voxel);
+                return dimmer.dimmer(processNoise(x, y, z), voxel);
             }
         }
         return rightFace(voxel);
     }
 
     @Override
-    public int leftFace(byte voxel, int x, int y, int z, int time) {
+    public int leftFace(byte voxel, int x, int y, int z) {
         if((voxel & waveBit) != 0)
         {
             if((voxel & shadeBit) != 0)
             {
-                final int brightness = (voxel + time & 3);
+                final int brightness = (voxel + 0 & 3); // TODO: Fix this
                 return dimmer.dimmer(brightness + 1 - (brightness & (brightness << 1)), voxel);
             }
             else
             {
-                return dimmer.dimmer(processNoise(x, y, z, time), voxel);
+                return dimmer.dimmer(processNoise(x, y, z), voxel);
             }
         }
         return leftFace(voxel);
@@ -407,17 +407,17 @@ public class VoxelColor implements IVoxelColor {
         }
 
         @Override
-        public int verticalFace(byte voxel, int x, int y, int z, int time) {
+        public int verticalFace(byte voxel, int x, int y, int z) {
             return simple(voxel);
         }
 
         @Override
-        public int leftFace(byte voxel, int x, int y, int z, int time) {
+        public int leftFace(byte voxel, int x, int y, int z) {
             return simple(voxel);
         }
 
         @Override
-        public int rightFace(byte voxel, int x, int y, int z, int time) {
+        public int rightFace(byte voxel, int x, int y, int z) {
             return simple(voxel);
         }
     }
