@@ -71,7 +71,7 @@ public class VoxProcessor extends ApplicationAdapter {
     {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setWindowedMode(500, 500);
+        config.setResizable(false);
         new Lwjgl3Application(new VoxProcessor(), config);
-
     }
 }

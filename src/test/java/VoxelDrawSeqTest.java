@@ -168,6 +168,7 @@ public class VoxelDrawSeqTest extends ApplicationAdapter {
         config.setWindowedMode(SCREEN_WIDTH, SCREEN_HEIGHT);
         config.setIdleFPS(10);
         config.useVsync(false);
+        config.setResizable(false);
         final VoxelDrawSeqTest app = new VoxelDrawSeqTest();
         new Lwjgl3Application(app, config);
     }

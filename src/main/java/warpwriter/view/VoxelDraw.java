@@ -585,7 +585,6 @@ public class VoxelDraw {
     }
     public static void draw(IVoxelSeq seq, IRectangleRenderer renderer, int scaleX, int scaleY) // scaleX 3, scaleY 3
     {
-        final int time = (seq instanceof ITemporal) ? ((ITemporal) seq).frame() : 0;
         final int len = seq.size(), sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ(),
                 offsetPX = (sizeY - 1 >> 1) + 1, pixelWidth = sizeY * scaleX + (sizeY - 1 >> 1) + 3, pixelHeight = sizeZ * scaleY + 4;
         seq.sort(IntComparator.side[seq.rotation()]);
@@ -599,9 +598,9 @@ public class VoxelDraw {
                 y = HashMap3D.extractY(xyz);
                 z = HashMap3D.extractZ(xyz);
                 final int xPos = (sizeY - y) * 3 + offsetPX;
-                renderer.rectRight(xPos, z * scaleY, scaleX, scaleY, v, 0, x, y, z, time);
+                renderer.rectRight(xPos, z * scaleY, scaleX, scaleY, v, 0, x, y, z);
                 if (z >= sizeZ - 1 || seq.getRotated(x, y, z + 1) == 0)
-                    renderer.rectVertical(xPos, z * scaleY + 1, scaleX, 1, v, 0, x, y, z, time);
+                    renderer.rectVertical(xPos, z * scaleY + 1, scaleX, 1, v, 0, x, y, z);
             }
         }
     }
@@ -611,7 +610,6 @@ public class VoxelDraw {
     }
     public static void draw45(IVoxelSeq seq, IRectangleRenderer renderer, int scaleX, int scaleY) // scaleX 2, scaleY 3
     {
-        final int time = (seq instanceof ITemporal) ? ((ITemporal) seq).frame() : 0;
         final int len = seq.size(), sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ(),
                 pixelWidth = (sizeX + sizeY) * scaleX + 3, pixelHeight = sizeZ * scaleY + 4;
         final int dep = 0;
@@ -626,10 +624,10 @@ public class VoxelDraw {
                 y = HashMap3D.extractY(xyz);
                 z = HashMap3D.extractZ(xyz);
                 final int xPos = (sizeY + x - y) * scaleX + 1;
-                renderer.rectLeft(xPos, z * scaleY + 1, scaleX, scaleY, v, dep, x, y, z, time);
-                renderer.rectRight(xPos + scaleX, z * scaleY + 1, scaleX, scaleY, v, dep, x, y, z, time);
+                renderer.rectLeft(xPos, z * scaleY + 1, scaleX, scaleY, v, dep, x, y, z);
+                renderer.rectRight(xPos + scaleX, z * scaleY + 1, scaleX, scaleY, v, dep, x, y, z);
                 if (z >= sizeZ - 1 || seq.getRotated(x, y, z + 1) == 0)
-                    renderer.rectVertical(xPos, z * scaleY + 4, scaleX * 2, 1, v, dep, x, y, z, time);
+                    renderer.rectVertical(xPos, z * scaleY + 4, scaleX * 2, 1, v, dep, x, y, z);
             }
         }
     }
@@ -639,7 +637,6 @@ public class VoxelDraw {
     }
     public static void drawAbove(IVoxelSeq seq, IRectangleRenderer renderer, int scaleX, int scaleY) // scaleX 1, scaleY 1
     {
-        final int time = (seq instanceof ITemporal) ? ((ITemporal) seq).frame() : 0;
         final int len = seq.size(), sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ(),
                 offsetPX = (sizeY * scaleX >> 1) + 1, offsetPY = (sizeX * scaleY >> 1) + 1,
                 pixelWidth = (sizeY * 3) + (sizeY >> 1) + 6, pixelHeight = sizeZ * 2 + sizeX * 3 + (sizeX >> 1) + 8;
@@ -654,9 +651,9 @@ public class VoxelDraw {
                 y = HashMap3D.extractY(xyz);
                 z = HashMap3D.extractZ(xyz);
                 final int xPos = (sizeY - y) * 3 * scaleX + offsetPX, yPos = z * 2 * scaleY + (sizeX - x) * 3 * scaleY + offsetPY;
-                renderer.rectRight(xPos, yPos, 3 * scaleX, 2 * scaleY, v, 0, x, y, z, time);
+                renderer.rectRight(xPos, yPos, 3 * scaleX, 2 * scaleY, v, 0, x, y, z);
                 //if (z >= sizeZ - 1 || seq.getRotated(x, y, z + 1) == 0)
-                renderer.rectVertical(xPos, yPos + 3 * scaleY, 3 * scaleX, 3 * scaleY, v, 0, x, y, z, time);
+                renderer.rectVertical(xPos, yPos + 3 * scaleY, 3 * scaleX, 3 * scaleY, v, 0, x, y, z);
             }
         }
     }
@@ -667,7 +664,6 @@ public class VoxelDraw {
 
     public static void drawIso(IVoxelSeq seq, IRectangleRenderer renderer, int scaleX, int scaleY) // scaleX 2, scaleY 2
     {
-        final int time = (seq instanceof ITemporal) ? ((ITemporal) seq).frame() : 0;
         final int len = seq.size(), sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ(),
                 pixelWidth = (sizeY + sizeX + 2) * scaleX + 1, pixelHeight = (sizeX + sizeY + sizeZ + 3) * scaleY + 1;
         final int dep = 0;
@@ -682,10 +678,10 @@ public class VoxelDraw {
                 y = HashMap3D.extractY(xyz);
                 z = HashMap3D.extractZ(xyz);
                 final int xPos = (sizeY - y + x) * scaleX + 1, yPos = (z - x - y + sizeX + sizeY) * scaleY + 1;
-                renderer.rectLeft(xPos, yPos, scaleX, scaleY, v, dep, x, y, z, time);
-                renderer.rectRight(xPos + scaleX, yPos, scaleX, scaleY, v, dep, x, y, z, time);
+                renderer.rectLeft(xPos, yPos, scaleX, scaleY, v, dep, x, y, z);
+                renderer.rectRight(xPos + scaleX, yPos, scaleX, scaleY, v, dep, x, y, z);
                 //if (z >= sizeZ - 1 || seq.getRotated(x, y, z + 1) == 0)
-                renderer.rectVertical(xPos, yPos + scaleY, 2 * scaleX, scaleY, v, dep, x, y, z, time);
+                renderer.rectVertical(xPos, yPos + scaleY, 2 * scaleX, scaleY, v, dep, x, y, z);
             }
         }
     }

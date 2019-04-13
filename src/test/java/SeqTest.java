@@ -170,6 +170,7 @@ public class SeqTest extends ApplicationAdapter {
         config.setWindowedMode(SCREEN_WIDTH, SCREEN_HEIGHT);
         config.setIdleFPS(10);
         config.useVsync(false);
+        config.setResizable(false);
         final SeqTest app = new SeqTest();
         new Lwjgl3Application(app, config);
     }

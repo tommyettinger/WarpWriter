@@ -133,6 +133,7 @@ public class BurstTest extends ApplicationAdapter {
         config.setWindowedMode(SCREEN_WIDTH, SCREEN_HEIGHT);
         config.setIdleFPS(10);
         config.useVsync(false);
+        config.setResizable(false);
         final BurstTest app = new BurstTest();
 //        config.setWindowListener(new Lwjgl3WindowAdapter() {
 //            @Override

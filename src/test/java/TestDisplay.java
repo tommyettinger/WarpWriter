@@ -757,6 +757,7 @@ public class TestDisplay extends ApplicationAdapter {
         config.setTitle("Display Test");
         config.setWindowedMode(1000, 600);
         config.setIdleFPS(10);
+        config.setResizable(false);
         final TestDisplay testDisplay = new TestDisplay();
         config.setWindowListener(new Lwjgl3WindowAdapter() {
             @Override

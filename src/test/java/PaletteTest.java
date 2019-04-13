@@ -116,6 +116,7 @@ public class PaletteTest extends ApplicationAdapter {
         config.setWindowedMode(SCREEN_WIDTH, SCREEN_HEIGHT);
         config.setIdleFPS(10);
         config.useVsync(false);
+        config.setResizable(false);
         new Lwjgl3Application(new PaletteTest(), config);
     }
 

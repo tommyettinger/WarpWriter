@@ -206,18 +206,18 @@ public class VoxelSpriteBatchRenderer implements IRectangleRenderer, ITriangleRe
     }
 
     @Override
-    public IRectangleRenderer rectVertical(int px, int py, int sizeX, int sizeY, byte voxel, int depth, int vx, int vy, int vz, int time) {
-        return rect(px, py, sizeX, sizeY, color.verticalFace(voxel, vx, vy, vz, time));
+    public IRectangleRenderer rectVertical(int px, int py, int sizeX, int sizeY, byte voxel, int depth, int vx, int vy, int vz) {
+        return rect(px, py, sizeX, sizeY, color.verticalFace(voxel, vx, vy, vz));
     }
 
     @Override
-    public IRectangleRenderer rectLeft(int px, int py, int sizeX, int sizeY, byte voxel, int depth, int vx, int vy, int vz, int time) {
-        return rect(px, py, sizeX, sizeY, color.leftFace(voxel, vx, vy, vz, time));
+    public IRectangleRenderer rectLeft(int px, int py, int sizeX, int sizeY, byte voxel, int depth, int vx, int vy, int vz) {
+        return rect(px, py, sizeX, sizeY, color.leftFace(voxel, vx, vy, vz));
     }
 
     @Override
-    public IRectangleRenderer rectRight(int px, int py, int sizeX, int sizeY, byte voxel, int depth, int vx, int vy, int vz, int time) {
-        return rect(px, py, sizeX, sizeY, color.rightFace(voxel, vx, vy, vz, time));
+    public IRectangleRenderer rectRight(int px, int py, int sizeX, int sizeY, byte voxel, int depth, int vx, int vy, int vz) {
+        return rect(px, py, sizeX, sizeY, color.rightFace(voxel, vx, vy, vz));
     }
 
     @Override

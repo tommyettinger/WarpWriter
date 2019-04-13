@@ -22,6 +22,7 @@ public class PaletteGenerator extends ApplicationAdapter {
         config.setTitle("Palette Stuff");
         config.setWindowedMode(1000, 600);
         config.setIdleFPS(10);
+        config.setResizable(false);
         new Lwjgl3Application(new PaletteGenerator(), config);
     }
 

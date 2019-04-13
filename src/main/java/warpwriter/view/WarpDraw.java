@@ -343,9 +343,9 @@ public class WarpDraw {
                     byte v = model.at(x, y, z);
                     if (v != 0) {
                         final int xPos = (sizeY - y) * 3 + offsetPX;
-                        renderer.rectRight(xPos, z * 3 + 1, 3, 3, v, 256 + x * 2, x, y, z, time);
+                        renderer.rectRight(xPos, z * 3 + 1, 3, 3, v, 256 + x * 2, x, y, z);
                         if (z >= sizeZ - 1 || model.at(x, y, z + 1) == 0)
-                            renderer.rectVertical(xPos, z * 3 + 4, 3, 1, v, 256 + x * 2, x, y, z, time);
+                            renderer.rectVertical(xPos, z * 3 + 4, 3, 1, v, 256 + x * 2, x, y, z);
                     }
                 }
             }
@@ -366,10 +366,10 @@ public class WarpDraw {
                     if (v != 0) {
                         dep = 3 * (x - y) + 256;
                         final int xPos = (sizeY + x - y) * 2 + 1;
-                        renderer.rectLeft(xPos, z * 3 + 1, 2, 3, v, dep, x, y, z, time);
-                        renderer.rectRight(xPos + 2, z * 3 + 1, 2, 3, v, dep, x, y, z, time);
+                        renderer.rectLeft(xPos, z * 3 + 1, 2, 3, v, dep, x, y, z);
+                        renderer.rectRight(xPos + 2, z * 3 + 1, 2, 3, v, dep, x, y, z);
                         if (z >= sizeZ - 1 || model.at(x, y, z + 1) == 0)
-                            renderer.rectVertical(xPos, z * 3 + 4, 4, 1, v, dep, x, y, z, time);
+                            renderer.rectVertical(xPos, z * 3 + 4, 4, 1, v, dep, x, y, z);
                     }
                 }
             }
@@ -388,10 +388,10 @@ public class WarpDraw {
                     byte v = model.at(x, y, z);
                     if (v != 0) {
                         final int xPos = (sizeY - y) * 3 + offsetPX, yPos = z * 2 + (sizeX - x) * 3 + offsetPY;
-                        renderer.rectRight(xPos, yPos, 3, 2, v, 256 + z * 8 - d, x, y, z, time);
+                        renderer.rectRight(xPos, yPos, 3, 2, v, 256 + z * 8 - d, x, y, z);
                         if (z >= sizeZ - 1 || model.at(x, y, z + 1) == 0)
                         {
-                            renderer.rectVertical(xPos, yPos + 3, 3, 3, v, 260 + z * 8 - d, x, y, z, time);
+                            renderer.rectVertical(xPos, yPos + 3, 3, 3, v, 260 + z * 8 - d, x, y, z);
                         }
                     }
                 }
@@ -412,15 +412,15 @@ public class WarpDraw {
                     if (v != 0) {
                         dep = 3 * (x + y + z) + 256;
                         final int xPos = (sizeY - y + x) * 2 + 1, yPos = (z - x - y + sizeX + sizeY) * 2 + 1;
-                        renderer.rectLeft(xPos, yPos, 2, 2, v, dep, x, y, z, time);
-                        renderer.rectRight(xPos + 2, yPos, 2, 2, v, dep, x, y, z, time);
+                        renderer.rectLeft(xPos, yPos, 2, 2, v, dep, x, y, z);
+                        renderer.rectRight(xPos + 2, yPos, 2, 2, v, dep, x, y, z);
 //                        renderer.depths[xPos+1][yPos]++;
 //                        renderer.depths[xPos+2][yPos]++;
 //                        renderer.depths[xPos+1][yPos+1]++;
 //                        renderer.depths[xPos+2][yPos+1]++;
                         if (z >= sizeZ - 1 || model.at(x, y, z + 1) == 0)
                         {
-                            renderer.rectVertical(xPos, yPos + 2, 4, 2, v, dep, x, y, z, time);
+                            renderer.rectVertical(xPos, yPos + 2, 4, 2, v, dep, x, y, z);
 //                            renderer.depths[xPos+1][yPos+2]++;
 //                            renderer.depths[xPos+2][yPos+2]++;
 //                            renderer.depths[xPos+1][yPos+3]++;
@@ -448,9 +448,9 @@ public class WarpDraw {
                 y = HashMap3D.extractY(xyz);
                 z = HashMap3D.extractZ(xyz);
                 final int xPos = (sizeY - y) * 3 + offsetPX;
-                renderer.rectRight(xPos, z * 3 + 1, 3, 3, v, 256 + x, x, y, z, time);
+                renderer.rectRight(xPos, z * 3 + 1, 3, 3, v, 256 + x, x, y, z);
                 if (z >= sizeZ - 1 || seq.getRotated(x, y, z + 1) == 0)
-                    renderer.rectVertical(xPos, z * 3 + 4, 3, 1, v, 256 + x, x, y, z, time);
+                    renderer.rectVertical(xPos, z * 3 + 4, 3, 1, v, 256 + x, x, y, z);
             }
         }
         return renderer.blit(2, pixelWidth, pixelHeight);
@@ -472,10 +472,10 @@ public class WarpDraw {
                 z = HashMap3D.extractZ(xyz);
                 dep = 3 * (x - y) + 256;
                 final int xPos = (sizeY + x - y) * 2 + 1;
-                renderer.rectLeft(xPos, z * 3 + 1, 2, 3, v, dep, x, y, z, time);
-                renderer.rectRight(xPos + 2, z * 3 + 1, 2, 3, v, dep, x, y, z, time);
+                renderer.rectLeft(xPos, z * 3 + 1, 2, 3, v, dep, x, y, z);
+                renderer.rectRight(xPos + 2, z * 3 + 1, 2, 3, v, dep, x, y, z);
                 if (z >= sizeZ - 1 || seq.getRotated(x, y, z + 1) == 0)
-                    renderer.rectVertical(xPos, z * 3 + 4, 4, 1, v, dep, x, y, z, time);
+                    renderer.rectVertical(xPos, z * 3 + 4, 4, 1, v, dep, x, y, z);
             }
         }
         return renderer.blit(5, pixelWidth, pixelHeight);
@@ -497,9 +497,9 @@ public class WarpDraw {
                 y = HashMap3D.extractY(xyz);
                 z = HashMap3D.extractZ(xyz);
                 final int xPos = (sizeY - y) * 3 + offsetPX, yPos = z * 2 + (sizeX - x) * 3 + offsetPY;
-                renderer.rectRight(xPos, yPos, 3, 2, v, 256 + z * 8 - x * 5, x, y, z, time);
+                renderer.rectRight(xPos, yPos, 3, 2, v, 256 + z * 8 - x * 5, x, y, z);
                 //if (z >= sizeZ - 1 || seq.getRotated(x, y, z + 1) == 0)
-                    renderer.rectVertical(xPos, yPos + 3, 3, 3, v, 260 + z * 8 - x * 5, x, y, z, time);
+                    renderer.rectVertical(xPos, yPos + 3, 3, 3, v, 260 + z * 8 - x * 5, x, y, z);
             }
         }
         return renderer.blit(13, pixelWidth, pixelHeight);
@@ -522,10 +522,10 @@ public class WarpDraw {
                 z = HashMap3D.extractZ(xyz);
                 dep = 3 * (x + y + z) + 256;
                 final int xPos = (sizeY - y + x) * 2 + 1, yPos = (z - x - y + sizeX + sizeY) * 2 + 1;
-                renderer.rectLeft(xPos, yPos, 2, 2, v, dep, x, y, z, time);
-                renderer.rectRight(xPos + 2, yPos, 2, 2, v, dep, x, y, z, time);
+                renderer.rectLeft(xPos, yPos, 2, 2, v, dep, x, y, z);
+                renderer.rectRight(xPos + 2, yPos, 2, 2, v, dep, x, y, z);
                 //if (z >= sizeZ - 1 || seq.getRotated(x, y, z + 1) == 0)
-                    renderer.rectVertical(xPos, yPos + 2, 4, 2, v, dep, x, y, z, time);
+                    renderer.rectVertical(xPos, yPos + 2, 4, 2, v, dep, x, y, z);
             }
         }
         return renderer.blit(12, pixelWidth, pixelHeight);

@@ -136,6 +136,7 @@ public class SimpleTest extends ApplicationAdapter {
         config.setWindowedMode(SCREEN_WIDTH, SCREEN_HEIGHT);
         config.setIdleFPS(10);
         config.useVsync(false);
+        config.setResizable(false);
         final SimpleTest app = new SimpleTest();
         config.setWindowListener(new Lwjgl3WindowAdapter() {
             @Override
