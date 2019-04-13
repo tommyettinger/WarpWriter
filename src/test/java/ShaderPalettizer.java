@@ -183,15 +183,15 @@ public class ShaderPalettizer extends ApplicationAdapter {
                     case Input.Keys.NUMPAD_6:
                         palette = new Texture(Gdx.files.local("palettes/FlesurrectBonus_GLSL.png"), Pixmap.Format.RGBA8888, false);
                         break;
-//                    case Input.Keys.NUM_0:
-//                    case Input.Keys.NUMPAD_0:
-//                        palette = new Texture(Gdx.files.local("Mash64_GLSL.png"), Pixmap.Format.RGBA8888, false);
-//                        break;
-                    case Input.Keys.M:                         
+                    case Input.Keys.NUM_0:
+                    case Input.Keys.NUMPAD_0:
+                        palette = new Texture(Gdx.files.local("palettes/Mash256_GLSL.png"), Pixmap.Format.RGBA8888, false);
+                        break;
+                    case Input.Keys.M:
                         load("D:/Mona_Lisa.jpg");
                         break;
                     case Input.Keys.S: 
-                        load("D:/Sierra_Nevadas.jpg");
+                        load("D:/Among_the_Sierra_Nevada_by_Albert Bierstadt.jpg");
                         break;
                     case Input.Keys.B:                         
                         load("D:/Painting_by_Henri_Biva.jpg");
