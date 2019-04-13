@@ -257,6 +257,7 @@ public class FetchTest extends ApplicationAdapter {
         config.setWindowedMode(SCREEN_WIDTH, SCREEN_HEIGHT);
         config.setIdleFPS(10);
         config.useVsync(true);
+        config.setResizable(false);
         final FetchTest app = new FetchTest();
         new Lwjgl3Application(app, config);
     }

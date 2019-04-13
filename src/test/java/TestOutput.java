@@ -226,6 +226,7 @@ public class TestOutput extends ApplicationAdapter {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setTitle("Output! Seed is 0x" + StringKit.hex(initialSeed));
         config.setWindowedMode(500, 500);
+        config.setResizable(false);
         new Lwjgl3Application(new TestOutput(), config);
     }
 }

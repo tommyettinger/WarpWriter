@@ -33,6 +33,7 @@ public class Palettizer extends ApplicationAdapter {
         config.setWindowedMode(SCREEN_WIDTH, SCREEN_HEIGHT);
         config.setIdleFPS(10);
         config.useVsync(true);
+        config.setResizable(false);
         final Palettizer app = new Palettizer();
         config.setWindowListener(new Lwjgl3WindowAdapter() {
             @Override

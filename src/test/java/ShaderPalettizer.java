@@ -76,6 +76,7 @@ public class ShaderPalettizer extends ApplicationAdapter {
         config.setWindowedMode(SCREEN_WIDTH, SCREEN_HEIGHT);
         config.setIdleFPS(10);
         config.useVsync(true);
+        config.setResizable(false);
         final ShaderPalettizer app = new ShaderPalettizer();
         config.setWindowListener(new Lwjgl3WindowAdapter() {
             @Override

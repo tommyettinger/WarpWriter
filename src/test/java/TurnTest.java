@@ -135,6 +135,7 @@ public class TurnTest extends ApplicationAdapter {
         config.setTitle("Fetch Tester");
         config.setWindowedMode(width, height);
         config.setIdleFPS(10);
+        config.setResizable(false);
         final TurnTest app = new TurnTest();
         new Lwjgl3Application(app, config);
     }

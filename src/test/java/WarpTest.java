@@ -287,6 +287,7 @@ public class WarpTest extends ApplicationAdapter {
         config.setWindowedMode(SCREEN_WIDTH, SCREEN_HEIGHT);
         config.setIdleFPS(10);
         config.useVsync(false);
+        config.setResizable(false);
         final WarpTest app = new WarpTest();
         new Lwjgl3Application(app, config);
     }

@@ -95,6 +95,7 @@ public class OneRovingVoxelTest extends ApplicationAdapter {
         config.setWindowedMode(SCREEN_WIDTH, SCREEN_HEIGHT);
         config.setIdleFPS(10);
         config.useVsync(false);
+        config.setResizable(false);
         final OneRovingVoxelTest app = new OneRovingVoxelTest();
         new Lwjgl3Application(app, config);
     }
