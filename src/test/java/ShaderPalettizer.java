@@ -53,9 +53,27 @@ public class ShaderPalettizer extends ApplicationAdapter {
             "   vec4 tgt = texture2D( u_texture, v_texCoords );\n" +
 //            "   gl_FragColor = texture2D(u_palette, vec2((tgt.b * b_adj + floor(tgt.r * 31.999)) * rb_adj, 1.0 - tgt.g));\n" + //solid shading
             "   vec4 used = texture2D(u_palette, vec2((tgt.b * b_adj + floor(tgt.r * 31.999)) * rb_adj, 1.0 - tgt.g));\n" +
-            "   float len = length(tgt.rgb) * 0.75;\n" + 
+            "   float len = length(tgt.rgb) * 0.75;\n" +
             "   float adj = sin(dot(gl_FragCoord.xy, vec2(4.743036261279236, 3.580412143837574)) + len) * (len * len + 0.175);\n" +
             "   tgt.rgb = clamp(tgt.rgb + (tgt.rgb - used.rgb) * adj, 0.0, 1.0);\n" +
+            "   gl_FragColor.rgb = v_color.rgb * texture2D(u_palette, vec2((tgt.b * b_adj + floor(tgt.r * 31.999)) * rb_adj, 1.0 - tgt.g)).rgb;\n" +
+            "   gl_FragColor.a = v_color.a * tgt.a;\n" +
+            "}";
+
+    /**
+     * This fragment shader substitutes colors with ones from a palette, without dithering.
+     */
+    public static final String fragmentShaderNoDither = "#version 150\n" +
+            "varying vec2 v_texCoords;\n" +
+            "varying vec4 v_color;\n" +
+            "uniform sampler2D u_texture;\n" +
+            "uniform sampler2D u_palette;\n" +
+            "const float b_adj = 31.0 / 32.0;\n" +
+            "const float rb_adj = 32.0 / 1023.0;\n" +
+            "void main()\n" +
+            "{\n" +
+            "   vec4 tgt = texture2D( u_texture, v_texCoords );\n" +
+//            "   gl_FragColor = texture2D(u_palette, vec2((tgt.b * b_adj + floor(tgt.r * 31.999)) * rb_adj, 1.0 - tgt.g));\n" + //solid shading
             "   gl_FragColor.rgb = v_color.rgb * texture2D(u_palette, vec2((tgt.b * b_adj + floor(tgt.r * 31.999)) * rb_adj, 1.0 - tgt.g)).rgb;\n" +
             "   gl_FragColor.a = v_color.a * tgt.a;\n" +
             "}";
@@ -68,6 +86,7 @@ public class ShaderPalettizer extends ApplicationAdapter {
 
     private ShaderProgram defaultShader;
     private ShaderProgram shader;
+    private ShaderProgram shaderNoDither;
     private Texture palette;
 
     public static void main(String[] arg) {
@@ -105,6 +124,8 @@ public class ShaderPalettizer extends ApplicationAdapter {
         defaultShader = SpriteBatch.createDefaultShader();
         shader = new ShaderProgram(vertexShader, fragmentShader);
         if (!shader.isCompiled()) throw new GdxRuntimeException("Couldn't compile shader: " + shader.getLog());
+        shaderNoDither = new ShaderProgram(vertexShader, fragmentShaderNoDither);
+        if (!shader.isCompiled()) throw new GdxRuntimeException("Couldn't compile shader: " + shader.getLog());
         batch = new SpriteBatch(1000, defaultShader);
         screenView = new ScreenViewport();
         screenView.getCamera().position.set(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0);
@@ -126,7 +147,7 @@ public class ShaderPalettizer extends ApplicationAdapter {
 
         batch.setProjectionMatrix(screenView.getCamera().combined);
         if(screenTexture != null) {
-            if(batch.getShader().equals(shader)) {
+            if(!batch.getShader().equals(defaultShader)) {
                 batch.setColor(-0x1.fffffep126f);
                 Gdx.gl.glActiveTexture(GL20.GL_TEXTURE1);
                 palette.bind();
@@ -184,30 +205,38 @@ public class ShaderPalettizer extends ApplicationAdapter {
                     case Input.Keys.NUMPAD_6:
                         palette = new Texture(Gdx.files.local("palettes/FlesurrectBonus_GLSL.png"), Pixmap.Format.RGBA8888, false);
                         break;
-                    case Input.Keys.NUM_0:
-                    case Input.Keys.NUMPAD_0:
+                    case Input.Keys.NUM_9:
+                    case Input.Keys.NUMPAD_9:
                         palette = new Texture(Gdx.files.local("palettes/Mash256_GLSL.png"), Pixmap.Format.RGBA8888, false);
                         break;
-                    case Input.Keys.M:
+                    case Input.Keys.NUM_0:
+                    case Input.Keys.NUMPAD_0:
+                        palette = new Texture(Gdx.files.local("palettes/Uniform216_GLSL.png"), Pixmap.Format.RGBA8888, false);
+                        break;
+                    case Input.Keys.M: // Mona Lisa
                         load("D:/Mona_Lisa.jpg");
                         break;
-                    case Input.Keys.S: 
+                    case Input.Keys.S: //Sierra Nevada
                         load("D:/Among_the_Sierra_Nevada_by_Albert Bierstadt.jpg");
                         break;
-                    case Input.Keys.B:                         
+                    case Input.Keys.B: // Biva
                         load("D:/Painting_by_Henri_Biva.jpg");
                         break;
-                    case Input.Keys.C:
+                    case Input.Keys.C: // Color Guard
                         load("D:/Color_Guard.png");
                         break;
-                    case Input.Keys.P:
+                    case Input.Keys.P: // lower-color palette
                         load("D:/Quorum64_GLSL.png");
                         break;
-                    case Input.Keys.O:
+                    case Input.Keys.O: // higher-color palette
                         load("D:/Quorum128_GLSL.png");
                         break;
+                    case Input.Keys.D: // dither/disable
+                        if(!batch.getShader().equals(shaderNoDither))
+                            batch.setShader(shaderNoDither);
+                        break;
                     default:
-                        if(batch.getShader().equals(defaultShader))
+                        if(!batch.getShader().equals(shader))
                             batch.setShader(shader);
                         else
                             batch.setShader(defaultShader);

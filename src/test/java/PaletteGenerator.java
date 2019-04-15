@@ -203,7 +203,18 @@ public class PaletteGenerator extends ApplicationAdapter {
         base.insert(0, 0);
         System.arraycopy(grayscale, 0, base.items, 1, grayscale.length);
         PALETTE = base.toArray();
-
+        
+        //// used for Uniform216
+//        PALETTE = new int[217];
+//        int idx = 1;
+//        for (int r = 0; r < 6; r++) {
+//            for (int g = 0; g < 6; g++) {
+//                for (int b = 0; b < 6; b++) {
+//                    PALETTE[idx++] = r * 51 << 24 | g * 51 << 16 | b * 51 << 8 | 0xFF;
+//                }
+//            }
+//        }
+        
 //        IntIntOrderedMap iiom = new IntIntOrderedMap(initial, initial);
 //        initial = iiom.keysAsArray();
         //uncomment next line to actually use unseven full, with more colors
