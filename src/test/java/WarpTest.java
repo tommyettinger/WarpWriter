@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.FakeLanguageGen;
+import squidpony.squidmath.MiniMover64RNG;
 import warpwriter.ModelMaker;
 import warpwriter.Tools3D;
 import warpwriter.VoxIO;
@@ -77,13 +78,17 @@ public class WarpTest extends ApplicationAdapter {
             "varying vec4 v_color;\n" +
             "uniform sampler2D u_texture;\n" +
             "uniform sampler2D u_palette;\n" +
+            "const float b_adj = 31.0 / 32.0;\n" +
+            "const float rb_adj = 32.0 / 1023.0;\n" +
             "void main()\n" +
             "{\n" +
             "   vec4 tgt = texture2D( u_texture, v_texCoords );\n" +
-            "   vec4 used = texture2D(u_palette, vec2((tgt.b + floor(tgt.r * 31.99999)) * 0.03125, 1.0 - tgt.g));\n" +
-            "   float adj = sin(dot(gl_FragCoord.xy, vec2(4.743036261279236, 3.580412143837574))) * 1.1 + 0.05;\n" +
-            "   tgt.rgb = clamp(tgt.rgb + (used.rgb - tgt.rgb) * adj, 0.0, 1.0);\n" +
-            "   gl_FragColor.rgb = v_color.rgb * texture2D(u_palette, vec2((tgt.b + floor(tgt.r * 31.99999)) * 0.03125, 1.0 - tgt.g)).rgb;\n" + //(tgt.b + floor(tgt.r * 32.0)) * 0.03125, tgt.g
+//            "   gl_FragColor = texture2D(u_palette, vec2((tgt.b * b_adj + floor(tgt.r * 31.999)) * rb_adj, 1.0 - tgt.g));\n" + //solid shading
+            "   vec4 used = texture2D(u_palette, vec2((tgt.b * b_adj + floor(tgt.r * 31.999)) * rb_adj, 1.0 - tgt.g));\n" +
+            "   float len = length(tgt.rgb) * 0.75;\n" +
+            "   float adj = sin(dot(gl_FragCoord.xy, vec2(4.743036261279236, 3.580412143837574)) + len) * (len * len + 0.175);\n" +
+            "   tgt.rgb = clamp(tgt.rgb + (tgt.rgb - used.rgb) * adj, 0.0, 1.0);\n" +
+            "   gl_FragColor.rgb = v_color.rgb * texture2D(u_palette, vec2((tgt.b * b_adj + floor(tgt.r * 31.999)) * rb_adj, 1.0 - tgt.g)).rgb;\n" +
             "   gl_FragColor.a = v_color.a * tgt.a;\n" +
             "}";
 //            "   float adj = fract(dot(gl_FragCoord.xy, vec2(0.7548776662466927, 0.5698402909980532))) * 2.15 - 1.1;\n" +
@@ -109,6 +114,8 @@ public class WarpTest extends ApplicationAdapter {
     private Colorizer colorizer;
     private ShaderProgram shader, defaultShader;
     private Texture palette;
+    protected MiniMover64RNG rng;
+
 //    private ChaoticFetch chaos;
 
     @Override
@@ -135,7 +142,8 @@ public class WarpTest extends ApplicationAdapter {
         voxelColor = new VoxelColor().set(colorizer);
         pixmapRenderer = new VoxelPixmapRenderer(new Pixmap(512, 512, Pixmap.Format.RGBA8888), voxelColor);
         pmTexture = new Texture(pixmapRenderer.pixmap);
-        maker = new ModelMaker(12345, colorizer);
+        rng = new MiniMover64RNG(-123456789);
+        maker = new ModelMaker(-123456789, colorizer);
 //        try {
 //            box = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("Aurora/dumbcube.vox")));
 //        } catch (Exception e) {
@@ -143,13 +151,14 @@ public class WarpTest extends ApplicationAdapter {
 //            box = maker.shipNoiseColorized();
 //        }
         makeBoom(maker.fireRange());
+        maker.rng.setState(rng.nextLong());
         voxels = maker.shipLargeNoiseColorized();
 //        chaos = new ChaoticFetch(maker.rng.nextLong(), (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 1);
         ship = new TurnModel().set(
 //                new ReplaceFetch(ColorFetch.color((byte) 0), (byte) 1)
 //                .add(new PaintFetch(chaos, true)).model(
                 new ArrayModel(voxels));
-        model = new TurnModel().set(model());
+        model = new TurnModel().set(ship);
 //        model = new TurnModel().set(ship);
         model.setDuration(16);
         Gdx.input.setInputProcessor(inputProcessor());
@@ -331,17 +340,20 @@ public class WarpTest extends ApplicationAdapter {
                         break;
                     case Input.Keys.P:
 //                        model.set(model());
+                        maker.rng.setState(rng.nextLong());
                         model.set(ship);
 //                        chaos.setSeed(maker.rng.nextLong());
                         Tools3D.deepCopyInto(maker.shipLargeNoiseColorized(), voxels);
                         animating = false;
                         break;
                     case Input.Keys.B: // burn!
+                        //maker.rng.setState(rng.nextLong());
                         makeBoom(maker.fireRange());
                         model.set(boom);
                         animating = true;
                         break;
                     case Input.Keys.Z: // zap!
+                        //maker.rng.setState(rng.nextLong());
                         makeBoom(maker.randomFireRange());
                         model.set(boom);
                         animating = true;

@@ -180,7 +180,7 @@ public class BurstTest extends ApplicationAdapter {
         screenView.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.enableBlending();
 
-        maker = new ModelMaker(12345, Colorizer.FlesurrectBonusColorizer);
+        maker = new ModelMaker(-123456789, Colorizer.FlesurrectBonusColorizer);
         batchRenderer = new VoxelSpriteBatchRenderer(batch);
         batchRenderer.color().set(Colorizer.FlesurrectBonusColorizer);
         voxelSprite = new VoxelSprite()

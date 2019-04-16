@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.StringKit;
+import squidpony.squidmath.MiniMover64RNG;
 import squidpony.squidmath.NumberTools;
 import warpwriter.Coloring;
 import warpwriter.ModelMaker;
@@ -128,6 +129,7 @@ public class SimpleTest extends ApplicationAdapter {
     protected VoxelSpriteBatchRenderer batchRenderer;
     protected ShaderProgram shader;
     protected ShaderProgram defaultShader;
+    protected MiniMover64RNG rng;
     protected Colorizer colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
 
     public static void main(String[] arg) {
@@ -165,6 +167,7 @@ public class SimpleTest extends ApplicationAdapter {
                     //maker.warriorRandom()
             ));
         } catch (FileNotFoundException e) {
+            maker.rng.setState(rng.nextLong());
             voxelSprite.set(new ArrayModel(maker.shipNoiseColorized()));
             batchRenderer.set(batchRenderer.color().set(colorizer));
         }
@@ -181,8 +184,10 @@ public class SimpleTest extends ApplicationAdapter {
         screenView.getCamera().position.set(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2, 0);
         screenView.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.enableBlending();
-        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
-        maker = new ModelMaker(12345, colorizer);
+        //colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
+        colorizer = Colorizer.FlesurrectBonusColorizer;
+        rng = new MiniMover64RNG(-123456789);
+        maker = new ModelMaker(-123456789, colorizer);
         batchRenderer = new VoxelSpriteBatchRenderer(batch);
         batchRenderer.color().set(colorizer);
         voxelSprite = new VoxelSprite()
@@ -205,7 +210,8 @@ public class SimpleTest extends ApplicationAdapter {
     }
 
     public IModel model() {
-         return new ArrayModel(maker.shipLargeNoiseColorized());
+        maker.rng.setState(rng.nextLong());
+        return new ArrayModel(maker.shipLargeNoiseColorized());
 //        HashMap3D<IFetch> map = new HashMap3D<>();
 //        for (int x=0; x<3; x++) {
 //            for (int y = 0; y < 3; y++)

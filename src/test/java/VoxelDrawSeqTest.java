@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.FakeLanguageGen;
+import squidpony.squidmath.MiniMover64RNG;
 import warpwriter.ModelMaker;
 import warpwriter.Tools3D;
 import warpwriter.VoxIO;
@@ -48,6 +49,8 @@ public class VoxelDrawSeqTest extends ApplicationAdapter {
 //    private byte[][][] container;
     private AnimatedVoxelSeq seq;
     private Colorizer colorizer;
+    protected MiniMover64RNG rng;
+
 //    private ChaoticFetch chaos;
 
     @Override
@@ -73,7 +76,8 @@ public class VoxelDrawSeqTest extends ApplicationAdapter {
         voxelColor = new VoxelColor().set(colorizer);
         batchRenderer = new VoxelSpriteBatchRenderer(batch);
         batchRenderer.color().set(colorizer);
-        maker = new ModelMaker(12345, colorizer);
+        rng = new MiniMover64RNG(-123456789);
+        maker = new ModelMaker(-123456789, colorizer);
 //        try {
 //            box = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("Aurora/dumbcube.vox")));
 //        } catch (Exception e) {
@@ -81,6 +85,7 @@ public class VoxelDrawSeqTest extends ApplicationAdapter {
 //            box = maker.shipNoiseColorized();
 //        }
 //        makeBoom(maker.fireRange());
+        maker.rng.setState(rng.nextLong());
         voxels = maker.shipLargeNoiseColorized();
         VoxelSeq vs = new VoxelSeq(1024);
         vs.putArray(voxels);
@@ -221,6 +226,7 @@ public class VoxelDrawSeqTest extends ApplicationAdapter {
 //                        model.set(model());
 //                        model.set(ship);
 //                        chaos.setSeed(maker.rng.nextLong());
+                        maker.rng.setState(rng.nextLong());
                         Tools3D.deepCopyInto(maker.shipLargeNoiseColorized(), voxels);
                         seq.setFrame(0);
                         seq.clear();
@@ -229,10 +235,12 @@ public class VoxelDrawSeqTest extends ApplicationAdapter {
                         animating = false;
                         break;
                     case Input.Keys.B: // burn!
+                        maker.rng.setState(rng.nextLong());
                         makeBoom(maker.fireRange());
                         animating = true;
                         break;
                     case Input.Keys.Z: // zap!
+                        maker.rng.setState(rng.nextLong());
                         makeBoom(maker.randomFireRange());
                         animating = true;
                         break;

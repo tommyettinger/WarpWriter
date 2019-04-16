@@ -74,7 +74,7 @@ public class SeqTest extends ApplicationAdapter {
         pixmapRenderer = new VoxelPixmapRenderer(new Pixmap(512, 512, Pixmap.Format.RGBA8888), voxelColor);
         pixmapRenderer.easing = false;
         pmTexture = new Texture(pixmapRenderer.pixmap);
-        maker = new ModelMaker(12345, colorizer);
+        maker = new ModelMaker(-123456789, colorizer);
 //        try {
 //            box = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("Aurora/dumbcube.vox")));
 //        } catch (Exception e) {
