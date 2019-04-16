@@ -154,13 +154,13 @@ public class VoxIO {
 
             bin.writeBytes("RGBA");
             writeInt(bin, 1024);
-            writeInt(bin,  0);
-//            for (int i = 1; i < 4; i++) {
-//                bin.writeInt(palette[i]);
-//            }
-//            bin.writeInt(palette[17]); // special case for eye shine
-            for (int i = 1; i < 256; i++) {
+            int i = 1;
+            for (; i < 256 && i < palette.length; i++) {
                 bin.writeInt(palette[i]);
+            }
+            // if the palette is smaller than 256 colors, this fills the rest with lastPalette's colors
+            for (; i < 256; i++) {
+                bin.writeInt(lastPalette[i]);
             }
             writeInt(bin,  0);
 
@@ -231,12 +231,13 @@ public class VoxIO {
             bin.writeBytes("RGBA");
             writeInt(bin, 1024);
             writeInt(bin,  0);
-            for (int i = 1; i < 4; i++) {
+            int i = 1;
+            for (; i < 256 && i < palette.length; i++) {
                 bin.writeInt(palette[i]);
             }
-            bin.writeInt(palette[17]); // special case for eye shine
-            for (int i = 5; i < 256; i++) {
-                bin.writeInt(palette[i]);
+            // if the palette is smaller than 256 colors, this fills the rest with lastPalette's colors
+            for (; i < 256; i++) {
+                bin.writeInt(lastPalette[i]);
             }
             writeInt(bin,  0);
 
