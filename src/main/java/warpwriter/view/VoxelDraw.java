@@ -1,7 +1,6 @@
 package warpwriter.view;
 
 import warpwriter.model.IModel;
-import warpwriter.model.ITemporal;
 import warpwriter.model.IVoxelSeq;
 import warpwriter.model.nonvoxel.HashMap3D;
 import warpwriter.model.nonvoxel.IntComparator;
@@ -282,6 +281,18 @@ public class VoxelDraw {
     }
 
     public static int isoWidth(IModel model) {
+        final int sizeVX = model.sizeX(), sizeVY = model.sizeY();
+        return (sizeVX + sizeVY) * 2 -
+                ((sizeVX + sizeVY & 1) << 2); // if sizeVX + sizeVY is odd, this is 4, otherwise it is 0
+    }
+
+    public static int isoHeight(IVoxelSeq model) {
+        return (model.sizeX() - 1) * 2 +
+                (model.sizeZ() - 1) * 4 +
+                (model.sizeY() - 1) * 2;
+    }
+
+    public static int isoWidth(IVoxelSeq model) {
         final int sizeVX = model.sizeX(), sizeVY = model.sizeY();
         return (sizeVX + sizeVY) * 2 -
                 ((sizeVX + sizeVY & 1) << 2); // if sizeVX + sizeVY is odd, this is 4, otherwise it is 0
@@ -586,7 +597,8 @@ public class VoxelDraw {
     public static void draw(IVoxelSeq seq, IRectangleRenderer renderer, int scaleX, int scaleY) // scaleX 3, scaleY 3
     {
         final int len = seq.size(), sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ(),
-                offsetPX = (sizeY - 1 >> 1) + 1, pixelWidth = sizeY * scaleX + (sizeY - 1 >> 1) + 3, pixelHeight = sizeZ * scaleY + 4;
+                offsetPX = (sizeY - 1 >> 1) + 1;
+//                pixelWidth = sizeY * scaleX + (sizeY - 1 >> 1) + 3, pixelHeight = sizeZ * scaleY + 4;
         seq.sort(IntComparator.side[seq.rotation()]);
         int xyz, x, y, z;
         byte v;
@@ -610,8 +622,8 @@ public class VoxelDraw {
     }
     public static void draw45(IVoxelSeq seq, IRectangleRenderer renderer, int scaleX, int scaleY) // scaleX 2, scaleY 3
     {
-        final int len = seq.size(), sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ(),
-                pixelWidth = (sizeX + sizeY) * scaleX + 3, pixelHeight = sizeZ * scaleY + 4;
+        final int len = seq.size(), sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ();
+//                pixelWidth = (sizeX + sizeY) * scaleX + 3, pixelHeight = sizeZ * scaleY + 4;
         final int dep = 0;
         seq.sort(IntComparator.side45[seq.rotation()]);
         int xyz, x, y, z;
@@ -638,8 +650,8 @@ public class VoxelDraw {
     public static void drawAbove(IVoxelSeq seq, IRectangleRenderer renderer, int scaleX, int scaleY) // scaleX 1, scaleY 1
     {
         final int len = seq.size(), sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ(),
-                offsetPX = (sizeY * scaleX >> 1) + 1, offsetPY = (sizeX * scaleY >> 1) + 1,
-                pixelWidth = (sizeY * 3) + (sizeY >> 1) + 6, pixelHeight = sizeZ * 2 + sizeX * 3 + (sizeX >> 1) + 8;
+                offsetPX = (sizeY * scaleX >> 1) + 1, offsetPY = (sizeX * scaleY >> 1) + 1;
+//                pixelWidth = (sizeY * 3) + (sizeY >> 1) + 6, pixelHeight = sizeZ * 2 + sizeX * 3 + (sizeX >> 1) + 8;
         seq.sort(IntComparator.side[seq.rotation()]);
         int xyz, x, y, z;
         byte v;
@@ -653,7 +665,7 @@ public class VoxelDraw {
                 final int xPos = (sizeY - y) * 3 * scaleX + offsetPX, yPos = z * 2 * scaleY + (sizeX - x) * 3 * scaleY + offsetPY;
                 renderer.rectRight(xPos, yPos, 3 * scaleX, 2 * scaleY, v, 0, x, y, z);
                 //if (z >= sizeZ - 1 || seq.getRotated(x, y, z + 1) == 0)
-                renderer.rectVertical(xPos, yPos + 3 * scaleY, 3 * scaleX, 3 * scaleY, v, 0, x, y, z);
+                renderer.rectVertical(xPos, yPos + 2 * scaleY, 3 * scaleX, 3 * scaleY, v, 0, x, y, z);
             }
         }
     }
@@ -664,8 +676,8 @@ public class VoxelDraw {
 
     public static void drawIso(IVoxelSeq seq, IRectangleRenderer renderer, int scaleX, int scaleY) // scaleX 2, scaleY 2
     {
-        final int len = seq.size(), sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ(),
-                pixelWidth = (sizeY + sizeX + 2) * scaleX + 1, pixelHeight = (sizeX + sizeY + sizeZ + 3) * scaleY + 1;
+        final int len = seq.size(), sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ();
+//                pixelWidth = (sizeY + sizeX + 2) * scaleX + 1, pixelHeight = (sizeX + sizeY + sizeZ + 3) * scaleY + 1;
         final int dep = 0;
         seq.sort(IntComparator.side45[seq.rotation()]);
         int xyz, x, y, z;
@@ -682,6 +694,42 @@ public class VoxelDraw {
                 renderer.rectRight(xPos + scaleX, yPos, scaleX, scaleY, v, dep, x, y, z);
                 //if (z >= sizeZ - 1 || seq.getRotated(x, y, z + 1) == 0)
                 renderer.rectVertical(xPos, yPos + scaleY, 2 * scaleX, scaleY, v, dep, x, y, z);
+            }
+        }
+    }
+
+
+
+
+    public static void drawAbove45(IVoxelSeq seq, ITriangleRenderer renderer) {
+        // To move one x+ in voxels is x + 2, y - 2 in pixels.
+        // To move one x- in voxels is x - 2, y + 2 in pixels.
+        // To move one y+ in voxels is x + 2, y + 2 in pixels.
+        // To move one y- in voxels is x - 2, y - 2 in pixels.
+        // To move one z+ in voxels is y + 4 in pixels.
+        // To move one z- in voxels is y - 4 in pixels.
+        final int len = seq.size(), sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ();
+//                pixelWidth = (sizeY + sizeX + 2) * scaleX + 1, pixelHeight = (sizeX + sizeY + sizeZ + 3) * scaleY + 1;
+        final int dep = 0;
+        seq.sort(IntComparator.side45[seq.rotation()]);
+        int xyz, x, y, z;
+        byte v;
+        for (int i = 0; i < len; i++) {
+            v = seq.getAtHollow(i);
+            if (v != 0) {
+                xyz = seq.keyAtRotated(i);
+                x = HashMap3D.extractX(xyz);
+                y = HashMap3D.extractY(xyz);
+                z = HashMap3D.extractZ(xyz);
+                final int xPos = (sizeY - y + x) * 2 + 1, yPos = (z + sizeX + sizeY - x - y) * 2 + 1;
+                renderer.drawLeftTriangleLeftFace(xPos, yPos, v);
+                renderer.drawRightTriangleLeftFace(xPos, yPos + 2, v);
+                renderer.drawLeftTriangleRightFace(xPos + 2, yPos + 2, v);
+                renderer.drawRightTriangleRightFace(xPos + 2, yPos, v);
+                //if (z >= sizeZ - 1 || seq.getRotated(x, y, z + 1) == 0)
+                renderer.drawLeftTriangleVerticalFace(xPos, yPos + 4, v);
+                renderer.drawRightTriangleVerticalFace(xPos + 2, yPos + 4, v);
+
             }
         }
     }

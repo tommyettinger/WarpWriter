@@ -124,7 +124,7 @@ public class VoxelDrawSeqTest extends ApplicationAdapter {
         if(angle > 2)
         {
             if(diagonal)
-                VoxelDraw.drawIso(seq, batchRenderer);
+                VoxelDraw.drawAbove45(seq, batchRenderer);
             else
                 VoxelDraw.drawAbove(seq, batchRenderer);
         }
