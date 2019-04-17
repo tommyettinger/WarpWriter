@@ -93,12 +93,7 @@ public class BlinkRenderer implements IRectangleRenderer, ITriangleRenderer {
         this.tri = tri;
         return this;
     }
-
-    @Override
-    public VoxelColor color() {
-        return rect.color();
-    }
-
+    
     public ITriangleRenderer getTri() {
         return tri;
     }

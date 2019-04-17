@@ -30,9 +30,6 @@ public class VoxelDraw {
     }
 
     public static void drawRight(IModel model, IRectangleRenderer renderer, int scaleX, int scaleY) {
-        if(model instanceof ITemporal) {
-            renderer.color().set(((ITemporal) model).frame());
-        }
         final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ();
         for (int z = 0; z < sizeZ; z++) {
             for (int y = 0; y < sizeY; y++) {
@@ -52,9 +49,6 @@ public class VoxelDraw {
     }
 
     public static void drawRightPeek(IModel model, IRectangleRenderer renderer, int scaleX, int scaleY) {
-        if(model instanceof ITemporal) {
-            renderer.color().set(((ITemporal) model).frame());
-        }
         final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ();
         for (int z = 0; z < sizeZ; z++) {
             for (int y = 0; y < sizeY; y++) {
@@ -76,9 +70,6 @@ public class VoxelDraw {
     }
 
     public static void drawLeft(IModel model, IRectangleRenderer renderer, int scaleX, int scaleY) {
-        if(model instanceof ITemporal) {
-            renderer.color().set(((ITemporal) model).frame());
-        }
         final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ();
         for (int z = 0; z < sizeZ; z++) {
             for (int y = 0; y < sizeY; y++) {
@@ -98,9 +89,6 @@ public class VoxelDraw {
     }
 
     public static void drawTop(IModel model, IRectangleRenderer renderer, int scaleX, int scaleY) {
-        if(model instanceof ITemporal) {
-            renderer.color().set(((ITemporal) model).frame());
-        }
         final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ();
         for (int y = 0; y < sizeY; y++) {
             for (int x = 0; x < sizeX; x++) {
@@ -120,9 +108,6 @@ public class VoxelDraw {
     }
 
     public static void drawBottom(IModel model, IRectangleRenderer renderer, int scaleX, int scaleY) {
-        if(model instanceof ITemporal) {
-            renderer.color().set(((ITemporal) model).frame());
-        }
         final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ();
         for (int y = 0; y < sizeY; y++) {
             for (int x = 0; x < sizeX; x++) {
@@ -142,9 +127,6 @@ public class VoxelDraw {
     }
 
     public static void draw45(IModel model, IRectangleRenderer renderer, int scaleX, int scaleY) {
-        if(model instanceof ITemporal) {
-            renderer.color().set(((ITemporal) model).frame());
-        }
         byte v;
         final int sizeX = model.sizeX(),
                 sizeY = model.sizeY(),
@@ -191,9 +173,6 @@ public class VoxelDraw {
     }
 
     public static void draw45Peek(IModel model, IRectangleRenderer renderer, int scaleX, int scaleY) {
-        if(model instanceof ITemporal) {
-            renderer.color().set(((ITemporal) model).frame());
-        }
         byte v;
         final int sizeX = model.sizeX(),
                 sizeY = model.sizeY(),
@@ -251,10 +230,6 @@ public class VoxelDraw {
     }
 
     public static void drawAbove(IModel model, IRectangleRenderer renderer, int scaleX, int scaleY) {
-        brenderer.set(renderer);
-        if(model instanceof ITemporal) {
-            renderer.color().set(((ITemporal) model).frame());
-        }
         final int sizeX = model.sizeX(),
                 sizeY = model.sizeY(),
                 sizeZ = model.sizeZ(),
@@ -325,9 +300,6 @@ public class VoxelDraw {
 
     public static void drawIso(IModel model, ITriangleRenderer renderer) {
         byte v;
-        if(model instanceof ITemporal) {
-            renderer.color().set(((ITemporal) model).frame());
-        }
         final int sizeVX = model.sizeX(), sizeVY = model.sizeY(), sizeVZ = model.sizeZ(),
                 sizeVX2 = sizeVX * 2, sizeVY2 = sizeVY * 2,
                 pixelWidth = isoWidth(model);
@@ -624,9 +596,6 @@ public class VoxelDraw {
     }
     public static void draw(IVoxelSeq seq, IRectangleRenderer renderer, int scaleX, int scaleY) // scaleX 3, scaleY 3
     {
-        if(seq instanceof ITemporal) {
-            renderer.color().set(((ITemporal) seq).frame());
-        }
         final int len = seq.size(), sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ(),
                 offsetPX = (sizeY - 1 >> 1) + 1;
 //                pixelWidth = sizeY * scaleX + (sizeY - 1 >> 1) + 3, pixelHeight = sizeZ * scaleY + 4;
@@ -653,9 +622,6 @@ public class VoxelDraw {
     }
     public static void draw45(IVoxelSeq seq, IRectangleRenderer renderer, int scaleX, int scaleY) // scaleX 2, scaleY 3
     {
-        if(seq instanceof ITemporal) {
-            renderer.color().set(((ITemporal) seq).frame());
-        }
         final int len = seq.size(), sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ();
 //                pixelWidth = (sizeX + sizeY) * scaleX + 3, pixelHeight = sizeZ * scaleY + 4;
         final int dep = 0;
@@ -683,9 +649,6 @@ public class VoxelDraw {
     }
     public static void drawAbove(IVoxelSeq seq, IRectangleRenderer renderer, int scaleX, int scaleY) // scaleX 1, scaleY 1
     {
-        if(seq instanceof ITemporal) {
-            renderer.color().set(((ITemporal) seq).frame());
-        }
         final int len = seq.size(), sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ(),
                 offsetPX = (sizeY * scaleX >> 1) + 1, offsetPY = (sizeX * scaleY >> 1) + 1;
 //                pixelWidth = (sizeY * 3) + (sizeY >> 1) + 6, pixelHeight = sizeZ * 2 + sizeX * 3 + (sizeX >> 1) + 8;
@@ -713,9 +676,6 @@ public class VoxelDraw {
 
     public static void drawIso(IVoxelSeq seq, IRectangleRenderer renderer, int scaleX, int scaleY) // scaleX 2, scaleY 2
     {
-        if(seq instanceof ITemporal) {
-            renderer.color().set(((ITemporal) seq).frame());
-        }
         final int len = seq.size(), sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ();
 //                pixelWidth = (sizeY + sizeX + 2) * scaleX + 1, pixelHeight = (sizeX + sizeY + sizeZ + 3) * scaleY + 1;
         final int dep = 0;
@@ -738,9 +698,6 @@ public class VoxelDraw {
         }
     }
 
-
-
-
     public static void drawAbove45(IVoxelSeq seq, ITriangleRenderer renderer) {
         // To move one x+ in voxels is x + 2, y - 2 in pixels.
         // To move one x- in voxels is x - 2, y + 2 in pixels.
@@ -748,23 +705,19 @@ public class VoxelDraw {
         // To move one y- in voxels is x - 2, y - 2 in pixels.
         // To move one z+ in voxels is y + 4 in pixels.
         // To move one z- in voxels is y - 4 in pixels.
-        if(seq instanceof ITemporal) {
-            renderer.color().set(((ITemporal) seq).frame());
-        }
         final int len = seq.size(), sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ();
 //                pixelWidth = (sizeY + sizeX + 2) * scaleX + 1, pixelHeight = (sizeX + sizeY + sizeZ + 3) * scaleY + 1;
         final int dep = 0;
         seq.sort(IntComparator.side45[seq.rotation()]);
-        int xyz, x, y, z;
-        byte v;
         for (int i = 0; i < len; i++) {
-            v = seq.getAtHollow(i);
+            final byte v = seq.getAtHollow(i);
             if (v != 0) {
-                xyz = seq.keyAtRotated(i);
-                x = HashMap3D.extractX(xyz);
-                y = HashMap3D.extractY(xyz);
-                z = HashMap3D.extractZ(xyz);
-                final int xPos = (sizeY - y + x) * 2 + 1, yPos = (z + sizeX + sizeY - x - y) * 2 + 1;
+                final int xyz = seq.keyAtRotated(i),
+                        x = HashMap3D.extractX(xyz),
+                        y = HashMap3D.extractY(xyz),
+                        z = HashMap3D.extractZ(xyz),
+                        xPos = (sizeY - y + x) * 2 + 1,
+                        yPos = (z + sizeX + sizeY - x - y) * 2 + 1;
                 renderer.drawLeftTriangleLeftFace(xPos, yPos, v, x, y, z);
                 renderer.drawRightTriangleLeftFace(xPos, yPos + 2, v, x, y, z);
                 renderer.drawLeftTriangleRightFace(xPos + 2, yPos + 2, v, x, y, z);
@@ -772,9 +725,7 @@ public class VoxelDraw {
                 //if (z >= sizeZ - 1 || seq.getRotated(x, y, z + 1) == 0)
                 renderer.drawLeftTriangleVerticalFace(xPos, yPos + 4, v, x, y, z);
                 renderer.drawRightTriangleVerticalFace(xPos + 2, yPos + 4, v, x, y, z);
-
             }
         }
     }
-
 }

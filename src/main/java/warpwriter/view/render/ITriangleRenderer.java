@@ -63,6 +63,4 @@ public interface ITriangleRenderer {
      * @return this
      */
     ITriangleRenderer drawRightTriangleRightFace(int x, int y, byte voxel, int vx, int vy, int vz);
-
-    VoxelColor color();
 }
