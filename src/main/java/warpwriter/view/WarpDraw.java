@@ -7,7 +7,6 @@ import warpwriter.model.ITemporal;
 import warpwriter.model.IVoxelSeq;
 import warpwriter.model.nonvoxel.HashMap3D;
 import warpwriter.model.nonvoxel.IntComparator;
-import warpwriter.view.color.IVoxelColor;
 import warpwriter.view.color.VoxelColor;
 import warpwriter.view.render.IRectangleRenderer;
 import warpwriter.view.render.VoxelPixmapRenderer;
@@ -16,13 +15,13 @@ import warpwriter.view.render.VoxelPixmapRenderer;
  * Created by Tommy Ettinger on 11/19/2018.
  */
 public class WarpDraw {
-    protected static IVoxelColor color = new VoxelColor();
+    protected static VoxelColor color = new VoxelColor();
 
 //    public static void draw(VoxelModel model, IRectangleRenderer renderer) {
 //        draw(model, renderer, color);
 //    }
 //
-//    public static void draw(VoxelModel model, IRectangleRenderer renderer, IVoxelColor color) {
+//    public static void draw(VoxelModel model, IRectangleRenderer renderer, VoxelColor color) {
 //        final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ(),
 //                startX = model.startX(), startY = model.startY(), startZ = model.startZ(),
 //                stepX = model.stepX(), stepY = model.stepY(), stepZ = model.stepZ(),
@@ -82,11 +81,11 @@ public class WarpDraw {
         simpleDraw(model, renderer, color, true);
     }
 
-    public static void simpleDraw(IModel model, IRectangleRenderer renderer, IVoxelColor color) {
+    public static void simpleDraw(IModel model, IRectangleRenderer renderer, VoxelColor color) {
         simpleDraw(model, renderer, color, true);
     }
 
-    public static void simpleDraw(IModel model, IRectangleRenderer renderer, IVoxelColor color, boolean outline) {
+    public static void simpleDraw(IModel model, IRectangleRenderer renderer, VoxelColor color, boolean outline) {
         final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ();
         if (outline) {
             final int outlineColor = Coloring.RINSED[Coloring.OUTLINE];
@@ -121,11 +120,11 @@ public class WarpDraw {
         simpleDraw45(model, renderer, color, true);
     }
 
-    public static void simpleDraw45(IModel model, IRectangleRenderer renderer, IVoxelColor color) {
+    public static void simpleDraw45(IModel model, IRectangleRenderer renderer, VoxelColor color) {
         simpleDraw45(model, renderer, color, true);
     }
 
-    public static void simpleDraw45(IModel model, IRectangleRenderer renderer, IVoxelColor color, boolean outline) {
+    public static void simpleDraw45(IModel model, IRectangleRenderer renderer, VoxelColor color, boolean outline) {
         final int sizeX = model.sizeX(),
                 sizeY = model.sizeY(),
                 sizeZ = model.sizeZ(),
@@ -224,7 +223,7 @@ public class WarpDraw {
 //        draw45(model, renderer, color);
 //    }
 //
-//    public static void draw45(VoxelModel model, IRectangleRenderer renderer, IVoxelColor color) {
+//    public static void draw45(VoxelModel model, IRectangleRenderer renderer, VoxelColor color) {
 //        final int sizeX = model.sizeX(), sizeY = model.sizeY(), sizeZ = model.sizeZ(),
 //                stepX = model.stepX(), stepY = model.stepY(), stepZ = model.stepZ(),
 //                sy = model.sizes()[1], sz = model.sizes()[2],
@@ -334,7 +333,9 @@ public class WarpDraw {
     }
     public static Pixmap draw(IModel model, VoxelPixmapRenderer renderer)
     {
-        final int time = (model instanceof ITemporal) ? ((ITemporal) model).frame() : 0;
+        if(model instanceof ITemporal) {
+            color.set(((ITemporal) model).frame());
+        }
         final int sizeX = model.sizeX() - 1, sizeY = model.sizeY() - 1, sizeZ = model.sizeZ() - 1,
                 offsetPX = (sizeY >> 1) + 1, pixelWidth = sizeY * 3 + (sizeY >> 1) + 6, pixelHeight = sizeZ * 3 + 7;
         for (int z = 0; z <= sizeZ; z++) {
@@ -355,7 +356,9 @@ public class WarpDraw {
 
     public static Pixmap draw45(IModel model, VoxelPixmapRenderer renderer)
     {
-        final int time = (model instanceof ITemporal) ? ((ITemporal) model).frame() : 0;
+        if(model instanceof ITemporal) {
+            color.set(((ITemporal) model).frame());
+        }
         final int sizeX = model.sizeX() - 1, sizeY = model.sizeY() - 1, sizeZ = model.sizeZ() - 1,
                 pixelWidth = (sizeX + sizeY) * 2 + 7, pixelHeight = sizeZ * 3 + 7;
         int dep;
@@ -378,7 +381,9 @@ public class WarpDraw {
     }
     public static Pixmap drawAbove(IModel model, VoxelPixmapRenderer renderer)
     {
-        final int time = (model instanceof ITemporal) ? ((ITemporal) model).frame() : 0;
+        if(model instanceof ITemporal) {
+            color.set(((ITemporal) model).frame());
+        }
         final int sizeX = model.sizeX() - 1, sizeY = model.sizeY() - 1, sizeZ = model.sizeZ() - 1,
                 offsetPX = (sizeY >> 1) + 1, offsetPY = (sizeX >> 1) + 1,
                 pixelWidth = (sizeY * 3) + (sizeY >> 1) + 6, pixelHeight = sizeZ * 2 + sizeX * 3 + (sizeX >> 1) + 8;
@@ -401,7 +406,9 @@ public class WarpDraw {
     }
     public static Pixmap drawIso(IModel model, VoxelPixmapRenderer renderer)
     {
-        final int time = (model instanceof ITemporal) ? ((ITemporal) model).frame() : 0;
+        if(model instanceof ITemporal) {
+            color.set(((ITemporal) model).frame());
+        }
         final int sizeX = model.sizeX() - 1, sizeY = model.sizeY() - 1, sizeZ = model.sizeZ() - 1,
                 pixelWidth = (sizeY + sizeX) * 2 + 7, pixelHeight = (sizeX + sizeY + sizeZ) * 2 + 7;
         int dep;
@@ -434,7 +441,9 @@ public class WarpDraw {
     }
     public static Pixmap draw(IVoxelSeq seq, VoxelPixmapRenderer renderer)
     {
-        final int time = (seq instanceof ITemporal) ? ((ITemporal) seq).frame() : 0;
+        if(seq instanceof ITemporal) {
+            color.set(((ITemporal) seq).frame());
+        }
         final int len = seq.size(), sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ(),
                 offsetPX = (sizeY - 1 >> 1) + 1, pixelWidth = sizeY * 3 + (sizeY - 1 >> 1) + 3, pixelHeight = sizeZ * 3 + 4;
         seq.sort(IntComparator.side[seq.rotation()]);
@@ -456,7 +465,9 @@ public class WarpDraw {
         return renderer.blit(2, pixelWidth, pixelHeight);
     }
     public static Pixmap draw45(IVoxelSeq seq, VoxelPixmapRenderer renderer) {
-        final int time = (seq instanceof ITemporal) ? ((ITemporal) seq).frame() : 0;
+        if(seq instanceof ITemporal) {
+            color.set(((ITemporal) seq).frame());
+        }
         final int len = seq.size(), sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ(), 
                 pixelWidth = (sizeX + sizeY) * 2 + 3, pixelHeight = sizeZ * 3 + 4;
         int dep;
@@ -482,7 +493,9 @@ public class WarpDraw {
     }
     public static Pixmap drawAbove(IVoxelSeq seq, VoxelPixmapRenderer renderer)
     {
-        final int time = (seq instanceof ITemporal) ? ((ITemporal) seq).frame() : 0;
+        if(seq instanceof ITemporal) {
+            color.set(((ITemporal) seq).frame());
+        }
         final int len = seq.size(), sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ(),
                 offsetPX = (sizeY >> 1) + 1, offsetPY = (sizeX >> 1) + 1,
                 pixelWidth = (sizeY * 3) + (sizeY >> 1) + 6, pixelHeight = sizeZ * 2 + sizeX * 3 + (sizeX >> 1) + 8;
@@ -506,7 +519,9 @@ public class WarpDraw {
     }
     public static Pixmap drawIso(IVoxelSeq seq, VoxelPixmapRenderer renderer)
     {
-        final int time = (seq instanceof ITemporal) ? ((ITemporal) seq).frame() : 0;
+        if(seq instanceof ITemporal) {
+            color.set(((ITemporal) seq).frame());
+        }
         final int len = seq.size(), sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ(),
                 pixelWidth = (sizeY + sizeX) * 2 + 7, pixelHeight = (sizeX + sizeY + sizeZ) * 2 + 7;
         int dep;

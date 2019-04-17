@@ -246,6 +246,28 @@ public class VoxelColor implements IVoxelColor {
         return this;
     }
 
+    protected int time = 0;
+
+    /**
+     * Gets the current time variable, which is typically measured in milliseconds but can be set however library users
+     * want (faster or slower animation rates can be achieved with different rates of change than 1ms-to-1-time.
+     * @return the current time variable, usually in milliseconds.
+     */
+    public int time() {
+        return time;
+    }
+    
+    /**
+     * Sets the current time variable, which is typically measured in milliseconds but can be set however library users
+     * want (faster or slower animation rates can be achieved with different rates of change than 1ms-to-1-time.
+     * @param time the time to set for animated effects when the palette is capable of them; usually in milliseconds.
+     * @return this for chaining
+     */
+    public VoxelColor set(int time) {
+        this.time = time;
+        return this;
+    }
+
     protected IDimmer dimmer = Dimmer.RinsedDimmer;
     
     protected int shadeBit = dimmer.getShadeBit();
@@ -324,7 +346,7 @@ public class VoxelColor implements IVoxelColor {
     
     protected int processNoise(int x, int y, int z)
     { 
-        float a = noise.getConfiguredNoise(x, y, z);
+        float a = noise.getConfiguredNoise(x, y, z, time);
         a = a * 0.5f + 0.5f;
         return (int) (a * a * (9.0f - 6.0f * a)) + 1;
     }
@@ -336,7 +358,7 @@ public class VoxelColor implements IVoxelColor {
         {
             if((voxel & shadeBit) != 0)
             {
-                final int brightness = (voxel + 0 & 3); // TODO: Fix this
+                final int brightness = (voxel + time & 3);
                 return dimmer.dimmer(brightness + 1 - (brightness & (brightness << 1)), voxel);
             }
             else
@@ -353,7 +375,7 @@ public class VoxelColor implements IVoxelColor {
         {
             if((voxel & shadeBit) != 0)
             {
-                final int brightness = (voxel + 0 & 3); // TODO: Fix this
+                final int brightness = (voxel + time & 3);
                 return dimmer.dimmer(brightness + 1 - (brightness & (brightness << 1)), voxel);
             }
             else
@@ -370,7 +392,7 @@ public class VoxelColor implements IVoxelColor {
         {
             if((voxel & shadeBit) != 0)
             {
-                final int brightness = (voxel + 0 & 3); // TODO: Fix this
+                final int brightness = (voxel + time & 3);
                 return dimmer.dimmer(brightness + 1 - (brightness & (brightness << 1)), voxel);
             }
             else

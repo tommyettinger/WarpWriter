@@ -1,5 +1,7 @@
 package warpwriter.view.render;
 
+import warpwriter.view.color.VoxelColor;
+
 /**
  * An IRectangleRenderer understands how to draw rectangles representing the three visible faces of a voxel cube.
  *
@@ -20,4 +22,5 @@ public interface IRectangleRenderer {
 
     IRectangleRenderer rectRight(int px, int py, int sizeX, int sizeY, byte voxel, int depth, int vx, int vy, int vz);
 
+    VoxelColor color();
 }

@@ -1,6 +1,7 @@
 package warpwriter.view.render;
 
 import com.badlogic.gdx.graphics.Color;
+import warpwriter.view.color.VoxelColor;
 
 /**
  * BlinkRenderer will flash a specified color to help identify which part of the code is rendering which pixels onscreen. Uses encapsulation to be compatible with IRectangleRenderer and ITriangleRenderer.
@@ -93,6 +94,11 @@ public class BlinkRenderer implements IRectangleRenderer, ITriangleRenderer {
         return this;
     }
 
+    @Override
+    public VoxelColor color() {
+        return rect.color();
+    }
+
     public ITriangleRenderer getTri() {
         return tri;
     }
@@ -143,32 +149,32 @@ public class BlinkRenderer implements IRectangleRenderer, ITriangleRenderer {
     }
 
     @Override
-    public ITriangleRenderer drawLeftTriangleVerticalFace(int x, int y, byte voxel) {
-        return tri.drawLeftTriangleVerticalFace(x, y, f(voxel));
+    public ITriangleRenderer drawLeftTriangleVerticalFace(int x, int y, byte voxel, int vx, int vy, int vz) {
+        return tri.drawLeftTriangleVerticalFace(x, y, f(voxel), vx, vy, vz);
     }
 
     @Override
-    public ITriangleRenderer drawLeftTriangleLeftFace(int x, int y, byte voxel) {
-        return tri.drawLeftTriangleLeftFace(x, y, f(voxel));
+    public ITriangleRenderer drawLeftTriangleLeftFace(int x, int y, byte voxel, int vx, int vy, int vz) {
+        return tri.drawLeftTriangleLeftFace(x, y, f(voxel), vx, vy, vz);
     }
 
     @Override
-    public ITriangleRenderer drawLeftTriangleRightFace(int x, int y, byte voxel) {
-        return tri.drawLeftTriangleRightFace(x, y, f(voxel));
+    public ITriangleRenderer drawLeftTriangleRightFace(int x, int y, byte voxel, int vx, int vy, int vz) {
+        return tri.drawLeftTriangleRightFace(x, y, f(voxel), vx, vy, vz);
     }
 
     @Override
-    public ITriangleRenderer drawRightTriangleVerticalFace(int x, int y, byte voxel) {
-        return tri.drawRightTriangleVerticalFace(x, y, f(voxel));
+    public ITriangleRenderer drawRightTriangleVerticalFace(int x, int y, byte voxel, int vx, int vy, int vz) {
+        return tri.drawRightTriangleVerticalFace(x, y, f(voxel), vx, vy, vz);
     }
 
     @Override
-    public ITriangleRenderer drawRightTriangleLeftFace(int x, int y, byte voxel) {
-        return tri.drawRightTriangleLeftFace(x, y, f(voxel));
+    public ITriangleRenderer drawRightTriangleLeftFace(int x, int y, byte voxel, int vx, int vy, int vz) {
+        return tri.drawRightTriangleLeftFace(x, y, f(voxel), vx, vy, vz);
     }
 
     @Override
-    public ITriangleRenderer drawRightTriangleRightFace(int x, int y, byte voxel) {
-        return tri.drawRightTriangleRightFace(x, y, f(voxel));
+    public ITriangleRenderer drawRightTriangleRightFace(int x, int y, byte voxel, int vx, int vy, int vz) {
+        return tri.drawRightTriangleRightFace(x, y, f(voxel), vx, vy, vz);
     }
 }
