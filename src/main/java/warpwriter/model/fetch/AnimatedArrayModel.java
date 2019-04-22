@@ -55,7 +55,7 @@ public class AnimatedArrayModel extends Fetch implements IModel, ITemporal {
      * @return this for chaining
      */
     @Override
-    public Fetch setDuration(int duration) {
+    public AnimatedArrayModel setDuration(int duration) {
         return this;
     }
 
@@ -67,7 +67,7 @@ public class AnimatedArrayModel extends Fetch implements IModel, ITemporal {
     }
 
     @Override
-    public Fetch setFrame(int frame) {
+    public AnimatedArrayModel setFrame(int frame) {
         final int d = duration();
         this.frame = ((frame % d) + d) % d;
         return this;
