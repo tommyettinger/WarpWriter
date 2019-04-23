@@ -228,13 +228,17 @@ public class ShaderPalettizer extends ApplicationAdapter {
                     case Input.Keys.NUMPAD_6:
                         palette = new Texture(Gdx.files.local("palettes/FlesurrectBonus_GLSL.png"), Pixmap.Format.RGBA8888, false);
                         break;
+                    case Input.Keys.NUM_8:
+                    case Input.Keys.NUMPAD_8:
+                        palette = new Texture(Gdx.files.local("palettes/Mash256_GLSL.png"), Pixmap.Format.RGBA8888, false);
+                        break;
                     case Input.Keys.NUM_9:
                     case Input.Keys.NUMPAD_9:
-                        palette = new Texture(Gdx.files.local("palettes/Mash256_GLSL.png"), Pixmap.Format.RGBA8888, false);
+                        palette = new Texture(Gdx.files.local("palettes/Uniform216_GLSL.png"), Pixmap.Format.RGBA8888, false);
                         break;
                     case Input.Keys.NUM_0:
                     case Input.Keys.NUMPAD_0:
-                        palette = new Texture(Gdx.files.local("palettes/Uniform216_GLSL.png"), Pixmap.Format.RGBA8888, false);
+                        palette = new Texture(Gdx.files.local("palettes/SemiUniform256_GLSL.png"), Pixmap.Format.RGBA8888, false);
                         break;
                     case Input.Keys.M: // Mona Lisa
                         load("D:/Mona_Lisa.jpg");
