@@ -1,7 +1,17 @@
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.math.MathUtils;
+import org.hsluv.HSLUVColorConverter;
+import squidpony.StringKit;
 import squidpony.squidmath.RandomnessSource;
+import squidpony.squidmath.VanDerCorputQRNG;
+import warpwriter.PNG8;
+import warpwriter.PaletteReducer;
+
+import java.io.IOException;
 
 /**
  * Created by Tommy Ettinger on 1/21/2018.
@@ -73,7 +83,25 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
     
     public void create() {
         //// does nothing yet, should use the HSLUV color space code soon.
-        int[] PALETTE;
+        int[] PALETTE = new int[256];
+        double[] color = new double[3];
+        for (int i = 1; i < 256; i++) {
+            if ((i & 15) == 0) {
+                int ch = i | i >>> 4;
+                PALETTE[i] = ch << 24 | ch << 16 | ch << 8 | 0xFF;
+            } else {
+                color[0] = (i & 15) * 23 + (i >>> 4);
+//                color[1] = DiverRNG.randomizeDouble(-1234567890123L * i) * 100.0;
+//                color[0] = VanDerCorputQRNG.determine2(i) * 360.0;
+                color[1] = VanDerCorputQRNG.determine(3, i) * 100.0;
+                color[2] = i * (100.0 / 255.0);
+                System.out.println(StringKit.join(", ", color));
+                HSLUVColorConverter.hsluvToRgb(color);
+                PALETTE[i] = (int) (MathUtils.clamp(color[0], 0.0, 1.0) * 255.5) << 24 |
+                        (int) (MathUtils.clamp(color[1], 0.0, 1.0) * 255.5) << 16 |
+                        (int) (MathUtils.clamp(color[2], 0.0, 1.0) * 255.5) << 8 | 0xFF;
+            }
+        }
 //        IntVLA base = new IntVLA(0x912);
 ////        base.addAll(Coloring.AURORA, 1, 255);
 ////        base.addAll(0x010101FF, 0x2D2D2DFF, 0x555555FF, 0x7B7B7BFF,
@@ -219,47 +247,47 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 ////        }
 //        
 //
-//        StringBuilder sb = new StringBuilder((1 + 12 * 8) * (PALETTE.length >>> 3));
-//        for (int i = 0; i < (PALETTE.length >>> 3); i++) {
-//            for (int j = 0; j < 8; j++) {
-//                sb.append("0x").append(StringKit.hex(PALETTE[i << 3 | j]).toUpperCase()).append(", ");
-//            }
-//            sb.append('\n');
-//        }
-//        String sbs = sb.toString();
-//        System.out.println(sbs);
-//        //Gdx.files.local("GeneratedPalette.txt").writeString(sbs, false);
-//        sb.setLength(0);
-//
-//        Pixmap pix = new Pixmap(256, 1, Pixmap.Format.RGBA8888);
-//        for (int i = 0; i < PALETTE.length - 1; i++) {
-//            pix.drawPixel(i, 0, PALETTE[i + 1]);
-//        }
-//        //pix.drawPixel(255, 0, 0);
-//        PNG8 png8 = new PNG8();
-//        png8.palette = new PaletteReducer(PALETTE);
-//        try {
-//            png8.writePrecisely(Gdx.files.local("SemiUniform"+PALETTE.length+".png"), pix, false);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        Pixmap p2 = new Pixmap(1024, 32, Pixmap.Format.RGBA8888);
-//        for (int r = 0; r < 32; r++) {
-//            for (int b = 0; b < 32; b++) {
-//                for (int g = 0; g < 32; g++) {
-//                    p2.drawPixel(r << 5 | b, g, PALETTE[png8.palette.paletteMapping[
-//                            ((r << 10) & 0x7C00)
-//                                    | ((g << 5) & 0x3E0)
-//                                    | b] & 0xFF]);
-//                }
-//            }
-//        }
-//        try {
-//            png8.writePrecisely(Gdx.files.local("SemiUniform"+PALETTE.length+"_GLSL.png"), p2, false);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        StringBuilder sb = new StringBuilder((1 + 12 * 8) * (PALETTE.length >>> 3));
+        for (int i = 0; i < (PALETTE.length >>> 3); i++) {
+            for (int j = 0; j < 8; j++) {
+                sb.append("0x").append(StringKit.hex(PALETTE[i << 3 | j]).toUpperCase()).append(", ");
+            }
+            sb.append('\n');
+        }
+        String sbs = sb.toString();
+        System.out.println(sbs);
+        //Gdx.files.local("GeneratedPalette.txt").writeString(sbs, false);
+        sb.setLength(0);
+
+        Pixmap pix = new Pixmap(256, 1, Pixmap.Format.RGBA8888);
+        for (int i = 0; i < PALETTE.length - 1; i++) {
+            pix.drawPixel(i, 0, PALETTE[i + 1]);
+        }
+        //pix.drawPixel(255, 0, 0);
+        PNG8 png8 = new PNG8();
+        png8.palette = new PaletteReducer(PALETTE);
+        try {
+            png8.writePrecisely(Gdx.files.local("Psyche"+PALETTE.length+".png"), pix, false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Pixmap p2 = new Pixmap(1024, 32, Pixmap.Format.RGBA8888);
+        for (int r = 0; r < 32; r++) {
+            for (int b = 0; b < 32; b++) {
+                for (int g = 0; g < 32; g++) {
+                    p2.drawPixel(r << 5 | b, g, PALETTE[png8.palette.paletteMapping[
+                            ((r << 10) & 0x7C00)
+                                    | ((g << 5) & 0x3E0)
+                                    | b] & 0xFF]);
+                }
+            }
+        }
+        try {
+            png8.writePrecisely(Gdx.files.local("Psyche"+PALETTE.length+"_GLSL.png"), p2, false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

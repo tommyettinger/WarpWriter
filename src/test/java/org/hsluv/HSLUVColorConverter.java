@@ -23,14 +23,14 @@ package org.hsluv;
 import squidpony.StringKit;
 
 public class HSLUVColorConverter {
-    private static double[][] m = new double[][]
+    private static final double[][] m = new double[][]
             {
                     new double[]{3.240969941904521, -1.537383177570093, -0.498610760293},
                     new double[]{-0.96924363628087, 1.87596750150772, 0.041555057407175},
                     new double[]{0.055630079696993, -0.20397695888897, 1.056971514242878},
             };
 
-    private static double[][] minv = new double[][]
+    private static final double[][] minv = new double[][]
             {
                     new double[]{0.41239079926595, 0.35758433938387, 0.18048078840183},
                     new double[]{0.21263900587151, 0.71516867876775, 0.072192315360733},
@@ -45,8 +45,10 @@ public class HSLUVColorConverter {
     private static double kappa = 903.2962962;
     private static double epsilon = 0.0088564516;
 
-    private static double[][] getBounds(double L) {
-        double[][] result = new double[6][];
+    private static final double[][] bounds = new double[6][2];
+    
+    private static void getBounds(double L) {
+        //double[][] result = new double[6][];
 
         double sub1 = Math.pow(L + 16, 3) / 1560896;
         double sub2 = sub1 > epsilon ? sub1 : L / kappa;
@@ -61,49 +63,33 @@ public class HSLUVColorConverter {
                 double top2 = (838422 * m3 + 769860 * m2 + 731718 * m1) * L * sub2 - 769860 * t * L;
                 double bottom = (632260 * m3 - 126452 * m2) * sub2 + 126452 * t;
 
-                result[c << 1 | t] = (new double[]{top1 / bottom, top2 / bottom});
+                bounds[c << 1 | t][0] = top1 / bottom;
+                bounds[c << 1 | t][1] = top2 / bottom;
             }
         }
-
-        return result;
     }
 
-    private static double intersectLineLine(double[] lineA, double[] lineB) {
-        return (lineA[1] - lineB[1]) / (lineB[0] - lineA[0]);
+    private static double intersectLineLine(double ax, double ay, double bx, double by) {
+        return (ay - by) / (bx - ax);
     }
 
-    private static double distanceFromPole(double[] point) {
-        return Math.sqrt(Math.pow(point[0], 2) + Math.pow(point[1], 2));
+    private static double distanceFromPole(double a, double b) {
+        return Math.sqrt(a * a + b * b);
     }
 
-    private static Length lengthOfRayUntilIntersect(double theta, double[] line) {
-        double length = line[1] / (Math.sin(theta) - line[0] * Math.cos(theta));
-
-        return new Length(length);
-    }
-
-    private static class Length {
-        final boolean greaterEqualZero;
-        final double length;
-
-
-        private Length(double length) {
-            this.greaterEqualZero = length >= 0;
-            this.length = length;
-        }
+    private static double lengthOfRayUntilIntersect(double theta, double[] line) {
+        return line[1] / (Math.sin(theta) - line[0] * Math.cos(theta));
     }
 
     private static double maxSafeChromaForL(double L) {
-        double[][] bounds = getBounds(L);
+        getBounds(L);
         double min = Double.MAX_VALUE;
 
         for (int i = 0; i < 2; ++i) {
             double m1 = bounds[i][0];
             double b1 = bounds[i][1];
-            double[] line = new double[]{m1, b1};
-
-            double x = intersectLineLine(line, new double[]{-1 / m1, 0});
-            double length = distanceFromPole(new double[]{x, b1 + x * m1});
+            double x = intersectLineLine(m1, b1, -1 / m1, 0);
+            double length = distanceFromPole(x, b1 + x * m1);
 
             min = Math.min(min, length);
         }
@@ -113,14 +99,13 @@ public class HSLUVColorConverter {
 
     private static double maxChromaForLH(double L, double H) {
         double hrad = H / 360 * Math.PI * 2;
-
-        double[][] bounds = getBounds(L);
+        getBounds(L);
         double min = Double.MAX_VALUE;
 
         for (double[] bound : bounds) {
-            Length length = lengthOfRayUntilIntersect(hrad, bound);
-            if (length.greaterEqualZero) {
-                min = Math.min(min, length.length);
+            double length = lengthOfRayUntilIntersect(hrad, bound);
+            if (length >= 0.0) {
+                min = Math.min(min, length);
             }
         }
 
@@ -137,10 +122,8 @@ public class HSLUVColorConverter {
         return sum;
     }
 
-    private static double round(double value, int places) {
-        double n = Math.pow(10, places);
-
-        return Math.round(value * n) / n;
+    private static double round(double value) {
+        return Math.round(value * 1000.0) / 1000.0;
     }
 
     private static double fromLinear(double c) {
@@ -159,47 +142,20 @@ public class HSLUVColorConverter {
         }
     }
 
-    private static int[] rgbPrepare(double[] tuple) {
-
-        int[] results = new int[tuple.length];
-
-        for (int i = 0; i < tuple.length; ++i) {
-            double chan = tuple[i];
-            double rounded = round(chan, 3);
-
-            if (rounded < -0.0001 || rounded > 1.0001) {
-                throw new IllegalArgumentException("Illegal rgb value: " + rounded);
-            }
-
-            results[i] = (int) Math.round(rounded * 255);
-        }
-
-        return results;
+    public static void xyzToRgb(double[] tuple, double[] result) {
+        result[0] = fromLinear(dotProduct(m[0], tuple));
+        result[1] = fromLinear(dotProduct(m[1], tuple));
+        result[2] = fromLinear(dotProduct(m[2], tuple));
     }
 
-    public static double[] xyzToRgb(double[] tuple) {
-        return new double[]
-                {
-                        fromLinear(dotProduct(m[0], tuple)),
-                        fromLinear(dotProduct(m[1], tuple)),
-                        fromLinear(dotProduct(m[2], tuple)),
-                };
-    }
-
-    public static double[] rgbToXyz(double[] tuple) {
-        double[] rgbl = new double[]
-                {
-                        toLinear(tuple[0]),
-                        toLinear(tuple[1]),
-                        toLinear(tuple[2]),
-                };
-
-        return new double[]
-                {
-                        dotProduct(minv[0], rgbl),
-                        dotProduct(minv[1], rgbl),
-                        dotProduct(minv[2], rgbl),
-                };
+    public static void rgbToXyz(double[] tuple, double[] result) {
+        result[0] = toLinear(tuple[0]);
+        result[1] = toLinear(tuple[1]);
+        result[2] = toLinear(tuple[2]);
+        
+        result[0] = dotProduct(minv[0], result);         
+        result[1] = dotProduct(minv[1], result);
+        result[2] = dotProduct(minv[2], result);
     }
 
     private static double yToL(double Y) {
@@ -218,7 +174,7 @@ public class HSLUVColorConverter {
         }
     }
 
-    public static double[] xyzToLuv(double[] tuple) {
+    public static void xyzToLuv(double[] tuple, double[] result) {
         double X = tuple[0];
         double Y = tuple[1];
         double Z = tuple[2];
@@ -229,22 +185,22 @@ public class HSLUVColorConverter {
         double L = yToL(Y);
 
         if (L == 0) {
-            return new double[]{0, 0, 0};
+            result[0] = result[1] = result[2] = 0;
+            return;
         }
-
-        double U = 13 * L * (varU - refU);
-        double V = 13 * L * (varV - refV);
-
-        return new double[]{L, U, V};
+        result[0] = L;
+        result[1] = 13 * L * (varU - refU);
+        result[2] = 13 * L * (varV - refV);
     }
 
-    public static double[] luvToXyz(double[] tuple) {
+    public static void luvToXyz(double[] tuple, double[] result) {
         double L = tuple[0];
         double U = tuple[1];
         double V = tuple[2];
 
         if (L == 0) {
-            return new double[]{0, 0, 0};
+            result[0] = result[1] = result[2] = 0;
+            return;
         }
 
         double varU = U / (13 * L) + refU;
@@ -253,11 +209,13 @@ public class HSLUVColorConverter {
         double Y = lToY(L);
         double X = 0 - (9 * Y * varU) / ((varU - 4) * varV - varU * varV);
         double Z = (9 * Y - (15 * varV * Y) - (varV * X)) / (3 * varV);
-
-        return new double[]{X, Y, Z};
+        
+        result[0] = X;
+        result[1] = Y;
+        result[2] = Z;
     }
 
-    public static double[] luvToLch(double[] tuple) {
+    public static void luvToLch(double[] tuple, double[] result) {
         double L = tuple[0];
         double U = tuple[1];
         double V = tuple[2];
@@ -277,103 +235,123 @@ public class HSLUVColorConverter {
                 H = 360 + H;
             }
         }
-
-        return new double[]{L, C, H};
+        result[0] = L;
+        result[1] = C;
+        result[2] = H;
     }
 
-    public static double[] lchToLuv(double[] tuple) {
+    public static void lchToLuv(double[] tuple, double[] result) {
         double L = tuple[0];
         double C = tuple[1];
         double H = tuple[2];
 
         double Hrad = H / 360.0 * 2 * Math.PI;
-        double U = Math.cos(Hrad) * C;
-        double V = Math.sin(Hrad) * C;
-
-        return new double[]{L, U, V};
+        result[0] = L;
+        result[1] = Math.cos(Hrad) * C;
+        result[2] = Math.sin(Hrad) * C;
     }
 
-    public static double[] hsluvToLch(double[] tuple) {
+    public static void hsluvToLch(double[] tuple, double[] result) {
+        double H = tuple[0];
+        double S = tuple[1];
+        double L = tuple[2];
+        
+        result[2] = H;
+        
+        if (L > 99.9999999) {
+            result[0] = 100.0;
+            result[1] = 0.0;
+            return;
+        }
+
+        if (L < 0.00000001) {
+            result[0] = 0.0;
+            result[1] = 0.0;
+            return;
+        }
+
+        double max = maxChromaForLH(L, H);
+        result[0] = L;
+        result[1] = max / 100 * S;
+    }
+
+    public static void lchToHsluv(double[] tuple, double[] result) {
+        double L = tuple[0];
+        double C = tuple[1];
+        double H = tuple[2];
+        
+        result[0] = H;
+        
+        if (L > 99.9999999) {
+            result[1] = 0.0;
+            result[2] = 100.0;
+            return;
+        }
+
+        if (L < 0.00000001) {
+            result[1] = 0.0;
+            result[2] = 0.0;
+            return;
+        }
+
+        double max = maxChromaForLH(L, H);
+        result[1] = C / max * 100;
+        result[2] = L;
+    }
+
+    public static void hpluvToLch(double[] tuple, double[] result) {
         double H = tuple[0];
         double S = tuple[1];
         double L = tuple[2];
 
+        result[2] = H;
+
         if (L > 99.9999999) {
-            return new double[]{100d, 0, H};
+            result[0] = 100.0;
+            result[1] = 0.0;
+            return;
         }
 
         if (L < 0.00000001) {
-            return new double[]{0, 0, H};
+            result[0] = 0.0;
+            result[1] = 0.0;
+            return;
         }
 
-        double max = maxChromaForLH(L, H);
-        double C = max / 100 * S;
-
-        return new double[]{L, C, H};
+        double max = maxSafeChromaForL(L);
+        result[0] = L;
+        result[1] = max / 100 * S;
     }
 
-    public static double[] lchToHsluv(double[] tuple) {
+    public static void lchToHpluv(double[] tuple, double[] result) {
         double L = tuple[0];
         double C = tuple[1];
         double H = tuple[2];
 
+        result[0] = H;
+
         if (L > 99.9999999) {
-            return new double[]{H, 0, 100};
+            result[1] = 0.0;
+            result[2] = 100.0;
+            return;
         }
 
         if (L < 0.00000001) {
-            return new double[]{H, 0, 0};
-        }
-
-        double max = maxChromaForLH(L, H);
-        double S = C / max * 100;
-
-        return new double[]{H, S, L};
-    }
-
-    public static double[] hpluvToLch(double[] tuple) {
-        double H = tuple[0];
-        double S = tuple[1];
-        double L = tuple[2];
-
-        if (L > 99.9999999) {
-            return new double[]{100, 0, H};
-        }
-
-        if (L < 0.00000001) {
-            return new double[]{0, 0, H};
+            result[1] = 0.0;
+            result[2] = 0.0;
+            return;
         }
 
         double max = maxSafeChromaForL(L);
-        double C = max / 100 * S;
-
-        return new double[]{L, C, H};
-    }
-
-    public static double[] lchToHpluv(double[] tuple) {
-        double L = tuple[0];
-        double C = tuple[1];
-        double H = tuple[2];
-
-        if (L > 99.9999999) {
-            return new double[]{H, 0, 100};
-        }
-
-        if (L < 0.00000001) {
-            return new double[]{H, 0, 0};
-        }
-
-        double max = maxSafeChromaForL(L);
-        double S = C / max * 100;
-
-        return new double[]{H, S, L};
+        result[0] = H;
+        result[1] = C / max * 100;
     }
 
     public static String rgbToHex(double[] tuple) {
         final char[] cs = {'#', '0', '0', '0', '0', '0', '0'};
         for (int i = 0, c = 1; i < tuple.length; ++i) {
             double chan = tuple[i];
-            double rounded = round(chan, 3);
+            double rounded = round(chan);
 
             if (rounded < -0.0001 || rounded > 1.0001) {
                 throw new IllegalArgumentException("Illegal rgb value: " + rounded);
@@ -395,29 +373,55 @@ public class HSLUVColorConverter {
     }
 
     public static double[] lchToRgb(double[] tuple) {
-        return xyzToRgb(luvToXyz(lchToLuv(tuple)));
+        lchToLuv(tuple, tuple);
+        luvToXyz(tuple, tuple);
+        xyzToRgb(tuple, tuple);
+        return tuple;
     }
 
     public static double[] rgbToLch(double[] tuple) {
-        return luvToLch(xyzToLuv(rgbToXyz(tuple)));
+        rgbToXyz(tuple, tuple);
+        xyzToLuv(tuple, tuple);
+        luvToLch(tuple, tuple);
+        return tuple;
     }
+
+
+    public static double[] luvToRgb(double[] tuple) {
+        luvToXyz(tuple, tuple);
+        xyzToRgb(tuple, tuple);
+        return tuple;
+    }
+
+    public static double[] rgbToLuv(double[] tuple) {
+        rgbToXyz(tuple, tuple);
+        xyzToLuv(tuple, tuple);
+        return tuple;
+    }
+
 
     // RGB <--> HUSL(p)
 
     public static double[] hsluvToRgb(double[] tuple) {
-        return lchToRgb(hsluvToLch(tuple));
+        hsluvToLch(tuple, tuple);
+        return lchToRgb(tuple);
     }
 
     public static double[] rgbToHsluv(double[] tuple) {
-        return lchToHsluv(rgbToLch(tuple));
+        rgbToLch(tuple);
+        lchToHsluv(tuple, tuple);
+        return tuple;
     }
 
     public static double[] hpluvToRgb(double[] tuple) {
-        return lchToRgb(hpluvToLch(tuple));
+        hpluvToLch(tuple, tuple);
+        return lchToRgb(tuple);
     }
 
     public static double[] rgbToHpluv(double[] tuple) {
-        return lchToHpluv(rgbToLch(tuple));
+        rgbToLch(tuple);
+        lchToHpluv(tuple, tuple);
+        return tuple;
     }
 
     // Hex
