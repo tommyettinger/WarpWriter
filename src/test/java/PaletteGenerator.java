@@ -3,11 +3,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.utils.IntSet;
 import squidpony.StringKit;
 import squidpony.squidmath.IntVLA;
-import squidpony.squidmath.MiniMover64RNG;
-import squidpony.squidmath.RNG;
 import squidpony.squidmath.RandomnessSource;
 import warpwriter.PNG8;
 import warpwriter.PaletteReducer;
@@ -207,36 +204,37 @@ public class PaletteGenerator extends ApplicationAdapter {
         System.arraycopy(grayscale, 0, base.items, 1, grayscale.length);
         PALETTE = base.toArray();
         */
-        //// used for Uniform216 and SemiUniform256
-        PALETTE = new int[256];
+        //// used for Uniform216, SemiUniform256, and Uniform65
+        PALETTE = new int[65];
         int idx = 1;
-        for (int r = 0; r < 6; r++) {
-            for (int g = 0; g < 6; g++) {
-                for (int b = 0; b < 6; b++) {
-                    PALETTE[idx++] = r * 51 << 24 | g * 51 << 16 | b * 51 << 8 | 0xFF;
-                }
-            }
-        }
-//        for (int r = 0; r < 5; r++) {
-//            for (int g = 0; g < 5; g++) {
-//                for (int b = 0; b < 5; b++) {
-//                    PALETTE[idx++] = r * 60 + (1 << r) - 1 << 24 | g * 60 + (1 << g) - 1 << 16 | b * 60 + (1 << b) - 1 << 8 | 0xFF;
+//        for (int r = 0; r < 6; r++) {
+//            for (int g = 0; g < 6; g++) {
+//                for (int b = 0; b < 6; b++) {
+//                    PALETTE[idx++] = r * 51 << 24 | g * 51 << 16 | b * 51 << 8 | 0xFF;
 //                }
 //            }
 //        }
-        IntSet is = new IntSet(256);
-        RNG rng = new RNG(new MiniMover64RNG(123456789));
-        while (idx < 256)
-        {
-            int pt = rng.next(9);
-            if(is.add(pt))
-            {
-                int r = pt & 7, g = (pt >>> 3) & 7, b = pt >>> 6;
-//                int r = pt % 5, g = (pt / 5) % 5, b = pt / 25;
-//                PALETTE[idx++] = r * 51 + 25 << 24 | g * 51 + 25 << 16 | b * 51 + 25 << 8 | 0xFF;
-                PALETTE[idx++] = r * 32 + 15 << 24 | g * 32 + 15 << 16 | b * 32 + 15 << 8 | 0xFF;
+        for (int r = 0; r < 4; r++) {
+            for (int g = 0; g < 4; g++) {
+                for (int b = 0; b < 4; b++) {
+//                    PALETTE[idx++] = r * 60 + (1 << r) - 1 << 24 | g * 60 + (1 << g) - 1 << 16 | b * 60 + (1 << b) - 1 << 8 | 0xFF;
+                    PALETTE[idx++] = r * 85 << 24 | g * 85 << 16 | b * 85 << 8 | 0xFF;
+                }
             }
         }
+//        IntSet is = new IntSet(256);
+//        RNG rng = new RNG(new MiniMover64RNG(123456789));
+//        while (idx < 256)
+//        {
+//            int pt = rng.next(9);
+//            if(is.add(pt))
+//            {
+//                int r = pt & 7, g = (pt >>> 3) & 7, b = pt >>> 6;
+////                int r = pt % 5, g = (pt / 5) % 5, b = pt / 25;
+////                PALETTE[idx++] = r * 51 + 25 << 24 | g * 51 + 25 << 16 | b * 51 + 25 << 8 | 0xFF;
+//                PALETTE[idx++] = r * 32 + 15 << 24 | g * 32 + 15 << 16 | b * 32 + 15 << 8 | 0xFF;
+//            }
+//        }
         
 //        IntIntOrderedMap iiom = new IntIntOrderedMap(initial, initial);
 //        initial = iiom.keysAsArray();
@@ -315,7 +313,7 @@ public class PaletteGenerator extends ApplicationAdapter {
         PNG8 png8 = new PNG8();
         png8.palette = new PaletteReducer(PALETTE);
         try {
-            png8.writePrecisely(Gdx.files.local("SemiUniform"+PALETTE.length+".png"), pix, false);
+            png8.writePrecisely(Gdx.files.local("Uniform"+PALETTE.length+".png"), pix, false);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -332,7 +330,7 @@ public class PaletteGenerator extends ApplicationAdapter {
             }
         }
         try {
-            png8.writePrecisely(Gdx.files.local("SemiUniform"+PALETTE.length+"_GLSL.png"), p2, false);
+            png8.writePrecisely(Gdx.files.local("Uniform"+PALETTE.length+"_GLSL.png"), p2, false);
         } catch (IOException e) {
             e.printStackTrace();
         }

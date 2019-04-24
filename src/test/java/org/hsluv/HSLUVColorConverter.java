@@ -245,7 +245,7 @@ public class HSLUVColorConverter {
         double C = tuple[1];
         double H = tuple[2];
 
-        double Hrad = H / 360.0 * 2 * Math.PI;
+        double Hrad = (H / 360.0) * 6.283185307179586;
         result[0] = L;
         result[1] = Math.cos(Hrad) * C;
         result[2] = Math.sin(Hrad) * C;

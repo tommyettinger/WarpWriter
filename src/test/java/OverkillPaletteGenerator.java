@@ -6,8 +6,6 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.MathUtils;
 import org.hsluv.HSLUVColorConverter;
 import squidpony.StringKit;
-import squidpony.squidmath.RandomnessSource;
-import squidpony.squidmath.VanDerCorputQRNG;
 import warpwriter.PNG8;
 import warpwriter.PaletteReducer;
 
@@ -64,8 +62,9 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
         return (((1024 + rmean) * r * r) >> 7) + g * g * 12 + (((1534 - rmean) * b * b) >> 8) + y * y * 14;
     }
 
-    public final double fastGaussian(RandomnessSource random) {
-        long a = random.nextLong(), b = random.nextLong();
+    public final double fastGaussian() {
+        long a = (state = (state << 29 | state >>> 35) * 0xAC564B05L) * 0x818102004182A025L,
+                b = (state = (state << 29 | state >>> 35) * 0xAC564B05L) * 0x818102004182A025L;
         a = (a & 0x0003FF003FF003FFL) + ((a & 0x0FFC00FFC00FFC00L) >>> 10);
         b = (b & 0x0003FF003FF003FFL) + ((b & 0x0FFC00FFC00FFC00L) >>> 10);
         a = (a & 0x000000007FF007FFL) + ((a & 0x0007FF0000000000L) >>> 40);
@@ -85,19 +84,17 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
         //// does nothing yet, should use the HSLUV color space code soon.
         int[] PALETTE = new int[256];
         double[] color = new double[3];
-        for (int i = 1; i < 256; i++) {
+        for (int i = 1; i < 256;) {
             if ((i & 15) == 0) {
                 int ch = i | i >>> 4;
-                PALETTE[i] = ch << 24 | ch << 16 | ch << 8 | 0xFF;
+                PALETTE[i++] = ch << 24 | ch << 16 | ch << 8 | 0xFF;
             } else {
-                color[0] = (i & 15) * 23 + (i >>> 4);
-//                color[1] = DiverRNG.randomizeDouble(-1234567890123L * i) * 100.0;
-//                color[0] = VanDerCorputQRNG.determine2(i) * 360.0;
-                color[1] = VanDerCorputQRNG.determine(3, i) * 100.0;
-                color[2] = i * (100.0 / 255.0);
-                System.out.println(StringKit.join(", ", color));
-                HSLUVColorConverter.hsluvToRgb(color);
-                PALETTE[i] = (int) (MathUtils.clamp(color[0], 0.0, 1.0) * 255.5) << 24 |
+                color[0] = i * (360.0 * 1.6180339887498949) - (i >>> 4);
+                color[1] = (1.0 - nextDouble() * nextDouble() * nextDouble()) * 100.0;
+                color[2] = MathUtils.clamp(fastGaussian() * 50.0 + 55.0, 0.0, 100.0);
+//                color[2] = i * (94.0 / 255.0) + 3.0;
+                System.out.println(StringKit.join(", ", color) + "  -> " + StringKit.join(", ", HSLUVColorConverter.hsluvToRgb(color)));
+                PALETTE[i++] = (int) (MathUtils.clamp(color[0], 0.0, 1.0) * 255.5) << 24 |
                         (int) (MathUtils.clamp(color[1], 0.0, 1.0) * 255.5) << 16 |
                         (int) (MathUtils.clamp(color[2], 0.0, 1.0) * 255.5) << 8 | 0xFF;
             }
