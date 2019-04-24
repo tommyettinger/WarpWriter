@@ -9,8 +9,12 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import squidpony.squidmath.NumberTools;
+
+import static warpwriter.view.render.ShaderUtils.*;
 
 public class ShaderPalettizer extends ApplicationAdapter {
     //public static final int backgroundColor = Color.rgba8888(Color.DARK_GRAY);
@@ -20,93 +24,8 @@ public class ShaderPalettizer extends ApplicationAdapter {
     protected Viewport screenView;
     protected Texture screenTexture;
     protected BitmapFont font;
-    /**
-     * This is the default vertex shader from libGDX.
-     */
-    public static final String vertexShader = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n"
-            + "attribute vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n"
-            + "attribute vec2 " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n"
-            + "uniform mat4 u_projTrans;\n"
-            + "varying vec4 v_color;\n"
-            + "varying vec2 v_texCoords;\n"
-            + "\n"
-            + "void main()\n"
-            + "{\n"
-            + "   v_color = " + ShaderProgram.COLOR_ATTRIBUTE + ";\n"
-            + "   v_color.a = v_color.a * (255.0/254.0);\n"
-            + "   v_texCoords = " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n"
-            + "   gl_Position =  u_projTrans * " + ShaderProgram.POSITION_ATTRIBUTE + ";\n"
-            + "}\n";
-
-    /**
-     * This fragment shader substitutes colors with ones from a palette, dithering as needed using a variant on the R2
-     * with triangle wave dithering technique suggested by Martin Roberts. This shows line artifacts in some places,
-     * aligned to a rhombic grid (matching the lines in isometric pixel art, interestingly).
-     */
-    public static final String fragmentShaderRoberts =
-            "varying vec2 v_texCoords;\n" +
-            "varying vec4 v_color;\n" +
-            "uniform sampler2D u_texture;\n" +
-            "uniform sampler2D u_palette;\n" +
-            "const float b_adj = 31.0 / 32.0;\n" +
-            "const float rb_adj = 32.0 / 1023.0;\n" +
-            "void main()\n" +
-            "{\n" +
-            "   vec4 tgt = texture2D( u_texture, v_texCoords );\n" +
-//            "   gl_FragColor = vec4(texture2D(u_palette, vec2((tgt.b * b_adj + floor(tgt.r * 31.999)) * rb_adj, 1.0 - tgt.g)).rgb, tgt.a);\n" + //solid shading
-            "   vec4 used = texture2D(u_palette, vec2((tgt.b * b_adj + floor(tgt.r * 31.999)) * rb_adj, 1.0 - tgt.g));\n" +
-            "   float len = length(tgt.rgb) * 0.75;\n" +
-            "   float adj = sin(dot(gl_FragCoord.xy, vec2(4.743036261279236, 3.580412143837574)) + len) * (len * len + 0.175);\n" +
-            "   tgt.rgb = clamp(tgt.rgb + (tgt.rgb - used.rgb) * adj, 0.0, 1.0);\n" +
-            "   gl_FragColor.rgb = v_color.rgb * texture2D(u_palette, vec2((tgt.b * b_adj + floor(tgt.r * 31.999)) * rb_adj, 1.0 - tgt.g)).rgb;\n" +
-            "   gl_FragColor.a = v_color.a * tgt.a;\n" +
-            "}";
-    /**
-     * This fragment shader substitutes colors with ones from a palette, dithering as needed using interleaved gradient
-     * noise by Jorge Jimenez (modified to incorporate the brightness of a color in dithering calculations). It is very
-     * hard to find repeating patterns in this form of dithering, though they can happen in small palettes.
-     */
-    public static final String fragmentShader =
-            "varying vec2 v_texCoords;\n" +
-            "varying vec4 v_color;\n" +
-            "uniform sampler2D u_texture;\n" +
-            "uniform sampler2D u_palette;\n" +
-            "const float b_adj = 31.0 / 32.0;\n" +
-            "const float rb_adj = 32.0 / 1023.0;\n" +
-            "void main()\n" +
-            "{\n" +
-            "   vec4 tgt = texture2D( u_texture, v_texCoords );\n" +
-//            "   gl_FragColor = texture2D(u_palette, vec2((tgt.b * b_adj + floor(tgt.r * 31.999)) * rb_adj, 1.0 - tgt.g));\n" + //solid shading
-            "   vec4 used = texture2D(u_palette, vec2((tgt.b * b_adj + floor(tgt.r * 31.999)) * rb_adj, 1.0 - tgt.g));\n" +
-            "   float len = length(tgt.rgb) + 1.0;\n" +
-            "   float adj = fract(52.9829189 * fract(0.06711056 * gl_FragCoord.x + 0.00583715 * gl_FragCoord.y)) * len - len * 0.5;\n" +
-            "   tgt.rgb = clamp(tgt.rgb + (tgt.rgb - used.rgb) * adj, 0.0, 1.0);\n" +
-            "   gl_FragColor.rgb = v_color.rgb * texture2D(u_palette, vec2((tgt.b * b_adj + floor(tgt.r * 31.999)) * rb_adj, 1.0 - tgt.g)).rgb;\n" +
-            "   gl_FragColor.a = v_color.a * tgt.a;\n" +
-            "}";
-    /**
-     * This fragment shader substitutes colors with ones from a palette, without dithering.
-     */
-    public static final String fragmentShaderNoDither = 
-            "varying vec2 v_texCoords;\n" +
-            "varying vec4 v_color;\n" +
-            "uniform sampler2D u_texture;\n" +
-            "uniform sampler2D u_palette;\n" +
-            "const float b_adj = 31.0 / 32.0;\n" +
-            "const float rb_adj = 32.0 / 1023.0;\n" +
-            "void main()\n" +
-            "{\n" +
-            "   vec4 tgt = texture2D( u_texture, v_texCoords );\n" +
-//            "   gl_FragColor = texture2D(u_palette, vec2((tgt.b * b_adj + floor(tgt.r * 31.999)) * rb_adj, 1.0 - tgt.g));\n" + //solid shading
-            "   gl_FragColor = v_color * vec4(texture2D(u_palette, vec2((tgt.b * b_adj + floor(tgt.r * 31.999)) * rb_adj, 1.0 - tgt.g)).rgb, tgt.a);\n" +
-            "}";
-
-    //2.371518130639618, 1.7902060719189539
-    //4.743036261279236, 3.580412143837574
-    //7.114554391918853, 5.370618215756862
-    //9.486072522558471, 7.1608242876758155
-
-
+    
+    protected long startTime;
     private ShaderProgram defaultShader;
     private ShaderProgram shader;
     private ShaderProgram shaderNoDither;
@@ -141,11 +60,12 @@ public class ShaderPalettizer extends ApplicationAdapter {
 
     @Override
     public void create() {
-        palette = new Texture(Gdx.files.local("palettes/Quorum256_GLSL.png"), Pixmap.Format.RGBA8888, false);
+        startTime = TimeUtils.millis();
+        palette = new Texture(Gdx.files.local("palettes/DB_Aurora_GLSL.png"), Pixmap.Format.RGBA8888, false);
         palette.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
         defaultShader = SpriteBatch.createDefaultShader();
-        shader = new ShaderProgram(vertexShader, fragmentShader);
+        shader = new ShaderProgram(vertexShader, fragmentShaderWarmMild);
         if (!shader.isCompiled()) throw new GdxRuntimeException("Couldn't compile shader: " + shader.getLog());
         shaderNoDither = new ShaderProgram(vertexShader, fragmentShaderNoDither);
         if (!shaderNoDither.isCompiled()) throw new GdxRuntimeException("Couldn't compile shader: " + shaderNoDither.getLog());
@@ -175,7 +95,12 @@ public class ShaderPalettizer extends ApplicationAdapter {
                 Gdx.gl.glActiveTexture(GL20.GL_TEXTURE1);
                 palette.bind();
                 batch.begin();
-                shader.setUniformi("u_palette", 1);
+                batch.getShader().setUniformi("u_palette", 1);
+                if(batch.getShader().equals(shader)) 
+                {
+                    batch.getShader().setUniformf("u_mul", 0.9f, 0.8f, 1f);
+                    batch.getShader().setUniformf("u_add", 0.1f, 0.7f, NumberTools.swayRandomized(12345, TimeUtils.timeSinceMillis(startTime) * 0x1p-9f) * 0.5f);
+                }
                 Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
             }
             else
