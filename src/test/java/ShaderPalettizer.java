@@ -65,7 +65,7 @@ public class ShaderPalettizer extends ApplicationAdapter {
         palette.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
         defaultShader = SpriteBatch.createDefaultShader();
-        shader = new ShaderProgram(vertexShader, fragmentShaderWarmMild);
+        shader = new ShaderProgram(vertexShader, fragmentShaderWarmMildLimited);
         if (!shader.isCompiled()) throw new GdxRuntimeException("Couldn't compile shader: " + shader.getLog());
         shaderNoDither = new ShaderProgram(vertexShader, fragmentShaderNoDither);
         if (!shaderNoDither.isCompiled()) throw new GdxRuntimeException("Couldn't compile shader: " + shaderNoDither.getLog());
@@ -98,8 +98,8 @@ public class ShaderPalettizer extends ApplicationAdapter {
                 batch.getShader().setUniformi("u_palette", 1);
                 if(batch.getShader().equals(shader)) 
                 {
-                    batch.getShader().setUniformf("u_mul", 0.9f, 0.8f, 1f);
-                    batch.getShader().setUniformf("u_add", 0.1f, 0.7f, NumberTools.swayRandomized(12345, TimeUtils.timeSinceMillis(startTime) * 0x1p-9f) * 0.5f);
+                    batch.getShader().setUniformf("u_mul", 1f, 0.9f, 1f);
+                    batch.getShader().setUniformf("u_add", 0.1f, 0.65f, NumberTools.swayRandomized(12345, TimeUtils.timeSinceMillis(startTime) * 0x1p-9f) * 0.45f - 0.2f);
                 }
                 Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
             }
