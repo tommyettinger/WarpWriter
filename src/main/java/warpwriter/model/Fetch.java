@@ -10,7 +10,8 @@ import warpwriter.model.nonvoxel.Turner;
  * This abstract class allows for IFetch implementations to use left-to-right method chaining to defer to other IFetch
  * instances for different coordinates instead of always needing to return a byte themselves.
  *
- * Override {@link #at(int, int, int)} but make sure to call nextFetch().at(x, y, z) if your result is 0 for transparency support.
+ * Override {@link #at(int, int, int)} but make sure to call {@link #safeNextFetch()}.{@link #at(int, int, int)} if your result is 0 for
+ * transparency support.
  *
  * @author Ben McLean
  */

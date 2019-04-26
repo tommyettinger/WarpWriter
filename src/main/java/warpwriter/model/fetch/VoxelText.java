@@ -50,7 +50,7 @@ public class VoxelText extends Fetch implements IModel, Disposable {
 
     @Override
     public byte at(int x, int y, int z) {
-        if (pixmap == null || outside(x, y, z)) return getNextFetch().at(x, y, z);
+        if (pixmap == null || outside(x, y, z)) return safeNextFetch().at(x, y, z);
         final int pixel = pixmap.getPixel(y, z);
         return (pixel & 0xFF) > 128 ? // If opacity is greater than half
                 deferByte(fill.at(x, y, z), x, y, z)
@@ -60,7 +60,7 @@ public class VoxelText extends Fetch implements IModel, Disposable {
                 || (z < pixmap.getHeight() - 1 && (pixmap.getPixel(y, z + 1) & 0xFF) > 128)
                 || (z > 0 && (pixmap.getPixel(y, z - 1) & 0xFF) > 128))
                 ? deferByte(outline.at(x, y, z), x, y, z)
-                : getNextFetch().at(x, y, z);
+                : safeNextFetch().at(x, y, z);
     }
 
     @Override

@@ -44,7 +44,7 @@ public class PaintFetch extends Fetch {
 
     @Override
     public byte at(int x, int y, int z) {
-        final byte canvas = getNextFetch().at(x, y, z);
+        final byte canvas = safeNextFetch().at(x, y, z);
         if (canvas == 0) return 0;
         final byte paint = fetch.at(x, y, z);
         return showThru && paint == 0 ? canvas : paint;

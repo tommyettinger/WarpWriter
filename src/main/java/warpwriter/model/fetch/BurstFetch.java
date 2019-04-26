@@ -128,9 +128,9 @@ public class BurstFetch extends Fetch implements ITemporal {
                 zz) && (Noise.IntPointHash.hashAll(xx, yy, zz, seed) >>> -f ^ h >>> -f) == 0
         ) { // if there's debris at this coordinate at this time
             //setChains(xx, yy, zz);
-            return debrisSource.at(x, y, z);
+            return debrisSource.at(xx, yy, zz);
         }
         // if there's no debris at this coordinate at this time
-        return getNextFetch().at(x, y, z);
+        return safeNextFetch().at(x, y, z);
     }
 }

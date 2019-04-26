@@ -15,7 +15,7 @@ public class Loop extends FetchModel {
 
     @Override
     public byte at(int x, int y, int z) {
-        return getNextFetch().at(loop(x, sizeX()), loop(y, sizeY()), loop(z, sizeZ()));
+        return safeNextFetch().at(loop(x, sizeX()), loop(y, sizeY()), loop(z, sizeZ()));
     }
 
     /**

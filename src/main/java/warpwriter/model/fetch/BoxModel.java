@@ -47,7 +47,7 @@ public class BoxModel extends FetchModel {
 
     @Override
     public byte at(int x, int y, int z) {
-        return bool(x, y, z) ? fetch.at(x, y, z) : getNextFetch().at(x, y, z);
+        return bool(x, y, z) ? fetch.at(x, y, z) : safeNextFetch().at(x, y, z);
     }
 
     /**

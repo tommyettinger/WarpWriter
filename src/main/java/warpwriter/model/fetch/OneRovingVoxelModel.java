@@ -73,6 +73,6 @@ public class OneRovingVoxelModel extends FetchModel {
 
     @Override
     public byte at(int x, int y, int z) {
-        return x == x() && y == y() && z == z() ? voxel : getNextFetch().at(x, y, z);
+        return x == x() && y == y() && z == z() ? voxel : safeNextFetch().at(x, y, z);
     }
 }
