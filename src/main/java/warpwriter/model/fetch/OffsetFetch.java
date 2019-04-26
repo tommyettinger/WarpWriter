@@ -54,7 +54,7 @@ public class OffsetFetch extends Fetch {
     }
 
     @Override
-    public byte bite() {
-        return deferByte(fetch.at(chainX() + x(), chainY() + y(), chainZ() + z()));
+    public byte at(int x, int y, int z) {
+        return deferByte(fetch.at(x + x(), y + y(), z + z()), x, y, z);
     }
 }

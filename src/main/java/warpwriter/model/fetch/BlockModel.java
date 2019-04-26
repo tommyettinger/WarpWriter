@@ -11,13 +11,12 @@ import warpwriter.model.IModel;
  */
 public class BlockModel extends Fetch implements IModel {
     @Override
-    public byte bite() {
-        final int x = chainX(), y = chainY(), z = chainZ();
-        if (outside(x, y, z)) return deferByte();
+    public byte at(int x, int y, int z) {
+        if (outside(x, y, z)) return getNextFetch().at(x, y, z);
         final IFetch iFetch = blocks[x / blockX][y / blockY][z / blockZ];
         final byte result = iFetch == null ? 0
                 : iFetch.at(x % blockX, y % blockY, z % blockZ);
-        return showThru ? deferByte(result) : result;
+        return showThru && result == 0 ? getNextFetch().at(x, y, z) : result;
     }
 
     protected IFetch blocks[][][];

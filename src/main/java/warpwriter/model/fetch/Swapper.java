@@ -27,131 +27,89 @@ public class Swapper extends Fetch {
     }
 
     @Override
-    public Fetch fetch() {
-        int x = chainX(), y = chainY(), z = chainZ();
+    public byte at(int x, int y, int z) {
         switch (swap) {
             case xyz:
-                setChains(x, y, z);
-                break;
-            case xzy:
-                setChains(x, z, y);
-                break;
-            case yxz:
-                setChains(y, x, z);
-                break;
-            case yzx:
-                setChains(y, z, x);
-                break;
-            case zxy:
-                setChains(z, x, y);
-                break;
-            case zyx:
-                setChains(z, y, x);
-                break;
-            case Oyz:
-                setChains(0, y, z);
-                break;
-            case Ozy:
-                setChains(0, z, y);
-                break;
-            case Oxz:
-                setChains(0, x, z);
-                break;
-            case Ozx:
-                setChains(0, z, x);
-                break;
-            case Oxy:
-                setChains(0, x, y);
-                break;
-            case Oyx:
-                setChains(0, y, x);
-                break;
-            case x0z:
-                setChains(x, 0, z);
-                break;
-            case x0y:
-                setChains(x, 0, y);
-                break;
-            case y0z:
-                setChains(y, 0, z);
-                break;
-            case y0x:
-                setChains(y, 0, x);
-                break;
-            case z0y:
-                setChains(z, 0, y);
-                break;
-            case z0x:
-                setChains(z, 0, x);
-                break;
-            case xy0:
-                setChains(x, y, 0);
-                break;
-            case xz0:
-                setChains(x, z, 0);
-                break;
-            case yx0:
-                setChains(y, x, 0);
-                break;
-            case yz0:
-                setChains(y, z, 0);
-                break;
-            case zx0:
-                setChains(z, x, 0);
-                break;
-            case zy0:
-                setChains(z, y, 0);
-                break;
-            case x00:
-                setChains(x, 0, 0);
-                break;
-            case y00:
-                setChains(y, 0, 0);
-                break;
-            case z00:
-                setChains(z, 0, 0);
-                break;
-            case Ox0:
-                setChains(0, x, 0);
-                break;
-            case Oy0:
-                setChains(0, y, 0);
-                break;
-            case Oz0:
-                setChains(0, z, 0);
-                break;
-            case O0x:
-                setChains(0, 0, x);
-                break;
-            case O0y:
-                setChains(0, 0, y);
-                break;
-            case O0z:
-                setChains(0, 0, z);
-                break;
-            case O00:
-                setChains(0, 0, 0);
-                break;
-            case clockX:
-                setChains(x, z * -1, y);
-                break;
-            case counterX:
-                setChains(x, z, y * -1);
-                break;
-            case clockY:
-                setChains(z * -1, y, x);
-                break;
-            case counterY:
-                setChains(z, y, x * -1);
-                break;
-            case clockZ:
-                setChains(y * -1, x, z);
-                break;
-            case counterZ:
             default:
-                setChains(y, x * -1, z);
-                break;
+                return getNextFetch().at(x, y, z);
+            case xzy:
+                return getNextFetch().at(x, z, y);
+            case yxz:
+                return getNextFetch().at(y, x, z);
+            case yzx:
+                return getNextFetch().at(y, z, x);
+            case zxy:
+                return getNextFetch().at(z, x, y);
+            case zyx:
+                return getNextFetch().at(z, y, x);
+            case Oyz:
+                return getNextFetch().at(0, y, z);
+            case Ozy:
+                return getNextFetch().at(0, z, y);
+            case Oxz:
+                return getNextFetch().at(0, x, z);
+            case Ozx:
+                return getNextFetch().at(0, z, x);
+            case Oxy:
+                return getNextFetch().at(0, x, y);
+            case Oyx:
+                return getNextFetch().at(0, y, x);
+            case x0z:
+                return getNextFetch().at(x, 0, z);
+            case x0y:
+                return getNextFetch().at(x, 0, y);
+            case y0z:
+                return getNextFetch().at(y, 0, z);
+            case y0x:
+                return getNextFetch().at(y, 0, x);
+            case z0y:
+                return getNextFetch().at(z, 0, y);
+            case z0x:
+                return getNextFetch().at(z, 0, x);
+            case xy0:
+                return getNextFetch().at(x, y, 0);
+            case xz0:
+                return getNextFetch().at(x, z, 0);
+            case yx0:
+                return getNextFetch().at(y, x, 0);
+            case yz0:
+                return getNextFetch().at(y, z, 0);
+            case zx0:
+                return getNextFetch().at(z, x, 0);
+            case zy0:
+                return getNextFetch().at(z, y, 0);
+            case x00:
+                return getNextFetch().at(x, 0, 0);
+            case y00:
+                return getNextFetch().at(y, 0, 0);
+            case z00:
+                return getNextFetch().at(z, 0, 0);
+            case Ox0:
+                return getNextFetch().at(0, x, 0);
+            case Oy0:
+                return getNextFetch().at(0, y, 0);
+            case Oz0:
+                return getNextFetch().at(0, z, 0);
+            case O0x:
+                return getNextFetch().at(0, 0, x);
+            case O0y:
+                return getNextFetch().at(0, 0, y);
+            case O0z:
+                return getNextFetch().at(0, 0, z);
+            case O00:
+                return getNextFetch().at(0, 0, 0);
+            case clockX:
+                return getNextFetch().at(x, z * -1, y);
+            case counterX:
+                return getNextFetch().at(x, z, y * -1);
+            case clockY:
+                return getNextFetch().at(z * -1, y, x);
+            case counterY:
+                return getNextFetch().at(z, y, x * -1);
+            case clockZ:
+                return getNextFetch().at(y * -1, x, z);
+            case counterZ:
+                return getNextFetch().at(y, x * -1, z);
         }
-        return getNextFetch();
     }
 }

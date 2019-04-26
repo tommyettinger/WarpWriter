@@ -218,7 +218,8 @@ public class WarpTest extends ApplicationAdapter {
     @Override
     public void render() {
         // TODO: Restore time here
-        //model.setFrame((int)(TimeUtils.millis() >>> 7) & 15);
+        //model.setFrame((int)(TimeU
+        // tils.millis() >>> 7) & 15);
         boom.setFrame((int)(TimeUtils.millis() >>> 7) & 15);
         buffer.begin();
         

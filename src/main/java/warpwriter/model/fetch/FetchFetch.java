@@ -16,12 +16,7 @@ public class FetchFetch extends Fetch {
     }
 
     @Override
-    public Fetch fetch() {
-        return deferFetch(iFetch.at(chainX(), chainY(), chainZ()));
-    }
-
-    @Override
-    public byte bite() {
-        return deferByte(iFetch.at(chainX(), chainY(), chainZ()));
+    public byte at(int x, int y, int z) {
+        return deferByte(iFetch.at(x, y, z), x, y, z);
     }
 }

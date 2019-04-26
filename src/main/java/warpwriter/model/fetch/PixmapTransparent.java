@@ -107,8 +107,8 @@ public class PixmapTransparent extends Fetch implements IModel {
     }
 
     @Override
-    public Fetch fetch() {
-        return bool(chainX(), chainY(), chainZ()) ? fetch : getNextFetch();
+    public byte at(int x, int y, int z) {
+        return bool(x, y, z) ? fetch.at(x, y, z) : getNextFetch().at(x, y, z);
     }
 
     @Override

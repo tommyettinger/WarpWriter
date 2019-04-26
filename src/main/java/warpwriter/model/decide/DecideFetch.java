@@ -1,6 +1,7 @@
 package warpwriter.model.decide;
 
 import warpwriter.model.Fetch;
+import warpwriter.model.IFetch;
 
 /**
  * Uses an IDecide to make a choice between two different Fetches
@@ -25,7 +26,7 @@ public class DecideFetch extends Fetch {
         return this;
     }
 
-    public Fetch getFetch() {
+    public IFetch getFetch() {
         return fetch;
     }
 
@@ -34,8 +35,8 @@ public class DecideFetch extends Fetch {
     }
 
     @Override
-    public Fetch fetch() {
-        return decide.bool(chainX(), chainY(), chainZ()) ? fetch : getNextFetch();
+    public byte at(int x, int y, int z) {
+        return decide.bool(x, y, z) ? deferFetch(fetch).at(x, y, z) : safeNextFetch().at(x, y, z);
     }
 
     public static final IDecide truth = new IDecide() {

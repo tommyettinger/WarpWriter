@@ -31,8 +31,8 @@ public class ChaoticFetch extends Fetch {
     }
 
     @Override
-    public byte bite() {
-        return colors[ModelMaker.hashBounded(chainX(), chainY(), chainZ(), seed, colors.length)];
+    public byte at(int x, int y, int z) {
+        return colors[ModelMaker.hashBounded(x, y, z, seed, colors.length)];
     }
 
     /**

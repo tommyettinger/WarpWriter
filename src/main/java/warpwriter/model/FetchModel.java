@@ -138,4 +138,9 @@ public class FetchModel extends Fetch implements IModel, IDecideModel {
     public boolean bool(int x, int y, int z) {
         return inside(x, y, z);
     }
+
+    @Override
+    public byte at(int x, int y, int z) {
+        return getNextFetch().at(x, y, z);
+    }
 }

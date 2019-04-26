@@ -9,7 +9,7 @@ import warpwriter.model.ITemporal;
 /**
  * An IModel that wraps a 4D byte array, with the outermost array storing normal 3D arrays that can be used as ordinary
  * models, and the index in that outermost array used for the animation frame. Uses the 3D arrays' bounds to implement
- * {@link #sizeX()} and its related methods and using its contents to implement {@link #bite()} (out-of-bounds requests
+ * {@link #sizeX()} and its related methods and using its contents to implement {@link #at(int, int, int)} (out-of-bounds requests
  * are handled by returning 0, and the current frame will affect which 3D array will be drawn).
  * <p>
  * Created by Tommy Ettinger on 1/26/2019.
@@ -103,21 +103,10 @@ public class AnimatedArrayModel extends Fetch implements IModel, ITemporal {
         return voxels[0][0][0].length;
     }
 
-    /**
-     * Looks up a color index (a byte) from a 3D position as x,y,z int parameters. Index 0 is used to mean an
-     * empty position with no color.
-     *
-     * @return a color index as a byte; 0 is empty, and this should usually be masked with {@code & 255} to get an index
-     */
     @Override
-    public Fetch fetch() {
-        return deferFetch(bite());
-    }
-
-    @Override
-    public byte bite() {
-        int x = chainX(), y = chainY(), z = chainZ();
-        return deferByte(inside(x, y, z) ? voxels[frame][x][y][z] : (byte) 0);
+    public byte at(int x, int y, int z) {
+        byte result = voxels[frame][x][y][z];
+        return result == 0 ? getNextFetch().at(x, y, z) : result;
     }
 
     @Override

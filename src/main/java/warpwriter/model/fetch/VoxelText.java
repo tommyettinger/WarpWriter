@@ -49,19 +49,18 @@ public class VoxelText extends Fetch implements IModel, Disposable {
     }
 
     @Override
-    public Fetch fetch() {
-        final int x = chainX(), y = chainY(), z = chainZ();
-        if (pixmap == null || outside(x, y, z)) return getNextFetch();
+    public byte at(int x, int y, int z) {
+        if (pixmap == null || outside(x, y, z)) return getNextFetch().at(x, y, z);
         final int pixel = pixmap.getPixel(y, z);
         return (pixel & 0xFF) > 128 ? // If opacity is greater than half
-                fill
+                deferByte(fill.at(x, y, z), x, y, z)
                 : outline != null // If there is an outline set
                 && ((y < pixmap.getWidth() - 1 && (pixmap.getPixel(y + 1, z) & 0xFF) > 128)
                 || (y > 0 && (pixmap.getPixel(y - 1, z) & 0xFF) > 128)
                 || (z < pixmap.getHeight() - 1 && (pixmap.getPixel(y, z + 1) & 0xFF) > 128)
                 || (z > 0 && (pixmap.getPixel(y, z - 1) & 0xFF) > 128))
-                ? outline
-                : getNextFetch();
+                ? deferByte(outline.at(x, y, z), x, y, z)
+                : getNextFetch().at(x, y, z);
     }
 
     @Override

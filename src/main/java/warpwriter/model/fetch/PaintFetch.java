@@ -43,14 +43,10 @@ public class PaintFetch extends Fetch {
     }
 
     @Override
-    public Fetch fetch() {
-        final int x = chainX(), y = chainY(), z = chainZ();
-        return getNextFetch().at(x, y, z) == 0 ?
-                ColorFetch.color((byte) 0)
-                : showThru ?
-                fetch.at(x, y, z) == 0 ?
-                        getNextFetch()
-                        : fetch
-                : fetch;
+    public byte at(int x, int y, int z) {
+        final byte canvas = getNextFetch().at(x, y, z);
+        if (canvas == 0) return 0;
+        final byte paint = fetch.at(x, y, z);
+        return showThru && paint == 0 ? canvas : paint;
     }
 }
