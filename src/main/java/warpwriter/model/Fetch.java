@@ -37,6 +37,9 @@ public abstract class Fetch implements IFetch, IDecide {
         return nextFetch;
     }
 
+    /**
+     * @return Either {@link #getNextFetch()} or else a transparent ColorFetch in case {@link #getNextFetch()} was null.
+     */
     public Fetch safeNextFetch() {
         final Fetch nextFetch = getNextFetch();
         return nextFetch == null ? ColorFetch.color((byte) 0) : nextFetch;
