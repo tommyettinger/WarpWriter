@@ -46,10 +46,8 @@ public class PaletteTest extends ApplicationAdapter {
             "uniform sampler2D u_texture;\n" +
             "void main()\n" +
             "{\n" +
-            "   vec2 offsetx;\n" +
-            "   offsetx.x = outlineW;\n" +
-            "   vec2 offsety;\n" +
-            "   offsety.y = outlineH;\n" +
+            "   vec2 offsetx = vec2(outlineW, 0.0);\n" +
+            "   vec2 offsety = vec2(0.0, outlineH);\n" +
             "   float alpha = texture2D( u_texture, v_texCoords ).a;\n" +
             "   alpha = max(alpha, texture2D( u_texture, v_texCoords + offsetx).a);\n" +
             "   alpha = max(alpha, texture2D( u_texture, v_texCoords - offsetx).a);\n" +
@@ -57,41 +55,6 @@ public class PaletteTest extends ApplicationAdapter {
             "   alpha = max(alpha, texture2D( u_texture, v_texCoords - offsety).a);\n" +
             "   gl_FragColor = v_color * texture2D( u_texture, v_texCoords );\n" +
             "   gl_FragColor.a = alpha;\n" +
-            "}";
-    /**
-     * This fragment shader draws a black outline around things.
-     */
-    public static final String fragmentShaderLighterOutline = "#version 150\n" +
-            "varying vec2 v_texCoords;\n" +
-            "varying vec4 v_color;\n" +
-            "uniform float outlineH;\n" +
-            "uniform float outlineW;\n" +
-            "uniform sampler2D u_texture;\n" +
-            "void main()\n" +
-            "{\n" +
-            "   vec2 offsetx;\n" +
-            "   offsetx.x = outlineW;\n" +
-            "   vec2 offsety;\n" +
-            "   offsety.y = outlineH;\n" +
-            "   vec4 self = texture2D( u_texture, v_texCoords );\n" +
-            "   if(self.a > 0.0)\n" +
-            "   {\n" +
-            "     gl_FragColor = v_color * self;\n" +
-            "   }\n" +
-            "   else\n" +
-            "   {\n" +
-            "     vec4 e = texture2D( u_texture, v_texCoords + offsetx);\n" +
-            "     vec4 w = texture2D( u_texture, v_texCoords - offsetx);\n" +
-            "     vec4 n = texture2D( u_texture, v_texCoords + offsety);\n" +
-            "     vec4 s = texture2D( u_texture, v_texCoords - offsety);\n" +
-            "     gl_FragColor.rgb = e.rgb * e.a + w.rgb * w.a + n.rgb * n.a + s.rgb * s.a;\n" +
-            "     gl_FragColor.a = 0;\n" +
-            "     if(length(gl_FragColor.rgb) > 0.0)\n" +
-            "     {\n" +
-            "       gl_FragColor.rgb /= (e.a + w.a + n.a + s.a) * 1.75;\n" +
-            "       gl_FragColor.a = 1.0;\n" +
-            "     }\n" +
-            "   }\n" +
             "}";
 
     public static final int backgroundColor = Color.rgba8888(Color.DARK_GRAY);
