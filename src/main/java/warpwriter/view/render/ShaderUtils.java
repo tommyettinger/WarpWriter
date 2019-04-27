@@ -127,6 +127,34 @@ public class ShaderUtils {
                     "   gl_FragColor.rgb = v_color.rgb * texture2D(u_palette, vec2((tgt.b * b_adj + floor(tgt.r * 31.999)) * rb_adj, 1.0 - tgt.g)).rgb;\n" +
                     "   gl_FragColor.a = v_color.a * tgt.a;\n" +
                     "}";
+    /**
+     * This fragment shader allows color space adjustments to be done and does not do any color reduction. The uniforms
+     * {@code u_mul} and {@code u_add} are each YCwCm adjustments. The first multiplies the Y (brightness), Cw (Chroma
+     * warm, with values greater than 1 making warm colors warmer and cool colors cooler) and Cm (Chroma mild, with
+     * values greater than 1 making green/yellow colors closer to those and red/blue colors closer to that) by the
+     * image's YCwCm values after palette-substitution. After that, {@code u_add} is added to Y (which can have an
+     * internal value between 0 and 1, and all are clamped), Cw (which ranges between -1 for blue/green and 1 for
+     * red/yellow), and Cm (which ranges between -1 for red/blue and 1 for yellow/green). You can use this to desaturate
+     * colors by setting {@code u_mul} to {@code vec3(1.0, 0.5, 0.5)} or any other small fractions for Cw and Cm. You
+     * can make colors warmer by setting {@code u_add} to {@code vec3(0.0, 0.6, 0.0)}; while warmth is added, randomly
+     * setting Cm to a value between -0.5 and 0.5 can simulate a fiery color effect over the screen. You can make an icy
+     * effect by setting {@code u_add} to {@code vec3(0.3, -0.4, 0.0)}. You can simulate the desaturation and yellowing
+     * that happens to old paintings by setting {@code u_mul} to {@code vec3(0.9, 0.7, 0.75)} and {@code u_add} to
+     * {@code vec3(0.05, 0.14, 0.16)}.
+     */
+    public static final String fragmentShaderOnlyWarmMild =
+            "varying vec2 v_texCoords;\n" +
+                    "varying vec4 v_color;\n" +
+                    "uniform sampler2D u_texture;\n" +
+                    "uniform vec3 u_add;\n" +
+                    "uniform vec3 u_mul;\n" +
+                    "void main()\n" +
+                    "{\n" +
+                    "   vec4 tgt = texture2D( u_texture, v_texCoords );\n" +
+                    "   tgt.rgb = u_add + u_mul * vec3(dot(tgt.rgb, vec3(0.375, 0.5, 0.125)), tgt.r - tgt.b, tgt.g - tgt.b);\n" +
+                    "   gl_FragColor.rgb = v_color.rgb * clamp(vec3(dot(tgt.rgb, vec3(1.0, 0.625, -0.5)), dot(tgt.rgb, vec3(1.0, -0.375, 0.5)), dot(tgt.rgb, vec3(1.0, -0.375, -0.5))), 0.0, 1.0);\n" +
+                    "   gl_FragColor.a = v_color.a * tgt.a;\n" +
+                    "}";
 
     /**
      * This fragment shader substitutes colors with ones from a palette, dithering as needed using a variant on the R2
