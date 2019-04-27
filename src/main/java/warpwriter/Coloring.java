@@ -1122,4 +1122,17 @@ public class Coloring {
             0xFEFF73FF, 0xD6BFFCFF, 0xE2E4E0FF, 0xAEFAA1FF, 0xDEF889FF, 0xFE9FEBFF, 0x9BF9DCFF, 0xFDFEABFF,
             0xFCE7C7FF, 0xAEF3FAFF, 0xD4FEBAFF, 0x82FFFDFF, 0xC7E0FCFF, 0xF5D5F0FF, 0xF7B8F8FF, 0xF4FCEEFF,
     };
+
+    /**
+     * Another one of DawnBringer's palettes, winner of PixelJoint's 2017 22-color palette competition.
+     * This has transparent at the start so it has 23 items.
+     */
+    public static final int[] DB_ISO22 = {
+            0x00000000, 0x0C0816FF, 0x4C4138FF, 0x70503AFF,
+            0xBC5F4EFF, 0xCE9148FF, 0xE4DA6CFF, 0x90C446FF,
+            0x698E34FF, 0x4D613CFF, 0x26323CFF, 0x2C4B73FF,
+            0x3C7373FF, 0x558DDEFF, 0x74BAEAFF, 0xF0FAFFFF,
+            0xCFB690FF, 0xB67C74FF, 0x845A78FF, 0x555461FF,
+            0x746658FF, 0x6B7B89FF, 0x939388FF
+    };
 }
