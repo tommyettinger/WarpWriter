@@ -26,7 +26,7 @@ public class EmptyVoxMaker {
     public static Pixmap palettePixmap(int[] palette) {
         Pixmap pixmap = new Pixmap(palette.length, 1, Pixmap.Format.RGBA8888);
         for (int x = 0; x < palette.length; x++)
-            pixmap.drawPixel(x, 1, palette[0]);
+            pixmap.drawPixel(x, 1, palette[x]);
         return pixmap;
     }
 
