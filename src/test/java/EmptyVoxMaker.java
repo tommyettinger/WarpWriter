@@ -1,10 +1,36 @@
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.PixmapIO;
 import warpwriter.Coloring;
 import warpwriter.VoxIO;
 
 import java.awt.*;
+import java.io.IOException;
 
 public class EmptyVoxMaker {
     public static void main(String[] arg) {
+
+        FileDialog fileDialog = new FileDialog((Frame) null, "Where to save png file?", FileDialog.SAVE);
+        fileDialog.setVisible(true);
+        System.out.println(fileDialog.getFiles()[0].getAbsolutePath());
+        //VoxIO.writeVOX(fileName, new byte[32][32][32], VGA25());
+        PixmapIO.PNG png = new PixmapIO.PNG();
+        try {
+            png.write(new FileHandle(fileDialog.getFiles()[0]), palettePixmap(VGA25()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.exit(0);
+    }
+
+    public static Pixmap palettePixmap(int[] palette) {
+        Pixmap pixmap = new Pixmap(palette.length, 1, Pixmap.Format.RGBA8888);
+        for (int x = 0; x < palette.length; x++)
+            pixmap.drawPixel(x, 1, palette[0]);
+        return pixmap;
+    }
+
+    public static int[] VGA25() {
         int[] palette = new int[26];
         for (int x = 0; x < 17; x++)
             palette[x] = Coloring.VGA256[x];
@@ -17,13 +43,6 @@ public class EmptyVoxMaker {
         palette[23] = Coloring.VGA256[42];
         palette[24] = Coloring.VGA256[43];
         palette[25] = Coloring.VGA256[89];
-
-        FileDialog fileDialog = new FileDialog((Frame) null, "Where to save empty vox file?", FileDialog.SAVE);
-        fileDialog.setVisible(true);
-        String fileName = fileDialog.getFiles()[0].getAbsolutePath();
-        System.out.println(fileName);
-
-        VoxIO.writeVOX(fileName, new byte[127][127][127], palette);
-        System.exit(0);
+        return palette;
     }
 }
