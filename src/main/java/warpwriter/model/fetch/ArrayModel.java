@@ -6,7 +6,7 @@ import warpwriter.model.IModel;
 
 /**
  * A simple IModel that wraps a 3D byte array, using its bounds to implement {@link #sizeX()} and its related methods
- * and using its contents to implement {@link #bite()} (out-of-bounds requests are handled by returning 0).
+ * and using its contents to implement {@link #at(int, int, int)} (out-of-bounds requests are handled by returning 0).
  * <p>
  * Created by Tommy Ettinger on 10/11/2018.
  *
@@ -65,21 +65,11 @@ public class ArrayModel extends Fetch implements IModel {
         return voxels[0][0].length;
     }
 
-    /**
-     * Looks up a color index (a byte) from a 3D position as x,y,z int parameters. Index 0 is used to mean an
-     * empty position with no color.
-     *
-     * @return a color index as a byte; 0 is empty, and this should usually be masked with {@code & 255} to get an index
-     */
     @Override
-    public Fetch fetch() {
-        return deferFetch(bite());
-    }
-
-    @Override
-    public byte bite() {
-        int x = chainX(), y = chainY(), z = chainZ();
-        return deferByte(inside(x, y, z) ? voxels[x][y][z] : (byte) 0);
+    public byte at(int x, int y, int z) {
+        return outside(x, y, z) || voxels[x][y][z] == 0 ?
+                safeNextFetch().at(x, y, z)
+                : voxels[x][y][z];
     }
 
     @Override

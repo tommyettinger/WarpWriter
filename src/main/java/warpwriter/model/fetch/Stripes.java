@@ -36,15 +36,15 @@ public class Stripes extends Fetch {
     }
 
     @Override
-    public Fetch fetch() {
-        final int z = chainZ(), xStep = Loop.loop(z, repeat);
+    public byte at(int x, int y, int z) {
+        final int xStep = Loop.loop(z, repeat);
         int step = 0;
         for (int i = 0; i < widths.length; i++)
             if (step <= xStep)
                 step += widths[i];
             else
-                return deferFetch(stripes[i]);
-        return deferFetch(stripes[0]);
+                return deferByte(deferFetch(stripes[i]).at(x, y, z), x, y, z);
+        return deferByte(deferFetch(stripes[0]).at(x, y, z), x, y, z);
     }
 
     /**

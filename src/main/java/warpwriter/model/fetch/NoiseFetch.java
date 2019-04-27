@@ -28,8 +28,7 @@ public class NoiseFetch extends Fetch {
     }
 
     @Override
-    public byte bite() {
-        final int x = chainX(), y = chainY(), z = chainZ();
+    public final byte at(int x, int y, int z) {
         return colors[(int)((noise.getNoise(x * 0.12, y * 0.12, z * 0.12) * 0.499999 + 0.5) * colors.length)];
     }
 
@@ -40,7 +39,7 @@ public class NoiseFetch extends Fetch {
      * @return this
      */
     @Override
-    public Fetch add(Fetch fetch) {
+    public final Fetch add(Fetch fetch) {
         return this;
     }
 
@@ -51,7 +50,7 @@ public class NoiseFetch extends Fetch {
      * @return this
      */
     @Override
-    public Fetch breakChain(Fetch fetch) {
+    public final Fetch breakChain(Fetch fetch) {
         return this;
     }
 

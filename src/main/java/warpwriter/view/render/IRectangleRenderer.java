@@ -21,6 +21,4 @@ public interface IRectangleRenderer {
     IRectangleRenderer rectLeft(int px, int py, int sizeX, int sizeY, byte voxel, int depth, int vx, int vy, int vz);
 
     IRectangleRenderer rectRight(int px, int py, int sizeX, int sizeY, byte voxel, int depth, int vx, int vy, int vz);
-
-    VoxelColor color();
 }

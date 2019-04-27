@@ -50,8 +50,7 @@ public class WorldFetch extends Fetch {
     }
 
     @Override
-    public byte bite() {
-        final int x = chainX(), y = chainY(), z = chainZ();
+    public byte at(int x, int y, int z) {
         if((x | y | z) < 0) // if any of x, y or z are negative
         {
 //            System.out.println("WorldFetch.bite() requested bad coordinates: " + x + "," + y + "," + z);

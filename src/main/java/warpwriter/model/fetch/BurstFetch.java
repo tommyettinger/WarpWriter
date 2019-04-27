@@ -102,8 +102,8 @@ public class BurstFetch extends Fetch implements ITemporal {
     }
 
     @Override
-    public Fetch fetch() {
-        int x = chainX(), y = chainY(), z = chainZ(), f = frame + 1, 
+    public byte at(int x, int y, int z) {
+        int f = frame + 1,
                 h = Noise.IntPointHash.hashAll(x >>> 1, y >>> 1, z >>> 1, seed);
         float groundMag = Vector2.len(x - centerX, y - centerY),
                 angle = NumberTools.atan2(y - centerY, x - centerX),
@@ -127,14 +127,10 @@ public class BurstFetch extends Fetch implements ITemporal {
                 yy,
                 zz) && (Noise.IntPointHash.hashAll(xx, yy, zz, seed) >>> -f ^ h >>> -f) == 0
         ) { // if there's debris at this coordinate at this time
-            setChains(
-                    xx,
-                    yy,
-                    zz
-            );
-            return debrisSource.setChains(x, y, z);
+            //setChains(xx, yy, zz);
+            return debrisSource.at(xx, yy, zz);
         }
         // if there's no debris at this coordinate at this time
-        return getNextFetch();
+        return safeNextFetch().at(x, y, z);
     }
 }

@@ -72,12 +72,7 @@ public class OneRovingVoxelModel extends FetchModel {
     }
 
     @Override
-    public Fetch fetch() {
-        return ColorFetch.color(bite());
-    }
-
-    @Override
-    public byte bite() {
-        return x() == chainX() && y() == chainY() && z() == chainZ() ? voxel : deferByte();
+    public byte at(int x, int y, int z) {
+        return x == x() && y == y() && z == z() ? voxel : safeNextFetch().at(x, y, z);
     }
 }

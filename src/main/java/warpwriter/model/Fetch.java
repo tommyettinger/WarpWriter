@@ -9,68 +9,13 @@ import warpwriter.model.nonvoxel.Turner;
 /**
  * This abstract class allows for IFetch implementations to use left-to-right method chaining to defer to other IFetch
  * instances for different coordinates instead of always needing to return a byte themselves.
- * <p>
- * DO NOT override {@link #at(int, int, int)}; you can't anyway because it is final.
- * <p>
- * Instead, child classes are expected to use at least one of the following two options:
- * <p>
- * 1. Override {@link #fetch()} to defer to another Fetch. This will be tried first, and if the result is null then
- * {@link #bite()} will be called instead. Get the coordinates to evaluate from {@link #chainX()}, {@link #chainY()},
- * and {@link #chainZ()}.
- * <p>
- * 2. Override {@link #bite()} to decide what byte to use at the end of a chain. It is recommended to wrap return
- * statements in {@link #deferByte(byte)} to guarantee smart transparency. Get the coordinates to evaluate from
- * {@link #chainX()}, {@link #chainY()}, and {@link #chainZ()}.
- * <p>
- * If both methods are overridden then a Fetch can be used both as a filter for other Fetches and as a final fetch,
- * depending on whether or not it is on the end of its chain.
- * <p>
- * Failure to implement the required overrides may result in infinite recursion.
- * <p>
- * To defer to the next method in the chain, use {@link #getNextFetch()}.
- * <p>
- * Coordinates to be sent to the next Fetch in the chain can be set through {@link #setChains(int, int, int)},
- * {@link #setChainX(int)},{@link #setChainY(int)} and {@link #setChainZ(int)}.
+ *
+ * Override {@link #at(int, int, int)} but make sure to call {@link #safeNextFetch()}.{@link #at(int, int, int)} if your result is 0 for
+ * transparency support.
  *
  * @author Ben McLean
  */
-public abstract class Fetch implements IFetch, IDecide, ITemporal {
-    /**
-     * This method is intended to be overridden with a decision about which Fetch to use for the provided coordinate.
-     * <p>
-     * Returning null indicates to outside code that {@link #bite()} should be called instead.
-     */
-    public Fetch fetch() {
-        return getNextFetch();
-    }
-
-    /**
-     * This method is intended to be overridden with a final decision about which byte to return for a given coordinate.
-     *
-     * @return A final answer, except that it is recommended to wrap results in {@link #deferByte(byte)} to ensure smart transparency in the event of a broken chain or if someone screws up and calls this method in the wrong order.
-     */
-    public byte bite() {
-        return deferByte();
-    }
-
-    /**
-     * 
-     * This method is final, so to produce similar behavior that chains correctly, override {@link #bite()} instead.
-     */
-    @Override
-    public final byte at(int x, int y, int z) {
-        Fetch current, next = this;
-        do {
-            current = next;
-            current.setChains(x, y, z);
-            next = current.fetch();
-            x = current.chainX();
-            y = current.chainY();
-            z = current.chainZ();
-        } while (next != null);
-        return current.bite();
-    }
-
+public abstract class Fetch implements IFetch, IDecide {
     public final byte at(int y, int z) {
         return at(0, y, z);
     }
@@ -87,43 +32,18 @@ public abstract class Fetch implements IFetch, IDecide, ITemporal {
         return at(x, y, z) != (byte) 0;
     }
 
-    protected int chainX, chainY, chainZ;
-
-    public int chainX() {
-        return chainX;
-    }
-
-    public int chainY() {
-        return chainY;
-    }
-
-    public int chainZ() {
-        return chainZ;
-    }
-
-    public Fetch setChainX(int x) {
-        chainX = x;
-        return this;
-    }
-
-    public Fetch setChainY(int y) {
-        chainY = y;
-        return this;
-    }
-
-    public Fetch setChainZ(int z) {
-        chainZ = z;
-        return this;
-    }
-
-    public Fetch setChains(int x, int y, int z) {
-        return setChainX(x).setChainY(y).setChainZ(z);
-    }
-
     private Fetch nextFetch;
 
     public Fetch getNextFetch() {
         return nextFetch;
+    }
+
+    /**
+     * @return Either {@link #getNextFetch()} or else a transparent ColorFetch in case {@link #getNextFetch()} was null.
+     */
+    public Fetch safeNextFetch() {
+        final Fetch nextFetch = getNextFetch();
+        return nextFetch == null ? ColorFetch.color((byte) 0) : nextFetch;
     }
 
     public Fetch add(Fetch nextFetch) {
@@ -149,7 +69,7 @@ public abstract class Fetch implements IFetch, IDecide, ITemporal {
         return getNextFetch() == null ? ColorFetch.transparent : getNextFetch();
     }
 
-    public Fetch deferFetch(byte result) {
+    public Fetch deferFetch(final byte result) {
         return result == 0 ? deferFetch() : ColorFetch.color(result);
     }
 
@@ -158,28 +78,13 @@ public abstract class Fetch implements IFetch, IDecide, ITemporal {
      *
      * @return If fetch is null then return getNextFetch(), else return fetch.
      */
-    public Fetch deferFetch(Fetch fetch) {
-        return fetch == null ? getNextFetch() : fetch;
+    public Fetch deferFetch(final Fetch fetch) {
+        Fetch newFetch = fetch == null ? getNextFetch() : fetch;
+        return newFetch == null ? ColorFetch.color((byte) 0) : newFetch;
     }
 
-    /**
-     * bite() is generally only called by outside code when there is no next fetch.
-     * <p>
-     * But just in case someone is naughty and breaks the chain, this method allows for a recovery, starting a new chain
-     * if necessary. Wrap the result of your bite(int x, int y, int z) overrides in this instead of returning (byte) 0
-     * to ensure you're transparent.
-     * <p>
-     * This should be the method which ensures that, when no next method is specified in the chain, the background is
-     * always transparent.
-     * @param result The byte value to check, and if non-zero, return.
-     * @return If {@code result} is non-zero, returns it as-is, otherwise this wll start a new chain and return its outcome. 
-     */
-    public byte deferByte(byte result) {
-        return result == 0 ? deferFetch().at(chainX(), chainY(), chainZ()) : result;
-    }
-
-    public byte deferByte() {
-        return deferByte((byte) 0);
+    public byte deferByte(final byte voxel, final int x, final int y, final int z) {
+        return voxel == 0 ? safeNextFetch().at(x, y, z) : voxel;
     }
 
     /**
@@ -219,87 +124,6 @@ public abstract class Fetch implements IFetch, IDecide, ITemporal {
      */
     public IModel model(IModel model) {
         return model(new FetchModel(model));
-    }
-
-    /**
-     * Allows treating the chained values as if they were in an array. Allows negative values for index,
-     * unlike an array, and will correctly treat the negative index that corresponds to a reversed axis as if it was the
-     * the corresponding non-reversed axis. This means -1 will be the same as 0, -2 the same as 1, and -3 the same as 2.
-     *
-     * @param index 0 or -1 for x, 1 or -2 for y, or 2 or -3 for z; negative index values have the same size,
-     *              but different starts and directions
-     * @return the size of the specified dimension
-     */
-    public int chain(int index) {
-        switch (index) {
-            case 0:
-            case -1:
-                return chainX();
-            case 1:
-            case -2:
-                return chainY();
-            case 2:
-            case -3:
-                return chainZ();
-            default:
-                throw new ArrayIndexOutOfBoundsException();
-        }
-    }
-
-    /**
-     * Allows treating the chained values as if they were in an array. Allows negative values for index,
-     * unlike an array, and will correctly treat the negative index that corresponds to a reversed axis as if it was the
-     * the corresponding non-reversed axis. This means -1 will be the same as 0, -2 the same as 1, and -3 the same as 2.
-     *
-     * @param index 0 or -1 for x, 1 or -2 for y, or 2 or -3 for z; negative index values have the same size,
-     *              but different starts and directions
-     * @param value The value to set
-     * @return the size of the specified dimension
-     */
-    public Fetch setChain(int index, int value) {
-        switch (index) {
-            case 0:
-            case -1:
-                return setChainX(value);
-            case 1:
-            case -2:
-                return setChainY(value);
-            case 2:
-            case -3:
-                return setChainZ(value);
-            default:
-                throw new ArrayIndexOutOfBoundsException();
-        }
-    }
-    @Override
-    public int duration() {
-        return duration;
-    }
-
-    /**
-     * This default implementation sets the duration of any time-based effects used in this Fetch. Implementors are
-     * permitted to change this behavior so the duration can be fixed if only some amount of animation frames are
-     * reasonable to generate, but this should always return this Fetch for chaining.
-     * @param duration the new duration of any time-based effects, minimum 1
-     * @return this for chaining
-     */
-    @Override
-    public Fetch setDuration(int duration) {
-        this.duration = Math.max(duration, 1);
-        return this;
-    }
-
-    protected int frame = 0, duration = 1;
-
-    @Override
-    public int frame() {
-        return frame;
-    }
-
-    @Override
-    public Fetch setFrame(int frame) {
-        this.frame = ((frame % duration) + duration) % duration;
-        return this;
     }
 
     public Fetch offsetModel(int sizeX, int sizeY, int sizeZ) {

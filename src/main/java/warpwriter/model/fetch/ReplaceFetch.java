@@ -1,6 +1,7 @@
 package warpwriter.model.fetch;
 
 import warpwriter.model.Fetch;
+import warpwriter.model.IFetch;
 
 /**
  * Peeks into the future of the Fetch chain after it to repaint occurrences of a specific color with a given Fetch.
@@ -9,10 +10,10 @@ import warpwriter.model.Fetch;
  * @author Tommy Ettinger
  */
 public class ReplaceFetch extends Fetch {
-    public Fetch fetch;
+    public IFetch fetch;
     public byte color;
 
-    public ReplaceFetch set(Fetch fetch) {
+    public ReplaceFetch set(IFetch fetch) {
         this.fetch = fetch;
         return this;
     }
@@ -22,7 +23,7 @@ public class ReplaceFetch extends Fetch {
         return this;
     }
 
-    public Fetch getFetch() {
+    public IFetch getFetch() {
         return fetch;
     }
 
@@ -30,30 +31,19 @@ public class ReplaceFetch extends Fetch {
         return color;
     }
 
-    public ReplaceFetch(Fetch fetch) {
+    public ReplaceFetch(IFetch fetch) {
         super();
         set(fetch);
     }
 
-    public ReplaceFetch(Fetch fetch, byte colorToReplace) {
+    public ReplaceFetch(IFetch fetch, byte colorToReplace) {
         this(fetch);
         set(colorToReplace);
     }
 
     @Override
-    public Fetch fetch() {
-        final int x = chainX(), y = chainY(), z = chainZ();
+    public byte at(int x, int y, int z) {
         final byte future = getNextFetch().at(x, y, z);
-        if (future == 0)
-            return ColorFetch.color((byte) 0);
-        else if (future == color)
-            return fetch;
-        else
-            return getNextFetch();
-//        return future == 0 ?
-//                ColorFetch.color((byte) 0)
-//                : future != color ?
-//                        getNextFetch()
-//                        : fetch;
+        return future == 0 ? 0 : future == color ? fetch.at(x, y, z) : future;
     }
 }

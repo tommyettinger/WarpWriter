@@ -86,21 +86,17 @@ public class TurnModel extends Fetch implements IModel {
         return !outside(x, y, z);
     }
 
-    @Override
-    public Fetch fetch() {
-        return deferFetch(bite());
-    }
-
     /**
      * Side effect: Uses the input values in turner as temporary storage, wiping out whatever may be stored in there. Outputs of turner are irrelevant, as turner is being used in this case to store rotation data without being used to actually implement the rotation.
      */
     @Override
-    public byte bite() {
-        for (int i = 0; i < 3; i++)
-            turner.input(turner().affected(i), start(i) + turner().step(i) * chain(i));
+    public byte at(int x, int y, int z) {
+        turner.input(turner().affected(0), start(0) + turner().step(0) * x);
+        turner.input(turner().affected(1), start(1) + turner().step(1) * y);
+        turner.input(turner().affected(2), start(2) + turner().step(2) * z);
         return deferByte(getModel().at(
                 turner.input(0), turner.input(1), turner.input(2)
-        ));
+        ), x, y, z);
     }
 
     /**
@@ -110,13 +106,13 @@ public class TurnModel extends Fetch implements IModel {
      *
      * @return Output identical to bite()
      */
-    private byte slowBite() {
-        turner.input(chainX(), chainY(), chainZ());
+    private byte slowBite(int x, int y, int z) {
+        turner.input(x, y, z);
         return deferByte(getModel().at(
                 turner.x() + start(turner.reverseLookup(0)),
                 turner.y() + start(turner.reverseLookup(1)),
                 turner.z() + start(turner.reverseLookup(2))
-        ));
+        ), x, y, z);
     }
 
     /**

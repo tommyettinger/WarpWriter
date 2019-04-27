@@ -159,8 +159,8 @@ public class WarpTest extends ApplicationAdapter {
 //                .add(new PaintFetch(chaos, true)).model(
                 new ArrayModel(voxels));
         model = new TurnModel().set(ship);
-//        model = new TurnModel().set(ship);
-        model.setDuration(16);
+        // TODO: restore time here
+        //model.setDuration(16);
         Gdx.input.setInputProcessor(inputProcessor());
 
         ////choose palette here
@@ -217,7 +217,8 @@ public class WarpTest extends ApplicationAdapter {
 
     @Override
     public void render() {
-        model.setFrame((int)(TimeUtils.millis() >>> 7) & 15);
+        // TODO: Restore time here
+        //model.setFrame((int)(TimeUtils.millis() >>> 7) & 15);
         boom.setFrame((int)(TimeUtils.millis() >>> 7) & 15);
         buffer.begin();
         
