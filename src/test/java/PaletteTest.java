@@ -38,7 +38,12 @@ public class PaletteTest extends ApplicationAdapter {
     /**
      * This fragment shader draws a black outline around things.
      */
-    public static final String fragmentShader = "#version 150\n" +
+    public static final String fragmentShader = "#ifdef GL_ES\n" +
+            "#define LOWP lowp\n" +
+            "precision mediump int;\n" +
+            "#else\n" +
+            "#define LOWP\n" +
+            "#endif\n" +
             "varying vec2 v_texCoords;\n" +
             "varying vec4 v_color;\n" +
             "uniform float outlineH;\n" +
