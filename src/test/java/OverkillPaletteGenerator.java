@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.MathUtils;
 import org.hsluv.HSLUVColorConverter;
 import squidpony.StringKit;
+import squidpony.squidmath.VanDerCorputQRNG;
 import warpwriter.PNG8;
 import warpwriter.PaletteReducer;
 
@@ -73,7 +74,7 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
                 - ((b & 0x0000000000000FFFL) + ((b & 0x000000007FF00000L) >>> 20))) * 0x1p-10);
     }
     
-    private long state = 64L;
+    private long state = 646464646464L;
     
     private double nextDouble()
     {
@@ -89,11 +90,15 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
                 int ch = i | i >>> 4;
                 PALETTE[i++] = ch << 24 | ch << 16 | ch << 8 | 0xFF;
             } else {
-                color[0] = i * (360.0 * 1.6180339887498949) - (i >>> 4);
-                color[1] = (1.0 - nextDouble() * nextDouble() * nextDouble()) * 100.0;
-                color[2] = MathUtils.clamp(fastGaussian() * 50.0 + 55.0, 0.0, 100.0);
+//                color[0] = i * (120.0 * 1.6180339887498949) - (i >>> 4);
+//                color[1] = (1.0 - nextDouble() * nextDouble() * nextDouble()) * 100.0;
+//                color[2] = i * 100.0 / 255.0;
+                color[0] = i * 100.0 / 255.0;
+                color[1] = VanDerCorputQRNG.determine(3, i + 1) * 208.0 - 104.0;
+                color[2] = VanDerCorputQRNG.determine2(i + 1) * 208.0 - 104.0;
+                        //MathUtils.clamp(fastGaussian() * 50.0 + 55.0, 0.0, 100.0);
 //                color[2] = i * (94.0 / 255.0) + 3.0;
-                System.out.println(StringKit.join(", ", color) + "  -> " + StringKit.join(", ", HSLUVColorConverter.hsluvToRgb(color)));
+                System.out.println(StringKit.join(", ", color) + "  -> " + StringKit.join(", ", HSLUVColorConverter.luvToRgb(color)));
                 PALETTE[i++] = (int) (MathUtils.clamp(color[0], 0.0, 1.0) * 255.5) << 24 |
                         (int) (MathUtils.clamp(color[1], 0.0, 1.0) * 255.5) << 16 |
                         (int) (MathUtils.clamp(color[2], 0.0, 1.0) * 255.5) << 8 | 0xFF;
@@ -264,7 +269,7 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
         PNG8 png8 = new PNG8();
         png8.palette = new PaletteReducer(PALETTE);
         try {
-            png8.writePrecisely(Gdx.files.local("Psyche"+PALETTE.length+".png"), pix, false);
+            png8.writePrecisely(Gdx.files.local("Retry"+PALETTE.length+".png"), pix, false);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -281,7 +286,7 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
             }
         }
         try {
-            png8.writePrecisely(Gdx.files.local("Psyche"+PALETTE.length+"_GLSL.png"), p2, false);
+            png8.writePrecisely(Gdx.files.local("Retry"+PALETTE.length+"_GLSL.png"), p2, false);
         } catch (IOException e) {
             e.printStackTrace();
         }
