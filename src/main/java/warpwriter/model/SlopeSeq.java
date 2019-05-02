@@ -76,7 +76,7 @@ import static warpwriter.model.nonvoxel.HashMap3D.*;
  * @author Sebastiano Vigna (responsible for all the hard parts)
  * @author Tommy Ettinger (mostly responsible for squashing several layers of parent classes into one monster class)
  */
-public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
+public class SlopeSeq implements IVoxelSeq, Serializable, Cloneable {
     private static final long serialVersionUID = 0L;
     /**
      * The array of position keys.
@@ -86,6 +86,10 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
      * The array of color index values.
      */
     protected byte[] value;
+    /**
+     * The array of slope index values.
+     */
+    protected byte[] slope;
     /**
      * The mask for wrapping a position counter.
      */
@@ -238,7 +242,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
      * @param f        the load factor.
      */
     @SuppressWarnings("unchecked")
-    public VoxelSeq(final int expected, final float f) {
+    public SlopeSeq(final int expected, final float f) {
         if (f <= 0 || f > 1)
             throw new IllegalArgumentException("Load factor must be greater than 0 and smaller than or equal to 1");
         if (expected < 0) throw new IllegalArgumentException("The expected number of elements must be nonnegative");
@@ -248,6 +252,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
         maxFill = maxFill(n, f);
         key = new int[n + 1];
         value = new byte[n + 1];
+        slope = new byte[n + 1];
         order = new IntVLA(expected * 3 >>> 2);
         full = new IntVLA(expected);
     }
@@ -257,14 +262,14 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
      *
      * @param expected the expected number of elements in the VoxelSeq.
      */
-    public VoxelSeq(final int expected) {
+    public SlopeSeq(final int expected) {
         this(expected, DEFAULT_LOAD_FACTOR);
     }
 
     /**
      * Creates a new VoxelSeq with initial expected 16 entries and 0.75f as load factor.
      */
-    public VoxelSeq() {
+    public SlopeSeq() {
         this(DEFAULT_INITIAL_SIZE, DEFAULT_LOAD_FACTOR);
     }
 
@@ -274,7 +279,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
      * @param m a {@link Map} to be copied into the new VoxelSeq.
      * @param f the load factor.
      */
-    public VoxelSeq(final VoxelSeq m, final float f) {
+    public SlopeSeq(final SlopeSeq m, final float f) {
         this(m.size, f);
         putAll(m);
     }
@@ -284,7 +289,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
      *
      * @param m a {@link Map} to be copied into the new VoxelSeq.
      */
-    public VoxelSeq(final VoxelSeq m) {
+    public SlopeSeq(final SlopeSeq m) {
         this(m, m.f);
     }
 
@@ -296,7 +301,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
      * @param f the load factor.
      * @throws IllegalArgumentException if <code>k</code> and <code>v</code> have different lengths.
      */
-    public VoxelSeq(final int[] keyArray, final byte[] valueArray, final float f) {
+    public SlopeSeq(final int[] keyArray, final byte[] valueArray, final float f) {
         this(keyArray.length, f);
         if (keyArray.length != valueArray.length)
             throw new IllegalArgumentException("The key array and the value array have different lengths (" + keyArray.length + " and " + valueArray.length + ")");
@@ -311,7 +316,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
      * @param valueArray the array of corresponding values in the new VoxelSeq.
      * @throws IllegalArgumentException if <code>k</code> and <code>v</code> have different lengths.
      */
-    public VoxelSeq(final int[] keyArray, final byte[] valueArray) {
+    public SlopeSeq(final int[] keyArray, final byte[] valueArray) {
         this(keyArray, valueArray, DEFAULT_LOAD_FACTOR);
     }
 
@@ -453,7 +458,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
      * SortedMap implementations) will work best when order matters.
      * @param m an IntIntOrderedMap to add into this
      */
-    public void putAll(VoxelSeq m) {
+    public void putAll(SlopeSeq m) {
         if (f <= .5)
             ensureCapacity(m.size); // The resulting map will be sized for m.size() elements
         else
@@ -463,7 +468,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
             put(m.keyAt(i), m.getAt(i));
         }
     }
-    private int insert(final int k, final byte v) {
+    private int insert(final int k, final byte v, final byte s) {
         int pos;
         if (k == 0) {
             if (containsNullKey)
@@ -484,12 +489,13 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
         }
         key[pos] = k;
         value[pos] = v;
+        slope[pos] = s;
         full.add(pos);
         if (size++ >= maxFill)
             rehash(arraySize(size + 1, f));
         return -1;
     }
-    private int insertAt(final int k, final byte v, final int idx) {
+    private int insertAt(final int k, final byte v, final byte s, final int idx) {
         int pos;
         if (k == 0) {
             if (containsNullKey)
@@ -522,13 +528,14 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
         }
         key[pos] = k;
         value[pos] = v;
+        slope[pos] = s;
         full.insert(idx, pos);
         if (size++ >= maxFill)
             rehash(arraySize(size + 1, f));
         return -1;
     }
     public byte put(final int k, final byte v) {
-        final int pos = insert(k, v);
+        final int pos = insert(k, v, (byte) 0);
         if (pos < 0)
             return defRetValue;
         final byte oldValue = value[pos];
@@ -536,11 +543,29 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
         return oldValue;
     }
     public byte putAt(final int k, final byte v, final int idx) {
-        final int pos = insertAt(k, v, idx);
+        final int pos = insertAt(k, v, (byte) 0, idx);
         if (pos < 0)
             return defRetValue;
         final byte oldValue = value[pos];
         value[pos] = v;
+        return oldValue;
+    }
+    public byte put(final int k, final byte v, final byte s) {
+        final int pos = insert(k, v, s);
+        if (pos < 0)
+            return defRetValue;
+        final byte oldValue = value[pos];
+        value[pos] = v;
+        slope[pos] = s;
+        return oldValue;
+    }
+    public byte putAt(final int k, final byte v, final byte s, final int idx) {
+        final int pos = insertAt(k, v, s, idx);
+        if (pos < 0)
+            return defRetValue;
+        final byte oldValue = value[pos];
+        value[pos] = v;
+        slope[pos] = s;
         return oldValue;
     }
     /**
@@ -571,6 +596,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
             }
             key[last] = curr;
             value[last] = value[pos];
+            slope[last] = slope[pos];
             fixOrder(pos, last);
         }
     }
@@ -596,11 +622,6 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
                 return removeEntry(pos);
         }
     }
-    private byte setValue(final int pos, final byte v) {
-        final byte oldValue = value[pos];
-        value[pos] = v;
-        return oldValue;
-    }
     public byte get(final int k) {
         if (k == 0)
             return containsNullKey ? value[n] : defRetValue;
@@ -618,6 +639,26 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
                 return defRetValue;
             if (k == curr)
                 return value[pos];
+        }
+    }
+
+    public byte slope(final int k) {
+        if (k == 0)
+            return containsNullKey ? slope[n] : 0;
+        int curr;
+        final int[] key = this.key;
+        int pos;
+        // The starting point.
+        if ((curr = key[pos = (mix(k)) & mask]) == 0)
+            return 0;
+        if (k == curr)
+            return slope[pos];
+        // There's always an unused entry.
+        while (true) {
+            if ((curr = key[pos = (pos + 1) & mask]) == 0)
+                return 0;
+            if (k == curr)
+                return slope[pos];
         }
     }
 
@@ -769,57 +810,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
     public boolean isEmpty() {
         return size == 0;
     }
-
-    /**
-     * Looks up the key {@code k} in this map, remembers the associated value (which will be
-     * {@link #defaultReturnValue()} if k wasn't found), adds {@code increment} to the actual associated value in the
-     * map, and returns the remembered value.
-     * @param k a key to look up
-     * @param increment a byte to add to the value associated with {@code k}
-     * @return the previous value associated with k, or {@link #defaultReturnValue()} if k wasn't found
-     */
-    public byte getAndIncrement(int k, byte increment) {
-        if (k == 0) {
-            if (containsNullKey) {
-                byte got = value[n];
-                value[n] += increment;
-                return got;
-            } else {
-                value[n] = (byte)(defRetValue + increment);
-                return defRetValue;
-            }
-        }
-        int curr;
-        final int[] key = this.key;
-        int pos;
-        // The starting point.
-        if ((curr = key[pos = (mix(k)) & mask]) == 0)
-        {
-            put(k, (byte)(defRetValue + increment));
-            return defRetValue;
-        }
-        if (k == curr)
-        {
-            byte got = value[pos];
-            value[pos] += increment;
-            return got;
-        }
-        // There's always an unused entry.
-        while (true) {
-            if ((curr = key[pos = (pos + 1) & mask]) == 0)
-            {
-                put(k, (byte)(defRetValue + increment));
-                return defRetValue;
-            }
-            if (k == curr)
-            {
-                byte got = value[pos];
-                value[pos] += increment;
-                return got;
-            }
-        }
-    }
-
+    
     /**
      * The entry class for a VoxelSeq does not record key and value, but rather the position in the hash table of the corresponding entry. This is necessary so that calls to
      * {@link MapEntry#setValue(byte)} are reflected in the map
@@ -839,6 +830,9 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
         public byte getValue() {
             return value[index];
         }
+        public byte getSlope() {
+            return slope[index];
+        }
         public byte setValue(final byte v) {
             final byte oldValue = value[index];
             value[index] = v;
@@ -849,16 +843,14 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
             if (!(o instanceof MapEntry))
                 return false;
             MapEntry e = (MapEntry) o;
-            return (key[index] == e.getKey())
-                    && (value[index] == e.getValue());
+            return key[index] == e.getKey() && value[index] == e.getValue() && slope[index] == e.getSlope();
         }
         public int hashCode() {
-            return mix(key[index])
-                    ^ mix(value[index]);
+            return mix(key[index]) ^ mix(value[index]) ^ mix(slope[index]);
         }
         @Override
         public String toString() {
-            return key[index] + "=>" + value[index];
+            return key[index] + "=>{" + value[index] + "," + slope[index] + "}";
         }
     }
 
@@ -1083,7 +1075,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
                 containsNullKey = false;
             } else {
                 int curr;
-                final int[] key = VoxelSeq.this.key;
+                final int[] key = SlopeSeq.this.key;
                 // We have to horribly duplicate the shiftKeys() code because we
                 // need to update next/prev.
                 for (;;) {
@@ -1208,7 +1200,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
             if (k == 0)
                 return containsNullKey && (value[n] == v);
             int curr;
-            final int[] key = VoxelSeq.this.key;
+            final int[] key = SlopeSeq.this.key;
             int pos;
             // The starting point.
             if ((curr = key[pos = (mix(k)) & mask]) == 0)
@@ -1238,7 +1230,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
                 return false;
             }
             int curr;
-            final int[] key = VoxelSeq.this.key;
+            final int[] key = SlopeSeq.this.key;
             int pos;
             // The starting point.
             if ((curr = key[pos = (mix(k)) & mask]) == 0)
@@ -1265,7 +1257,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
             return size;
         }
         public void clear() {
-            VoxelSeq.this.clear();
+            SlopeSeq.this.clear();
         }
 
         public FastEntryIterator fastIterator() {
@@ -1445,7 +1437,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
         }
 
         public void clear() {
-            VoxelSeq.this.clear();
+            SlopeSeq.this.clear();
         }
 
         public Integer first() {
@@ -1738,7 +1730,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
             return v instanceof Byte && containsValue((Byte)v);
         }
         public void clear() {
-            VoxelSeq.this.clear();
+            SlopeSeq.this.clear();
         }
     }
     public Collection<Byte> values() {
@@ -1855,14 +1847,16 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
      */
     @SuppressWarnings("unchecked")
     @GwtIncompatible
-    public VoxelSeq clone() {
-        VoxelSeq c;
+    public SlopeSeq clone() {
+        SlopeSeq c;
         try {
-            c = (VoxelSeq) super.clone();
+            c = (SlopeSeq) super.clone();
             c.key = new int[n + 1];
             System.arraycopy(key, 0, c.key, 0, n + 1);
             c.value = new byte[n + 1];
             System.arraycopy(value, 0, c.value, 0, n + 1);
+            c.slope = new byte[n + 1];
+            System.arraycopy(slope, 0, c.slope, 0, n + 1);
             c.order = order.copy();
             c.full = full.copy();
             return c;
@@ -1882,19 +1876,19 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
             while (key[i] == 0)
                 i++;             
             t = mix(key[i]) ^ mix(
-                    value[i] ^ HashCommon.INV_INT_PHI);
+                    value[i] ^ HashCommon.INV_INT_PHI ^ mix(slope[i] * 0xC13F));
             h += t;
             i++;
         }
         // Zero / null keys have hash zero.
         if (containsNullKey)
-            h += mix(value[n] ^ HashCommon.INV_INT_PHI);
+            h += mix(value[n] ^ HashCommon.INV_INT_PHI ^ mix(slope[n] * 0xC13F));
         return h;
     }
 
     public long hash64()
     {
-        return 31L * (31L * CrossHash.hash64(key) + CrossHash.hash64(value)) + size;
+        return 31L * (31L * CrossHash.hash64(key) + (31L * CrossHash.hash64(value) + CrossHash.hash64(slope))) + size;
     }
     /**
      * Returns the maximum number of entries that can be filled before rehashing.
@@ -2009,59 +2003,14 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
     public boolean equals(Object o) {
         if (o == this)
             return true;
-        if (!(o instanceof VoxelSeq))
+        if (!(o instanceof SlopeSeq))
             return false;
-        VoxelSeq m = (VoxelSeq) o;
+        SlopeSeq m = (SlopeSeq) o;
         if (m.size != size)
             return false;
         return entrySet().containsAll(m.entrySet());
     }
-
-    @GwtIncompatible
-    private void writeObject(java.io.ObjectOutputStream s)
-            throws java.io.IOException {
-        final int[] key = this.key;
-        final byte[] value = this.value;
-        final MapIterator i = new MapIterator();
-        s.defaultWriteObject();
-        for (int j = size, e; j-- != 0;) {
-            e = i.nextEntry();
-            s.writeInt(key[e]);
-            s.writeByte(value[e]);
-        }
-    }
-    @GwtIncompatible
-    @SuppressWarnings("unchecked")
-    private void readObject(java.io.ObjectInputStream s)
-            throws java.io.IOException, ClassNotFoundException {
-        s.defaultReadObject();
-        n = arraySize(size, f);
-        maxFill = maxFill(n, f);
-        mask = n - 1;
-        final int[] key = this.key = new int[n + 1];
-        final byte[] value = this.value = new byte[n + 1];
-        final IntVLA order = this.order = new IntVLA(n + 1);
-        int k;
-        byte v;
-        for (int i = size, pos; i-- != 0;) {
-            k = s.readInt();
-            v = s.readByte();
-            if (k == 0) {
-                pos = n;
-                containsNullKey = true;
-            } else {
-                pos = (mix(k))
-                        & mask;
-                while (!(key[pos] == 0))
-                    pos = (pos + 1) & mask;
-            }
-
-            key[pos] = k;
-            value[pos] = v;
-            full.add(pos);
-        }
-    }
-
+    
     /**
      * Gets the value at the given index in the iteration order in constant time (random-access).
      * @param idx the index in the iteration order of the value to fetch
@@ -2075,6 +2024,21 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
         if (key[pos = full.get(idx)] == 0)
             return containsNullKey ? value[n] : defRetValue;
         return value[pos];
+    }
+
+    /**
+     * Gets the value at the given index in the iteration order in constant time (random-access).
+     * @param idx the index in the iteration order of the value to fetch
+     * @return the value at the index, if the index is valid, otherwise the default return value
+     */
+    public byte slopeAt(final int idx) {
+        int pos;
+        if (idx < 0 || idx >= full.size)
+            return defRetValue;
+        // The starting point.
+        if (key[pos = full.get(idx)] == 0)
+            return containsNullKey ? slope[n] : defRetValue;
+        return slope[pos];
     }
     /**
      * Gets the key at the given index in the iteration order in constant time (random-access).
@@ -2131,6 +2095,20 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
         if (key[pos = order.get(idx)] == 0)
             return containsNullKey ? value[n] : defRetValue;
         return value[pos];
+    }
+    /**
+     * Gets the value at the given index in the iteration order in constant time (random-access).
+     * @param idx the index in the iteration order of the value to fetch
+     * @return the value at the index, if the index is valid, otherwise the default return value
+     */
+    public byte slopeAtHollow(final int idx) {
+        int pos;
+        if (idx < 0 || idx >= order.size)
+            return defRetValue;
+        // The starting point.
+        if (key[pos = order.get(idx)] == 0)
+            return containsNullKey ? slope[n] : defRetValue;
+        return slope[pos];
     }
     /**
      * Gets the key at the given index in the iteration order in constant time (random-access).
@@ -2211,7 +2189,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
      * @param rng used to generate a random ordering
      * @return this for chaining
      */
-    public VoxelSeq shuffle(IRNG rng)
+    public SlopeSeq shuffle(IRNG rng)
     {
         if(size < 2)
             return this;
@@ -2235,7 +2213,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
      *                 Map to have the value currently in this Map at the index specified by the value in ordering
      * @return this for chaining, after modifying it in-place
      */
-    public VoxelSeq reorder(int... ordering)
+    public SlopeSeq reorder(int... ordering)
     {
         full.reorder(ordering);
         return this;
@@ -2548,7 +2526,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
     }
 
     @Override
-    public VoxelSeq counterX() {
+    public SlopeSeq counterX() {
         final int r = rotation();
         switch (r & 28) { // 16, 8, 4
             case 0:
@@ -2570,7 +2548,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
     }
     
     @Override
-    public VoxelSeq counterY() {
+    public SlopeSeq counterY() {
         final int r = rotation();
         switch (r & 28) // 16, 8, and 4 can each be set.
         {
@@ -2597,12 +2575,12 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
     }
 
     @Override
-    public VoxelSeq counterZ() {
+    public SlopeSeq counterZ() {
         rotate((rotation() - 1 & 3) | (rotation() & 28));
         return this;
     }
     @Override
-    public VoxelSeq clockX() {
+    public SlopeSeq clockX() {
         final int r = rotation();
         switch (r & 28) {
             case 4:
@@ -2624,7 +2602,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
     }
 
     @Override
-    public VoxelSeq clockY() {
+    public SlopeSeq clockY() {
         final int r = rotation();
         switch (r & 28) // 16, 8, and 4 can each be set.
         {
@@ -2651,13 +2629,13 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
     }
 
     @Override
-    public VoxelSeq clockZ() {
+    public SlopeSeq clockZ() {
         rotate((rotation() + 1 & 3) | (rotation() & 28));
         return this;
     }
 
     @Override
-    public VoxelSeq reset() {
+    public SlopeSeq reset() {
         rotate(0);
         return this;
     }
