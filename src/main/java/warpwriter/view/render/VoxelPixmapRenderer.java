@@ -11,9 +11,8 @@ import warpwriter.view.color.VoxelColor;
 public class VoxelPixmapRenderer implements IRectangleRenderer {
     public Pixmap pixmap;
     public int[][] depths, working, render, outlines;
-    public byte[][] raw;
     public VoxelColor color;
-    public boolean flipX, flipY, easing = false, outline = true, sloping = true;
+    public boolean flipX, flipY, easing = true, outline = true;
 
     public VoxelPixmapRenderer() {
         this(new Pixmap(64, 64, Pixmap.Format.RGBA8888));
@@ -29,7 +28,6 @@ public class VoxelPixmapRenderer implements IRectangleRenderer {
         render = new int[pixmap.getWidth()][pixmap.getHeight()];
         depths = new int[pixmap.getWidth()][pixmap.getHeight()];
         outlines = new int[pixmap.getWidth()][pixmap.getHeight()];
-        raw = new byte[pixmap.getWidth()][pixmap.getHeight()];
         this.color = color;
     }
 
@@ -45,7 +43,7 @@ public class VoxelPixmapRenderer implements IRectangleRenderer {
         return this;
     }
 
-    public IRectangleRenderer rect(int x, int y, int sizeX, int sizeY, int color, int outlineColor, int depth, byte base) {
+    public IRectangleRenderer rect(int x, int y, int sizeX, int sizeY, int color, int outlineColor, int depth) {
         //pixmap.setColor(color);
         //pixmap.fillRectangle(x, y, sizeX, sizeY);
         for (int i = 0; i < sizeX && x < working.length; i++, x++) {
@@ -53,7 +51,6 @@ public class VoxelPixmapRenderer implements IRectangleRenderer {
                 working[x][yy] = color;
                 depths[x][yy] = depth;
                 outlines[x][yy] = outlineColor;
-                raw[x][yy] = base;
             }
         }
         return this;
@@ -83,15 +80,15 @@ public class VoxelPixmapRenderer implements IRectangleRenderer {
     }
 
     public IRectangleRenderer rectVertical(int px, int py, int sizeX, int sizeY, byte voxel, int depth, int vx, int vy, int vz) {
-        return rect(px, py, sizeX, sizeY, color.verticalFace(voxel, vx, vy, vz), color.twilight().dark(voxel), depth, voxel);
+        return rect(px, py, sizeX, sizeY, color.verticalFace(voxel, vx, vy, vz), color.twilight().dark(voxel), depth);
     }
 
     public IRectangleRenderer rectLeft(int px, int py, int sizeX, int sizeY, byte voxel, int depth, int vx, int vy, int vz) {
-        return rect(px, py, sizeX, sizeY, color.leftFace(voxel, vx, vy, vz), color.twilight().dark(voxel), depth, voxel);
+        return rect(px, py, sizeX, sizeY, color.leftFace(voxel, vx, vy, vz), color.twilight().dark(voxel), depth);
     }
 
     public IRectangleRenderer rectRight(int px, int py, int sizeX, int sizeY, byte voxel, int depth, int vx, int vy, int vz) {
-        return rect(px, py, sizeX, sizeY, color.rightFace(voxel, vx, vy, vz), color.twilight().dark(voxel), depth, voxel);
+        return rect(px, py, sizeX, sizeY, color.rightFace(voxel, vx, vy, vz), color.twilight().dark(voxel), depth);
     }
 
     public int getPixel(int x, int y) {
@@ -139,9 +136,6 @@ public class VoxelPixmapRenderer implements IRectangleRenderer {
         pixmap.fill();
         ArrayTools.fill(working, 0);
         ArrayTools.fill(depths, 0);
-        ArrayTools.fill(outlines, 0);
-        ArrayTools.fill(render, 0);
-        ArrayTools.fill(raw, (byte)0);
         return this;
     }
 
@@ -152,7 +146,6 @@ public class VoxelPixmapRenderer implements IRectangleRenderer {
     private static final IntIntMap counts = new IntIntMap(9);
     
     public Pixmap blit(int threshold, int pixelWidth, int pixelHeight) {
-        final int pmh = pixmap.getHeight() - 1;
         pixmap.setColor(0);
         pixmap.fill();
         int xSize = Math.min(pixelWidth, working.length) - 1,
@@ -161,35 +154,6 @@ public class VoxelPixmapRenderer implements IRectangleRenderer {
         for (int x = 0; x <= xSize; x++) {
             System.arraycopy(working[x], 0, render[x], 0, ySize);
         }
-        if(sloping)
-        {
-            int m;
-            for (int x = 1; x < xSize; x++) {
-                for (int y = 1; y < ySize; y++) {
-                    if(raw[x-1][y+1] == raw[x+1][y-1]){
-                        m = mix(working[x-1][y+1], working[x+1][y-1]);
-                        /*if(render[x-1][y+1] != 0) */render[x-1][y+1] = m;
-                        /*if(render[x+1][y-1] != 0) */render[x+1][y-1] = m;
-                        /*if(render[x][y]     != 0) */render[x][y]     = m;
-                        /*if(render[x-1][y]   != 0) */render[x-1][y]   = m;
-                        /*if(render[x+1][y]   != 0) */render[x+1][y]   = m;
-                        /*if(render[x][y+1]   != 0) */render[x][y+1]   = m;
-                        /*if(render[x][y-1]   != 0) */render[x][y-1]   = m;
-                    }
-                    if(raw[x-1][y-1] == raw[x+1][y+1]){
-                        m = mix(working[x-1][y-1], working[x+1][y+1]);
-                        /* if(render[x-1][y-1] != 0) */ render[x-1][y-1] = m;
-                        /* if(render[x+1][y+1] != 0) */ render[x+1][y+1] = m;
-                        /* if(render[x][y]     != 0) */ render[x][y]     = m;
-                        /* if(render[x-1][y]   != 0) */ render[x-1][y]   = m;
-                        /* if(render[x+1][y]   != 0) */ render[x+1][y]   = m;
-                        /* if(render[x][y+1]   != 0) */ render[x][y+1]   = m;
-                        /* if(render[x][y-1]   != 0) */ render[x][y-1]   = m;
-                    }
-                }
-            }
-        }
-
         if(outline) {
             int o;
             for (int x = 1; x < xSize; x++) {
@@ -231,6 +195,7 @@ public class VoxelPixmapRenderer implements IRectangleRenderer {
             }
         }
         
+        final int pmh = pixmap.getHeight() - 1;
         for (int x = 0; x < xSize; x++) {
             for (int y = 0; y < ySize; y++) {
                 pixmap.drawPixel(x, pmh - y, render[x][y]);
@@ -285,23 +250,6 @@ public class VoxelPixmapRenderer implements IRectangleRenderer {
         ArrayTools.fill(working, 0);
         ArrayTools.fill(depths, 0);
         ArrayTools.fill(outlines, 0);
-        ArrayTools.fill(raw, (byte) 0);
         return pixmap;
-    }
-
-    /**
-     * Color mixing for int colors; always 50/50.
-     * @param a first color to mix
-     * @param b second color to mixx
-     * @return the mixed color
-     */
-    private int mix(final int a, final int b)
-    {
-        if(a == b || (b & 0xFF) < 0x80) return a;
-        else if((a & 0xFF) < 0x80) return b;
-        return ((a >>> 24) + (b >>> 24) >>> 1 & 0xFF) << 24 |
-                ((a >>> 16 & 0xFF) + (b >>> 16 & 0xFF) >>> 1 & 0xFF) << 16 |
-                ((a >>> 8 & 0xFF) + (b >>> 8 & 0xFF) >>> 1 & 0xFF) << 8 |
-                ((a & 0xFF) + (b & 0xFF) >>> 1 & 0xFF);
     }
 }

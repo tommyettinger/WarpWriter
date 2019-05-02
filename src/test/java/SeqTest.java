@@ -250,38 +250,35 @@ public class SeqTest extends ApplicationAdapter {
                     case Input.Keys.F: // fringe, affects outline/edge
                         pixmapRenderer.outline = !pixmapRenderer.outline;
                         break;
-                    case Input.Keys.S: // sloping
-                        pixmapRenderer.sloping = !pixmapRenderer.sloping;
-                        break;
                     case Input.Keys.T: // try again
 //                        model.turner().reset();
                         diagonal = false;
                         angle = 2;
                         break;
-//                    case Input.Keys.A:
-//                        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT))
-//                        {
-//                            pixmapRenderer.color().set(Colorizer.AuroraBonusColorizer);
-//                            maker.setColorizer(Colorizer.AuroraBonusColorizer);
-//                        }
-//                        else
-//                        {
-//                            pixmapRenderer.color.set(Colorizer.AuroraColorizer);
-//                            maker.setColorizer(Colorizer.AuroraColorizer);
-//                        }
-//                        break;
-//                    case Input.Keys.S: // smaller palette, 64 colors
-//                        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT))
-//                        {
-//                            pixmapRenderer.color().set(Colorizer.FlesurrectBonusColorizer);
-//                            maker.setColorizer(Colorizer.FlesurrectBonusColorizer);
-//                        }
-//                        else 
-//                        {
-//                            pixmapRenderer.color().set(Colorizer.FlesurrectColorizer);
-//                            maker.setColorizer(Colorizer.FlesurrectColorizer);
-//                        }
-//                        break;
+                    case Input.Keys.A:
+                        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT))
+                        {
+                            pixmapRenderer.color().set(Colorizer.AuroraBonusColorizer);
+                            maker.setColorizer(Colorizer.AuroraBonusColorizer);
+                        }
+                        else
+                        {
+                            pixmapRenderer.color.set(Colorizer.AuroraColorizer);
+                            maker.setColorizer(Colorizer.AuroraColorizer);
+                        }
+                        break;
+                    case Input.Keys.S: // smaller palette, 64 colors
+                        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT))
+                        {
+                            pixmapRenderer.color().set(Colorizer.FlesurrectBonusColorizer);
+                            maker.setColorizer(Colorizer.FlesurrectBonusColorizer);
+                        }
+                        else 
+                        {
+                            pixmapRenderer.color().set(Colorizer.FlesurrectColorizer);
+                            maker.setColorizer(Colorizer.FlesurrectColorizer);
+                        }
+                        break;
                     case Input.Keys.W: // write
                         VoxIO.writeVOX(FakeLanguageGen.SIMPLISH.word(Tools3D.hash64(voxels), true) + ".vox", voxels, maker.getColorizer().getReducer().paletteArray);
                         break;
