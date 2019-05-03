@@ -320,6 +320,34 @@ public class SlopeSeq implements IVoxelSeq, Serializable, Cloneable {
         this(keyArray, valueArray, DEFAULT_LOAD_FACTOR);
     }
 
+
+    /**
+     * Creates a new VoxelSeq using the elements of two parallel arrays.
+     *
+     * @param keyArray the array of keys of the new VoxelSeq.
+     * @param valueArray the array of corresponding values in the new VoxelSeq.
+     * @param f the load factor.
+     * @throws IllegalArgumentException if <code>k</code> and <code>v</code> have different lengths.
+     */
+    public SlopeSeq(final int[] keyArray, final byte[] valueArray, final byte[] slopeArray, final float f) {
+        this(keyArray.length, f);
+        if (keyArray.length != valueArray.length || keyArray.length != slopeArray.length)
+            throw new IllegalArgumentException("The key array and the value array have different lengths (keys:" + keyArray.length + ", values:" + valueArray.length + ", slopes:" + slopeArray.length + ")");
+        for (int i = 0; i < keyArray.length; i++)
+            put(keyArray[i], valueArray[i], slopeArray[i]);
+    }
+
+    /**
+     * Creates a new VoxelSeq with 0.75f as load factor using the elements of two parallel arrays.
+     *
+     * @param keyArray the array of keys of the new VoxelSeq.
+     * @param valueArray the array of corresponding values in the new VoxelSeq.
+     * @throws IllegalArgumentException if <code>k</code> and <code>v</code> have different lengths.
+     */
+    public SlopeSeq(final int[] keyArray, final byte[] valueArray, final byte[] slopeArray) {
+        this(keyArray, valueArray, slopeArray, DEFAULT_LOAD_FACTOR);
+    }
+
     public void putArray(byte[][][] voxels)
     {
         final int sizeX = (voxels.length);
@@ -644,19 +672,19 @@ public class SlopeSeq implements IVoxelSeq, Serializable, Cloneable {
 
     public byte slope(final int k) {
         if (k == 0)
-            return containsNullKey ? slope[n] : 0;
+            return containsNullKey ? slope[n] : -1;
         int curr;
         final int[] key = this.key;
         int pos;
         // The starting point.
         if ((curr = key[pos = (mix(k)) & mask]) == 0)
-            return 0;
+            return -1;
         if (k == curr)
             return slope[pos];
         // There's always an unused entry.
         while (true) {
             if ((curr = key[pos = (pos + 1) & mask]) == 0)
-                return 0;
+                return -1;
             if (k == curr)
                 return slope[pos];
         }
@@ -2412,6 +2440,10 @@ public class SlopeSeq implements IVoxelSeq, Serializable, Cloneable {
     {
         return get(fuse(x, y, z));
     }
+    public byte slope(final int x, final int y, final int z)
+    {
+        return slope(fuse(x, y, z));
+    }
     public boolean containsKey(final int x, final int y, final int z)
     {
         return containsKey(fuse(x, y, z));
@@ -2423,6 +2455,10 @@ public class SlopeSeq implements IVoxelSeq, Serializable, Cloneable {
     public byte put(final int x, final int y, final int z, final byte val)
     {
         return put(fuse(x, y, z), val);
+    }
+    public byte put(final int x, final int y, final int z, final byte val, final byte slope)
+    {
+        return put(fuse(x, y, z), val, slope);
     }
     /**
      * Sorts this whole VoxelSeq on its keys using the supplied Comparator.
@@ -2469,7 +2505,7 @@ public class SlopeSeq implements IVoxelSeq, Serializable, Cloneable {
 
     public byte getRotated(final int key)
     {
-        return getRotated(key, rotation);
+        return get(rotate(key, ((-rotation) & 3) | rotation & -4));
     }
     public byte getRotated(final int key, final int rotation)
     {
