@@ -2,6 +2,7 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3WindowAdapter;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import squidpony.squidmath.NumberTools;
 
 import static warpwriter.view.render.ShaderUtils.*;
 
@@ -53,7 +55,10 @@ public class ShaderPalettizer extends ApplicationAdapter {
 
     public void load(String name) {
         //// loads a file by its full path, which we get via drag+drop
-        screenTexture = new Texture(Gdx.files.absolute(name));
+        FileHandle file = Gdx.files.absolute(name);
+        if(!file.exists())
+            return;
+        screenTexture = new Texture(file);
         screenTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
     }
 
@@ -64,7 +69,7 @@ public class ShaderPalettizer extends ApplicationAdapter {
         palette.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
         defaultShader = SpriteBatch.createDefaultShader();
-        shader = new ShaderProgram(vertexShader, fragmentShaderWarmMild);
+        shader = new ShaderProgram(vertexShader, fragmentShaderWarmMildLimited);
         if (!shader.isCompiled()) throw new GdxRuntimeException("Couldn't compile shader: " + shader.getLog());
         shaderNoDither = new ShaderProgram(vertexShader, fragmentShaderNoDither);
         if (!shaderNoDither.isCompiled()) throw new GdxRuntimeException("Couldn't compile shader: " + shaderNoDither.getLog());
@@ -77,8 +82,8 @@ public class ShaderPalettizer extends ApplicationAdapter {
 
         // if you don't have these files on this absolute path, that's fine, and they will be ignored
 //        load("D:/Painting_by_Henri_Biva.jpg");
-//        load("D:/Sierra_Nevadas.jpg");
-        load("D:/Mona_Lisa.jpg");
+        load("D:/Among_the_Sierra_Nevada_by_Albert Bierstadt.jpg");
+//        load("D:/Mona_Lisa.jpg");
     }
 
 
@@ -97,10 +102,10 @@ public class ShaderPalettizer extends ApplicationAdapter {
                 batch.getShader().setUniformi("u_palette", 1);
                 if(batch.getShader().equals(shader)) 
                 {
-                    shader.setUniformf("u_mul", 0.9f, 0.7f, 0.75f);
-                    shader.setUniformf("u_add", 0.05f, 0.14f, 0.16f);
-//                    shader.setUniformf("u_mul", 1f, 0.9f, 1f);
-//                    shader.setUniformf("u_add", 0.1f, 0.65f, NumberTools.swayRandomized(12345, TimeUtils.timeSinceMillis(startTime) * 0x1p-9f) * 0.45f - 0.2f);
+//                    shader.setUniformf("u_mul", 0.9f, 0.7f, 0.75f);
+//                    shader.setUniformf("u_add", 0.05f, 0.14f, 0.16f);
+                    shader.setUniformf("u_mul", 1f, 0.8f, 0.85f);
+                    shader.setUniformf("u_add", 0.1f, 0.95f, NumberTools.swayRandomized(12345, TimeUtils.timeSinceMillis(startTime) * 0x1p-9f) * 0.4f - 0.2f);
                 }
                 Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
             }
@@ -187,6 +192,8 @@ public class ShaderPalettizer extends ApplicationAdapter {
                     case Input.Keys.D: // dither/disable
                         if(!batch.getShader().equals(shaderNoDither))
                             batch.setShader(shaderNoDither);
+                        else
+                            batch.setShader(defaultShader);
                         break;
                     default:
                         if(!batch.getShader().equals(shader))
