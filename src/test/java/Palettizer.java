@@ -10,9 +10,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import warpwriter.Coloring;
 import warpwriter.PNG8;
 import warpwriter.PaletteReducer;
+import warpwriter.model.color.Colorizer;
 
 import java.io.IOException;
 
@@ -56,6 +56,8 @@ public class Palettizer extends ApplicationAdapter {
             String subname = name.substring(Math.max(name.lastIndexOf('/'), name.lastIndexOf('\\')) + 1, name.lastIndexOf('.'));
             pm = reducer.reduceWithNoise(pm);
             png8.writePrecisely(Gdx.files.local(subname + "_FloydSteinbergHu.png"), pm, false);
+            pm = reducer.reduceFloydSteinberg(new Pixmap(Gdx.files.absolute(name)));
+            png8.writePrecisely(Gdx.files.local(subname + "_FloydSteinberg.png"), pm, false);
 //            pm = reducer.reduceWithBlueNoise(new Pixmap(Gdx.files.absolute(name)));
 //            png8.writePrecisely(Gdx.files.local(subname + "_BlueNoise.png"), pm, false);
             pm = reducer.reduceBurkes(new Pixmap(Gdx.files.absolute(name)));
@@ -80,8 +82,8 @@ public class Palettizer extends ApplicationAdapter {
     public void create() {
         font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
         batch = new SpriteBatch();
-        reducer = Coloring.FLESURRECT_REDUCER;
-                //Colorizer.AuroraColorizer.getReducer();
+        reducer = //Coloring.FLESURRECT_REDUCER;
+                Colorizer.AuroraColorizer.getReducer();
                 //Colorizer.RinsedColorizer.getReducer();
                 // new PaletteReducer(Coloring.RINSED);
         reducer.setDitherStrength(1f);
