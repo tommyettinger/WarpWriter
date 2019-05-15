@@ -6,9 +6,9 @@ import com.badlogic.gdx.graphics.Pixmap;
 import squidpony.StringKit;
 import squidpony.squidmath.IntVLA;
 import squidpony.squidmath.RandomnessSource;
-import warpwriter.Coloring;
 import warpwriter.PNG8;
 import warpwriter.PaletteReducer;
+import warpwriter.model.color.Colorizer;
 
 import java.io.IOException;
 
@@ -278,7 +278,7 @@ public class PaletteGenerator extends ApplicationAdapter {
 //        Gdx.files.local("DawnBringer_Aurora_Official.hex").writeString(sbs, false);
 //        sb.setLength(0);
 
-        PALETTE = Coloring.DB_ISO22;
+        PALETTE = Colorizer.FlesurrectBonusPalette;
         
         StringBuilder sb = new StringBuilder((1 + 12 * 8) * (PALETTE.length + 7 >>> 3));
         for (int i = 0; i < (PALETTE.length + 7 >>> 3); i++) {
@@ -309,14 +309,18 @@ public class PaletteGenerator extends ApplicationAdapter {
 //        }
         //PALETTE = Colorizer.FlesurrectBonusPalette;
         Pixmap pix = new Pixmap(256, 1, Pixmap.Format.RGBA8888);
-        for (int i = 0; i < PALETTE.length - 1; i++) {
-            pix.drawPixel(i, 0, PALETTE[i + 1]);
+        for (int i = 1; i < PALETTE.length; i++) {
+            pix.drawPixel(i-1, 0, PALETTE[i]);
+//            pix.drawPixel(i-1, 0, PALETTE[i << 2 | 2]);
+//            pix.drawPixel(i+63, 0, PALETTE[i << 2]);
+//            pix.drawPixel(i+127, 0, PALETTE[i << 2 | 1]);
+//            pix.drawPixel(i+191, 0, PALETTE[i << 2 | 3]);
         }
         //pix.drawPixel(255, 0, 0);
         PNG8 png8 = new PNG8();
         png8.palette = new PaletteReducer(PALETTE);
         try {
-            png8.writePrecisely(Gdx.files.local("DB_Iso22.png"), pix, false);
+            png8.writePrecisely(Gdx.files.local("FlesurrectBonus.png"), pix, false);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -333,7 +337,7 @@ public class PaletteGenerator extends ApplicationAdapter {
             }
         }
         try {
-            png8.writePrecisely(Gdx.files.local("DB_Iso22_GLSL.png"), p2, false);
+            png8.writePrecisely(Gdx.files.local("FlesurrectBonus_GLSL.png"), p2, false);
 //            png8.writePrecisely(Gdx.files.local("Uniform"+PALETTE.length+"_GLSL.png"), p2, false);
         } catch (IOException e) {
             e.printStackTrace();

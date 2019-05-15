@@ -82,8 +82,9 @@ public class Palettizer extends ApplicationAdapter {
     public void create() {
         font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
         batch = new SpriteBatch();
-        reducer = //Coloring.FLESURRECT_REDUCER;
-                Colorizer.AuroraColorizer.getReducer();
+        reducer = new PaletteReducer(Colorizer.FlesurrectBonusPalette);
+                //Coloring.FLESURRECT_REDUCER;
+                //Colorizer.AuroraColorizer.getReducer();
                 //Colorizer.RinsedColorizer.getReducer();
                 // new PaletteReducer(Coloring.RINSED);
         reducer.setDitherStrength(1f);

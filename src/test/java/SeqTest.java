@@ -19,9 +19,13 @@ import warpwriter.model.AnimatedVoxelSeq;
 import warpwriter.model.ITemporal;
 import warpwriter.model.VoxelSeq;
 import warpwriter.model.color.Colorizer;
+import warpwriter.model.nonvoxel.LittleEndianDataInputStream;
 import warpwriter.view.WarpDraw;
 import warpwriter.view.color.VoxelColor;
 import warpwriter.view.render.VoxelPixmapRenderer;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class SeqTest extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 320;//640;
@@ -82,7 +86,11 @@ public class SeqTest extends ApplicationAdapter {
 //            box = maker.shipNoiseColorized();
 //        }
 //        makeBoom(maker.fireRange());
-        voxels = maker.shipLargeNoiseColorized();
+        try {
+            voxels = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("FlesurrectBonus/Damned.vox")));
+        } catch (FileNotFoundException e) {
+            voxels = maker.shipLargeNoiseColorized();
+        }
         VoxelSeq vs = new VoxelSeq(1024);
         vs.putArray(voxels);
         vs.hollow();
