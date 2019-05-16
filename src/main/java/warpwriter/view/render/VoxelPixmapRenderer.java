@@ -13,9 +13,10 @@ public class VoxelPixmapRenderer implements IRectangleRenderer {
     public int[][] depths, working, render, outlines;
     public VoxelColor color;
     public boolean flipX, flipY, easing = true, outline = true;
+    public int offsetX = 0, offsetY = 0;
 
     public VoxelPixmapRenderer() {
-        this(new Pixmap(64, 64, Pixmap.Format.RGBA8888));
+        this(null);
     }
 
     public VoxelPixmapRenderer(Pixmap pixmap) {
@@ -34,7 +35,7 @@ public class VoxelPixmapRenderer implements IRectangleRenderer {
     @Override
     public IRectangleRenderer rect(int x, int y, int sizeX, int sizeY, int color) {
         pixmap.setColor(color);
-        pixmap.fillRectangle(x, y, sizeX, sizeY);
+        pixmap.fillRectangle(x + offsetX, y + offsetY, sizeX, sizeY);
 //        for (int i = 0; i < sizeX; i++, x++) {
 //            for (int j = 0, yy = y; j < sizeY; j++, yy++) {
 //                working[x][yy] = color;
@@ -92,7 +93,7 @@ public class VoxelPixmapRenderer implements IRectangleRenderer {
     }
 
     public int getPixel(int x, int y) {
-        return pixmap.getPixel(x, y);
+        return pixmap.getPixel(x + offsetX, y + offsetY);
     }
 
     public VoxelPixmapRenderer flipX() {
@@ -142,9 +143,9 @@ public class VoxelPixmapRenderer implements IRectangleRenderer {
     private int lightness(int color) {
         return (color >>> 24) + (color >>> 16 & 0xFF) + (color >>> 8 & 0xFF);
     }
-    
+
     private static final IntIntMap counts = new IntIntMap(9);
-    
+
     public Pixmap blit(int threshold, int pixelWidth, int pixelHeight) {
         pixmap.setColor(0);
         pixmap.fill();
@@ -154,7 +155,7 @@ public class VoxelPixmapRenderer implements IRectangleRenderer {
         for (int x = 0; x <= xSize; x++) {
             System.arraycopy(working[x], 0, render[x], 0, ySize);
         }
-        if(outline) {
+        if (outline) {
             int o;
             for (int x = 1; x < xSize; x++) {
                 for (int y = 1; y < ySize; y++) {
@@ -194,11 +195,11 @@ public class VoxelPixmapRenderer implements IRectangleRenderer {
                 }
             }
         }
-        
+
         final int pmh = pixmap.getHeight() - 1;
         for (int x = 0; x < xSize; x++) {
             for (int y = 0; y < ySize; y++) {
-                pixmap.drawPixel(x, pmh - y, render[x][y]);
+                pixmap.drawPixel(x + offsetX, pmh - y + offsetY, render[x][y]);
             }
         }
 
@@ -222,16 +223,16 @@ public class VoxelPixmapRenderer implements IRectangleRenderer {
                         if (a != 0 && b != 0 && c != 0 && d != 0 && e != 0 && f != 0 && g != 0 && h != 0) {
                             tgt = 0;
                             lo = lightness(o);
-                            if(counts.get(a, 0) >= 4 && lightness(a) < lo)
+                            if (counts.get(a, 0) >= 4 && lightness(a) < lo)
                                 tgt = a;
-                            else if(counts.get(b, 0) >= 4 && lightness(b) < lo)
+                            else if (counts.get(b, 0) >= 4 && lightness(b) < lo)
                                 tgt = b;
-                            else if(counts.get(c, 0) >= 4 && lightness(c) < lo)
+                            else if (counts.get(c, 0) >= 4 && lightness(c) < lo)
                                 tgt = c;
-                            else if(counts.get(d, 0) >= 4 && lightness(d) < lo)
+                            else if (counts.get(d, 0) >= 4 && lightness(d) < lo)
                                 tgt = d;
-                            if(tgt != 0) {
-                                pixmap.drawPixel(x, pmh - y, tgt);
+                            if (tgt != 0) {
+                                pixmap.drawPixel(x + offsetX, pmh - y + offsetY, tgt);
 
 //                                lt = lightness(tgt);
 //                                if (a == d && lt < lo)
