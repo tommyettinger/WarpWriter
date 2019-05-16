@@ -17,8 +17,8 @@ public class PreviewSpinnerTest {
         for (int z = 0; z < 4; z++) {
             for (int model = 0; model < models.length; model++) {
                 turnModel.set(models[model]);
-                result[z * 8 + model] = draw(turnModel, false, width, height);
-                result[z * 8 + model + 4] = draw(turnModel, true, width, height);
+                result[z * 8 + model * 2] = draw(turnModel, false, width, height);
+                result[z * 8 + model * 2 + 1] = draw(turnModel, true, width, height);
             }
             turnModel.turner().clockX();
         }
