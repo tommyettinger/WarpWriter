@@ -68,7 +68,7 @@ public class TestOutput extends ApplicationAdapter {
             pixes[i] = new Pixmap(width, height, Pixmap.Format.RGBA8888);
         }
         pix = pixes[0];
-        vpr = new VoxelPixmapRenderer(pix, new VoxelColor().set(mm.getColorizer()));
+        vpr = new VoxelPixmapRenderer().set(pix).set(new VoxelColor().set(mm.getColorizer()));
         png = new PNG8(width * height);
         png.setFlipY(false);
         png.setCompression(6);

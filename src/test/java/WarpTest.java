@@ -140,8 +140,8 @@ public class WarpTest extends ApplicationAdapter {
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.AURORA); // 1020 possible colors, will be reduced to 63
         colorizer = Colorizer.FlesurrectBonusColorizer;
         voxelColor = new VoxelColor().set(colorizer);
-        pixmapRenderer = new VoxelPixmapRenderer(new Pixmap(512, 512, Pixmap.Format.RGBA8888), voxelColor);
-        pmTexture = new Texture(pixmapRenderer.pixmap);
+        pixmapRenderer = new VoxelPixmapRenderer().set(new Pixmap(512, 512, Pixmap.Format.RGBA8888)).set(voxelColor);
+        pmTexture = new Texture(pixmapRenderer.pixmap());
         rng = new MiniMover64RNG(-123456789);
         maker = new ModelMaker(-123456789, colorizer);
 //        try {
@@ -384,7 +384,7 @@ public class WarpTest extends ApplicationAdapter {
                         }
                         else
                         {
-                            pixmapRenderer.color.set(Colorizer.AuroraColorizer);
+                            pixmapRenderer.voxelColor().set(Colorizer.AuroraColorizer);
                             maker.setColorizer(Colorizer.AuroraColorizer);
                         }
                         break;
