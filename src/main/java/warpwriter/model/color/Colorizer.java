@@ -1274,6 +1274,11 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
 //
 //        }
 //        System.out.println(sb.append("};"));
+//        for (int i = 0; i < 64; i++) {
+//            System.arraycopy(CURVEBALL_BONUS_RAMP_VALUES[i], 0, CurveballBonusPalette, i << 2, 4);
+//        }
+
+
 //        {
 //            for (int i = 1; i < 64; i++) {
 //                int color = FLESURRECT_BONUS_RAMP_VALUES[i | 128][2] = FLESURRECT_BONUS_RAMP_VALUES[i][2] =
