@@ -52,6 +52,7 @@ public class PreviewSpinnerTest extends ApplicationAdapter {
         fileDialog.setVisible(true);
         System.out.println(fileDialog.getFiles()[0].getAbsolutePath());
 
+        writeGIF(pixmaps, new FileHandle(fileDialog.getFiles()[0]), new FileHandle(fileDialog.getFiles()[0]));
 
         Gdx.app.exit();
         System.exit(0);
