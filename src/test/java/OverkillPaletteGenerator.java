@@ -89,27 +89,32 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
     
     public void create() {
         int[] PALETTE = new int[64];
-        double[] color = new double[3];
+//        double[] color = new double[3];
         double luma, warm, mild, hue;
+        int ctr = 1;
         for (int i = 1; i < 64;) {
-            if ((i & 15) == 0) {
-                int ch = i << 2 | i >>> 2;
+            if ((i & 7) == 7) {
+                int ch = i << 2 | i >>> 3;
                 PALETTE[i++] = ch << 24 | ch << 16 | ch << 8 | 0xFF;
+                ctr++;
             } else {
+                int r, g, b;
+                do {
 //                hue = i * (Math.PI * 1.6180339887498949);
-                hue = i * (Math.PI * 2.0 / 63.0);
-                mild = (NumberTools.sin(hue) * (fastGaussian() * 0.5 + 0.8));
-                warm = (NumberTools.cos(hue) * (fastGaussian() * 0.5 + 0.8));
-                luma = curvedDouble();
+                    hue = (ctr) * (Math.PI * 2.0 / 53.0);
+                    mild = (NumberTools.sin(hue) * (NumberTools.cos(ctr * 1.963) * 0.45 + 0.8));
+                    warm = (NumberTools.cos(hue) * (NumberTools.sin(ctr * 1.611) * 0.45 + 0.8));
+                    luma = curvedDouble();
+                    ctr++;
 //                color[0] = i * (360.0 * 1.6180339887498949);
 //                color[1] = Math.sqrt(1.0 - nextDouble() * nextDouble()) * 100.0;
 //                color[2] = curvedDouble() * 100.0;
 //                color[2] = i * (94.0 / 255.0) + 3.0;
 //                System.out.println(StringKit.join(", ", color) + "  -> " + StringKit.join(", ", HSLUVColorConverter.hsluvToRgb(color)));                 
-                int r = MathUtils.clamp((int) ((luma + warm * 0.5) * 255), 0, 255);
-                int g = MathUtils.clamp((int) ((luma + mild * 0.5) * 255), 0, 255);
-                int b = MathUtils.clamp((int) ((luma - (warm + mild) * 0.25) * 255), 0, 255);
-
+                  r = (int) ((luma + warm * 0.5) * 255);
+                  g = (int) ((luma + mild * 0.5) * 255);
+                  b = (int) ((luma - (warm + mild) * 0.25) * 255);
+                }while (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255);
                 PALETTE[i++] = r << 24 |
                         g << 16 |
                         b << 8 | 0xFF;
@@ -304,6 +309,109 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        int[][] CURVEBALL_BONUS_RAMP_VALUES = new int[256][4];
+        for (int i = 1; i < 64; i++) {
+            int color = CURVEBALL_BONUS_RAMP_VALUES[i | 128][2] = CURVEBALL_BONUS_RAMP_VALUES[i][2] =
+                    PALETTE[i],
+                    r = (color >>> 24),
+                    g = (color >>> 16 & 0xFF),
+                    b = (color >>> 8 & 0xFF);
+            CURVEBALL_BONUS_RAMP_VALUES[i | 64][1] = CURVEBALL_BONUS_RAMP_VALUES[i | 64][2] =
+                    CURVEBALL_BONUS_RAMP_VALUES[i | 64][3] = color;
+            CURVEBALL_BONUS_RAMP_VALUES[i | 192][0] = CURVEBALL_BONUS_RAMP_VALUES[i | 192][2] = color;
+            int co = r - b, t = b + (co >> 1), cg = g - t, y = t + (cg >> 1),
+                    yBright = y * 21 >> 4, yDim = y * 11 >> 4, yDark = y * 6 >> 4, chromO, chromG;
+            chromO = (co * 3) >> 2;
+            chromG = (cg * 3) >> 2;
+            t = yDim - (chromG >> 1);
+            g = chromG + t;
+            b = t - (chromO >> 1);
+            r = b + chromO;
+            CURVEBALL_BONUS_RAMP_VALUES[i | 192][1] = CURVEBALL_BONUS_RAMP_VALUES[i | 128][1] =
+                    CURVEBALL_BONUS_RAMP_VALUES[i | 64][0] = CURVEBALL_BONUS_RAMP_VALUES[i][1] =
+                            MathUtils.clamp(r, 0, 255) << 24 |
+                                    MathUtils.clamp(g, 0, 255) << 16 |
+                                    MathUtils.clamp(b, 0, 255) << 8 | 0xFF;
+            chromO = (co * 3) >> 2;
+            chromG = (cg * (256 - yBright) * 3) >> 9;
+            t = yBright - (chromG >> 1);
+            g = chromG + t;
+            b = t - (chromO >> 1);
+            r = b + chromO;
+            CURVEBALL_BONUS_RAMP_VALUES[i | 192][3] = CURVEBALL_BONUS_RAMP_VALUES[i | 128][3] =
+                    CURVEBALL_BONUS_RAMP_VALUES[i][3] =
+                            MathUtils.clamp(r, 0, 255) << 24 |
+                                    MathUtils.clamp(g, 0, 255) << 16 |
+                                    MathUtils.clamp(b, 0, 255) << 8 | 0xFF;
+            chromO = (co * 13) >> 4;
+            chromG = (cg * (256 - yDark) * 13) >> 11;
+            t = yDark - (chromG >> 1);
+            g = chromG + t;
+            b = t - (chromO >> 1);
+            r = b + chromO;
+            CURVEBALL_BONUS_RAMP_VALUES[i | 128][0] = CURVEBALL_BONUS_RAMP_VALUES[i][0] =
+                    MathUtils.clamp(r, 0, 255) << 24 |
+                            MathUtils.clamp(g, 0, 255) << 16 |
+                            MathUtils.clamp(b, 0, 255) << 8 | 0xFF;
+        }
+        sb.setLength(0);
+        sb.ensureCapacity(2800);
+        sb.append("private static final int[][] CURVEBALL_BONUS_RAMP_VALUES = new int[][] {\n");
+        for (int i = 0; i < 256; i++) {
+            sb.append("{ 0x");
+            StringKit.appendHex(sb, CURVEBALL_BONUS_RAMP_VALUES[i][0]);
+            StringKit.appendHex(sb.append(", 0x"), CURVEBALL_BONUS_RAMP_VALUES[i][1]);
+            StringKit.appendHex(sb.append(", 0x"), CURVEBALL_BONUS_RAMP_VALUES[i][2]);
+            StringKit.appendHex(sb.append(", 0x"), CURVEBALL_BONUS_RAMP_VALUES[i][3]);
+            sb.append(" },\n");
+
+        }
+        System.out.println(sb.append("};"));
+        PALETTE = new int[256];
+        for (int i = 0; i < 64; i++) {
+            System.arraycopy(CURVEBALL_BONUS_RAMP_VALUES[i], 0, PALETTE, i << 2, 4);
+        }
+        sb.setLength(0);
+        sb.ensureCapacity((1 + 12 * 8) * (PALETTE.length >>> 3));
+        for (int i = 0; i < (PALETTE.length >>> 3); i++) {
+            for (int j = 0; j < 8; j++) {
+                sb.append("0x").append(StringKit.hex(PALETTE[i << 3 | j]).toUpperCase()).append(", ");
+            }
+            sb.append('\n');
+        }
+        System.out.println(sb.toString());
+        sb.setLength(0);
+
+        pix = new Pixmap(256, 1, Pixmap.Format.RGBA8888);
+        for (int i = 0; i < PALETTE.length - 1; i++) {
+            pix.drawPixel(i, 0, PALETTE[i + 1]);
+        }
+        //pix.drawPixel(255, 0, 0);
+        png8.palette = new PaletteReducer(PALETTE);
+        try {
+            png8.writePrecisely(Gdx.files.local("Curveball"+PALETTE.length+".png"), pix, false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        p2 = new Pixmap(1024, 32, Pixmap.Format.RGBA8888);
+        for (int r = 0; r < 32; r++) {
+            for (int b = 0; b < 32; b++) {
+                for (int g = 0; g < 32; g++) {
+                    p2.drawPixel(r << 5 | b, g, PALETTE[png8.palette.paletteMapping[
+                            ((r << 10) & 0x7C00)
+                                    | ((g << 5) & 0x3E0)
+                                    | b] & 0xFF]);
+                }
+            }
+        }
+        try {
+            png8.writePrecisely(Gdx.files.local("Curveball"+PALETTE.length+"_GLSL.png"), p2, false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
     }
 
     /**
