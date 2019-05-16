@@ -278,7 +278,7 @@ public class PaletteGenerator extends ApplicationAdapter {
 //        Gdx.files.local("DawnBringer_Aurora_Official.hex").writeString(sbs, false);
 //        sb.setLength(0);
 
-        PALETTE = Colorizer.FlesurrectBonusPalette;
+        PALETTE = Colorizer.CurveballBonusPalette;
         
         StringBuilder sb = new StringBuilder((1 + 12 * 8) * (PALETTE.length + 7 >>> 3));
         for (int i = 0; i < (PALETTE.length + 7 >>> 3); i++) {
@@ -320,7 +320,7 @@ public class PaletteGenerator extends ApplicationAdapter {
         PNG8 png8 = new PNG8();
         png8.palette = new PaletteReducer(PALETTE);
         try {
-            png8.writePrecisely(Gdx.files.local("FlesurrectBonus.png"), pix, false);
+            png8.writePrecisely(Gdx.files.local("CurveballBonus.png"), pix, false);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -337,7 +337,7 @@ public class PaletteGenerator extends ApplicationAdapter {
             }
         }
         try {
-            png8.writePrecisely(Gdx.files.local("FlesurrectBonus_GLSL.png"), p2, false);
+            png8.writePrecisely(Gdx.files.local("CurveballBonus_GLSL.png"), p2, false);
 //            png8.writePrecisely(Gdx.files.local("Uniform"+PALETTE.length+"_GLSL.png"), p2, false);
         } catch (IOException e) {
             e.printStackTrace();

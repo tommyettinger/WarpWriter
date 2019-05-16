@@ -4,8 +4,8 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.MathUtils;
-import org.hsluv.HSLUVColorConverter;
 import squidpony.StringKit;
+import squidpony.squidmath.NumberTools;
 import warpwriter.PNG8;
 import warpwriter.PaletteReducer;
 
@@ -79,24 +79,43 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
     {
         return ((state = (state << 29 | state >>> 35) * 0xAC564B05L) * 0x818102004182A025L & 0x1FFFFFFFFFFFFFL) * 0x1p-53;
     }
+    private double curvedDouble()
+    {
+        return 0.1 * (nextDouble() + nextDouble() + nextDouble()
+                + nextDouble() + nextDouble() + nextDouble())
+                + 0.2 * ((1.0 - nextDouble() * nextDouble()) + (1.0 - nextDouble() * nextDouble()));
+
+    }
     
     public void create() {
-        //// does nothing yet, should use the HSLUV color space code soon.
-        int[] PALETTE = new int[256];
+        int[] PALETTE = new int[64];
         double[] color = new double[3];
-        for (int i = 1; i < 256;) {
+        double luma, warm, mild, hue;
+        for (int i = 1; i < 64;) {
             if ((i & 15) == 0) {
-                int ch = i | i >>> 4;
+                int ch = i << 2 | i >>> 2;
                 PALETTE[i++] = ch << 24 | ch << 16 | ch << 8 | 0xFF;
             } else {
-                color[0] = i * (360.0 * 1.6180339887498949) - (i >>> 4);
-                color[1] = (1.0 - nextDouble() * nextDouble() * nextDouble()) * 100.0;
-                color[2] = MathUtils.clamp(fastGaussian() * 50.0 + 55.0, 0.0, 100.0);
+//                hue = i * (Math.PI * 1.6180339887498949);
+                hue = i * (Math.PI * 2.0 / 63.0);
+                mild = (NumberTools.sin(hue) * (fastGaussian() * 0.5 + 0.8));
+                warm = (NumberTools.cos(hue) * (fastGaussian() * 0.5 + 0.8));
+                luma = curvedDouble();
+//                color[0] = i * (360.0 * 1.6180339887498949);
+//                color[1] = Math.sqrt(1.0 - nextDouble() * nextDouble()) * 100.0;
+//                color[2] = curvedDouble() * 100.0;
 //                color[2] = i * (94.0 / 255.0) + 3.0;
-                System.out.println(StringKit.join(", ", color) + "  -> " + StringKit.join(", ", HSLUVColorConverter.hsluvToRgb(color)));
-                PALETTE[i++] = (int) (MathUtils.clamp(color[0], 0.0, 1.0) * 255.5) << 24 |
-                        (int) (MathUtils.clamp(color[1], 0.0, 1.0) * 255.5) << 16 |
-                        (int) (MathUtils.clamp(color[2], 0.0, 1.0) * 255.5) << 8 | 0xFF;
+//                System.out.println(StringKit.join(", ", color) + "  -> " + StringKit.join(", ", HSLUVColorConverter.hsluvToRgb(color)));                 
+                int r = MathUtils.clamp((int) ((luma + warm * 0.5) * 255), 0, 255);
+                int g = MathUtils.clamp((int) ((luma + mild * 0.5) * 255), 0, 255);
+                int b = MathUtils.clamp((int) ((luma - (warm + mild) * 0.25) * 255), 0, 255);
+
+                PALETTE[i++] = r << 24 |
+                        g << 16 |
+                        b << 8 | 0xFF;
+//                PALETTE[i++] = (int) (MathUtils.clamp(color[0], 0.0, 1.0) * 255.5) << 24 |
+//                        (int) (MathUtils.clamp(color[1], 0.0, 1.0) * 255.5) << 16 |
+//                        (int) (MathUtils.clamp(color[2], 0.0, 1.0) * 255.5) << 8 | 0xFF;
             }
         }
 //        IntVLA base = new IntVLA(0x912);
@@ -155,9 +174,9 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 ////            else if (mild < -0.6) warm *= 0.4 - mild;
 //            final double t = luma - cg;
 //
-////            int g = (int) ((luma + mild * 0.5 - warm * 0.375) * 255);
-////            int b = (int) ((luma - warm * 0.375 - mild * 0.5) * 255);
-////            int r = (int) ((luma + warm * 0.625 - mild * 0.5) * 255);
+////            int g = (int) ((luma + mild * 0.5) * 255);
+////            int b = (int) ((luma - (warm + mild) * 0.25) * 255);
+////            int r = (int) ((luma + warm * 0.5) * 255);
 //            base.add(
 //                    (int) MathUtils.clamp(t + co, 0.0, 255.0) << 24 |
 //                            (int) MathUtils.clamp(luma + cg, 0.0, 255.0) << 16 |
@@ -264,7 +283,7 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
         PNG8 png8 = new PNG8();
         png8.palette = new PaletteReducer(PALETTE);
         try {
-            png8.writePrecisely(Gdx.files.local("Psyche"+PALETTE.length+".png"), pix, false);
+            png8.writePrecisely(Gdx.files.local("Curveball"+PALETTE.length+".png"), pix, false);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -281,7 +300,7 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
             }
         }
         try {
-            png8.writePrecisely(Gdx.files.local("Psyche"+PALETTE.length+"_GLSL.png"), p2, false);
+            png8.writePrecisely(Gdx.files.local("Curveball"+PALETTE.length+"_GLSL.png"), p2, false);
         } catch (IOException e) {
             e.printStackTrace();
         }
