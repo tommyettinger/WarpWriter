@@ -126,7 +126,7 @@ public class SimpleTest extends ApplicationAdapter {
             //// loads a file by its full path, which we get via drag+drop
             final byte[][][] arr = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream(name)));
             //// set the palette to the one from the vox model, using arbitraryDimmer()
-            batchRenderer.set(batchRenderer.color().set(Dimmer.arbitraryDimmer(VoxIO.lastPalette)));
+            batchRenderer.color().set(Dimmer.arbitraryDimmer(VoxIO.lastPalette));
             voxelSprite.set(new ArrayModel(
                     arr
                     //// Aurora folder has vox models with a different palette, which involves a different IDimmer.
