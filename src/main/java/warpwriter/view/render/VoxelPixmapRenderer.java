@@ -10,27 +10,32 @@ import warpwriter.view.color.VoxelColor;
  * Created by Tommy Ettinger on 12/16/2018.
  */
 public class VoxelPixmapRenderer implements IRectangleRenderer, ITriangleRenderer {
-    public Pixmap pixmap;
+    protected Pixmap pixmap;
     public int[][] depths, working, render, outlines;
-    public VoxelColor color;
+    protected VoxelColor color;
     public boolean flipX, flipY, easing = true, outline = true;
     public int offsetX = 0, offsetY = 0;
 
-    public VoxelPixmapRenderer() {
-        this(null);
+    public Pixmap pixmap() {
+        return pixmap;
     }
 
-    public VoxelPixmapRenderer(Pixmap pixmap) {
-        this(pixmap, new VoxelColor());
-    }
-
-    public VoxelPixmapRenderer(Pixmap pixmap, VoxelColor color) {
+    public VoxelPixmapRenderer set(Pixmap pixmap) {
         this.pixmap = pixmap;
         working = new int[pixmap.getWidth()][pixmap.getHeight()];
         render = new int[pixmap.getWidth()][pixmap.getHeight()];
         depths = new int[pixmap.getWidth()][pixmap.getHeight()];
         outlines = new int[pixmap.getWidth()][pixmap.getHeight()];
+        return this;
+    }
+
+    public VoxelColor voxelColor() {
+        return color;
+    }
+
+    public VoxelPixmapRenderer set(VoxelColor color) {
         this.color = color;
+        return this;
     }
 
     @Override
