@@ -3,7 +3,6 @@ package warpwriter.view.render;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.utils.IntIntMap;
 import squidpony.ArrayTools;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import warpwriter.view.color.VoxelColor;
 
 /**
@@ -278,26 +277,26 @@ public class VoxelPixmapRenderer implements IRectangleRenderer, ITriangleRendere
     @Override
     public ITriangleRenderer drawLeftTriangle(int x, int y, int color) {
         pixmap.setColor(color);
-//        pixmap.drawRectangle(x + 1 + offsetX, y + offsetY, 1, 3);
-//        pixmap.drawPixel(x + offsetX, y + 1 + offsetY, color);
-        pixmap.fillTriangle(
-                x + 1 + offsetX, y + offsetY,
-                x + 1 + offsetX, y + 2 + offsetY,
-                x + offsetX, y + 1 + offsetY
-        );
+        pixmap.drawRectangle(x + 1 + offsetX, y + offsetY, 1, 3);
+        pixmap.drawPixel(x + offsetX, y + 1 + offsetY, color);
+//        pixmap.fillTriangle(
+//                x + 1 + offsetX, y + offsetY,
+//                x + 1 + offsetX, y + 2 + offsetY,
+//                x + offsetX, y + 1 + offsetY
+//        );
         return this;
     }
 
     @Override
     public ITriangleRenderer drawRightTriangle(int x, int y, int color) {
         pixmap.setColor(color);
-//        pixmap.drawRectangle(x + offsetX, y + offsetY, 1, 3);
-//        pixmap.drawPixel(x + 1 + offsetX, y + 1 + offsetY, color);
-        pixmap.fillTriangle(
-                x + offsetX, y + offsetY,
-                x + offsetX, y + 2 + offsetY,
-                x + 1 + offsetX, y + 1 + offsetY
-                );
+        pixmap.drawRectangle(x + offsetX, y + offsetY, 1, 3);
+        pixmap.drawPixel(x + 1 + offsetX, y + 1 + offsetY, color);
+//        pixmap.fillTriangle(
+//                x + offsetX, y + offsetY,
+//                x + offsetX, y + 2 + offsetY,
+//                x + 1 + offsetX, y + 1 + offsetY
+//                );
         return this;
     }
 

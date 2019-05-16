@@ -4,8 +4,8 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.utils.Array;
+import warpwriter.PNG8;
 import warpwriter.VoxIO;
 import warpwriter.model.IModel;
 import warpwriter.model.TurnModel;
@@ -22,6 +22,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class PreviewSpinnerTest extends ApplicationAdapter {
 
@@ -70,9 +71,15 @@ public class PreviewSpinnerTest extends ApplicationAdapter {
 
         final Array<String> strings = new Array<>();
 
+        PNG8 png8 = new PNG8();
             int i = 0;
             for(Pixmap pixmap : pixmaps){
-                PixmapIO.writePNG(Gdx.files.absolute(directory.file().getAbsolutePath() + "/frame" + i + ".png"), pixmap);
+//                PixmapIO.writePNG(Gdx.files.absolute(directory.file().getAbsolutePath() + "/frame" + i + ".png"), pixmap);
+                try {
+                    png8.write(new FileHandle(directory.file().getAbsolutePath() + "/frame" + i + ".png"), pixmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 strings.add("frame" + i + ".png");
                 saveprogress += (0.5f / pixmaps.length);
                 i++;
@@ -130,10 +137,12 @@ public class PreviewSpinnerTest extends ApplicationAdapter {
             for (int model = 0; model < models.length; model++) {
                 turnModel.set(models[model]);
                 result[model * 8 + z * 2] = draw(turnModel, false, width, height);
-                result[model * 8 + z * 2 + 1] = draw(turnModel, true, width, height);
+                result[model * 8 + z * 2 + 1] = draw(turnModel, false, width, height);
             }
             turnModel.turner().clockZ();
         }
+//        turnModel.set(models[0]);
+//        Pixmap[] result = { draw(turnModel, false, width, height) };
         return result;
     }
 
