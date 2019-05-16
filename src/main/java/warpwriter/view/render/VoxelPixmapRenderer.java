@@ -12,7 +12,7 @@ import warpwriter.view.color.VoxelColor;
 public class VoxelPixmapRenderer implements IRectangleRenderer, ITriangleRenderer {
     protected Pixmap pixmap;
     public int[][] depths, working, render, outlines;
-    protected VoxelColor color;
+    protected VoxelColor color = new VoxelColor();
     public boolean flipX, flipY, easing = true, outline = true;
 
     public Pixmap pixmap() {
