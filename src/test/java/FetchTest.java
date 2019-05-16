@@ -75,7 +75,7 @@ public class FetchTest extends ApplicationAdapter {
         for (int f = 0; f < tex.length; f++) {
             tex[f] = new Texture(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, Pixmap.Format.RGBA8888);
         }
-        pixmapRenderer = new VoxelPixmapRenderer(new Pixmap(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, Pixmap.Format.RGBA8888), voxelColor);
+        pixmapRenderer = new VoxelPixmapRenderer().set(new Pixmap(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, Pixmap.Format.RGBA8888)).set(voxelColor);
 
 //        view = new FitViewport(width, height);
         font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));

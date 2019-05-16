@@ -13,7 +13,7 @@ public class TurnModel extends Fetch implements IModel {
 
     public TurnModel set(IModel iModel) {
         this.iModel = iModel;
-        return this;
+        return size();
     }
 
     public TurnModel set(Turner turner) {
