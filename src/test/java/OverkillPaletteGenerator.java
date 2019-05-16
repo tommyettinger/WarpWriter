@@ -73,7 +73,7 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
                 - ((b & 0x0000000000000FFFL) + ((b & 0x000000007FF00000L) >>> 20))) * 0x1p-10);
     }
     
-    private long state = 64L;
+    private long state = 9005L;
     
     private double nextDouble()
     {
@@ -81,9 +81,13 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
     }
     private double curvedDouble()
     {
-        return 0.1 * (nextDouble() + nextDouble() + nextDouble()
-                + nextDouble() + nextDouble() + nextDouble())
-                + 0.2 * ((1.0 - nextDouble() * nextDouble()) + (1.0 - nextDouble() * nextDouble()));
+        // averages about 0.6
+//        return 0.1 * (nextDouble() + nextDouble() + nextDouble()
+//                + nextDouble() + nextDouble() + nextDouble())
+//                + 0.2 * ((1.0 - nextDouble() * nextDouble()) + (1.0 - nextDouble() * nextDouble()));
+        // averages about 0.685
+        return 0.25 * (0.5 * (nextDouble() + nextDouble() + nextDouble() + nextDouble()) +
+                (3.0 - nextDouble() * nextDouble() - nextDouble() * nextDouble() - nextDouble() * nextDouble()));
 
     }
     
@@ -91,29 +95,33 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
         int[] PALETTE = new int[64];
 //        double[] color = new double[3];
         double luma, warm, mild, hue;
+        double[] lumas = new double[64], warms = new double[64], milds = new double[64];
         int ctr = 1;
+        int r, g, b;
         for (int i = 1; i < 64;) {
             if ((i & 7) == 7) {
                 int ch = i << 2 | i >>> 3;
-                PALETTE[i++] = ch << 24 | ch << 16 | ch << 8 | 0xFF;
+                PALETTE[i] = ch << 24 | ch << 16 | ch << 8 | 0xFF;
+                milds[i] = warms[i] = 0.0;
+                lumas[i] = ch / 255.0;
                 ctr++;
+                i++;
             } else {
-                int r, g, b;
                 do {
 //                hue = i * (Math.PI * 1.6180339887498949);
                     hue = (ctr) * (Math.PI * 2.0 / 53.0);
-                    mild = (NumberTools.sin(hue) * (NumberTools.cos(ctr * 1.963) * 0.45 + 0.8));
-                    warm = (NumberTools.cos(hue) * (NumberTools.sin(ctr * 1.611) * 0.45 + 0.8));
-                    luma = curvedDouble();
+                    milds[i] = mild = (NumberTools.sin(hue) * (NumberTools.zigzag(ctr * 1.543) * 0.5 + 0.8));
+                    warms[i] = warm = (NumberTools.cos(hue) * (NumberTools.zigzag(0.4 + ctr * 1.611) * 0.5 + 0.8));
+                    lumas[i] = luma = curvedDouble();
                     ctr++;
 //                color[0] = i * (360.0 * 1.6180339887498949);
 //                color[1] = Math.sqrt(1.0 - nextDouble() * nextDouble()) * 100.0;
 //                color[2] = curvedDouble() * 100.0;
 //                color[2] = i * (94.0 / 255.0) + 3.0;
 //                System.out.println(StringKit.join(", ", color) + "  -> " + StringKit.join(", ", HSLUVColorConverter.hsluvToRgb(color)));                 
-                  r = (int) ((luma + warm * 0.5) * 255);
-                  g = (int) ((luma + mild * 0.5) * 255);
-                  b = (int) ((luma - (warm + mild) * 0.25) * 255);
+                  r = (int) ((luma + warm * 0.5) * 255.5);
+                  g = (int) ((luma + mild * 0.5) * 255.5);
+                  b = (int) ((luma - (warm + mild) * 0.25) * 255.5);
                 }while (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255);
                 PALETTE[i++] = r << 24 |
                         g << 16 |
@@ -294,16 +302,17 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
         }
 
         Pixmap p2 = new Pixmap(1024, 32, Pixmap.Format.RGBA8888);
-        for (int r = 0; r < 32; r++) {
-            for (int b = 0; b < 32; b++) {
-                for (int g = 0; g < 32; g++) {
-                    p2.drawPixel(r << 5 | b, g, PALETTE[png8.palette.paletteMapping[
-                            ((r << 10) & 0x7C00)
-                                    | ((g << 5) & 0x3E0)
-                                    | b] & 0xFF]);
+        for (int red = 0; red < 32; red++) {
+            for (int blu = 0; blu < 32; blu++) {
+                for (int gre = 0; gre < 32; gre++) {
+                    p2.drawPixel(red << 5 | blu, gre, PALETTE[png8.palette.paletteMapping[
+                            ((red << 10) & 0x7C00)
+                                    | ((gre << 5) & 0x3E0)
+                                    | blu] & 0xFF]);
                 }
             }
         }
+
         try {
             png8.writePrecisely(Gdx.files.local("Curveball"+PALETTE.length+"_GLSL.png"), p2, false);
         } catch (IOException e) {
@@ -313,43 +322,43 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
         int[][] CURVEBALL_BONUS_RAMP_VALUES = new int[256][4];
         for (int i = 1; i < 64; i++) {
             int color = CURVEBALL_BONUS_RAMP_VALUES[i | 128][2] = CURVEBALL_BONUS_RAMP_VALUES[i][2] =
-                    PALETTE[i],
-                    r = (color >>> 24),
-                    g = (color >>> 16 & 0xFF),
-                    b = (color >>> 8 & 0xFF);
+                    PALETTE[i];             
+//            r = (color >>> 24);
+//            g = (color >>> 16 & 0xFF);
+//            b = (color >>> 8 & 0xFF);
+            luma = lumas[i];
+            warm = warms[i];
+            mild = milds[i];
             CURVEBALL_BONUS_RAMP_VALUES[i | 64][1] = CURVEBALL_BONUS_RAMP_VALUES[i | 64][2] =
                     CURVEBALL_BONUS_RAMP_VALUES[i | 64][3] = color;
             CURVEBALL_BONUS_RAMP_VALUES[i | 192][0] = CURVEBALL_BONUS_RAMP_VALUES[i | 192][2] = color;
-            int co = r - b, t = b + (co >> 1), cg = g - t, y = t + (cg >> 1),
-                    yBright = y * 21 >> 4, yDim = y * 11 >> 4, yDark = y * 6 >> 4, chromO, chromG;
-            chromO = (co * 3) >> 2;
-            chromG = (cg * 3) >> 2;
-            t = yDim - (chromG >> 1);
-            g = chromG + t;
-            b = t - (chromO >> 1);
-            r = b + chromO;
+//            int co = r - b, t = b + (co >> 1), cg = g - t, y = t + (cg >> 1),
+//                    yBright = y * 21 >> 4, yDim = y * 11 >> 4, yDark = y * 6 >> 4, chromO, chromG;
+//            chromO = (co * 3) >> 2;
+//            chromG = (cg * 3) >> 2;
+//            t = yDim - (chromG >> 1);
+//            g = chromG + t;
+//            b = t - (chromO >> 1);
+//            r = b + chromO;
+            r = MathUtils.clamp((int) ((luma * 0.8 + warm * 0.6) * 255.5), 0, 255);
+            g = MathUtils.clamp((int) ((luma * 0.8 + mild * 0.6) * 255.5), 0, 255);
+            b = MathUtils.clamp((int) ((luma * 0.8 - (warm + mild) * 0.3) * 255.5), 0, 255);
             CURVEBALL_BONUS_RAMP_VALUES[i | 192][1] = CURVEBALL_BONUS_RAMP_VALUES[i | 128][1] =
                     CURVEBALL_BONUS_RAMP_VALUES[i | 64][0] = CURVEBALL_BONUS_RAMP_VALUES[i][1] =
                             MathUtils.clamp(r, 0, 255) << 24 |
                                     MathUtils.clamp(g, 0, 255) << 16 |
                                     MathUtils.clamp(b, 0, 255) << 8 | 0xFF;
-            chromO = (co * 3) >> 2;
-            chromG = (cg * (256 - yBright) * 3) >> 9;
-            t = yBright - (chromG >> 1);
-            g = chromG + t;
-            b = t - (chromO >> 1);
-            r = b + chromO;
+            r = MathUtils.clamp((int) ((luma * 1.2 + warm * 0.3) * 255.5), 0, 255);
+            g = MathUtils.clamp((int) ((luma * 1.2 + mild * 0.3) * 255.5), 0, 255);
+            b = MathUtils.clamp((int) ((luma * 1.2 - (warm + mild) * 0.15) * 255.5), 0, 255);
             CURVEBALL_BONUS_RAMP_VALUES[i | 192][3] = CURVEBALL_BONUS_RAMP_VALUES[i | 128][3] =
                     CURVEBALL_BONUS_RAMP_VALUES[i][3] =
                             MathUtils.clamp(r, 0, 255) << 24 |
                                     MathUtils.clamp(g, 0, 255) << 16 |
                                     MathUtils.clamp(b, 0, 255) << 8 | 0xFF;
-            chromO = (co * 13) >> 4;
-            chromG = (cg * (256 - yDark) * 13) >> 11;
-            t = yDark - (chromG >> 1);
-            g = chromG + t;
-            b = t - (chromO >> 1);
-            r = b + chromO;
+            r = MathUtils.clamp((int) ((luma * 0.6 + warm * 0.4) * 255.5), 0, 255);
+            g = MathUtils.clamp((int) ((luma * 0.6 + mild * 0.4) * 255.5), 0, 255);
+            b = MathUtils.clamp((int) ((luma * 0.6 - (warm + mild) * 0.2) * 255.5), 0, 255);
             CURVEBALL_BONUS_RAMP_VALUES[i | 128][0] = CURVEBALL_BONUS_RAMP_VALUES[i][0] =
                     MathUtils.clamp(r, 0, 255) << 24 |
                             MathUtils.clamp(g, 0, 255) << 16 |
@@ -390,27 +399,43 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
         //pix.drawPixel(255, 0, 0);
         png8.palette = new PaletteReducer(PALETTE);
         try {
-            png8.writePrecisely(Gdx.files.local("Curveball"+PALETTE.length+".png"), pix, false);
+            png8.writePrecisely(Gdx.files.local("CurveballBonus.png"), pix, false);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         p2 = new Pixmap(1024, 32, Pixmap.Format.RGBA8888);
-        for (int r = 0; r < 32; r++) {
-            for (int b = 0; b < 32; b++) {
-                for (int g = 0; g < 32; g++) {
-                    p2.drawPixel(r << 5 | b, g, PALETTE[png8.palette.paletteMapping[
-                            ((r << 10) & 0x7C00)
-                                    | ((g << 5) & 0x3E0)
-                                    | b] & 0xFF]);
+        for (int red = 0; red < 32; red++) {
+            for (int blu = 0; blu < 32; blu++) {
+                for (int gre = 0; gre < 32; gre++) {
+                    p2.drawPixel(red << 5 | blu, gre, PALETTE[png8.palette.paletteMapping[
+                            ((red << 10) & 0x7C00)
+                                    | ((gre << 5) & 0x3E0)
+                                    | blu] & 0xFF]);
                 }
             }
         }
         try {
-            png8.writePrecisely(Gdx.files.local("Curveball"+PALETTE.length+"_GLSL.png"), p2, false);
+            png8.writePrecisely(Gdx.files.local("CurveballBonus_GLSL.png"), p2, false);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        pix = new Pixmap(256, 1, Pixmap.Format.RGBA8888);
+        for (int i = 1; i < 64; i++) {
+//            pix.drawPixel(i-1, 0, PALETTE[i]);
+            pix.drawPixel(i-1, 0, PALETTE[i << 2 | 2]);
+            pix.drawPixel(i+63, 0, PALETTE[i << 2]);
+            pix.drawPixel(i+127, 0, PALETTE[i << 2 | 1]);
+            pix.drawPixel(i+191, 0, PALETTE[i << 2 | 3]);
+        }
+        png8.palette = new PaletteReducer(PALETTE);
+        try {
+            png8.writePrecisely(Gdx.files.local("CurveballBonusMagicaVoxel.png"), pix, false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
         
     }
 

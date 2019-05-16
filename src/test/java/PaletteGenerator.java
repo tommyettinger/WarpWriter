@@ -307,20 +307,20 @@ public class PaletteGenerator extends ApplicationAdapter {
 //            pix.setColor(PALETTE[i]);
 //            pix.fillRectangle((i & 15) << 3, (i & -16) >>> 1, 8, 8);
 //        }
-        //PALETTE = Colorizer.FlesurrectBonusPalette;
+        PALETTE = Colorizer.CurveballBonusPalette;
         Pixmap pix = new Pixmap(256, 1, Pixmap.Format.RGBA8888);
-        for (int i = 1; i < PALETTE.length; i++) {
-            pix.drawPixel(i-1, 0, PALETTE[i]);
-//            pix.drawPixel(i-1, 0, PALETTE[i << 2 | 2]);
-//            pix.drawPixel(i+63, 0, PALETTE[i << 2]);
-//            pix.drawPixel(i+127, 0, PALETTE[i << 2 | 1]);
-//            pix.drawPixel(i+191, 0, PALETTE[i << 2 | 3]);
+        for (int i = 1; i < 64; i++) {
+//            pix.drawPixel(i-1, 0, PALETTE[i]);
+            pix.drawPixel(i-1, 0, PALETTE[i << 2 | 2]);
+            pix.drawPixel(i+63, 0, PALETTE[i << 2]);
+            pix.drawPixel(i+127, 0, PALETTE[i << 2 | 1]);
+            pix.drawPixel(i+191, 0, PALETTE[i << 2 | 3]);
         }
         //pix.drawPixel(255, 0, 0);
         PNG8 png8 = new PNG8();
         png8.palette = new PaletteReducer(PALETTE);
         try {
-            png8.writePrecisely(Gdx.files.local("CurveballBonus.png"), pix, false);
+            png8.writePrecisely(Gdx.files.local("CurveballBonusMagicaVoxel.png"), pix, false);
         } catch (IOException e) {
             e.printStackTrace();
         }
