@@ -14,7 +14,6 @@ public class VoxelPixmapRenderer implements IRectangleRenderer, ITriangleRendere
     public int[][] depths, working, render, outlines;
     protected VoxelColor color;
     public boolean flipX, flipY, easing = true, outline = true;
-    public int offsetX = 0, offsetY = 0;
 
     public Pixmap pixmap() {
         return pixmap;
@@ -36,6 +35,22 @@ public class VoxelPixmapRenderer implements IRectangleRenderer, ITriangleRendere
     public VoxelPixmapRenderer set(VoxelColor color) {
         this.color = color;
         return this;
+    }
+
+    protected int offsetX = 0, offsetY = 0;
+
+    public VoxelPixmapRenderer setOffset(int offsetX, int offsetY) {
+        this.offsetX = offsetX;
+        this.offsetY = offsetY;
+        return this;
+    }
+
+    public int offsetX() {
+        return offsetX;
+    }
+
+    public int offsetY() {
+        return offsetY;
     }
 
     @Override
