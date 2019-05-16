@@ -48,11 +48,11 @@ public class PreviewSpinnerTest extends ApplicationAdapter {
 
         Pixmap[] pixmaps = spin(model);
 
-        fileDialog = new FileDialog((Frame) null, "Where to save GIF file?", FileDialog.SAVE);
-        fileDialog.setVisible(true);
+//        fileDialog = new FileDialog((Frame) null, "Where to save GIF file?", FileDialog.SAVE);
+//        fileDialog.setVisible(true);
         System.out.println(fileDialog.getFiles()[0].getAbsolutePath());
 
-        writeGIF(pixmaps, new FileHandle(fileDialog.getFiles()[0]), new FileHandle(fileDialog.getFiles()[0]));
+        writeGIF(pixmaps, new FileHandle(fileDialog.getDirectory() + "temp"), new FileHandle(fileDialog.getDirectory()));
 
         Gdx.app.exit();
         System.exit(0);
@@ -132,7 +132,7 @@ public class PreviewSpinnerTest extends ApplicationAdapter {
                 result[model * 8 + z * 2] = draw(turnModel, false, width, height);
                 result[model * 8 + z * 2 + 1] = draw(turnModel, true, width, height);
             }
-            turnModel.turner().clockX();
+            turnModel.turner().clockZ();
         }
         return result;
     }
