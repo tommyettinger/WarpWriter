@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import squidpony.squidmath.NumberTools;
 
 import static warpwriter.view.render.ShaderUtils.*;
 
@@ -68,7 +69,7 @@ public class ShaderPalettizer extends ApplicationAdapter {
         palette.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
         defaultShader = SpriteBatch.createDefaultShader();
-        shader = new ShaderProgram(vertexShader, fragmentShader);
+        shader = new ShaderProgram(vertexShader, fragmentShaderWarmMildLimited);
         if (!shader.isCompiled()) throw new GdxRuntimeException("Couldn't compile shader: " + shader.getLog());
         shaderNoDither = new ShaderProgram(vertexShader, fragmentShaderNoDither);
         if (!shaderNoDither.isCompiled()) throw new GdxRuntimeException("Couldn't compile shader: " + shaderNoDither.getLog());
@@ -105,9 +106,11 @@ public class ShaderPalettizer extends ApplicationAdapter {
 //                    shader.setUniformf("u_add", 0.05f, 0.14f, 0.16f);
 //                    shader.setUniformf("u_mul", 1f, 1f, 1f);
 //                    shader.setUniformf("u_add", 0f, 0f, 0f);
-//                    shader.setUniformf("u_mul", 1f, 0.8f, 0.85f);
-//                    shader.setUniformf("u_add", 0.1f, 0.95f, NumberTools.swayRandomized(12345, TimeUtils.timeSinceMillis(startTime) * 0x1p-9f) * 0.4f - 0.2f);
+                    shader.setUniformf("u_mul", 1f, 0.8f, 0.85f);
+                    shader.setUniformf("u_add", 0.1f, 0.95f, NumberTools.swayRandomized(12345, TimeUtils.timeSinceMillis(startTime) * 0x1p-9f) * 0.4f + 0.2f);
                 }
+//                else batch.getShader().setUniformi("u_palette", 1);
+
                 Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
             }
             else
