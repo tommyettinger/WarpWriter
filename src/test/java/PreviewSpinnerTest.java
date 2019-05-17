@@ -4,8 +4,8 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.utils.Array;
-import warpwriter.PNG8;
 import warpwriter.VoxIO;
 import warpwriter.model.IModel;
 import warpwriter.model.TurnModel;
@@ -14,6 +14,7 @@ import warpwriter.model.nonvoxel.LittleEndianDataInputStream;
 import warpwriter.view.VoxelDraw;
 import warpwriter.view.color.Dimmer;
 import warpwriter.view.render.VoxelPixmapRenderer;
+
 import javax.imageio.ImageIO;
 import javax.imageio.stream.FileImageOutputStream;
 import javax.imageio.stream.ImageOutputStream;
@@ -71,12 +72,13 @@ public class PreviewSpinnerTest extends ApplicationAdapter {
 
         final Array<String> strings = new Array<>();
 
-        PNG8 png8 = new PNG8();
+        PixmapIO.PNG png = new PixmapIO.PNG();
+        png.setFlipY(true);
             int i = 0;
             for(Pixmap pixmap : pixmaps){
 //                PixmapIO.writePNG(Gdx.files.absolute(directory.file().getAbsolutePath() + "/frame" + i + ".png"), pixmap);
                 try {
-                    png8.write(new FileHandle(directory.file().getAbsolutePath() + "/frame" + i + ".png"), pixmap);
+                    png.write(new FileHandle(directory.file().getAbsolutePath() + "/frame" + i + ".png"), pixmap);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -86,7 +88,7 @@ public class PreviewSpinnerTest extends ApplicationAdapter {
             }
 
             lastRecording = compileGIF(strings, directory, writedirectory);
-            directory.deleteDirectory();
+//            directory.deleteDirectory();
             for(Pixmap pixmap : pixmaps){
                 pixmap.dispose();
             }
@@ -107,7 +109,7 @@ public class PreviewSpinnerTest extends ApplicationAdapter {
             BufferedImage firstImage = ImageIO.read(new File(dirstring + "/" + strings.get(0)));
             File file = new File(directory.file().getAbsolutePath() + "/recording" + time + ".gif");
             ImageOutputStream output = new FileImageOutputStream(file);
-            GifSequenceWriter writer = new GifSequenceWriter(output, firstImage.getType(), (int) (1f / recordfps * 1000f), true);
+            GifSequenceWriter writer = new GifSequenceWriter(output, BufferedImage.TYPE_4BYTE_ABGR, (int) (1f / recordfps * 1000f), true);
 
             writer.writeToSequence(firstImage);
 
@@ -137,7 +139,7 @@ public class PreviewSpinnerTest extends ApplicationAdapter {
             for (int model = 0; model < models.length; model++) {
                 turnModel.set(models[model]);
                 result[model * 8 + z * 2] = draw(turnModel, false, width, height);
-                result[model * 8 + z * 2 + 1] = draw(turnModel, false, width, height);
+                result[model * 8 + z * 2 + 1] = draw(turnModel, false, width, height); // z45 should be true, but that doesn't show up
             }
             turnModel.turner().clockZ();
         }
@@ -242,7 +244,7 @@ public class PreviewSpinnerTest extends ApplicationAdapter {
         return pixmap;
     }
 
-    public static int width(IModel models[]) {
+    public static int width(IModel[] models) {
         int width = VoxelDraw.isoWidth(models[0]);
         for (IModel model : models) {
             int newWidth = VoxelDraw.isoWidth(model);
@@ -251,7 +253,7 @@ public class PreviewSpinnerTest extends ApplicationAdapter {
         return width;
     }
 
-    public static int height(IModel models[]) {
+    public static int height(IModel[] models) {
         int height = VoxelDraw.isoHeight(models[0]);
         for (IModel model : models) {
             int newHeight = VoxelDraw.isoHeight(model);
