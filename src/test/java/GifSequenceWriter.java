@@ -30,7 +30,6 @@ public class GifSequenceWriter {
         gifWriter = getWriter();
         imageWriteParam = gifWriter.getDefaultWriteParam();
         ImageTypeSpecifier imageTypeSpecifier = ImageTypeSpecifier.createFromBufferedImageType(imageType);
-
         imageMetaData = gifWriter.getDefaultImageMetadata(imageTypeSpecifier, imageWriteParam);
 
         String metaFormatName = imageMetaData.getNativeMetadataFormatName();
@@ -41,7 +40,7 @@ public class GifSequenceWriter {
 
         graphicsControlExtensionNode.setAttribute("disposalMethod", "none");
         graphicsControlExtensionNode.setAttribute("userInputFlag", "FALSE");
-        graphicsControlExtensionNode.setAttribute("transparentColorFlag", "FALSE");
+        graphicsControlExtensionNode.setAttribute("transparentColorFlag", "TRUE");
         graphicsControlExtensionNode.setAttribute("delayTime", Integer.toString(timeBetweenFramesMS / 10));
         graphicsControlExtensionNode.setAttribute("transparentColorIndex", "0");
 
