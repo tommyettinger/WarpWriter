@@ -1856,6 +1856,62 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
             return 0x80;
         }
     };
+    public static final Colorizer JudgeBonusColorizer = new Colorizer(new PaletteReducer(Coloring.JUDGE64)) {
+        private final byte[] primary = {
+                61, 23, 26, 32, 45, 55
+        }, grays = {
+                1, 2, 3, 4, 6, 5, 7
+        };
+
+        @Override
+        public byte[] mainColors() {
+            return primary;
+        }
+
+        /**
+         * @return An array of grayscale or close-to-grayscale color indices, with the darkest first and lightest last.
+         */
+        @Override
+        public byte[] grayscale() {
+            return grays;
+        }
+
+        @Override
+        public byte brighten(byte voxel) {
+            // the second half of voxels (with bit 0x40 set) don't shade visually, but Colorizer uses this method to
+            // denote a structural change to the voxel's makeup, so this uses the first 64 voxel colors to shade both
+            // halves, then marks voxels from the second half back to being an unshaded voxel as the last step.
+            return (byte) (JUDGE_RAMPS[voxel & 0x3F][3] | (voxel & 0xC0));
+        }
+
+        @Override
+        public byte darken(byte voxel) {
+            // the second half of voxels (with bit 0x40 set) don't shade visually, but Colorizer uses this method to
+            // denote a structural change to the voxel's makeup, so this uses the first 64 voxel colors to shade both
+            // halves, then marks voxels from the second half back to being an unshaded voxel as the last step.
+            return (byte) (JUDGE_RAMPS[voxel & 0x3F][1] | (voxel & 0xC0));
+        }
+
+        @Override
+        public int dimmer(int brightness, byte voxel) {
+            return JUDGE_BONUS_RAMP_VALUES[voxel & 0xFF][
+                    brightness <= 0
+                            ? 0
+                            : brightness >= 3
+                            ? 3
+                            : brightness
+                    ];
+        }
+
+        @Override
+        public int getShadeBit() {
+            return 0x40;
+        }
+        @Override
+        public int getWaveBit() {
+            return 0x80;
+        }
+    };
 
     public static Colorizer arbitraryColorizer(final int[] palette) {
         final int COUNT = palette.length;

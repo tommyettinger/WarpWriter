@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import squidpony.FakeLanguageGen;
 import warpwriter.ModelMaker;
 import warpwriter.Tools3D;
 import warpwriter.VoxIO;
@@ -287,9 +286,9 @@ public class SeqTest extends ApplicationAdapter {
                             maker.setColorizer(Colorizer.FlesurrectColorizer);
                         }
                         break;
-                    case Input.Keys.W: // write
-                        VoxIO.writeVOX(FakeLanguageGen.SIMPLISH.word(Tools3D.hash64(voxels), true) + ".vox", voxels, maker.getColorizer().getReducer().paletteArray);
-                        break;
+//                    case Input.Keys.W: // write
+//                        VoxIO.writeVOX(FakeLanguageGen.SIMPLISH.word(Tools3D.hash64(voxels), true) + ".vox", voxels, maker.getColorizer().getReducer().paletteArray);
+//                        break;
                     case Input.Keys.ESCAPE:
                         Gdx.app.exit();
                         break;
