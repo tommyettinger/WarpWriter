@@ -165,7 +165,7 @@ public class ShaderPalettizer extends ApplicationAdapter {
                         break;
                     case Input.Keys.NUM_7:
                     case Input.Keys.NUMPAD_7:
-                        palette = new Texture(Gdx.files.local("palettes/CurveballBonus_GLSL.png"), Pixmap.Format.RGBA8888, false);
+                        palette = new Texture(Gdx.files.local("palettes/JudgeBonus_GLSL.png"), Pixmap.Format.RGBA8888, false);
                         break;
                     case Input.Keys.NUM_8:
                     case Input.Keys.NUMPAD_8:
