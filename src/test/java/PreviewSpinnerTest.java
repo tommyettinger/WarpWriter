@@ -132,7 +132,7 @@ public class PreviewSpinnerTest extends ApplicationAdapter {
     }
 
     public Pixmap[] spin(IModel models[]) {
-        final int width = width(models), height = height(models);
+        final int width = width(models) * 2, height = height(models);
         final TurnModel turnModel = new TurnModel();
         Pixmap[] result = new Pixmap[models.length * 8];
         for (int z = 0; z < 4; z++) {
@@ -172,7 +172,7 @@ public class PreviewSpinnerTest extends ApplicationAdapter {
 
         final int sizeX = (z45 ? VoxelDraw.isoWidth(turnModel) : turnModel.sizeY() - 1),
                 offCenter = sizeX / 2;
-        final int offsetX = 0, offsetY = 0;
+        final int offsetX = width / 2, offsetY = 0;
 
         switch (angle) {
             case 0: // Bottom
