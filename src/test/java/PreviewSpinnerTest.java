@@ -139,7 +139,7 @@ public class PreviewSpinnerTest extends ApplicationAdapter {
             for (int model = 0; model < models.length; model++) {
                 turnModel.set(models[model]);
                 result[model * 8 + z * 2] = draw(turnModel, false, width, height);
-                result[model * 8 + z * 2 + 1] = draw(turnModel, false, width, height); // z45 should be true, but that doesn't show up
+                result[model * 8 + z * 2 + 1] = draw(turnModel, true, width, height); // z45 should be true, but that doesn't show up
             }
             turnModel.turner().clockZ();
         }
