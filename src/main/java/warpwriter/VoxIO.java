@@ -56,7 +56,7 @@ public class VoxIO {
                 return null;
             //int version = 
                     stream.readInt();
-            //int xSize = 16, ySize = 16, zSize = 8;
+            int sizeX = 16, sizeY = 16, sizeZ = 16;
             // a MagicaVoxel .vox file starts with a 'magic' 4 character 'VOX ' identifier
             if (chunkId[0] == 'V' && chunkId[1] == 'O' && chunkId[2] == 'X' && chunkId[3] == ' ') {
                 while (stream.available() > 0) {
@@ -69,14 +69,14 @@ public class VoxIO {
 
                     // there are only 3 chunks we only care about, and they are SIZE, XYZI, and RGBA
                     if (chunkName.equals("SIZE")) {
-                        voxelData = new byte[stream.readInt()][stream.readInt()][stream.readInt()];
+                        voxelData = new byte[sizeX = stream.readInt()][sizeY = stream.readInt()][sizeZ = stream.readInt()];
                         stream.skipBytes(chunkSize - 4 * 3);
                     } else if (chunkName.equals("XYZI") && voxelData != null) {
                         // XYZI contains n voxels
                         int numVoxels = stream.readInt();
                         // each voxel has x, y, z and color index values
                         for (int i = 0; i < numVoxels; i++) {
-                            voxelData[stream.read()][stream.read()][stream.read()] = stream.readByte();
+                            voxelData[stream.read()][sizeY - 1 - stream.read()][stream.read()] = stream.readByte();
                         }
                     } else if(chunkName.equals("RGBA") && voxelData != null)
                     {
