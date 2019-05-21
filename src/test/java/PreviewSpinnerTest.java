@@ -63,7 +63,7 @@ public class PreviewSpinnerTest extends ApplicationAdapter {
     public float saveprogress;
     public File lastRecording;
     public boolean saving;
-    private int recordfps = 12;
+    private int recordfps = 2;
 
     public void writeGIF(Pixmap[] pixmaps, final FileHandle directory, final FileHandle writedirectory){
         if(saving)
@@ -177,7 +177,7 @@ public class PreviewSpinnerTest extends ApplicationAdapter {
         switch (angle) {
             case 0: // Bottom
                 VoxelDraw.drawBottom(turnModel, renderer
-                        .setFlipX(false).setFlipY(false)
+                        //.setFlipX(false).setFlipY(false)
                         .setOffset(offsetX - offCenter * 6, offsetY)
                 );
                 break;
@@ -186,7 +186,7 @@ public class PreviewSpinnerTest extends ApplicationAdapter {
                     renderer.color().set(renderer.color().direction().flipY());
                     turnModel.turner().clockY().clockY().clockZ();
                     VoxelDraw.drawIso(turnModel, renderer
-                            .setFlipX(true).setFlipY(true)
+                            //.setFlipX(true).setFlipY(true)
                             .setScale(2, 1)
                             .setOffset(
                                     offsetX + (offCenter - 1) * 2,
@@ -199,7 +199,7 @@ public class PreviewSpinnerTest extends ApplicationAdapter {
                     renderer.color().set(renderer.color().direction().opposite());
                     turnModel.turner().clockY().clockY().clockZ().clockZ();
                     VoxelDraw.drawAbove(turnModel, renderer
-                            .setFlipX(true).setFlipY(true)
+                            //.setFlipX(true).setFlipY(true)
                             .setScale(1, 1)
                             .setOffset(
                                     offsetX + (offCenter + 1) * 6,
@@ -213,32 +213,32 @@ public class PreviewSpinnerTest extends ApplicationAdapter {
             case 2: // Side
                 if (z45)
                     VoxelDraw.draw45Peek(turnModel, renderer
-                            .setFlipX(false).setFlipY(false)
+                            //.setFlipX(false).setFlipY(false)
                             .setOffset(offsetX - offCenter * 2, offsetY)
                     );
                 else
                     VoxelDraw.drawRightPeek(turnModel, renderer
-                            .setFlipX(false).setFlipY(false)
+                            //.setFlipX(false).setFlipY(false)
                             .setOffset(offsetX - offCenter * 6, offsetY)
                     );
                 break;
             case 3: // Above
                 if (z45)
                     VoxelDraw.drawIso(turnModel, renderer
-                            .setFlipX(false).setFlipY(false)
+                            //.setFlipX(false).setFlipY(false)
                             .setScale(2, 1)
-                            .setOffset(offsetX - offCenter * 2, offsetY)
+                            .setOffset(offsetX - offCenter * 2, offsetY + 4)
                     );
                 else
                     VoxelDraw.drawAbove(turnModel, renderer
-                            .setFlipX(false).setFlipY(false)
+                            //.setFlipX(false).setFlipY(false)
                             .setScale(1, 1)
                             .setOffset(offsetX - offCenter * 6, offsetY)
                     );
                 break;
             case 4: // Top
                 VoxelDraw.drawTop(turnModel, renderer
-                        .setFlipX(false).setFlipY(false)
+                        //.setFlipX(false).setFlipY(false)
                         .setOffset(offsetX - offCenter * 6, offsetY)
                 );
                 break;

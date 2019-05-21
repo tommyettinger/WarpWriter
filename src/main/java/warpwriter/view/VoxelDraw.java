@@ -1,7 +1,6 @@
 package warpwriter.view;
 
 import warpwriter.model.IModel;
-import warpwriter.model.ITemporal;
 import warpwriter.model.IVoxelSeq;
 import warpwriter.model.nonvoxel.HashMap3D;
 import warpwriter.model.nonvoxel.IntComparator;
@@ -275,15 +274,14 @@ public class VoxelDraw {
     }
 
     public static int isoHeight(IModel model) {
-        return (model.sizeX() - 1) * 2 +
-                (model.sizeZ() - 1) * 4 +
-                (model.sizeY() - 1) * 2;
+        return (model.sizeZ() +
+                Math.max(model.sizeX(), model.sizeY())) * 4;
     }
 
     public static int isoWidth(IModel model) {
         final int sizeVX = model.sizeX(), sizeVY = model.sizeY();
-        return (sizeVX + sizeVY) * 2 -
-                ((sizeVX + sizeVY & 1) << 2); // if sizeVX + sizeVY is odd, this is 4, otherwise it is 0
+        return (sizeVX + sizeVY) * 2;
+                //- ((sizeVX + sizeVY & 1) << 2); // if sizeVX + sizeVY is odd, this is 4, otherwise it is 0
     }
 
     public static int isoHeight(IVoxelSeq model) {
