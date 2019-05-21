@@ -13,6 +13,21 @@ public class VoxelPixmapRenderer implements IRectangleRenderer, ITriangleRendere
     public int[][] depths, working, render, outlines;
     protected VoxelColor color = new VoxelColor();
     public boolean flipX, flipY, easing = true, outline = true;
+    public int scaleX=1, scaleY=1;
+
+    public VoxelPixmapRenderer multiplyScale(int multiplier) {
+        return setScale(scaleX * multiplier, scaleY * multiplier);
+    }
+
+    public VoxelPixmapRenderer setScale(int scale) {
+        return setScale(scale, scale);
+    }
+
+    public VoxelPixmapRenderer setScale(int scaleX, int scaleY) {
+        this.scaleX = scaleX;
+        this.scaleY = scaleY;
+        return this;
+    }
 
     public Pixmap pixmap() {
         return pixmap;
@@ -277,8 +292,8 @@ public class VoxelPixmapRenderer implements IRectangleRenderer, ITriangleRendere
     @Override
     public ITriangleRenderer drawLeftTriangle(int x, int y, int color) {
         pixmap.setColor(color);
-        pixmap.drawRectangle(x + 1 + offsetX, y + offsetY, 1, 3);
-        pixmap.drawPixel(x + offsetX, y + 1 + offsetY, color);
+        pixmap.drawRectangle((x + 1) * scaleX + offsetX, y * scaleY + offsetY, scaleX, scaleY * 3);
+        pixmap.drawRectangle(x * scaleX + offsetX, (y + 1) * scaleY + offsetY * scaleY, scaleX, scaleY);
 //        pixmap.fillTriangle(
 //                x + 1 + offsetX, y + offsetY,
 //                x + 1 + offsetX, y + 2 + offsetY,
@@ -290,8 +305,8 @@ public class VoxelPixmapRenderer implements IRectangleRenderer, ITriangleRendere
     @Override
     public ITriangleRenderer drawRightTriangle(int x, int y, int color) {
         pixmap.setColor(color);
-        pixmap.drawRectangle(x + offsetX, y + offsetY, 1, 3);
-        pixmap.drawPixel(x + 1 + offsetX, y + 1 + offsetY, color);
+        pixmap.drawRectangle(x * scaleX + offsetX, y * scaleY + offsetY, scaleX, scaleY * 3);
+        pixmap.drawRectangle((x + 1) * scaleX + offsetX, (y + 1) * scaleY + offsetY, scaleX, scaleY);
 //        pixmap.fillTriangle(
 //                x + offsetX, y + offsetY,
 //                x + offsetX, y + 2 + offsetY,

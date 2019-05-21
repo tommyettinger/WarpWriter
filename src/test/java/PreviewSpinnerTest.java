@@ -187,6 +187,7 @@ public class PreviewSpinnerTest extends ApplicationAdapter {
                     turnModel.turner().clockY().clockY().clockZ();
                     VoxelDraw.drawIso(turnModel, renderer
                             .setFlipX(true).setFlipY(true)
+                            .setScale(2, 1)
                             .setOffset(
                                     offsetX + (offCenter - 1) * 2,
                                     offsetY + (int) (VoxelDraw.isoHeight(turnModel))
@@ -199,6 +200,7 @@ public class PreviewSpinnerTest extends ApplicationAdapter {
                     turnModel.turner().clockY().clockY().clockZ().clockZ();
                     VoxelDraw.drawAbove(turnModel, renderer
                             .setFlipX(true).setFlipY(true)
+                            .setScale(1, 1)
                             .setOffset(
                                     offsetX + (offCenter + 1) * 6,
                                     offsetY + (int) ((turnModel.sizeX() + turnModel.sizeZ()) * 4)
@@ -224,11 +226,13 @@ public class PreviewSpinnerTest extends ApplicationAdapter {
                 if (z45)
                     VoxelDraw.drawIso(turnModel, renderer
                             .setFlipX(false).setFlipY(false)
+                            .setScale(2, 1)
                             .setOffset(offsetX - offCenter * 2, offsetY)
                     );
                 else
                     VoxelDraw.drawAbove(turnModel, renderer
                             .setFlipX(false).setFlipY(false)
+                            .setScale(1, 1)
                             .setOffset(offsetX - offCenter * 6, offsetY)
                     );
                 break;
