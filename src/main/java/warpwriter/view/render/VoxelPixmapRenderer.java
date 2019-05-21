@@ -13,7 +13,7 @@ public class VoxelPixmapRenderer implements IRectangleRenderer, ITriangleRendere
     public int[][] depths, working, render, outlines;
     protected VoxelColor color = new VoxelColor();
     public boolean flipX, flipY, easing = true, outline = true;
-    public int scaleX=1, scaleY=1;
+    public int scaleX = 1, scaleY = 1;
 
     public VoxelPixmapRenderer multiplyScale(int multiplier) {
         return setScale(scaleX * multiplier, scaleY * multiplier);
@@ -70,7 +70,7 @@ public class VoxelPixmapRenderer implements IRectangleRenderer, ITriangleRendere
     @Override
     public IRectangleRenderer rect(int x, int y, int sizeX, int sizeY, int color) {
         pixmap.setColor(color);
-        pixmap.fillRectangle(x + offsetX, y + offsetY, sizeX, sizeY);
+        pixmap.fillRectangle(x * scaleX + offsetX, y * scaleY + offsetY, sizeX * scaleX, sizeY * scaleY);
 //        for (int i = 0; i < sizeX; i++, x++) {
 //            for (int j = 0, yy = y; j < sizeY; j++, yy++) {
 //                working[x][yy] = color;
@@ -128,7 +128,7 @@ public class VoxelPixmapRenderer implements IRectangleRenderer, ITriangleRendere
     }
 
     public int getPixel(int x, int y) {
-        return pixmap.getPixel(x + offsetX, y + offsetY);
+        return pixmap.getPixel(x * scaleX + offsetX, y * scaleY + offsetY);
     }
 
     public VoxelPixmapRenderer flipX() {
@@ -234,7 +234,8 @@ public class VoxelPixmapRenderer implements IRectangleRenderer, ITriangleRendere
         final int pmh = pixmap.getHeight() - 1;
         for (int x = 0; x < xSize; x++) {
             for (int y = 0; y < ySize; y++) {
-                pixmap.drawPixel(x + offsetX, pmh - y + offsetY, render[x][y]);
+                pixmap.setColor(render[x][y]);
+                pixmap.fillRectangle(x * scaleX + offsetX, pmh - (y * scaleY) + offsetY, scaleX, scaleY);
             }
         }
 
@@ -267,7 +268,8 @@ public class VoxelPixmapRenderer implements IRectangleRenderer, ITriangleRendere
                             else if (counts.get(d, 0) >= 4 && lightness(d) < lo)
                                 tgt = d;
                             if (tgt != 0) {
-                                pixmap.drawPixel(x + offsetX, pmh - y + offsetY, tgt);
+                                pixmap.setColor(tgt);
+                                pixmap.fillRectangle(x * scaleX + offsetX, pmh - (y * scaleY) + offsetY, scaleX, scaleY);
 
 //                                lt = lightness(tgt);
 //                                if (a == d && lt < lo)
@@ -292,8 +294,8 @@ public class VoxelPixmapRenderer implements IRectangleRenderer, ITriangleRendere
     @Override
     public ITriangleRenderer drawLeftTriangle(int x, int y, int color) {
         pixmap.setColor(color);
-        pixmap.drawRectangle((x + 1) * scaleX + offsetX, y * scaleY + offsetY, scaleX, scaleY * 3);
-        pixmap.drawRectangle(x * scaleX + offsetX, (y + 1) * scaleY + offsetY * scaleY, scaleX, scaleY);
+        pixmap.fillRectangle((x + 1) * scaleX + offsetX, y * scaleY + offsetY, scaleX, scaleY * 3);
+        pixmap.fillRectangle(x * scaleX + offsetX, (y + 1) * scaleY + offsetY * scaleY, scaleX, scaleY);
 //        pixmap.fillTriangle(
 //                x + 1 + offsetX, y + offsetY,
 //                x + 1 + offsetX, y + 2 + offsetY,
@@ -305,8 +307,8 @@ public class VoxelPixmapRenderer implements IRectangleRenderer, ITriangleRendere
     @Override
     public ITriangleRenderer drawRightTriangle(int x, int y, int color) {
         pixmap.setColor(color);
-        pixmap.drawRectangle(x * scaleX + offsetX, y * scaleY + offsetY, scaleX, scaleY * 3);
-        pixmap.drawRectangle((x + 1) * scaleX + offsetX, (y + 1) * scaleY + offsetY, scaleX, scaleY);
+        pixmap.fillRectangle(x * scaleX + offsetX, y * scaleY + offsetY, scaleX, scaleY * 3);
+        pixmap.fillRectangle((x + 1) * scaleX + offsetX, (y + 1) * scaleY + offsetY, scaleX, scaleY);
 //        pixmap.fillTriangle(
 //                x + offsetX, y + offsetY,
 //                x + offsetX, y + 2 + offsetY,
