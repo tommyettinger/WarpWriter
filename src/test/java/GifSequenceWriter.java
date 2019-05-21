@@ -38,7 +38,7 @@ public class GifSequenceWriter {
 
         IIOMetadataNode graphicsControlExtensionNode = getNode(root, "GraphicControlExtension");
 
-        graphicsControlExtensionNode.setAttribute("disposalMethod", "none");
+        graphicsControlExtensionNode.setAttribute("disposalMethod", "restoreToBackgroundColor");
         graphicsControlExtensionNode.setAttribute("userInputFlag", "FALSE");
         graphicsControlExtensionNode.setAttribute("transparentColorFlag", "TRUE");
         graphicsControlExtensionNode.setAttribute("delayTime", Integer.toString(timeBetweenFramesMS / 10));
