@@ -17,4 +17,10 @@ public interface ITurner {
     ITurner clockZ();
 
     ITurner reset();
+
+    float angleX();
+
+    float angleY();
+
+    float angleZ();
 }

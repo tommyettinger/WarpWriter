@@ -231,5 +231,18 @@ public class AnimatedVoxelSeq implements IVoxelSeq, ITemporal, Serializable {
         return this;
     }
 
+    @Override
+    public float angleX() {
+        return 90f;
+    }
 
+    @Override
+    public float angleY() {
+        return 90f;
+    }
+
+    @Override
+    public float angleZ() {
+        return 90f;
+    }
 }

@@ -93,6 +93,21 @@ public class Turner implements ITurner {
         return this;
     }
 
+    @Override
+    public float angleX() {
+        return 90f;
+    }
+
+    @Override
+    public float angleY() {
+        return 90f;
+    }
+
+    @Override
+    public float angleZ() {
+        return 90f;
+    }
+
     /**
      * @param index 0 for x, 1 for y, 2 for z
      * @return if selected rotation is negative, return -1, otherwise return 1
