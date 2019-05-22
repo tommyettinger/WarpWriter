@@ -141,13 +141,15 @@ public class VoxelSpriteBatchRenderer implements IRectangleRenderer, ITriangleRe
 
     public IRectangleRenderer rect(int x, int y, int sizeX, int sizeY, int color) {
         //final float oldColor = batch.getPackedColor(); // requires less conversions than batch.getColor(), same result
-        batch.setColor(NumberTools.intBitsToFloat(Integer.reverseBytes(color) & 0xFEFFFFFF));
-        // converts RGBA int to ABGR int, masks out one bit of alpha (libGDX thing), and converts to float color
-        // I think SquidLib's intBitsToFloat() is slightly more efficient than libGDX's NumberUtils, not sure.
+        batch.setColor(NumberTools.reversedIntBitsToFloat(color & 0xFFFFFFFE));
+        // color is an RGBA int, batch takes an ABGR int with only 7 bits of alpha allowed.
+        // this masks out one bit of alpha (libGDX thing to avoid bad floats like NaN), and converts to float color
+        // I think SquidLib's reversedIntBitsToFloat() is slightly more efficient than libGDX's NumberUtils, not sure.
+        // it has optimizations on GWT, mainly.
         // float colors can be used by SpriteBatch without needing an object.
         batch.draw(one,
-                x * scaleX * (flipX ? -1 : 1) + offsetX,
-                y * scaleY * (flipY ? -1 : 1) + offsetY,
+                scaleX * (flipX ? -x : x) + offsetX,
+                scaleY * (flipY ? -y : y) + offsetY,
                 sizeX * scaleX,
                 sizeY * scaleY
         );
@@ -221,6 +223,63 @@ public class VoxelSpriteBatchRenderer implements IRectangleRenderer, ITriangleRe
     }
 
     @Override
+    public ITriangleRenderer drawLeftTriangleVerticalFace(int x, int y, byte voxel, int depth, int vx, int vy, int vz) {
+        final int color = this.color.verticalFace(voxel, vx, vy, vz);
+        return flipX ?
+                drawRightTriangle(x, y, color)
+                : drawLeftTriangle(x, y, color);
+    }
+
+    @Override
+    public ITriangleRenderer drawLeftTriangleLeftFace(int x, int y, byte voxel, int depth, int vx, int vy, int vz) {
+        final int color = flipX ?
+                this.color.rightFace(voxel, vx, vy, vz)
+                : this.color.leftFace(voxel, vx, vy, vz);
+        return flipX ?
+                drawRightTriangle(x, y, color)
+                : drawLeftTriangle(x, y, color);
+    }
+
+    @Override
+    public ITriangleRenderer drawLeftTriangleRightFace(int x, int y, byte voxel, int depth, int vx, int vy, int vz) {
+        final int color = flipX ?
+                this.color.leftFace(voxel, vx, vy, vz)
+                : this.color.rightFace(voxel, vx, vy, vz);
+        return flipX ?
+                drawRightTriangle(x, y, color)
+                : drawLeftTriangle(x, y, color);
+    }
+
+    @Override
+    public ITriangleRenderer drawRightTriangleVerticalFace(int x, int y, byte voxel, int depth, int vx, int vy, int vz) {
+        final int color = this.color.verticalFace(voxel, vx, vy, vz);
+        return flipX ?
+                drawLeftTriangle(x, y, color)
+                : drawRightTriangle(x, y, color);
+    }
+
+    @Override
+    public ITriangleRenderer drawRightTriangleLeftFace(int x, int y, byte voxel, int depth, int vx, int vy, int vz) {
+        final int color = flipX ?
+                this.color.rightFace(voxel, vx, vy, vz)
+                : this.color.leftFace(voxel, vx, vy, vz);
+        return flipX ?
+                drawLeftTriangle(x, y, color)
+                : drawRightTriangle(x, y, color);
+    }
+
+    @Override
+    public ITriangleRenderer drawRightTriangleRightFace(int x, int y, byte voxel, int depth, int vx, int vy, int vz) {
+        final int color = flipX ?
+                this.color.leftFace(voxel, vx, vy, vz)
+                : this.color.rightFace(voxel, vx, vy, vz);
+        return flipX ?
+                drawLeftTriangle(x, y, color)
+                : drawRightTriangle(x, y, color);
+    }
+
+
+    @Override
     public ITriangleRenderer drawLeftTriangleVerticalFace(int x, int y, byte voxel, int vx, int vy, int vz) {
         final int color = this.color.verticalFace(voxel, vx, vy, vz);
         return flipX ?
@@ -275,4 +334,5 @@ public class VoxelSpriteBatchRenderer implements IRectangleRenderer, ITriangleRe
                 drawLeftTriangle(x, y, color)
                 : drawRightTriangle(x, y, color);
     }
+
 }

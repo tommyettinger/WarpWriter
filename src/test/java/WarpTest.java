@@ -240,7 +240,7 @@ public class WarpTest extends ApplicationAdapter {
         Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
         if(diagonal) {
             if(angle != 2){
-                pmTexture.draw(WarpDraw.drawIso(model, pixmapRenderer), 0, 0);
+                pmTexture.draw(WarpDraw.drawAbove45(model, pixmapRenderer), 0, 0);
             }
             else 
             {

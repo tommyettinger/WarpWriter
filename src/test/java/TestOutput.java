@@ -203,7 +203,7 @@ public class TestOutput extends ApplicationAdapter {
 //        }
         if((dir & 1) == 1)
         {
-            pix = WarpDraw.drawIso(tm, vpr);
+            pix = WarpDraw.drawAbove45(tm, vpr);
             tm.turner().clockZ();
         }
         else

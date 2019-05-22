@@ -209,7 +209,7 @@ public class FetchTest extends ApplicationAdapter {
 //            batch.begin();
             if (direction.isDiagonal()) {
                 if (angle != 2) {
-                    tex[f].draw(WarpDraw.drawIso(viewArea, pixmapRenderer), 0, 0);
+                    tex[f].draw(WarpDraw.drawAbove45(viewArea, pixmapRenderer), 0, 0);
                 } else {
                     tex[f].draw(WarpDraw.draw45(viewArea, pixmapRenderer), 0, 0);
                 }
