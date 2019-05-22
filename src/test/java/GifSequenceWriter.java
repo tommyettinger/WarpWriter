@@ -1,8 +1,16 @@
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.PixmapIO;
+import com.badlogic.gdx.utils.Array;
+
 import javax.imageio.*;
 import javax.imageio.metadata.IIOMetadata;
 import javax.imageio.metadata.IIOMetadataNode;
+import javax.imageio.stream.FileImageOutputStream;
 import javax.imageio.stream.ImageOutputStream;
+import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 
@@ -17,17 +25,17 @@ public class GifSequenceWriter {
     /**
      * Creates a new GifSequenceWriter
      *
-     * @param outputStream        the ImageOutputStream to be written to
      * @param imageType           one of the imageTypes specified in BufferedImage
      * @param timeBetweenFramesMS the time between frames in miliseconds
      * @param loopContinuously    whether the gif should loop repeatedly
      * @throws IIOException if no gif ImageWriters are found
      * @author Elliot Kroo (elliot@kroo.net)
      */
-    public GifSequenceWriter(ImageOutputStream outputStream, int imageType, int timeBetweenFramesMS, boolean loopContinuously)
-            throws IOException {
+    public GifSequenceWriter(int imageType, int timeBetweenFramesMS, boolean loopContinuously) {
         // my method to create a writer
-        gifWriter = getWriter();
+        try {
+            gifWriter = getWriter();
+
         imageWriteParam = gifWriter.getDefaultWriteParam();
         ImageTypeSpecifier imageTypeSpecifier = ImageTypeSpecifier.createFromBufferedImageType(imageType);
         imageMetaData = gifWriter.getDefaultImageMetadata(imageTypeSpecifier, imageWriteParam);
@@ -61,9 +69,10 @@ public class GifSequenceWriter {
 
         imageMetaData.setFromTree(metaFormatName, root);
 
-        gifWriter.setOutput(outputStream);
-
         gifWriter.prepareWriteSequence(null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void writeToSequence(RenderedImage img) throws IOException {
@@ -112,5 +121,72 @@ public class GifSequenceWriter {
         IIOMetadataNode node = new IIOMetadataNode(nodeName);
         rootNode.appendChild(node);
         return (node);
+    }
+
+    public float saveprogress;
+    public File lastRecording;
+    public boolean saving;
+    private int recordfps = 2;
+
+    public void writeGIF(Pixmap[] pixmaps, final FileHandle directory, final FileHandle writedirectory) {
+        if (saving)
+            return;
+        saving = true;
+
+        final Array<String> strings = new Array<>();
+
+        PixmapIO.PNG png = new PixmapIO.PNG();
+        png.setFlipY(true);
+        int i = 0;
+        for (Pixmap pixmap : pixmaps) {
+//                PixmapIO.writePNG(Gdx.files.absolute(directory.file().getAbsolutePath() + "/frame" + i + ".png"), pixmap);
+            try {
+                png.write(new FileHandle(directory.file().getAbsolutePath() + "/frame" + i + ".png"), pixmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            strings.add("frame" + i + ".png");
+            saveprogress += (0.5f / pixmaps.length);
+            i++;
+        }
+
+        lastRecording = compileGIF(strings, directory, writedirectory);
+//            directory.deleteDirectory();
+        for (Pixmap pixmap : pixmaps) {
+            pixmap.dispose();
+        }
+        saving = false;
+    }
+
+    private Array<byte[]> frames = new Array<>();
+
+    private File compileGIF(Array<String> strings, FileHandle inputdirectory, FileHandle directory) {
+        if (strings.size == 0) {
+            throw new RuntimeException("No strings!");
+        }
+
+        try {
+            String time = "" + (int) (System.currentTimeMillis() / 1000);
+            String dirstring = inputdirectory.file().getAbsolutePath();
+            new File(directory.file().getAbsolutePath()).mkdir();
+            BufferedImage firstImage = ImageIO.read(new File(dirstring + "/" + strings.get(0)));
+            File file = new File(directory.file().getAbsolutePath() + "/recording" + time + ".gif");
+            FileImageOutputStream output = new FileImageOutputStream(file);
+            gifWriter.setOutput(output);
+
+            writeToSequence(firstImage);
+
+            for (int i = 1; i < strings.size; i++) {
+                BufferedImage after = ImageIO.read(new File(dirstring + "/" + strings.get(i)));
+                saveprogress += (0.5f / frames.size);
+                writeToSequence(after);
+            }
+            close();
+            output.close();
+            return file;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

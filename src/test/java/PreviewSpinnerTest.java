@@ -54,77 +54,11 @@ public class PreviewSpinnerTest extends ApplicationAdapter {
 //        fileDialog.setVisible(true);
         System.out.println(fileDialog.getFiles()[0].getAbsolutePath());
 
-        writeGIF(pixmaps, new FileHandle(fileDialog.getDirectory() + "temp"), new FileHandle(fileDialog.getDirectory()));
+        GifSequenceWriter writer = new GifSequenceWriter(BufferedImage.TYPE_4BYTE_ABGR, (int) 500f, true);
+        writer.writeGIF(pixmaps, new FileHandle(fileDialog.getDirectory() + "temp"), new FileHandle(fileDialog.getDirectory()));
 
         Gdx.app.exit();
         System.exit(0);
-    }
-
-    public float saveprogress;
-    public File lastRecording;
-    public boolean saving;
-    private int recordfps = 2;
-
-    public void writeGIF(Pixmap[] pixmaps, final FileHandle directory, final FileHandle writedirectory) {
-        if (saving)
-            return;
-        saving = true;
-
-        final Array<String> strings = new Array<>();
-
-        PixmapIO.PNG png = new PixmapIO.PNG();
-        png.setFlipY(true);
-        int i = 0;
-        for (Pixmap pixmap : pixmaps) {
-//                PixmapIO.writePNG(Gdx.files.absolute(directory.file().getAbsolutePath() + "/frame" + i + ".png"), pixmap);
-            try {
-                png.write(new FileHandle(directory.file().getAbsolutePath() + "/frame" + i + ".png"), pixmap);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            strings.add("frame" + i + ".png");
-            saveprogress += (0.5f / pixmaps.length);
-            i++;
-        }
-
-        lastRecording = compileGIF(strings, directory, writedirectory);
-//            directory.deleteDirectory();
-        for (Pixmap pixmap : pixmaps) {
-            pixmap.dispose();
-        }
-        saving = false;
-    }
-
-    private Array<byte[]> frames = new Array<>();
-
-    private File compileGIF(Array<String> strings, FileHandle inputdirectory, FileHandle directory) {
-        if (strings.size == 0) {
-            throw new RuntimeException("No strings!");
-        }
-
-        try {
-            String time = "" + (int) (System.currentTimeMillis() / 1000);
-            String dirstring = inputdirectory.file().getAbsolutePath();
-            new File(directory.file().getAbsolutePath()).mkdir();
-            BufferedImage firstImage = ImageIO.read(new File(dirstring + "/" + strings.get(0)));
-            File file = new File(directory.file().getAbsolutePath() + "/recording" + time + ".gif");
-            ImageOutputStream output = new FileImageOutputStream(file);
-            GifSequenceWriter writer = new GifSequenceWriter(output, BufferedImage.TYPE_4BYTE_ABGR, (int) (1f / recordfps * 1000f), true);
-
-            writer.writeToSequence(firstImage);
-
-            for (int i = 1; i < strings.size; i++) {
-                BufferedImage after = ImageIO.read(new File(dirstring + "/" + strings.get(i)));
-                saveprogress += (0.5f / frames.size);
-                writer.writeToSequence(after);
-            }
-            writer.close();
-            output.close();
-            return file;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 
     public Pixmap[] spin(IModel model) {
@@ -140,6 +74,7 @@ public class PreviewSpinnerTest extends ApplicationAdapter {
             for (int model = 0; model < models.length; model++) {
                 turnModel.set(models[model]);
                 result[model * 8 + z * 2] = draw(turnModel, true, width, height);
+                renderer.blit(1, width, height);
                 result[model * 8 + z * 2 + 1] = draw(turnModel, false, width, height); // z45 should be true, but that doesn't show up
             }
             turnModel.turner().counterZ();
