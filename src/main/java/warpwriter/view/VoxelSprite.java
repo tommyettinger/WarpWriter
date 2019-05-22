@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
 import warpwriter.model.IModel;
 import warpwriter.model.TurnModel;
+import warpwriter.model.nonvoxel.ITurner;
 import warpwriter.view.render.VoxelSpriteBatchRenderer;
 
 /**
@@ -15,7 +16,7 @@ import warpwriter.view.render.VoxelSpriteBatchRenderer;
  *
  * @author Ben McLean
  */
-public class VoxelSprite implements Disposable {
+public class VoxelSprite implements Disposable, ITurner {
     protected VoxelSpriteBatchRenderer renderer;
     protected TurnModel turnModel = new TurnModel();
 
@@ -187,6 +188,21 @@ public class VoxelSprite implements Disposable {
     public VoxelSprite reset() {
         turnModel.turner().reset();
         return this.setZ45(false).setAngle(2);
+    }
+
+    @Override
+    public float angleX() {
+        return 90f;
+    }
+
+    @Override
+    public float angleY() {
+        return 90f;
+    }
+
+    @Override
+    public float angleZ() {
+        return 45f;
     }
 
     public VoxelSprite render() {

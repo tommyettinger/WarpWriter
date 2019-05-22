@@ -1,5 +1,6 @@
 package warpwriter.model;
 
+import warpwriter.model.nonvoxel.ITurner;
 import warpwriter.model.nonvoxel.Turner;
 
 /**
@@ -7,7 +8,7 @@ import warpwriter.model.nonvoxel.Turner;
  *
  * @author Ben McLean
  */
-public class TurnModel extends Fetch implements IModel {
+public class TurnModel extends Fetch implements IModel, ITurner {
     protected IModel iModel;
     protected Turner turner = new Turner();
 
@@ -138,5 +139,62 @@ public class TurnModel extends Fetch implements IModel {
             default:
                 throw new ArrayIndexOutOfBoundsException();
         }
+    }
+
+    @Override
+    public TurnModel counterX() {
+        turner.counterZ();
+        return this;
+    }
+
+    @Override
+    public TurnModel counterY() {
+        turner.counterY();
+        return this;
+    }
+
+    @Override
+    public TurnModel counterZ() {
+        turner.counterZ();
+        return this;
+    }
+
+    @Override
+    public TurnModel clockX() {
+        turner.clockX();
+        return this;
+    }
+
+    @Override
+    public TurnModel clockY() {
+        turner.clockY();
+        return this;
+    }
+
+    @Override
+    public TurnModel clockZ() {
+        turner.clockZ();
+        return this;
+    }
+
+    @Override
+    public TurnModel reset() {
+        turner.reset();
+        return this;
+    }
+
+    @Override
+    public float angleX() {
+        return 90f;
+    }
+
+    @Override
+    public float angleY() {
+        return 90f;
+    }
+
+    @Override
+    public float angleZ() {
+        return 90f;
     }
 }
