@@ -370,6 +370,27 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
     }
 
     /**
+     * Puts all non-empty voxels in {@code model} into this VoxelSeq, and also sets up the voxels touching empty space
+     * so they will be iterated through by some of the rendering methods, instead of needing to iterate over all voxels.
+     * @param model an IModel; the highest of its {@link IModel#sizeX()}, {@link IModel#sizeY()} and
+     *              {@link IModel#sizeZ()} will be used for all sizes to allow rotation.
+     */
+    public void putModel(IModel model)
+    {
+        this.sizeX = this.sizeY = this.sizeZ = Math.max(model.sizeX(), Math.max(model.sizeY(), model.sizeZ()));
+        byte v;
+        for (int x = 0; x < sizeX; x++) {
+            for (int y = 0; y < sizeY; y++) {
+                for (int z = 0; z < sizeZ; z++) {
+                    v = model.at(x, y, z);
+                    if(v != 0)
+                        put(x, y, z, v);
+                }
+            }
+        }
+        hollow();
+    }
+    /**
      * Resets the order of potentially-visible voxels as used by the rotation-related methods; since this order is not
      * changed by normal {@link #put(int, byte)} and {@link #remove(int)}, this method must be used to complete any
      * changes to the structure of the VoxelSeq.
@@ -433,7 +454,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
      * If the lengths of the two arrays are not equal, this puts a number of entries equal to the lesser length.
      * If either array is null, this returns without performing any changes.
      * @param keyArray an array of int keys that should usually have the same length as valueArray
-     * @param valueArray an array of int values that should usually have the same length as keyArray
+     * @param valueArray an array of byte values that should usually have the same length as keyArray
      */
     public void putAll(final int[] keyArray, final byte[] valueArray)
     {
@@ -445,13 +466,12 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
     }
 
     /**
-     * Puts all key-value pairs in the Map m into this VoxelSeq.
-     * The entries are all appended to the end of the iteration order, unless a key was already present. Then,
-     * its value is changed at the existing position in the iteration order. This can take any kind of Map,
-     * including unordered HashMap objects; if the Map does not have stable ordering, the order in which entries
-     * will be appended is not stable either. For this reason, VoxelSeq, LinkedHashMap, and TreeMap (or other
-     * SortedMap implementations) will work best when order matters.
-     * @param m an IntIntOrderedMap to add into this
+     * Puts all key-value pairs in the VoxelSeq {@code m} into this VoxelSeq.
+     * The entries are all appended to the end of the iteration order, keeping the same order they had in m, unless a
+     * key was already present. Then, its value is changed at the existing position in the iteration order. This does
+     * not change the order of voxels touching empty space (for rendering); call {@link #hollow()} when you're done
+     * editing this VoxelSeq to set up that order.
+     * @param m another VoxelSeq to add into this
      */
     public void putAll(VoxelSeq m) {
         if (f <= .5)
