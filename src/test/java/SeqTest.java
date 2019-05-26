@@ -13,18 +13,13 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import warpwriter.ModelMaker;
 import warpwriter.Tools3D;
-import warpwriter.VoxIO;
 import warpwriter.model.AnimatedVoxelSeq;
 import warpwriter.model.ITemporal;
 import warpwriter.model.VoxelSeq;
 import warpwriter.model.color.Colorizer;
-import warpwriter.model.nonvoxel.LittleEndianDataInputStream;
 import warpwriter.view.WarpDraw;
 import warpwriter.view.color.VoxelColor;
 import warpwriter.view.render.VoxelPixmapRenderer;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 public class SeqTest extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 320;//640;
@@ -74,7 +69,7 @@ public class SeqTest extends ApplicationAdapter {
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.FLESURRECT);
         colorizer = Colorizer.FlesurrectBonusColorizer;
-        shadowColor = colorizer.dim(colorizer.grayscale()[1]);
+        shadowColor = colorizer.medium(colorizer.reduce(0x505050FF));
         voxelColor = new VoxelColor().set(colorizer);
         pixmapRenderer = new VoxelPixmapRenderer().set(new Pixmap(512, 512, Pixmap.Format.RGBA8888)).set(voxelColor);
         pixmapRenderer.easing = false;
@@ -87,11 +82,12 @@ public class SeqTest extends ApplicationAdapter {
 //            box = maker.shipNoiseColorized();
 //        }
 //        makeBoom(maker.fireRange());
-        try {
-            voxels = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("FlesurrectBonus/Damned.vox")));
-        } catch (FileNotFoundException e) {
-            voxels = maker.shipLargeNoiseColorized();
-        }
+//        try {
+//            voxels = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("FlesurrectBonus/Damned.vox")));
+//        } catch (FileNotFoundException e) {
+//            voxels = maker.shipLargeNoiseColorized();
+//        }
+        voxels = maker.shipLargeNoiseColorized();
         VoxelSeq vs = new VoxelSeq(1024);
         vs.putArray(voxels);
         vs.hollow();
@@ -134,9 +130,11 @@ public class SeqTest extends ApplicationAdapter {
         if(angle > 2)
         {
             if(diagonal)
-                pmTexture.draw(WarpDraw.drawIso(seq, pixmapRenderer), 0, 0);
+                pmTexture.draw(WarpDraw.drawIsoShadow(seq, pixmapRenderer, shadowColor), 0, 0);
+//                pmTexture.draw(WarpDraw.drawIso(seq, pixmapRenderer), 0, 0);
             else 
-                pmTexture.draw(WarpDraw.drawAbove(seq, pixmapRenderer), 0, 0);
+                pmTexture.draw(WarpDraw.drawAboveShadow(seq, pixmapRenderer, shadowColor), 0, 0);
+//                pmTexture.draw(WarpDraw.drawAbove(seq, pixmapRenderer), 0, 0);
         }
         else{
             if(diagonal)
