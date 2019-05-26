@@ -51,6 +51,7 @@ public class SeqTest extends ApplicationAdapter {
 //    private byte[][][] container;
     private AnimatedVoxelSeq seq;
     private Colorizer colorizer;
+    private int shadowColor;
 //    private ChaoticFetch chaos;
 
     @Override
@@ -73,10 +74,11 @@ public class SeqTest extends ApplicationAdapter {
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.FLESURRECT);
         colorizer = Colorizer.FlesurrectBonusColorizer;
+        shadowColor = colorizer.dim(colorizer.grayscale()[1]);
         voxelColor = new VoxelColor().set(colorizer);
         pixmapRenderer = new VoxelPixmapRenderer().set(new Pixmap(512, 512, Pixmap.Format.RGBA8888)).set(voxelColor);
         pixmapRenderer.easing = false;
-        pmTexture = new Texture(pixmapRenderer.pixmap());
+        pmTexture = new Texture(512, 512, Pixmap.Format.RGBA8888);
         maker = new ModelMaker(-123456789, colorizer);
 //        try {
 //            box = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("Aurora/dumbcube.vox")));
@@ -138,9 +140,15 @@ public class SeqTest extends ApplicationAdapter {
         }
         else{
             if(diagonal)
-                pmTexture.draw(WarpDraw.draw45(seq, pixmapRenderer), 0, 0);
+            {
+                pmTexture.draw(WarpDraw.draw45Shadow(seq, pixmapRenderer, shadowColor), 0, 0);
+//                pmTexture.draw(WarpDraw.draw45(seq, pixmapRenderer), 0, 0);
+            }
             else
-                pmTexture.draw(WarpDraw.draw(seq, pixmapRenderer), 0, 0);
+            {
+                pmTexture.draw(WarpDraw.drawShadow(seq, pixmapRenderer, shadowColor), 0, 0);
+//                pmTexture.draw(WarpDraw.draw(seq, pixmapRenderer), 0, 0);
+            }
         }
         batch.draw(pmTexture, 64, 64);
         //batch.setColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made

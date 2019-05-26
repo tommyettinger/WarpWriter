@@ -439,6 +439,8 @@ public class WarpDraw {
         }
         return renderer.blit(12, pixelWidth, pixelHeight);
     }
+
+
     public static Pixmap draw(IVoxelSeq seq, VoxelPixmapRenderer renderer)
     {
         if(seq instanceof ITemporal) {
@@ -470,7 +472,7 @@ public class WarpDraw {
         if(seq instanceof ITemporal) {
             renderer.color().set(((ITemporal) seq).frame());
         }
-        final int len = seq.size(), sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ(), 
+        final int len = seq.size(), sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ(),
                 pixelWidth = (sizeX + sizeY) * 2 * renderer.scaleX + 3, pixelHeight = sizeZ * 3 * renderer.scaleY + 4;
         int dep;
         seq.sort(IntComparator.side45[seq.rotation()]);
@@ -514,7 +516,7 @@ public class WarpDraw {
                 final int xPos = (sizeY - y) * 3 + offsetPX, yPos = z * 2 + (sizeX - x) * 3 + offsetPY;
                 renderer.rectRight(xPos, yPos, 3, 2, v, 256 + z * 8 - x * 5, x, y, z);
                 //if (z >= sizeZ - 1 || seq.getRotated(x, y, z + 1) == 0)
-                    renderer.rectVertical(xPos, yPos + 3, 3, 3, v, 260 + z * 8 - x * 5, x, y, z);
+                renderer.rectVertical(xPos, yPos + 3, 3, 3, v, 260 + z * 8 - x * 5, x, y, z);
             }
         }
         return renderer.blit(13, pixelWidth, pixelHeight);
@@ -542,7 +544,7 @@ public class WarpDraw {
                 renderer.rectLeft(xPos, yPos, 2, 2, v, dep, x, y, z);
                 renderer.rectRight(xPos + 2, yPos, 2, 2, v, dep, x, y, z);
                 //if (z >= sizeZ - 1 || seq.getRotated(x, y, z + 1) == 0)
-                    renderer.rectVertical(xPos, yPos + 2, 4, 2, v, dep, x, y, z);
+                renderer.rectVertical(xPos, yPos + 2, 4, 2, v, dep, x, y, z);
             }
         }
         return renderer.blit(12, pixelWidth, pixelHeight);
@@ -581,5 +583,63 @@ public class WarpDraw {
             }
         }
         return renderer.blit(12, pixelWidth, pixelHeight);
+    }
+
+    public static Pixmap drawShadow(IVoxelSeq seq, VoxelPixmapRenderer renderer, int shadowColor)
+    {
+        if(seq instanceof ITemporal) {
+            renderer.color().set(((ITemporal) seq).frame());
+        }
+        final int len = seq.size(), sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ(),
+                offsetPX = (sizeY - 1 >> 1) + 1,
+                pixelWidth = (sizeY * 3 + (sizeY - 1 >> 1)) * renderer.scaleX + 3,
+                pixelHeight = sizeZ * 3 * renderer.scaleY + 4;
+        seq.sort(IntComparator.side[seq.rotation()]);
+        int xyz, x, y, z;
+        byte v;
+        for (int i = 0; i < len; i++) {
+            v = seq.getAtHollow(i);
+            if (v != 0) {
+                xyz = seq.keyAtRotated(i);
+                x = HashMap3D.extractX(xyz);
+                y = HashMap3D.extractY(xyz);
+                z = HashMap3D.extractZ(xyz);
+                final int xPos = (sizeY - y) * 3 + offsetPX;
+                renderer.rectRight(xPos, z * 3 + 1, 3, 3, v, 256 + x, x, y, z);
+                if (z >= sizeZ - 1 || seq.getRotated(x, y, z + 1) == 0)
+                    renderer.rectVertical(xPos, z * 3 + 4, 3, 1, v, 256 + x, x, y, z);
+                renderer.rect(xPos, 0, 3, 1, shadowColor, 0, 99999);
+
+            }
+        }
+        return renderer.blit(2, pixelWidth, pixelHeight);
+    }
+    public static Pixmap draw45Shadow(IVoxelSeq seq, VoxelPixmapRenderer renderer, int shadowColor) {
+        if(seq instanceof ITemporal) {
+            renderer.color().set(((ITemporal) seq).frame());
+        }
+        final int len = seq.size(), sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ(),
+                pixelWidth = (sizeX + sizeY) * 2 * renderer.scaleX + 3, pixelHeight = sizeZ * 3 * renderer.scaleY + 4;
+        int dep;
+        seq.sort(IntComparator.side45[seq.rotation()]);
+        int xyz, x, y, z;
+        byte v;
+        for (int i = 0; i < len; i++) {
+            v = seq.getAtHollow(i);
+            if (v != 0) {
+                xyz = seq.keyAtRotated(i);
+                x = HashMap3D.extractX(xyz);
+                y = HashMap3D.extractY(xyz);
+                z = HashMap3D.extractZ(xyz);
+                dep = 3 * (x - y) + 256;
+                final int xPos = (sizeY + x - y) * 2 + 1;
+                renderer.rectLeft(xPos, z * 3 + 1, 2, 3, v, dep, x, y, z);
+                renderer.rectRight(xPos + 2, z * 3 + 1, 2, 3, v, dep, x, y, z);
+                if (z >= sizeZ - 1 || seq.getRotated(x, y, z + 1) == 0)
+                    renderer.rectVertical(xPos, z * 3 + 4, 4, 1, v, dep, x, y, z);
+                renderer.rect(xPos, 0, 4, 1, shadowColor, 0, 99999);
+            }
+        }
+        return renderer.blit(5, pixelWidth, pixelHeight);
     }
 }

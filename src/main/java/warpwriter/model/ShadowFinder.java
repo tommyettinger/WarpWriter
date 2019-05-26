@@ -18,8 +18,8 @@ public class ShadowFinder {
      * @param blobShadow if true, the shadow will be rounded and expanded in some places using a cellular automaton
      * @return a GreasedRegion with one cell per voxel (not pixel); "on" marks shadow and "off" marks normal light
      */
-    public static GreasedRegion shadowBelow(VoxelSeq seq, boolean blobShadow) {
-        GreasedRegion floor = new GreasedRegion(seq.sizeX, seq.sizeY);
+    public static GreasedRegion shadowBelow(IVoxelSeq seq, boolean blobShadow) {
+        GreasedRegion floor = new GreasedRegion(seq.sizeX(), seq.sizeY());
         final int sz = seq.size();
         int k;
         for (int i = 0; i < sz; i++) {
