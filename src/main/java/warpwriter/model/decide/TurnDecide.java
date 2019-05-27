@@ -32,11 +32,11 @@ public class TurnDecide implements IDecide {
 
     @Override
     public boolean bool(int x, int y, int z) {
-        turner.input(x, y, z);
+        Turner.tempTurner.set(turner).input(x, y, z);
         return decide.bool(
-                turner.x(),
-                turner.y(),
-                turner.z()
+                Turner.tempTurner.x(),
+                Turner.tempTurner.y(),
+                Turner.tempTurner.z()
         );
     }
 }

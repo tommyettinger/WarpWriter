@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.Disposable;
 import warpwriter.model.IModel;
 import warpwriter.model.TurnModel;
 import warpwriter.model.nonvoxel.ITurner;
+import warpwriter.model.nonvoxel.Turner;
 import warpwriter.view.render.VoxelSpriteBatchRenderer;
 
 /**
@@ -122,7 +123,7 @@ public class VoxelSprite implements Disposable, ITurner {
      * @return this
      */
     public VoxelSprite clockX() {
-        turnModel.turner().clockX();
+        turnModel.clockX();
         return this;
     }
 
@@ -132,7 +133,7 @@ public class VoxelSprite implements Disposable, ITurner {
      * @return this
      */
     public VoxelSprite counterX() {
-        turnModel.turner().counterX();
+        turnModel.counterX();
         return this;
     }
 
@@ -142,7 +143,7 @@ public class VoxelSprite implements Disposable, ITurner {
      * @return this
      */
     public VoxelSprite clockY() {
-        turnModel.turner().clockY();
+        turnModel.clockY();
         return this;
     }
 
@@ -152,7 +153,7 @@ public class VoxelSprite implements Disposable, ITurner {
      * @return this
      */
     public VoxelSprite counterY() {
-        turnModel.turner().counterY();
+        turnModel.counterY();
         return this;
     }
 
@@ -164,7 +165,7 @@ public class VoxelSprite implements Disposable, ITurner {
     public VoxelSprite clockZ() {
         if (z45) {
             z45 = false;
-            turnModel.turner().clockZ();
+            turnModel.clockZ();
         } else
             z45 = true;
         return this;
@@ -180,13 +181,13 @@ public class VoxelSprite implements Disposable, ITurner {
             z45 = false;
         else {
             z45 = true;
-            turnModel.turner().counterZ();
+            turnModel.counterZ();
         }
         return this;
     }
 
     public VoxelSprite reset() {
-        turnModel.turner().reset();
+        turnModel.reset();
         return this.setZ45(false).setAngle(2);
     }
 
@@ -219,42 +220,42 @@ public class VoxelSprite implements Disposable, ITurner {
             case 1: // Below
                 if (z45) {
                     renderer.color().set(renderer.color().direction().flipY());
-                    turnModel.turner().clockY().clockY().clockZ();
+                    turnModel.clockY().clockY().clockZ();
                     VoxelDraw.drawIso(turnModel, renderer
-                            .setFlipX(true).setFlipY(true)
+                            .setFlipX(false).setFlipY(true)
                             .setScale(scaleX * 2f, scaleY)
                             .setOffset(
                                     offsetX + (offCenter - 1) * 2,
                                     offsetY + (int) (VoxelDraw.isoHeight(turnModel) * scaleY)
                             )
                     );
-                    turnModel.turner().counterZ().counterY().counterY();
+                    turnModel.counterZ().counterY().counterY();
                     renderer.color().set(renderer.color().direction().flipY());
                 } else {
                     renderer.color().set(renderer.color().direction().opposite());
-                    turnModel.turner().clockY().clockY().clockZ().clockZ();
+                    turnModel.clockY().clockY().clockZ().clockZ();
                     VoxelDraw.drawAbove(turnModel, renderer
-                            .setFlipX(true).setFlipY(true)
+                            .setFlipX(false).setFlipY(true)
                             .setScale(scaleX, scaleY)
                             .setOffset(
                                     offsetX + (offCenter + 1) * 6,
                                     offsetY + (int) ((turnModel.sizeX() + turnModel.sizeZ()) * 4 * scaleY)
                             )
                     );
-                    turnModel.turner().counterZ().counterZ().counterY().counterY();
+                    turnModel.counterZ().counterZ().counterY().counterY();
                     renderer.color().set(renderer.color().direction().opposite());
                 }
                 break;
             case 2: // Side
                 if (z45)
                     VoxelDraw.draw45Peek(turnModel, renderer
-                            .setFlipX(false).setFlipY(false)
+                            .setFlipX(true).setFlipY(false)
                             .setScale(scaleX, scaleY)
                             .setOffset(offsetX - offCenter * 2, offsetY)
                     );
                 else
                     VoxelDraw.drawRightPeek(turnModel, renderer
-                            .setFlipX(false).setFlipY(false)
+                            .setFlipX(true).setFlipY(false)
                             .setScale(scaleX, scaleY)
                             .setOffset(offsetX - offCenter * 6, offsetY)
                     );
@@ -262,13 +263,13 @@ public class VoxelSprite implements Disposable, ITurner {
             case 3: // Above
                 if (z45)
                     VoxelDraw.drawIso(turnModel, renderer
-                            .setFlipX(false).setFlipY(false)
+                            .setFlipX(true).setFlipY(false)
                             .setScale(scaleX * 2f, scaleY)
                             .setOffset(offsetX - offCenter * 2, offsetY)
                     );
                 else
                     VoxelDraw.drawAbove(turnModel, renderer
-                            .setFlipX(false).setFlipY(false)
+                            .setFlipX(true).setFlipY(false)
                             .setScale(scaleX, scaleY)
                             .setOffset(offsetX - offCenter * 6, offsetY)
                     );

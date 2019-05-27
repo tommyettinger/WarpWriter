@@ -142,7 +142,7 @@ public class PreviewSpinnerTest extends ApplicationAdapter {
                 result[model * 8 + z * 2] = draw(turnModel, true, width, height);
                 result[model * 8 + z * 2 + 1] = draw(turnModel, false, width, height); // z45 should be true, but that doesn't show up
             }
-            turnModel.turner().counterZ();
+            turnModel.counterZ();
         }
 //        turnModel.set(models[0]);
 //        Pixmap[] result = { draw(turnModel, false, width, height) };

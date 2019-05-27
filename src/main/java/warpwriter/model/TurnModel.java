@@ -10,7 +10,7 @@ import warpwriter.model.nonvoxel.Turner;
  */
 public class TurnModel extends Fetch implements IModel, ITurner {
     protected IModel iModel;
-    protected Turner turner = new Turner();
+    protected Turner turner = Turner.reset;
 
     public TurnModel set(IModel iModel) {
         this.iModel = iModel;
@@ -31,7 +31,7 @@ public class TurnModel extends Fetch implements IModel, ITurner {
     }
 
     public TurnModel size() {
-        turner().input(getModel().sizeX(), getModel().sizeY(), getModel().sizeZ());
+        Turner.tempTurner.set(turner).input(getModel().sizeX(), getModel().sizeY(), getModel().sizeZ());
         return this;
     }
 
@@ -92,11 +92,13 @@ public class TurnModel extends Fetch implements IModel, ITurner {
      */
     @Override
     public byte at(int x, int y, int z) {
-        turner.input(turner().affected(0), start(0) + turner().step(0) * x);
-        turner.input(turner().affected(1), start(1) + turner().step(1) * y);
-        turner.input(turner().affected(2), start(2) + turner().step(2) * z);
+        Turner.tempTurner
+                .set(turner)
+        .input(turner().affected(0), start(0) + turner().step(0) * x)
+        .input(turner().affected(1), start(1) + turner().step(1) * y)
+        .input(turner().affected(2), start(2) + turner().step(2) * z);
         return deferByte(getModel().at(
-                turner.input(0), turner.input(1), turner.input(2)
+                Turner.tempTurner.input(0), Turner.tempTurner.input(1), Turner.tempTurner.input(2)
         ), x, y, z);
     }
 
@@ -108,11 +110,11 @@ public class TurnModel extends Fetch implements IModel, ITurner {
      * @return Output identical to bite()
      */
     private byte slowBite(int x, int y, int z) {
-        turner.input(x, y, z);
+        Turner.tempTurner.set(turner).input(x, y, z);
         return deferByte(getModel().at(
-                turner.x() + start(turner.reverseLookup(0)),
-                turner.y() + start(turner.reverseLookup(1)),
-                turner.z() + start(turner.reverseLookup(2))
+                Turner.tempTurner.x() + start(turner.reverseLookup(0)),
+                Turner.tempTurner.y() + start(turner.reverseLookup(1)),
+                Turner.tempTurner.z() + start(turner.reverseLookup(2))
         ), x, y, z);
     }
 
@@ -143,58 +145,51 @@ public class TurnModel extends Fetch implements IModel, ITurner {
 
     @Override
     public TurnModel counterX() {
-        turner.counterZ();
-        return this;
+        return set(turner.counterZ());
     }
 
     @Override
     public TurnModel counterY() {
-        turner.counterY();
-        return this;
+        return set(turner.counterY());
     }
 
     @Override
     public TurnModel counterZ() {
-        turner.counterZ();
-        return this;
+        return set(turner.counterZ());
     }
 
     @Override
     public TurnModel clockX() {
-        turner.clockX();
-        return this;
+        return set(turner.clockX());
     }
 
     @Override
     public TurnModel clockY() {
-        turner.clockY();
-        return this;
+        return set(turner.clockY());
     }
 
     @Override
     public TurnModel clockZ() {
-        turner.clockZ();
-        return this;
+        return set(turner.clockZ());
     }
 
     @Override
     public TurnModel reset() {
-        turner.reset();
-        return this;
+        return set(turner.reset());
     }
 
     @Override
     public float angleX() {
-        return 90f;
+        return turner.angleX();
     }
 
     @Override
     public float angleY() {
-        return 90f;
+        return turner.angleY();
     }
 
     @Override
     public float angleZ() {
-        return 90f;
+        return turner.angleZ();
     }
 }
