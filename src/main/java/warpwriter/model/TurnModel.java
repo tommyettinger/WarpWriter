@@ -145,7 +145,7 @@ public class TurnModel extends Fetch implements IModel, ITurnable {
 
     @Override
     public TurnModel counterX() {
-        return set(rotation.counterZ());
+        return set(rotation.counterX());
     }
 
     @Override

@@ -248,13 +248,13 @@ public class VoxelSprite implements Disposable, ITurnable {
             case 2: // Side
                 if (z45)
                     VoxelDraw.draw45Peek(turnModel, renderer
-                            .setFlipX(true).setFlipY(false)
+                            .setFlipX(false).setFlipY(false)
                             .setScale(scaleX, scaleY)
                             .setOffset(offsetX - offCenter * 2, offsetY)
                     );
                 else
                     VoxelDraw.drawRightPeek(turnModel, renderer
-                            .setFlipX(true).setFlipY(false)
+                            .setFlipX(false).setFlipY(false)
                             .setScale(scaleX, scaleY)
                             .setOffset(offsetX - offCenter * 6, offsetY)
                     );
@@ -262,13 +262,13 @@ public class VoxelSprite implements Disposable, ITurnable {
             case 3: // Above
                 if (z45)
                     VoxelDraw.drawIso(turnModel, renderer
-                            .setFlipX(true).setFlipY(false)
+                            .setFlipX(false).setFlipY(false)
                             .setScale(scaleX * 2f, scaleY)
                             .setOffset(offsetX - offCenter * 2, offsetY)
                     );
                 else
                     VoxelDraw.drawAbove(turnModel, renderer
-                            .setFlipX(true).setFlipY(false)
+                            .setFlipX(false).setFlipY(false)
                             .setScale(scaleX, scaleY)
                             .setOffset(offsetX - offCenter * 6, offsetY)
                     );
