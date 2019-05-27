@@ -1,5 +1,7 @@
 package warpwriter.model.nonvoxel;
 
+import squidpony.StringKit;
+
 /**
  * Rotates integer coordinates based on right-hand rotation.
  *
@@ -40,9 +42,17 @@ public class Turner implements ITurner {
             }
         }
 
-        public final int value;
-        public final String name;
-        public final int[] rotation;
+        private final int value;
+        private final String name;
+        private final int[] rotation;
+
+        public final int[] rotation() {
+            return rotation;
+        }
+
+        public final int value() {
+            return value;
+        }
 
         Rotation(final int value, final String name, final int x, final int y, final int z) {
             this.value = value;
@@ -162,7 +172,57 @@ public class Turner implements ITurner {
 
         @Override
         public Rotation counterZ() {
-            return null;
+            switch (this) {
+                default:
+                case SOUTH0:
+                    return EAST0;
+                case SOUTH1:
+                    return DOWN3;
+                case SOUTH2:
+                    return WEST2;
+                case SOUTH3:
+                    return UP1;
+                case EAST0:
+                    return NORTH0;
+                case EAST1:
+                    return DOWN0;
+                case EAST2:
+                    return SOUTH2;
+                case EAST3:
+                    return UP0;
+                case NORTH0:
+                    return WEST0;
+                case NORTH1:
+                    return DOWN1;
+                case NORTH2:
+                    return EAST2;
+                case NORTH3:
+                    return UP3;
+                case WEST0:
+                    return SOUTH0;
+                case WEST1:
+                    return DOWN2;
+                case WEST2:
+                    return NORTH2;
+                case WEST3:
+                    return UP2;
+                case UP0:
+                    return WEST1;
+                case UP1:
+                    return NORTH1;
+                case UP2:
+                    return EAST1;
+                case UP3:
+                    return SOUTH1;
+                case DOWN0:
+                    return WEST3;
+                case DOWN1:
+                    return SOUTH3;
+                case DOWN2:
+                    return EAST3;
+                case DOWN3:
+                    return NORTH3;
+            }
         }
 
         @Override
@@ -361,7 +421,7 @@ public class Turner implements ITurner {
                         value.rotation[2] == rotation[2])
                     return value;
             }
-            throw new IllegalArgumentException("Rotation array " + rotation + " does not correspond to a rotation.");
+            throw new IllegalArgumentException("Rotation array " + StringKit.join(", ", rotation) + " does not correspond to a rotation.");
         }
     }
 
