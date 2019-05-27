@@ -94,7 +94,7 @@ public class ShaderPalettizer extends ApplicationAdapter {
         batch.setProjectionMatrix(screenView.getCamera().combined);
         if(screenTexture != null) {
             if(!batch.getShader().equals(defaultShader)) {
-                batch.setColor(-0x1.fffffep126f);
+                batch.setPackedColor(-0x1.fffffep126f);
                 Gdx.gl.glActiveTexture(GL20.GL_TEXTURE1);
                 palette.bind();
                 batch.begin();
