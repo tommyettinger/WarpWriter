@@ -127,7 +127,7 @@ public class PaletteTest extends ApplicationAdapter {
         batch.setShader(defaultShader);
         for (int x = 0; x < 8; x++)
             for (int y = 0; y < 32; y++) {
-                batch.setColor(NumberTools.reversedIntBitsToFloat(color((byte) (x * 32 + y)) & -2));
+                batch.setPackedColor(NumberTools.reversedIntBitsToFloat(color((byte) (x * 32 + y)) & -2));
                 batch.draw(one, x * (VIRTUAL_WIDTH / 8), VIRTUAL_HEIGHT - y * 22 - 22, VIRTUAL_WIDTH / 8, 22);
             }
         batch.end();
@@ -142,7 +142,7 @@ public class PaletteTest extends ApplicationAdapter {
         screenView.apply();
         batch.setProjectionMatrix(screenView.getCamera().combined);
         batch.begin();
-        batch.setColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
+        batch.setPackedColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
         screenTexture = buffer.getColorBufferTexture();
         screenTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         screenRegion.setRegion(screenTexture);

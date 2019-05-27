@@ -232,7 +232,7 @@ public class WarpTest extends ApplicationAdapter {
         worldView.update(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         batch.setProjectionMatrix(worldView.getCamera().combined);
         batch.setShader(shader);
-        batch.setColor(-0x1.fffffep126f);
+        batch.setPackedColor(-0x1.fffffep126f);
         Gdx.gl.glActiveTexture(GL20.GL_TEXTURE1);
         palette.bind();
         batch.begin();
@@ -276,7 +276,7 @@ public class WarpTest extends ApplicationAdapter {
         batch.draw(screenRegion, 0, 0);
         //// for GB_GREEN
         //font.setColor(0x34 / 255f, 0x68 / 255f, 0x56 / 255f, 1f);
-        batch.setColor(-0x1.fffffep126f);
+        batch.setPackedColor(-0x1.fffffep126f);
 //        font.setColor(0f, 0f, 0f, 1f);
         //font.draw(batch, model.voxels.length + ", " + model.voxels[0].length + ", " + model.voxels[0][0].length + ", " + " (original)", 0, 80);
         

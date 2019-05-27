@@ -13,7 +13,6 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import squidpony.squidmath.NumberTools;
 
 import static warpwriter.view.render.ShaderUtils.*;
 
@@ -71,7 +70,7 @@ public class ShaderPalettizer extends ApplicationAdapter {
         defaultShader = SpriteBatch.createDefaultShader();
         shader = new ShaderProgram(vertexShader, fragmentShaderWarmMildLimited);
         if (!shader.isCompiled()) throw new GdxRuntimeException("Couldn't compile shader: " + shader.getLog());
-        shaderNoDither = new ShaderProgram(vertexShader, fragmentShaderNoDither);
+        shaderNoDither = new ShaderProgram(vertexShader, fragmentShaderWarmMildSoft);
         if (!shaderNoDither.isCompiled()) throw new GdxRuntimeException("Couldn't compile shader: " + shaderNoDither.getLog());
         batch = new SpriteBatch(1000, defaultShader);
         screenView = new ScreenViewport();
@@ -95,20 +94,20 @@ public class ShaderPalettizer extends ApplicationAdapter {
         batch.setProjectionMatrix(screenView.getCamera().combined);
         if(screenTexture != null) {
             if(!batch.getShader().equals(defaultShader)) {
-                batch.setColor(-0x1.fffffep126f);
+                batch.setPackedColor(-0x1.fffffep126f);
                 Gdx.gl.glActiveTexture(GL20.GL_TEXTURE1);
                 palette.bind();
                 batch.begin();
                 batch.getShader().setUniformi("u_palette", 1);
-                if(batch.getShader().equals(shader)) 
-                {
-//                    shader.setUniformf("u_mul", 0.9f, 0.7f, 0.75f);
-//                    shader.setUniformf("u_add", 0.05f, 0.14f, 0.16f);
+                //if(!batch.getShader().equals(defaultShader)) 
+                //{
+                    shader.setUniformf("u_mul", 0.9f, 0.7f, 0.75f);
+                    shader.setUniformf("u_add", 0.05f, 0.14f, 0.16f);
 //                    shader.setUniformf("u_mul", 1f, 1f, 1f);
 //                    shader.setUniformf("u_add", 0f, 0f, 0f);
-                    shader.setUniformf("u_mul", 1f, 0.8f, 0.85f);
-                    shader.setUniformf("u_add", 0.1f, 0.95f, NumberTools.swayRandomized(12345, TimeUtils.timeSinceMillis(startTime) * 0x1p-9f) * 0.4f + 0.2f);
-                }
+//                    shader.setUniformf("u_mul", 1f, 0.8f, 0.85f);
+//                    shader.setUniformf("u_add", 0.1f, 0.95f, NumberTools.swayRandomized(12345, TimeUtils.timeSinceMillis(startTime) * 0x1p-9f) * 0.4f + 0.2f);
+                //}
 //                else batch.getShader().setUniformi("u_palette", 1);
 
                 Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
@@ -199,15 +198,27 @@ public class ShaderPalettizer extends ApplicationAdapter {
                         break;
                     case Input.Keys.D: // dither/disable
                         if(!batch.getShader().equals(shaderNoDither))
+                        {
                             batch.setShader(shaderNoDither);
+                            Gdx.graphics.setTitle("Softness ON");
+                        }
                         else
+                        {
                             batch.setShader(shader);
+                            Gdx.graphics.setTitle("Softness OFF");
+                        }
                         break;
                     default:
                         if(!batch.getShader().equals(shader))
+                        {
                             batch.setShader(shader);
+                            Gdx.graphics.setTitle("Softness OFF");
+                        }
                         else
+                        {
                             batch.setShader(defaultShader);
+                            Gdx.graphics.setTitle("Default Shader");
+                        }
                         break;
                 }
                 palette.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);

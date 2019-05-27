@@ -139,7 +139,7 @@ public class VoxelDrawSeqTest extends ApplicationAdapter {
             else
                 VoxelDraw.draw(seq, batchRenderer);
         }
-        batch.setColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
+        batch.setPackedColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
         batch.end();
         buffer.end();
         Gdx.gl.glClearColor(0, 0, 0, 1f);

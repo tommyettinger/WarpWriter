@@ -141,7 +141,7 @@ public class VoxelSpriteBatchRenderer implements IRectangleRenderer, ITriangleRe
 
     public IRectangleRenderer rect(int x, int y, int sizeX, int sizeY, int color) {
         //final float oldColor = batch.getPackedColor(); // requires less conversions than batch.getColor(), same result
-        batch.setColor(NumberTools.reversedIntBitsToFloat(color & 0xFFFFFFFE));
+        batch.setPackedColor(NumberTools.reversedIntBitsToFloat(color & 0xFFFFFFFE));
         // color is an RGBA int, batch takes an ABGR int with only 7 bits of alpha allowed.
         // this masks out one bit of alpha (libGDX thing to avoid bad floats like NaN), and converts to float color
         // I think SquidLib's reversedIntBitsToFloat() is slightly more efficient than libGDX's NumberUtils, not sure.
@@ -169,7 +169,7 @@ public class VoxelSpriteBatchRenderer implements IRectangleRenderer, ITriangleRe
 
     public VoxelSpriteBatchRenderer drawTriangle(int x, int y, int color, boolean left) {
         float oldColor = batch.getPackedColor(); // requires less conversions than batch.getColor(), same result
-        batch.setColor(NumberTools.intBitsToFloat(Integer.reverseBytes(color) & 0xFEFFFFFF));
+        batch.setPackedColor(NumberTools.reversedIntBitsToFloat(color & 0xFFFFFFFE));
         // converts RGBA int to ABGR int, masks out one bit of alpha (libGDX thing), and converts to float color
         // I think SquidLib's intBitsToFloat() is slightly more efficient than libGDX's NumberUtils, not sure.
         // float colors can be used by SpriteBatch without needing an object.
@@ -180,7 +180,7 @@ public class VoxelSpriteBatchRenderer implements IRectangleRenderer, ITriangleRe
                 scaleX * 2,
                 scaleY * 3
         );
-        batch.setColor(oldColor);
+        batch.setPackedColor(oldColor);
         return this;
     }
 

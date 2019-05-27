@@ -187,7 +187,7 @@ public class OneRovingVoxelTest extends ApplicationAdapter {
 
         voxelSprite.render();
 
-        batch.setColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
+        batch.setPackedColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
         batch.end();
         buffer.end();
         float bright = NumberTools.swayTight((TimeUtils.millis() & 0xFFFFFF) * 3E-4f) * 0.7f + 0.2f;
