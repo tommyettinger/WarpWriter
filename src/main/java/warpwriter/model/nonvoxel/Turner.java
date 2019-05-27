@@ -6,6 +6,199 @@ package warpwriter.model.nonvoxel;
  * @author Ben McLean
  */
 public class Turner implements ITurner {
+    public enum Rotation implements ITurner {
+        SOUTH0(0, -1, 1, 2),
+        SOUTH1(1, -1, -3, 1),
+        SOUTH2(2, -1, -2, -3),
+        SOUTH3(3, -1, 2, -2),
+        EAST0(4, -2, -1, 2),
+        EAST1(5, -2, -3, -1),
+        EAST2(6, -2, 0, -3),
+        EAST3(7, -2, 2, 0),
+        NORTH0(8, 0, -2, 2),
+        NORTH1(9, 0, -3, -2),
+        NORTH2(10, 0, 1, -3),
+        NORTH3(11, 0, 2, 1),
+        WEST0(12, 1, 0, 2),
+        WEST1(13, 1, -3, 0),
+        WEST2(14, 1, -1, -3),
+        WEST3(15, 1, 2, -1),
+        UP0(16, -3, -2, 0),
+        UP1(17, -3, -1, -2),
+        UP2(18, -3, 1, -1),
+        UP3(19, -3, 0, 1),
+        DOWN0(20, 2, -2, -1),
+        DOWN1(21, 2, 0, -2),
+        DOWN2(22, 2, 1, 0),
+        DOWN3(23, 2, -1, 1);
+
+        public static final Rotation[] rotations = new Rotation[24];
+
+        static {
+            for (Rotation rotation : Rotation.values()) {
+                rotations[rotation.value] = rotation;
+            }
+        }
+
+        public final int value;
+        public final int[] rotation;
+
+        Rotation(final int value, final int x, final int y, final int z) {
+            this.value = value;
+            this.rotation = new int[]{x, y, z};
+        }
+
+        @Override
+        public Rotation counterX() {
+            switch (this) {
+                default:
+                case SOUTH0:
+                    return SOUTH1;
+                case SOUTH1:
+                    return SOUTH2;
+                case SOUTH2:
+                    return SOUTH3;
+                case SOUTH3:
+                    return SOUTH0;
+                case EAST0:
+                    return EAST1;
+                case EAST1:
+                    return EAST2;
+                case EAST2:
+                    return EAST3;
+                case EAST3:
+                    return EAST0;
+                case NORTH0:
+                    return NORTH1;
+                case NORTH1:
+                    return NORTH2;
+                case NORTH2:
+                    return NORTH3;
+                case NORTH3:
+                    return NORTH0;
+                case WEST0:
+                    return WEST1;
+                case WEST1:
+                    return WEST2;
+                case WEST2:
+                    return WEST3;
+                case WEST3:
+                    return WEST0;
+                case UP0:
+                    return UP1;
+                case UP1:
+                    return UP2;
+                case UP2:
+                    return UP3;
+                case UP3:
+                    return UP0;
+                case DOWN0:
+                    return DOWN1;
+                case DOWN1:
+                    return DOWN2;
+                case DOWN2:
+                    return DOWN3;
+                case DOWN3:
+                    return DOWN0;
+            }
+        }
+
+        @Override
+        public Rotation counterY() {
+            return null;
+        }
+
+        @Override
+        public Rotation counterZ() {
+            return null;
+        }
+
+        @Override
+        public Rotation clockX() {
+            switch (this) {
+                default:
+                case SOUTH0:
+                    return SOUTH3;
+                case SOUTH1:
+                    return SOUTH0;
+                case SOUTH2:
+                    return SOUTH1;
+                case SOUTH3:
+                    return SOUTH2;
+                case EAST0:
+                    return EAST3;
+                case EAST1:
+                    return EAST0;
+                case EAST2:
+                    return EAST1;
+                case EAST3:
+                    return EAST2;
+                case NORTH0:
+                    return NORTH3;
+                case NORTH1:
+                    return NORTH0;
+                case NORTH2:
+                    return NORTH1;
+                case NORTH3:
+                    return NORTH2;
+                case WEST0:
+                    return WEST3;
+                case WEST1:
+                    return WEST0;
+                case WEST2:
+                    return WEST1;
+                case WEST3:
+                    return WEST2;
+                case UP0:
+                    return UP3;
+                case UP1:
+                    return UP0;
+                case UP2:
+                    return UP1;
+                case UP3:
+                    return UP2;
+                case DOWN0:
+                    return DOWN3;
+                case DOWN1:
+                    return DOWN0;
+                case DOWN2:
+                    return DOWN1;
+                case DOWN3:
+                    return DOWN2;
+            }
+        }
+
+        @Override
+        public Rotation clockY() {
+            return null;
+        }
+
+        @Override
+        public Rotation clockZ() {
+            return null;
+        }
+
+        @Override
+        public Rotation reset() {
+            return SOUTH0;
+        }
+
+        @Override
+        public float angleX() {
+            return 90f;
+        }
+
+        @Override
+        public float angleY() {
+            return 90f;
+        }
+
+        @Override
+        public float angleZ() {
+            return 90f;
+        }
+    }
+
     public Turner() {
     }
 
