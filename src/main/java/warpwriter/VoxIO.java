@@ -76,7 +76,7 @@ public class VoxIO {
                         int numVoxels = stream.readInt();
                         // each voxel has x, y, z and color index values
                         for (int i = 0; i < numVoxels; i++) {
-                            voxelData[stream.read()][sizeY - 1 - stream.read()][stream.read()] = stream.readByte();
+                            voxelData[stream.read()][stream.read()][stream.read()] = stream.readByte();
                         }
                     } else if(chunkName.equals("RGBA") && voxelData != null)
                     {
