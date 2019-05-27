@@ -26,6 +26,7 @@ import warpwriter.model.fetch.ArrayModel;
 import warpwriter.model.fetch.BoxModel;
 import warpwriter.model.fetch.ColorFetch;
 import warpwriter.model.nonvoxel.LittleEndianDataInputStream;
+import warpwriter.model.nonvoxel.Turner;
 import warpwriter.view.VoxelSprite;
 import warpwriter.view.color.Dimmer;
 import warpwriter.view.render.VoxelSpriteBatchRenderer;
@@ -215,7 +216,7 @@ public class SimpleTest extends ApplicationAdapter {
 
         font.draw(batch, StringKit.join(", ", voxelSprite.getModel().sizeX(), voxelSprite.getModel().sizeY(), voxelSprite.getModel().sizeZ()) + " (original)", 0, 80);
         font.draw(batch, voxelSprite.turnModel().sizeX() + ", " + voxelSprite.turnModel().sizeY() + ", " + voxelSprite.turnModel().sizeZ() + " (modified)", 0, 60);
-        font.draw(batch, StringKit.join(", ", voxelSprite.turnModel().turner().rotation()) + " (rotation)", 0, 40);
+        font.draw(batch, StringKit.join(", ", voxelSprite.turnModel().turner().rotation()) + " (rotation) " + Turner.Rotation.rotation(voxelSprite.turnModel().turner().rotation()), 0, 40);
         font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 20);
 
         voxelSprite.render();
@@ -223,7 +224,8 @@ public class SimpleTest extends ApplicationAdapter {
         batch.setColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
         batch.end();
         buffer.end();
-        float bright = NumberTools.swayTight((TimeUtils.millis() & 0xFFFFFF) * 3E-4f) * 0.7f + 0.2f;
+        float bright = 0.25f;
+                //NumberTools.swayTight((TimeUtils.millis() & 0xFFFFFF) * 3E-4f) * 0.7f + 0.2f;
         Gdx.gl.glClearColor(bright, bright, bright, 1f);
 //        ((backgroundColor >> 24) & 0xff) / 255f,
 //                ((backgroundColor >> 16) & 0xff) / 255f,

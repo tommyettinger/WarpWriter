@@ -7,30 +7,30 @@ package warpwriter.model.nonvoxel;
  */
 public class Turner implements ITurner {
     public enum Rotation implements ITurner {
-        SOUTH0(0, -1, 1, 2),
-        SOUTH1(1, -1, -3, 1),
-        SOUTH2(2, -1, -2, -3),
-        SOUTH3(3, -1, 2, -2),
-        EAST0(4, -2, -1, 2),
-        EAST1(5, -2, -3, -1),
-        EAST2(6, -2, 0, -3),
-        EAST3(7, -2, 2, 0),
-        NORTH0(8, 0, -2, 2),
-        NORTH1(9, 0, -3, -2),
-        NORTH2(10, 0, 1, -3),
-        NORTH3(11, 0, 2, 1),
-        WEST0(12, 1, 0, 2),
-        WEST1(13, 1, -3, 0),
-        WEST2(14, 1, -1, -3),
-        WEST3(15, 1, 2, -1),
-        UP0(16, -3, -2, 0),
-        UP1(17, -3, -1, -2),
-        UP2(18, -3, 1, -1),
-        UP3(19, -3, 0, 1),
-        DOWN0(20, 2, -2, -1),
-        DOWN1(21, 2, 0, -2),
-        DOWN2(22, 2, 1, 0),
-        DOWN3(23, 2, -1, 1);
+        SOUTH0(0, "SOUTH0", -1, 1, 2),
+        SOUTH1(1, "SOUTH1", -1, -3, 1),
+        SOUTH2(2, "SOUTH2", -1, -2, -3),
+        SOUTH3(3, "SOUTH3", -1, 2, -2),
+        EAST0(4, "EAST0", -2, -1, 2),
+        EAST1(5, "EAST1", -2, -3, -1),
+        EAST2(6, "EAST2", -2, 0, -3),
+        EAST3(7, "EAST3", -2, 2, 0),
+        NORTH0(8, "NORTH0", 0, -2, 2),
+        NORTH1(9, "NORTH1", 0, -3, -2),
+        NORTH2(10, "NORTH2", 0, 1, -3),
+        NORTH3(11, "NORTH3", 0, 2, 1),
+        WEST0(12, "WEST0", 1, 0, 2),
+        WEST1(13, "WEST1", 1, -3, 0),
+        WEST2(14, "WEST2", 1, -1, -3),
+        WEST3(15, "WEST3", 1, 2, -1),
+        UP0(16, "UP0", -3, -2, 0),
+        UP1(17, "UP1", -3, -1, -2),
+        UP2(18, "UP2", -3, 1, -1),
+        UP3(19, "UP3", -3, 0, 1),
+        DOWN0(20, "DOWN0", 2, -2, -1),
+        DOWN1(21, "DOWN1", 2, 0, -2),
+        DOWN2(22, "DOWN2", 2, 1, 0),
+        DOWN3(23, "DOWN3", 2, -1, 1);
 
         public static final Rotation[] rotations = new Rotation[24];
 
@@ -41,10 +41,12 @@ public class Turner implements ITurner {
         }
 
         public final int value;
+        public final String name;
         public final int[] rotation;
 
-        Rotation(final int value, final int x, final int y, final int z) {
+        Rotation(final int value, final String name, final int x, final int y, final int z) {
             this.value = value;
+            this.name = name;
             this.rotation = new int[]{x, y, z};
         }
 
@@ -196,6 +198,20 @@ public class Turner implements ITurner {
         @Override
         public float angleZ() {
             return 90f;
+        }
+
+        public String toString() {
+            return name;
+        }
+
+        public static Rotation rotation(final int[] rotation) {
+            for (Rotation value : Rotation.values()) {
+                if (value.rotation[0] == rotation[0] &&
+                        value.rotation[1] == rotation[1] &&
+                        value.rotation[2] == rotation[2])
+                    return value;
+            }
+            throw new IllegalArgumentException("Rotation array " + rotation + " does not correspond to a rotation.");
         }
     }
 
