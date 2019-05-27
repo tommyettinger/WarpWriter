@@ -1,91 +1,91 @@
 package warpwriter.model.fetch;
 
 import warpwriter.model.Fetch;
-import warpwriter.model.nonvoxel.ITurner;
-import warpwriter.model.nonvoxel.Turner;
+import warpwriter.model.nonvoxel.ITurnable;
+import warpwriter.model.nonvoxel.Rotation;
 
 /**
- * Rotates a Fetch chain using a Turner.
+ * Rotates a Fetch chain using a Rotation.
  *
  * @author Ben McLean
  */
-public class TurnFetch extends Fetch implements ITurner {
-    protected Turner turner;
+public class TurnFetch extends Fetch implements ITurnable {
+    protected Rotation rotation;
 
     public TurnFetch() {
-        this(Turner.reset);
+        this(Rotation.reset);
     }
 
     public TurnFetch(TurnFetch turnFetch) {
-        this(turnFetch.turner());
+        this(turnFetch.rotation());
     }
 
-    public TurnFetch(Turner turner) {
-        set(turner);
+    public TurnFetch(Rotation rotation) {
+        set(rotation);
     }
 
-    public TurnFetch set(Turner turner) {
-        this.turner = turner;
+    public TurnFetch set(Rotation rotation) {
+        this.rotation = rotation;
         return this;
     }
 
-    public Turner turner() {
-        return turner;
+    public Rotation rotation() {
+        return rotation;
     }
 
     @Override
     public byte at(int x, int y, int z) {
-        Turner.tempTurner.set(turner).input(x, y, z);
-        return getNextFetch().at(Turner.tempTurner.x(), Turner.tempTurner.y(), Turner.tempTurner.z());
+        Rotation.tempTurner.set(rotation).input(x, y, z);
+        return getNextFetch().at(Rotation.tempTurner.x(), Rotation.tempTurner.y(), Rotation.tempTurner.z());
     }
 
     @Override
-    public ITurner counterX() {
-        return set(turner.counterX());
+    public ITurnable counterX() {
+        return set(rotation.counterX());
     }
 
     @Override
-    public ITurner counterY() {
-        return set(turner.counterY());
+    public ITurnable counterY() {
+        return set(rotation.counterY());
     }
 
     @Override
-    public ITurner counterZ() {
-        return set(turner.counterZ());
+    public ITurnable counterZ() {
+        return set(rotation.counterZ());
     }
 
     @Override
-    public ITurner clockX() {
-        return set(turner.clockX());
+    public ITurnable clockX() {
+        return set(rotation.clockX());
     }
 
     @Override
-    public ITurner clockY() {
-        return set(turner.clockY());
+    public ITurnable clockY() {
+        return set(rotation.clockY());
     }
 
     @Override
-    public ITurner clockZ() {
-        return set(turner.clockZ());
+    public ITurnable clockZ() {
+        return set(rotation.clockZ());
     }
 
     @Override
-    public ITurner reset() {
-        return set(turner.reset());
+    public ITurnable reset() {
+        return set(rotation.reset());
     }
 
     @Override
     public float angleX() {
-        return turner.angleX();
+        return rotation.angleX();
     }
 
     @Override
     public float angleY() {
-        return turner.angleY();
+        return rotation.angleY();
     }
 
     @Override
     public float angleZ() {
-        return turner.angleZ();
+        return rotation.angleZ();
     }
 }

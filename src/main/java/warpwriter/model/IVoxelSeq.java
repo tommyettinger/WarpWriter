@@ -1,12 +1,12 @@
 package warpwriter.model;
 
-import warpwriter.model.nonvoxel.ITurner;
+import warpwriter.model.nonvoxel.ITurnable;
 import warpwriter.model.nonvoxel.IntComparator;
 
 /**
  * Created by Tommy Ettinger on 2/24/2019.
  */
-public interface IVoxelSeq extends ITurner {
+public interface IVoxelSeq extends ITurnable {
     int size();
     void clear();
     void hollow();

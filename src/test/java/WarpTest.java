@@ -281,7 +281,7 @@ public class WarpTest extends ApplicationAdapter {
         //font.draw(batch, model.voxels.length + ", " + model.voxels[0].length + ", " + model.voxels[0][0].length + ", " + " (original)", 0, 80);
         
 //        font.draw(batch, model.sizeX() + ", " + model.sizeY() + ", " + model.sizeZ() + " (sizes)", 0, 60);
-//        font.draw(batch, StringKit.join(", ", model.turner().rotation()) + " (rotation)", 0, 40);
+//        font.draw(batch, StringKit.join(", ", model.rotation().rotation()) + " (rotation)", 0, 40);
 //        font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 20);
         batch.end();
     }
@@ -317,27 +317,27 @@ public class WarpTest extends ApplicationAdapter {
                         angle = 3;
                         break;
                     case Input.Keys.U:
-                        model.turner().clockX();
+                        model.rotation().clockX();
                         break;
                     case Input.Keys.I:
-                        model.turner().clockY();
+                        model.rotation().clockY();
                         break;
                     case Input.Keys.O:
                         if(!(diagonal = !diagonal)) 
-                            model.turner().clockZ();
+                            model.rotation().clockZ();
                         break;
                     case Input.Keys.J:
-                        model.turner().counterX();
+                        model.rotation().counterX();
                         break;
                     case Input.Keys.K:
-                        model.turner().counterY();
+                        model.rotation().counterY();
                         break;
                     case Input.Keys.L:
                         if(diagonal = !diagonal)
-                            model.turner().counterZ();
+                            model.rotation().counterZ();
                         break;
                     case Input.Keys.R:
-                        model.turner().reset();
+                        model.rotation().reset();
                         break;
                     case Input.Keys.P:
 //                        model.set(model());
@@ -372,7 +372,7 @@ public class WarpTest extends ApplicationAdapter {
                         pixmapRenderer.outline = !pixmapRenderer.outline;
                         break;
                     case Input.Keys.T: // try again
-                        model.turner().reset();
+                        model.rotation().reset();
                         diagonal = false;
                         angle = 2;
                         break;

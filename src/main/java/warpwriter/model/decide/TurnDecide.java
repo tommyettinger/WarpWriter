@@ -1,9 +1,9 @@
 package warpwriter.model.decide;
 
-import warpwriter.model.nonvoxel.Turner;
+import warpwriter.model.nonvoxel.Rotation;
 
 /**
- * Uses Turner to rotate the coordinates of an IDecide
+ * Uses Rotation to rotate the coordinates of an IDecide
  *
  * @author Ben McLean
  */
@@ -19,24 +19,24 @@ public class TurnDecide implements IDecide {
         return decide;
     }
 
-    protected Turner turner;
+    protected Rotation rotation;
 
-    public Turner turner() {
-        return turner;
+    public Rotation rotation() {
+        return rotation;
     }
 
-    public TurnDecide set(Turner turner) {
-        this.turner = turner;
+    public TurnDecide set(Rotation rotation) {
+        this.rotation = rotation;
         return this;
     }
 
     @Override
     public boolean bool(int x, int y, int z) {
-        Turner.tempTurner.set(turner).input(x, y, z);
+        Rotation.tempTurner.set(rotation).input(x, y, z);
         return decide.bool(
-                Turner.tempTurner.x(),
-                Turner.tempTurner.y(),
-                Turner.tempTurner.z()
+                Rotation.tempTurner.x(),
+                Rotation.tempTurner.y(),
+                Rotation.tempTurner.z()
         );
     }
 }

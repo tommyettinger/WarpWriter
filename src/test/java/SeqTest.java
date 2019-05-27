@@ -167,7 +167,7 @@ public class SeqTest extends ApplicationAdapter {
         font.setColor(0f, 0f, 0f, 1f);
         //font.draw(batch, model.voxels.length + ", " + model.voxels[0].length + ", " + model.voxels[0][0].length + ", " + " (original)", 0, 80);
 //        font.draw(batch, model.sizeX() + ", " + model.sizeY() + ", " + model.sizeZ() + " (sizes)", 0, 60);
-//        font.draw(batch, StringKit.join(", ", model.turner().rotation()) + " (rotation)", 0, 40);
+//        font.draw(batch, StringKit.join(", ", model.rotation().rotation()) + " (rotation)", 0, 40);
         font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 20);
         batch.end();
     }
@@ -230,7 +230,7 @@ public class SeqTest extends ApplicationAdapter {
                         System.out.println("Current rotation: " + seq.rotation());
                         break;
 //                    case Input.Keys.R:
-//                        model.turner().reset();
+//                        model.rotation().reset();
 //                        break;
                     case Input.Keys.P:
 //                        model.set(model());
@@ -264,7 +264,7 @@ public class SeqTest extends ApplicationAdapter {
                         pixmapRenderer.outline = !pixmapRenderer.outline;
                         break;
                     case Input.Keys.T: // try again
-//                        model.turner().reset();
+//                        model.rotation().reset();
                         diagonal = false;
                         angle = 2;
                         break;

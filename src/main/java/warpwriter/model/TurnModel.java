@@ -1,24 +1,24 @@
 package warpwriter.model;
 
-import warpwriter.model.nonvoxel.ITurner;
-import warpwriter.model.nonvoxel.Turner;
+import warpwriter.model.nonvoxel.ITurnable;
+import warpwriter.model.nonvoxel.Rotation;
 
 /**
  * Rotates models at 90 degree angles, including their sizes
  *
  * @author Ben McLean
  */
-public class TurnModel extends Fetch implements IModel, ITurner {
+public class TurnModel extends Fetch implements IModel, ITurnable {
     protected IModel iModel;
-    protected Turner turner = Turner.reset;
+    protected Rotation rotation = Rotation.reset;
 
     public TurnModel set(IModel iModel) {
         this.iModel = iModel;
         return size();
     }
 
-    public TurnModel set(Turner turner) {
-        this.turner = turner;
+    public TurnModel set(Rotation rotation) {
+        this.rotation = rotation;
         return this;
     }
 
@@ -26,12 +26,12 @@ public class TurnModel extends Fetch implements IModel, ITurner {
         return iModel;
     }
 
-    public Turner turner() {
-        return turner;
+    public Rotation rotation() {
+        return rotation;
     }
 
     public TurnModel size() {
-        Turner.tempTurner.set(turner).input(getModel().sizeX(), getModel().sizeY(), getModel().sizeZ());
+        Rotation.tempTurner.set(rotation).input(getModel().sizeX(), getModel().sizeY(), getModel().sizeZ());
         return this;
     }
 
@@ -40,7 +40,7 @@ public class TurnModel extends Fetch implements IModel, ITurner {
      * @return Model size after rotation
      */
     public int size(int axis) {
-        return modelSize(turner().rotation(axis)); // modelSize() handles negative sizes correctly
+        return modelSize(rotation().rotation(axis)); // modelSize() handles negative sizes correctly
     }
 
     @Override
@@ -59,7 +59,7 @@ public class TurnModel extends Fetch implements IModel, ITurner {
     }
 
     public int start(int axis) {
-        final int rot = turner().rotation(axis);
+        final int rot = rotation().rotation(axis);
         return rot < 0 ?
                 modelSize(rot) - 1 // when rot is negative, we need to go from the end of the axis, not the start
                 : 0;
@@ -88,33 +88,33 @@ public class TurnModel extends Fetch implements IModel, ITurner {
     }
 
     /**
-     * Side effect: Uses the input values in turner as temporary storage, wiping out whatever may be stored in there. Outputs of turner are irrelevant, as turner is being used in this case to store rotation data without being used to actually implement the rotation.
+     * Side effect: Uses the input values in rotation as temporary storage, wiping out whatever may be stored in there. Outputs of rotation are irrelevant, as rotation is being used in this case to store rotation data without being used to actually implement the rotation.
      */
     @Override
     public byte at(int x, int y, int z) {
-        Turner.tempTurner
-                .set(turner)
-        .input(turner().affected(0), start(0) + turner().step(0) * x)
-        .input(turner().affected(1), start(1) + turner().step(1) * y)
-        .input(turner().affected(2), start(2) + turner().step(2) * z);
+        Rotation.tempTurner
+                .set(rotation)
+        .input(rotation().affected(0), start(0) + rotation().step(0) * x)
+        .input(rotation().affected(1), start(1) + rotation().step(1) * y)
+        .input(rotation().affected(2), start(2) + rotation().step(2) * z);
         return deferByte(getModel().at(
-                Turner.tempTurner.input(0), Turner.tempTurner.input(1), Turner.tempTurner.input(2)
+                Rotation.tempTurner.input(0), Rotation.tempTurner.input(1), Rotation.tempTurner.input(2)
         ), x, y, z);
     }
 
     /**
-     * This is a slightly slower version of bite() which shows what it would look like if it relied on turner to actually implement rotation rather than just to store rotation data.
+     * This is a slightly slower version of bite() which shows what it would look like if it relied on rotation to actually implement rotation rather than just to store rotation data.
      * <p>
      * It is not used because using it would involve six reverse lookups on the rotation array instead of none.
      *
      * @return Output identical to bite()
      */
     private byte slowBite(int x, int y, int z) {
-        Turner.tempTurner.set(turner).input(x, y, z);
+        Rotation.tempTurner.set(rotation).input(x, y, z);
         return deferByte(getModel().at(
-                Turner.tempTurner.x() + start(turner.reverseLookup(0)),
-                Turner.tempTurner.y() + start(turner.reverseLookup(1)),
-                Turner.tempTurner.z() + start(turner.reverseLookup(2))
+                Rotation.tempTurner.x() + start(rotation.reverseLookup(0)),
+                Rotation.tempTurner.y() + start(rotation.reverseLookup(1)),
+                Rotation.tempTurner.z() + start(rotation.reverseLookup(2))
         ), x, y, z);
     }
 
@@ -145,51 +145,51 @@ public class TurnModel extends Fetch implements IModel, ITurner {
 
     @Override
     public TurnModel counterX() {
-        return set(turner.counterZ());
+        return set(rotation.counterZ());
     }
 
     @Override
     public TurnModel counterY() {
-        return set(turner.counterY());
+        return set(rotation.counterY());
     }
 
     @Override
     public TurnModel counterZ() {
-        return set(turner.counterZ());
+        return set(rotation.counterZ());
     }
 
     @Override
     public TurnModel clockX() {
-        return set(turner.clockX());
+        return set(rotation.clockX());
     }
 
     @Override
     public TurnModel clockY() {
-        return set(turner.clockY());
+        return set(rotation.clockY());
     }
 
     @Override
     public TurnModel clockZ() {
-        return set(turner.clockZ());
+        return set(rotation.clockZ());
     }
 
     @Override
     public TurnModel reset() {
-        return set(turner.reset());
+        return set(rotation.reset());
     }
 
     @Override
     public float angleX() {
-        return turner.angleX();
+        return rotation.angleX();
     }
 
     @Override
     public float angleY() {
-        return turner.angleY();
+        return rotation.angleY();
     }
 
     @Override
     public float angleZ() {
-        return turner.angleZ();
+        return rotation.angleZ();
     }
 }

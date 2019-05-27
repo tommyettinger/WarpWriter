@@ -7,7 +7,7 @@ import squidpony.StringKit;
  *
  * @author Ben McLean
  */
-public enum Turner implements ITurner {
+public enum Rotation implements ITurnable {
     SOUTH0(0, "SOUTH0", -1, 1, 2),
     SOUTH1(1, "SOUTH1", -1, -3, 1),
     SOUTH2(2, "SOUTH2", -1, -2, -3),
@@ -33,10 +33,10 @@ public enum Turner implements ITurner {
     DOWN2(22, "DOWN2", 2, 1, 0),
     DOWN3(23, "DOWN3", 2, -1, 1);
 
-    public static final Turner[] rotations = new Turner[24];
+    public static final Rotation[] rotations = new Rotation[24];
 
     static {
-        for (Turner rotation : Turner.values()) {
+        for (Rotation rotation : Rotation.values()) {
             rotations[rotation.value] = rotation;
         }
     }
@@ -57,14 +57,14 @@ public enum Turner implements ITurner {
         return value;
     }
 
-    Turner(final int value, final String name, final int x, final int y, final int z) {
+    Rotation(final int value, final String name, final int x, final int y, final int z) {
         this.value = value;
         this.name = name;
         this.rotation = new int[]{x, y, z};
     }
 
     @Override
-    public Turner counterX() {
+    public Rotation counterX() {
         switch (this) {
             default:
             case SOUTH0:
@@ -119,7 +119,7 @@ public enum Turner implements ITurner {
     }
 
     @Override
-    public Turner counterY() {
+    public Rotation counterY() {
         switch (this) {
             default:
             case SOUTH0:
@@ -174,7 +174,7 @@ public enum Turner implements ITurner {
     }
 
     @Override
-    public Turner counterZ() {
+    public Rotation counterZ() {
         switch (this) {
             default:
             case SOUTH0:
@@ -229,7 +229,7 @@ public enum Turner implements ITurner {
     }
 
     @Override
-    public Turner clockX() {
+    public Rotation clockX() {
         switch (this) {
             default:
             case SOUTH0:
@@ -284,7 +284,7 @@ public enum Turner implements ITurner {
     }
 
     @Override
-    public Turner clockY() {
+    public Rotation clockY() {
         switch (this) {
             default:
             case SOUTH0:
@@ -339,7 +339,7 @@ public enum Turner implements ITurner {
     }
 
     @Override
-    public Turner clockZ() {
+    public Rotation clockZ() {
         switch (this) {
             default:
             case SOUTH0:
@@ -394,11 +394,11 @@ public enum Turner implements ITurner {
     }
 
     @Override
-    public Turner reset() {
+    public Rotation reset() {
         return reset;
     }
 
-    public static final Turner reset = SOUTH0;
+    public static final Rotation reset = SOUTH0;
 
     @Override
     public float angleX() {
@@ -419,14 +419,14 @@ public enum Turner implements ITurner {
         return name;
     }
 
-    public static Turner rotation(final int[] rotation) {
-        for (Turner value : Turner.values()) {
+    public static Rotation rotation(final int[] rotation) {
+        for (Rotation value : Rotation.values()) {
             if (value.rotation[0] == rotation[0] &&
                     value.rotation[1] == rotation[1] &&
                     value.rotation[2] == rotation[2])
                 return value;
         }
-        throw new IllegalArgumentException("Turner array " + StringKit.join(", ", rotation) + " does not correspond to a rotation.");
+        throw new IllegalArgumentException("Rotation array " + StringKit.join(", ", rotation) + " does not correspond to a rotation.");
     }
 
     public int affected(int axis) {
@@ -479,15 +479,15 @@ public enum Turner implements ITurner {
     public static TempTurner tempTurner = new TempTurner();
 
     public static class TempTurner {
-        protected Turner turner = SOUTH0;
+        protected Rotation rotation = SOUTH0;
 
-        public TempTurner set(Turner turner) {
-            this.turner = turner;
+        public TempTurner set(Rotation rotation) {
+            this.rotation = rotation;
             return this;
         }
 
-        public Turner turner() {
-            return turner;
+        public Rotation rotation() {
+            return rotation;
         }
 
         protected int[] input = new int[]{0, 0, 0};
@@ -509,8 +509,8 @@ public enum Turner implements ITurner {
         }
 
         public int turn(int axis) {
-            final int index = turner.reverseLookup(axis);
-            return input(index) * turner.step(index);
+            final int index = rotation.reverseLookup(axis);
+            return input(index) * rotation.step(index);
         }
 
         public int x() {

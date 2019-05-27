@@ -134,7 +134,7 @@ public class PreviewSpinnerTest extends ApplicationAdapter {
     public Pixmap[] spin(IModel models[]) {
         final int width = width(models) * 2, height = height(models);
         final TurnModel turnModel = new TurnModel();
-        turnModel.turner().clockZ().clockZ();
+        turnModel.rotation().clockZ().clockZ();
         Pixmap[] result = new Pixmap[models.length * 8];
         for (int z = 0; z < 4; z++) {
             for (int model = 0; model < models.length; model++) {
@@ -185,7 +185,7 @@ public class PreviewSpinnerTest extends ApplicationAdapter {
             case 1: // Below
                 if (z45) {
                     renderer.color().set(renderer.color().direction().flipY());
-                    turnModel.turner().clockY().clockY().clockZ();
+                    turnModel.rotation().clockY().clockY().clockZ();
                     VoxelDraw.drawIso(turnModel, renderer
                             //.setFlipX(true).setFlipY(true)
                             .setScale(2, 1)
@@ -194,11 +194,11 @@ public class PreviewSpinnerTest extends ApplicationAdapter {
                                     offsetY + (int) (VoxelDraw.isoHeight(turnModel))
                             )
                     );
-                    turnModel.turner().counterZ().counterY().counterY();
+                    turnModel.rotation().counterZ().counterY().counterY();
                     renderer.color().set(renderer.color().direction().flipY());
                 } else {
                     renderer.color().set(renderer.color().direction().opposite());
-                    turnModel.turner().clockY().clockY().clockZ().clockZ();
+                    turnModel.rotation().clockY().clockY().clockZ().clockZ();
                     VoxelDraw.drawAbove(turnModel, renderer
                             //.setFlipX(true).setFlipY(true)
                             .setScale(1, 1)
@@ -207,7 +207,7 @@ public class PreviewSpinnerTest extends ApplicationAdapter {
                                     offsetY + (int) ((turnModel.sizeX() + turnModel.sizeZ()) * 4)
                             )
                     );
-                    turnModel.turner().counterZ().counterZ().counterY().counterY();
+                    turnModel.rotation().counterZ().counterZ().counterY().counterY();
                     renderer.color().set(renderer.color().direction().opposite());
                 }
                 break;

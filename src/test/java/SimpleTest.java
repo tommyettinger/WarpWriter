@@ -11,12 +11,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.StringKit;
 import squidpony.squidmath.MiniMover64RNG;
-import squidpony.squidmath.NumberTools;
 import warpwriter.Coloring;
 import warpwriter.ModelMaker;
 import warpwriter.VoxIO;
@@ -26,7 +24,6 @@ import warpwriter.model.fetch.ArrayModel;
 import warpwriter.model.fetch.BoxModel;
 import warpwriter.model.fetch.ColorFetch;
 import warpwriter.model.nonvoxel.LittleEndianDataInputStream;
-import warpwriter.model.nonvoxel.Turner;
 import warpwriter.view.VoxelSprite;
 import warpwriter.view.color.Dimmer;
 import warpwriter.view.render.VoxelSpriteBatchRenderer;
@@ -216,7 +213,7 @@ public class SimpleTest extends ApplicationAdapter {
 
         font.draw(batch, StringKit.join(", ", voxelSprite.getModel().sizeX(), voxelSprite.getModel().sizeY(), voxelSprite.getModel().sizeZ()) + " (original)", 0, 80);
         font.draw(batch, voxelSprite.turnModel().sizeX() + ", " + voxelSprite.turnModel().sizeY() + ", " + voxelSprite.turnModel().sizeZ() + " (modified)", 0, 60);
-        font.draw(batch, StringKit.join(", ", voxelSprite.turnModel().turner().rotation()) + " (rotation) " + voxelSprite.turnModel().turner(), 0, 40);
+        font.draw(batch, StringKit.join(", ", voxelSprite.turnModel().rotation().rotation()) + " (rotation) " + voxelSprite.turnModel().rotation(), 0, 40);
         font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 20);
 
         voxelSprite.render();

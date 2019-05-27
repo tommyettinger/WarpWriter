@@ -131,42 +131,42 @@ public class FetchTest extends ApplicationAdapter {
                     case Input.Keys.NUMPAD_8:
                     case Input.Keys.NUM_8:
                         direction = CompassDirection.NORTH;
-                        viewArea.turner().reset();
+                        viewArea.rotation().reset();
                         break;
                     case Input.Keys.NUMPAD_6:
                     case Input.Keys.NUM_6:
                         direction = CompassDirection.EAST;
-                        viewArea.turner().reset().counterZ();
+                        viewArea.rotation().reset().counterZ();
                         break;
                     case Input.Keys.NUMPAD_2:
                     case Input.Keys.NUM_2:
                         direction = CompassDirection.SOUTH;
-                        viewArea.turner().reset().clockZ().clockZ();
+                        viewArea.rotation().reset().clockZ().clockZ();
                         break;
                     case Input.Keys.NUMPAD_4:
                     case Input.Keys.NUM_4:
                         direction = CompassDirection.WEST;
-                        viewArea.turner().reset().clockZ();
+                        viewArea.rotation().reset().clockZ();
                         break;
                     case Input.Keys.NUMPAD_7:
                     case Input.Keys.NUM_7:
                         direction = CompassDirection.NORTH_WEST;
-                        viewArea.turner().reset();
+                        viewArea.rotation().reset();
                         break;
                     case Input.Keys.NUMPAD_9:
                     case Input.Keys.NUM_9:
                         direction = CompassDirection.NORTH_EAST;
-                        viewArea.turner().reset().counterZ();
+                        viewArea.rotation().reset().counterZ();
                         break;
                     case Input.Keys.NUMPAD_3:
                     case Input.Keys.NUM_3:
                         direction = CompassDirection.SOUTH_EAST;
-                        viewArea.turner().reset().clockZ().clockZ();
+                        viewArea.rotation().reset().clockZ().clockZ();
                         break;
                     case Input.Keys.NUMPAD_1:
                     case Input.Keys.NUM_1:
                         direction = CompassDirection.SOUTH_WEST;
-                        viewArea.turner().reset().clockZ();
+                        viewArea.rotation().reset().clockZ();
                         break;
                     case Input.Keys.ENTER:
                         offset.setSize(0, 0, 0);

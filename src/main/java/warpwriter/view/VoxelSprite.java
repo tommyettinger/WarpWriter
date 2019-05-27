@@ -4,8 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
 import warpwriter.model.IModel;
 import warpwriter.model.TurnModel;
-import warpwriter.model.nonvoxel.ITurner;
-import warpwriter.model.nonvoxel.Turner;
+import warpwriter.model.nonvoxel.ITurnable;
 import warpwriter.view.render.VoxelSpriteBatchRenderer;
 
 /**
@@ -17,7 +16,7 @@ import warpwriter.view.render.VoxelSpriteBatchRenderer;
  *
  * @author Ben McLean
  */
-public class VoxelSprite implements Disposable, ITurner {
+public class VoxelSprite implements Disposable, ITurnable {
     protected VoxelSpriteBatchRenderer renderer;
     protected TurnModel turnModel = new TurnModel();
 

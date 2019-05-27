@@ -78,22 +78,22 @@ public class TurnTest extends ApplicationAdapter {
                         angle = 3;
                         break;
                     case Input.Keys.U:
-                        turnModel.turner().clockX();
+                        turnModel.rotation().clockX();
                         break;
                     case Input.Keys.I:
-                        turnModel.turner().clockY();
+                        turnModel.rotation().clockY();
                         break;
                     case Input.Keys.O:
-                        turnModel.turner().clockZ();
+                        turnModel.rotation().clockZ();
                         break;
                     case Input.Keys.J:
-                        turnModel.turner().counterX();
+                        turnModel.rotation().counterX();
                         break;
                     case Input.Keys.K:
-                        turnModel.turner().counterY();
+                        turnModel.rotation().counterY();
                         break;
                     case Input.Keys.L:
-                        turnModel.turner().counterZ();
+                        turnModel.rotation().counterZ();
                         break;
                     case Input.Keys.ESCAPE:
                         Gdx.app.exit();
@@ -124,8 +124,8 @@ public class TurnTest extends ApplicationAdapter {
         view.update(width, height);
         batch.setProjectionMatrix(view.getCamera().combined);
         batch.begin();
-//        font.draw(batch, turnModel.turner().face().toString(), 200, 20);
-//        font.draw(batch, turnModel.turner().roll().toString(), 200, 40);
+//        font.draw(batch, turnModel.rotation().face().toString(), 200, 20);
+//        font.draw(batch, turnModel.rotation().roll().toString(), 200, 40);
         batch.draw(tex, 0, 0);
         batch.end();
     }

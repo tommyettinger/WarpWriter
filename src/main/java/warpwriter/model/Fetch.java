@@ -4,7 +4,7 @@ import squidpony.squidmath.Noise;
 import warpwriter.model.decide.DecideFetch;
 import warpwriter.model.decide.IDecide;
 import warpwriter.model.fetch.*;
-import warpwriter.model.nonvoxel.Turner;
+import warpwriter.model.nonvoxel.Rotation;
 
 /**
  * This abstract class allows for IFetch implementations to use left-to-right method chaining to defer to other IFetch
@@ -190,7 +190,7 @@ public abstract class Fetch implements IFetch, IDecide {
         return add(new DecideFetch(decide, fetch));
     }
 
-    public Fetch turnFetch(Turner turner) {
-        return add(new TurnFetch(turner));
+    public Fetch turnFetch(Rotation rotation) {
+        return add(new TurnFetch(rotation));
     }
 }

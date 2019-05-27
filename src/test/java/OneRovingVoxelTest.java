@@ -182,7 +182,7 @@ public class OneRovingVoxelTest extends ApplicationAdapter {
 
         font.draw(batch, StringKit.join(", ", voxelSprite.getModel().sizeX(), voxelSprite.getModel().sizeY(), voxelSprite.getModel().sizeZ()) + " (original)", 0, 80);
         font.draw(batch, voxelSprite.turnModel().sizeX() + ", " + voxelSprite.turnModel().sizeY() + ", " + voxelSprite.turnModel().sizeZ() + " (modified)", 0, 60);
-        font.draw(batch, StringKit.join(", ", voxelSprite.turnModel().turner().rotation()) + " (rotation)", 0, 40);
+        font.draw(batch, StringKit.join(", ", voxelSprite.turnModel().rotation().rotation()) + " (rotation)", 0, 40);
         font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 20);
 
         voxelSprite.render();
