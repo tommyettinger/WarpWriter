@@ -107,7 +107,57 @@ public class Turner implements ITurner {
 
         @Override
         public Rotation counterY() {
-            return null;
+            switch (this) {
+                default:
+                case SOUTH0:
+                    return DOWN2;
+                case SOUTH1:
+                    return WEST1;
+                case SOUTH2:
+                    return UP0;
+                case SOUTH3:
+                    return EAST3;
+                case EAST0:
+                    return DOWN3;
+                case EAST1:
+                    return SOUTH1;
+                case EAST2:
+                    return UP3;
+                case EAST3:
+                    return NORTH3;
+                case NORTH0:
+                    return DOWN0;
+                case NORTH1:
+                    return EAST1;
+                case NORTH2:
+                    return UP2;
+                case NORTH3:
+                    return WEST3;
+                case WEST0:
+                    return DOWN1;
+                case WEST1:
+                    return NORTH1;
+                case WEST2:
+                    return UP1;
+                case WEST3:
+                    return SOUTH3;
+                case UP0:
+                    return NORTH0;
+                case UP1:
+                    return EAST0;
+                case UP2:
+                    return SOUTH0;
+                case UP3:
+                    return WEST0;
+                case DOWN0:
+                    return SOUTH2;
+                case DOWN1:
+                    return EAST2;
+                case DOWN2:
+                    return NORTH2;
+                case DOWN3:
+                    return WEST2;
+            }
         }
 
         @Override
