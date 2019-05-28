@@ -50,7 +50,7 @@ public class VoxelSprite implements Disposable, ITurnable {
         return turnModel;
     }
 
-    protected boolean z45 = false;
+    protected boolean z45 = true;
 
     public boolean getZ45() {
         return z45;
@@ -61,7 +61,7 @@ public class VoxelSprite implements Disposable, ITurnable {
         return this;
     }
 
-    protected int angle = 2;
+    protected int angle = 3;
 
     public int angle() {
         return angle;
@@ -187,7 +187,7 @@ public class VoxelSprite implements Disposable, ITurnable {
 
     public VoxelSprite reset() {
         turnModel.reset();
-        return this.setZ45(false).setAngle(2);
+        return this.setZ45(true).setAngle(3);
     }
 
 //    @Override

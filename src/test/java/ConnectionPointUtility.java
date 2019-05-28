@@ -10,21 +10,17 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.StringKit;
-import squidpony.squidmath.NumberTools;
 import warpwriter.Coloring;
 import warpwriter.ModelMaker;
 import warpwriter.model.FetchModel;
-import warpwriter.model.IFetch;
 import warpwriter.model.IModel;
 import warpwriter.model.color.Colorizer;
 import warpwriter.model.decide.DecideFetch;
-import warpwriter.model.decide.QuarterDecide;
+import warpwriter.model.decide.QuadrantDecide;
 import warpwriter.model.fetch.*;
-import warpwriter.model.nonvoxel.HashMap3D;
 import warpwriter.view.VoxelSprite;
 import warpwriter.view.render.VoxelSpriteBatchRenderer;
 
@@ -94,7 +90,7 @@ public class ConnectionPointUtility extends ApplicationAdapter {
     protected ShaderProgram defaultShader;
     protected Colorizer colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
     protected OneRovingVoxelModel oneRovingVoxelModel = new OneRovingVoxelModel();
-    protected QuarterDecide quarterDecide = new QuarterDecide();
+    protected QuadrantDecide quadrantDecide = new QuadrantDecide();
     protected DecideFetch decideFetch = new DecideFetch();
 
     public static void main(String[] arg) {
@@ -125,7 +121,9 @@ public class ConnectionPointUtility extends ApplicationAdapter {
         batchRenderer.color().set(colorizer);
         voxelSprite = new VoxelSprite()
                 .set(batchRenderer)
-                .setOffset(VIRTUAL_WIDTH / 2, 100);
+                .setOffset(VIRTUAL_WIDTH / 2, 100)
+                .setZ45(true)
+                .setAngle(3);
         makeModel();
         Gdx.input.setInputProcessor(inputProcessor());
 
@@ -135,39 +133,46 @@ public class ConnectionPointUtility extends ApplicationAdapter {
     }
 
     public void makeModel() {
-        IModel model = box ?
-                new BoxModel(model(), ColorFetch.color((byte) 9))
-                : model();
+        IModel model = model();
+
+        decideFetch.setDecide(quadrantDecide).setFetch(model);
+
         oneRovingVoxelModel.setVoxel((byte) 40)
                 .setSize(model.sizeX(), model.sizeY(), model.sizeZ())
-                .breakChain(new FetchModel(model));
+                .breakChain(decideFetch);
+
+        oneRovingVoxelModel.set(model.sizeX() / 2, model.sizeY() / 2, model.sizeZ() / 2);
+
+        quadrantDecide.set(oneRovingVoxelModel.x(), oneRovingVoxelModel.y(), oneRovingVoxelModel.z());
+
         voxelSprite.set(oneRovingVoxelModel);
     }
 
     public IModel model() {
-        // return new ArrayModel(maker.shipLargeRandomColorized())
-        HashMap3D<IFetch> map = new HashMap3D<>();
-        for (int x=0; x<3; x++) {
-            for (int y = 0; y < 3; y++)
-//                for (int z=0; z<3; z++)
-//                    map.put(x, y, 0, ColorFetch.color(maker.randomMainColor()));
-            {
-                byte midColor = colorizer.getReducer().randomColorIndex(maker.rng);
-                map.put(x, y, 0, new DecideFetch()
-                        .setDecide(TileFetch.Diagonal16x16x16)
-                        .setFetch(new NoiseFetch(colorizer.darken(midColor), midColor, midColor, colorizer.brighten(midColor))
-                ));
-            }
-        }
-        return //new ArrayModel(
-                new WorldFetch()
-                .set(map)
-//                , 48, 48, 16);
-                .model(48, 48, 16);
-//        return new DecideFetch(
-//                TileFetch.Diagonal16x16x16,
-//                new NoiseFetch(Colorizer.AuroraBonusColorizer.darken(midColor), midColor, midColor, Colorizer.AuroraBonusColorizer.brighten(midColor))
-//        ).model(16, 16, 16);
+        return new FetchModel(ColorFetch.color((byte) 9), 48, 48, 16);
+//        // return new ArrayModel(maker.shipLargeRandomColorized())
+//        HashMap3D<IFetch> map = new HashMap3D<>();
+//        for (int x=0; x<3; x++) {
+//            for (int y = 0; y < 3; y++)
+////                for (int z=0; z<3; z++)
+////                    map.put(x, y, 0, ColorFetch.color(maker.randomMainColor()));
+//            {
+//                byte midColor = colorizer.getReducer().randomColorIndex(maker.rng);
+//                map.put(x, y, 0, new DecideFetch()
+//                        .setDecide(TileFetch.Diagonal16x16x16)
+//                        .setFetch(new NoiseFetch(colorizer.darken(midColor), midColor, midColor, colorizer.brighten(midColor))
+//                ));
+//            }
+//        }
+//        return //new ArrayModel(
+//                new WorldFetch()
+//                .set(map)
+////                , 48, 48, 16);
+//                .model(48, 48, 16);
+////        return new DecideFetch(
+////                TileFetch.Diagonal16x16x16,
+////                new NoiseFetch(Colorizer.AuroraBonusColorizer.darken(midColor), midColor, midColor, Colorizer.AuroraBonusColorizer.brighten(midColor))
+////        ).model(16, 16, 16);
     }
 
     @Override
@@ -185,7 +190,7 @@ public class ConnectionPointUtility extends ApplicationAdapter {
 
         font.draw(batch, StringKit.join(", ", voxelSprite.getModel().sizeX(), voxelSprite.getModel().sizeY(), voxelSprite.getModel().sizeZ()) + " (original)", 0, 80);
         font.draw(batch, voxelSprite.turnModel().sizeX() + ", " + voxelSprite.turnModel().sizeY() + ", " + voxelSprite.turnModel().sizeZ() + " (modified)", 0, 60);
-        font.draw(batch, StringKit.join(", ", voxelSprite.turnModel().rotation().rotation()) + " (rotation)", 0, 40);
+        font.draw(batch, "Rotation: " + voxelSprite.turnModel().rotation() + ", z45: " + voxelSprite.getZ45(), 0, 40);
         font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 20);
 
         voxelSprite.render();
@@ -239,24 +244,31 @@ public class ConnectionPointUtility extends ApplicationAdapter {
                         break;
                     case Input.Keys.U:
                         voxelSprite.clockX();
+                        quadrantDecide.set(voxelSprite.turnModel().rotation());
                         break;
                     case Input.Keys.I:
                         voxelSprite.clockY();
+                        quadrantDecide.set(voxelSprite.turnModel().rotation());
                         break;
                     case Input.Keys.O:
                         voxelSprite.clockZ();
+                        quadrantDecide.set(voxelSprite.turnModel().rotation());
                         break;
                     case Input.Keys.J:
                         voxelSprite.counterX();
+                        quadrantDecide.set(voxelSprite.turnModel().rotation());
                         break;
                     case Input.Keys.K:
                         voxelSprite.counterY();
+                        quadrantDecide.set(voxelSprite.turnModel().rotation());
                         break;
                     case Input.Keys.L:
                         voxelSprite.counterZ();
+                        quadrantDecide.set(voxelSprite.turnModel().rotation());
                         break;
                     case Input.Keys.R:
                         voxelSprite.reset();
+                        quadrantDecide.set(voxelSprite.turnModel().rotation());
                         break;
                     case Input.Keys.P:
                         makeModel();
@@ -273,27 +285,27 @@ public class ConnectionPointUtility extends ApplicationAdapter {
                         break;
                     case Input.Keys.W:
                         oneRovingVoxelModel.addX(1);
-                        quarterDecide.addX(1);
+                        quadrantDecide.addX(1);
                         break;
                     case Input.Keys.S:
                         oneRovingVoxelModel.addX(-1);
-                        quarterDecide.addX(-1);
+                        quadrantDecide.addX(-1);
                         break;
                     case Input.Keys.A:
                         oneRovingVoxelModel.addY(-1);
-                        quarterDecide.addY(-1);
+                        quadrantDecide.addY(-1);
                         break;
                     case Input.Keys.D:
                         oneRovingVoxelModel.addY(1);
-                        quarterDecide.addY(1);
+                        quadrantDecide.addY(1);
                         break;
                     case Input.Keys.SPACE:
                         oneRovingVoxelModel.addZ(1);
-                        quarterDecide.addZ(1);
+                        quadrantDecide.addZ(1);
                         break;
                     case Input.Keys.C:
                         oneRovingVoxelModel.addZ(-1);
-                        quarterDecide.addZ(-1);
+                        quadrantDecide.addZ(-1);
                         break;
                     case Input.Keys.ESCAPE:
                         Gdx.app.exit();
