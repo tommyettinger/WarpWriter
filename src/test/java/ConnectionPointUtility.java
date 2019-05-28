@@ -19,7 +19,7 @@ import warpwriter.model.FetchModel;
 import warpwriter.model.IModel;
 import warpwriter.model.color.Colorizer;
 import warpwriter.model.decide.DecideFetch;
-import warpwriter.model.decide.QuadrantDecide;
+import warpwriter.model.decide.OctantDecide;
 import warpwriter.model.fetch.*;
 import warpwriter.view.VoxelSprite;
 import warpwriter.view.render.VoxelSpriteBatchRenderer;
@@ -90,7 +90,7 @@ public class ConnectionPointUtility extends ApplicationAdapter {
     protected ShaderProgram defaultShader;
     protected Colorizer colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
     protected OneRovingVoxelModel oneRovingVoxelModel = new OneRovingVoxelModel();
-    protected QuadrantDecide quadrantDecide = new QuadrantDecide();
+    protected OctantDecide octantDecide = new OctantDecide();
     protected DecideFetch decideFetch = new DecideFetch();
 
     public static void main(String[] arg) {
@@ -135,7 +135,7 @@ public class ConnectionPointUtility extends ApplicationAdapter {
     public void makeModel() {
         IModel model = model();
 
-        decideFetch.setDecide(quadrantDecide).setFetch(model);
+        decideFetch.setDecide(octantDecide).setFetch(model);
 
         oneRovingVoxelModel.setVoxel((byte) 40)
                 .setSize(model.sizeX(), model.sizeY(), model.sizeZ())
@@ -143,7 +143,7 @@ public class ConnectionPointUtility extends ApplicationAdapter {
 
         oneRovingVoxelModel.set(model.sizeX() / 2, model.sizeY() / 2, model.sizeZ() / 2);
 
-        quadrantDecide.set(oneRovingVoxelModel.x(), oneRovingVoxelModel.y(), oneRovingVoxelModel.z());
+        octantDecide.set(oneRovingVoxelModel.x(), oneRovingVoxelModel.y(), oneRovingVoxelModel.z());
 
         voxelSprite.set(oneRovingVoxelModel);
     }
@@ -244,31 +244,31 @@ public class ConnectionPointUtility extends ApplicationAdapter {
                         break;
                     case Input.Keys.U:
                         voxelSprite.clockX();
-                        quadrantDecide.set(voxelSprite.turnModel().rotation());
+                        octantDecide.set(voxelSprite.turnModel().rotation());
                         break;
                     case Input.Keys.I:
                         voxelSprite.clockY();
-                        quadrantDecide.set(voxelSprite.turnModel().rotation());
+                        octantDecide.set(voxelSprite.turnModel().rotation());
                         break;
                     case Input.Keys.O:
                         voxelSprite.clockZ();
-                        quadrantDecide.set(voxelSprite.turnModel().rotation());
+                        octantDecide.set(voxelSprite.turnModel().rotation());
                         break;
                     case Input.Keys.J:
                         voxelSprite.counterX();
-                        quadrantDecide.set(voxelSprite.turnModel().rotation());
+                        octantDecide.set(voxelSprite.turnModel().rotation());
                         break;
                     case Input.Keys.K:
                         voxelSprite.counterY();
-                        quadrantDecide.set(voxelSprite.turnModel().rotation());
+                        octantDecide.set(voxelSprite.turnModel().rotation());
                         break;
                     case Input.Keys.L:
                         voxelSprite.counterZ();
-                        quadrantDecide.set(voxelSprite.turnModel().rotation());
+                        octantDecide.set(voxelSprite.turnModel().rotation());
                         break;
                     case Input.Keys.R:
                         voxelSprite.reset();
-                        quadrantDecide.set(voxelSprite.turnModel().rotation());
+                        octantDecide.set(voxelSprite.turnModel().rotation());
                         break;
                     case Input.Keys.P:
                         makeModel();
@@ -285,27 +285,27 @@ public class ConnectionPointUtility extends ApplicationAdapter {
                         break;
                     case Input.Keys.W:
                         oneRovingVoxelModel.addX(1);
-                        quadrantDecide.addX(1);
+                        octantDecide.addX(1);
                         break;
                     case Input.Keys.S:
                         oneRovingVoxelModel.addX(-1);
-                        quadrantDecide.addX(-1);
+                        octantDecide.addX(-1);
                         break;
                     case Input.Keys.A:
                         oneRovingVoxelModel.addY(-1);
-                        quadrantDecide.addY(-1);
+                        octantDecide.addY(-1);
                         break;
                     case Input.Keys.D:
                         oneRovingVoxelModel.addY(1);
-                        quadrantDecide.addY(1);
+                        octantDecide.addY(1);
                         break;
                     case Input.Keys.SPACE:
                         oneRovingVoxelModel.addZ(1);
-                        quadrantDecide.addZ(1);
+                        octantDecide.addZ(1);
                         break;
                     case Input.Keys.C:
                         oneRovingVoxelModel.addZ(-1);
-                        quadrantDecide.addZ(-1);
+                        octantDecide.addZ(-1);
                         break;
                     case Input.Keys.ESCAPE:
                         Gdx.app.exit();
