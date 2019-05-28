@@ -184,9 +184,10 @@ public class WarpTest extends ApplicationAdapter {
                         midColor |= colorizer.getWaveBit();
                     if ((y & 2) == 2)
                         midColor |= colorizer.getShadeBit();
-                    map.put(x, y, z, new DecideFetch(
-                            new SphereDecide(8, 8, 8, 7), ColorFetch.color(midColor)
-                    ));
+                    map.put(x, y, z, new DecideFetch()
+                            .setDecide(new SphereDecide(8, 8, 8, 7))
+                            .setFetch(ColorFetch.color(midColor))
+                    );
                 }
             }
         }

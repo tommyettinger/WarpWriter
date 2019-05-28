@@ -10,24 +10,28 @@ import warpwriter.model.IFetch;
  */
 public class DecideFetch extends Fetch {
     protected IDecide decide;
-    protected Fetch fetch;
-
-    public DecideFetch(IDecide decide, Fetch fetch) {
-        set(decide).set(fetch);
-    }
+    protected IFetch iFetch;
 
     public DecideFetch set(IDecide decide) {
+        return setDecide(decide);
+    }
+
+    public DecideFetch setDecide(IDecide decide) {
         this.decide = decide;
         return this;
     }
 
-    public DecideFetch set(Fetch fetch) {
-        this.fetch = fetch;
+    public DecideFetch set(IFetch iFetch) {
+        return setFetch(iFetch);
+    }
+
+    public DecideFetch setFetch(IFetch iFetch) {
+        this.iFetch = iFetch;
         return this;
     }
 
     public IFetch getFetch() {
-        return fetch;
+        return iFetch;
     }
 
     public IDecide getDecide() {
@@ -36,7 +40,7 @@ public class DecideFetch extends Fetch {
 
     @Override
     public byte at(int x, int y, int z) {
-        return decide.bool(x, y, z) ? deferFetch(fetch).at(x, y, z) : safeNextFetch().at(x, y, z);
+        return decide.bool(x, y, z) ? iFetch.at(x, y, z) : safeNextFetch().at(x, y, z);
     }
 
     public static final IDecide truth = new IDecide() {

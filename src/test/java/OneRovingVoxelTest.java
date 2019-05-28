@@ -150,10 +150,10 @@ public class OneRovingVoxelTest extends ApplicationAdapter {
 //                    map.put(x, y, 0, ColorFetch.color(maker.randomMainColor()));
             {
                 byte midColor = colorizer.getReducer().randomColorIndex(maker.rng);
-                map.put(x, y, 0, new DecideFetch(
-                        TileFetch.Diagonal16x16x16,
-                        new NoiseFetch(colorizer.darken(midColor), midColor, midColor, colorizer.brighten(midColor))
-                ));
+                map.put(x, y, 0, new DecideFetch()
+                        .setDecide(TileFetch.Diagonal16x16x16)
+                        .setFetch(new NoiseFetch(colorizer.darken(midColor), midColor, midColor, colorizer.brighten(midColor)))
+                );
             }
         }
         return //new ArrayModel(

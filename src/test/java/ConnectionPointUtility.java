@@ -22,6 +22,7 @@ import warpwriter.model.IFetch;
 import warpwriter.model.IModel;
 import warpwriter.model.color.Colorizer;
 import warpwriter.model.decide.DecideFetch;
+import warpwriter.model.decide.QuarterDecide;
 import warpwriter.model.fetch.*;
 import warpwriter.model.nonvoxel.HashMap3D;
 import warpwriter.view.VoxelSprite;
@@ -93,10 +94,12 @@ public class ConnectionPointUtility extends ApplicationAdapter {
     protected ShaderProgram defaultShader;
     protected Colorizer colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
     protected OneRovingVoxelModel oneRovingVoxelModel = new OneRovingVoxelModel();
+    protected QuarterDecide quarterDecide = new QuarterDecide();
+    protected DecideFetch decideFetch = new DecideFetch();
 
     public static void main(String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-        config.setTitle("One Roving Voxel Test");
+        config.setTitle("WarpWriter Connection Point Utility");
         config.setWindowedMode(SCREEN_WIDTH, SCREEN_HEIGHT);
         config.setIdleFPS(10);
         config.useVsync(false);
@@ -150,9 +153,9 @@ public class ConnectionPointUtility extends ApplicationAdapter {
 //                    map.put(x, y, 0, ColorFetch.color(maker.randomMainColor()));
             {
                 byte midColor = colorizer.getReducer().randomColorIndex(maker.rng);
-                map.put(x, y, 0, new DecideFetch(
-                        TileFetch.Diagonal16x16x16,
-                        new NoiseFetch(colorizer.darken(midColor), midColor, midColor, colorizer.brighten(midColor))
+                map.put(x, y, 0, new DecideFetch()
+                        .setDecide(TileFetch.Diagonal16x16x16)
+                        .setFetch(new NoiseFetch(colorizer.darken(midColor), midColor, midColor, colorizer.brighten(midColor))
                 ));
             }
         }
@@ -268,26 +271,29 @@ public class ConnectionPointUtility extends ApplicationAdapter {
                     case Input.Keys.H:
                         batchRenderer.color().set(batchRenderer.color().direction().clock());
                         break;
-                    case Input.Keys.T: // try again
-                        voxelSprite.reset();
-                        break;
                     case Input.Keys.W:
                         oneRovingVoxelModel.addX(1);
+                        quarterDecide.addX(1);
                         break;
                     case Input.Keys.S:
                         oneRovingVoxelModel.addX(-1);
+                        quarterDecide.addX(-1);
                         break;
                     case Input.Keys.A:
                         oneRovingVoxelModel.addY(-1);
+                        quarterDecide.addY(-1);
                         break;
                     case Input.Keys.D:
                         oneRovingVoxelModel.addY(1);
+                        quarterDecide.addY(1);
                         break;
                     case Input.Keys.SPACE:
                         oneRovingVoxelModel.addZ(1);
+                        quarterDecide.addZ(1);
                         break;
                     case Input.Keys.C:
                         oneRovingVoxelModel.addZ(-1);
+                        quarterDecide.addZ(-1);
                         break;
                     case Input.Keys.ESCAPE:
                         Gdx.app.exit();

@@ -187,7 +187,7 @@ public abstract class Fetch implements IFetch, IDecide {
     }
 
     public Fetch decideFetch(IDecide decide, Fetch fetch) {
-        return add(new DecideFetch(decide, fetch));
+        return add(new DecideFetch().setDecide(decide).setFetch(fetch));
     }
 
     public Fetch turnFetch(Rotation rotation) {

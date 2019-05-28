@@ -33,6 +33,22 @@ public class QuarterDecide implements IDecide, ITurnable {
         return this;
     }
 
+    public QuarterDecide addX(final int x) {
+        return setX(this.x + x);
+    }
+
+    public QuarterDecide addY(final int y) {
+        return setY(this.y + y);
+    }
+
+    public QuarterDecide addZ(final int z) {
+        return setZ(this.z + z);
+    }
+
+    public QuarterDecide add(final int x, final int y, final int z) {
+        return addX(x).addY(y).addZ(z);
+    }
+
     public QuarterDecide set(final int x, final int y, final int z) {
         return setX(x).setY(y).setZ(z);
     }
