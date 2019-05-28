@@ -512,7 +512,7 @@ public enum Rotation implements ITurnable {
     }
 
     public static final boolean octantZ(final int octant) {
-        return octant % 8 > 3;
+        return octant % 8 < 4;
     }
 
     public static final int octantStepZ(final int octant) {
