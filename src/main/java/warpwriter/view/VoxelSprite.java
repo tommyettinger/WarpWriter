@@ -190,17 +190,17 @@ public class VoxelSprite implements Disposable, ITurnable {
         return this.setZ45(false).setAngle(2);
     }
 
-    @Override
+//    @Override
     public float angleX() {
         return 90f;
     }
 
-    @Override
+//    @Override
     public float angleY() {
         return 90f;
     }
 
-    @Override
+//    @Override
     public float angleZ() {
         return 45f;
     }

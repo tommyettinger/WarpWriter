@@ -12,18 +12,18 @@ public enum Rotation implements ITurnable {
     SOUTH1(1, "SOUTH1", -1, 2, -2),
     SOUTH2(2, "SOUTH2", -1, -2, -3),
     SOUTH3(3, "SOUTH3", -1, -3, 1),
-    EAST0(4, "EAST0", 1, 0, 2),
-    EAST1(5, "EAST1", 1, 2, -1),
-    EAST2(6, "EAST2", 1, -1, -3),
-    EAST3(7, "EAST3", 1, -3, 0),
+    WEST0(4, "WEST0", -2, -1, 2),
+    WEST1(5, "WEST1", -2, 2, 0),
+    WEST2(6, "WEST2", -2, 0, -3),
+    WEST3(7, "WEST3", -2, -3, -1),
     NORTH0(8, "NORTH0", 0, -2, 2),
     NORTH1(9, "NORTH1", 0, 2, 1),
     NORTH2(10, "NORTH2", 0, 1, -3),
     NORTH3(11, "NORTH3", 0, -3, -2),
-    WEST0(13, "WEST0", -2, -1, 2),
-    WEST1(14, "WEST1", -2, 2, 0),
-    WEST2(15, "WEST2", -2, 0, -3),
-    WEST3(16, "WEST3", -2, -3, -1),
+    EAST0(12, "EAST0", 1, 0, 2),
+    EAST1(13, "EAST1", 1, 2, -1),
+    EAST2(14, "EAST2", 1, -1, -3),
+    EAST3(15, "EAST3", 1, -3, 0),
     UP0(16, "UP0", -3, -2, 0),
     UP1(17, "UP1", -3, 0, 1),
     UP2(18, "UP2", -3, 1, -1),
@@ -32,7 +32,55 @@ public enum Rotation implements ITurnable {
     DOWN1(21, "DOWN1", 2, -1, 1),
     DOWN2(22, "DOWN2", 2, 1, 0),
     DOWN3(23, "DOWN3", 2, 0, -2);
-    
+
+    public boolean south() {
+        return south(this);
+    }
+
+    public static boolean south(Rotation rotation) {
+        return rotation == SOUTH0 || rotation == SOUTH1 || rotation == SOUTH2 || rotation == SOUTH3;
+    }
+
+    public boolean west() {
+        return west(this);
+    }
+
+    public static boolean west(Rotation rotation) {
+        return rotation == WEST0 || rotation == WEST1 || rotation == WEST2 || rotation == WEST3;
+    }
+
+    public boolean north() {
+        return north(this);
+    }
+
+    public static boolean north(Rotation rotation) {
+        return rotation == NORTH0 || rotation == NORTH1 || rotation == NORTH2 || rotation == NORTH3;
+    }
+
+    public boolean east() {
+        return east(this);
+    }
+
+    public static boolean east(Rotation rotation) {
+        return rotation == EAST0 || rotation == EAST1 || rotation == EAST2 || rotation == EAST3;
+    }
+
+    public boolean up() {
+        return up(this);
+    }
+
+    public static boolean up(Rotation rotation) {
+        return rotation == UP0 || rotation == UP1 || rotation == UP2 || rotation == UP3;
+    }
+
+    public boolean down() {
+        return down(this);
+    }
+
+    public static boolean down(Rotation rotation) {
+        return rotation == DOWN0 || rotation == DOWN1 || rotation == DOWN2 || rotation == DOWN3;
+    }
+
     public static final Rotation[] rotations = new Rotation[24];
 
     static {
@@ -400,17 +448,17 @@ public enum Rotation implements ITurnable {
 
     public static final Rotation reset = SOUTH0;
 
-    @Override
+    //    @Override
     public float angleX() {
         return 90f;
     }
 
-    @Override
+    //    @Override
     public float angleY() {
         return 90f;
     }
 
-    @Override
+    //    @Override
     public float angleZ() {
         return 90f;
     }
@@ -420,12 +468,11 @@ public enum Rotation implements ITurnable {
     }
 
     public static Rotation rotation(final int[] rotation) {
-        for (Rotation value : Rotation.values()) {
+        for (Rotation value : Rotation.values())
             if (value.rotation[0] == rotation[0] &&
                     value.rotation[1] == rotation[1] &&
                     value.rotation[2] == rotation[2])
                 return value;
-        }
         throw new IllegalArgumentException("Rotation array " + StringKit.join(", ", rotation) + " does not correspond to a rotation.");
     }
 

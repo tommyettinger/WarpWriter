@@ -2638,17 +2638,17 @@ public class SlopeSeq implements IVoxelSeq, Serializable, Cloneable {
         return this;
     }
 
-    @Override
+//    @Override
     public float angleX() {
         return 90f;
     }
 
-    @Override
+//    @Override
     public float angleY() {
         return 90f;
     }
 
-    @Override
+//    @Override
     public float angleZ() {
         return 90f;
     }

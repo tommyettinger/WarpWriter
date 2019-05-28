@@ -17,10 +17,4 @@ public interface ITurnable {
     ITurnable clockZ();
 
     ITurnable reset();
-
-    float angleX();
-
-    float angleY();
-
-    float angleZ();
 }
