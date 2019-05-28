@@ -150,7 +150,7 @@ public class ConnectionPointUtility extends ApplicationAdapter {
                 .set(
                         oneRovingVoxelModel.x() - voxelSprite.turnModel().rotation().octantStepX(),
                         oneRovingVoxelModel.y() - voxelSprite.turnModel().rotation().octantStepY(),
-                        oneRovingVoxelModel.z() - voxelSprite.turnModel().rotation().octantStepY()
+                        oneRovingVoxelModel.z() - voxelSprite.turnModel().rotation().octantStepZ()
                 );
         return this;
     }
