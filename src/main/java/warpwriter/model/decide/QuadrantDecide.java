@@ -67,22 +67,22 @@ public class QuadrantDecide implements IDecide, ITurnable {
     @Override
     public boolean bool(int x, int y, int z) {
         switch (rotation) {
-            case EAST1: case NORTH2:
-                return x < x() && y < y() && z < z();
-            case SOUTH1: case EAST2:
-                return x > x() && y < y() && z < z();
-            case NORTH1: case WEST2:
-                return x < x() && y > y () &&  z < z();
-            case SOUTH2: case WEST1:
-                return x > x() && y > y() && z < z();
-            case EAST0: case NORTH3:
-                return x < x() && y < y() && z > z();
-            default: case SOUTH0: case EAST3:
-                return x > x() && y < y() && z > z();
-            case NORTH0: case WEST3:
-                return x < x() && y > y() && z > z();
-            case SOUTH3: case WEST0:
-                return x > x() && y > y() && z > z();
+            case EAST1: case NORTH2: case DOWN3:
+                return x < x() && y < y() && z < z(); //0
+            case SOUTH1: case EAST2: case DOWN2:
+                return x > x() && y < y() && z < z(); //1
+            case NORTH1: case WEST2: case DOWN0:
+                return x < x() && y > y () &&  z < z(); //2
+            case SOUTH2: case WEST1: case DOWN1:
+                return x > x() && y > y() && z < z(); //3
+            case EAST0: case NORTH3: case UP2:
+                return x < x() && y < y() && z > z(); //4
+            default: case SOUTH0: case EAST3: case UP3:
+                return x > x() && y < y() && z > z(); //5
+            case NORTH0: case WEST3: case UP1:
+                return x < x() && y > y() && z > z(); //6
+            case SOUTH3: case WEST0: case UP0:
+                return x > x() && y > y() && z > z(); //7
         }
     }
 
