@@ -2,6 +2,7 @@ package warpwriter.model.decide;
 
 import warpwriter.model.Fetch;
 import warpwriter.model.IFetch;
+import warpwriter.model.fetch.ColorFetch;
 
 /**
  * Uses an IDecide to make a choice between two different Fetches
@@ -9,8 +10,8 @@ import warpwriter.model.IFetch;
  * @author Ben McLean
  */
 public class DecideFetch extends Fetch {
-    protected IDecide decide;
-    protected IFetch iFetch;
+    protected IDecide decide = falsehood;
+    protected IFetch iFetch = ColorFetch.transparent;
 
     public DecideFetch set(IDecide decide) {
         return setDecide(decide);
