@@ -201,4 +201,15 @@ public class BlinkRenderer implements IRectangleRenderer, ITriangleRenderer {
     public ITriangleRenderer drawRightTriangleRightFace(int x, int y, byte voxel, int vx, int vy, int vz) {
         return tri.drawRightTriangleRightFace(x, y, f(voxel), vx, vy, vz);
     }
+
+    public final byte transparency() {
+        return rect.transparency();
+    }
+
+    @Override
+    public BlinkRenderer setTransparency(byte transparency) {
+        if (rect != null) rect.setTransparency(transparency);
+        if (tri != null) tri.setTransparency(transparency);
+        return this;
+    }
 }

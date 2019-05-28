@@ -69,7 +69,7 @@ public class VoxelPixmapRenderer implements IRectangleRenderer, ITriangleRendere
 
     @Override
     public VoxelPixmapRenderer rect(int x, int y, int sizeX, int sizeY, int color) {
-        pixmap.setColor(color);
+        pixmap.setColor(transparency(color));
         pixmap.fillRectangle(
                 scaleX * (flipX ? -x : x) + offsetX,
                 scaleY * (flipY ? -y : y) + offsetY,
@@ -301,7 +301,7 @@ public class VoxelPixmapRenderer implements IRectangleRenderer, ITriangleRendere
 
     @Override
     public VoxelPixmapRenderer drawLeftTriangle(int x, int y, int color) {
-        pixmap.setColor(color);
+        pixmap.setColor(transparency(color));
         pixmap.fillRectangle((x + 1) * scaleX + offsetX, y * scaleY + offsetY, scaleX, scaleY * 3);
         pixmap.fillRectangle(x * scaleX + offsetX, (y + 1) * scaleY + offsetY * scaleY, scaleX, scaleY);
 //        pixmap.fillTriangle(
@@ -314,7 +314,7 @@ public class VoxelPixmapRenderer implements IRectangleRenderer, ITriangleRendere
 
     @Override
     public VoxelPixmapRenderer drawRightTriangle(int x, int y, int color) {
-        pixmap.setColor(color);
+        pixmap.setColor(transparency(color));
         pixmap.fillRectangle(x * scaleX + offsetX, y * scaleY + offsetY, scaleX, scaleY * 3);
         pixmap.fillRectangle((x + 1) * scaleX + offsetX, (y + 1) * scaleY + offsetY, scaleX, scaleY);
 //        pixmap.fillTriangle(
@@ -381,7 +381,7 @@ public class VoxelPixmapRenderer implements IRectangleRenderer, ITriangleRendere
                 drawLeftTriangle(x, y, color)
                 : drawRightTriangle(x, y, color);
     }
-    
+
     public VoxelPixmapRenderer drawLeftTriangle(int x, int y, int shown, byte voxel, int depth) {
         final int outline = color.twilight().dark(voxel);
         rect((x + 1) * scaleX + offsetX, y * scaleY + offsetY, scaleX, scaleY * 3, shown, outline, depth);
@@ -449,5 +449,26 @@ public class VoxelPixmapRenderer implements IRectangleRenderer, ITriangleRendere
         return flipX ?
                 drawLeftTriangle(x, y, color, voxel, depth)
                 : drawRightTriangle(x, y, color, voxel, depth);
+    }
+
+    protected byte transparency = Byte.MAX_VALUE;
+
+    @Override
+    public final byte transparency() {
+        return transparency;
+    }
+
+    @Override
+    public VoxelPixmapRenderer setTransparency(byte transparency) {
+        this.transparency = transparency;
+        return this;
+    }
+
+    public final int transparency(int color) {
+        return transparency(color, transparency);
+    }
+
+    public static int transparency(int color, byte transparency) {
+        return (color & 0xFFFFFF00) | ((color & 0xFF) * (transparency + 1) >>> 7);
     }
 }

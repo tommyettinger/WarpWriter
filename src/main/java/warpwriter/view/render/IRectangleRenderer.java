@@ -7,7 +7,7 @@ import warpwriter.view.color.VoxelColor;
  *
  * @author Ben McLean
  */
-public interface IRectangleRenderer {
+public interface IRectangleRenderer extends IVoxelRenderer {
     IRectangleRenderer rect(int x, int y, int sizeX, int sizeY, int color);
 
     IRectangleRenderer rectVertical(int x, int y, int sizeX, int sizeY, byte voxel);

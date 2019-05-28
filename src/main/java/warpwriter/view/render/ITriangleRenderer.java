@@ -5,7 +5,7 @@ package warpwriter.view.render;
  *
  * @author Ben McLean
  */
-public interface ITriangleRenderer {
+public interface ITriangleRenderer extends IVoxelRenderer {
     /**
      * Draws a triangle 3 high and 2 wide pointing left
      *
