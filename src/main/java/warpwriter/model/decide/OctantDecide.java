@@ -72,12 +72,13 @@ public class OctantDecide implements IDecide, ITurnable {
             case 1:
                 return x > x() && y < y() && z < z();
             case 2:
-                return x < x() && y > y () &&  z < z();
+                return x < x() && y > y() && z < z();
             case 3:
                 return x > x() && y > y() && z < z();
             case 4:
                 return x < x() && y < y() && z > z();
-            default: case 5:
+            default:
+            case 5:
                 return x > x() && y < y() && z > z();
             case 6:
                 return x < x() && y > y() && z > z();

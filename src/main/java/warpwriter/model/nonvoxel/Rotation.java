@@ -447,23 +447,76 @@ public enum Rotation implements ITurnable {
 
     public static int octant(Rotation rotation) {
         switch (rotation) {
-            case EAST1: case NORTH2: case DOWN3:
+            case EAST1:
+            case NORTH2:
+            case DOWN3:
                 return 0;
-            case SOUTH1: case EAST2: case DOWN2:
+            case SOUTH1:
+            case EAST2:
+            case DOWN2:
                 return 1;
-            case NORTH1: case WEST2: case DOWN0:
+            case NORTH1:
+            case WEST2:
+            case DOWN0:
                 return 2;
-            case SOUTH2: case WEST1: case DOWN1:
+            case SOUTH2:
+            case WEST1:
+            case DOWN1:
                 return 3;
-            case EAST0: case NORTH3: case UP2:
+            case EAST0:
+            case NORTH3:
+            case UP2:
                 return 4;
-            default: case SOUTH0: case EAST3: case UP3:
+            default:
+            case SOUTH0:
+            case EAST3:
+            case UP3:
                 return 5;
-            case NORTH0: case WEST3: case UP1:
+            case NORTH0:
+            case WEST3:
+            case UP1:
                 return 6;
-            case SOUTH3: case WEST0: case UP0:
+            case SOUTH3:
+            case WEST0:
+            case UP0:
                 return 7;
         }
+    }
+
+    public final int octantStepX() {
+        return octantStepX(octant(this));
+    }
+
+    public static final boolean octantX(final int octant) {
+        return octant % 2 == 0;
+    }
+
+    public static final int octantStepX(final int octant) {
+        return octantX(octant) ? -1 : 1;
+    }
+
+    public final int octantStepY() {
+        return octantStepY(octant(this));
+    }
+
+    public static final boolean octantY(final int octant) {
+        return octant % 4 < 2;
+    }
+
+    public static final int octantStepY(final int octant) {
+        return octantY(octant) ? -1 : 1;
+    }
+
+    public final int octantStepZ() {
+        return octantStepZ(octant(this));
+    }
+
+    public static final boolean octantZ(final int octant) {
+        return octant % 8 > 3;
+    }
+
+    public static final int octantStepZ(final int octant) {
+        return octantZ(octant) ? -1 : 1;
     }
 
     @Override

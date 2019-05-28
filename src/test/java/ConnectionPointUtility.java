@@ -91,7 +91,7 @@ public class ConnectionPointUtility extends ApplicationAdapter {
     protected Colorizer colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
     protected OneRovingVoxelModel oneRovingVoxelModel = new OneRovingVoxelModel();
     protected OctantDecide octantDecide = new OctantDecide();
-    protected DecideFetch decideFetch = new DecideFetch();
+    protected FetchModel frontModel;
 
     public static void main(String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
@@ -133,22 +133,29 @@ public class ConnectionPointUtility extends ApplicationAdapter {
     }
 
     public void makeModel() {
-        IModel model = model();
-
-        decideFetch.setDecide(octantDecide).setFetch(model);
+        FetchModel model = model();
 
         oneRovingVoxelModel.setVoxel((byte) 40)
                 .setSize(model.sizeX(), model.sizeY(), model.sizeZ())
-                .breakChain(decideFetch);
+                .add(new DecideFetch().setDecide(octantDecide).setFetch(ColorFetch.transparent).add(model));
 
         oneRovingVoxelModel.set(model.sizeX() / 2, model.sizeY() / 2, model.sizeZ() / 2);
 
-        octantDecide.set(oneRovingVoxelModel.x(), oneRovingVoxelModel.y(), oneRovingVoxelModel.z());
-
         voxelSprite.set(oneRovingVoxelModel);
+        setOctantDecide();
     }
 
-    public IModel model() {
+    public ConnectionPointUtility setOctantDecide() {
+        octantDecide.set(voxelSprite.turnModel().rotation())
+                .set(
+                        oneRovingVoxelModel.x() - voxelSprite.turnModel().rotation().octantStepX(),
+                        oneRovingVoxelModel.y() - voxelSprite.turnModel().rotation().octantStepY(),
+                        oneRovingVoxelModel.z() - voxelSprite.turnModel().rotation().octantStepY()
+                );
+        return this;
+    }
+
+    public FetchModel model() {
         return new FetchModel(ColorFetch.color((byte) 9), 48, 48, 16);
 //        // return new ArrayModel(maker.shipLargeRandomColorized())
 //        HashMap3D<IFetch> map = new HashMap3D<>();
@@ -215,8 +222,8 @@ public class ConnectionPointUtility extends ApplicationAdapter {
         screenRegion.flip(false, true);
 
         batch.setShader(shader);
-        shader.setUniformf("outlineH", 1f/VIRTUAL_HEIGHT);
-        shader.setUniformf("outlineW", 1f/VIRTUAL_WIDTH);
+        shader.setUniformf("outlineH", 1f / VIRTUAL_HEIGHT);
+        shader.setUniformf("outlineW", 1f / VIRTUAL_WIDTH);
 
         batch.draw(screenRegion, 0, 0);
         batch.setShader(defaultShader);
@@ -244,31 +251,31 @@ public class ConnectionPointUtility extends ApplicationAdapter {
                         break;
                     case Input.Keys.U:
                         voxelSprite.clockX();
-                        octantDecide.set(voxelSprite.turnModel().rotation());
+                        setOctantDecide();
                         break;
                     case Input.Keys.I:
                         voxelSprite.clockY();
-                        octantDecide.set(voxelSprite.turnModel().rotation());
+                        setOctantDecide();
                         break;
                     case Input.Keys.O:
                         voxelSprite.clockZ();
-                        octantDecide.set(voxelSprite.turnModel().rotation());
+                        setOctantDecide();
                         break;
                     case Input.Keys.J:
                         voxelSprite.counterX();
-                        octantDecide.set(voxelSprite.turnModel().rotation());
+                        setOctantDecide();
                         break;
                     case Input.Keys.K:
                         voxelSprite.counterY();
-                        octantDecide.set(voxelSprite.turnModel().rotation());
+                        setOctantDecide();
                         break;
                     case Input.Keys.L:
                         voxelSprite.counterZ();
-                        octantDecide.set(voxelSprite.turnModel().rotation());
+                        setOctantDecide();
                         break;
                     case Input.Keys.R:
                         voxelSprite.reset();
-                        octantDecide.set(voxelSprite.turnModel().rotation());
+                        setOctantDecide();
                         break;
                     case Input.Keys.P:
                         makeModel();
@@ -285,27 +292,27 @@ public class ConnectionPointUtility extends ApplicationAdapter {
                         break;
                     case Input.Keys.W:
                         oneRovingVoxelModel.addX(1);
-                        octantDecide.addX(1);
+                        setOctantDecide();
                         break;
                     case Input.Keys.S:
                         oneRovingVoxelModel.addX(-1);
-                        octantDecide.addX(-1);
+                        setOctantDecide();
                         break;
                     case Input.Keys.A:
                         oneRovingVoxelModel.addY(-1);
-                        octantDecide.addY(-1);
+                        setOctantDecide();
                         break;
                     case Input.Keys.D:
                         oneRovingVoxelModel.addY(1);
-                        octantDecide.addY(1);
+                        setOctantDecide();
                         break;
                     case Input.Keys.SPACE:
                         oneRovingVoxelModel.addZ(1);
-                        octantDecide.addZ(1);
+                        setOctantDecide();
                         break;
                     case Input.Keys.C:
                         oneRovingVoxelModel.addZ(-1);
-                        octantDecide.addZ(-1);
+                        setOctantDecide();
                         break;
                     case Input.Keys.ESCAPE:
                         Gdx.app.exit();
