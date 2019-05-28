@@ -195,9 +195,7 @@ public class ConnectionPointUtility extends ApplicationAdapter {
 
         font.draw(batch, StringKit.join(", ", oneRovingVoxelModel.x(), oneRovingVoxelModel.y(), oneRovingVoxelModel.z()) + " (roving voxel)", 0, 100);
         font.draw(batch, StringKit.join(", ", octantDecide.x(), octantDecide.y(), octantDecide.z()) + " (octantDecide)", 0, 80);
-
-//        font.draw(batch, StringKit.join(", ", voxelSprite.getModel().sizeX(), voxelSprite.getModel().sizeY(), voxelSprite.getModel().sizeZ()) + " (original)", 0, 80);
-//        font.draw(batch, voxelSprite.turnModel().sizeX() + ", " + voxelSprite.turnModel().sizeY() + ", " + voxelSprite.turnModel().sizeZ() + " (modified)", 0, 60);
+        font.draw(batch, StringKit.join(", ", voxelSprite.turnModel().rotation().octantStepX(), voxelSprite.turnModel().rotation().octantStepY(), voxelSprite.turnModel().rotation().octantStepZ()) + " (octant steps)", 0, 60);
         font.draw(batch, "Rotation: " + voxelSprite.turnModel().rotation() + ", z45: " + voxelSprite.getZ45(), 0, 40);
         font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 20);
 
