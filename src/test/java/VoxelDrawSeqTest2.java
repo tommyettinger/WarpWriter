@@ -22,9 +22,9 @@ import warpwriter.model.VoxelSeq;
 import warpwriter.model.color.Colorizer;
 import warpwriter.view.VoxelDraw;
 import warpwriter.view.color.VoxelColor;
-import warpwriter.view.render.VoxelSpriteBatchRenderer;
+import warpwriter.view.render.VoxelImmediateRenderer;
 
-public class VoxelDrawSeqTest extends ApplicationAdapter {
+public class VoxelDrawSeqTest2 extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 320;//640;
     public static final int SCREEN_HEIGHT = 360;//720;
     public static final int VIRTUAL_WIDTH = 320;
@@ -38,7 +38,7 @@ public class VoxelDrawSeqTest extends ApplicationAdapter {
     protected TextureRegion screenRegion;
 //    protected TurnModel model, ship;
     protected ModelMaker maker;
-    protected VoxelSpriteBatchRenderer batchRenderer;
+    protected VoxelImmediateRenderer batchRenderer;
     protected VoxelColor voxelColor;
     protected int angle = 2;
     protected boolean diagonal = false;
@@ -56,14 +56,12 @@ public class VoxelDrawSeqTest extends ApplicationAdapter {
     @Override
     public void create() {
         font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
-        batch = new SpriteBatch();
         worldView = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         screenView = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         buffer = new FrameBuffer(Pixmap.Format.RGBA8888, VIRTUAL_WIDTH, VIRTUAL_HEIGHT, false, false);
         screenRegion = new TextureRegion();
         screenView.getCamera().position.set(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2, 0);
         screenView.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        batch.enableBlending();
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.AURORA);
 //        colorizer = Colorizer.arbitraryColorizer(Coloring.GB_GREEN);
 //        colorizer = Colorizer.arbitraryColorizer(Coloring.DB32);
@@ -74,7 +72,8 @@ public class VoxelDrawSeqTest extends ApplicationAdapter {
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.FLESURRECT);
         colorizer = Colorizer.JudgeBonusColorizer;
         voxelColor = new VoxelColor().set(colorizer);
-        batchRenderer = new VoxelSpriteBatchRenderer(batch);
+        batchRenderer = new VoxelImmediateRenderer(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
+        batch = new SpriteBatch();
         batchRenderer.color().set(colorizer);
         rng = new MiniMover64RNG(-123456789);
         maker = new ModelMaker(-123456789, colorizer);
@@ -124,8 +123,7 @@ public class VoxelDrawSeqTest extends ApplicationAdapter {
         worldView.apply();
         worldView.getCamera().position.set(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2, 0);
         worldView.update(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
-        batch.setProjectionMatrix(screenView.getCamera().combined);
-        batch.begin();
+        batchRenderer.begin();
         if(angle > 2)
         {
             if(diagonal)
@@ -139,8 +137,7 @@ public class VoxelDrawSeqTest extends ApplicationAdapter {
             else
                 VoxelDraw.draw(seq, batchRenderer);
         }
-        batch.setPackedColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
-        batch.end();
+        batchRenderer.end();
         buffer.end();
         Gdx.gl.glClearColor(0, 0, 0, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -174,7 +171,7 @@ public class VoxelDrawSeqTest extends ApplicationAdapter {
         config.setIdleFPS(10);
         config.useVsync(false);
         config.setResizable(false);
-        final VoxelDrawSeqTest app = new VoxelDrawSeqTest();
+        final VoxelDrawSeqTest2 app = new VoxelDrawSeqTest2();
         new Lwjgl3Application(app, config);
     }
 
