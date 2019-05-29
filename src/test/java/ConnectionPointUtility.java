@@ -18,6 +18,7 @@ import warpwriter.ModelMaker;
 import warpwriter.model.FetchModel;
 import warpwriter.model.color.Colorizer;
 import warpwriter.model.decide.DecideFetch;
+import warpwriter.model.decide.NotDecide;
 import warpwriter.model.decide.OctantDecide;
 import warpwriter.model.fetch.*;
 import warpwriter.view.VoxelSprite;
@@ -116,7 +117,7 @@ public class ConnectionPointUtility extends ApplicationAdapter {
         batch.enableBlending();
         colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
         maker = new ModelMaker(12345, colorizer);
-        renderer = new VoxelSpriteBatchRenderer(batch).setTransparency((byte) 64);
+        renderer = new VoxelSpriteBatchRenderer(batch);
         renderer.color().set(colorizer);
         voxelSprite = new VoxelSprite()
                 .set(renderer)
@@ -140,7 +141,9 @@ public class ConnectionPointUtility extends ApplicationAdapter {
 
         oneRovingVoxelModel.set(model.sizeX() / 2, model.sizeY() / 2, model.sizeZ() / 2);
 
-        voxelSprite.set(oneRovingVoxelModel);
+        frontModel = new FetchModel(new DecideFetch().setDecide(octantDecide).setFetch(model), model);
+
+        voxelSprite.set(frontModel);
         setOctantDecide();
     }
 
@@ -198,6 +201,11 @@ public class ConnectionPointUtility extends ApplicationAdapter {
         font.draw(batch, "Rotation: " + voxelSprite.turnModel().rotation() + ", z45: " + voxelSprite.getZ45(), 0, 40);
         font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 20);
 
+        voxelSprite.set(oneRovingVoxelModel);
+        renderer.setTransparency(Byte.MAX_VALUE);
+        voxelSprite.render();
+        voxelSprite.set(frontModel);
+        renderer.setTransparency((byte) 64);
         voxelSprite.render();
 
         batch.setPackedColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
