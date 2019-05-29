@@ -1,6 +1,6 @@
 package warpwriter.view;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Disposable;
 import warpwriter.model.IModel;
 import warpwriter.model.TurnModel;
@@ -23,7 +23,7 @@ public class VoxelSprite implements Disposable, ITurnable {
     public VoxelSprite() {
     }
 
-    public VoxelSprite(SpriteBatch batch) {
+    public VoxelSprite(Batch batch) {
         this();
         set(new VoxelSpriteBatchRenderer(batch));
     }

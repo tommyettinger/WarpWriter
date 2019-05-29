@@ -8,7 +8,7 @@ import squidpony.squidmath.NumberTools;
 import warpwriter.view.color.VoxelColor;
 
 /**
- * Renders voxel models to a libGDX SpriteBatch.
+ * Renders voxel models to a libGDX ImmediateModeRenderer20.
  *
  * @author Ben McLean
  */
