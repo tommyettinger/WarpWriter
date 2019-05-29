@@ -213,12 +213,12 @@ public class FetchTest extends ApplicationAdapter {
                 } else {
                     tex[f].draw(WarpDraw.draw45(viewArea, pixmapRenderer), 0, 0);
                 }
-//            WarpDraw.simpleDraw45(model, batchRenderer, voxelColor, outline);
+//            WarpDraw.simpleDraw45(model, renderer, voxelColor, outline);
             } else if (angle != 2) {
                 tex[f].draw(WarpDraw.drawAbove(viewArea, pixmapRenderer), 0, 0);
             } else {
                 tex[f].draw(WarpDraw.draw(viewArea, pixmapRenderer), 0, 0);
-                //WarpDraw.simpleDraw(model, batchRenderer, voxelColor, outline);
+                //WarpDraw.simpleDraw(model, renderer, voxelColor, outline);
             }
             System.out.println(TimeUtils.timeSinceNanos(start) + " nanoseconds to render frame " + f);
 //            batch.draw(tex[f], 0, 0);

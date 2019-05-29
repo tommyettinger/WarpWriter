@@ -247,7 +247,7 @@ public class WarpTest extends ApplicationAdapter {
             {
                 pmTexture.draw(WarpDraw.draw45(model, pixmapRenderer), 0, 0);
             }
-//            WarpDraw.simpleDraw45(model, batchRenderer, voxelColor, outline);
+//            WarpDraw.simpleDraw45(model, renderer, voxelColor, outline);
         }
         else if(angle != 2)
         {
@@ -255,7 +255,7 @@ public class WarpTest extends ApplicationAdapter {
         }
         else {
             pmTexture.draw(WarpDraw.draw(model, pixmapRenderer), 0, 0);
-            //WarpDraw.simpleDraw(model, batchRenderer, voxelColor, outline);
+            //WarpDraw.simpleDraw(model, renderer, voxelColor, outline);
         }
         //batch.setColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
         batch.draw(pmTexture, 64, 64);

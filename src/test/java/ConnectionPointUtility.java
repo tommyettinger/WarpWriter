@@ -16,7 +16,6 @@ import squidpony.StringKit;
 import warpwriter.Coloring;
 import warpwriter.ModelMaker;
 import warpwriter.model.FetchModel;
-import warpwriter.model.IModel;
 import warpwriter.model.color.Colorizer;
 import warpwriter.model.decide.DecideFetch;
 import warpwriter.model.decide.OctantDecide;
@@ -85,7 +84,7 @@ public class ConnectionPointUtility extends ApplicationAdapter {
     protected ModelMaker maker;
     protected VoxelSprite voxelSprite;
     protected boolean box = false;
-    protected VoxelSpriteBatchRenderer batchRenderer;
+    protected VoxelSpriteBatchRenderer renderer;
     protected ShaderProgram shader;
     protected ShaderProgram defaultShader;
     protected Colorizer colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
@@ -117,10 +116,10 @@ public class ConnectionPointUtility extends ApplicationAdapter {
         batch.enableBlending();
         colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
         maker = new ModelMaker(12345, colorizer);
-        batchRenderer = new VoxelSpriteBatchRenderer(batch);
-        batchRenderer.color().set(colorizer);
+        renderer = new VoxelSpriteBatchRenderer(batch).setTransparency((byte) 64);
+        renderer.color().set(colorizer);
         voxelSprite = new VoxelSprite()
-                .set(batchRenderer)
+                .set(renderer)
                 .setOffset(VIRTUAL_WIDTH / 2, 100)
                 .setZ45(true)
                 .setAngle(3);
@@ -284,10 +283,10 @@ public class ConnectionPointUtility extends ApplicationAdapter {
                         makeModel();
                         break;
                     case Input.Keys.G:
-                        batchRenderer.color().set(batchRenderer.color().direction().counter());
+                        renderer.color().set(renderer.color().direction().counter());
                         break;
                     case Input.Keys.H:
-                        batchRenderer.color().set(batchRenderer.color().direction().clock());
+                        renderer.color().set(renderer.color().direction().clock());
                         break;
                     case Input.Keys.W:
                         oneRovingVoxelModel.addX(1);
