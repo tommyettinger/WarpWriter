@@ -17,10 +17,6 @@ public class NotDecide implements IDecide {
         return this;
     }
 
-    public NotDecide(IDecide decide) {
-        set(decide);
-    }
-
     @Override
     public boolean bool(int x, int y, int z) {
         return !decide.bool(x, y, z);
