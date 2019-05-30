@@ -18,7 +18,6 @@ import warpwriter.ModelMaker;
 import warpwriter.model.FetchModel;
 import warpwriter.model.color.Colorizer;
 import warpwriter.model.decide.DecideFetch;
-import warpwriter.model.decide.NotDecide;
 import warpwriter.model.decide.OctantDecide;
 import warpwriter.model.fetch.*;
 import warpwriter.view.VoxelSprite;
@@ -89,7 +88,7 @@ public class ConnectionPointUtility extends ApplicationAdapter {
     protected ShaderProgram shader;
     protected ShaderProgram defaultShader;
     protected Colorizer colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
-    protected OneRovingVoxelModel oneRovingVoxelModel = new OneRovingVoxelModel();
+    protected CursorModel cursorModel = new CursorModel();
     protected OctantDecide octantDecide = new OctantDecide();
     protected FetchModel frontModel;
 
@@ -135,11 +134,11 @@ public class ConnectionPointUtility extends ApplicationAdapter {
     public void makeModel() {
         FetchModel model = model();
 
-        oneRovingVoxelModel.setVoxel((byte) 40)
+        cursorModel.setColor((byte) 40)
                 .setSize(model.sizeX(), model.sizeY(), model.sizeZ())
                 .add(new DecideFetch().setDecide(octantDecide).setFetch(ColorFetch.transparent).add(model));
 
-        oneRovingVoxelModel.set(model.sizeX() / 2, model.sizeY() / 2, model.sizeZ() / 2);
+        cursorModel.set(model.sizeX() / 2, model.sizeY() / 2, model.sizeZ() / 2);
 
         frontModel = new FetchModel(new DecideFetch().setDecide(octantDecide).setFetch(model), model);
 
@@ -150,9 +149,9 @@ public class ConnectionPointUtility extends ApplicationAdapter {
     public ConnectionPointUtility setOctantDecide() {
         octantDecide.set(voxelSprite.turnModel().rotation())
                 .set(
-                        oneRovingVoxelModel.x() - voxelSprite.turnModel().rotation().octantStepX(),
-                        oneRovingVoxelModel.y() - voxelSprite.turnModel().rotation().octantStepY(),
-                        oneRovingVoxelModel.z() - voxelSprite.turnModel().rotation().octantStepZ()
+                        cursorModel.x() - voxelSprite.turnModel().rotation().octantStepX(),
+                        cursorModel.y() - voxelSprite.turnModel().rotation().octantStepY(),
+                        cursorModel.z() - voxelSprite.turnModel().rotation().octantStepZ()
                 );
         return this;
     }
@@ -195,13 +194,13 @@ public class ConnectionPointUtility extends ApplicationAdapter {
         batch.setProjectionMatrix(worldView.getCamera().combined);
         batch.begin();
 
-        font.draw(batch, StringKit.join(", ", oneRovingVoxelModel.x(), oneRovingVoxelModel.y(), oneRovingVoxelModel.z()) + " (roving voxel)", 0, 100);
+        font.draw(batch, StringKit.join(", ", cursorModel.x(), cursorModel.y(), cursorModel.z()) + " (roving voxel)", 0, 100);
         font.draw(batch, StringKit.join(", ", octantDecide.x(), octantDecide.y(), octantDecide.z()) + " (octantDecide)", 0, 80);
         font.draw(batch, StringKit.join(", ", voxelSprite.turnModel().rotation().octantStepX(), voxelSprite.turnModel().rotation().octantStepY(), voxelSprite.turnModel().rotation().octantStepZ()) + " (octant steps)", 0, 60);
         font.draw(batch, "Rotation: " + voxelSprite.turnModel().rotation() + ", z45: " + voxelSprite.getZ45(), 0, 40);
         font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 20);
 
-        voxelSprite.set(oneRovingVoxelModel);
+        voxelSprite.set(cursorModel);
         renderer.setTransparency(Byte.MAX_VALUE);
         voxelSprite.render();
         voxelSprite.set(frontModel);
@@ -297,27 +296,27 @@ public class ConnectionPointUtility extends ApplicationAdapter {
                         renderer.color().set(renderer.color().direction().clock());
                         break;
                     case Input.Keys.W:
-                        oneRovingVoxelModel.addX(1);
+                        cursorModel.addX(1);
                         setOctantDecide();
                         break;
                     case Input.Keys.S:
-                        oneRovingVoxelModel.addX(-1);
+                        cursorModel.addX(-1);
                         setOctantDecide();
                         break;
                     case Input.Keys.A:
-                        oneRovingVoxelModel.addY(-1);
+                        cursorModel.addY(-1);
                         setOctantDecide();
                         break;
                     case Input.Keys.D:
-                        oneRovingVoxelModel.addY(1);
+                        cursorModel.addY(1);
                         setOctantDecide();
                         break;
                     case Input.Keys.SPACE:
-                        oneRovingVoxelModel.addZ(1);
+                        cursorModel.addZ(1);
                         setOctantDecide();
                         break;
                     case Input.Keys.C:
-                        oneRovingVoxelModel.addZ(-1);
+                        cursorModel.addZ(-1);
                         setOctantDecide();
                         break;
                     case Input.Keys.ESCAPE:
