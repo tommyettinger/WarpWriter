@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -19,7 +20,7 @@ import warpwriter.model.IModel;
  */
 public class VoxelText extends Fetch implements IModel, Disposable {
     protected FrameBuffer buffer;
-    protected SpriteBatch batch;
+    protected Batch batch;
     protected Pixmap pixmap;
     protected int sizeX = 1;
     protected Fetch fill;

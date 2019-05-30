@@ -5,6 +5,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3WindowAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -26,6 +27,7 @@ import warpwriter.model.fetch.ColorFetch;
 import warpwriter.model.nonvoxel.LittleEndianDataInputStream;
 import warpwriter.view.VoxelSprite;
 import warpwriter.view.color.Dimmer;
+import warpwriter.view.render.MutantBatch;
 import warpwriter.view.render.VoxelSpriteBatchRenderer;
 
 import java.io.FileInputStream;
@@ -78,11 +80,11 @@ public class SimpleTest extends ApplicationAdapter {
             "}";
 
     //public static final int backgroundColor = Color.rgba8888(Color.DARK_GRAY);
-    public static final int SCREEN_WIDTH = 1280;
-    public static final int SCREEN_HEIGHT = 720;
-    public static final int VIRTUAL_WIDTH = 1280;
-    public static final int VIRTUAL_HEIGHT = 720;
-    protected SpriteBatch batch;
+    public static final int SCREEN_WIDTH = 640;
+    public static final int SCREEN_HEIGHT = 360;
+    public static final int VIRTUAL_WIDTH = 640;
+    public static final int VIRTUAL_HEIGHT = 360;
+    protected Batch batch;
     protected Viewport worldView;
     protected Viewport screenView;
     protected BitmapFont font;
@@ -142,7 +144,7 @@ public class SimpleTest extends ApplicationAdapter {
     @Override
     public void create() {
         font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
-        batch = new SpriteBatch();
+        batch = new MutantBatch();
         worldView = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         screenView = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         buffer = new FrameBuffer(Pixmap.Format.RGBA8888, VIRTUAL_WIDTH, VIRTUAL_HEIGHT, false, false);
