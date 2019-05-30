@@ -9,14 +9,57 @@ import warpwriter.model.FetchModel;
  * @author Ben McLean
  */
 public class CursorModel extends FetchModel {
-    protected int interval = 4;
+    protected boolean inward = true;
 
-    public final int interval() {
+    public final boolean inward() {
+        return inward;
+    }
+
+    public CursorModel setInward(final boolean inward) {
+        this.inward = inward;
+        return this;
+    }
+
+    public CursorModel toggleInward() {
+        return setInward(!inward());
+    }
+
+    protected float interval = 0.25f;
+
+    public final float interval() {
         return interval;
     }
 
-    public CursorModel setInterval(final int interval) {
+    public CursorModel setInterval(final float interval) {
         this.interval = interval;
+        return this;
+    }
+
+    protected float delta = 0f;
+
+    public float delta() {
+        return delta;
+    }
+
+    public CursorModel addDelta(final float delta) {
+        this.delta += delta;
+        if (this.delta > interval) {
+            this.delta -= interval;
+            frame++;
+            if (frame > frames - 1)
+                frame = 0;
+        }
+        return this;
+    }
+
+    protected int frames = 4;
+
+    public final int frames() {
+        return frames;
+    }
+
+    public CursorModel setFrames(final int frames) {
+        this.frames = frames;
         return this;
     }
 
@@ -104,6 +147,6 @@ public class CursorModel extends FetchModel {
     }
 
     public boolean isOn(final int distance) {
-        return distance % interval == frame % interval;
+        return distance % frames == (inward ? frames - frame - 1 : frame);
     }
 }

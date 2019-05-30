@@ -185,6 +185,8 @@ public class ConnectionPointUtility extends ApplicationAdapter {
 
     @Override
     public void render() {
+        cursorModel.addDelta(Gdx.graphics.getDeltaTime());
+
         buffer.begin();
         Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -196,7 +198,8 @@ public class ConnectionPointUtility extends ApplicationAdapter {
 
         font.draw(batch, StringKit.join(", ", cursorModel.x(), cursorModel.y(), cursorModel.z()) + " (roving voxel)", 0, 100);
         font.draw(batch, StringKit.join(", ", octantDecide.x(), octantDecide.y(), octantDecide.z()) + " (octantDecide)", 0, 80);
-        font.draw(batch, StringKit.join(", ", voxelSprite.turnModel().rotation().octantStepX(), voxelSprite.turnModel().rotation().octantStepY(), voxelSprite.turnModel().rotation().octantStepZ()) + " (octant steps)", 0, 60);
+        font.draw(batch, "Delta: " + cursorModel.delta() + ", Frame: " + cursorModel.frame(), 0, 60);
+//        font.draw(batch, StringKit.join(", ", voxelSprite.turnModel().rotation().octantStepX(), voxelSprite.turnModel().rotation().octantStepY(), voxelSprite.turnModel().rotation().octantStepZ()) + " (octant steps)", 0, 60);
         font.draw(batch, "Rotation: " + voxelSprite.turnModel().rotation() + ", z45: " + voxelSprite.getZ45(), 0, 40);
         font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 20);
 
