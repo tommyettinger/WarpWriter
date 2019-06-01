@@ -68,9 +68,9 @@ public class ShaderPalettizer extends ApplicationAdapter {
         palette.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
         defaultShader = SpriteBatch.createDefaultShader();
-        shader = new ShaderProgram(vertexShader, fragmentShaderWarmMildLimited);
+        shader = new ShaderProgram(vertexShader, fragmentShaderRoberts);
         if (!shader.isCompiled()) throw new GdxRuntimeException("Couldn't compile shader: " + shader.getLog());
-        shaderNoDither = new ShaderProgram(vertexShader, fragmentShaderWarmMildSoft);
+        shaderNoDither = new ShaderProgram(vertexShader, fragmentShaderRandom);
         if (!shaderNoDither.isCompiled()) throw new GdxRuntimeException("Couldn't compile shader: " + shaderNoDither.getLog());
         batch = new SpriteBatch(1000, defaultShader);
         screenView = new ScreenViewport();
@@ -101,8 +101,8 @@ public class ShaderPalettizer extends ApplicationAdapter {
                 batch.getShader().setUniformi("u_palette", 1);
                 //if(!batch.getShader().equals(defaultShader)) 
                 //{
-                    shader.setUniformf("u_mul", 0.9f, 0.7f, 0.75f);
-                    shader.setUniformf("u_add", 0.05f, 0.14f, 0.16f);
+//                    shader.setUniformf("u_mul", 0.9f, 0.7f, 0.75f);
+//                    shader.setUniformf("u_add", 0.05f, 0.14f, 0.16f);
 //                    shader.setUniformf("u_mul", 1f, 1f, 1f);
 //                    shader.setUniformf("u_add", 0f, 0f, 0f);
 //                    shader.setUniformf("u_mul", 1f, 0.8f, 0.85f);

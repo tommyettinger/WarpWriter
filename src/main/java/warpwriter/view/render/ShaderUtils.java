@@ -230,6 +230,28 @@ public class ShaderUtils {
                     "   gl_FragColor.rgb = v_color.rgb * texture2D(u_palette, vec2((tgt.b * b_adj + floor(tgt.r * 31.999)) * rb_adj, 1.0 - tgt.g)).rgb;\n" +
                     "   gl_FragColor.a = v_color.a * tgt.a;\n" +
                     "}";
+
+    /**
+     * Modeled after {@link #fragmentShaderRoberts}, but this doesn't try to use an ordered dither and instead tries to
+     * use a noisy dither with a slight bias toward keeping close-enough matches as the same color.
+     */
+    public static final String fragmentShaderRandom =
+            "varying vec2 v_texCoords;\n" +
+                    "varying vec4 v_color;\n" +
+                    "uniform sampler2D u_texture;\n" +
+                    "uniform sampler2D u_palette;\n" +
+                    "const float b_adj = 31.0 / 32.0;\n" +
+                    "const float rb_adj = 32.0 / 1023.0;\n" +
+                    "void main()\n" +
+                    "{\n" +
+                    "   vec4 tgt = texture2D( u_texture, v_texCoords );\n" +
+                    "   vec4 used = texture2D(u_palette, vec2((tgt.b * b_adj + floor(tgt.r * 31.999)) * rb_adj, 1.0 - tgt.g));\n" +
+                    "   float len = fract(length(tgt.rgb) * dot(sin(gl_FragCoord.xy * 5.6789), vec2(14.743036261279236, 13.580412143837574)));\n" +
+                    "   float adj = asin(len * 1.8 - 1.0) * 0.6;\n" +
+                    "   tgt.rgb = clamp(tgt.rgb + (tgt.rgb - used.rgb) * adj, 0.0, 1.0);\n" +
+                    "   gl_FragColor.rgb = v_color.rgb * texture2D(u_palette, vec2((tgt.b * b_adj + floor(tgt.r * 31.999)) * rb_adj, 1.0 - tgt.g)).rgb;\n" +
+                    "   gl_FragColor.a = v_color.a * tgt.a;\n" +
+                    "}";
     /**
      * This fragment shader substitutes colors with ones from a palette, without dithering.
      */
