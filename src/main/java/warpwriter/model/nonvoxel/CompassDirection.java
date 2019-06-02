@@ -28,23 +28,23 @@ public enum CompassDirection {
         if (x == 0 && y == 0) {
             return NONE;
         } else {
-            float degree = NumberTools.atan2_(y, x) * 360f; // gets degrees from 0 to 360
-            if (degree < 22.5f) {
+            float degree = NumberTools.atan2_(y, x); // gets degrees from 0 to 1
+            if (degree < 0x1p-4f) { // 0x1p-4f is a float equal to 1f / 16f, precisely.
                 return NORTH;
-            } else if (degree < 67.5f) {
+            } else if (degree < 0x3p-4f) { // the values after "0x" and followed by "p-4f" are hex numbers.
                 return NORTH_EAST;
-            } else if (degree < 112.5f) {
+            } else if (degree < 0x5p-4f) { // 0x3p-4f is 3f / 16f, 0x5p-4f is 5f / 16f, etc. 
                 return EAST;
-            } else if (degree < 157.5f) {
+            } else if (degree < 0x7p-4f) {
                 return SOUTH_EAST;
-            } else if (degree < 202.5f) {
+            } else if (degree < 0x9p-4f) {
                 return SOUTH;
-            } else if (degree < 247.5f) {
+            } else if (degree < 0xBp-4f) { //0xBp-4f is 11f / 16f, 0xDp-4f is 13f / 16f, 0xFp-4f is 15f / 16f  
                 return SOUTH_WEST;
-            } else if (degree < 292.5f) {
+            } else if (degree < 0xDp-4f) {
                 return WEST;
             } else {
-                return degree < 337.5f ? NORTH_WEST : NORTH;
+                return degree < 0xFp-4f ? NORTH_WEST : NORTH;
             }
         }
     }
