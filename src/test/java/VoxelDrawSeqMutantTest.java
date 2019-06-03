@@ -19,10 +19,14 @@ import warpwriter.model.AnimatedVoxelSeq;
 import warpwriter.model.ITemporal;
 import warpwriter.model.VoxelSeq;
 import warpwriter.model.color.Colorizer;
+import warpwriter.model.nonvoxel.LittleEndianDataInputStream;
 import warpwriter.view.VoxelDraw;
 import warpwriter.view.color.VoxelColor;
 import warpwriter.view.render.MutantBatch;
 import warpwriter.view.render.VoxelSpriteBatchRenderer;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class VoxelDrawSeqMutantTest extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 320;//640;
@@ -100,6 +104,21 @@ public class VoxelDrawSeqMutantTest extends ApplicationAdapter {
 //        model = new TurnModel().set(ship);
 //        model.setDuration(16);
         Gdx.input.setInputProcessor(inputProcessor());
+
+        System.out.println("Testing on a .vox file this program wrote:");
+        try {
+            System.out.println(VoxIO.readPriorities(new LittleEndianDataInputStream(new FileInputStream("hasOwnPalette/Priorities.vox"))));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Testing on a .vox file this program wrote that was then opened and saved in MagicaVoxel:");
+        try {
+            System.out.println(VoxIO.readPriorities(new LittleEndianDataInputStream(new FileInputStream("hasOwnPalette/PrioritiesRewritten.vox"))));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void makeBoom(byte[] fireColors) {
@@ -256,7 +275,13 @@ public class VoxelDrawSeqMutantTest extends ApplicationAdapter {
                         angle = 2;
                         break;
                     case Input.Keys.W: // write
-                        VoxIO.writeVOX(FakeLanguageGen.SIMPLISH.word(Tools3D.hash64(voxels), true) + ".vox", voxels, maker.getColorizer().getReducer().paletteArray);
+                        String name = FakeLanguageGen.SIMPLISH.word(Tools3D.hash64(voxels), true) + ".vox";
+                        VoxIO.writeVOX(name, voxels, maker.getColorizer().getReducer().paletteArray, new VoxelSeq(new int[1], new byte[]{100}));
+                        try {
+                            System.out.println(VoxIO.readPriorities(new LittleEndianDataInputStream(new FileInputStream(name))));
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
                         break;
                     case Input.Keys.ESCAPE:
                         Gdx.app.exit();

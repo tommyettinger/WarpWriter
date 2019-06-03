@@ -108,16 +108,18 @@ public class AnimatedVoxelSeq implements IVoxelSeq, ITemporal, Serializable {
 
     @Override
     public void sizeX(int i) {
+        seqs[frame].sizeX(i);
     }
 
     @Override
     public void sizeY(int i) {
+        seqs[frame].sizeY(i);
 
     }
 
     @Override
-    public void setSizeZ(int i) {
-
+    public void sizeZ(int i) {
+        seqs[frame].sizeZ(i);
     }
 
     @Override

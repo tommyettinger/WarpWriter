@@ -1,12 +1,15 @@
 package warpwriter;
 
 import squidpony.annotation.GwtIncompatible;
+import warpwriter.model.VoxelSeq;
 import warpwriter.model.nonvoxel.LittleEndianDataInputStream;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import static warpwriter.model.nonvoxel.HashMap3D.*;
 
 
 /**
@@ -55,7 +58,7 @@ public class VoxIO {
             if (4 != stream.read(chunkId))
                 return null;
             //int version = 
-                    stream.readInt();
+            stream.readInt();
             int sizeX = 16, sizeY = 16, sizeZ = 16;
             // a MagicaVoxel .vox file starts with a 'magic' 4 character 'VOX ' identifier
             if (chunkId[0] == 'V' && chunkId[1] == 'O' && chunkId[2] == 'X' && chunkId[3] == ' ') {
@@ -64,7 +67,7 @@ public class VoxIO {
                     stream.read(chunkId);
                     int chunkSize = stream.readInt();
                     //int childChunks = 
-                            stream.readInt();
+                    stream.readInt();
                     String chunkName = new String(chunkId); // assumes default charset is compatible with ASCII
 
                     // there are only 3 chunks we only care about, and they are SIZE, XYZI, and RGBA
@@ -93,10 +96,58 @@ public class VoxIO {
         } catch (IOException e) {
             e.printStackTrace();
         }
-//        for (int i = 0; i < 256; i++) {
-//            System.out.println(StringKit.hex(lastPalette[i]));
-//        }
         return voxelData;
+    }
+    public static VoxelSeq readPriorities(LittleEndianDataInputStream stream) {
+        // check out https://github.com/ephtracy/voxel-model/blob/master/MagicaVoxel-file-format-vox.txt for the file format used below
+        VoxelSeq priorities = null;
+        int sizeX = 16, sizeY = 16, sizeZ = 16;
+        try {
+            byte[] chunkId = new byte[4];
+            if (4 != stream.read(chunkId))
+                return null;
+            //int version =
+            stream.readInt();
+            // a MagicaVoxel .vox file starts with a 'magic' 4 character 'VOX ' identifier
+            if (chunkId[0] == 'V' && chunkId[1] == 'O' && chunkId[2] == 'X' && chunkId[3] == ' ') {
+                while (stream.available() > 0) {
+                    // each chunk has an ID, size and child chunks
+                    stream.read(chunkId);
+                    int chunkSize = stream.readInt();
+                    //int childChunks = 
+                    stream.readInt();
+                    String chunkName = new String(chunkId); // assumes default charset is compatible with ASCII
+
+                    // there are only 3 chunks we only care about, and they are SIZE, XYZI, and RGBA
+                    if (chunkName.equals("SIZE")) {
+                        sizeX = stream.readInt();
+                        sizeY = stream.readInt();
+                        sizeZ = stream.readInt();
+                        stream.skipBytes(chunkSize - 4 * 3);
+                    } else if (chunkName.equals("PRIO")) {
+                        // PRIO contains n voxels
+                        int numVoxels = stream.readInt();
+                        priorities = new VoxelSeq(numVoxels);
+                        // each voxel has x, y, z and color index values
+                        for (int i = 0; i < numVoxels; i++) {
+                            priorities.put(stream.read() & 255, stream.read() & 255, stream.read() & 255, stream.readByte());
+                        }
+                    }
+                    else stream.skipBytes(chunkSize);   // read any excess bytes
+                }
+
+            }
+            stream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(priorities != null)
+        {
+            priorities.sizeX(sizeX);
+            priorities.sizeY(sizeY);
+            priorities.sizeZ(sizeZ);
+        }
+        return priorities;
     }
     private static void writeInt(DataOutputStream bin, int value) throws IOException
     {
@@ -104,6 +155,10 @@ public class VoxIO {
     }
     @GwtIncompatible
     public static void writeVOX(String filename, byte[][][] voxelData, int[] palette) {
+        writeVOX(filename, voxelData, palette, null);
+    }
+    @GwtIncompatible
+    public static void writeVOX(String filename, byte[][][] voxelData, int[] palette, VoxelSeq priorities) {
         // check out http://voxel.codeplex.com/wikipage?title=VOX%20Format&referringTitle=Home for the file format used below
         try {
             int xSize = voxelData.length, ySize = voxelData[0].length, zSize = voxelData[0][0].length;
@@ -154,6 +209,7 @@ public class VoxIO {
 
             bin.writeBytes("RGBA");
             writeInt(bin, 1024);
+            writeInt(bin, 0);
             int i = 1;
             for (; i < 256 && i < palette.length; i++) {
                 bin.writeInt(palette[i]);
@@ -163,7 +219,21 @@ public class VoxIO {
                 bin.writeInt(lastPalette[i]);
             }
             writeInt(bin,  0);
-
+            
+            if(priorities != null) {
+                bin.writeBytes("PRIO");
+                int fullSize = priorities.fullSize();
+                writeInt(bin, fullSize * 4 + 4);
+                writeInt(bin, 0);
+                writeInt(bin, fullSize);
+                for (int j = 0; j < fullSize; j++) {
+                    int key = priorities.keyAt(j);
+                    bin.writeByte(extractX(key) & 255);
+                    bin.writeByte(extractY(key) & 255);
+                    bin.writeByte(extractZ(key) & 255);
+                    bin.writeByte(priorities.getAt(j));
+                }
+            }
             bin.flush();
             bin.close();
             fos.flush();

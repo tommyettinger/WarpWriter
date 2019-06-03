@@ -160,7 +160,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
         return sizeZ;
     }
 
-    public void setSizeZ(int sizeZ) {
+    public void sizeZ(int sizeZ) {
         this.sizeZ = sizeZ;
     }
 

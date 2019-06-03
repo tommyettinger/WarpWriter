@@ -15,7 +15,7 @@ public interface IVoxelSeq extends ITurnable {
     int sizeY();
     void sizeY(int i);
     int sizeZ();
-    void setSizeZ(int i);
+    void sizeZ(int i);
     int rotation();
     void rotate(int i);
     byte get(int x, int y, int z);
