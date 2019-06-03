@@ -1,9 +1,6 @@
 package warpwriter.model.nonvoxel;
 
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Matrix3;
-import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.*;
 import squidpony.squidmath.NumberTools;
 
 import java.io.Serializable;
@@ -51,8 +48,33 @@ public class TurnQuaternion implements Serializable {
     {
         return (int) (angle * 256f + 256.5f) & 0xFF;
     }
+    /** Linearly interpolates between two angles in turns. Takes into account that angles wrap at 1 turn and always
+     * takes the direction with the smallest delta angle.
+     *
+     * @param from start angle in turns
+     * @param to target angle in turns
+     * @param progress interpolation value in the range 0.0f inclusive to 1.0f inclusive
+     * @return the interpolated angle in the range 0.0f inclusive to 1.0f exclusive
+     */
+    public static float lerpAngleTurn (float from, float to, float progress) {
+        float delta = (to - from + 1.5f);
+        delta = (from + (delta - 0.5f - (int)delta) * progress + 1f);
+        return delta - (int)delta;
+    }
 
-
+    /** Linearly interpolates between two angles in brads. Takes into account that angles wrap at 256 brads and always
+     * takes the direction with the smallest delta angle.
+     *
+     * @param from start angle in brads
+     * @param to target angle in brads
+     * @param progress interpolation value in the range 0 inclusive to 1 inclusive
+     * @return the interpolated angle in the range 0 inclusive to 256 exclusive, as an int
+     */
+    public static int lerpAngleBrad (int from, int to, float progress) {
+        int delta = ((to - from + 128) & 255) - 128;
+        return (int)(from + delta * progress + 256.5f) & 255;
+    }
+    
     /** Constructor, sets the four components of the quaternion.
      * @param x The x-component
      * @param y The y-component
@@ -137,28 +159,28 @@ public class TurnQuaternion implements Serializable {
         return "[" + x + "|" + y + "|" + z + "|" + w + "]";
     }
 
-    /** Sets the quaternion to the given euler angles in brads.
-     * @param yaw the rotation around the y axis in brads
-     * @param pitch the rotation around the x axis in brads
-     * @param roll the rotation around the z axis brads
+    /** Sets the quaternion to the given Euler angles in brads.
+     * @param yaw the rotation around the z axis in brads
+     * @param pitch the rotation around the y axis in brads
+     * @param roll the rotation around the x axis in brads
      * @return this quaternion */
     public TurnQuaternion setEulerAnglesBrad (int yaw, int pitch, int roll) {
         return setEulerAngles(bradToTurn(yaw), bradToTurn(pitch), bradToTurn(roll));
     }
 
-    /** Sets the quaternion to the given euler angles in turns.
-     * @param yaw the rotation around the y axis in turns
-     * @param pitch the rotation around the x axis in turns
-     * @param roll the rotation around the z axis in turns
+    /** Sets the quaternion to the given Euler angles in turns.
+     * @param yaw the rotation around the z axis in turns
+     * @param pitch the rotation around the y axis in turns
+     * @param roll the rotation around the x axis in turns
      * @return this quaternion */
     public TurnQuaternion setEulerAngles (float yaw, float pitch, float roll) {
-        final float hr = roll * 0.5f;
+        final float hr = yaw * 0.5f;
         final float shr = NumberTools.sin_(hr);
         final float chr = NumberTools.cos_(hr);
-        final float hp = pitch * 0.5f;
+        final float hp = roll * 0.5f;
         final float shp = NumberTools.sin_(hp);
         final float chp = NumberTools.cos_(hp);
-        final float hy = yaw * 0.5f;
+        final float hy = pitch * 0.5f;
         final float shy = NumberTools.sin_(hy);
         final float chy = NumberTools.cos_(hy);
         final float chy_shp = chy * shp;
@@ -180,24 +202,30 @@ public class TurnQuaternion implements Serializable {
         return (t >> 31) | ((-t) >>> 31); // Thanks, Project Nayuki! https://www.nayuki.io/page/some-bit-twiddling-functions-explained
     }
 
-    /** Get the roll euler angle in turns, which is the rotation around the z axis. Requires that this quaternion is normalized.
+    /**
+     * Get the roll Euler angle in turns, which is the rotation around the z axis. Requires that this quaternion is normalized.
+     * Was getRoll() in libGDX, but WarpWriter uses the z-axis for up-down, while libGDX uses it for forward/back.
      * @return the rotation around the z axis in turns (between 0 and 1) */
-    public float getRoll () {
+    public float getYaw () {
         final int pole = getGimbalPole();
         return pole == 0 ? NumberTools.atan2_(2f * (w * z + y * x), 1f - 2f * (x * x + z * z)) : (pole << 1)
                 * NumberTools.atan2_(y, w);
     }
 
-    /** Get the pitch euler angle in turns, which is the rotation around the x axis. Requires that this quaternion is normalized.
+    /** 
+     * Get the pitch Euler angle in turns, which is the rotation around the x axis. Requires that this quaternion is normalized.
+     * Was getPitch() in libGDX, but WarpWriter uses the x-axis for forward/back, while libGDX uses it for left/right.
      * @return the rotation around the x axis in turns (between 0.75 and 1 or between 0 and 0.25) */
-    public float getPitch () {
+    public float getRoll () {
         final int pole = getGimbalPole();
         return pole == 0 ? NumberTools.asin_(MathUtils.clamp(2f * (w * x - z * y), -1f, 1f)) : (float)pole * 0.25f;
     }
 
-    /** Get the yaw euler angle in turns, which is the rotation around the y axis. Requires that this quaternion is normalized.
+    /** 
+     * Get the yaw Euler angle in turns, which is the rotation around the y axis. Requires that this quaternion is normalized.
+     * Was getYaw() in libGDX, but WarpWriter uses the y-axis for left/right, while libGDX uses it for up/down.
      * @return the rotation around the y axis in turns (between 0 and 1) */
-    public float getYaw () {
+    public float getPitch () {
         return getGimbalPole() == 0 ? NumberTools.atan2_(2f * (y * w + x * z), 1f - 2f * (y * y + x * x)) : 0f;
     }
 
@@ -234,10 +262,11 @@ public class TurnQuaternion implements Serializable {
         return this;
     }
 
-    // TODO : this would better fit into the vector3 class
-    /** Transforms the given vector using this quaternion
+    /** Transforms the given vector using this quaternion. Modifies {@code v} in-place.
      *
-     * @param v Vector to transform */
+     * @param v Vector to transform; will be modified
+     * @return v, after changes
+     */
     public Vector3 transform (Vector3 v) {
         tmp2.set(this);
         tmp2.conjugate();
@@ -337,8 +366,7 @@ public class TurnQuaternion implements Serializable {
         return this;
     }
 
-    // TODO : the matrix4 set(quaternion) doesnt set the last row+col of the matrix to 0,0,0,1 so... that's why there is this
-// method
+    // TODO : the matrix4 set(quaternion) doesnt set the last row+col of the matrix to 0,0,0,1 so... that's why there is this method
     /** Fills a 4x4 matrix with the rotation matrix represented by this quaternion.
      *
      * @param matrix Matrix to fill */
