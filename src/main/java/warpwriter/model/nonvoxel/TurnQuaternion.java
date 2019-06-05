@@ -160,20 +160,20 @@ public class TurnQuaternion implements Serializable {
     }
 
     /** Sets the quaternion to the given Euler angles in brads.
-     * @param yaw the rotation around the z axis in brads
-     * @param pitch the rotation around the y axis in brads
      * @param roll the rotation around the x axis in brads
+     * @param pitch the rotation around the y axis in brads
+     * @param yaw the rotation around the z axis in brads
      * @return this quaternion */
-    public TurnQuaternion setEulerAnglesBrad (int yaw, int pitch, int roll) {
-        return setEulerAngles(bradToTurn(yaw), bradToTurn(pitch), bradToTurn(roll));
+    public TurnQuaternion setEulerAnglesBrad (int roll, int pitch, int yaw) {
+        return setEulerAngles(bradToTurn(roll), bradToTurn(pitch), bradToTurn(yaw));
     }
 
     /** Sets the quaternion to the given Euler angles in turns.
-     * @param yaw the rotation around the z axis in turns
-     * @param pitch the rotation around the y axis in turns
      * @param roll the rotation around the x axis in turns
+     * @param pitch the rotation around the y axis in turns
+     * @param yaw the rotation around the z axis in turns
      * @return this quaternion */
-    public TurnQuaternion setEulerAngles (float yaw, float pitch, float roll) {
+    public TurnQuaternion setEulerAngles (float roll, float pitch, float yaw) {
         final float hr = yaw * 0.5f;
         final float shr = NumberTools.sin_(hr);
         final float chr = NumberTools.cos_(hr);
@@ -202,16 +202,6 @@ public class TurnQuaternion implements Serializable {
         return (t >> 31) | ((-t) >>> 31); // Thanks, Project Nayuki! https://www.nayuki.io/page/some-bit-twiddling-functions-explained
     }
 
-    /**
-     * Get the roll Euler angle in turns, which is the rotation around the z axis. Requires that this quaternion is normalized.
-     * Was getRoll() in libGDX, but WarpWriter uses the z-axis for up-down, while libGDX uses it for forward/back.
-     * @return the rotation around the z axis in turns (between 0 and 1) */
-    public float getYaw () {
-        final int pole = getGimbalPole();
-        return pole == 0 ? NumberTools.atan2_(2f * (w * z + y * x), 1f - 2f * (x * x + z * z)) : (pole << 1)
-                * NumberTools.atan2_(y, w);
-    }
-
     /** 
      * Get the pitch Euler angle in turns, which is the rotation around the x axis. Requires that this quaternion is normalized.
      * Was getPitch() in libGDX, but WarpWriter uses the x-axis for forward/back, while libGDX uses it for left/right.
@@ -227,6 +217,16 @@ public class TurnQuaternion implements Serializable {
      * @return the rotation around the y axis in turns (between 0 and 1) */
     public float getPitch () {
         return getGimbalPole() == 0 ? NumberTools.atan2_(2f * (y * w + x * z), 1f - 2f * (y * y + x * x)) : 0f;
+    }
+
+    /**
+     * Get the roll Euler angle in turns, which is the rotation around the z axis. Requires that this quaternion is normalized.
+     * Was getRoll() in libGDX, but WarpWriter uses the z-axis for up-down, while libGDX uses it for forward/back.
+     * @return the rotation around the z axis in turns (between 0 and 1) */
+    public float getYaw () {
+        final int pole = getGimbalPole();
+        return pole == 0 ? NumberTools.atan2_(2f * (w * z + y * x), 1f - 2f * (x * x + z * z)) : (pole << 1)
+                * NumberTools.atan2_(y, w);
     }
 
     public final static float len2 (final float x, final float y, final float z, final float w) {
