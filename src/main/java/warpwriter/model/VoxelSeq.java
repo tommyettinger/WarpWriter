@@ -2037,17 +2037,55 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
         return entrySet().containsAll(m.entrySet());
     }
 
+    private static final char[] keyBase64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".toCharArray(),
+            valBase64 = new char[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    62, 0, 0, 0, 63, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 0, 0, 0, 64, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,
+                    0, 0, 0, 0, 0, 0, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 0, 0, 0, 0, 0};
+
+    /**
+     * For writing VoxelSeq data to a String when a File is not an option (such as on GWT). Use
+     * {@link #deserializeFromString(String)} to read back the contents into a VoxelSeq.
+     * @return a String that may be read back using {@link #deserializeFromString(String)}
+     */
+    public String serializeToString()
+    {
+        StringBuilder sb = new StringBuilder(7 * size);
+        final int limit = size;
+        for (int i = 0, k, v; i < limit; i++) {
+            k = keyAt(i);
+            v = getAt(i);
+            sb.append(keyBase64[0x3f & k >>> 24]).append(keyBase64[0x3f & k >>> 18]).append(keyBase64[0x3f & k >>> 12])
+                    .append(keyBase64[0x3f & k >>> 6]).append(keyBase64[0x3f & k]).append(0xf & v >>> 4).append(0xf & v);
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Reads back a VoxelSeq that had been written to a String with {@link #serializeToString()}.
+     * @param data a String written by {@link #serializeToString()} that stores a VoxelSeq
+     * @return a copy of the VoxelSeq stored by the String {@code data}
+     */
+    public static VoxelSeq deserializeFromString(String data)
+    {
+        final int len = data.length();
+        VoxelSeq vs = new VoxelSeq(len / 7);
+        for (int i = 0; i < len; i += 7) {
+            vs.put(valBase64[data.charAt(i)] << 24 | valBase64[data.charAt(i+1)] << 18
+                    | valBase64[data.charAt(i+2)] << 12 | valBase64[data.charAt(i+3)] << 6
+                    | valBase64[data.charAt(i+4)],
+                    (byte) (valBase64[data.charAt(i+5)] << 4 | valBase64[data.charAt(i+6)]));
+        }
+        vs.hollow();
+        return vs;
+    }
+
     @GwtIncompatible
     private void writeObject(java.io.ObjectOutputStream s)
             throws java.io.IOException {
-        final int[] key = this.key;
-        final byte[] value = this.value;
-        final MapIterator i = new MapIterator();
         s.defaultWriteObject();
-        for (int j = size, e; j-- != 0;) {
-            e = i.nextEntry();
-            s.writeInt(key[e]);
-            s.writeByte(value[e]);
+        for (int limit = size, j = 0; j < limit; j++) {
+            s.writeInt(keyAt(j));
+            s.writeByte(getAt(j));
         }
     }
     @GwtIncompatible
@@ -2060,7 +2098,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
         mask = n - 1;
         final int[] key = this.key = new int[n + 1];
         final byte[] value = this.value = new byte[n + 1];
-        final IntVLA order = this.order = new IntVLA(n + 1);
+        final IntVLA full = this.full = new IntVLA(n + 1);
         int k;
         byte v;
         for (int i = size, pos; i-- != 0;) {
@@ -2080,6 +2118,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
             value[pos] = v;
             full.add(pos);
         }
+        hollow();
     }
 
     /**
