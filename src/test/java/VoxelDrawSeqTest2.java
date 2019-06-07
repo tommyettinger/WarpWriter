@@ -16,10 +16,9 @@ import squidpony.squidmath.MiniMover64RNG;
 import warpwriter.ModelMaker;
 import warpwriter.Tools3D;
 import warpwriter.VoxIO;
-import warpwriter.model.AnimatedVoxelSeq;
-import warpwriter.model.ITemporal;
 import warpwriter.model.VoxelSeq;
 import warpwriter.model.color.Colorizer;
+import warpwriter.model.nonvoxel.Transform;
 import warpwriter.view.VoxelDraw;
 import warpwriter.view.color.VoxelColor;
 import warpwriter.view.render.VoxelImmediateRenderer;
@@ -47,10 +46,14 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //    protected AnimatedArrayModel boom;
     private byte[][][] voxels;
 //    private byte[][][] container;
-    private AnimatedVoxelSeq seq;
+    private VoxelSeq seq;
+    private VoxelSeq middleSeq;
     private Colorizer colorizer;
     protected MiniMover64RNG rng;
-
+    
+    private Transform transformStart, transformEnd, transformMid;
+    private float alpha;
+    
 //    private ChaoticFetch chaos;
 
     @Override
@@ -77,6 +80,9 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
         batchRenderer.color().set(colorizer);
         rng = new MiniMover64RNG(-123456789);
         maker = new ModelMaker(-123456789, colorizer);
+        transformStart = new Transform();
+        transformEnd = new Transform(0, 0, 128, 0, 0, 0);
+        transformMid = new Transform();
 //        try {
 //            box = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("Aurora/dumbcube.vox")));
 //        } catch (Exception e) {
@@ -86,10 +92,10 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //        makeBoom(maker.fireRange());
         maker.rng.setState(rng.nextLong());
         voxels = maker.shipLargeNoiseColorized();
-        VoxelSeq vs = new VoxelSeq(1024);
-        vs.putArray(voxels);
-        vs.hollow();
-        seq = new AnimatedVoxelSeq(vs, 4);
+        seq = new VoxelSeq(1024);
+        seq.putArray(voxels);
+        seq.hollow();
+        middleSeq = new VoxelSeq(seq.size());
 //        chaos = new ChaoticFetch(maker.rng.nextLong(), (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 1);
 //        ship = new TurnModel().set(
 ////                new ReplaceFetch(ColorFetch.color((byte) 0), (byte) 1)
@@ -101,18 +107,28 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
         Gdx.input.setInputProcessor(inputProcessor());
     }
 
-    public void makeBoom(byte[] fireColors) {
-        long state = maker.rng.getState();
-        seq = new AnimatedVoxelSeq(maker.animateExplosion(18, 40, 40, 32, fireColors));
-        maker.rng.setState(state);
-    }
+//    public void makeBoom(byte[] fireColors) {
+//        long state = maker.rng.getState();
+//        seq = new AnimatedVoxelSeq(maker.animateExplosion(18, 40, 40, 32, fireColors));
+//        maker.rng.setState(state);
+//    }
 
     @Override
     public void render() {
 //        model.setFrame((int)(TimeUtils.millis() >>> 7) & 15);
 //        boom.setFrame((int)(TimeUtils.millis() >>> 7) & 15);
         if(seq != null)
-            ((ITemporal) seq).setFrame((int)(TimeUtils.millis() * 5 >>> 9));
+        {
+            long time = TimeUtils.millis();
+//            ((ITemporal) seq).setFrame((int)(TimeUtils.millis() * 5 >>> 9));
+            alpha = (time & 0x7FFL) * 0x1p-11f;
+            if((time & 0x800L) == 0L) 
+                transformStart.interpolateInto(transformEnd, alpha, transformMid);
+            else
+                transformStart.interpolateInto(transformEnd, 1f - alpha, transformMid);
+            middleSeq.clear();
+            transformMid.transformInto(seq, middleSeq, seq.sizeX() * 0.5f, seq.sizeY() * 0.5f, seq.sizeZ() * 0.5f);
+        }
         buffer.begin();
         
         Gdx.gl.glClearColor(0.4f, 0.75f, 0.3f, 1f);
@@ -127,15 +143,15 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
         if(angle > 2)
         {
             if(diagonal)
-                VoxelDraw.drawIso(seq, batchRenderer);
+                VoxelDraw.drawIso(middleSeq, batchRenderer);
             else
-                VoxelDraw.drawAbove(seq, batchRenderer);
+                VoxelDraw.drawAbove(middleSeq, batchRenderer);
         }
         else{
             if(diagonal)
-                VoxelDraw.draw45(seq, batchRenderer);
+                VoxelDraw.draw45(middleSeq, batchRenderer);
             else
-                VoxelDraw.draw(seq, batchRenderer);
+                VoxelDraw.draw(middleSeq, batchRenderer);
         }
         batchRenderer.end();
         buffer.end();
@@ -225,22 +241,22 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //                        chaos.setSeed(maker.rng.nextLong());
                         maker.rng.setState(rng.nextLong());
                         Tools3D.deepCopyInto(maker.shipLargeNoiseColorized(), voxels);
-                        seq.setFrame(0);
+//                        seq.setFrame(0);
                         seq.clear();
                         seq.putSurface(voxels);
-                        seq = new AnimatedVoxelSeq(seq.seqs[0], 4);
+//                        seq = new AnimatedVoxelSeq(seq.seqs[0], 4);
                         animating = false;
                         break;
-                    case Input.Keys.B: // burn!
-                        maker.rng.setState(rng.nextLong());
-                        makeBoom(maker.fireRange());
-                        animating = true;
-                        break;
-                    case Input.Keys.Z: // zap!
-                        maker.rng.setState(rng.nextLong());
-                        makeBoom(maker.randomFireRange());
-                        animating = true;
-                        break;
+//                    case Input.Keys.B: // burn!
+//                        maker.rng.setState(rng.nextLong());
+//                        makeBoom(maker.fireRange());
+//                        animating = true;
+//                        break;
+//                    case Input.Keys.Z: // zap!
+//                        maker.rng.setState(rng.nextLong());
+//                        makeBoom(maker.randomFireRange());
+//                        animating = true;
+//                        break;
                     case Input.Keys.G:
                         voxelColor.set(voxelColor.direction().counter());
                         break;

@@ -1,9 +1,11 @@
 package warpwriter.model.nonvoxel;
 
 import com.badlogic.gdx.math.Vector3;
+import warpwriter.model.IVoxelSeq;
 import warpwriter.model.VoxelSeq;
 
-import static com.badlogic.gdx.math.MathUtils.*;
+import static com.badlogic.gdx.math.MathUtils.lerp;
+import static com.badlogic.gdx.math.MathUtils.round;
 import static warpwriter.model.nonvoxel.HashMap3D.*;
 
 /**
@@ -64,7 +66,7 @@ public class Transform {
 //        this.roll = roll;
 //        this.pitch = pitch;
 //        this.yaw = yaw;
-        new TurnQuaternion().setEulerAnglesBrad(roll, pitch, yaw);
+        this.rotation = new TurnQuaternion().setEulerAnglesBrad(roll, pitch, yaw);
         this.moveX = moveX;
         this.moveY = moveY;
         this.moveZ = moveZ;
@@ -145,7 +147,7 @@ public class Transform {
      * @param jointZ the z-coordinate of the joint to rotate around, which may be in-between voxel coordinates
      * @return a new VoxelSeq that will contain a transformed copy of start 
      */
-    public VoxelSeq transform(VoxelSeq start, float jointX, float jointY, float jointZ)
+    public IVoxelSeq transform(IVoxelSeq start, float jointX, float jointY, float jointZ)
     {
         return transformInto(start, new VoxelSeq((int)(start.size() * stretchX * stretchY * stretchZ + 8)),
                 jointX, jointY, jointZ);
@@ -162,9 +164,9 @@ public class Transform {
      * @param jointZ the z-coordinate of the joint to rotate around, which may be in-between voxel coordinates
      * @return {@code next}, with the added voxels, for chaining
      */
-    public VoxelSeq transformInto(VoxelSeq start, VoxelSeq next, float jointX, float jointY, float jointZ)
+    public IVoxelSeq transformInto(IVoxelSeq start, IVoxelSeq next, float jointX, float jointY, float jointZ)
     {
-        final int len = start.size();
+        final int len = start.fullSize();
 //        final VoxelSeq next = new VoxelSeq((int) (len * stretchX * stretchY * stretchZ + 8));
         int k, x, y, z;
         byte v;
@@ -191,6 +193,8 @@ public class Transform {
                 }
             }
         }
+        next.hollow();
+        //System.out.println(len + ", " + next.fullSize());
         return next;
     }
 }

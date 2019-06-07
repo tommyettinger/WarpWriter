@@ -19,6 +19,7 @@ public interface IVoxelSeq extends ITurnable {
     int rotation();
     void rotate(int i);
     byte get(int x, int y, int z);
+    byte put(int x, int y, int z, byte v);
     int keyAt(int index);
     byte getAt(int index);
     byte getAtHollow(int index);
@@ -30,4 +31,5 @@ public interface IVoxelSeq extends ITurnable {
     byte getRotated(int index, int rotation);
     void sort(IntComparator comparator);
     void putSurface(byte[][][] voxels);
+    int fullSize();
 }

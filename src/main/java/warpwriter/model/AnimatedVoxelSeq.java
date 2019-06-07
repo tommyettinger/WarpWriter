@@ -97,6 +97,11 @@ public class AnimatedVoxelSeq implements IVoxelSeq, ITemporal, Serializable {
     }
 
     @Override
+    public int fullSize() {
+        return seqs[frame].fullSize();
+    }
+
+    @Override
     public void clear() {
         seqs[frame].clear();
     }
@@ -135,6 +140,11 @@ public class AnimatedVoxelSeq implements IVoxelSeq, ITemporal, Serializable {
     @Override
     public byte get(int x, int y, int z) {
         return seqs[frame].get(x, y, z);
+    }
+
+    @Override
+    public byte put(int x, int y, int z, byte v) {
+        return seqs[frame].put(x, y, z, v);
     }
 
     @Override

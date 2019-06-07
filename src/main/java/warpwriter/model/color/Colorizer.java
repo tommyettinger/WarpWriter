@@ -1897,9 +1897,7 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
             return JUDGE_BONUS_RAMP_VALUES[voxel & 0xFF][
                     brightness <= 0
                             ? 0
-                            : brightness >= 3
-                            ? 3
-                            : brightness
+                            : Math.min(brightness, 3)
                     ];
         }
 
