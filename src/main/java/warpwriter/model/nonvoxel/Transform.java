@@ -171,7 +171,7 @@ public class Transform {
         int k, x, y, z;
         byte v;
         for (int i = 0; i < len; i++) {
-            k = start.keyAt(i);
+            k = start.keyAtRotated(i);
             v = start.getAt(i);
             x = extractX(k);
             y = extractY(k);

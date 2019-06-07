@@ -81,7 +81,7 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
         rng = new MiniMover64RNG(-123456789);
         maker = new ModelMaker(-123456789, colorizer);
         transformStart = new Transform();
-        transformEnd = new Transform(0, 0, 128, 0, 0, 0);
+        transformEnd = new Transform(32, 64, 128, 0, 0, 0);
         transformMid = new Transform();
 //        try {
 //            box = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("Aurora/dumbcube.vox")));
@@ -91,11 +91,14 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //        }
 //        makeBoom(maker.fireRange());
         maker.rng.setState(rng.nextLong());
-        voxels = maker.shipLargeNoiseColorized();
+        voxels = maker.shipLargeSmoothColorized();
         seq = new VoxelSeq(1024);
-        seq.putArray(voxels);
+        seq.putSurface(voxels);
         seq.hollow();
-        middleSeq = new VoxelSeq(seq.size());
+        middleSeq = new VoxelSeq(seq.fullSize());
+        middleSeq.sizeX(60);
+        middleSeq.sizeY(60);
+        middleSeq.sizeZ(60);
 //        chaos = new ChaoticFetch(maker.rng.nextLong(), (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 1);
 //        ship = new TurnModel().set(
 ////                new ReplaceFetch(ColorFetch.color((byte) 0), (byte) 1)
@@ -127,7 +130,7 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
             else
                 transformStart.interpolateInto(transformEnd, 1f - alpha, transformMid);
             middleSeq.clear();
-            transformMid.transformInto(seq, middleSeq, seq.sizeX() * 0.5f, seq.sizeY() * 0.5f, seq.sizeZ() * 0.5f);
+            transformMid.transformInto(seq, middleSeq, seq.sizeX * 0.5f, seq.sizeY * 0.5f, seq.sizeZ * 0.5f);
         }
         buffer.begin();
         
@@ -207,30 +210,30 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
                         angle = 3;
                         break;
                     case Input.Keys.U:
-                            seq.clockX();
-                        System.out.println("Current rotation: " + seq.rotation());
+                            middleSeq.clockX();
+                        System.out.println("Current rotation: " + middleSeq.rotation());
                         break;
                     case Input.Keys.J:
-                            seq.counterX();
-                        System.out.println("Current rotation: " + seq.rotation());
+                            middleSeq.counterX();
+                        System.out.println("Current rotation: " + middleSeq.rotation());
                         break;
                     case Input.Keys.I:
-                        seq.clockY();
-                        System.out.println("Current rotation: " + seq.rotation());
+                        middleSeq.clockY();
+                        System.out.println("Current rotation: " + middleSeq.rotation());
                         break;
                     case Input.Keys.K:
-                        seq.counterY();
-                        System.out.println("Current rotation: " + seq.rotation());
+                        middleSeq.counterY();
+                        System.out.println("Current rotation: " + middleSeq.rotation());
                         break;
                     case Input.Keys.O:
-                        if((seq.rotation() & 28) == 0 ^ (diagonal = !diagonal)) // angle == 3 ||  
-                            seq.clockZ();
-                        System.out.println("Current rotation: " + seq.rotation());
+                        if((middleSeq.rotation() & 28) == 0 ^ (diagonal = !diagonal)) // angle == 3 ||  
+                            middleSeq.clockZ();
+                        System.out.println("Current rotation: " + middleSeq.rotation());
                         break;
                     case Input.Keys.L:
-                        if((seq.rotation() & 28) != 0 ^ (diagonal = !diagonal)) // angle == 3 ||  
-                            seq.counterZ();
-                        System.out.println("Current rotation: " + seq.rotation());
+                        if((middleSeq.rotation() & 28) != 0 ^ (diagonal = !diagonal)) // angle == 3 ||  
+                            middleSeq.counterZ();
+                        System.out.println("Current rotation: " + middleSeq.rotation());
                         break;
 //                    case Input.Keys.R:
 //                        model.rotation().reset();
@@ -240,7 +243,7 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //                        model.set(ship);
 //                        chaos.setSeed(maker.rng.nextLong());
                         maker.rng.setState(rng.nextLong());
-                        Tools3D.deepCopyInto(maker.shipLargeNoiseColorized(), voxels);
+                        Tools3D.deepCopyInto(maker.shipLargeSmoothColorized(), voxels);
 //                        seq.setFrame(0);
                         seq.clear();
                         seq.putSurface(voxels);
