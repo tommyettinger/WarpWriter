@@ -750,7 +750,7 @@ public class ModelMaker {
                         } else {
                             nextShip[x][smallYSize - y][z] = nextShip[x][y][z] =
                                     // checks sorta-top 9 bits, different branch
-                                    ((current >>> 15 & 0x3FF) < color * 9)
+                                    ((current >>> 15 & 0x3FF) < color * 13)
                                             ? 0
                                             // checks 6 bits of paint
                                             : (merlin3D(x, y, z, seed) == 0) 
@@ -807,7 +807,7 @@ public class ModelMaker {
 
     }
     
-    private static final int resolution = 4;
+    private static final int resolution = 2;
     private static int lorp(int start, int end, int a) {
         return ((1 << resolution) - a) * start + a * end >>> resolution;
     }
