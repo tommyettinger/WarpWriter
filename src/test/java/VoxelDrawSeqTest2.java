@@ -5,12 +5,12 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import io.anuke.gif.GifRecorder;
 import squidpony.FakeLanguageGen;
 import squidpony.squidmath.MiniMover64RNG;
 import warpwriter.ModelMaker;
@@ -19,8 +19,10 @@ import warpwriter.VoxIO;
 import warpwriter.model.VoxelSeq;
 import warpwriter.model.color.Colorizer;
 import warpwriter.model.nonvoxel.Transform;
+import warpwriter.model.nonvoxel.TurnQuaternion;
 import warpwriter.view.VoxelDraw;
 import warpwriter.view.color.VoxelColor;
+import warpwriter.view.render.MutantBatch;
 import warpwriter.view.render.VoxelImmediateRenderer;
 
 public class VoxelDrawSeqTest2 extends ApplicationAdapter {
@@ -28,7 +30,7 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
     public static final int SCREEN_HEIGHT = 360;//720;
     public static final int VIRTUAL_WIDTH = 320;
     public static final int VIRTUAL_HEIGHT = 360;
-    protected SpriteBatch batch;
+    protected MutantBatch batch;
     protected Viewport worldView;
     protected Viewport screenView;
     protected BitmapFont font;
@@ -39,8 +41,8 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
     protected ModelMaker maker;
     protected VoxelImmediateRenderer batchRenderer;
     protected VoxelColor voxelColor;
-    protected int angle = 2;
-    protected boolean diagonal = false;
+    protected int angle = 3;
+    protected boolean diagonal = true;
     protected boolean animating = false;
 //    protected byte[][][][] explosion;
 //    protected AnimatedArrayModel boom;
@@ -48,12 +50,15 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //    private byte[][][] container;
     private VoxelSeq seq;
     private VoxelSeq middleSeq;
+    private VoxelSeq axes;
     private Colorizer colorizer;
     protected MiniMover64RNG rng;
-    
-    private Transform transformStart, transformEnd, transformMid;
+    private TurnQuaternion turnX90, turnZ90;
+    private Transform[] transforms;
+    private Transform transformMid;
     private float alpha;
-    
+    private long startTime;
+    private GifRecorder gifRecorder;
 //    private ChaoticFetch chaos;
 
     @Override
@@ -76,12 +81,23 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
         colorizer = Colorizer.JudgeBonusColorizer;
         voxelColor = new VoxelColor().set(colorizer);
         batchRenderer = new VoxelImmediateRenderer(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
-        batch = new SpriteBatch();
+        batch = new MutantBatch();
         batchRenderer.color().set(colorizer);
         rng = new MiniMover64RNG(-123456789);
         maker = new ModelMaker(-123456789, colorizer);
-        transformStart = new Transform();
-        transformEnd = new Transform(32, 64, 128, 0, 0, 0);
+//        transformStart = new Transform();
+//        transformEnd = new Transform(32, 64, 128, 0, 0, 0);
+        turnX90 = new TurnQuaternion().setEulerAnglesBrad(64, 0, 0);
+        turnZ90 = new TurnQuaternion().setEulerAnglesBrad(0, 0, 64);
+        transforms = new Transform[24];
+        transforms[0] = new Transform();
+        for (int i = 0; i < transforms.length; i+=2) {
+            if(i == 0)
+                transforms[i] = new Transform(new TurnQuaternion().mul(turnX90).nor(), 0, 0, 0, 1, 1, 1);
+            else
+                transforms[i] = new Transform(transforms[i-1].rotation.cpy().mul(turnX90).nor(), 0, 0, 0, 1, 1, 1);
+            transforms[i+1] = new Transform(transforms[i].rotation.cpy().mul(turnZ90).nor(), 0, 0, 0, 1, 1, 1);
+        }
         transformMid = new Transform();
 //        try {
 //            box = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("Aurora/dumbcube.vox")));
@@ -94,11 +110,22 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
         voxels = maker.shipLargeSmoothColorized();
         seq = new VoxelSeq(1024);
         seq.putSurface(voxels);
+        byte red = colorizer.reduce(0xFF0000FF), green = colorizer.reduce(0x00FF00FF), blue = colorizer.reduce(0x0000FFFF);
+        for (int i = 30; i < 60; i++) {
+            seq.put(i, 30, 30, red);
+            seq.put(30, i, 30, green);
+            seq.put(30, 30, i, blue);
+        }
         seq.hollow();
         middleSeq = new VoxelSeq(seq.fullSize());
         middleSeq.sizeX(60);
         middleSeq.sizeY(60);
         middleSeq.sizeZ(60);
+//        axes = new VoxelSeq(180);
+//        axes.sizeX(60);
+//        axes.sizeY(60);
+//        axes.sizeZ(60);
+        
 //        chaos = new ChaoticFetch(maker.rng.nextLong(), (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 1);
 //        ship = new TurnModel().set(
 ////                new ReplaceFetch(ColorFetch.color((byte) 0), (byte) 1)
@@ -108,6 +135,14 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //        model = new TurnModel().set(ship);
 //        model.setDuration(16);
         Gdx.input.setInputProcessor(inputProcessor());
+        gifRecorder = new GifRecorder(batch);
+        gifRecorder.setGUIDisabled(true);
+        gifRecorder.open();
+        gifRecorder.setBounds(SCREEN_WIDTH * -0.5f, SCREEN_HEIGHT * -0.5f, SCREEN_WIDTH, SCREEN_HEIGHT);
+        gifRecorder.setFPS(16);
+        gifRecorder.startRecording();
+
+        startTime = TimeUtils.millis();
     }
 
 //    public void makeBoom(byte[] fireColors) {
@@ -122,15 +157,16 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //        boom.setFrame((int)(TimeUtils.millis() >>> 7) & 15);
         if(seq != null)
         {
-            long time = TimeUtils.millis();
+            long time = TimeUtils.timeSinceMillis(startTime);
 //            ((ITemporal) seq).setFrame((int)(TimeUtils.millis() * 5 >>> 9));
-            alpha = (time & 0x7FFL) * 0x1p-11f;
-            if((time & 0x800L) == 0L) 
-                transformStart.interpolateInto(transformEnd, alpha, transformMid);
-            else
-                transformStart.interpolateInto(transformEnd, 1f - alpha, transformMid);
+            alpha = (time & 0x3FFL) * 0x1p-10f;
+            transforms[(int) (time >>> 10) % transforms.length].interpolateInto(transforms[((int) (time >>> 10) + 1) % transforms.length], alpha, transformMid);
+//            if((time & 0x800L) == 0L) 
+//                transformStart.interpolateInto(transformEnd, alpha, transformMid);
+//            else
+//                transformStart.interpolateInto(transformEnd, 1f - alpha, transformMid);
             middleSeq.clear();
-            transformMid.transformInto(seq, middleSeq, seq.sizeX * 0.5f, seq.sizeY * 0.5f, seq.sizeZ * 0.5f);
+            transformMid.transformInto(seq, middleSeq, 30f, 30f, 30f);
         }
         buffer.begin();
         
@@ -170,12 +206,19 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
         batch.draw(screenRegion, 0, 0);
         //// for GB_GREEN
         //font.setColor(0x34 / 255f, 0x68 / 255f, 0x56 / 255f, 1f);
-        font.setColor(0f, 0f, 0f, 1f);
         //font.draw(batch, model.voxels.length + ", " + model.voxels[0].length + ", " + model.voxels[0][0].length + ", " + " (original)", 0, 80);
 //        font.draw(batch, model.sizeX() + ", " + model.sizeY() + ", " + model.sizeZ() + " (sizes)", 0, 60);
 //        font.draw(batch, StringKit.join(", ", model.rotation().rotation()) + " (rotation)", 0, 40);
-        font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 20);
+
+        //font.setColor(0f, 0f, 0f, 1f);
+        //font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 20);
         batch.end();
+        gifRecorder.update();
+        if(gifRecorder.isRecording() && TimeUtils.timeSinceMillis(startTime) > 0x8000L){
+            gifRecorder.finishRecording();
+            gifRecorder.writeGIF();
+        }
+
     }
 
     @Override
