@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import io.anuke.gif.GifRecorder;
 import squidpony.FakeLanguageGen;
 import squidpony.squidmath.MiniMover64RNG;
 import warpwriter.ModelMaker;
@@ -53,12 +52,12 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
     private VoxelSeq axes;
     private Colorizer colorizer;
     protected MiniMover64RNG rng;
-    private TurnQuaternion turnX90, turnZ90;
+    private TurnQuaternion turnX90, turnY90, turnZ90;
     private Transform[] transforms;
     private Transform transformMid;
     private float alpha;
     private long startTime;
-    private GifRecorder gifRecorder;
+//    private GifRecorder gifRecorder;
 //    private ChaoticFetch chaos;
 
     @Override
@@ -80,7 +79,7 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.FLESURRECT);
         colorizer = Colorizer.JudgeBonusColorizer;
         voxelColor = new VoxelColor().set(colorizer);
-        batchRenderer = new VoxelImmediateRenderer(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
+        batchRenderer = new VoxelImmediateRenderer(VIRTUAL_WIDTH, VIRTUAL_HEIGHT).setOffset(VIRTUAL_WIDTH, 0).flipX();
         batch = new MutantBatch();
         batchRenderer.color().set(colorizer);
         rng = new MiniMover64RNG(-123456789);
@@ -88,9 +87,19 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //        transformStart = new Transform();
 //        transformEnd = new Transform(32, 64, 128, 0, 0, 0);
         turnX90 = new TurnQuaternion().setEulerAnglesBrad(64, 0, 0);
+        turnY90 = new TurnQuaternion().setEulerAnglesBrad(0, 64, 0);
         turnZ90 = new TurnQuaternion().setEulerAnglesBrad(0, 0, 64);
-        transforms = new Transform[24];
-        transforms[0] = new Transform();
+        transforms = new Transform[12];
+//        transforms[0] = new Transform();
+//        transforms[1] = new Transform(transforms[0].rotation.cpy().mul(turnZ90).nor(), 0, 0, 0, 1, 1, 1);
+//        for (int i = 0; i < transforms.length; i+=3) {
+//            if(i == 0)
+//                transforms[i] = new Transform(new TurnQuaternion().mul(turnX90).nor(), 0, 0, 0, 1, 1, 1);
+//            else
+//                transforms[i] = new Transform(transforms[i-1].rotation.cpy().mul(turnX90).nor(), 0, 0, 0, 1, 1, 1);
+//            transforms[i+1] = new Transform(transforms[i].rotation.cpy().mul(turnY90).nor(), 0, 0, 0, 1, 1, 1);
+//            transforms[i+2] = new Transform(transforms[i+1].rotation.cpy().mul(turnZ90).nor(), 0, 0, 0, 1, 1, 1);
+//        }
         for (int i = 0; i < transforms.length; i+=2) {
             if(i == 0)
                 transforms[i] = new Transform(new TurnQuaternion().mul(turnX90).nor(), 0, 0, 0, 1, 1, 1);
@@ -106,17 +115,35 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //            box = maker.shipNoiseColorized();
 //        }
 //        makeBoom(maker.fireRange());
+        byte red = colorizer.reduce(0xFF0000FF), green = colorizer.reduce(0x00FF00FF),
+                blue = colorizer.reduce(0x0000FFFF), white = colorizer.reduce(0xFFFFFFFF);
         maker.rng.setState(rng.nextLong());
         voxels = maker.shipLargeSmoothColorized();
+//        voxels = new byte[60][60][60];
+//        seq = new VoxelSeq(1024);
+//        seq.putSurface(voxels);
+        
+//        for (int i = 30; i < 60; i++) {
+//            voxels[i ][30][30] =(red);
+//            voxels[30][i ][30] =(green);
+//            voxels[30][30][i ] =(blue);
+//        }
+//        voxels[50][30][30]=(white);
+//        voxels[49][31][30]=(white);
+//        voxels[49][29][30]=(white);
+//        voxels[49][30][31]=(white);
+//        voxels[49][30][29]=(white);
+//        voxels[48][31][30]=(white);
+//        voxels[48][29][30]=(white);
+//        voxels[48][30][31]=(white);
+//        voxels[48][30][29]=(white);
+//        voxels[48][31][31]=(white);
+//        voxels[48][29][29]=(white);
+//        voxels[48][29][31]=(white);
+//        voxels[48][31][29]=(white);
         seq = new VoxelSeq(1024);
         seq.putSurface(voxels);
-        byte red = colorizer.reduce(0xFF0000FF), green = colorizer.reduce(0x00FF00FF), blue = colorizer.reduce(0x0000FFFF);
-        for (int i = 30; i < 60; i++) {
-            seq.put(i, 30, 30, red);
-            seq.put(30, i, 30, green);
-            seq.put(30, 30, i, blue);
-        }
-        seq.hollow();
+//        seq.hollow();
         middleSeq = new VoxelSeq(seq.fullSize());
         middleSeq.sizeX(60);
         middleSeq.sizeY(60);
@@ -135,12 +162,12 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //        model = new TurnModel().set(ship);
 //        model.setDuration(16);
         Gdx.input.setInputProcessor(inputProcessor());
-        gifRecorder = new GifRecorder(batch);
-        gifRecorder.setGUIDisabled(true);
-        gifRecorder.open();
-        gifRecorder.setBounds(SCREEN_WIDTH * -0.5f, SCREEN_HEIGHT * -0.5f, SCREEN_WIDTH, SCREEN_HEIGHT);
-        gifRecorder.setFPS(16);
-        gifRecorder.startRecording();
+//        gifRecorder = new GifRecorder(batch);
+//        gifRecorder.setGUIDisabled(true);
+//        gifRecorder.open();
+//        gifRecorder.setBounds(SCREEN_WIDTH * -0.5f, SCREEN_HEIGHT * -0.5f, SCREEN_WIDTH, SCREEN_HEIGHT);
+//        gifRecorder.setFPS(16);
+//        gifRecorder.startRecording();
 
         startTime = TimeUtils.millis();
     }
@@ -161,12 +188,13 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //            ((ITemporal) seq).setFrame((int)(TimeUtils.millis() * 5 >>> 9));
             alpha = (time & 0x3FFL) * 0x1p-10f;
             transforms[(int) (time >>> 10) % transforms.length].interpolateInto(transforms[((int) (time >>> 10) + 1) % transforms.length], alpha, transformMid);
+//            transforms[0].interpolateInto(transforms[1], alpha, transformMid);
 //            if((time & 0x800L) == 0L) 
 //                transformStart.interpolateInto(transformEnd, alpha, transformMid);
 //            else
 //                transformStart.interpolateInto(transformEnd, 1f - alpha, transformMid);
             middleSeq.clear();
-            transformMid.transformInto(seq, middleSeq, 30f, 30f, 30f);
+            transformMid.transformInto(seq, middleSeq, 29.5f, 29.5f, 29.5f);
         }
         buffer.begin();
         
@@ -210,14 +238,14 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //        font.draw(batch, model.sizeX() + ", " + model.sizeY() + ", " + model.sizeZ() + " (sizes)", 0, 60);
 //        font.draw(batch, StringKit.join(", ", model.rotation().rotation()) + " (rotation)", 0, 40);
 
-        //font.setColor(0f, 0f, 0f, 1f);
-        //font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 20);
+        font.setColor(0f, 0f, 0f, 1f);
+        font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 20);
         batch.end();
-        gifRecorder.update();
-        if(gifRecorder.isRecording() && TimeUtils.timeSinceMillis(startTime) > 0x8000L){
-            gifRecorder.finishRecording();
-            gifRecorder.writeGIF();
-        }
+//        gifRecorder.update();
+//        if(gifRecorder.isRecording() && TimeUtils.timeSinceMillis(startTime) > 0x800L){
+//            gifRecorder.finishRecording();
+//            gifRecorder.writeGIF();
+//        }
 
     }
 
