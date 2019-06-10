@@ -2,6 +2,7 @@ package warpwriter.view.color;
 
 import squidpony.squidmath.FastNoise;
 import warpwriter.Coloring;
+import warpwriter.model.IVoxelSeq;
 
 /**
  * VoxelColor will color voxel cubes in a way that varies based on the direction of the light.
@@ -289,6 +290,33 @@ public class VoxelColor implements IVoxelColor {
         return this;
     }
 
+    public static int mixLightly(int baseColor, int mixColor)
+    {
+        final int
+                r = (baseColor >>> 26) * 3 + (mixColor >>> 26),
+                g = (baseColor >>> 18 & 0x3F) * 3 + (mixColor >>> 18 & 0x3F),
+                b = (baseColor >>> 10 & 0x3F) * 3 + (mixColor >>> 10 & 0x3F);
+        return r << 24 | g << 16 | b << 8 | 0xFF;
+    }
+
+    public static int mixEvenly(int baseColor, int mixColor)
+    {
+        final int
+                r = (baseColor >>> 25) + (mixColor >>> 25),
+                g = (baseColor >>> 17 & 0x7F) + (mixColor >>> 17 & 0x7F),
+                b = (baseColor >>> 9 & 0x7F) + (mixColor >>> 9 & 0x7F);
+        return r << 24 | g << 16 | b << 8 | 0xFF;
+    }
+
+    public static int mixHeavily(int baseColor, int mixColor)
+    {
+        final int
+                r = (mixColor >>> 26) * 3 + (baseColor >>> 26),
+                g = (mixColor >>> 18 & 0x3F) * 3 + (baseColor >>> 18 & 0x3F),
+                b = (mixColor >>> 10 & 0x3F) * 3 + (baseColor >>> 10 & 0x3F);
+        return r << 24 | g << 16 | b << 8 | 0xFF;
+    }
+    
     @Override
     public int verticalFace(byte voxel) {
         switch (lightDirection) {
@@ -303,6 +331,24 @@ public class VoxelColor implements IVoxelColor {
                 return dimmer.dark(voxel);
             case RIGHT_ABOVE:
             case LEFT_ABOVE:
+            default:
+                return dimmer.medium(voxel);
+        }
+    }
+
+    public int reverseVerticalFace(byte voxel) {
+        switch (lightDirection) {
+            case BELOW_RIGHT:
+            case BELOW_LEFT:
+                return dimmer.bright(voxel);
+            case RIGHT_ABOVE:
+            case LEFT_ABOVE:
+                return dimmer.dim(voxel);
+            case ABOVE_RIGHT:
+            case ABOVE_LEFT:
+                return dimmer.dark(voxel);
+            case LEFT_BELOW:
+            case RIGHT_BELOW:
             default:
                 return dimmer.medium(voxel);
         }
@@ -368,6 +414,21 @@ public class VoxelColor implements IVoxelColor {
         }
         return verticalFace(voxel);
     }
+    public int reverseVerticalFace(byte voxel, int x, int y, int z) {
+        if((voxel & waveBit) != 0)
+        {
+            if((voxel & shadeBit) != 0)
+            {
+                final int brightness = (voxel + time & 3);
+                return dimmer.dimmer(brightness + 1 - (brightness & (brightness << 1)), voxel);
+            }
+            else
+            {
+                return dimmer.dimmer(processNoise(x, y, z), voxel);
+            }
+        }
+        return reverseVerticalFace(voxel);
+    }
 
     @Override
     public int rightFace(byte voxel, int x, int y, int z) {
@@ -401,6 +462,43 @@ public class VoxelColor implements IVoxelColor {
             }
         }
         return leftFace(voxel);
+    }
+    
+    public int spotColor(byte voxel, int x, int y, int z, IVoxelSeq seq)
+    {
+        final byte 
+                xh = seq.getRotated(x + 1, y, z),
+                yh = seq.getRotated(x, y + 1, z),
+                zh = seq.getRotated(x, y, z + 1),
+                zl = seq.getRotated(x, y, z - 1);
+        if(zh == 0)
+        {
+            if(xh == 0 && yh != 0)
+                return mixLightly(leftFace(voxel, x, y, z), verticalFace(voxel, x, y, z));
+            else if(yh == 0 && xh != 0)
+                return mixLightly(rightFace(voxel, x, y, z), verticalFace(voxel, x, y, z));
+            else
+                return verticalFace(voxel, x, y, z);
+        }
+        else if(zl == 0)
+        {
+            if(xh == 0 && yh != 0)
+                return mixLightly(leftFace(voxel, x, y, z), reverseVerticalFace(voxel, x, y, z));
+            else if(yh == 0 && xh != 0)
+                return mixLightly(rightFace(voxel, x, y, z), reverseVerticalFace(voxel, x, y, z));
+            else
+                return reverseVerticalFace(voxel, x, y, z);
+        }
+        else 
+        {
+            if(xh == 0 && yh != 0)
+                return leftFace(voxel, x, y, z);
+            else if(yh == 0 && xh != 0)
+                return rightFace(voxel, x, y, z);
+            else
+                return mixEvenly(leftFace(voxel, x, y, z), rightFace(voxel, x, y, z));
+            
+        }
     }
 
     /**
