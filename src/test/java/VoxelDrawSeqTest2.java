@@ -42,14 +42,14 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
     protected VoxelColor voxelColor;
     protected int angle = 3;
     protected boolean diagonal = true;
-    protected boolean animating = false;
+    protected boolean animating = true;
 //    protected byte[][][][] explosion;
 //    protected AnimatedArrayModel boom;
     private byte[][][] voxels;
 //    private byte[][][] container;
     private VoxelSeq seq;
     private VoxelSeq middleSeq;
-    private VoxelSeq axes;
+//    private VoxelSeq axes;
     private Colorizer colorizer;
     protected MiniMover64RNG rng;
     private TurnQuaternion turnX90, turnY90, turnZ90;
@@ -65,7 +65,7 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
         font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
         worldView = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         screenView = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
-        buffer = new FrameBuffer(Pixmap.Format.RGBA8888, VIRTUAL_WIDTH, VIRTUAL_HEIGHT, false, false);
+        buffer = new FrameBuffer(Pixmap.Format.RGBA8888, VIRTUAL_WIDTH, VIRTUAL_HEIGHT, true, false);
         screenRegion = new TextureRegion();
         screenView.getCamera().position.set(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2, 0);
         screenView.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -79,9 +79,10 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.FLESURRECT);
         colorizer = Colorizer.JudgeBonusColorizer;
         voxelColor = new VoxelColor().set(colorizer);
-        batchRenderer = new VoxelImmediateRenderer(VIRTUAL_WIDTH, VIRTUAL_HEIGHT).setOffset(VIRTUAL_WIDTH, 0).flipX();
+        batchRenderer = new VoxelImmediateRenderer(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);//.setOffset(VIRTUAL_WIDTH, 0).flipX();
         batch = new MutantBatch();
         batchRenderer.color().set(colorizer);
+//        batchRenderer.setScale(2, 2);
         rng = new MiniMover64RNG(-123456789);
         maker = new ModelMaker(-123456789, colorizer);
 //        transformStart = new Transform();
@@ -152,6 +153,12 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //        axes.sizeX(60);
 //        axes.sizeY(60);
 //        axes.sizeZ(60);
+//        for (int i = 30; i < 60; i++) {
+//            axes.put(i ,30,30, red);
+//            axes.put(30,i ,30, green);
+//            axes.put(30,30,i , blue);
+//        }
+//        axes.hollow();
         
 //        chaos = new ChaoticFetch(maker.rng.nextLong(), (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 1);
 //        ship = new TurnModel().set(
@@ -182,7 +189,7 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
     public void render() {
 //        model.setFrame((int)(TimeUtils.millis() >>> 7) & 15);
 //        boom.setFrame((int)(TimeUtils.millis() >>> 7) & 15);
-        if(seq != null)
+        if(seq != null && animating)
         {
             long time = TimeUtils.timeSinceMillis(startTime);
 //            ((ITemporal) seq).setFrame((int)(TimeUtils.millis() * 5 >>> 9));
@@ -195,6 +202,8 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //                transformStart.interpolateInto(transformEnd, 1f - alpha, transformMid);
             middleSeq.clear();
             transformMid.transformInto(seq, middleSeq, 29.5f, 29.5f, 29.5f);
+//            middleSeq.putAll(axes);
+//            middleSeq.hollow();
         }
         buffer.begin();
         
@@ -319,7 +328,6 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
                         seq.clear();
                         seq.putSurface(voxels);
 //                        seq = new AnimatedVoxelSeq(seq.seqs[0], 4);
-                        animating = false;
                         break;
 //                    case Input.Keys.B: // burn!
 //                        maker.rng.setState(rng.nextLong());
@@ -341,6 +349,10 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //                        model.rotation().reset();
                         diagonal = false;
                         angle = 2;
+                        break;
+                    case Input.Keys.A: // try again
+//                        model.rotation().reset();
+                        animating = !animating;
                         break;
                     case Input.Keys.W: // write
                         VoxIO.writeVOX(FakeLanguageGen.SIMPLISH.word(Tools3D.hash64(voxels), true) + ".vox", voxels, maker.getColorizer().getReducer().paletteArray);

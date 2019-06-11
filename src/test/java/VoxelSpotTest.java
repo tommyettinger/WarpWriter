@@ -24,10 +24,10 @@ import warpwriter.view.render.MutantBatch;
 import warpwriter.view.render.VoxelSpotRenderer;
 
 public class VoxelSpotTest extends ApplicationAdapter {
-    public static final int SCREEN_WIDTH = 640;//640;
-    public static final int SCREEN_HEIGHT = 720;//720;
-    public static final int VIRTUAL_WIDTH = 320;
-    public static final int VIRTUAL_HEIGHT = 360;
+    public static final int SCREEN_WIDTH = 320;//640;
+    public static final int SCREEN_HEIGHT = 360;//720;
+    public static final int VIRTUAL_WIDTH = 80;
+    public static final int VIRTUAL_HEIGHT = 90;
     protected MutantBatch batch;
     protected Viewport worldView;
     protected Viewport screenView;
@@ -238,8 +238,8 @@ public class VoxelSpotTest extends ApplicationAdapter {
 //        font.draw(batch, model.sizeX() + ", " + model.sizeY() + ", " + model.sizeZ() + " (sizes)", 0, 60);
 //        font.draw(batch, StringKit.join(", ", model.rotation().rotation()) + " (rotation)", 0, 40);
 
-        font.setColor(0f, 0f, 0f, 1f);
-        font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 20);
+//        font.setColor(0f, 0f, 0f, 1f);
+//        font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 20);
         batch.end();
 //        gifRecorder.update();
 //        if(gifRecorder.isRecording() && TimeUtils.timeSinceMillis(startTime) > 0x800L){

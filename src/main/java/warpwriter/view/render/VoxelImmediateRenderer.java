@@ -1,5 +1,6 @@
 package warpwriter.view.render;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
 import com.badlogic.gdx.math.Matrix4;
@@ -140,18 +141,39 @@ public class VoxelImmediateRenderer implements IRectangleRenderer, ITriangleRend
         return this;
     }
 
+    public VoxelImmediateRenderer rectBack(int x, int y, int sizeX, int sizeY, int color) {
+        final float c = NumberTools.reversedIntBitsToFloat(transparency(color) & 0xFFFFFFFE);
+        x = scaleX * (flipX ? -x : x) + offsetX - 1;
+        y = scaleY * (flipY ? -y : y) + offsetY - 1;
+        sizeX = sizeX * scaleX + 2;
+        sizeY = sizeY * scaleY + 2;
+        batch.color(c);
+        batch.vertex(x, y, -0.750f);
+        batch.color(c);
+        batch.vertex(x + sizeX, y, -0.750f);
+        batch.color(c);
+        batch.vertex(x + sizeX, y + sizeY, -0.750f);
+        batch.color(c);
+        batch.vertex(x, y, -0.750f);
+        batch.color(c);
+        batch.vertex(x + sizeX, y + sizeY, -0.750f);
+        batch.color(c);
+        batch.vertex(x, y + sizeY, -0.750f);
+        return this;
+    }
+
     @Override
     public VoxelImmediateRenderer drawLeftTriangle(int x, int y, int color) {
         final float c = NumberTools.reversedIntBitsToFloat(transparency(color) & 0xFFFFFFFE);
         x = scaleX * (flipX ? -x : x) + offsetX;
         y = scaleY * (flipY ? -y : y) + offsetY;
-        int sizeX = 2 * scaleX;
+        float sizeX = 2.000f * scaleX;
         batch.color(c);
         batch.vertex(x + sizeX, y, 0);
         batch.color(c);
-        batch.vertex(x + sizeX, y + 3 * scaleY, 0);
+        batch.vertex(x + sizeX, y + 4.00f * scaleY, 0);
         batch.color(c);
-        batch.vertex(x, y + 1.5f * scaleY, 0);
+        batch.vertex(x, y + 2.00f * scaleY, 0);
         return this;
     }
 
@@ -163,20 +185,49 @@ public class VoxelImmediateRenderer implements IRectangleRenderer, ITriangleRend
         batch.color(c);
         batch.vertex(x, y, 0);
         batch.color(c);
-        batch.vertex(x + 2 * scaleX, y + 1.5f * scaleY, 0);
+        batch.vertex(x + 2.000f * scaleX, y + 2.00f * scaleY, 0);
         batch.color(c);
-        batch.vertex(x, y + 3 * scaleY, 0);
+        batch.vertex(x, y + 4.00f * scaleY, 0);
         return this;
     }
-    
+
+    public VoxelImmediateRenderer drawLeftTriangleBack(int x, int y, int color) {
+        final float c = NumberTools.reversedIntBitsToFloat(transparency(color) & 0xFFFFFFFE);
+        x = scaleX * (flipX ? -x : x) + offsetX - 2;
+        y = scaleY * (flipY ? -y : y) + offsetY - 1;
+        float sizeX = 2.000f * scaleX;
+        batch.color(c);
+        batch.vertex(x + sizeX + 3, y, -0.750f);
+        batch.color(c);
+        batch.vertex(x + sizeX + 3, y + 4.00f * scaleY + 2, -0.750f);
+        batch.color(c);
+        batch.vertex(x, y + 2.00f * scaleY + 1, -0.750f);
+        return this;
+    }
+
+    public VoxelImmediateRenderer drawRightTriangleBack(int x, int y, int color) {
+        final float c = NumberTools.reversedIntBitsToFloat(transparency(color) & 0xFFFFFFFE);
+        x = scaleX * (flipX ? -x : x) + offsetX - 1;
+        y = scaleY * (flipY ? -y : y) + offsetY - 1;
+        batch.color(c);
+        batch.vertex(x, y, -0.750f);
+        batch.color(c);
+        batch.vertex(x + 2.000f * scaleX + 3, y + 2.00f * scaleY + 1, -0.750f);
+        batch.color(c);
+        batch.vertex(x, y + 4.00f * scaleY + 2, -0.750f);
+        return this;
+    }
+
     @Override
     public VoxelImmediateRenderer rectVertical(int x, int y, int sizeX, int sizeY, byte voxel) {
-        return rect(x, y, sizeX, sizeY, color.verticalFace(voxel));
+        return rectBack(x, y, sizeX, sizeY, color.twilight().dark(voxel))
+                .rect(x, y, sizeX, sizeY, color.verticalFace(voxel));
     }
 
     @Override
     public VoxelImmediateRenderer rectLeft(int x, int y, int sizeX, int sizeY, byte voxel) {
-        return rect(x, y, sizeX, sizeY,
+        return rectBack(x, y, sizeX, sizeY, color.twilight().dark(voxel))
+                .rect(x, y, sizeX, sizeY,
                 flipX ?
                         color.rightFace(voxel)
                         : color.leftFace(voxel)
@@ -185,7 +236,8 @@ public class VoxelImmediateRenderer implements IRectangleRenderer, ITriangleRend
 
     @Override
     public VoxelImmediateRenderer rectRight(int x, int y, int sizeX, int sizeY, byte voxel) {
-        return rect(x, y, sizeX, sizeY,
+        return rectBack(x, y, sizeX, sizeY, color.twilight().dark(voxel))
+                .rect(x, y, sizeX, sizeY,
                 flipX ?
                         color.leftFace(voxel)
                         : color.rightFace(voxel)
@@ -194,25 +246,30 @@ public class VoxelImmediateRenderer implements IRectangleRenderer, ITriangleRend
 
     @Override
     public VoxelImmediateRenderer rectVertical(int px, int py, int sizeX, int sizeY, byte voxel, int depth, int vx, int vy, int vz) {
-        return rect(px, py, sizeX, sizeY, color.verticalFace(voxel, vx, vy, vz));
+        return rectBack(px-1, py-1, sizeX+2, sizeY+2, color.twilight().dark(voxel))
+                .rect(px, py, sizeX, sizeY, color.verticalFace(voxel, vx, vy, vz));
     }
 
     @Override
     public VoxelImmediateRenderer rectLeft(int px, int py, int sizeX, int sizeY, byte voxel, int depth, int vx, int vy, int vz) {
-        return rect(px, py, sizeX, sizeY, color.leftFace(voxel, vx, vy, vz));
+        return rectBack(px-1, py-1, sizeX+2, sizeY+2, color.twilight().dark(voxel))
+                .rect(px, py, sizeX, sizeY, color.leftFace(voxel, vx, vy, vz));
     }
 
     @Override
     public VoxelImmediateRenderer rectRight(int px, int py, int sizeX, int sizeY, byte voxel, int depth, int vx, int vy, int vz) {
-        return rect(px, py, sizeX, sizeY, color.rightFace(voxel, vx, vy, vz));
+        return rectBack(px-1, py-1, sizeX+2, sizeY+2, color.twilight().dark(voxel))
+                .rect(px, py, sizeX, sizeY, color.rightFace(voxel, vx, vy, vz));
     }
 
     @Override
     public VoxelImmediateRenderer drawLeftTriangleVerticalFace(int x, int y, byte voxel, int depth, int vx, int vy, int vz) {
         final int color = this.color.verticalFace(voxel, vx, vy, vz);
-        return flipX ?
-                drawRightTriangle(x, y, color)
-                : drawLeftTriangle(x, y, color);
+        return flipX
+                ? drawRightTriangleBack(x, y, this.color.twilight().dark(voxel))
+                .drawRightTriangle(x, y, color)
+                : drawLeftTriangleBack(x, y, this.color.twilight().dark(voxel))
+                .drawLeftTriangle(x, y, color);
     }
 
     @Override
@@ -220,9 +277,11 @@ public class VoxelImmediateRenderer implements IRectangleRenderer, ITriangleRend
         final int color = flipX ?
                 this.color.rightFace(voxel, vx, vy, vz)
                 : this.color.leftFace(voxel, vx, vy, vz);
-        return flipX ?
-                drawRightTriangle(x, y, color)
-                : drawLeftTriangle(x, y, color);
+        return flipX
+                ? drawRightTriangleBack(x, y, this.color.twilight().dark(voxel))
+                .drawRightTriangle(x, y, color)
+                : drawLeftTriangleBack(x, y, this.color.twilight().dark(voxel))
+                .drawLeftTriangle(x, y, color);
     }
 
     @Override
@@ -230,17 +289,21 @@ public class VoxelImmediateRenderer implements IRectangleRenderer, ITriangleRend
         final int color = flipX ?
                 this.color.leftFace(voxel, vx, vy, vz)
                 : this.color.rightFace(voxel, vx, vy, vz);
-        return flipX ?
-                drawRightTriangle(x, y, color)
-                : drawLeftTriangle(x, y, color);
+        return flipX
+                ? drawRightTriangleBack(x, y, this.color.twilight().dark(voxel))
+                .drawRightTriangle(x, y, color)
+                : drawLeftTriangleBack(x, y, this.color.twilight().dark(voxel))
+                .drawLeftTriangle(x, y, color);
     }
 
     @Override
     public VoxelImmediateRenderer drawRightTriangleVerticalFace(int x, int y, byte voxel, int depth, int vx, int vy, int vz) {
         final int color = this.color.verticalFace(voxel, vx, vy, vz);
-        return flipX ?
-                drawLeftTriangle(x, y, color)
-                : drawRightTriangle(x, y, color);
+        return flipX
+                ? drawLeftTriangleBack(x, y, this.color.twilight().dark(voxel))
+                .drawLeftTriangle(x, y, color)
+                : drawRightTriangleBack(x, y, this.color.twilight().dark(voxel))
+                .drawRightTriangle(x, y, color);
     }
 
     @Override
@@ -248,9 +311,11 @@ public class VoxelImmediateRenderer implements IRectangleRenderer, ITriangleRend
         final int color = flipX ?
                 this.color.rightFace(voxel, vx, vy, vz)
                 : this.color.leftFace(voxel, vx, vy, vz);
-        return flipX ?
-                drawLeftTriangle(x, y, color)
-                : drawRightTriangle(x, y, color);
+        return flipX
+                ? drawLeftTriangleBack(x, y, this.color.twilight().dark(voxel))
+                .drawLeftTriangle(x, y, color)
+                : drawRightTriangleBack(x, y, this.color.twilight().dark(voxel))
+                .drawRightTriangle(x, y, color);
     }
 
     @Override
@@ -258,17 +323,21 @@ public class VoxelImmediateRenderer implements IRectangleRenderer, ITriangleRend
         final int color = flipX ?
                 this.color.leftFace(voxel, vx, vy, vz)
                 : this.color.rightFace(voxel, vx, vy, vz);
-        return flipX ?
-                drawLeftTriangle(x, y, color)
-                : drawRightTriangle(x, y, color);
+        return flipX
+                ? drawLeftTriangleBack(x, y, this.color.twilight().dark(voxel))
+                .drawLeftTriangle(x, y, color)
+                : drawRightTriangleBack(x, y, this.color.twilight().dark(voxel))
+                .drawRightTriangle(x, y, color);
     }
 
     @Override
     public VoxelImmediateRenderer drawLeftTriangleVerticalFace(int x, int y, byte voxel, int vx, int vy, int vz) {
         final int color = this.color.verticalFace(voxel, vx, vy, vz);
-        return flipX ?
-                drawRightTriangle(x, y, color)
-                : drawLeftTriangle(x, y, color);
+        return flipX
+                ? drawRightTriangleBack(x, y, this.color.twilight().dark(voxel))
+                .drawRightTriangle(x, y, color)
+                : drawLeftTriangleBack(x, y, this.color.twilight().dark(voxel))
+                .drawLeftTriangle(x, y, color);
     }
 
     @Override
@@ -276,9 +345,11 @@ public class VoxelImmediateRenderer implements IRectangleRenderer, ITriangleRend
         final int color = flipX ?
                 this.color.rightFace(voxel, vx, vy, vz)
                 : this.color.leftFace(voxel, vx, vy, vz);
-        return flipX ?
-                drawRightTriangle(x, y, color)
-                : drawLeftTriangle(x, y, color);
+        return flipX
+                ? drawRightTriangleBack(x, y, this.color.twilight().dark(voxel))
+                .drawRightTriangle(x, y, color)
+                : drawLeftTriangleBack(x, y, this.color.twilight().dark(voxel))
+                .drawLeftTriangle(x, y, color);
     }
 
     @Override
@@ -286,17 +357,21 @@ public class VoxelImmediateRenderer implements IRectangleRenderer, ITriangleRend
         final int color = flipX ?
                 this.color.leftFace(voxel, vx, vy, vz)
                 : this.color.rightFace(voxel, vx, vy, vz);
-        return flipX ?
-                drawRightTriangle(x, y, color)
-                : drawLeftTriangle(x, y, color);
+        return flipX
+                ? drawRightTriangleBack(x, y, this.color.twilight().dark(voxel))
+                .drawRightTriangle(x, y, color)
+                : drawLeftTriangleBack(x, y, this.color.twilight().dark(voxel))
+                .drawLeftTriangle(x, y, color);
     }
 
     @Override
     public VoxelImmediateRenderer drawRightTriangleVerticalFace(int x, int y, byte voxel, int vx, int vy, int vz) {
         final int color = this.color.verticalFace(voxel, vx, vy, vz);
-        return flipX ?
-                drawLeftTriangle(x, y, color)
-                : drawRightTriangle(x, y, color);
+        return flipX
+                ? drawLeftTriangleBack(x, y, this.color.twilight().dark(voxel))
+                .drawLeftTriangle(x, y, color)
+                : drawRightTriangleBack(x, y, this.color.twilight().dark(voxel))
+                .drawRightTriangle(x, y, color);
     }
 
     @Override
@@ -304,9 +379,11 @@ public class VoxelImmediateRenderer implements IRectangleRenderer, ITriangleRend
         final int color = flipX ?
                 this.color.rightFace(voxel, vx, vy, vz)
                 : this.color.leftFace(voxel, vx, vy, vz);
-        return flipX ?
-                drawLeftTriangle(x, y, color)
-                : drawRightTriangle(x, y, color);
+        return flipX
+                ? drawLeftTriangleBack(x, y, this.color.twilight().dark(voxel))
+                .drawLeftTriangle(x, y, color)
+                : drawRightTriangleBack(x, y, this.color.twilight().dark(voxel))
+                .drawRightTriangle(x, y, color);
     }
 
     @Override
@@ -314,9 +391,11 @@ public class VoxelImmediateRenderer implements IRectangleRenderer, ITriangleRend
         final int color = flipX ?
                 this.color.leftFace(voxel, vx, vy, vz)
                 : this.color.rightFace(voxel, vx, vy, vz);
-        return flipX ?
-                drawLeftTriangle(x, y, color)
-                : drawRightTriangle(x, y, color);
+        return flipX
+                ? drawLeftTriangleBack(x, y, this.color.twilight().dark(voxel))
+                .drawLeftTriangle(x, y, color)
+                : drawRightTriangleBack(x, y, this.color.twilight().dark(voxel))
+                .drawRightTriangle(x, y, color);
     }
 
     protected byte transparency = Byte.MAX_VALUE;
@@ -342,6 +421,16 @@ public class VoxelImmediateRenderer implements IRectangleRenderer, ITriangleRend
 
     public void begin()
     {
+        Gdx.gl.glClear(GL20.GL_DEPTH_BUFFER_BIT);
+
+//        Gdx.gl.glEnable(GL20.GL_CULL_FACE);
+//        Gdx.gl.glCullFace(GL20.GL_BACK);
+//
+        Gdx.gl.glDepthFunc(GL20.GL_LESS);
+
+        Gdx.gl.glEnable(GL20.GL_DEPTH_TEST);
+        Gdx.gl.glDepthMask(true);
+        
         batch.begin(proj, GL20.GL_TRIANGLES);
     }
     public void end()
