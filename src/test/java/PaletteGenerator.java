@@ -6,9 +6,10 @@ import com.badlogic.gdx.graphics.Pixmap;
 import squidpony.StringKit;
 import squidpony.squidmath.IntVLA;
 import squidpony.squidmath.RandomnessSource;
+import warpwriter.Coloring;
 import warpwriter.PNG8;
 import warpwriter.PaletteReducer;
-import warpwriter.model.color.Colorizer;
+import warpwriter.view.color.VoxelColor;
 
 import java.io.IOException;
 
@@ -278,8 +279,20 @@ public class PaletteGenerator extends ApplicationAdapter {
 //        Gdx.files.local("DawnBringer_Aurora_Official.hex").writeString(sbs, false);
 //        sb.setLength(0);
 
-        PALETTE = Colorizer.CurveballBonusPalette;
-        
+//        PALETTE = Coloring.GB_GREEN;
+        PALETTE = new int[17];
+        PALETTE[1] = 0x000000FF;
+        PALETTE[2] = Coloring.GB_GREEN[1];
+        PALETTE[6] = Coloring.GB_GREEN[2];
+        PALETTE[10] = Coloring.GB_GREEN[3];
+        PALETTE[14] = Coloring.GB_GREEN[4];
+        PALETTE[15] = VoxelColor.mixEvenly(Coloring.GB_GREEN[4], 0xFFFFFFFF);
+        PALETTE[16] = 0xFFFFFFFF;
+        for (int i = 3; i < 14; i+=4) {
+            PALETTE[i] = VoxelColor.mixLightly(PALETTE[i-1], PALETTE[i+3]);
+            PALETTE[i+1] = VoxelColor.mixEvenly(PALETTE[i-1], PALETTE[i+3]);
+            PALETTE[i+2] = VoxelColor.mixHeavily(PALETTE[i-1], PALETTE[i+3]);
+        }
         StringBuilder sb = new StringBuilder((1 + 12 * 8) * (PALETTE.length + 7 >>> 3));
         for (int i = 0; i < (PALETTE.length + 7 >>> 3); i++) {
             for (int j = 0; j < 8 && (i << 3 | j) < PALETTE.length; j++) {
@@ -307,20 +320,29 @@ public class PaletteGenerator extends ApplicationAdapter {
 //            pix.setColor(PALETTE[i]);
 //            pix.fillRectangle((i & 15) << 3, (i & -16) >>> 1, 8, 8);
 //        }
-        PALETTE = Colorizer.CurveballBonusPalette;
-        Pixmap pix = new Pixmap(256, 1, Pixmap.Format.RGBA8888);
-        for (int i = 1; i < 64; i++) {
-//            pix.drawPixel(i-1, 0, PALETTE[i]);
-            pix.drawPixel(i-1, 0, PALETTE[i << 2 | 2]);
-            pix.drawPixel(i+63, 0, PALETTE[i << 2]);
-            pix.drawPixel(i+127, 0, PALETTE[i << 2 | 1]);
-            pix.drawPixel(i+191, 0, PALETTE[i << 2 | 3]);
-        }
-        //pix.drawPixel(255, 0, 0);
+//        PALETTE = Colorizer.CurveballBonusPalette;
         PNG8 png8 = new PNG8();
         png8.palette = new PaletteReducer(PALETTE);
+//        Pixmap pix = new Pixmap(256, 1, Pixmap.Format.RGBA8888);
+//        for (int i = 1; i < 64; i++) {
+//            pix.drawPixel(i-1, 0, PALETTE[i << 2 | 2]);
+//            pix.drawPixel(i+63, 0, PALETTE[i << 2]);
+//            pix.drawPixel(i+127, 0, PALETTE[i << 2 | 1]);
+//            pix.drawPixel(i+191, 0, PALETTE[i << 2 | 3]);
+//        }
+        //pix.drawPixel(255, 0, 0);
+//        try {
+//            png8.writePrecisely(Gdx.files.local("GBGreenMagicaVoxel.png"), pix, false);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        Pixmap pix = new Pixmap(256, 1, Pixmap.Format.RGBA8888);
+        for (int i = 1; i < PALETTE.length; i++) {
+            pix.drawPixel(i-1, 0, PALETTE[i]);
+        }
+        pix.drawPixel(255, 0, 0);
         try {
-            png8.writePrecisely(Gdx.files.local("CurveballBonusMagicaVoxel.png"), pix, false);
+            png8.writePrecisely(Gdx.files.local("GBGreen16.png"), pix, false);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -337,7 +359,7 @@ public class PaletteGenerator extends ApplicationAdapter {
             }
         }
         try {
-            png8.writePrecisely(Gdx.files.local("CurveballBonus_GLSL.png"), p2, false);
+            png8.writePrecisely(Gdx.files.local("GBGreen16_GLSL.png"), p2, false);
 //            png8.writePrecisely(Gdx.files.local("Uniform"+PALETTE.length+"_GLSL.png"), p2, false);
         } catch (IOException e) {
             e.printStackTrace();

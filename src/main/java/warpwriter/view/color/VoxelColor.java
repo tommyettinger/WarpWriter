@@ -298,6 +298,14 @@ public class VoxelColor implements IVoxelColor {
                 b = (baseColor >>> 10 & 0x3F) * 3 + (mixColor >>> 10 & 0x3F);
         return r << 24 | g << 16 | b << 8 | 0xFF;
     }
+    public static int mixThird(int baseColor, int mixColor)
+    {
+        final int
+                r = ((baseColor >>> 23 & 0x1FE) + (mixColor >>> 24)) / 3,
+                g = ((baseColor >>> 15 & 0x1FE) + (mixColor >>> 16 & 0xFF)) / 3,
+                b = ((baseColor >>> 7 & 0x1FE) + (mixColor >>> 8 & 0xFF)) / 3;
+        return r << 24 | g << 16 | b << 8 | 0xFF;
+    }
 
     public static int mixEvenly(int baseColor, int mixColor)
     {
