@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.FakeLanguageGen;
@@ -16,7 +15,6 @@ import warpwriter.ModelMaker;
 import warpwriter.Tools3D;
 import warpwriter.VoxIO;
 import warpwriter.model.AnimatedVoxelSeq;
-import warpwriter.model.ITemporal;
 import warpwriter.model.VoxelSeq;
 import warpwriter.model.color.Colorizer;
 import warpwriter.model.nonvoxel.LittleEndianDataInputStream;
@@ -94,7 +92,7 @@ public class VoxelDrawSeqMutantTest extends ApplicationAdapter {
         VoxelSeq vs = new VoxelSeq(1024);
         vs.putArray(voxels);
         vs.hollow();
-        seq = new AnimatedVoxelSeq(vs, 4);
+        seq = new AnimatedVoxelSeq(new VoxelSeq[]{vs, new VoxelSeq(new int[]{1}, new byte[]{100})});
 //        chaos = new ChaoticFetch(maker.rng.nextLong(), (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 1);
 //        ship = new TurnModel().set(
 ////                new ReplaceFetch(ColorFetch.color((byte) 0), (byte) 1)
@@ -105,16 +103,31 @@ public class VoxelDrawSeqMutantTest extends ApplicationAdapter {
 //        model.setDuration(16);
         Gdx.input.setInputProcessor(inputProcessor());
 
-        System.out.println("Testing on a .vox file this program wrote:");
+        System.out.println("Testing on a .vox file this program wrote (old technique):");
         try {
             System.out.println(VoxIO.readPriorities(new LittleEndianDataInputStream(new FileInputStream("hasOwnPalette/Priorities.vox"))));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
-        System.out.println("Testing on a .vox file this program wrote that was then opened and saved in MagicaVoxel:");
+        System.out.println("Testing on a .vox file this program wrote (old technique) that was then opened and saved in MagicaVoxel:");
         try {
             System.out.println(VoxIO.readPriorities(new LittleEndianDataInputStream(new FileInputStream("hasOwnPalette/PrioritiesRewritten.vox"))));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
+        System.out.println("Testing on a .vox file this program wrote (new technique):");
+        try {
+            System.out.println(VoxIO.readPriorities(new LittleEndianDataInputStream(new FileInputStream("hasOwnPalette/Priorities2.vox"))));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Testing on a .vox file this program wrote (new technique) that was then opened and saved in MagicaVoxel:");
+        try {
+            System.out.println(VoxIO.readPriorities(new LittleEndianDataInputStream(new FileInputStream("hasOwnPalette/PrioritiesRewritten2.vox"))));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -131,8 +144,7 @@ public class VoxelDrawSeqMutantTest extends ApplicationAdapter {
     public void render() {
 //        model.setFrame((int)(TimeUtils.millis() >>> 7) & 15);
 //        boom.setFrame((int)(TimeUtils.millis() >>> 7) & 15);
-        if(seq != null)
-            ((ITemporal) seq).setFrame((int)(TimeUtils.millis() * 5 >>> 9));
+//        if(seq != null) ((ITemporal) seq).setFrame((int)(TimeUtils.millis() * 5 >>> 9));
         buffer.begin();
         
         Gdx.gl.glClearColor(0.4f, 0.75f, 0.3f, 1f);
@@ -250,7 +262,6 @@ public class VoxelDrawSeqMutantTest extends ApplicationAdapter {
                         seq.setFrame(0);
                         seq.clear();
                         seq.putSurface(voxels);
-                        seq = new AnimatedVoxelSeq(seq.seqs[0], 4);
                         animating = false;
                         break;
                     case Input.Keys.B: // burn!
@@ -276,7 +287,7 @@ public class VoxelDrawSeqMutantTest extends ApplicationAdapter {
                         break;
                     case Input.Keys.W: // write
                         String name = FakeLanguageGen.SIMPLISH.word(Tools3D.hash64(voxels), true) + ".vox";
-                        VoxIO.writeVOX(name, voxels, maker.getColorizer().getReducer().paletteArray, new VoxelSeq(new int[1], new byte[]{100}));
+                        VoxIO.writeAnimatedVOX(name, seq, maker.getColorizer().getReducer().paletteArray);
                         try {
                             System.out.println(VoxIO.readPriorities(new LittleEndianDataInputStream(new FileInputStream(name))));
                         } catch (FileNotFoundException e) {

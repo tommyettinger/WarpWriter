@@ -15,6 +15,9 @@ public class AnimatedVoxelSeq implements IVoxelSeq, ITemporal, Serializable {
     public AnimatedVoxelSeq() {
         seqs = new IVoxelSeq[]{new VoxelSeq(32)};
     }
+    public AnimatedVoxelSeq(IVoxelSeq[] voxelSeqs) {
+        seqs = voxelSeqs;
+    }
     public AnimatedVoxelSeq(IVoxelSeq single, int duration)
     {
         seqs = new IVoxelSeq[duration];

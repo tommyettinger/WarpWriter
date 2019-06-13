@@ -1,6 +1,8 @@
 package warpwriter;
 
 import squidpony.annotation.GwtIncompatible;
+import warpwriter.model.AnimatedVoxelSeq;
+import warpwriter.model.IVoxelSeq;
 import warpwriter.model.VoxelSeq;
 import warpwriter.model.nonvoxel.LittleEndianDataInputStream;
 
@@ -98,10 +100,77 @@ public class VoxIO {
         }
         return voxelData;
     }
+    public static AnimatedVoxelSeq readVoxelSeq(LittleEndianDataInputStream stream) {
+        // check out https://github.com/ephtracy/voxel-model/blob/master/MagicaVoxel-file-format-vox.txt for the file format used below
+        AnimatedVoxelSeq voxelData = null;
+        VoxelSeq[] seqs = null;
+        int frames = 1;
+        int currentFrame = -1;
+        try {
+            byte[] chunkId = new byte[4];
+            if (4 != stream.read(chunkId))
+                return null;
+            //int version = 
+            stream.readInt();
+            // a MagicaVoxel .vox file starts with a 'magic' 4 character 'VOX ' identifier
+            if (chunkId[0] == 'V' && chunkId[1] == 'O' && chunkId[2] == 'X' && chunkId[3] == ' ') {
+                while (stream.available() > 0) {
+                    // each chunk has an ID, size and child chunks
+                    stream.read(chunkId);
+                    int chunkSize = stream.readInt();
+                    //int childChunks = 
+                    stream.readInt();
+                    String chunkName = new String(chunkId); // assumes default charset is compatible with ASCII
+                    
+                    // if PACK is found, there could be multiple frames
+                    if(chunkName.equals("PACK"))
+                    {
+                        frames = stream.readInt();
+                        voxelData = new AnimatedVoxelSeq(seqs = new VoxelSeq[frames]);
+                    }
+                    // there are only 3 other chunks we only care about, and they are SIZE, XYZI, and RGBA
+                    else if (chunkName.equals("SIZE")) {
+                        if(seqs == null)
+                        {
+                            voxelData = new AnimatedVoxelSeq(seqs = new VoxelSeq[1]);
+                        }
+                        currentFrame++;
+                        seqs[currentFrame] = new VoxelSeq();
+                        seqs[currentFrame].sizeX(stream.readInt());
+                        seqs[currentFrame].sizeY(stream.readInt());
+                        seqs[currentFrame].sizeZ(stream.readInt());
+                        stream.skipBytes(chunkSize - 4 * 3);
+                    } else if (chunkName.equals("XYZI") && seqs != null) {
+                        // XYZI contains n voxels
+                        int numVoxels = stream.readInt();
+
+                        // each voxel has x, y, z and color index values
+                        for (int i = 0; i < numVoxels; i++) {
+                            seqs[currentFrame].put(stream.read(), stream.read(), stream.read(), stream.readByte());
+                        }
+                    } else if(chunkName.equals("RGBA") && voxelData != null)
+                    {
+                        for (int i = 1; i < 256; i++) {
+                            lastPalette[i] = Integer.reverseBytes(stream.readInt());
+                        }
+                        stream.readInt();
+                    }
+                    else stream.skipBytes(chunkSize);   // read any excess bytes
+                }
+
+            }
+            stream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return voxelData;
+    }
+
     public static VoxelSeq readPriorities(LittleEndianDataInputStream stream) {
         // check out https://github.com/ephtracy/voxel-model/blob/master/MagicaVoxel-file-format-vox.txt for the file format used below
         VoxelSeq priorities = null;
         int sizeX = 16, sizeY = 16, sizeZ = 16;
+        boolean hasReadSize = false, hasReadPositions = false;
         try {
             byte[] chunkId = new byte[4];
             if (4 != stream.read(chunkId))
@@ -124,13 +193,20 @@ public class VoxIO {
                         sizeY = stream.readInt();
                         sizeZ = stream.readInt();
                         stream.skipBytes(chunkSize - 4 * 3);
-                    } else if (chunkName.equals("PRIO")) {
-                        // PRIO contains n voxels
+                        hasReadSize = true;
+                    } else if (chunkName.equals("XYZI")) {
+                        if(!hasReadPositions)
+                        {
+                            hasReadPositions = true;
+                            stream.skipBytes(chunkSize);
+                            continue;
+                        }
+                        // XYZI contains n voxels
                         int numVoxels = stream.readInt();
                         priorities = new VoxelSeq(numVoxels);
                         // each voxel has x, y, z and color index values
                         for (int i = 0; i < numVoxels; i++) {
-                            priorities.put(stream.read() & 255, stream.read() & 255, stream.read() & 255, stream.readByte());
+                            priorities.put(stream.read(), stream.read(), stream.read(), stream.readByte());
                         }
                     }
                     else stream.skipBytes(chunkSize);   // read any excess bytes
@@ -160,6 +236,11 @@ public class VoxIO {
     @GwtIncompatible
     public static void writeVOX(String filename, byte[][][] voxelData, int[] palette, VoxelSeq priorities) {
         // check out http://voxel.codeplex.com/wikipage?title=VOX%20Format&referringTitle=Home for the file format used below
+        if(priorities == null)
+        {
+            writeVOX(filename, voxelData, palette);
+            return;
+        }
         try {
             int xSize = voxelData.length, ySize = voxelData[0].length, zSize = voxelData[0][0].length;
 
@@ -186,12 +267,13 @@ public class VoxIO {
             writeInt(bin, 150);
 
             bin.writeBytes("MAIN");
-            writeInt(bin,  0);
-            writeInt(bin,  12 + 12 + 12 + 4 + voxelsRaw.size() + 12 + 1024);
+            writeInt(bin, 0);
+            writeInt(bin, 12 + 12 + 12 + 4 + voxelsRaw.size() + 12 + 1024);
 
-            //bin.writeBytes("PACK");
-            //writeInt(bin,  0);
-            //writeInt(bin,  12 + 12 + 12 + 4 + voxelsRaw.size() + 12 + 1024);
+            bin.writeBytes("PACK");
+            writeInt(bin, 4);
+            writeInt(bin, 0);
+            writeInt(bin, 2);
 
             bin.writeBytes("SIZE");
             writeInt(bin, 12);
@@ -201,11 +283,33 @@ public class VoxIO {
             writeInt(bin, zSize);
 
             bin.writeBytes("XYZI");
-            writeInt(bin,  4 + voxelsRaw.size());
-            writeInt(bin,  0);
-            writeInt(bin,  voxelsRaw.size() >> 2);
+            writeInt(bin, 4 + voxelsRaw.size());
+            writeInt(bin, 0);
+            writeInt(bin, voxelsRaw.size() >> 2);
             bin.write(voxelsRaw.toByteArray());
-            //voxelsRaw.writeTo(bin);
+
+            
+            // priorities section 1
+            bin.writeBytes("SIZE");
+            writeInt(bin, 12);
+            writeInt(bin, 0);
+            writeInt(bin, xSize);
+            writeInt(bin, ySize);
+            writeInt(bin, zSize);
+
+            // priorities section 2
+            bin.writeBytes("XYZI");
+            int fullSize = priorities.fullSize();
+            writeInt(bin, fullSize * 4 + 4);
+            writeInt(bin, 0);
+            writeInt(bin, fullSize);
+            for (int j = 0; j < fullSize; j++) {
+                int key = priorities.keyAt(j);
+                bin.writeByte(extractX(key));
+                bin.writeByte(extractY(key));
+                bin.writeByte(extractZ(key));
+                bin.writeByte(priorities.getAt(j));
+            }
 
             bin.writeBytes("RGBA");
             writeInt(bin, 1024);
@@ -220,20 +324,6 @@ public class VoxIO {
             }
             writeInt(bin,  0);
             
-            if(priorities != null) {
-                bin.writeBytes("PRIO");
-                int fullSize = priorities.fullSize();
-                writeInt(bin, fullSize * 4 + 4);
-                writeInt(bin, 0);
-                writeInt(bin, fullSize);
-                for (int j = 0; j < fullSize; j++) {
-                    int key = priorities.keyAt(j);
-                    bin.writeByte(extractX(key) & 255);
-                    bin.writeByte(extractY(key) & 255);
-                    bin.writeByte(extractZ(key) & 255);
-                    bin.writeByte(priorities.getAt(j));
-                }
-            }
             bin.flush();
             bin.close();
             fos.flush();
@@ -242,6 +332,7 @@ public class VoxIO {
             e.printStackTrace();
         }
     }
+
     @GwtIncompatible
     public static void writeAnimatedVOX(String filename, byte[][][][] voxelData, int[] palette) {
         // check out http://voxel.codeplex.com/wikipage?title=VOX%20Format&referringTitle=Home for the file format used below
@@ -265,6 +356,90 @@ public class VoxIO {
                             voxelsRaw.write(cc);
                         }
                     }
+                }
+                rawArrays[f] = voxelsRaw.toByteArray();
+                totalSize += rawArrays[f].length;
+            }
+
+            // a MagicaVoxel .vox file starts with a 'magic' 4 character 'VOX ' identifier
+            bin.writeBytes("VOX ");
+            // current version
+            writeInt(bin, 150);
+
+            bin.writeBytes("MAIN");
+            writeInt(bin,  0);
+            writeInt(bin,  16 + 40 * frames + totalSize + 12 + 1024);
+
+            bin.writeBytes("PACK");
+            writeInt(bin, 4);
+            writeInt(bin,  0);
+            writeInt(bin,  frames);
+            for (int f = 0; f < frames; f++) {
+                bin.writeBytes("SIZE");
+                writeInt(bin, 12);
+                writeInt(bin, 0);
+                writeInt(bin, xSize);
+                writeInt(bin, ySize);
+                writeInt(bin, zSize);
+
+                bin.writeBytes("XYZI");
+                writeInt(bin, 4 + rawArrays[f].length);
+                writeInt(bin, 0);
+                writeInt(bin, rawArrays[f].length >> 2);
+                bin.write(rawArrays[f]);
+                //voxelsRaw.writeTo(bin);
+            }
+            bin.writeBytes("RGBA");
+            writeInt(bin, 1024);
+            writeInt(bin,  0);
+            int i = 1;
+            for (; i < 256 && i < palette.length; i++) {
+                bin.writeInt(palette[i]);
+            }
+            // if the palette is smaller than 256 colors, this fills the rest with lastPalette's colors
+            for (; i < 256; i++) {
+                bin.writeInt(lastPalette[i]);
+            }
+            writeInt(bin,  0);
+
+            bin.flush();
+            bin.close();
+            fos.flush();
+            fos.close();
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * This is meant to be used for AnimatedVoxelSeq collections that represent one primary voxel model in the first
+     * frame, and some amount of priority sections in subsequent frames.
+     * @param filename filename to write to
+     * @param voxelData AnimatedVoxelSeq to write; expected to have 2 or more frames, but not required
+     * @param palette the palette used by the model; the first item is always treated as 0 (fully transparent), and at
+     *                most 255 subsequent entries will be used
+     */
+    @GwtIncompatible
+    public static void writeAnimatedVOX(String filename, AnimatedVoxelSeq voxelData, int[] palette) {
+        // check out http://voxel.codeplex.com/wikipage?title=VOX%20Format&referringTitle=Home for the file format used below
+        try {
+            int frames = voxelData.duration(), xSize = voxelData.sizeX(), ySize = voxelData.sizeY(), zSize = voxelData.sizeZ();
+
+            FileOutputStream fos = new FileOutputStream(filename);
+            DataOutputStream bin = new DataOutputStream(fos);
+            byte[][] rawArrays = new byte[frames][];
+            int totalSize = 0;
+            for (int f = 0; f < frames; f++) {
+                final IVoxelSeq vs = voxelData.seqs[f];
+                final int len = vs.fullSize();
+                ByteArrayOutputStream voxelsRaw = new ByteArrayOutputStream(len*4);
+                int xyz;
+                for (int i = 0; i < len; i++) {
+                    xyz = vs.keyAt(i);
+                    voxelsRaw.write(extractX(xyz));
+                    voxelsRaw.write(extractY(xyz));
+                    voxelsRaw.write(extractZ(xyz));
+                    voxelsRaw.write(vs.getAt(i));
                 }
                 rawArrays[f] = voxelsRaw.toByteArray();
                 totalSize += rawArrays[f].length;
