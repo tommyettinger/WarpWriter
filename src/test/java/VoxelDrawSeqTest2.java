@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.FakeLanguageGen;
+import squidpony.squidmath.DiverRNG;
 import squidpony.squidmath.MiniMover64RNG;
 import warpwriter.ModelMaker;
 import warpwriter.Tools3D;
@@ -101,13 +102,26 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //            transforms[i+1] = new Transform(transforms[i].rotation.cpy().mul(turnY90).nor(), 0, 0, 0, 1, 1, 1);
 //            transforms[i+2] = new Transform(transforms[i+1].rotation.cpy().mul(turnZ90).nor(), 0, 0, 0, 1, 1, 1);
 //        }
-        for (int i = 0; i < transforms.length; i+=2) {
+        for (int i = 0; i < transforms.length; i++) {
+            int r = DiverRNG.randomizeBounded(i, 0x1000000);
             if(i == 0)
-                transforms[i] = new Transform(new TurnQuaternion().mul(turnX90).nor(), 0, 0, 0, 1, 1, 1);
+                transforms[i] = new Transform(new TurnQuaternion()
+                        .mul(turnY90.setEulerAnglesBrad(0, r >>> 8 & 0x7F, 0))
+                        .mul(turnZ90.setEulerAnglesBrad(0, 0, r & 0x7F))
+                        .mul(turnX90.setEulerAnglesBrad(r >>> 17, 0, 0)), 0, 0, 0, 1, 1, 1);
             else
-                transforms[i] = new Transform(transforms[i-1].rotation.cpy().mul(turnX90).nor(), 0, 0, 0, 1, 1, 1);
-            transforms[i+1] = new Transform(transforms[i].rotation.cpy().mul(turnZ90).nor(), 0, 0, 0, 1, 1, 1);
+                transforms[i] = new Transform(transforms[i-1].rotation.cpy()
+                        .mul(turnY90.setEulerAnglesBrad(0, r >>> 8 & 0x7F, 0))
+                        .mul(turnZ90.setEulerAnglesBrad(0, 0, r & 0x7F))
+                        .mul(turnX90.setEulerAnglesBrad(r >>> 17, 0, 0)), 0, 0, 0, 1, 1, 1);
         }
+//        for (int i = 0; i < transforms.length; i+=2) {
+//            if(i == 0)
+//                transforms[i] = new Transform(new TurnQuaternion().mul(turnX90), 0, 0, 0, 1, 1, 1);
+//            else
+//                transforms[i] = new Transform(transforms[i-1].rotation.cpy().mul(turnX90), 0, 0, 0, 1, 1, 1);
+//            transforms[i+1] = new Transform(transforms[i].rotation.cpy().mul(turnZ90), 0, 0, 0, 1, 1, 1);
+//        }
         transformMid = new Transform();
 //        try {
 //            box = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("Aurora/dumbcube.vox")));

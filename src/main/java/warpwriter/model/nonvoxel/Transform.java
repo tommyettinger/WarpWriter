@@ -178,17 +178,17 @@ public class Transform {
             z = extractZ(k);
             temp.set(x - jointX, y - jointY, z - jointZ);
             rotation.transform(temp).add(jointX + moveX, jointY + moveY, jointZ + moveZ);
-            if(stretchX <= 1.01f && stretchY <= 1.01f && stretchZ <= 1.01f)
-                next.put(round(temp.x * stretchX), round(temp.y * stretchY), round(temp.z * stretchZ), v);
-            else {
-                for (int sx = 0; sx < stretchX; sx++) {
-                    for (int sy = 0; sy < stretchY; sy++) {
-                        for (int sz = 0; sz < stretchZ; sz++) {
-                            next.put(
-                                    round(temp.x * stretchX + sx),
-                                    round(temp.y * stretchY + sy),
-                                    round(temp.z * stretchZ + sz), v);
-                        }
+//            if(stretchX <= 1.01f && stretchY <= 1.01f && stretchZ <= 1.01f)
+//                next.put(round(temp.x * stretchX), round(temp.y * stretchY), round(temp.z * stretchZ), v);
+//            else 
+            
+            for (int sx = 0; sx <= stretchX; sx++) {
+                for (int sy = 0; sy <= stretchY; sy++) {
+                    for (int sz = 0; sz <= stretchZ; sz++) {
+                        next.put(
+                                round(temp.x * stretchX + sx),
+                                round(temp.y * stretchY + sy),
+                                round(temp.z * stretchZ + sz), v);
                     }
                 }
             }

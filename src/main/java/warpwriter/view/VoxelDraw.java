@@ -713,21 +713,23 @@ public class VoxelDraw {
         for (int i = 0; i < len; i++) {
             final byte v = seq.getAtHollow(i);
             if (v != 0) {
-                final int xyz = seq.keyAtRotated(i),
-                        x = HashMap3D.extractX(xyz),
-                        y = HashMap3D.extractY(xyz),
-                        z = HashMap3D.extractZ(xyz),
-                        xPos = (sizeY - y + x) * 2 + 1,
-                        yPos = (z + sizeX + sizeY - x - y) * 2 + 1;
-//                        dep = 3 * (x + y + z) + 256;
-                renderer.drawLeftTriangleLeftFace(xPos, yPos, v, x, y, z);
-                renderer.drawRightTriangleLeftFace(xPos, yPos + 2, v, x, y, z);
-                renderer.drawLeftTriangleRightFace(xPos + 2, yPos + 2, v, x, y, z);
-                renderer.drawRightTriangleRightFace(xPos + 2, yPos, v, x, y, z);
-                //if (z >= sizeZ - 1 || seq.getRotated(x, y, z + 1) == 0)
-                renderer.drawLeftTriangleVerticalFace(xPos, yPos + 4, v, x, y, z);
-                renderer.drawRightTriangleVerticalFace(xPos + 2, yPos + 4, v, x, y, z);
-            }
+				final int xyz = seq.keyAtRotated(i),
+						x = HashMap3D.extractX(xyz),
+						y = HashMap3D.extractY(xyz),
+						z = HashMap3D.extractZ(xyz),
+						xPos = (sizeY - y + x) * 2 + 1,
+						yPos = (z + sizeX + sizeY - x - y) * 2 + 1;
+//                        dep = 3 * (x + y + z) + 256;					
+				renderer.drawLeftTriangleRightFace(xPos + 2, yPos + 2, v, x, y, z);
+				renderer.drawRightTriangleRightFace(xPos + 2, yPos, v, x, y, z);
+
+				renderer.drawLeftTriangleLeftFace(xPos, yPos, v, x, y, z);
+				renderer.drawRightTriangleLeftFace(xPos, yPos + 2, v, x, y, z);
+				if (z >= sizeZ - 1 || seq.getRotated(x, y, z + 1) == 0) {
+					renderer.drawLeftTriangleVerticalFace(xPos, yPos + 4, v, x, y, z);
+					renderer.drawRightTriangleVerticalFace(xPos + 2, yPos + 4, v, x, y, z);
+				}
+			}
         }
     }
 }
