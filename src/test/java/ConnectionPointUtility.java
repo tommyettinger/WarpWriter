@@ -12,15 +12,21 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import squidpony.Mnemonic;
 import squidpony.StringKit;
-import warpwriter.Coloring;
 import warpwriter.ModelMaker;
+import warpwriter.VoxIO;
+import warpwriter.model.AnimatedVoxelSeq;
 import warpwriter.model.FetchModel;
+import warpwriter.model.VoxelSeq;
 import warpwriter.model.color.Colorizer;
 import warpwriter.model.decide.DecideFetch;
 import warpwriter.model.decide.OctantDecide;
-import warpwriter.model.fetch.*;
+import warpwriter.model.fetch.ArrayModel;
+import warpwriter.model.fetch.ColorFetch;
+import warpwriter.model.fetch.CursorModel;
 import warpwriter.view.VoxelSprite;
+import warpwriter.view.render.MutantBatch;
 import warpwriter.view.render.VoxelSpriteBatchRenderer;
 
 public class ConnectionPointUtility extends ApplicationAdapter {
@@ -74,7 +80,7 @@ public class ConnectionPointUtility extends ApplicationAdapter {
     public static final int SCREEN_HEIGHT = 720;
     public static final int VIRTUAL_WIDTH = 1280;
     public static final int VIRTUAL_HEIGHT = 720;
-    protected SpriteBatch batch;
+    protected MutantBatch batch;
     protected Viewport worldView;
     protected Viewport screenView;
     protected BitmapFont font;
@@ -87,10 +93,13 @@ public class ConnectionPointUtility extends ApplicationAdapter {
     protected VoxelSpriteBatchRenderer renderer;
     protected ShaderProgram shader;
     protected ShaderProgram defaultShader;
-    protected Colorizer colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
+    protected Colorizer colorizer = Colorizer.AuroraColorizer;
     protected CursorModel cursorModel = new CursorModel();
     protected OctantDecide octantDecide = new OctantDecide();
     protected FetchModel frontModel;
+    protected VoxelSeq[] seqs;
+    protected String name = "Glorious Axe and Dark Frost";
+    protected Mnemonic naming;
 
     public static void main(String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
@@ -106,7 +115,7 @@ public class ConnectionPointUtility extends ApplicationAdapter {
     @Override
     public void create() {
         font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
-        batch = new SpriteBatch();
+        batch = new MutantBatch();
         worldView = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         screenView = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         buffer = new FrameBuffer(Pixmap.Format.RGBA8888, VIRTUAL_WIDTH, VIRTUAL_HEIGHT, false, false);
@@ -114,8 +123,9 @@ public class ConnectionPointUtility extends ApplicationAdapter {
         screenView.getCamera().position.set(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2, 0);
         screenView.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.enableBlending();
-        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
-        maker = new ModelMaker(12345, colorizer);
+        colorizer = Colorizer.AuroraColorizer;
+        naming = new Mnemonic(54321);
+        maker = new ModelMaker(987654321123456789L, colorizer);
         renderer = new VoxelSpriteBatchRenderer(batch);
         renderer.color().set(colorizer);
         voxelSprite = new VoxelSprite()
@@ -123,6 +133,8 @@ public class ConnectionPointUtility extends ApplicationAdapter {
                 .setOffset(VIRTUAL_WIDTH / 2, 100)
                 .setZ45(true)
                 .setAngle(3);
+        // 0 is the normal model, 1 is priority non-connection voxels, each later seq is one connection point
+        seqs = new VoxelSeq[]{new VoxelSeq(256), new VoxelSeq(64), new VoxelSeq(16), new VoxelSeq(16)};
         makeModel();
         Gdx.input.setInputProcessor(inputProcessor());
 
@@ -133,7 +145,10 @@ public class ConnectionPointUtility extends ApplicationAdapter {
 
     public void makeModel() {
         FetchModel model = model();
-
+        seqs[0].clear();
+        seqs[0].putModel(model);
+        seqs[1].clear();
+        seqs[2].clear();
         cursorModel.setColor((byte) 40)
                 .setSize(model.sizeX(), model.sizeY(), model.sizeZ())
                 .add(new DecideFetch().setDecide(octantDecide).setFetch(ColorFetch.transparent).add(model));
@@ -157,8 +172,10 @@ public class ConnectionPointUtility extends ApplicationAdapter {
     }
 
     public FetchModel model() {
-        return new FetchModel(ColorFetch.color((byte) 9), 48, 48, 16);
-//        // return new ArrayModel(maker.shipLargeRandomColorized())
+        //return new FetchModel(ColorFetch.color((byte) 9), 48, 48, 16);
+        name = "The " + naming.toWordMnemonic(maker.rng.stateA, false) + " and the " + naming.toWordMnemonic(maker.rng.stateB, false) + ".vox";
+
+        return new FetchModel(new ArrayModel(maker.shipLargeSmoothColorized()));
 //        HashMap3D<IFetch> map = new HashMap3D<>();
 //        for (int x=0; x<3; x++) {
 //            for (int y = 0; y < 3; y++)
@@ -321,6 +338,12 @@ public class ConnectionPointUtility extends ApplicationAdapter {
                     case Input.Keys.C:
                         cursorModel.addZ(-1);
                         setOctantDecide();
+                        break;
+                    case Input.Keys.ENTER:
+                        seqs[1].put(cursorModel.x(), cursorModel.y(), cursorModel.z(), seqs[0].get(cursorModel.x(), cursorModel.y(), cursorModel.z()));
+                        break;
+                    case Input.Keys.SLASH:
+                        VoxIO.writeAnimatedVOX(name, new AnimatedVoxelSeq(seqs), colorizer.getReducer().paletteArray);
                         break;
                     case Input.Keys.ESCAPE:
                         Gdx.app.exit();
