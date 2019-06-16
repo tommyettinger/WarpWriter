@@ -364,7 +364,7 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
                         diagonal = false;
                         angle = 2;
                         break;
-                    case Input.Keys.A: // try again
+                    case Input.Keys.A:
 //                        model.rotation().reset();
                         animating = !animating;
                         break;

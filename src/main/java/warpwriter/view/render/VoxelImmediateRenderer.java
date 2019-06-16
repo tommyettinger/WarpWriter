@@ -121,32 +121,35 @@ public class VoxelImmediateRenderer implements IRectangleRenderer, ITriangleRend
     }
 
     public VoxelImmediateRenderer rect(int x, int y, int sizeX, int sizeY, int color) {
+        return rect(x, y, sizeX, sizeY, color, 0);
+    }
+    public VoxelImmediateRenderer rect(int x, int y, int sizeX, int sizeY, int color, int depth) {
         final float c = NumberTools.reversedIntBitsToFloat(transparency(color) & 0xFFFFFFFE);
         x = scaleX * (flipX ? -x : x) + offsetX;
         y = scaleY * (flipY ? -y : y) + offsetY;
         sizeX *= scaleX;
         sizeY *= scaleY;
         batch.color(c);
-        batch.vertex(x, y, 0);
+        batch.vertex(x, y, depth);
         batch.color(c);
-        batch.vertex(x + sizeX, y, 0);
+        batch.vertex(x + sizeX, y, depth);
         batch.color(c);
-        batch.vertex(x + sizeX, y + sizeY, 0);
+        batch.vertex(x + sizeX, y + sizeY, depth);
         batch.color(c);
-        batch.vertex(x, y, 0);
+        batch.vertex(x, y, depth);
         batch.color(c);
-        batch.vertex(x + sizeX, y + sizeY, 0);
+        batch.vertex(x + sizeX, y + sizeY, depth);
         batch.color(c);
-        batch.vertex(x, y + sizeY, 0);
+        batch.vertex(x, y + sizeY, depth);
         return this;
     }
 
     public VoxelImmediateRenderer rectBack(int x, int y, int sizeX, int sizeY, int color) {
         final float c = NumberTools.reversedIntBitsToFloat(transparency(color) & 0xFFFFFFFE);
-        x = scaleX * (flipX ? -x : x) + offsetX - 1;
-        y = scaleY * (flipY ? -y : y) + offsetY - 1;
-        sizeX = sizeX * scaleX + 2;
-        sizeY = sizeY * scaleY + 2;
+        x = scaleX * (flipX ? -x : x) + offsetX;
+        y = scaleY * (flipY ? -y : y) + offsetY;
+        sizeX = sizeX * scaleX;
+        sizeY = sizeY * scaleY;
         batch.color(c);
         batch.vertex(x, y, -0.750f);
         batch.color(c);
@@ -255,19 +258,19 @@ public class VoxelImmediateRenderer implements IRectangleRenderer, ITriangleRend
     @Override
     public VoxelImmediateRenderer rectVertical(int px, int py, int sizeX, int sizeY, byte voxel, int depth, int vx, int vy, int vz) {
         return rectBack(px-1, py-1, sizeX+2, sizeY+2, color.twilight().dark(voxel))
-                .rect(px, py, sizeX, sizeY, color.verticalFace(voxel, vx, vy, vz));
+                .rect(px, py, sizeX, sizeY, color.verticalFace(voxel, vx, vy, vz), depth);
     }
 
     @Override
     public VoxelImmediateRenderer rectLeft(int px, int py, int sizeX, int sizeY, byte voxel, int depth, int vx, int vy, int vz) {
         return rectBack(px-1, py-1, sizeX+2, sizeY+2, color.twilight().dark(voxel))
-                .rect(px, py, sizeX, sizeY, color.leftFace(voxel, vx, vy, vz));
+                .rect(px, py, sizeX, sizeY, color.leftFace(voxel, vx, vy, vz), depth);
     }
 
     @Override
     public VoxelImmediateRenderer rectRight(int px, int py, int sizeX, int sizeY, byte voxel, int depth, int vx, int vy, int vz) {
         return rectBack(px-1, py-1, sizeX+2, sizeY+2, color.twilight().dark(voxel))
-                .rect(px, py, sizeX, sizeY, color.rightFace(voxel, vx, vy, vz));
+                .rect(px, py, sizeX, sizeY, color.rightFace(voxel, vx, vy, vz), depth);
     }
 
     @Override

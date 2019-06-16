@@ -23,7 +23,9 @@ public class ShaderUtils {
             + "   v_texCoords = " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n"
             + "   gl_Position =  u_projTrans * " + ShaderProgram.POSITION_ATTRIBUTE + ";\n"
             + "}\n";
-
+    
+    public static final String vertexShaderImmediate = vertexShader.replace("u_projTrans", "u_projModelView");
+    
     /**
      * This fragment shader substitutes colors with ones from a palette, dithering as needed using interleaved gradient
      * noise by Jorge Jimenez (modified to incorporate the brightness of a color in dithering calculations). It is very
