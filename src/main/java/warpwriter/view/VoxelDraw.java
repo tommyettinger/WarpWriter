@@ -662,11 +662,11 @@ public class VoxelDraw {
                 x = HashMap3D.extractX(xyz);
                 y = HashMap3D.extractY(xyz);
                 z = HashMap3D.extractZ(xyz);
-                dep = 1500 + z * 8 - x * 5;
+                dep = 1500 + z * 8 + x * 5;
                 final int xPos = (sizeY - y) * 3 * scaleX + offsetPX, yPos = z * 2 * scaleY + (sizeX - x) * 3 * scaleY + offsetPY;
                 renderer.rectRight(xPos, yPos, 3 * scaleX, 2 * scaleY, v, dep, x, y, z);
                 //if (z >= sizeZ - 1 || seq.getRotated(x, y, z + 1) == 0)
-                renderer.rectVertical(xPos, yPos + 2 * scaleY, 3 * scaleX, 3 * scaleY, v, dep+4, x, y, z);
+                renderer.rectVertical(xPos, yPos + 2 * scaleY, 3 * scaleX, 3 * scaleY, v, dep, x, y, z);
             }
         }
     }
