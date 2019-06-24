@@ -38,7 +38,7 @@ public class VoxelDrawSeqMutantTest extends ApplicationAdapter {
     protected Viewport screenView;
     protected BitmapFont font;
     protected FrameBuffer buffer;
-    protected Texture screenTexture, pmTexture;
+    protected Texture screenTexture;
     protected TextureRegion screenRegion;
 //    protected TurnModel model, ship;
     protected ModelMaker maker;
@@ -65,7 +65,7 @@ public class VoxelDrawSeqMutantTest extends ApplicationAdapter {
         palette = new Texture(Gdx.files.local("palettes/GBGreen16_GLSL.png"), Pixmap.Format.RGBA8888, false);
         palette.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         batch = new MutantBatch(1000);
-        //batch.setShader(shader);
+        batch.setShader(shader);
         font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
         worldView = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         screenView = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
@@ -157,9 +157,9 @@ public class VoxelDrawSeqMutantTest extends ApplicationAdapter {
 //        if(seq != null) ((ITemporal) seq).setFrame((int)(TimeUtils.millis() * 5 >>> 9));
         buffer.begin();
         
-        Gdx.gl.glClearColor(0.4f, 0.75f, 0.3f, 1f);
+//        Gdx.gl.glClearColor(0.4f, 0.75f, 0.3f, 1f);
         // for GB_GREEN palette
-//        Gdx.gl.glClearColor(0xE0 / 255f, 0xF8 / 255f, 0xD0 / 255f, 1f);
+        Gdx.gl.glClearColor(0xE0 / 255f, 0xF8 / 255f, 0xD0 / 255f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
         worldView.apply();
@@ -189,24 +189,27 @@ public class VoxelDrawSeqMutantTest extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         screenView.apply();
         batch.setProjectionMatrix(screenView.getCamera().combined);
-        //Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0 + palette.getTextureObjectHandle());
-        //palette.bind();
+//        Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0 + palette.getTextureObjectHandle());
         //System.out.println(palette.getTextureObjectHandle());
         batch.begin();
-        //shader.setUniformi("u_palette", palette.getTextureObjectHandle());
         screenTexture = buffer.getColorBufferTexture();
         screenTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         screenRegion.setRegion(screenTexture);
         screenRegion.flip(false, true);
-        //Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0 + screenTexture.getTextureObjectHandle());
+
+        palette.bind(1);
+        screenTexture.bind(0);
+        shader.setUniformi("u_palette", 1);
+//        Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0); //GL20.GL_TEXTURE0 + screenTexture.getTextureObjectHandle()
         batch.draw(screenRegion, 0, 0);
-        //// for GB_GREEN
-        //font.setColor(0x34 / 255f, 0x68 / 255f, 0x56 / 255f, 1f);
         //font.draw(batch, model.voxels.length + ", " + model.voxels[0].length + ", " + model.voxels[0][0].length + ", " + " (original)", 0, 80);
 //        font.draw(batch, model.sizeX() + ", " + model.sizeY() + ", " + model.sizeZ() + " (sizes)", 0, 60);
 //        font.draw(batch, StringKit.join(", ", model.rotation().rotation()) + " (rotation)", 0, 40);
-
-        font.setColor(0f, 0f, 0f, 1f);
+        batch.end();
+        batch.begin();
+        //// for GB_GREEN
+        font.setColor(0x34 / 255f, 0x68 / 255f, 0x56 / 255f, 1f);
+//        font.setColor(0f, 0f, 0f, 1f);
         font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 20);
         batch.end();
 
