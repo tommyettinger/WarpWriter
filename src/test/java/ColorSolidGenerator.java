@@ -15,7 +15,7 @@ public class ColorSolidGenerator extends ApplicationAdapter {
     }
 
     private PaletteReducer reducer;
-    private byte[][][] data = new byte[96][96][96];
+    private byte[][][] sparse = new byte[96][96][96], dense = new byte[32][32][32];
     @Override
     public void create() {
         Gdx.files.local("ColorSolids/").mkdirs();
@@ -23,11 +23,12 @@ public class ColorSolidGenerator extends ApplicationAdapter {
         for (int x = 0; x < 32; x++) {
             for (int y = 0; y < 32; y++) {
                 for (int z = 0; z < 32; z++) {
-                    data[x*3+1][y*3+1][z*3+1] = reducer.paletteMapping[x << 10 | y << 5 | z];
+                    dense[x][y][z] = sparse[x*3+1][y*3+1][z*3+1] = reducer.paletteMapping[x << 10 | y << 5 | z];
                 }
             }
         }
-        VoxIO.writeVOX("ColorSolids/AuroraColorSolid.vox", data, reducer.paletteArray);
+        VoxIO.writeVOX("ColorSolids/AuroraColorSolid.vox", dense, reducer.paletteArray);
+        VoxIO.writeVOX("ColorSolids/AuroraColorSpace.vox", sparse, reducer.paletteArray);
         generate("Flesurrect", Coloring.FLESURRECT);
         generate("FlesurrectBonus", Colorizer.FlesurrectBonusPalette);
         generate("Rinsed", Coloring.RINSED);
@@ -43,11 +44,12 @@ public class ColorSolidGenerator extends ApplicationAdapter {
         for (int x = 0; x < 32; x++) {
             for (int y = 0; y < 32; y++) {
                 for (int z = 0; z < 32; z++) {
-                    data[x*3+1][y*3+1][z*3+1] = reducer.paletteMapping[x << 10 | y << 5 | z];
+                    dense[x][y][z] = sparse[x*3+1][y*3+1][z*3+1] = reducer.paletteMapping[x << 10 | y << 5 | z];
                 }
             }
         }
-        VoxIO.writeVOX("ColorSolids/" + name + "ColorSolid.vox", data, reducer.paletteArray);
+        VoxIO.writeVOX("ColorSolids/" + name + "ColorSolid.vox", dense, reducer.paletteArray);
+        VoxIO.writeVOX("ColorSolids/" + name + "ColorSpace.vox", sparse, reducer.paletteArray);
 
     }
 }
