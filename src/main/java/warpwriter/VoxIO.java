@@ -236,11 +236,6 @@ public class VoxIO {
     @GwtIncompatible
     public static void writeVOX(String filename, byte[][][] voxelData, int[] palette, VoxelSeq priorities) {
         // check out http://voxel.codeplex.com/wikipage?title=VOX%20Format&referringTitle=Home for the file format used below
-        if(priorities == null)
-        {
-            writeVOX(filename, voxelData, palette);
-            return;
-        }
         try {
             int xSize = voxelData.length, ySize = voxelData[0].length, zSize = voxelData[0][0].length;
 
@@ -270,11 +265,13 @@ public class VoxIO {
             writeInt(bin, 0);
             writeInt(bin, 12 + 12 + 12 + 4 + voxelsRaw.size() + 12 + 1024);
 
-            bin.writeBytes("PACK");
-            writeInt(bin, 4);
-            writeInt(bin, 0);
-            writeInt(bin, 2);
-
+            if(priorities != null) {
+                bin.writeBytes("PACK");
+                writeInt(bin, 4);
+                writeInt(bin, 0);
+                writeInt(bin, 2);
+            }
+            
             bin.writeBytes("SIZE");
             writeInt(bin, 12);
             writeInt(bin, 0);
@@ -288,29 +285,29 @@ public class VoxIO {
             writeInt(bin, voxelsRaw.size() >> 2);
             bin.write(voxelsRaw.toByteArray());
 
-            
-            // priorities section 1
-            bin.writeBytes("SIZE");
-            writeInt(bin, 12);
-            writeInt(bin, 0);
-            writeInt(bin, xSize);
-            writeInt(bin, ySize);
-            writeInt(bin, zSize);
+            if(priorities != null) {
+                // priorities section 1
+                bin.writeBytes("SIZE");
+                writeInt(bin, 12);
+                writeInt(bin, 0);
+                writeInt(bin, xSize);
+                writeInt(bin, ySize);
+                writeInt(bin, zSize);
 
-            // priorities section 2
-            bin.writeBytes("XYZI");
-            int fullSize = priorities.fullSize();
-            writeInt(bin, fullSize * 4 + 4);
-            writeInt(bin, 0);
-            writeInt(bin, fullSize);
-            for (int j = 0; j < fullSize; j++) {
-                int key = priorities.keyAt(j);
-                bin.writeByte(extractX(key));
-                bin.writeByte(extractY(key));
-                bin.writeByte(extractZ(key));
-                bin.writeByte(priorities.getAt(j));
+                // priorities section 2
+                bin.writeBytes("XYZI");
+                int fullSize = priorities.fullSize();
+                writeInt(bin, fullSize * 4 + 4);
+                writeInt(bin, 0);
+                writeInt(bin, fullSize);
+                for (int j = 0; j < fullSize; j++) {
+                    int key = priorities.keyAt(j);
+                    bin.writeByte(extractX(key));
+                    bin.writeByte(extractY(key));
+                    bin.writeByte(extractZ(key));
+                    bin.writeByte(priorities.getAt(j));
+                }
             }
-
             bin.writeBytes("RGBA");
             writeInt(bin, 1024);
             writeInt(bin, 0);
