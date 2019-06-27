@@ -194,6 +194,7 @@ public class ShaderUtils {
                     "uniform vec3 u_mul;\n" +
                     "const float b_adj = 31.0 / 32.0;\n" +
                     "const float rb_adj = 32.0 / 1023.0;\n" +
+                    //"const vec3 tweaks = vec3(0.9829189, -0.1898291, 0.4914555);\n" +
                     "void main()\n" +
                     "{\n" +
                     "   vec4 tgt = texture2D( u_texture, v_texCoords );\n" +
@@ -201,7 +202,7 @@ public class ShaderUtils {
                     "   float len = length(tgt.rgb) + 1.0;\n" +
 //                    "   float len = abs((tgt.r - tgt.b) * (tgt.g - tgt.b)) * 4.0;\n" +
                     "   float adj = fract(52.9829189 * fract(dot(vec2(0.06711056, 0.00583715), gl_FragCoord.xy))) * len - len * 0.5;\n" +
-                    "   tgt.rgb = clamp(tgt.rgb + (tgt.rgb - used.rgb) * adj + (tgt.r - tgt.b + 0.6) * 0.04, 0.0, 1.0);\n" +
+                    "   tgt.rgb = clamp(tgt.rgb + (tgt.rgb - used.rgb) * adj + (tgt.r * 0.0625 - tgt.b * 0.0375), 0.0, 1.0);\n" +
                     "   tgt.rgb = u_add + u_mul * vec3(dot(tgt.rgb, vec3(0.375, 0.5, 0.125)), tgt.r - tgt.b, tgt.g - tgt.b);\n" +
                     "   tgt.rgb = clamp(vec3(dot(tgt.rgb, vec3(1.0, 0.625, -0.5)), dot(tgt.rgb, vec3(1.0, -0.375, 0.5)), dot(tgt.rgb, vec3(1.0, -0.375, -0.5))), 0.0, 1.0);\n" +
                     "   gl_FragColor.rgb = v_color.rgb * texture2D(u_palette, vec2((tgt.b * b_adj + floor(tgt.r * 31.999)) * rb_adj, 1.0 - tgt.g)).rgb;\n" +

@@ -9,11 +9,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import static com.badlogic.gdx.Gdx.input;
 import static warpwriter.view.render.ShaderUtils.*;
 
 public class ShaderPalettizer extends ApplicationAdapter {
@@ -24,12 +27,13 @@ public class ShaderPalettizer extends ApplicationAdapter {
     protected Viewport screenView;
     protected Texture screenTexture;
     protected BitmapFont font;
-    
-    protected long startTime;
+
+    private long startTime = 0L, lastProcessedTime = 0L;
     private ShaderProgram defaultShader;
     private ShaderProgram shader;
     private ShaderProgram shaderNoDither;
     private Texture palette;
+    private Vector3 add, mul;
 
     public static void main(String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
@@ -67,6 +71,8 @@ public class ShaderPalettizer extends ApplicationAdapter {
         palette = new Texture(Gdx.files.local("palettes/DB_Aurora_GLSL.png"), Pixmap.Format.RGBA8888, false);
         palette.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
+        add = new Vector3(0, 0, 0);
+        mul = new Vector3(1, 1, 1);
         defaultShader = SpriteBatch.createDefaultShader();
         shader = new ShaderProgram(vertexShader, fragmentShaderWarmMildLimited);
         if (!shader.isCompiled()) throw new GdxRuntimeException("Couldn't compile shader: " + shader.getLog());
@@ -91,6 +97,8 @@ public class ShaderPalettizer extends ApplicationAdapter {
         Gdx.gl.glClearColor(0.4f, 0.4f, 0.4f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        handleInput();
+        
         batch.setProjectionMatrix(screenView.getCamera().combined);
         if(screenTexture != null) {
             if(!batch.getShader().equals(defaultShader)) {
@@ -103,8 +111,8 @@ public class ShaderPalettizer extends ApplicationAdapter {
                 //{
 //                    shader.setUniformf("u_mul", 0.9f, 0.7f, 0.75f);
 //                    shader.setUniformf("u_add", 0.05f, 0.14f, 0.16f);
-                    shader.setUniformf("u_mul", 1f, 1f, 1f);
-                    shader.setUniformf("u_add", 0f, 0f, 0f);
+                    shader.setUniformf("u_mul", mul);
+                    shader.setUniformf("u_add", add);
 //                    shader.setUniformf("u_mul", 1f, 0.8f, 0.85f);
 //                    shader.setUniformf("u_add", 0.1f, 0.95f, NumberTools.swayRandomized(12345, TimeUtils.timeSinceMillis(startTime) * 0x1p-9f) * 0.4f + 0.2f);
                 //}
@@ -164,15 +172,18 @@ public class ShaderPalettizer extends ApplicationAdapter {
                         break;
                     case Input.Keys.NUM_7:
                     case Input.Keys.NUMPAD_7:
+//                        palette = new Texture(Gdx.files.local("palettes/Vinik24_GLSL.png"), Pixmap.Format.RGBA8888, false);
                         palette = new Texture(Gdx.files.local("palettes/JudgeBonus_GLSL.png"), Pixmap.Format.RGBA8888, false);
                         break;
                     case Input.Keys.NUM_8:
                     case Input.Keys.NUMPAD_8:
+//                        palette = new Texture(Gdx.files.local("palettes/Vinik24Bonus_GLSL.png"), Pixmap.Format.RGBA8888, false);
                         palette = new Texture(Gdx.files.local("palettes/Mash256_GLSL.png"), Pixmap.Format.RGBA8888, false);
                         break;
                     case Input.Keys.NUM_9:
                     case Input.Keys.NUMPAD_9:
-                        palette = new Texture(Gdx.files.local("palettes/Uniform216_GLSL.png"), Pixmap.Format.RGBA8888, false);
+                        palette = new Texture(Gdx.files.local("palettes/PureBonus_GLSL.png"), Pixmap.Format.RGBA8888, false);
+//                        palette = new Texture(Gdx.files.local("palettes/Uniform216_GLSL.png"), Pixmap.Format.RGBA8888, false);
                         break;
                     case Input.Keys.NUM_0:
                     case Input.Keys.NUMPAD_0:
@@ -193,25 +204,25 @@ public class ShaderPalettizer extends ApplicationAdapter {
                     case Input.Keys.C: // Color Guard
                         load("D:/Color_Guard.png");
                         break;
-                    case Input.Keys.P: // lower-color palette
-                        load("D:/Quorum64_GLSL.png");
+                    case Input.Keys.F: // lower-color palette
+                        load("samples/FlesurrectBonus_Ships/Flesurrect_Spaceships.png");
                         break;
-                    case Input.Keys.O: // higher-color palette
-                        load("D:/Quorum128_GLSL.png");
+                    case Input.Keys.A: // higher-color palette
+                        load("samples/Aurora_Ships/Aurora_Spaceships.png");
                         break;
                     case Input.Keys.D: // dither/disable
-                        if(!batch.getShader().equals(shaderNoDither))
-                        {
-                            batch.setShader(shaderNoDither);
-                            Gdx.graphics.setTitle("Softness ON");
-                        }
-                        else
+                        if(!batch.getShader().equals(shader))
                         {
                             batch.setShader(shader);
                             Gdx.graphics.setTitle("Softness OFF");
                         }
+                        else
+                        {
+                            batch.setShader(shaderNoDither);
+                            Gdx.graphics.setTitle("Softness ON");
+                        }
                         break;
-                    default:
+                    case Input.Keys.SPACE:
                         if(!batch.getShader().equals(shader))
                         {
                             batch.setShader(shader);
@@ -229,4 +240,40 @@ public class ShaderPalettizer extends ApplicationAdapter {
             }
         };
     }
+    public void handleInput()
+    {
+        // only process once every 100 ms, or 10 times a second, at most
+        if(TimeUtils.timeSinceMillis(lastProcessedTime) < 100)
+            return;
+        lastProcessedTime = TimeUtils.millis();
+        Vector3 changing;
+        // holding shift will change multipliers, otherwise it affects addends
+        if(input.isKeyPressed(Input.Keys.SHIFT_LEFT) || input.isKeyPressed(Input.Keys.SHIFT_RIGHT))
+            changing = mul;
+        else
+            changing = add;
+        if(input.isKeyPressed(Input.Keys.PERIOD) || input.isKeyPressed(Input.Keys.L)) //light
+            changing.x = MathUtils.clamp(changing.x + 0.02f, -1f, 1f);
+        else if(input.isKeyPressed(Input.Keys.COMMA) || input.isKeyPressed(Input.Keys.D)) //dark
+            changing.x = MathUtils.clamp(changing.x - 0.02f, -1f, 1f);
+        else if(input.isKeyPressed(Input.Keys.RIGHT)) //warm
+            changing.y = MathUtils.clamp(changing.y + 0.02f, -2f, 2f);
+        else if(input.isKeyPressed(Input.Keys.LEFT)) //cool
+            changing.y = MathUtils.clamp(changing.y - 0.02f, -2f, 2f);
+        else if(input.isKeyPressed(Input.Keys.UP)) //mild
+            changing.z = MathUtils.clamp(changing.z + 0.02f, -2f, 2f);
+        else if(input.isKeyPressed(Input.Keys.DOWN)) // bold
+            changing.z = MathUtils.clamp(changing.z - 0.02f, -2f, 2f);
+        else if(input.isKeyPressed(Input.Keys.R)) // reset
+        {
+            mul.set(1f, 1f, 1f);
+            add.set(0f, 0f, 0f);
+        }
+        else if(input.isKeyPressed(Input.Keys.P)) // print
+            System.out.println("Mul: Y="+mul.x+",Cw="+mul.y+",Cm="+mul.z+
+                    "\nAdd: Y="+add.x+",Cw="+add.y+",Cm="+add.z);
+        else if(input.isKeyPressed(Input.Keys.Q) || input.isKeyPressed(Input.Keys.ESCAPE)) //quit
+            Gdx.app.exit();
+    }
+
 }
