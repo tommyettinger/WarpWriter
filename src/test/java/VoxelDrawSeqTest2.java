@@ -18,12 +18,16 @@ import warpwriter.Tools3D;
 import warpwriter.VoxIO;
 import warpwriter.model.VoxelSeq;
 import warpwriter.model.color.Colorizer;
+import warpwriter.model.nonvoxel.LittleEndianDataInputStream;
 import warpwriter.model.nonvoxel.Transform;
 import warpwriter.model.nonvoxel.TurnQuaternion;
 import warpwriter.view.VoxelDraw;
 import warpwriter.view.color.VoxelColor;
 import warpwriter.view.render.MutantBatch;
 import warpwriter.view.render.VoxelImmediateRenderer;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class VoxelDrawSeqTest2 extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 320;//640;
@@ -78,11 +82,11 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.CW_PALETTE);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.FLESURRECT);
-        colorizer = Colorizer.JudgeBonusColorizer;
-        voxelColor = new VoxelColor().set(colorizer);
+        colorizer = Colorizer.FlesurrectBonusColorizer;
         batchRenderer = new VoxelImmediateRenderer(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);//.setOffset(VIRTUAL_WIDTH, 0).flipX();
         batch = new MutantBatch();
         batchRenderer.color().set(colorizer);
+        voxelColor = batchRenderer.color();
 //        batchRenderer.setScale(2, 2);
         rng = new MiniMover64RNG(-123456789);
         maker = new ModelMaker(-123456789, colorizer);
@@ -133,7 +137,11 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
         byte red = colorizer.reduce(0xFF0000FF), green = colorizer.reduce(0x00FF00FF),
                 blue = colorizer.reduce(0x0000FFFF), white = colorizer.reduce(0xFFFFFFFF);
         maker.rng.setState(rng.nextLong());
-        voxels = maker.shipLargeSmoothColorized();
+        try {
+            voxels = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("FlesurrectBonus/Damned.vox")));
+        } catch (FileNotFoundException e) {
+            voxels = maker.shipLargeNoiseColorized();
+        }
 //        voxels = new byte[60][60][60];
 //        seq = new VoxelSeq(1024);
 //        seq.putSurface(voxels);
@@ -205,10 +213,11 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //        boom.setFrame((int)(TimeUtils.millis() >>> 7) & 15);
         if(seq != null && animating)
         {
-            long time = TimeUtils.timeSinceMillis(startTime);
+            int time = (int) TimeUtils.timeSinceMillis(startTime);
 //            ((ITemporal) seq).setFrame((int)(TimeUtils.millis() * 5 >>> 9));
-            alpha = (time & 0x3FFL) * 0x1p-10f;
-            transforms[(int) (time >>> 10) % transforms.length].interpolateInto(transforms[((int) (time >>> 10) + 1) % transforms.length], alpha, transformMid);
+            voxelColor.set(time * 5 >>> 9);
+            alpha = (time & 0x3FF) * 0x1p-10f;
+            transforms[(time >>> 10) % transforms.length].interpolateInto(transforms[((time >>> 10) + 1) % transforms.length], alpha, transformMid);
 //            transforms[0].interpolateInto(transforms[1], alpha, transformMid);
 //            if((time & 0x800L) == 0L) 
 //                transformStart.interpolateInto(transformEnd, alpha, transformMid);

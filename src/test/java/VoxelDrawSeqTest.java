@@ -34,7 +34,7 @@ public class VoxelDrawSeqTest extends ApplicationAdapter {
     protected Viewport screenView;
     protected BitmapFont font;
     protected FrameBuffer buffer;
-    protected Texture screenTexture, pmTexture;
+    protected Texture screenTexture;
     protected TextureRegion screenRegion;
 //    protected TurnModel model, ship;
     protected ModelMaker maker;
