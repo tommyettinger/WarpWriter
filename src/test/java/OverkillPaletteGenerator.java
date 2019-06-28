@@ -5,7 +5,6 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.MathUtils;
 import squidpony.StringKit;
-import squidpony.squidmath.IntVLA;
 import warpwriter.PNG8;
 import warpwriter.PaletteReducer;
 
@@ -102,110 +101,139 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 //                0xFE7700FF, 0x7B6C8FFF, 0x00B4B1FF, 0xFFB93CFF, 0xAE98AFFF, 0x0091BAFF, 0xAE970AFF, 0xFFA9E6FF,
 //                0x00C7FFFF, 0x6D7908FF, 0xF760A4FF, 0x00E8FFFF, 0x96A67EFF, 0xD42E63FF, 0x00A6FFFF, 0xB7CCB4FF,
 //        };//new int[64];
-        int[] PALETTE = 
-//                new int[64];
-                {
-                    // vinik24
-                        0x00000000,
-                        0x000000FF,
-                        0x6F6776FF,
-                        0x9A9A97FF,
-                        0xC5CCB8FF,
-                        0x8B5580FF,
-                        0xC38890FF,
-                        0xA593A5FF,
-                        0x666092FF,
-                        0x9A4F50FF,
-                        0xC28D75FF,
-                        0x7CA1C0FF,
-                        0x416AA3FF,
-                        0x8D6268FF,
-                        0xBE955CFF,
-                        0x68ACA9FF,
-                        0x387080FF,
-                        0x6E6962FF,
-                        0x93A167FF,
-                        0x6EAA78FF,
-                        0x557064FF,
-                        0x9D9F7FFF,
-                        0x7E9E99FF,
-                        0x5D6872FF,
-                        0x433455FF,
 
-//                    // vine's flexible linear color ramps
-//                        0x00000000,
-//                        0x280B26FF,
-//                        0x361027FF,
-//                        0x681824FF,
-//                        0xB42313FF,
-//                        0xF4680BFF,
-//                        0xF4C047FF,
-//                        0xFFFDF0FF,
-//                        0x0C1327FF,
-//                        0x03282BFF,
-//                        0x09493FFF,
-//                        0x118337FF,
-//                        0x57C52BFF,
-//                        0xB9ED5EFF,
-//                        0x1A112EFF,
-//                        0x291945FF,
-//                        0x5E1C5AFF,
-//                        0x8F1767FF,
-//                        0xF45D92FF,
-//                        0xFEB58BFF,
-//                        0x0E092FFF,
-//                        0x1B1853FF,
-//                        0x222D81FF,
-//                        0x465BE7FF,
-//                        0x2AC0F2FF,
-//                        0x7DF2CFFF,
-//                        0x220C27FF,
-//                        0x2F1316FF,
-//                        0x431E1EFF,
-//                        0x74341AFF,
-//                        0xAF5D23FF,
-//                        0xF8993AFF,
-//                        0x19102EFF,
-//                        0x241E44FF,
-//                        0x25315EFF,
-//                        0x3A5C85FF,
-//                        0x56A1BFFF,
-//                        0x97DBD2FF,
+        // used for NonUniform256
+        int[] PALETTE = new int[256];
+        PALETTE[1] = 0x1F1F1FFF;
+        PALETTE[2] = 0x3F3F3FFF;
+        PALETTE[3] = 0x5F5F5FFF;
+        PALETTE[4] = 0x7F7F7FFF;
+        PALETTE[5] = 0x9F9F9FFF;
+        PALETTE[6] = 0xBFBFBFFF;
+        PALETTE[7] = 0xDFDFDFFF;
+        int idx = 8;
+        for (int rr = 0; rr < 3; rr++) {
+            for (int gg = 0; gg < 3; gg++) {
+                for (int bb = 0; bb < 3; bb++) {
+                    PALETTE[idx++] = rr * 127 + (rr >> 1) << 24 |
+                            gg * 127 + (gg >> 1) << 16 |
+                            bb * 127 + (bb >> 1) << 8 | 0xFF;
+//                    PALETTE[idx++] = rr * 63 + (rr >> 2) + (rr >> 1) << 24 |
+//                            gg * 63 + (gg >> 2) + (gg >> 1) << 16 |
+//                            bb * 63 + (bb >> 2) + (bb >> 1) << 8 | 0xFF;
+                }
+            }
+        }
+        for (int n = 21; idx < 64; n++) {
+            PALETTE[idx++] = (int)(Math.pow(vdc(5, n), 0.625) * 255) << 24 |
+                    (int)(Math.pow(vdc(7, n), 0.625) * 255) << 16 |
+                    (int)(Math.pow(vdc(2, n), 0.625) * 255) << 8 | 0xFF;
+        }
 
-//                    // linear basic color ramps
+//        int[] PALETTE = 
+////                new int[64];
+//                {
+//                    // vinik24
 //                        0x00000000,
-//                        0x0E0C0CFF,
-//                        0x5F2D56FF,
-//                        0x993970FF,
-//                        0xDC4A7BFF,
-//                        0xF78697FF,
-//                        0x9F294EFF,
-//                        0x62232FFF,
-//                        0x8F4029FF,
-//                        0xC56025FF,
-//                        0xEE8E2EFF,
-//                        0xFCCBA3FF,
-//                        0xDA4E38FF,
-//                        0xFACB3EFF,
-//                        0x97DA3FFF,
-//                        0x4BA747FF,
-//                        0x3D734FFF,
-//                        0x314152FF,
-//                        0x417089FF,
-//                        0x49A790FF,
-//                        0x72D6CEFF,
-//                        0x5698CCFF,
-//                        0x5956BDFF,
-//                        0x473579FF,
-//                        0x8156AAFF,
-//                        0xC278D0FF,
-//                        0xF0B3DDFF,
-//                        0xFDF7EDFF,
-//                        0xD3BFA9FF,
-//                        0xAA8D7AFF,
-//                        0x775C55FF,
-//                        0x483B3AFF,
-                };
+//                        0x000000FF,
+//                        0x6F6776FF,
+//                        0x9A9A97FF,
+//                        0xC5CCB8FF,
+//                        0x8B5580FF,
+//                        0xC38890FF,
+//                        0xA593A5FF,
+//                        0x666092FF,
+//                        0x9A4F50FF,
+//                        0xC28D75FF,
+//                        0x7CA1C0FF,
+//                        0x416AA3FF,
+//                        0x8D6268FF,
+//                        0xBE955CFF,
+//                        0x68ACA9FF,
+//                        0x387080FF,
+//                        0x6E6962FF,
+//                        0x93A167FF,
+//                        0x6EAA78FF,
+//                        0x557064FF,
+//                        0x9D9F7FFF,
+//                        0x7E9E99FF,
+//                        0x5D6872FF,
+//                        0x433455FF,
+//
+////                    // vine's flexible linear color ramps
+////                        0x00000000,
+////                        0x280B26FF,
+////                        0x361027FF,
+////                        0x681824FF,
+////                        0xB42313FF,
+////                        0xF4680BFF,
+////                        0xF4C047FF,
+////                        0xFFFDF0FF,
+////                        0x0C1327FF,
+////                        0x03282BFF,
+////                        0x09493FFF,
+////                        0x118337FF,
+////                        0x57C52BFF,
+////                        0xB9ED5EFF,
+////                        0x1A112EFF,
+////                        0x291945FF,
+////                        0x5E1C5AFF,
+////                        0x8F1767FF,
+////                        0xF45D92FF,
+////                        0xFEB58BFF,
+////                        0x0E092FFF,
+////                        0x1B1853FF,
+////                        0x222D81FF,
+////                        0x465BE7FF,
+////                        0x2AC0F2FF,
+////                        0x7DF2CFFF,
+////                        0x220C27FF,
+////                        0x2F1316FF,
+////                        0x431E1EFF,
+////                        0x74341AFF,
+////                        0xAF5D23FF,
+////                        0xF8993AFF,
+////                        0x19102EFF,
+////                        0x241E44FF,
+////                        0x25315EFF,
+////                        0x3A5C85FF,
+////                        0x56A1BFFF,
+////                        0x97DBD2FF,
+//
+////                    // linear basic color ramps
+////                        0x00000000,
+////                        0x0E0C0CFF,
+////                        0x5F2D56FF,
+////                        0x993970FF,
+////                        0xDC4A7BFF,
+////                        0xF78697FF,
+////                        0x9F294EFF,
+////                        0x62232FFF,
+////                        0x8F4029FF,
+////                        0xC56025FF,
+////                        0xEE8E2EFF,
+////                        0xFCCBA3FF,
+////                        0xDA4E38FF,
+////                        0xFACB3EFF,
+////                        0x97DA3FFF,
+////                        0x4BA747FF,
+////                        0x3D734FFF,
+////                        0x314152FF,
+////                        0x417089FF,
+////                        0x49A790FF,
+////                        0x72D6CEFF,
+////                        0x5698CCFF,
+////                        0x5956BDFF,
+////                        0x473579FF,
+////                        0x8156AAFF,
+////                        0xC278D0FF,
+////                        0xF0B3DDFF,
+////                        0xFDF7EDFF,
+////                        0xD3BFA9FF,
+////                        0xAA8D7AFF,
+////                        0x775C55FF,
+////                        0x483B3AFF,
+//                };
 //                {
 //                        0x00000000,
 ////                0x8c0000ff, 0x809ce4ff, 0xb1ffc0ff, 0xff008cff, 0x00465eff, 0xb99d00ff, 0xffe8ffff, 0x4ead9aff, 0xa30000ff, 0x08a6f7ff, 0xefffb6ff, 0xff00c9ff, 0x004854ff, 0xde8b00ff, 0xf4fcffff, 0x6faa89ff, 0xac0014ff, 0x00b1ffff, 0xffffbdff, 0xff48ffff, 0x004945ff, 0xf17e42ff, 0x00ffffff, 0x84a77bff, 0xa40040ff, 0x00baf6ff, 0xffffccff, 0xb278ffff, 0x004a2cff, 0xf37a6eff, 0x00ffffff, 0x97a46bff, 0x8a0067ff, 0x00bfd5ff, 0xffffdbff, 0x0098ffff, 0x004a02ff, 0xe77f90ff, 0x00ffffff, 0xac9e58ff, 0x61107fff, 0x00c1a0ff, 0xfffee8ff, 0x00abffff, 0x004900ff, 0xd487a8ff, 0x00ffffff, 0xc89549ff, 0x2e3185ff, 0x00c05fff, 0xfff8f5ff, 0x00b4ffff, 0x2e4500ff, 0xc08eb7ff, 0x00ffffff, 0xe78445ff, 0x003e7fff, 0x00bc00ff, 0xfff0ffff, 0x00b7f5ff, 0x573a00ff, 0xad94c3ff, 0x00fff4ff, 0xff6b56ff, 0x004472ff, 0x59b300ff, 0xffeaffff, 0x00b6c9ff, 0x7d1d00ff, 0x9699d0ff, 0x60ffbeff, 0xff497aff, 0x004866ff, 0xa0a400ff, 0xffe9ffff, 0x00b3a5ff, 0x9e0000ff, 0x6ea0deff, 0xc6ffa0ff, 0xff28aeff, 0x004b5bff, 0xd29000ff, 0xfff0ffff, 0x55af8eff, 0xb60000ff, 0x00a8e9ff, 0xfcff9aff, 0xff3bebff, 0x004f51ff, 0xf37b00ff, 0xb1ffffff, 0x7bab80ff, 0xbf0035ff, 0x00b0e9ff, 0xffffa6ff, 0xdc68ffff, 0x005243ff, 0xff6d4cff, 0x00ffffff, 0x92a877ff, 0xb10067ff, 0x00b7d8ff, 0xfff5baff, 0x638effff, 0x00562dff, 0xfa6c79ff, 0x00ffffff, 0xa6a46eff, 0x8e0091ff, 0x00bab2ff, 0xffecccff, 0x00a9ffff, 0x005903ff, 0xe6759bff, 0x00ffffff, 0xbc9f64ff, 0x5833a8ff, 0x00b97aff, 0xffe6dbff, 0x00baffff, 0x305900ff, 0xcb80b0ff, 0x00ffffff, 0xd7965eff, 0x004cacff, 0x00b634ff, 0xffdfe8ff, 0x00c1ffff, 0x595400ff, 0xb089baff, 0x00fff6ff, 0xf58863ff, 0x0059a1ff, 0x0bae00ff, 0xffd7f8ff, 0x00c4f1ff, 0x844600ff, 0x988ec0ff, 0x00ffb1ff, 0xff7479ff, 0x006090ff, 0x79a100ff, 0xffd2ffff, 0x00c4c3ff, 0xae2100ff, 0x7d92c4ff, 0x6aff7cff, 0xff5ea2ff, 0x006680ff, 0xb28e00ff, 0xffd1ffff, 0x00c2a1ff, 0xd20000ff, 0x5396c9ff, 0xbdf561ff, 0xff58daff, 0x006a72ff, 0xdc7400ff, 0xcad8ffff, 0x6dbe8dff, 0xe90037ff, 0x009bcaff, 0xebe364ff, 0xff6effff, 0x016f67ff, 0xf4580aff, 0x1ae4ffff, 0x96bb85ff, 0xea0072ff, 0x009fc2ff, 0xffd379ff, 0xba92ffff, 0x1f7359ff, 0xf8474dff, 0x00efffff, 0xb0b883ff, 0xd000abff, 0x00a1aaff, 0xffc793ff, 0x00b3ffff, 0x357744ff, 0xe94b78ff, 0x00f7ffff, 0xc7b683ff, 0x9d3bd5ff, 0x00a080ff, 0xffbfa9ff, 0x00cbffff, 0x4f7a25ff, 0xcd5b96ff, 0x00f9ffff, 0xdeb383ff, 0x4d63e8ff, 0x009d46ff, 0xffbabaff, 0x00dbffff, 0x707800ff, 0xaa68a6ff, 0x00f5eeff, 0xf8ad86ff, 0x0078e4ff, 0x009600ff, 0xfcb5c8ff, 0x00e3ffff, 0x977100ff, 0x8971a9ff, 0x00efa4ff, 0xffa393ff, 0x0083d1ff, 0x3d8b00ff, 0xf2b1d8ff, 0x00e7fdff, 0xc25e00ff, 0x6c75a7ff, 0x00e461ff, 0xff97b0ff, 0x008ab8ff, 0x7c7b00ff, 0xe2afedff, 0x00e7cdff, 0xed3800ff, 0x4f77a3ff, 0x68d727ff, 0xff8edeff, 0x008ea1ff, 0xa96100ff, 0xc1b1ffff, 0x4fe6adff, 0xff003dff, 0x1d789fff, 0xaec603ff, 0xff93ffff, 0x2a9190ff, 0xc93c00ff, 0x7bb8ffff, 0x9ce29dff, 0xff0079ff, 0x007999ff, 0xd7b42aff, 0xffaaffff, 0x489381ff, 0xda000aff, 0x00c3ffff, 0xc7df9cff, 0xff00b9ff, 0x007a8aff, 0xeea450ff, 0x9dc9ffff, 0x5b9672ff, 0xd60042ff, 0x00ccffff, 0xe3dda3ff, 0xe23cf2ff, 0x00796fff, 0xf49a72ff, 0x00e7ffff, 0x6e975eff, 0xc1006aff, 0x00d2ffff, 0xfadbabff, 0x9670ffff, 0x007645ff, 0xee968eff, 0x00fdffff, 0x869644ff, 0x9e3184ff, 0x00d3e7ff, 0xffd9b2ff, 0x008dffff, 0x007100ff, 0xe296a3ff, 0x00ffffff, 0xa59126ff, 0x77468eff, 0x00d0a5ff, 0xffd5bdff, 0x009effff, 0x006a00ff, 0xd597b3ff, 0x00ffffff, 0xca8509ff, 0x52508cff, 0x00cb5fff, 0xffcecfff, 0x00a6f3ff, 0x435e00ff, 0xc897c2ff, 0x00ffffff, 0xf26f1aff, 0x325484ff, 0x00c303ff, 0xffc7f0ff, 0x00a9d1ff, 0x714b00ff, 0xb599d5ff, 0x00ffdcff, 0xff4842ff, 0x06557bff, 0x73b600ff, 0xffc5ffff, 0x00aab3ff, 0x952800ff, 0x919febff, 0x91ffbcff, 0xff0074ff, 0x005572ff, 0xafa700ff, 0xffceffff, 0x47a99cff, 0xae0000ff, 0x38a8ffff, 0xd4ffb1ff, 0xff00b2ff, 0x005568ff, 0xd69500ff, 0xffe4ffff, 0x67a78cff, 0xb8000eff, 0x00b2ffff, 0xfdffb6ff, 0xff2df1ff, 0x005558ff, 0xea8740ff, 0x6affffff, 0x7ba67cff, 0xb1003cff, 0x00bcffff, 0xffffc2ff, 0xce69ffff, 0x00553dff, 0xee8169ff, 0x00ffffff, 0x8da46aff, 0x980061ff, 0x00c1e8ff, 0xfffcd0ff, 0x568effff, 0x005315ff, 0xe5838aff, 0x00ffffff, 0xa4a055ff, 0x720e79ff, 0x00c3b5ff, 0xfff9ddff, 0x00a5ffff, 0x005000ff, 0xd588a1ff, 0x00ffffff, 0xc09740ff, 0x453081ff, 0x00c275ff, 0xfff5eaff, 0x00b0ffff, 0x1d4a00ff, 0xc58db2ff, 0x00ffffff, 0xe28838ff, 0x103c7bff, 0x00be29ff, 0xffeeffff, 0x00b4faff, 0x4b3f00ff, 0xb492c0ff, 0x00ffffff, 0xff6e46ff, 0x004170ff, 0x37b600ff, 0xffe8ffff, 0x00b4d0ff, 0x702700ff, 0x9e97d0ff, 0x42ffd5ff, 0xff4968ff, 0x004363ff, 0x8fa900ff, 0xffe8ffff, 0x00b2adff, 0x900000ff, 0x799ee1ff, 0xbeffb6ff, 0xff139bff, 0x004559ff, 0xc59800ff, 0xfff1ffff, 0x50ae94ff, 0xa60000ff, 0x00a8f1ff, 0xf9ffaeff, 0xff1dd8ff, 0x00464eff, 0xe88500ff, 0xdeffffff, 0x73aa84ff, 0xaf001eff, 0x00b2f6ff, 0xffffb7ff, 0xf256ffff, 0x00483fff, 0xfa7846ff, 0x00ffffff, 0x89a678ff, 0xa5004cff, 0x00bae9ff, 0xffffc9ff, 0x9481ffff, 0x004a28ff, 0xf87573ff, 0x00ffffff, 0x9ca26bff, 0x870073ff, 0x00bfc7ff, 0xffffdaff, 0x009effff, 0x004b00ff, 0xe97c96ff, 0x00ffffff, 0xb19d5cff, 0x591a8bff, 0x00c091ff, 0xfffae9ff, 0x00b0ffff, 0x074a00ff, 0xd386adff, 0x00ffffff, 0xcc9350ff, 0x143890ff, 0x00be4fff, 0xfff4f7ff, 0x00b8ffff, 0x3c4600ff, 0xbc8ebbff, 0x00ffffff, 0xea8351ff, 0x004488ff, 0x00b900ff, 0xffedffff, 0x00baf1ff, 0x633a00ff, 0xa794c5ff, 0x00ffdeff, 0xff6c63ff, 0x004a79ff, 0x6caf00ff, 0xffe7ffff, 0x00b9c4ff, 0x8a1600ff, 0x8e9aceff, 0x6dffa8ff, 0xff4e88ff, 0x004e6bff, 0xad9e00ff, 0xffe6ffff, 0x00b6a0ff, 0xac0000ff, 0x67a0d9ff, 0xc9ff8bff, 0xff3abdff, 0x00525fff, 0xdc8800ff, 0xfcedffff, 0x5ab289ff, 0xc40013ff, 0x00a7dfff, 0xfcff89ff, 0xff4efbff, 0x005654ff, 0xfa7107ff, 0x8cfbffff, 0x81ad7eff, 0xca0048ff, 0x00aedcff, 0xfff498ff, 0xca76ffff, 0x005a46ff, 0xff6250ff, 0x00ffffff, 0x9aaa77ff, 0xb8007dff, 0x00b3c8ff, 0xffe8afff, 0x0099ffff, 0x005e31ff, 0xfa637dff, 0x00ffffff, 0xafa672ff, 0x8f00a8ff, 0x00b4a1ff, 0xffe0c3ff, 0x00b3ffff, 0x23610bff, 0xe26f9eff, 0x00ffffff, 0xc5a26cff, 0x4f42beff, 0x00b369ff, 0xffd9d3ff, 0x00c2ffff, 0x466000ff, 0xc47bb1ff, 0x00ffffff, 0xdf9a6aff, 0x0059bfff, 0x00ae1bff, 0xffd3e1ff, 0x00caffff, 0x6d5b00ff, 0xa684b9ff, 0xccccccff, 0x999999ff, 0x666666ff, 0x333333ff
@@ -220,14 +248,14 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 //        double[] color = new double[3];
 
 
-//        System.arraycopy(Coloring.VINIK24, 0, PALETTE, 0, 10);
+//        System.arraycopy(Coloring.CORPUT_64, 0, PALETTE, 0, 10);
 //        for (int i = 10, r = 0; r < 9; r++) {
-//            PALETTE[i++] = Coloring.VINIK24[17+r*8];
-//            PALETTE[i++] = VoxelColor.mixThird  (Coloring.VINIK24[16+r*8], Coloring.VINIK24[15+r*8]);
-//            PALETTE[i++] = VoxelColor.mixThird  (Coloring.VINIK24[14+r*8], Coloring.VINIK24[15+r*8]);
-//            PALETTE[i++] = VoxelColor.mixLightly(Coloring.VINIK24[13+r*8], Coloring.VINIK24[14+r*8]);
-//            PALETTE[i++] = VoxelColor.mixEvenly (Coloring.VINIK24[12+r*8], Coloring.VINIK24[13+r*8]);
-//            PALETTE[i++] = VoxelColor.mixThird  (Coloring.VINIK24[11+r*8], Coloring.VINIK24[12+r*8]);
+//            PALETTE[i++] = Coloring.CORPUT_64[17+r*8];
+//            PALETTE[i++] = VoxelColor.mixThird  (Coloring.CORPUT_64[16+r*8], Coloring.CORPUT_64[15+r*8]);
+//            PALETTE[i++] = VoxelColor.mixThird  (Coloring.CORPUT_64[14+r*8], Coloring.CORPUT_64[15+r*8]);
+//            PALETTE[i++] = VoxelColor.mixLightly(Coloring.CORPUT_64[13+r*8], Coloring.CORPUT_64[14+r*8]);
+//            PALETTE[i++] = VoxelColor.mixEvenly (Coloring.CORPUT_64[12+r*8], Coloring.CORPUT_64[13+r*8]);
+//            PALETTE[i++] = VoxelColor.mixThird  (Coloring.CORPUT_64[11+r*8], Coloring.CORPUT_64[12+r*8]);
 //        }
         
         double luma, warm, mild, hue;
@@ -284,8 +312,8 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 //                        (int) (MathUtils.clamp(color[2], 0.0, 1.0) * 255.5) << 8 | 0xFF;
             }
         }
-        IntVLA base = new IntVLA(256);
-        base.addAll(PALETTE, 1, PALETTE.length - 1);
+//        IntVLA base = new IntVLA(256);
+//        base.addAll(PALETTE, 1, PALETTE.length - 1);
 ////        base.addAll(Coloring.AURORA, 1, 255);
 ////        base.addAll(0x010101FF, 0x2D2D2DFF, 0x555555FF, 0x7B7B7BFF,
 ////                0x9F9F9FFF, 0xC1C1C1FF, 0xE1E1E1FF, 0xFFFFFFFF);
@@ -399,15 +427,19 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 //        PALETTE = base.toArray();
 //        
 //        //// used for Uniform216 and SemiUniform256
-////        PALETTE = new int[256];
-////        int idx = 1;
-////        for (int r = 0; r < 6; r++) {
-////            for (int g = 0; g < 6; g++) {
-////                for (int b = 0; b < 6; b++) {
-////                    PALETTE[idx++] = r * 51 << 24 | g * 51 << 16 | b * 51 << 8 | 0xFF;
-////                }
-////            }
-////        }
+//        // used for NonUniform256
+//        PALETTE = new int[256];
+//        PALETTE[1] = 0x3F3F3FFF;
+//        PALETTE[2] = 0x7F7F7FFF;
+//        PALETTE[3] = 0xBFBFBFFF;
+//        int idx = 4;
+//        for (int rr = 0; rr < 7; rr++) {
+//            for (int gg = 0; gg < 9; gg++) {
+//                for (int bb = 0; bb < 4; bb++) {
+//                    PALETTE[idx++] = rr * 42 + (rr >> 1) << 24 | gg * 32 - (gg >> 3) << 16 | bb * 85 << 8 | 0xFF;
+//                }
+//            }
+//        }
 //////        for (int r = 0; r < 5; r++) {
 //////            for (int g = 0; g < 5; g++) {
 //////                for (int b = 0; b < 5; b++) {
@@ -450,7 +482,7 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
         PNG8 png8 = new PNG8();
         png8.palette = new PaletteReducer(PALETTE);
         try {
-            png8.writePrecisely(Gdx.files.local("Vinik24.png"), pix, false);
+            png8.writePrecisely(Gdx.files.local("Corput64.png"), pix, false);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -468,14 +500,14 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
         }
 
         try {
-            png8.writePrecisely(Gdx.files.local("Vinik24_GLSL.png"), p2, false);
+            png8.writePrecisely(Gdx.files.local("Corput64_GLSL.png"), p2, false);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        int[][] VINIK24_BONUS_RAMP_VALUES = new int[256][4];
+        int[][] CORPUT_64_BONUS_RAMP_VALUES = new int[256][4];
         for (int i = 1; i < PALETTE.length; i++) {
-            int color = VINIK24_BONUS_RAMP_VALUES[i | 128][2] = VINIK24_BONUS_RAMP_VALUES[i][2] =
+            int color = CORPUT_64_BONUS_RAMP_VALUES[i | 128][2] = CORPUT_64_BONUS_RAMP_VALUES[i][2] =
                     PALETTE[i];             
 //            r = (color >>> 24);
 //            g = (color >>> 16 & 0xFF);
@@ -483,9 +515,9 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
             luma = lumas[i];
             warm = warms[i];
             mild = milds[i];
-            VINIK24_BONUS_RAMP_VALUES[i | 64][1] = VINIK24_BONUS_RAMP_VALUES[i | 64][2] =
-                    VINIK24_BONUS_RAMP_VALUES[i | 64][3] = color;
-            VINIK24_BONUS_RAMP_VALUES[i | 192][0] = VINIK24_BONUS_RAMP_VALUES[i | 192][2] = color;
+            CORPUT_64_BONUS_RAMP_VALUES[i | 64][1] = CORPUT_64_BONUS_RAMP_VALUES[i | 64][2] =
+                    CORPUT_64_BONUS_RAMP_VALUES[i | 64][3] = color;
+            CORPUT_64_BONUS_RAMP_VALUES[i | 192][0] = CORPUT_64_BONUS_RAMP_VALUES[i | 192][2] = color;
 //            int co = r - b, t = b + (co >> 1), cg = g - t, y = t + (cg >> 1),
 //                    yBright = y * 21 >> 4, yDim = y * 11 >> 4, yDark = y * 6 >> 4, chromO, chromG;
 //            chromO = (co * 3) >> 2;
@@ -497,43 +529,43 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
             r = MathUtils.clamp((int) ((luma * 0.83 + warm * 0.6) * 255.5), 0, 255);
             g = MathUtils.clamp((int) ((luma * 0.83 + mild * 0.6) * 255.5), 0, 255);
             b = MathUtils.clamp((int) ((luma * 0.83 - (warm + mild) * 0.3) * 255.5), 0, 255);
-            VINIK24_BONUS_RAMP_VALUES[i | 192][1] = VINIK24_BONUS_RAMP_VALUES[i | 128][1] =
-                    VINIK24_BONUS_RAMP_VALUES[i | 64][0] = VINIK24_BONUS_RAMP_VALUES[i][1] =
+            CORPUT_64_BONUS_RAMP_VALUES[i | 192][1] = CORPUT_64_BONUS_RAMP_VALUES[i | 128][1] =
+                    CORPUT_64_BONUS_RAMP_VALUES[i | 64][0] = CORPUT_64_BONUS_RAMP_VALUES[i][1] =
                             MathUtils.clamp(r, 0, 255) << 24 |
                                     MathUtils.clamp(g, 0, 255) << 16 |
                                     MathUtils.clamp(b, 0, 255) << 8 | 0xFF;
             r = MathUtils.clamp((int) ((luma * 1.2 + warm * 0.44) * 255.5), 0, 255);
             g = MathUtils.clamp((int) ((luma * 1.2 + mild * 0.44) * 255.5), 0, 255);
             b = MathUtils.clamp((int) ((luma * 1.2 - (warm + mild) * 0.22) * 255.5), 0, 255);
-            VINIK24_BONUS_RAMP_VALUES[i | 192][3] = VINIK24_BONUS_RAMP_VALUES[i | 128][3] =
-                    VINIK24_BONUS_RAMP_VALUES[i][3] =
+            CORPUT_64_BONUS_RAMP_VALUES[i | 192][3] = CORPUT_64_BONUS_RAMP_VALUES[i | 128][3] =
+                    CORPUT_64_BONUS_RAMP_VALUES[i][3] =
                             MathUtils.clamp(r, 0, 255) << 24 |
                                     MathUtils.clamp(g, 0, 255) << 16 |
                                     MathUtils.clamp(b, 0, 255) << 8 | 0xFF;
             r = MathUtils.clamp((int) ((luma * 0.65 + warm * 0.5) * 255.5), 0, 255);
             g = MathUtils.clamp((int) ((luma * 0.65 + mild * 0.5) * 255.5), 0, 255);
             b = MathUtils.clamp((int) ((luma * 0.65 - (warm + mild) * 0.25) * 255.5), 0, 255);
-            VINIK24_BONUS_RAMP_VALUES[i | 128][0] = VINIK24_BONUS_RAMP_VALUES[i][0] =
+            CORPUT_64_BONUS_RAMP_VALUES[i | 128][0] = CORPUT_64_BONUS_RAMP_VALUES[i][0] =
                     MathUtils.clamp(r, 0, 255) << 24 |
                             MathUtils.clamp(g, 0, 255) << 16 |
                             MathUtils.clamp(b, 0, 255) << 8 | 0xFF;
         }
         sb.setLength(0);
         sb.ensureCapacity(2800);
-        sb.append("private static final int[][] VINIK24_BONUS_RAMP_VALUES = new int[][] {\n");
+        sb.append("private static final int[][] CORPUT_64_BONUS_RAMP_VALUES = new int[][] {\n");
         for (int i = 0; i < 256; i++) {
             sb.append("{ 0x");
-            StringKit.appendHex(sb, VINIK24_BONUS_RAMP_VALUES[i][0]);
-            StringKit.appendHex(sb.append(", 0x"), VINIK24_BONUS_RAMP_VALUES[i][1]);
-            StringKit.appendHex(sb.append(", 0x"), VINIK24_BONUS_RAMP_VALUES[i][2]);
-            StringKit.appendHex(sb.append(", 0x"), VINIK24_BONUS_RAMP_VALUES[i][3]);
+            StringKit.appendHex(sb, CORPUT_64_BONUS_RAMP_VALUES[i][0]);
+            StringKit.appendHex(sb.append(", 0x"), CORPUT_64_BONUS_RAMP_VALUES[i][1]);
+            StringKit.appendHex(sb.append(", 0x"), CORPUT_64_BONUS_RAMP_VALUES[i][2]);
+            StringKit.appendHex(sb.append(", 0x"), CORPUT_64_BONUS_RAMP_VALUES[i][3]);
             sb.append(" },\n");
 
         }
         System.out.println(sb.append("};"));
         PALETTE = new int[256];
         for (int i = 0; i < 64; i++) {
-            System.arraycopy(VINIK24_BONUS_RAMP_VALUES[i], 0, PALETTE, i << 2, 4);
+            System.arraycopy(CORPUT_64_BONUS_RAMP_VALUES[i], 0, PALETTE, i << 2, 4);
         }
         sb.setLength(0);
         sb.ensureCapacity((1 + 12 * 8) * (PALETTE.length >>> 3));
@@ -553,7 +585,7 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
         //pix.drawPixel(255, 0, 0);
         png8.palette = new PaletteReducer(PALETTE);
         try {
-            png8.writePrecisely(Gdx.files.local("Vinik24Bonus.png"), pix, false);
+            png8.writePrecisely(Gdx.files.local("Corput64Bonus.png"), pix, false);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -570,7 +602,7 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
             }
         }
         try {
-            png8.writePrecisely(Gdx.files.local("Vinik24Bonus_GLSL.png"), p2, false);
+            png8.writePrecisely(Gdx.files.local("Corput64Bonus_GLSL.png"), p2, false);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -585,7 +617,7 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
         }
         png8.palette = new PaletteReducer(PALETTE);
         try {
-            png8.writePrecisely(Gdx.files.local("Vinik24BonusMagicaVoxel.png"), pix, false);
+            png8.writePrecisely(Gdx.files.local("Corput64BonusMagicaVoxel.png"), pix, false);
         } catch (IOException e) {
             e.printStackTrace();
         }

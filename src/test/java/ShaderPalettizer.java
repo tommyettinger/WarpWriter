@@ -172,17 +172,19 @@ public class ShaderPalettizer extends ApplicationAdapter {
                         break;
                     case Input.Keys.NUM_7:
                     case Input.Keys.NUMPAD_7:
-//                        palette = new Texture(Gdx.files.local("palettes/Vinik24_GLSL.png"), Pixmap.Format.RGBA8888, false);
-                        palette = new Texture(Gdx.files.local("palettes/JudgeBonus_GLSL.png"), Pixmap.Format.RGBA8888, false);
+                        palette = new Texture(Gdx.files.local("palettes/Corput256_GLSL.png"), Pixmap.Format.RGBA8888, false);
+//                        palette = new Texture(Gdx.files.local("palettes/JudgeBonus_GLSL.png"), Pixmap.Format.RGBA8888, false);
                         break;
                     case Input.Keys.NUM_8:
                     case Input.Keys.NUMPAD_8:
-//                        palette = new Texture(Gdx.files.local("palettes/Vinik24Bonus_GLSL.png"), Pixmap.Format.RGBA8888, false);
-                        palette = new Texture(Gdx.files.local("palettes/Mash256_GLSL.png"), Pixmap.Format.RGBA8888, false);
+                        palette = new Texture(Gdx.files.local("palettes/Corput64_GLSL.png"), Pixmap.Format.RGBA8888, false);
+//                        palette = new Texture(Gdx.files.local("palettes/NonUniform256_GLSL.png"), Pixmap.Format.RGBA8888, false);
+//                        palette = new Texture(Gdx.files.local("palettes/Mash256_GLSL.png"), Pixmap.Format.RGBA8888, false);
                         break;
                     case Input.Keys.NUM_9:
                     case Input.Keys.NUMPAD_9:
-                        palette = new Texture(Gdx.files.local("palettes/PureBonus_GLSL.png"), Pixmap.Format.RGBA8888, false);
+                        palette = new Texture(Gdx.files.local("palettes/Corput64Bonus_GLSL.png"), Pixmap.Format.RGBA8888, false);
+//                        palette = new Texture(Gdx.files.local("palettes/PureBonus_GLSL.png"), Pixmap.Format.RGBA8888, false);
 //                        palette = new Texture(Gdx.files.local("palettes/Uniform216_GLSL.png"), Pixmap.Format.RGBA8888, false);
                         break;
                     case Input.Keys.NUM_0:
@@ -210,25 +212,30 @@ public class ShaderPalettizer extends ApplicationAdapter {
                     case Input.Keys.A: // higher-color palette
                         load("samples/Aurora_Ships/Aurora_Spaceships.png");
                         break;
-                    case Input.Keys.D: // dither/disable
-                        if(!batch.getShader().equals(shader))
+//                    case Input.Keys.D: // dither/disable
+//                        if(!batch.getShader().equals(shader))
+//                        {
+//                            batch.setShader(shader);
+//                            Gdx.graphics.setTitle("Softness OFF");
+//                        }
+//                        else
+//                        {
+//                            batch.setShader(shaderNoDither);
+//                            Gdx.graphics.setTitle("Softness ON");
+//                        }
+//                        break;
+                    case Input.Keys.SPACE:
+                        if(batch.getShader().equals(defaultShader))
                         {
                             batch.setShader(shader);
                             Gdx.graphics.setTitle("Softness OFF");
                         }
-                        else
+                        else if(batch.getShader().equals(shader))
                         {
                             batch.setShader(shaderNoDither);
                             Gdx.graphics.setTitle("Softness ON");
                         }
-                        break;
-                    case Input.Keys.SPACE:
-                        if(!batch.getShader().equals(shader))
-                        {
-                            batch.setShader(shader);
-                            Gdx.graphics.setTitle("Softness OFF");
-                        }
-                        else
+                        else 
                         {
                             batch.setShader(defaultShader);
                             Gdx.graphics.setTitle("Default Shader");
