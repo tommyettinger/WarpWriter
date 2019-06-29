@@ -62,6 +62,7 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
     private Transform transformMid;
     private float alpha;
     private long startTime;
+    private int roll = 0, pitch = 0, yaw = 0;
 //    private GifRecorder gifRecorder;
 //    private ChaoticFetch chaos;
 
@@ -108,16 +109,20 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //        }
         for (int i = 0; i < transforms.length; i++) {
             int r = DiverRNG.randomizeBounded(i, 0x1000000);
-            if(i == 0)
-                transforms[i] = new Transform(new TurnQuaternion()
-                        .mul(turnY90.setEulerAnglesBrad(0, r >>> 8 & 0x7F, 0))
-                        .mul(turnZ90.setEulerAnglesBrad(0, 0, r & 0x7F))
-                        .mul(turnX90.setEulerAnglesBrad(r >>> 17, 0, 0)), 0, 0, 0, 1, 1, 1);
-            else
-                transforms[i] = new Transform(transforms[i-1].rotation.cpy()
-                        .mul(turnY90.setEulerAnglesBrad(0, r >>> 8 & 0x7F, 0))
-                        .mul(turnZ90.setEulerAnglesBrad(0, 0, r & 0x7F))
-                        .mul(turnX90.setEulerAnglesBrad(r >>> 17, 0, 0)), 0, 0, 0, 1, 1, 1);
+            if (i == 0) {
+                transforms[i] = new Transform(new TurnQuaternion().setEulerAnglesBrad(r >>> 16, r >>> 8, r)
+//                        .mul(turnY90.setEulerAnglesBrad(0, r >>> 8 & 0x7F, 0))
+//                        .mul(turnZ90.setEulerAnglesBrad(0, 0, r & 0x7F))
+//                        .mul(turnX90.setEulerAnglesBrad(r >>> 17, 0, 0))
+                        , 0, 0, 0, 1, 1, 1);
+            } else {
+                transforms[i] = new Transform(transforms[i - 1].rotation.cpy()
+                        .mul(new TurnQuaternion().setEulerAnglesBrad(r >>> 16, r >>> 8, r))
+//                        .mul(turnY90.setEulerAnglesBrad(0, r >>> 8 & 0x7F, 0))
+//                        .mul(turnZ90.setEulerAnglesBrad(0, 0, r & 0x7F))
+//                        .mul(turnX90.setEulerAnglesBrad(r >>> 17, 0, 0))
+                        , 0, 0, 0, 1, 1, 1);
+            }
         }
 //        for (int i = 0; i < transforms.length; i+=2) {
 //            if(i == 0)
@@ -140,7 +145,7 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
         try {
             voxels = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("FlesurrectBonus/Damned.vox")));
         } catch (FileNotFoundException e) {
-            voxels = maker.shipLargeNoiseColorized();
+            voxels = maker.shipLargeSmoothColorized();
         }
 //        voxels = new byte[60][60][60];
 //        seq = new VoxelSeq(1024);
@@ -214,17 +219,11 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
         if(seq != null && animating)
         {
             int time = (int) TimeUtils.timeSinceMillis(startTime);
-//            ((ITemporal) seq).setFrame((int)(TimeUtils.millis() * 5 >>> 9));
             voxelColor.set(time * 5 >>> 9);
-            alpha = (time & 0x3FF) * 0x1p-10f;
-            transforms[(time >>> 10) % transforms.length].interpolateInto(transforms[((time >>> 10) + 1) % transforms.length], alpha, transformMid);
-//            transforms[0].interpolateInto(transforms[1], alpha, transformMid);
-//            if((time & 0x800L) == 0L) 
-//                transformStart.interpolateInto(transformEnd, alpha, transformMid);
-//            else
-//                transformStart.interpolateInto(transformEnd, 1f - alpha, transformMid);
+//            alpha = (time & 0x7FF) * 0x1p-11f;
+//            transforms[(time >>> 11) % transforms.length].interpolateInto(transforms[((time >>> 11) + 1) % transforms.length], alpha, transformMid);
             middleSeq.clear();
-            transformMid.transformInto(seq, middleSeq, 29.5f, 29.5f, 29.5f);
+            transformMid.transformInto(seq, middleSeq, 19.5f, 19.5f, 19.5f);
 //            middleSeq.putAll(axes);
 //            middleSeq.hollow();
         }
@@ -313,34 +312,48 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
                         angle = 3;
                         break;
                     case Input.Keys.U:
-                            middleSeq.clockX();
-                        System.out.println("Current rotation: " + middleSeq.rotation());
+//                            middleSeq.clockX();
+//                        System.out.println("Current rotation: " + middleSeq.rotation());
+                        transformMid.rotation.setEulerAnglesBrad(--roll, pitch, yaw);
+                        System.out.println("Current rotation: " + transformMid.rotation.toBradString());
                         break;
                     case Input.Keys.J:
-                            middleSeq.counterX();
-                        System.out.println("Current rotation: " + middleSeq.rotation());
+//                            middleSeq.counterX();
+//                        System.out.println("Current rotation: " + middleSeq.rotation());
+                        transformMid.rotation.setEulerAnglesBrad(++roll, pitch, yaw);
+                        System.out.println("Current rotation: " + transformMid.rotation.toBradString());
                         break;
                     case Input.Keys.I:
-                        middleSeq.clockY();
-                        System.out.println("Current rotation: " + middleSeq.rotation());
+//                        middleSeq.clockY();
+//                        System.out.println("Current rotation: " + middleSeq.rotation());
+                        transformMid.rotation.setEulerAnglesBrad(roll, --pitch, yaw);
+                        System.out.println("Current rotation: " + transformMid.rotation.toBradString());
                         break;
                     case Input.Keys.K:
-                        middleSeq.counterY();
-                        System.out.println("Current rotation: " + middleSeq.rotation());
+//                        middleSeq.counterY();
+//                        System.out.println("Current rotation: " + middleSeq.rotation());
+                        transformMid.rotation.setEulerAnglesBrad(roll, ++pitch, yaw);
+                        System.out.println("Current rotation: " + transformMid.rotation.toBradString());
                         break;
                     case Input.Keys.O:
-                        if((middleSeq.rotation() & 28) == 0 ^ (diagonal = !diagonal)) // angle == 3 ||  
-                            middleSeq.clockZ();
-                        System.out.println("Current rotation: " + middleSeq.rotation());
+//                        if((middleSeq.rotation() & 28) == 0 ^ (diagonal = !diagonal)) // angle == 3 ||  
+//                            middleSeq.clockZ();
+//                        System.out.println("Current rotation: " + middleSeq.rotation());
+                        transformMid.rotation.setEulerAnglesBrad(roll, pitch, --yaw);
+                        System.out.println("Current rotation: " + transformMid.rotation.toBradString());
                         break;
                     case Input.Keys.L:
-                        if((middleSeq.rotation() & 28) != 0 ^ (diagonal = !diagonal)) // angle == 3 ||  
-                            middleSeq.counterZ();
-                        System.out.println("Current rotation: " + middleSeq.rotation());
+//                        if((middleSeq.rotation() & 28) != 0 ^ (diagonal = !diagonal)) // angle == 3 ||  
+//                            middleSeq.counterZ();
+//                        System.out.println("Current rotation: " + middleSeq.rotation());
+                        transformMid.rotation.setEulerAnglesBrad(roll, pitch, ++yaw);
+                        System.out.println("Current rotation: " + transformMid.rotation.toBradString());
                         break;
-//                    case Input.Keys.R:
+                    case Input.Keys.R:
+                        transformMid.rotation.setEulerAnglesBrad(roll = 0, pitch = 0, yaw = 0);
+                        System.out.println("Current rotation: " + transformMid.rotation.toBradString());
 //                        model.rotation().reset();
-//                        break;
+                        break;
                     case Input.Keys.P:
 //                        model.set(model());
 //                        model.set(ship);

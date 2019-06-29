@@ -153,7 +153,15 @@ public class TurnQuaternion implements Serializable {
     public float len () {
         return (float)Math.sqrt(x * x + y * y + z * z + w * w);
     }
-
+    
+    public String toBradString () {
+        final int pole = getGimbalPole();
+        final int roll = turnToBrad(pole == 0 ? NumberTools.asin_(MathUtils.clamp(2f * (w * x - z * y), -1f, 1f)) : ((pole >> 31) + pole * 0.25f));
+        final int pitch = pole == 0 ? turnToBrad(NumberTools.atan2_(2f * (y * w + x * z), 1f - 2f * (y * y + x * x))) : 0;
+        final int yaw = turnToBrad(pole == 0 ? NumberTools.atan2_(2f * (w * z + y * x), 1f - 2f * (x * x + z * z)) : (pole << 1)
+                * NumberTools.atan2_(y, w));
+        return "TurnQuaternion{roll=" + roll + ", pitch=" + pitch + ", yaw=" + yaw + "}";
+    }
     @Override
     public String toString () {
         return "[" + x + "|" + y + "|" + z + "|" + w + "]";
@@ -208,7 +216,7 @@ public class TurnQuaternion implements Serializable {
      * @return the rotation around the x axis in turns (between 0.75 and 1 or between 0 and 0.25) */
     public float getRoll () {
         final int pole = getGimbalPole();
-        return pole == 0 ? NumberTools.asin_(MathUtils.clamp(2f * (w * x - z * y), -1f, 1f)) : (float)pole * 0.25f;
+        return pole == 0 ? NumberTools.asin_(MathUtils.clamp(2f * (w * x - z * y), -1f, 1f)) : ((pole >> 31) + pole * 0.25f);
     }
 
     /** 
