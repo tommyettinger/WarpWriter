@@ -346,9 +346,9 @@ public class VoxelImmediateRenderer implements IRectangleRenderer, ITriangleRend
         final int color = this.color.verticalFace(voxel, vx, vy, vz);
         return flipX
                 ? drawRightTriangleBack(x, y, this.color.twilight().dark(voxel))
-                .drawRightTriangle(x, y, color, vx + vy + vz)
+                .drawRightTriangle(x, y, color, vx + vy + vz + 3)
                 : drawLeftTriangleBack(x, y, this.color.twilight().dark(voxel))
-                .drawLeftTriangle(x, y, color, vx + vy + vz);
+                .drawLeftTriangle(x, y, color, vx + vy + vz + 3);
     }
 
     @Override
@@ -380,9 +380,9 @@ public class VoxelImmediateRenderer implements IRectangleRenderer, ITriangleRend
         final int color = this.color.verticalFace(voxel, vx, vy, vz);
         return flipX
                 ? drawLeftTriangleBack(x, y, this.color.twilight().dark(voxel))
-                .drawLeftTriangle(x, y, color, vx + vy + vz)
+                .drawLeftTriangle(x, y, color, vx + vy + vz + 3)
                 : drawRightTriangleBack(x, y, this.color.twilight().dark(voxel))
-                .drawRightTriangle(x, y, color, vx + vy + vz);
+                .drawRightTriangle(x, y, color, vx + vy + vz + 3);
     }
 
     @Override

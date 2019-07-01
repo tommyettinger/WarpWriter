@@ -47,8 +47,14 @@
         </repository>
     </distributionManagement>
     <repositories>
+        <repository>
+            <id>sonatype-nexus-snapshots</id>
+            <name>Sonatype Nexus Snapshots</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
 		<repository>
 		    <id>jitpack.io</id>
+            <name>JitPack.io</name>
 		    <url>https://jitpack.io</url>
 		</repository>
 	</repositories>
@@ -61,9 +67,13 @@
         <maven.gpg.version>1.6</maven.gpg.version>
         <jdk.version>1.7</jdk.version>
         <junit.version>4.11</junit.version>
-        <squidlib.version>d024a0a0af</squidlib.version>
+        <squidlib.version>56425b68f5</squidlib.version>
+<!--        <squidlib.version>2ce0c7441e</squidlib.version>-->
+        
         <!--<fastutil.version>2727aa9866</fastutil.version>-->
-        <gdx.version>1.9.9</gdx.version>
+        
+        <gdx.version>1.9.10-SNAPSHOT</gdx.version>
+<!--        <gdx.version>1.9.9</gdx.version>-->
     </properties>
 
 

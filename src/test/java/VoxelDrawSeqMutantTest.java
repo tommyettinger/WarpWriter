@@ -42,7 +42,7 @@ public class VoxelDrawSeqMutantTest extends ApplicationAdapter {
     protected TextureRegion screenRegion;
 //    protected TurnModel model, ship;
     protected ModelMaker maker;
-    protected VoxelImmediateRenderer batchRenderer;
+    protected VoxelImmediateRenderer renderer;
     protected VoxelColor voxelColor;
     protected int angle = 2;
     protected boolean diagonal = false;
@@ -62,7 +62,7 @@ public class VoxelDrawSeqMutantTest extends ApplicationAdapter {
     @Override
     public void create() {
         shader = new ShaderProgram(ShaderUtils.vertexShader, ShaderUtils.fragmentShader);
-        palette = new Texture(Gdx.files.local("palettes/GBGreen16_GLSL.png"), Pixmap.Format.RGBA8888, false);
+        palette = new Texture(Gdx.files.local("palettes/DB_Aurora_GLSL.png"), Pixmap.Format.RGBA8888, false);
         palette.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         batch = new MutantBatch(1000);
         batch.setShader(shader);
@@ -83,10 +83,9 @@ public class VoxelDrawSeqMutantTest extends ApplicationAdapter {
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.FLESURRECT);
         colorizer = Colorizer.AuroraColorizer;
-        voxelColor = new VoxelColor().set(colorizer);
-        batchRenderer = new VoxelImmediateRenderer(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
-        batchRenderer.color().set(colorizer);
-
+        renderer = new VoxelImmediateRenderer(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
+        renderer.color().set(colorizer);
+        voxelColor = renderer.color();
 //        batchRenderer = new VoxelSpriteBatchRenderer(batch);
         rng = new MiniMover64RNG(-123456789);
         maker = new ModelMaker(-123456789, colorizer);
@@ -157,9 +156,9 @@ public class VoxelDrawSeqMutantTest extends ApplicationAdapter {
 //        if(seq != null) ((ITemporal) seq).setFrame((int)(TimeUtils.millis() * 5 >>> 9));
         buffer.begin();
         
-//        Gdx.gl.glClearColor(0.4f, 0.75f, 0.3f, 1f);
+        Gdx.gl.glClearColor(0.4f, 0.75f, 0.3f, 1f);
         // for GB_GREEN palette
-        Gdx.gl.glClearColor(0xE0 / 255f, 0xF8 / 255f, 0xD0 / 255f, 1f);
+//        Gdx.gl.glClearColor(0xE0 / 255f, 0xF8 / 255f, 0xD0 / 255f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
         worldView.apply();
@@ -167,22 +166,22 @@ public class VoxelDrawSeqMutantTest extends ApplicationAdapter {
         worldView.update(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
 //        batch.setProjectionMatrix(screenView.getCamera().combined);
         //System.out.println(palette.getTextureObjectHandle());
-        batchRenderer.begin();
+        renderer.begin();
         if(angle > 2)
         {
             if(diagonal)
-                VoxelDraw.drawIso(seq, batchRenderer);
+                VoxelDraw.drawIso(seq, renderer);
             else
-                VoxelDraw.drawAbove(seq, batchRenderer);
+                VoxelDraw.drawAbove(seq, renderer);
         }
         else{
             if(diagonal)
-                VoxelDraw.draw45(seq, batchRenderer);
+                VoxelDraw.draw45(seq, renderer);
             else
-                VoxelDraw.draw(seq, batchRenderer);
+                VoxelDraw.draw(seq, renderer);
         }
         batch.setPackedColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
-        batchRenderer.end();
+        renderer.end();
         buffer.end();
 
         Gdx.gl.glClearColor(0, 0, 0, 1f);
