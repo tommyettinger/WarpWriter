@@ -1,6 +1,7 @@
 package warpwriter.model.nonvoxel;
 
 import com.badlogic.gdx.math.Vector3;
+import warpwriter.model.AnimatedVoxelSeq;
 import warpwriter.model.IVoxelSeq;
 import warpwriter.model.VoxelSeq;
 
@@ -152,7 +153,7 @@ public class Transform {
         return transformInto(start, new VoxelSeq((int)(start.size() * stretchX * stretchY * stretchZ + 8)),
                 jointX, jointY, jointZ);
     }
-    
+
     /**
      * Given a VoxelSeq {@code start} to use as a basis, a (usually empty) VoxelSeq {@code next} to fill with voxels,
      * and a 3D point to rotate around like a socket joint, this inserts voxels into {@code next} that may be rotated,
@@ -167,7 +168,6 @@ public class Transform {
     public IVoxelSeq transformInto(IVoxelSeq start, IVoxelSeq next, float jointX, float jointY, float jointZ)
     {
         final int len = start.fullSize();
-//        final VoxelSeq next = new VoxelSeq((int) (len * stretchX * stretchY * stretchZ + 8));
         int k, x, y, z;
         byte v;
         for (int i = 0; i < len; i++) {
@@ -181,7 +181,6 @@ public class Transform {
 //            if(stretchX <= 1.01f && stretchY <= 1.01f && stretchZ <= 1.01f)
 //                next.put(round(temp.x * stretchX), round(temp.y * stretchY), round(temp.z * stretchZ), v);
 //            else 
-            
             for (int sx = 0; sx <= stretchX; sx++) {
                 for (int sy = 0; sy <= stretchY; sy++) {
                     for (int sz = 0; sz <= stretchZ; sz++) {
@@ -194,7 +193,100 @@ public class Transform {
             }
         }
         next.hollow();
-        //System.out.println(len + ", " + next.fullSize());
+        return next;
+    }
+    /**
+     * Given an AnimatedVoxelSeq to use as a basis and a 3D point to rotate around like a socket joint, this makes a new
+     * VoxelSeq that may be rotated, translated, and/or stretched from its original location. This treats the second
+     * frame in initial, that is, {@code initial.seqs[1]}, as holding connections, and all later frames as holding
+     * increasing priorities.
+     * @param initial a VoxelSeq that will not be modified
+     * @param jointX the x-coordinate of the joint to rotate around, which may be in-between voxel coordinates
+     * @param jointY the y-coordinate of the joint to rotate around, which may be in-between voxel coordinates
+     * @param jointZ the z-coordinate of the joint to rotate around, which may be in-between voxel coordinates
+     * @return a new VoxelSeq that will contain a transformed copy of start 
+     */
+    public IVoxelSeq transform(AnimatedVoxelSeq initial, float jointX, float jointY, float jointZ)
+    {
+        VoxelSeq[] seqs = new VoxelSeq[initial.seqs.length];
+        seqs[0] = new VoxelSeq((int)(initial.size() * stretchX * stretchY * stretchZ + 8));
+        seqs[1] = new VoxelSeq();
+        for (int i = 2; i < initial.seqs.length; i++) {
+            seqs[i] = new VoxelSeq(initial.seqs[i].fullSize());
+        }
+        return transformInto(initial, new AnimatedVoxelSeq(seqs),
+                jointX, jointY, jointZ);
+    }
+
+    /**
+     * Given an AnimatedVoxelSeq {@code initial} to use as a basis, a (usually empty) VoxelSeq {@code next} to fill with 
+     * voxels, and a 3D point to rotate around like a socket joint, this inserts voxels into {@code next} that may be
+     * rotated, translated, and/or stretched from its original location. This treats the second frame in initial, that
+     * is, {@code initial.seqs[1]}, as holding connections, and all later frames as holding increasing priorities.
+     * @param initial an AnimatedVoxelSeq that will be modified, but won't be cleared (voxels will be added to its current content)
+     * @param jointX the x-coordinate of the joint to rotate around, which may be in-between voxel coordinates
+     * @param jointY the y-coordinate of the joint to rotate around, which may be in-between voxel coordinates
+     * @param jointZ the z-coordinate of the joint to rotate around, which may be in-between voxel coordinates
+     * @return {@code next}, with the added voxels, for chaining
+     */
+    public IVoxelSeq transformInto(AnimatedVoxelSeq initial, AnimatedVoxelSeq next, float jointX, float jointY, float jointZ)
+    {
+        IVoxelSeq curr = initial.seqs[0];
+        next.setFrame(0);
+        int len = curr.fullSize();
+        int k, x, y, z;
+        byte v;
+        for (int i = 0; i < len; i++) {
+            k = curr.keyAtRotated(i);
+            v = curr.getAt(i);
+            x = extractX(k);
+            y = extractY(k);
+            z = extractZ(k);
+            temp.set(x - jointX, y - jointY, z - jointZ);
+            rotation.transform(temp).add(jointX + moveX, jointY + moveY, jointZ + moveZ);
+//            if(stretchX <= 1.01f && stretchY <= 1.01f && stretchZ <= 1.01f)
+//                next.put(round(temp.x * stretchX), round(temp.y * stretchY), round(temp.z * stretchZ), v);
+//            else 
+            for (int sx = 0; sx <= stretchX; sx++) {
+                for (int sy = 0; sy <= stretchY; sy++) {
+                    for (int sz = 0; sz <= stretchZ; sz++) {
+                        next.put(
+                                round(temp.x * stretchX + sx),
+                                round(temp.y * stretchY + sy),
+                                round(temp.z * stretchZ + sz), v);
+                    }
+                }
+            }
+        }
+        next.hollow();
+        for (int f = 1; f < initial.seqs.length; f++) {
+            next.setFrame(f);
+            len = curr.fullSize();
+            for (int i = 0; i < len; i++) {
+                k = curr.keyAtRotated(i);
+                v = curr.getAt(i);
+                x = extractX(k);
+                y = extractY(k);
+                z = extractZ(k);
+                temp.set(x - jointX, y - jointY, z - jointZ);
+                rotation.transform(temp).add(jointX + moveX, jointY + moveY, jointZ + moveZ);
+                if (stretchX <= 1.01f && stretchY <= 1.01f && stretchZ <= 1.01f)
+                    next.put(round(temp.x * stretchX), round(temp.y * stretchY), round(temp.z * stretchZ), v);
+                else {
+                    for (int sx = 0; sx < stretchX; sx++) {
+                        for (int sy = 0; sy < stretchY; sy++) {
+                            for (int sz = 0; sz < stretchZ; sz++) {
+                                next.put(
+                                        round(temp.x * stretchX + sx),
+                                        round(temp.y * stretchY + sy),
+                                        round(temp.z * stretchZ + sz), v);
+                            }
+                        }
+                    }
+                }
+            }
+            next.hollow();
+        }
         return next;
     }
 }
