@@ -229,16 +229,17 @@ public class Transform {
      * @param jointZ the z-coordinate of the joint to rotate around, which may be in-between voxel coordinates
      * @return {@code next}, with the added voxels, for chaining
      */
-    public IVoxelSeq transformInto(AnimatedVoxelSeq initial, AnimatedVoxelSeq next, float jointX, float jointY, float jointZ)
+    public IVoxelSeq transformInto(AnimatedVoxelSeq initial, AnimatedVoxelSeq target, float jointX, float jointY, float jointZ)
     {
         IVoxelSeq curr = initial.seqs[0];
-        next.setFrame(0);
+        IVoxelSeq next = target.seqs[0];
         int len = curr.fullSize();
         int k, x, y, z;
         byte v;
         for (int i = 0; i < len; i++) {
+//            k = curr.rotate(curr.keyAt(i), curr.rotation());
             k = curr.keyAtRotated(i);
-            v = curr.getAt(i);
+            v = curr.getAtHollow(i);
             x = extractX(k);
             y = extractY(k);
             z = extractZ(k);
@@ -247,9 +248,9 @@ public class Transform {
 //            if(stretchX <= 1.01f && stretchY <= 1.01f && stretchZ <= 1.01f)
 //                next.put(round(temp.x * stretchX), round(temp.y * stretchY), round(temp.z * stretchZ), v);
 //            else 
-            for (int sx = 0; sx <= stretchX; sx++) {
-                for (int sy = 0; sy <= stretchY; sy++) {
-                    for (int sz = 0; sz <= stretchZ; sz++) {
+            for (int sx = 0; sx < stretchX; sx++) {
+                for (int sy = 0; sy < stretchY; sy++) {
+                    for (int sz = 0; sz < stretchZ; sz++) {
                         next.put(
                                 round(temp.x * stretchX + sx),
                                 round(temp.y * stretchY + sy),
@@ -258,13 +259,14 @@ public class Transform {
                 }
             }
         }
-        next.hollow();
-        for (int f = 1; f < initial.seqs.length; f++) {
-            next.setFrame(f);
+        //next.hollow();
+        for (int f = 1; f < initial.seqs.length && f < target.seqs.length; f++) {
+            curr = initial.seqs[f];
+            next = f == 1 ? target.seqs[1] : target.seqs[0];
             len = curr.fullSize();
             for (int i = 0; i < len; i++) {
                 k = curr.keyAtRotated(i);
-                v = curr.getAt(i);
+                v = curr.getAtHollow(i);
                 x = extractX(k);
                 y = extractY(k);
                 z = extractZ(k);
@@ -285,8 +287,8 @@ public class Transform {
                     }
                 }
             }
-            next.hollow();
         }
-        return next;
+        target.seqs[0].hollow();
+        return target;
     }
 }

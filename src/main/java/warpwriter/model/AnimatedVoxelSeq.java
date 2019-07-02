@@ -166,6 +166,11 @@ public class AnimatedVoxelSeq implements IVoxelSeq, ITemporal, Serializable {
     }
 
     @Override
+    public int rotate(int k, int rotation) {
+        return seqs[frame].rotate(k, rotation);
+    }
+
+    @Override
     public byte getRotated(int x, int y, int z) {
         return seqs[frame].getRotated(x, y, z);
     }

@@ -104,12 +104,12 @@ public class VoxIO {
         // check out https://github.com/ephtracy/voxel-model/blob/master/MagicaVoxel-file-format-vox.txt for the file format used below
         AnimatedVoxelSeq voxelData = null;
         VoxelSeq[] seqs = null;
-        int frames = 1;
+        int frames;
         int currentFrame = -1;
         try {
             byte[] chunkId = new byte[4];
             if (4 != stream.read(chunkId))
-                return null;
+                return new AnimatedVoxelSeq();
             //int version = 
             stream.readInt();
             // a MagicaVoxel .vox file starts with a 'magic' 4 character 'VOX ' identifier
@@ -148,6 +148,7 @@ public class VoxIO {
                         for (int i = 0; i < numVoxels; i++) {
                             seqs[currentFrame].put(stream.read(), stream.read(), stream.read(), stream.readByte());
                         }
+                        seqs[currentFrame].hollow();
                     } else if(chunkName.equals("RGBA") && voxelData != null)
                     {
                         for (int i = 1; i < 256; i++) {
@@ -162,6 +163,10 @@ public class VoxIO {
             stream.close();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        if(voxelData == null)
+        {
+            voxelData = new AnimatedVoxelSeq();
         }
         return voxelData;
     }
