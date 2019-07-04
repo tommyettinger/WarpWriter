@@ -140,6 +140,7 @@ public class MetaVoxTest extends ApplicationAdapter {
         maker.rng.setState(rng.nextLong());
         try {
             seq = VoxIO.readVoxelSeq(new LittleEndianDataInputStream(new FileInputStream("metavox/Damned.vox")));
+            voxels = new byte[60][60][60];
         } catch (Exception e) {
             VoxelSeq single = new VoxelSeq();
             voxels = maker.shipLargeSmoothColorized();
@@ -361,7 +362,13 @@ public class MetaVoxTest extends ApplicationAdapter {
 //                        chaos.setSeed(maker.rng.nextLong());
                         maker.rng.setState(rng.nextLong());
                         Tools3D.deepCopyInto(maker.shipLargeSmoothColorized(), voxels);
-//                        seq.setFrame(0);
+                        seq.setFrame(1);
+                        seq.clear();
+                        seq.setFrame(2);
+                        seq.clear();
+                        seq.setFrame(3);
+                        seq.clear();
+                        seq.setFrame(0);
                         seq.clear();
                         seq.putSurface(voxels);
 //                        seq = new AnimatedVoxelSeq(seq.seqs[0], 4);

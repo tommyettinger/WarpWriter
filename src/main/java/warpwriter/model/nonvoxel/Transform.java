@@ -5,8 +5,7 @@ import warpwriter.model.AnimatedVoxelSeq;
 import warpwriter.model.IVoxelSeq;
 import warpwriter.model.VoxelSeq;
 
-import static com.badlogic.gdx.math.MathUtils.lerp;
-import static com.badlogic.gdx.math.MathUtils.round;
+import static com.badlogic.gdx.math.MathUtils.*;
 import static warpwriter.model.nonvoxel.HashMap3D.*;
 
 /**
@@ -244,17 +243,22 @@ public class Transform {
             y = extractY(k);
             z = extractZ(k);
             temp.set(x - jointX, y - jointY, z - jointZ);
-            rotation.transform(temp).add(jointX + moveX, jointY + moveY, jointZ + moveZ);
+            rotation.transform(temp)
+					.add(jointX + moveX, jointY + moveY, jointZ + moveZ)
+					.scl(stretchX, stretchY, stretchZ);
 //            if(stretchX <= 1.01f && stretchY <= 1.01f && stretchZ <= 1.01f)
 //                next.put(round(temp.x * stretchX), round(temp.y * stretchY), round(temp.z * stretchZ), v);
 //            else 
-            for (int sx = 0; sx < stretchX; sx++) {
-                for (int sy = 0; sy < stretchY; sy++) {
-                    for (int sz = 0; sz < stretchZ; sz++) {
+			final float limX = (temp.x - floor(temp.x - 0.25f) < 0.75f) ? stretchX + 1 : stretchX;
+			final float limY = (temp.y - floor(temp.y - 0.25f) < 0.75f) ? stretchY + 1 : stretchY;
+			final float limZ = (temp.z - floor(temp.z - 0.25f) < 0.75f) ? stretchZ + 1 : stretchZ;
+            for (int sx = 0; sx < limX; sx++) {
+                for (int sy = 0; sy < limY; sy++) {
+                    for (int sz = 0; sz < limZ; sz++) {
                         next.put(
-                                round(temp.x * stretchX + sx),
-                                round(temp.y * stretchY + sy),
-                                round(temp.z * stretchZ + sz), v);
+                                round(temp.x + sx),
+                                round(temp.y + sy),
+                                round(temp.z + sz), v);
                     }
                 }
             }
@@ -271,17 +275,18 @@ public class Transform {
                 y = extractY(k);
                 z = extractZ(k);
                 temp.set(x - jointX, y - jointY, z - jointZ);
-                rotation.transform(temp).add(jointX + moveX, jointY + moveY, jointZ + moveZ);
+                rotation.transform(temp).add(jointX + moveX, jointY + moveY, jointZ + moveZ)
+						.scl(stretchX, stretchY, stretchZ);
                 if (stretchX <= 1.01f && stretchY <= 1.01f && stretchZ <= 1.01f)
-                    next.put(round(temp.x * stretchX), round(temp.y * stretchY), round(temp.z * stretchZ), v);
+                    next.put(round(temp.x), round(temp.y), round(temp.z), v);
                 else {
                     for (int sx = 0; sx < stretchX; sx++) {
                         for (int sy = 0; sy < stretchY; sy++) {
                             for (int sz = 0; sz < stretchZ; sz++) {
                                 next.put(
-                                        round(temp.x * stretchX + sx),
-                                        round(temp.y * stretchY + sy),
-                                        round(temp.z * stretchZ + sz), v);
+                                        round(temp.x + sx),
+                                        round(temp.y + sy),
+                                        round(temp.z + sz), v);
                             }
                         }
                     }
