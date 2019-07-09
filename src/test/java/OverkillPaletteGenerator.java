@@ -130,48 +130,84 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
         int[] PALETTE = 
                 new int[64];
         {
-            int i = 1, r, g, b;
-            for (int cw : new int[] {0, -1, 1}) {
-                for (int cm : new int[]{0, -1, 1}) {
-                    for (int lu = 0; lu <= 6; lu++) {
-                        double luma, warm, mild;
-                        if ((cm | cw) == 0)
-                            luma = lu / 6.0;
-                        else
-                            luma = 0.9 - Math.pow((6.0 - lu) / 6.0, 1.125) * 0.8;
-                        if ((cm & cw) == 0) {
-                            if (cw == 1) {
-                                warm = 0.7;
-                                mild = 0.0625;
-                            } else if(cm == -1){
-                                warm = 0.25;
-                                mild = -0.65;
-                            }else {
-                                warm = cw * 0.5;
-                                mild = cm * 0.5;
-                            }
-                        } else if(cw == 1 && cm == 1) {
-                            warm = 1.0;
-                            mild = 0.75 + luma * 0.3;
-                            luma = Math.pow(luma, 0.6);
-                        }
-                        else {
-                            warm = cw;
-                            mild = cm;
-                        }
-                        if((lu & 1) == 1)
-                        {
-                            warm *= 0.7;
-                            mild *= 0.7;
-                        }
-                        r = MathUtils.clamp((int) ((luma + warm * 0.625 - mild * 0.5) * 255.5), 0, 255);
-                        g = MathUtils.clamp((int) ((luma + mild * 0.5 - warm * 0.375) * 255.5), 0, 255);
-                        b = MathUtils.clamp((int) ((luma - warm * 0.375 - mild * 0.5) * 255.5), 0, 255);
-                        PALETTE[i++] = r << 24 | g << 16 | b << 8 | 0xFF;
-
+            int i = 1;
+            for (int j = 0; j < 9; j++) {
+                int v = j * j * 4 - (j >>> 3);
+                PALETTE[i++] = v << 24 | v << 16 | v << 8 | 0xFF;
+            }
+            int[] rgb = {0, 0, 0};
+            for (int sel = 0; sel < 3; sel++) {
+                int o1 = (sel + 1) % 3, o2 = (sel + 2) % 3;
+                for (int j = 0; j < 9; j++) {
+                    if((j & 1) == 0)
+                    {
+                        rgb[sel] = MathUtils.clamp(j * 60, 0, 255);
+                        rgb[o1] = rgb[o2] = MathUtils.clamp(-150 + j * 40, 0, 255);
                     }
+                    else
+                    {
+                        rgb[sel] = MathUtils.clamp(j * 48, 0, 255);
+                        rgb[o1] = rgb[o2] = MathUtils.clamp(-24 + j * 36, 0, 255);
+                    }
+                    PALETTE[i++] = rgb[0] << 24 | rgb[1] << 16 | rgb[2] << 8 | 0xFF;
+                }
+                for (int j = 0; j < 9; j++) {
+                    if((j & 1) == 0)
+                    {
+                        rgb[o1] = rgb[o2] = MathUtils.clamp(j * 60, 0, 255);
+                        rgb[sel] = MathUtils.clamp(-150 + j * 40, 0, 255);
+                    }
+                    else
+                    {
+                        rgb[o1] = rgb[o2] = MathUtils.clamp(j * 48, 0, 255);
+                        rgb[sel] = MathUtils.clamp(-24 + j * 36, 0, 255);
+                    }
+                    PALETTE[i++] = rgb[0] << 24 | rgb[1] << 16 | rgb[2] << 8 | 0xFF;
                 }
             }
+            
+//            int i = 1, r, g, b;
+//            for (int cw : new int[] {0, -1, 1}) {
+//                for (int cm : new int[]{0, -1, 1}) {
+//                    for (int lu = 0; lu <= 6; lu++) {
+//                        double luma, warm, mild;
+//                        if ((cm | cw) == 0)
+//                            luma = lu / 6.0;
+//                        else
+//                            luma = 0.9 - Math.pow((6.0 - lu) / 6.0, 1.125) * 0.8;
+//                        if ((cm & cw) == 0) {
+//                            if (cw == 1) {
+//                                warm = 0.7;
+//                                mild = 0.0625;
+//                            } else if(cm == -1){
+//                                warm = 0.25;
+//                                mild = -0.65;
+//                            }else {
+//                                warm = cw * 0.5;
+//                                mild = cm * 0.5;
+//                            }
+//                        } else if(cw == 1 && cm == 1) {
+//                            warm = 1.0;
+//                            mild = 0.75 + luma * 0.3;
+//                            luma = Math.pow(luma, 0.6);
+//                        }
+//                        else {
+//                            warm = cw;
+//                            mild = cm;
+//                        }
+//                        if((lu & 1) == 1)
+//                        {
+//                            warm *= 0.7;
+//                            mild *= 0.7;
+//                        }
+//                        r = MathUtils.clamp((int) ((luma + warm * 0.625 - mild * 0.5) * 255.5), 0, 255);
+//                        g = MathUtils.clamp((int) ((luma + mild * 0.5 - warm * 0.375) * 255.5), 0, 255);
+//                        b = MathUtils.clamp((int) ((luma - warm * 0.375 - mild * 0.5) * 255.5), 0, 255);
+//                        PALETTE[i++] = r << 24 | g << 16 | b << 8 | 0xFF;
+//
+//                    }
+//                }
+//            }
         }
 //                {
 //                    // vinik24
@@ -528,7 +564,7 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
         PNG8 png8 = new PNG8();
         png8.palette = new PaletteReducer(PALETTE);
         try {
-            png8.writePrecisely(Gdx.files.local("Laser64.png"), pix, false);
+            png8.writePrecisely(Gdx.files.local("Cubicle64.png"), pix, false);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -546,14 +582,14 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
         }
 
         try {
-            png8.writePrecisely(Gdx.files.local("Laser64_GLSL.png"), p2, false);
+            png8.writePrecisely(Gdx.files.local("Cubicle64_GLSL.png"), p2, false);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        int[][] LASER64_BONUS_RAMP_VALUES = new int[256][4];
+        int[][] CUBICLE64_BONUS_RAMP_VALUES = new int[256][4];
         for (int i = 1; i < PALETTE.length; i++) {
-            int color = LASER64_BONUS_RAMP_VALUES[i | 128][2] = LASER64_BONUS_RAMP_VALUES[i][2] =
+            int color = CUBICLE64_BONUS_RAMP_VALUES[i | 128][2] = CUBICLE64_BONUS_RAMP_VALUES[i][2] =
                     PALETTE[i];             
 //            r = (color >>> 24);
 //            g = (color >>> 16 & 0xFF);
@@ -561,9 +597,9 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
             luma = lumas[i];
             warm = warms[i];
             mild = milds[i];
-            LASER64_BONUS_RAMP_VALUES[i | 64][1] = LASER64_BONUS_RAMP_VALUES[i | 64][2] =
-                    LASER64_BONUS_RAMP_VALUES[i | 64][3] = color;
-            LASER64_BONUS_RAMP_VALUES[i | 192][0] = LASER64_BONUS_RAMP_VALUES[i | 192][2] = color;
+            CUBICLE64_BONUS_RAMP_VALUES[i | 64][1] = CUBICLE64_BONUS_RAMP_VALUES[i | 64][2] =
+                    CUBICLE64_BONUS_RAMP_VALUES[i | 64][3] = color;
+            CUBICLE64_BONUS_RAMP_VALUES[i | 192][0] = CUBICLE64_BONUS_RAMP_VALUES[i | 192][2] = color;
 //            int co = r - b, t = b + (co >> 1), cg = g - t, y = t + (cg >> 1),
 //                    yBright = y * 21 >> 4, yDim = y * 11 >> 4, yDark = y * 6 >> 4, chromO, chromG;
 //            chromO = (co * 3) >> 2;
@@ -575,43 +611,43 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
             r = MathUtils.clamp((int) ((luma * 0.83 + warm * 0.6) * 255.5), 0, 255);
             g = MathUtils.clamp((int) ((luma * 0.83 + mild * 0.6) * 255.5), 0, 255);
             b = MathUtils.clamp((int) ((luma * 0.83 - (warm + mild) * 0.3) * 255.5), 0, 255);
-            LASER64_BONUS_RAMP_VALUES[i | 192][1] = LASER64_BONUS_RAMP_VALUES[i | 128][1] =
-                    LASER64_BONUS_RAMP_VALUES[i | 64][0] = LASER64_BONUS_RAMP_VALUES[i][1] =
+            CUBICLE64_BONUS_RAMP_VALUES[i | 192][1] = CUBICLE64_BONUS_RAMP_VALUES[i | 128][1] =
+                    CUBICLE64_BONUS_RAMP_VALUES[i | 64][0] = CUBICLE64_BONUS_RAMP_VALUES[i][1] =
                             MathUtils.clamp(r, 0, 255) << 24 |
                                     MathUtils.clamp(g, 0, 255) << 16 |
                                     MathUtils.clamp(b, 0, 255) << 8 | 0xFF;
             r = MathUtils.clamp((int) ((luma * 1.2 + warm * 0.44) * 255.5), 0, 255);
             g = MathUtils.clamp((int) ((luma * 1.2 + mild * 0.44) * 255.5), 0, 255);
             b = MathUtils.clamp((int) ((luma * 1.2 - (warm + mild) * 0.22) * 255.5), 0, 255);
-            LASER64_BONUS_RAMP_VALUES[i | 192][3] = LASER64_BONUS_RAMP_VALUES[i | 128][3] =
-                    LASER64_BONUS_RAMP_VALUES[i][3] =
+            CUBICLE64_BONUS_RAMP_VALUES[i | 192][3] = CUBICLE64_BONUS_RAMP_VALUES[i | 128][3] =
+                    CUBICLE64_BONUS_RAMP_VALUES[i][3] =
                             MathUtils.clamp(r, 0, 255) << 24 |
                                     MathUtils.clamp(g, 0, 255) << 16 |
                                     MathUtils.clamp(b, 0, 255) << 8 | 0xFF;
             r = MathUtils.clamp((int) ((luma * 0.65 + warm * 0.5) * 255.5), 0, 255);
             g = MathUtils.clamp((int) ((luma * 0.65 + mild * 0.5) * 255.5), 0, 255);
             b = MathUtils.clamp((int) ((luma * 0.65 - (warm + mild) * 0.25) * 255.5), 0, 255);
-            LASER64_BONUS_RAMP_VALUES[i | 128][0] = LASER64_BONUS_RAMP_VALUES[i][0] =
+            CUBICLE64_BONUS_RAMP_VALUES[i | 128][0] = CUBICLE64_BONUS_RAMP_VALUES[i][0] =
                     MathUtils.clamp(r, 0, 255) << 24 |
                             MathUtils.clamp(g, 0, 255) << 16 |
                             MathUtils.clamp(b, 0, 255) << 8 | 0xFF;
         }
         sb.setLength(0);
         sb.ensureCapacity(2800);
-        sb.append("private static final int[][] LASER64_BONUS_RAMP_VALUES = new int[][] {\n");
+        sb.append("private static final int[][] CUBICLE64_BONUS_RAMP_VALUES = new int[][] {\n");
         for (int i = 0; i < 256; i++) {
             sb.append("{ 0x");
-            StringKit.appendHex(sb, LASER64_BONUS_RAMP_VALUES[i][0]);
-            StringKit.appendHex(sb.append(", 0x"), LASER64_BONUS_RAMP_VALUES[i][1]);
-            StringKit.appendHex(sb.append(", 0x"), LASER64_BONUS_RAMP_VALUES[i][2]);
-            StringKit.appendHex(sb.append(", 0x"), LASER64_BONUS_RAMP_VALUES[i][3]);
+            StringKit.appendHex(sb, CUBICLE64_BONUS_RAMP_VALUES[i][0]);
+            StringKit.appendHex(sb.append(", 0x"), CUBICLE64_BONUS_RAMP_VALUES[i][1]);
+            StringKit.appendHex(sb.append(", 0x"), CUBICLE64_BONUS_RAMP_VALUES[i][2]);
+            StringKit.appendHex(sb.append(", 0x"), CUBICLE64_BONUS_RAMP_VALUES[i][3]);
             sb.append(" },\n");
 
         }
         System.out.println(sb.append("};"));
         PALETTE = new int[256];
         for (int i = 0; i < 64; i++) {
-            System.arraycopy(LASER64_BONUS_RAMP_VALUES[i], 0, PALETTE, i << 2, 4);
+            System.arraycopy(CUBICLE64_BONUS_RAMP_VALUES[i], 0, PALETTE, i << 2, 4);
         }
         sb.setLength(0);
         sb.ensureCapacity((1 + 12 * 8) * (PALETTE.length >>> 3));
@@ -631,7 +667,7 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
         //pix.drawPixel(255, 0, 0);
         png8.palette = new PaletteReducer(PALETTE);
         try {
-            png8.writePrecisely(Gdx.files.local("Laser64Bonus.png"), pix, false);
+            png8.writePrecisely(Gdx.files.local("Cubicle64Bonus.png"), pix, false);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -648,7 +684,7 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
             }
         }
         try {
-            png8.writePrecisely(Gdx.files.local("Laser64Bonus_GLSL.png"), p2, false);
+            png8.writePrecisely(Gdx.files.local("Cubicle64Bonus_GLSL.png"), p2, false);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -663,7 +699,7 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
         }
         png8.palette = new PaletteReducer(PALETTE);
         try {
-            png8.writePrecisely(Gdx.files.local("Laser64BonusMagicaVoxel.png"), pix, false);
+            png8.writePrecisely(Gdx.files.local("Cubicle64BonusMagicaVoxel.png"), pix, false);
         } catch (IOException e) {
             e.printStackTrace();
         }

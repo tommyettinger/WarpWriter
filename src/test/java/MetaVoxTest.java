@@ -225,7 +225,7 @@ public class MetaVoxTest extends ApplicationAdapter {
             voxelColor.set(time * 5 >>> 9);
 //            alpha = (time & 0x7FF) * 0x1p-11f;
 //            transforms[(time >>> 11) % transforms.length].interpolateInto(transforms[((time >>> 11) + 1) % transforms.length], alpha, transformMid);
-            middleSeq.clear();
+            middleSeq.clearAll();
             transformMid.transformInto(seq, middleSeq, 19.5f, 19.5f, 19.5f);
 //            middleSeq.putAll(axes);
 //            middleSeq.seqs[0].hollow();
@@ -362,14 +362,8 @@ public class MetaVoxTest extends ApplicationAdapter {
 //                        chaos.setSeed(maker.rng.nextLong());
                         maker.rng.setState(rng.nextLong());
                         Tools3D.deepCopyInto(maker.shipLargeSmoothColorized(), voxels);
-                        seq.setFrame(1);
-                        seq.clear();
-                        seq.setFrame(2);
-                        seq.clear();
-                        seq.setFrame(3);
-                        seq.clear();
+                        seq.clearAll();
                         seq.setFrame(0);
-                        seq.clear();
                         seq.putSurface(voxels);
 //                        seq = new AnimatedVoxelSeq(seq.seqs[0], 4);
                         break;
