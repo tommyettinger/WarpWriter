@@ -132,7 +132,7 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
         {
             int i = 1;
             for (int j = 0; j < 9; j++) {
-                int v = j * j * 4 - (j >>> 3);
+                int v = 256 - (8-j) * (8-j) * 4 + (-j >> 31);
                 PALETTE[i++] = v << 24 | v << 16 | v << 8 | 0xFF;
             }
             int[] rgb = {0, 0, 0};
@@ -141,26 +141,26 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
                 for (int j = 0; j < 9; j++) {
                     if((j & 1) == 0)
                     {
-                        rgb[sel] = MathUtils.clamp(j * 60, 0, 255);
-                        rgb[o1] = rgb[o2] = MathUtils.clamp(-150 + j * 40, 0, 255);
+                        rgb[sel] = MathUtils.clamp(j * 60 + 50, 0, 255);
+                        rgb[o1] = rgb[o2] = MathUtils.clamp(-100 + j * 40, 0, 240);
                     }
                     else
                     {
-                        rgb[sel] = MathUtils.clamp(j * 48, 0, 255);
-                        rgb[o1] = rgb[o2] = MathUtils.clamp(-24 + j * 36, 0, 255);
+                        rgb[sel] = MathUtils.clamp(j * 44 + 56, 0, 255);
+                        rgb[o1] = rgb[o2] = MathUtils.clamp(-16 + j * 26, 0, 220);
                     }
                     PALETTE[i++] = rgb[0] << 24 | rgb[1] << 16 | rgb[2] << 8 | 0xFF;
                 }
                 for (int j = 0; j < 9; j++) {
-                    if((j & 1) == 0)
+                    if((j & 1) == 1)
                     {
-                        rgb[o1] = rgb[o2] = MathUtils.clamp(j * 60, 0, 255);
-                        rgb[sel] = MathUtils.clamp(-150 + j * 40, 0, 255);
+                        rgb[o1] = rgb[o2] = MathUtils.clamp(j * 56 + 50, 0, 255);
+                        rgb[sel] = MathUtils.clamp(-100 + j * 42, 0, 240);
                     }
                     else
                     {
-                        rgb[o1] = rgb[o2] = MathUtils.clamp(j * 48, 0, 255);
-                        rgb[sel] = MathUtils.clamp(-24 + j * 36, 0, 255);
+                        rgb[o1] = rgb[o2] = MathUtils.clamp(j * 38 + 56, 0, 255);
+                        rgb[sel] = MathUtils.clamp(-16 + j * 32, 0, 220);
                     }
                     PALETTE[i++] = rgb[0] << 24 | rgb[1] << 16 | rgb[2] << 8 | 0xFF;
                 }
