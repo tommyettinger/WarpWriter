@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.FakeLanguageGen;
@@ -56,13 +57,13 @@ public class VoxelDrawSeqMutantTest extends ApplicationAdapter {
     protected MiniMover64RNG rng;
     protected Texture palette;
     protected ShaderProgram shader;
-
+    protected long startTime;
 //    private ChaoticFetch chaos;
 
     @Override
     public void create() {
         shader = new ShaderProgram(ShaderUtils.vertexShader, ShaderUtils.fragmentShader);
-        palette = new Texture(Gdx.files.local("palettes/DB_Aurora_GLSL.png"), Pixmap.Format.RGBA8888, false);
+        palette = new Texture(Gdx.files.local("palettes/Cubicle64Bonus_GLSL.png"), Pixmap.Format.RGBA8888, false);
         palette.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         batch = new MutantBatch(1000);
         batch.setShader(shader);
@@ -82,7 +83,8 @@ public class VoxelDrawSeqMutantTest extends ApplicationAdapter {
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.CW_PALETTE);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.FLESURRECT);
-        colorizer = Colorizer.AuroraColorizer;
+//        colorizer = Colorizer.AuroraColorizer;
+        colorizer = Colorizer.CubicleBonusColorizer;
         renderer = new VoxelImmediateRenderer(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         renderer.color().set(colorizer);
         voxelColor = renderer.color();
@@ -140,6 +142,7 @@ public class VoxelDrawSeqMutantTest extends ApplicationAdapter {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+        startTime = TimeUtils.millis();
 
     }
 
@@ -151,6 +154,9 @@ public class VoxelDrawSeqMutantTest extends ApplicationAdapter {
 
     @Override
     public void render() {
+        int time = (int) TimeUtils.timeSinceMillis(startTime);
+        voxelColor.set(time * 5 >>> 9);
+
 //        model.setFrame((int)(TimeUtils.millis() >>> 7) & 15);
 //        boom.setFrame((int)(TimeUtils.millis() >>> 7) & 15);
 //        if(seq != null) ((ITemporal) seq).setFrame((int)(TimeUtils.millis() * 5 >>> 9));

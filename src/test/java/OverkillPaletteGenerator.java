@@ -90,6 +90,9 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
                 (3.0 - nextDouble() * nextDouble() - nextDouble() * nextDouble() - nextDouble() * nextDouble()));
 
     }
+    private static double difference(double y1, double w1, double m1, double y2, double w2, double m2) {
+        return (y1 - y2) * (y1 - y2) + ((w1 - w2) * (w1 - w2) + (m1 - m2) * (m1 - m2)) * 0.1625;
+    }
     
     public void create() {
 //        int[] PALETTE = {0x00000000, 0xD73700FF, 0xAF92EBFF, 0x00E4DAFF, 0xD78200FF, 0x826B86FF, 0x00BDD4FF, 0xE7C33AFF,
@@ -394,6 +397,129 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 //                        (int) (MathUtils.clamp(color[2], 0.0, 1.0) * 255.5) << 8 | 0xFF;
             }
         }
+        final double THRESHOLD = 0.011; // threshold controls the "stark-ness" of color changes; must not be negative.
+        byte[] paletteMapping = new byte[1 << 16];
+        int[] reverse = new int[PALETTE.length];
+        byte[][] ramps = new byte[PALETTE.length][4];
+        final int yLim = 63, cwLim = 31, cmLim = 31, shift1 = 6, shift2 = 11;
+        for (int i = 1; i < PALETTE.length; i++) {
+            reverse[i] =
+                    (int) ((lumas[i]) * yLim)
+                            | (int) ((warms[i] * 0.5 + 0.5) * cwLim) << shift1
+                            | (int) ((milds[i] * 0.5 + 0.5) * cmLim) << shift2;
+            if(paletteMapping[reverse[i]] != 0)
+                System.out.println("color at index " + i + " overlaps an existing color that has index " + reverse[i] + "!");
+            paletteMapping[reverse[i]] = (byte) i;
+        }
+        double wf, mf, yf;
+        for (int cr = 0; cr <= cmLim; cr++) {
+            wf = (double) cr / cmLim - 0.5;
+            for (int cb = 0; cb <= cwLim; cb++) {
+                mf = (double) cb / cwLim - 0.5;
+                for (int y = 0; y <= yLim; y++) {
+                    final int c2 = cr << shift2 | cb << shift1 | y;
+                    if (paletteMapping[c2] == 0) {
+                        yf = (double) y / yLim;
+                        double dist = Double.POSITIVE_INFINITY;
+                        for (int i = 1; i < PALETTE.length; i++) {
+                            if (Math.abs(lumas[i] - yf) < 0.2f && dist > (dist = Math.min(dist, difference(lumas[i], warms[i], milds[i], yf, wf, mf))))
+                                paletteMapping[c2] = (byte) i;
+                        }
+                    }
+                }
+            }
+        }
+
+        double adj;
+        int idx2;
+        for (int i = 1; i < PALETTE.length; i++) {
+            int rev = reverse[i], y = rev & yLim, match = i;
+            yf = lumas[i];
+            warm = warms[i];
+            mild = milds[i];
+            ramps[i][1] = (byte)i;//Color.rgba8888(DAWNBRINGER_AURORA[i]);
+            ramps[i][0] = 9;//15;  //0xFFFFFFFF, white
+            ramps[i][2] = 1;//0x010101FF, black
+            ramps[i][3] = 1;//0x010101FF, black
+            for (int yy = y + 2, rr = rev + 2; yy <= yLim; yy++, rr++) {
+                if ((idx2 = paletteMapping[rr] & 255) != i && difference(lumas[idx2], warms[idx2], milds[idx2], yf, warm, mild) > THRESHOLD) {
+                    ramps[i][0] = paletteMapping[rr];
+                    break;
+                }
+                adj = 1.0 + ((yLim + 1 >>> 1) - yy) * 0x1p-10;
+                mild = MathUtils.clamp(mild * adj, -0.5, 0.5);
+                warm = MathUtils.clamp(warm * adj + 0x1.8p-10, -0.5, 0.5);
+
+//                cof = (cof + 0.5f) * 0.984375f - 0.5f;
+//                cgf = (cgf - 0.5f) * 0.96875f + 0.5f;
+                rr = yy
+                        | (int) ((warm + 0.5) * cwLim) << shift1
+                        | (int) ((mild + 0.5) * cmLim) << shift2;
+            }
+            warm = warms[i];
+            mild = milds[i];
+            for (int yy = y - 2, rr = rev - 2; yy > 0; rr--) {
+                if ((idx2 = paletteMapping[rr] & 255) != i && difference(lumas[idx2], warms[idx2], milds[idx2], yf, warm, mild) > THRESHOLD) {
+                    ramps[i][2] = paletteMapping[rr];
+                    rev = rr;
+                    y = yy;
+                    match = paletteMapping[rr] & 255;
+                    break;
+                }
+                adj = 1.0 + (yy - (yLim + 1 >>> 1)) * 0x1p-10;
+                mild = MathUtils.clamp(mild * adj, -0.5, 0.5);
+                warm = MathUtils.clamp(warm * adj - 0x1.8p-10, -0.5, 0.5);
+                rr = yy
+                        | (int) ((warm + 0.5) * cwLim) << shift1
+                        | (int) ((mild + 0.5) * cmLim) << shift2;
+
+//                cof = MathUtils.clamp(cof * 0.9375f, -0.5f, 0.5f);
+//                cgf = MathUtils.clamp(cgf * 0.9375f, -0.5f, 0.5f);
+//                rr = yy
+//                        | (int) ((cof + 0.5f) * 63) << 7
+//                        | (int) ((cgf + 0.5f) * 63) << 13;
+                if (--yy == 0) {
+                    match = -1;
+                }
+            }
+            if (match >= 0) {
+                for (int yy = y - 3, rr = rev - 3; yy > 0; yy--, rr--) {
+                    if ((idx2 = paletteMapping[rr] & 255) != match && difference(lumas[idx2], warms[idx2], milds[idx2], yf, warm, mild) > THRESHOLD) {
+                        ramps[i][3] = paletteMapping[rr];
+                        break;
+                    }
+                    adj = 1.0 + (yy - (yLim + 1 >>> 1)) * 0x1p-10;
+                    mild = MathUtils.clamp(mild * adj, -0.5, 0.5);
+                    warm = MathUtils.clamp(warm * adj - 0x1.8p-10, -0.5, 0.5);
+                    rr = yy
+                            | (int) ((warm + 0.5) * cwLim) << shift1
+                            | (int) ((mild + 0.5) * cmLim) << shift2;
+                }
+            }
+        }
+
+        System.out.println("public static final byte[][] CUBICLE64_RAMPS = new byte[][]{");
+        for (int i = 0; i < PALETTE.length; i++) {
+            System.out.println(
+                    "{ " + ramps[i][3]
+                            + ", " + ramps[i][2]
+                            + ", " + ramps[i][1]
+                            + ", " + ramps[i][0] + " },"
+            );
+        }
+        System.out.println("};");
+
+        System.out.println("public static final int[][] CUBICLE64_RAMP_VALUES = new int[][]{");
+        for (int i = 0; i < PALETTE.length; i++) {
+            System.out.println("{ 0x" + StringKit.hex(PALETTE[ramps[i][3] & 255])
+                    + ", 0x" + StringKit.hex(PALETTE[ramps[i][2] & 255])
+                    + ", 0x" + StringKit.hex(PALETTE[ramps[i][1] & 255])
+                    + ", 0x" + StringKit.hex(PALETTE[ramps[i][0] & 255]) + " },"
+            );
+        }
+        System.out.println("};");
+
+
 //        IntVLA base = new IntVLA(256);
 //        base.addAll(PALETTE, 1, PALETTE.length - 1);
 ////        base.addAll(Coloring.AURORA, 1, 255);

@@ -1198,4 +1198,22 @@ public class Coloring {
             0x574ECAFF, 0x140BCBFF, 0x5A2784FF, 0x8354C9FF, 0x9B77E6FF, 0x6A0F6EFF, 0xAF4DC1FF, 0x8113BDFF,
             0xFFC7FFFF, 0xAB337CFF, 0xFF5FFAFF, 0x6F243AFF, 0xE94771FF, 0xD0363EFF, 0xC3A5F4FF, 0x5A00BBFF,
     };
+
+    /**
+     * An interesting and potentially-useful palette that behaves better as part of a Bonus Colorizer. Made by drawing a
+     * straight line from black to white through the grayscale section of an RGB cube, then drawing curved zig-zagging
+     * lines from close-to-black to close-to-white that go through red, green, blue, cyan, magenta, and yellow. The
+     * zig-zag moves every-other color into a desaturated area. The normal way of getting a Bonus Colorizer will (almost
+     * accidentally) add orange/brown where the desaturated yellow or red would be, and tends to have good coverage.
+     */
+    public static final int[] CUBICLE64 = {
+            0x00000000, 0x000000FF, 0x3B3B3BFF, 0x6F6F6FFF, 0x9B9B9BFF, 0xBFBFBFFF, 0xDBDBDBFF, 0xEFEFEFFF,
+            0xFBFBFBFF, 0xFFFFFFFF, 0x320000FF, 0x640A0AFF, 0xAA0000FF, 0xBC3E3EFF, 0xFF3C3CFF, 0xFF7272FF,
+            0xFF8C8CFF, 0xFFA6A6FF, 0xFFDCDCFF, 0x003838FF, 0x006A6AFF, 0x308484FF, 0x1ADADAFF, 0x70D0D0FF,
+            0x6EFFFFFF, 0xB0FFFFFF, 0xC2FFFFFF, 0xDCFFFFFF, 0x003200FF, 0x0A640AFF, 0x00AA00FF, 0x3EBC3EFF,
+            0x3CFF3CFF, 0x72FF72FF, 0x8CFF8CFF, 0xA6FFA6FF, 0xDCFFDCFF, 0x380038FF, 0x6A006AFF, 0x843084FF,
+            0xDA1ADAFF, 0xD070D0FF, 0xFF6EFFFF, 0xFFB0FFFF, 0xFFC2FFFF, 0xFFDCFFFF, 0x000032FF, 0x0A0A64FF,
+            0x0000AAFF, 0x3E3EBCFF, 0x3C3CFFFF, 0x7272FFFF, 0x8C8CFFFF, 0xA6A6FFFF, 0xDCDCFFFF, 0x383800FF,
+            0x6A6A00FF, 0x848430FF, 0xDADA1AFF, 0xD0D070FF, 0xFFFF6EFF, 0xFFFFB0FF, 0xFFFFC2FF, 0xFFFFDCFF,
+    };
 }
