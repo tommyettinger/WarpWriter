@@ -61,6 +61,7 @@ public class ShaderPalettizer extends ApplicationAdapter {
         FileHandle file = Gdx.files.absolute(name);
         if(!file.exists())
             return;
+        if(screenTexture != null) screenTexture.dispose();
         screenTexture = new Texture(file);
         screenTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
     }
@@ -96,17 +97,16 @@ public class ShaderPalettizer extends ApplicationAdapter {
     public void render() {
         Gdx.gl.glClearColor(0.4f, 0.4f, 0.4f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         handleInput();
-        
+        final ShaderProgram sh = batch.getShader();
         batch.setProjectionMatrix(screenView.getCamera().combined);
         if(screenTexture != null) {
-            if(!batch.getShader().equals(defaultShader)) {
-                batch.setPackedColor(-0x1.fffffep126f);
+            if(!sh.equals(defaultShader)) {
+                batch.setPackedColor(-0x1.fffffep126f); // packed white
                 Gdx.gl.glActiveTexture(GL20.GL_TEXTURE1);
                 palette.bind();
                 batch.begin();
-                batch.getShader().setUniformi("u_palette", 1);
+                sh.setUniformi("u_palette", 1);
                 //if(!batch.getShader().equals(defaultShader)) 
                 //{
 //                    shader.setUniformf("u_mul", 0.9f, 0.7f, 0.75f);
@@ -121,8 +121,14 @@ public class ShaderPalettizer extends ApplicationAdapter {
                 Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
             }
             else
+            {
                 batch.begin();
+            }
             batch.draw(screenTexture, 0, 0);
+            batch.setShader(defaultShader);
+            batch.draw(screenTexture, screenTexture.getWidth(), 0);
+            batch.setShader(sh);
+
         }
         else {
             batch.begin();
