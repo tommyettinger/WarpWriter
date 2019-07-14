@@ -598,24 +598,29 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 //        for (int r = 0, rr = 0; r < 29; r++, rr += 0x05000000) {
 //            for (int g = 0, gg = 0; g < 29; g++, gg += 0x050000) {
 //                for (int b = 0, bb = 0; b < 29; b++, bb += 0x0500) {
-        for (int r = 0, rr = 0; r < 29; r++) {
-            rr = r * 9 + (r >>> 3) << 24;
-            for (int g = 0, gg = 0; g < 29; g++) {
-                gg = g * 9 + (g >>> 3) << 16;
-                for (int b = 0, bb = 0; b < 29; b++) {
-                    bb = b * 9 + (b >>> 3) << 8;
+        for (int r = 0, rr = 0; r < 9; r++) {
+            rr = r * 32 - (r >>> 3) << 24;
+            for (int g = 0, gg = 0; g < 9; g++) {
+                gg = g * 32 - (g >>> 3) << 16;
+                for (int b = 0, bb = 0; b < 9; b++) {
+                    bb = b * 32 - (b >>> 3) << 8;
                     base.add(rr | gg | bb | 0xFF);
                 }
             }
         }
         while (base.size > 256) {
-            int ca = 0, cb = 1, cc, idx;
+            System.out.println(base.size);
+            int ca = 0, cb = 1, cc, idx, color1, color2;
+//            int t, d = 0xFFFFFFF;
             double t, d = 0x1p500;
             OUTER:
             for (int i = 0; i < base.size; i++) {
+                color1 = base.get(i);
                 lab1.fromRGBA(base.get(i));
                 for (int j = i + 1; j < base.size; j++) {
+                    color2 = base.get(j);
                     lab2.fromRGBA(base.get(j));
+//                    if ((t = difference(color1, color2)) < d) {
                     if ((t = cielab.CIEDE2000(lab1, lab2)) < d) {
                         d = t;
                         ca = i;
@@ -625,11 +630,11 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
                     }
                 }
             }
-            idx = ca;
-            ca = base.get(ca);
-            cc = base.get(cb);
-            int ra = (ca >>> 24), ga = (ca >>> 16 & 0xFF), ba = (ca >>> 8 & 0xFF),
-                    rb = (cc >>> 24), gb = (cc >>> 16 & 0xFF), bb = (cc >>> 8 & 0xFF);
+            idx = cb;
+            cc = base.get(ca);
+            cb = base.get(cb);
+            int ra = (cc >>> 24), ga = (cc >>> 16 & 0xFF), ba = (cc >>> 8 & 0xFF),
+                    rb = (cb >>> 24), gb = (cb >>> 16 & 0xFF), bb = (cb >>> 8 & 0xFF);
 //                    maxa = Math.max(ra, Math.max(ga, ba)), mina = Math.min(ra, Math.min(ga, ba)),
 //                    maxb = Math.max(rb, Math.max(gb, bb)), minb = Math.min(rb, Math.min(gb, bb));
 //            if (maxa - mina > 100)
@@ -637,7 +642,7 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 //            else if (maxb - minb > 100)
 //                base.set(cb, t);
 //            else
-                base.set(cb,
+                base.set(ca,
                         (ra + rb + 1 << 23 & 0xFF000000)
                                 | (ga + gb + 1 << 15 & 0xFF0000)
                                 | (ba + bb + 1 << 7 & 0xFF00)
