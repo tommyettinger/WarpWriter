@@ -3,6 +3,7 @@
 package org.cie;
 
 import com.badlogic.gdx.graphics.Color;
+import squidpony.squidmath.NumberTools;
 
 public class CIELABConverter {
 
@@ -47,10 +48,33 @@ public class CIELABConverter {
 			x = (x > 0.008856) ? Math.cbrt(x) : (7.787 * x) + 16.0 / 116.0;
 			y = (y > 0.008856) ? Math.cbrt(y) : (7.787 * y) + 16.0 / 116.0;
 			z = (z > 0.008856) ? Math.cbrt(z) : (7.787 * z) + 16.0 / 116.0;
-			
+
 			L = (116.0 * y) - 16.0;
 			A = 500.0 * (x - y);
 			B = 200.0 * (y - z);
+		}
+		public Lab fromRGBA(int rgba)
+		{
+			double r = (rgba >>> 24) / 255.0, g = (rgba >>> 16 & 0xFF) / 255.0, b = (rgba >>> 8 & 0xFF) / 255.0;
+			alpha = (rgba & 0xFF) / 255.0;
+			double x, y, z;
+
+			r = (r > 0.04045) ? Math.pow((r + 0.055) / 1.055, 2.4) : r / 12.92;
+			g = (g > 0.04045) ? Math.pow((g + 0.055) / 1.055, 2.4) : g / 12.92;
+			b = (b > 0.04045) ? Math.pow((b + 0.055) / 1.055, 2.4) : b / 12.92;
+
+			x = (r * 0.4124 + g * 0.3576 + b * 0.1805) / 0.95047;
+			y = (r * 0.2126 + g * 0.7152 + b * 0.0722) / 1.00000;
+			z = (r * 0.0193 + g * 0.1192 + b * 0.9505) / 1.08883;
+
+			x = (x > 0.008856) ? Math.cbrt(x) : (7.787 * x) + 16.0 / 116.0;
+			y = (y > 0.008856) ? Math.cbrt(y) : (7.787 * y) + 16.0 / 116.0;
+			z = (z > 0.008856) ? Math.cbrt(z) : (7.787 * z) + 16.0 / 116.0;
+
+			L = (116.0 * y) - 16.0;
+			A = 500.0 * (x - y);
+			B = 200.0 * (y - z);
+			return this;
 		}
 		public Color toColor(){
 			double y = (L + 16.0) / 116.0;
@@ -71,6 +95,30 @@ public class CIELABConverter {
 			b = (b > 0.0031308) ? (1.055 * Math.pow(b, 1.0 / 2.4) - 0.055) : 12.92 * b;
 
 			return new Color((float)r, (float)g, (float)b, (float)alpha);
+		}
+
+		public int toRGBA(){
+			double y = (L + 16.0) / 116.0;
+			double x = A / 500.0 + y;
+			double z = y - B / 200.0;
+			double r, g, b;
+
+			x = 0.95047 * ((x * x * x > 0.008856) ? x * x * x : (x - 16.0 / 116.0) / 7.787);
+			y = 1.00000 * ((y * y * y > 0.008856) ? y * y * y : (y - 16.0 / 116.0) / 7.787);
+			z = 1.08883 * ((z * z * z > 0.008856) ? z * z * z : (z - 16.0 / 116.0) / 7.787);
+
+			r = x *  3.2406 + y * -1.5372 + z * -0.4986;
+			g = x * -0.9689 + y *  1.8758 + z *  0.0415;
+			b = x *  0.0557 + y * -0.2040 + z *  1.0570;
+
+			r = ((r > 0.0031308) ? (1.055 * Math.pow(r, 1.0 / 2.4) - 0.055) : 12.92 * r) * 255.5;
+			g = ((g > 0.0031308) ? (1.055 * Math.pow(g, 1.0 / 2.4) - 0.055) : 12.92 * g) * 255.5;
+			b = ((b > 0.0031308) ? (1.055 * Math.pow(b, 1.0 / 2.4) - 0.055) : 12.92 * b) * 255.5;
+
+			return  Math.max(0, Math.min(255, (int) r)) << 24 |
+					Math.max(0, Math.min(255, (int) g)) << 16 | 
+					Math.max(0, Math.min(255, (int) b)) << 8 | 
+					Math.max(0, Math.min(255, (int) (alpha * 255.5)));
 		}
 
 	}
@@ -124,11 +172,11 @@ public class CIELABConverter {
 	/*******************************************************************************
 	* Conversions.
 	******************************************************************************/
-
-	private static double deg2Rad(final double deg)
-	{
-		return (deg * (Math.PI / 180.0));
-	}
+	private static final double deg2Rad30  = (0.5235987755982988);
+	private static final double deg2Rad6   = (0.10471975511965978);
+	private static final double deg2Rad25  = (0.4363323129985824);
+	private static final double deg2Rad275 = (4.799655442984406);
+	private static final double deg2Rad63  = (1.0995574287564276);
 
 	static double L_prime_div_k_L_S_L(final Lab lab1, final Lab lab2)
 	{
@@ -169,7 +217,7 @@ public class CIELABConverter {
 		if (Math.abs(lab1.B) < 0x1p-32 && Math.abs(a1Prime) < 0x1p-32)
 			hPrime1 = 0.0;
 		else {
-			hPrime1 = Math.atan2(lab1.B, a1Prime);
+			hPrime1 = NumberTools.atan2(lab1.B, a1Prime);
 			/*
 			* This must be converted to a hue angle in degrees between 0
 			* and 360 by addition of 2pi to negative hue angles.
@@ -181,7 +229,7 @@ public class CIELABConverter {
 		if (Math.abs(lab2.B) < 0x1p-32 && Math.abs(a2Prime) < 0x1p-32)
 			hPrime2 = 0.0;
 		else {
-			hPrime2 = Math.atan2(lab2.B, a2Prime);
+			hPrime2 = NumberTools.atan2(lab2.B, a2Prime);
 			/*
 			* This must be converted to a hue angle in degrees between 0
 			* and 360 by addition of 2pi to negative hue angles.
@@ -200,7 +248,7 @@ public class CIELABConverter {
 				deltahPrime -= deg360InRad;
 		}
 
-		double deltaHPrime = 2.0 * Math.sqrt(CPrimeProduct) * Math.sin(deltahPrime / 2.0);
+		double deltaHPrime = 2.0 * Math.sqrt(CPrimeProduct) * NumberTools.sin(deltahPrime / 2.0);
 		double hPrimeSum = hPrime1 + hPrime2;
 		if (Math.abs(CPrime1 * CPrime2) < 0x1p-32) {
 			barhPrime = hPrimeSum;
@@ -217,10 +265,10 @@ public class CIELABConverter {
 		}
 
 		barCPrime = ((CPrime1 + CPrime2) * 0.5);
-		double T = 1.0 - (0.17 * Math.cos(barhPrime - deg2Rad(30.0))) +
-			(0.24 * Math.cos(2.0 * barhPrime)) +
-			(0.32 * Math.cos((3.0 * barhPrime) + deg2Rad(6.0))) -
-			(0.20 * Math.cos((4.0 * barhPrime) - deg2Rad(63.0)));
+		double T = 1.0 - (0.17 * NumberTools.cos(barhPrime - deg2Rad30)) +
+			(0.24 * NumberTools.cos(2.0 * barhPrime)) +
+			(0.32 * NumberTools.cos((3.0 * barhPrime) + deg2Rad6)) -
+			(0.20 * NumberTools.cos((4.0 * barhPrime) - deg2Rad63));
 		double S_H = 1 + (0.015 * barCPrime * T);
 		return deltaHPrime / (k_H * S_H);
 	}
@@ -228,9 +276,9 @@ public class CIELABConverter {
 	protected double R_T(final double C_prime_div_k_L_S_L, final double H_prime_div_k_L_S_L)
 	{
 		final double pow25To7 = 6103515625.0; /* Math.pow(25, 7) */
-		double deltaTheta = deg2Rad(30.0) * Math.exp(-Math.pow((barhPrime - deg2Rad(275.0)) / deg2Rad(25.0), 2.0));
+		double deltaTheta = deg2Rad30 * Math.exp(-Math.pow((barhPrime - deg2Rad275) / deg2Rad25, 2.0));
 		double R_C = 2.0 * Math.sqrt(Math.pow(barCPrime, 7.0) / (Math.pow(barCPrime, 7.0) + pow25To7));
-		double R_T = (-Math.sin(2.0 * deltaTheta)) * R_C;
+		double R_T = (-NumberTools.sin(2.0 * deltaTheta)) * R_C;
 		return R_T * C_prime_div_k_L_S_L * H_prime_div_k_L_S_L;
 	}
 
@@ -246,9 +294,9 @@ public class CIELABConverter {
 		double deltaH_prime_div_k_L_S_L = H_prime_div_k_L_S_L(lab1, lab2);
 		double deltaR_T = R_T(deltaC_prime_div_k_L_S_L, deltaH_prime_div_k_L_S_L);
 		return
-			Math.pow(deltaL_prime_div_k_L_S_L, 2.0) +
-			Math.pow(deltaC_prime_div_k_L_S_L, 2.0) +
-			Math.pow(deltaH_prime_div_k_L_S_L, 2.0) +
+			deltaL_prime_div_k_L_S_L * deltaL_prime_div_k_L_S_L +
+			deltaC_prime_div_k_L_S_L * deltaC_prime_div_k_L_S_L +
+			deltaH_prime_div_k_L_S_L * deltaH_prime_div_k_L_S_L +
 			deltaR_T;
 	}
 }
