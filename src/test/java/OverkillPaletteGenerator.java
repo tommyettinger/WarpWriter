@@ -499,7 +499,7 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 //            }
 //        }
 //
-//        System.out.println("public static final byte[][] LABRADOR256_RAMPS = new byte[][]{");
+//        System.out.println("public static final byte[][] LAVA256_RAMPS = new byte[][]{");
 //        for (int i = 0; i < PALETTE.length; i++) {
 //            System.out.println(
 //                    "{ " + ramps[i][3]
@@ -510,7 +510,7 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 //        }
 //        System.out.println("};");
 //
-//        System.out.println("public static final int[][] LABRADOR256_RAMP_VALUES = new int[][]{");
+//        System.out.println("public static final int[][] LAVA256_RAMP_VALUES = new int[][]{");
 //        for (int i = 0; i < PALETTE.length; i++) {
 //            System.out.println("{ 0x" + StringKit.hex(PALETTE[ramps[i][3] & 255])
 //                    + ", 0x" + StringKit.hex(PALETTE[ramps[i][2] & 255])
@@ -521,9 +521,6 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 //        System.out.println("};");
 
 
-        CIELABConverter cielab = new CIELABConverter();
-        CIELABConverter.Lab lab1 = new CIELABConverter.Lab(), lab2 = new CIELABConverter.Lab();
-        IntVLA base = new IntVLA(29 * 29 * 29);
 //        IntVLA base = new IntVLA(52 * 52 * 52);
 //        base.addAll(PALETTE, 1, PALETTE.length - 1);
 ////        base.addAll(Coloring.AURORA, 1, 255);
@@ -598,16 +595,45 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 //        for (int r = 0, rr = 0; r < 29; r++, rr += 0x05000000) {
 //            for (int g = 0, gg = 0; g < 29; g++, gg += 0x050000) {
 //                for (int b = 0, bb = 0; b < 29; b++, bb += 0x0500) {
-        for (int r = 0, rr = 0; r < 9; r++) {
-            rr = r * 32 - (r >>> 3) << 24;
-            for (int g = 0, gg = 0; g < 9; g++) {
-                gg = g * 32 - (g >>> 3) << 16;
-                for (int b = 0, bb = 0; b < 9; b++) {
-                    bb = b * 32 - (b >>> 3) << 8;
-                    base.add(rr | gg | bb | 0xFF);
-                }
+        CIELABConverter cielab = new CIELABConverter();
+        CIELABConverter.Lab lab1 = new CIELABConverter.Lab(), lab2 = new CIELABConverter.Lab();
+        IntVLA base = new IntVLA(1000);
+
+
+        for (int i = 20, rr, gg, bb; i < 920; i++) {
+            double denominator = 3.0, resY = 0.0, resZ = 0.0;
+            int n = i;
+            while (n > 0)
+            {
+                resY += (n % 3) / denominator;
+                n /= 3;
+                denominator *= 3.0;
             }
+
+            denominator = 5;
+            n = i;
+            while (n > 0)
+            {
+                resZ += (n % 5) / denominator;
+                n /= 5;
+                denominator *= 5.0;
+            }
+            rr = (int)((Integer.reverse(i) >>> 1) * 0x1p-23);
+            gg = (int)(resY * 256);
+            bb = (int)(resZ * 256);
+            base.add(rr << 24 | gg << 16 | bb << 8 | 0xFF);
+
         }
+//        for (int r = 0, rr = 0; r < 10; r++) {
+//            rr = r * 32 - (r >>> 3) << 24;
+//            for (int g = 0, gg = 0; g < 10; g++) {
+//                gg = g * 32 - (g >>> 3) << 16;
+//                for (int b = 0, bb = 0; b < 10; b++) {
+//                    bb = b * 32 - (b >>> 3) << 8;
+//                    base.add(rr | gg | bb | 0xFF);
+//                }
+//            }
+//        }
         while (base.size > 256) {
             System.out.println(base.size);
             int ca = 0, cb = 1, cc, idx, color1, color2;
@@ -702,14 +728,17 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
         sb.setLength(0);
 
         Pixmap pix = new Pixmap(256, 1, Pixmap.Format.RGBA8888);
-        for (int i = 0; i < PALETTE.length - 1; i++) {
-            pix.drawPixel(i, 0, PALETTE[i + 1]);
+        for (int i = 0; i < PALETTE.length; i++) {
+            pix.drawPixel(i, 0, PALETTE[i]);
         }
+//        for (int i = 0; i < PALETTE.length - 1; i++) {
+//            pix.drawPixel(i, 0, PALETTE[i + 1]);
+//        }
         //pix.drawPixel(255, 0, 0);
         PNG8 png8 = new PNG8();
         png8.palette = new PaletteReducer(PALETTE);
         try {
-            png8.writePrecisely(Gdx.files.local("Labrador256.png"), pix, false);
+            png8.writePrecisely(Gdx.files.local("Lava256.png"), pix, false);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -727,14 +756,14 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
         }
 
         try {
-            png8.writePrecisely(Gdx.files.local("Labrador256_GLSL.png"), p2, false);
+            png8.writePrecisely(Gdx.files.local("Lava256_GLSL.png"), p2, false);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-//        int[][] LABRADOR256_BONUS_RAMP_VALUES = new int[256][4];
+//        int[][] LAVA256_BONUS_RAMP_VALUES = new int[256][4];
 //        for (int i = 1; i < PALETTE.length; i++) {
-//            int color = LABRADOR256_BONUS_RAMP_VALUES[i | 128][2] = LABRADOR256_BONUS_RAMP_VALUES[i][2] =
+//            int color = LAVA256_BONUS_RAMP_VALUES[i | 128][2] = LAVA256_BONUS_RAMP_VALUES[i][2] =
 //                    PALETTE[i];             
 ////            r = (color >>> 24);
 ////            g = (color >>> 16 & 0xFF);
@@ -742,9 +771,9 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 //            luma = lumas[i];
 //            warm = warms[i];
 //            mild = milds[i];
-//            LABRADOR256_BONUS_RAMP_VALUES[i | 64][1] = LABRADOR256_BONUS_RAMP_VALUES[i | 64][2] =
-//                    LABRADOR256_BONUS_RAMP_VALUES[i | 64][3] = color;
-//            LABRADOR256_BONUS_RAMP_VALUES[i | 192][0] = LABRADOR256_BONUS_RAMP_VALUES[i | 192][2] = color;
+//            LAVA256_BONUS_RAMP_VALUES[i | 64][1] = LAVA256_BONUS_RAMP_VALUES[i | 64][2] =
+//                    LAVA256_BONUS_RAMP_VALUES[i | 64][3] = color;
+//            LAVA256_BONUS_RAMP_VALUES[i | 192][0] = LAVA256_BONUS_RAMP_VALUES[i | 192][2] = color;
 ////            int co = r - b, t = b + (co >> 1), cg = g - t, y = t + (cg >> 1),
 ////                    yBright = y * 21 >> 4, yDim = y * 11 >> 4, yDark = y * 6 >> 4, chromO, chromG;
 ////            chromO = (co * 3) >> 2;
@@ -756,43 +785,43 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 //            r = MathUtils.clamp((int) ((luma * 0.83 + warm * 0.6) * 255.5), 0, 255);
 //            g = MathUtils.clamp((int) ((luma * 0.83 + mild * 0.6) * 255.5), 0, 255);
 //            b = MathUtils.clamp((int) ((luma * 0.83 - (warm + mild) * 0.3) * 255.5), 0, 255);
-//            LABRADOR256_BONUS_RAMP_VALUES[i | 192][1] = LABRADOR256_BONUS_RAMP_VALUES[i | 128][1] =
-//                    LABRADOR256_BONUS_RAMP_VALUES[i | 64][0] = LABRADOR256_BONUS_RAMP_VALUES[i][1] =
+//            LAVA256_BONUS_RAMP_VALUES[i | 192][1] = LAVA256_BONUS_RAMP_VALUES[i | 128][1] =
+//                    LAVA256_BONUS_RAMP_VALUES[i | 64][0] = LAVA256_BONUS_RAMP_VALUES[i][1] =
 //                            MathUtils.clamp(r, 0, 255) << 24 |
 //                                    MathUtils.clamp(g, 0, 255) << 16 |
 //                                    MathUtils.clamp(b, 0, 255) << 8 | 0xFF;
 //            r = MathUtils.clamp((int) ((luma * 1.2 + warm * 0.44) * 255.5), 0, 255);
 //            g = MathUtils.clamp((int) ((luma * 1.2 + mild * 0.44) * 255.5), 0, 255);
 //            b = MathUtils.clamp((int) ((luma * 1.2 - (warm + mild) * 0.22) * 255.5), 0, 255);
-//            LABRADOR256_BONUS_RAMP_VALUES[i | 192][3] = LABRADOR256_BONUS_RAMP_VALUES[i | 128][3] =
-//                    LABRADOR256_BONUS_RAMP_VALUES[i][3] =
+//            LAVA256_BONUS_RAMP_VALUES[i | 192][3] = LAVA256_BONUS_RAMP_VALUES[i | 128][3] =
+//                    LAVA256_BONUS_RAMP_VALUES[i][3] =
 //                            MathUtils.clamp(r, 0, 255) << 24 |
 //                                    MathUtils.clamp(g, 0, 255) << 16 |
 //                                    MathUtils.clamp(b, 0, 255) << 8 | 0xFF;
 //            r = MathUtils.clamp((int) ((luma * 0.65 + warm * 0.5) * 255.5), 0, 255);
 //            g = MathUtils.clamp((int) ((luma * 0.65 + mild * 0.5) * 255.5), 0, 255);
 //            b = MathUtils.clamp((int) ((luma * 0.65 - (warm + mild) * 0.25) * 255.5), 0, 255);
-//            LABRADOR256_BONUS_RAMP_VALUES[i | 128][0] = LABRADOR256_BONUS_RAMP_VALUES[i][0] =
+//            LAVA256_BONUS_RAMP_VALUES[i | 128][0] = LAVA256_BONUS_RAMP_VALUES[i][0] =
 //                    MathUtils.clamp(r, 0, 255) << 24 |
 //                            MathUtils.clamp(g, 0, 255) << 16 |
 //                            MathUtils.clamp(b, 0, 255) << 8 | 0xFF;
 //        }
 //        sb.setLength(0);
 //        sb.ensureCapacity(2800);
-//        sb.append("private static final int[][] LABRADOR256_BONUS_RAMP_VALUES = new int[][] {\n");
+//        sb.append("private static final int[][] LAVA256_BONUS_RAMP_VALUES = new int[][] {\n");
 //        for (int i = 0; i < 256; i++) {
 //            sb.append("{ 0x");
-//            StringKit.appendHex(sb, LABRADOR256_BONUS_RAMP_VALUES[i][0]);
-//            StringKit.appendHex(sb.append(", 0x"), LABRADOR256_BONUS_RAMP_VALUES[i][1]);
-//            StringKit.appendHex(sb.append(", 0x"), LABRADOR256_BONUS_RAMP_VALUES[i][2]);
-//            StringKit.appendHex(sb.append(", 0x"), LABRADOR256_BONUS_RAMP_VALUES[i][3]);
+//            StringKit.appendHex(sb, LAVA256_BONUS_RAMP_VALUES[i][0]);
+//            StringKit.appendHex(sb.append(", 0x"), LAVA256_BONUS_RAMP_VALUES[i][1]);
+//            StringKit.appendHex(sb.append(", 0x"), LAVA256_BONUS_RAMP_VALUES[i][2]);
+//            StringKit.appendHex(sb.append(", 0x"), LAVA256_BONUS_RAMP_VALUES[i][3]);
 //            sb.append(" },\n");
 //
 //        }
 //        System.out.println(sb.append("};"));
 //        PALETTE = new int[256];
 //        for (int i = 0; i < 64; i++) {
-//            System.arraycopy(LABRADOR256_BONUS_RAMP_VALUES[i], 0, PALETTE, i << 2, 4);
+//            System.arraycopy(LAVA256_BONUS_RAMP_VALUES[i], 0, PALETTE, i << 2, 4);
 //        }
 //        sb.setLength(0);
 //        sb.ensureCapacity((1 + 12 * 8) * (PALETTE.length >>> 3));
@@ -812,7 +841,7 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 //        //pix.drawPixel(255, 0, 0);
 //        png8.palette = new PaletteReducer(PALETTE);
 //        try {
-//            png8.writePrecisely(Gdx.files.local("Labrador256Bonus.png"), pix, false);
+//            png8.writePrecisely(Gdx.files.local("Lava256Bonus.png"), pix, false);
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
@@ -829,7 +858,7 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 //            }
 //        }
 //        try {
-//            png8.writePrecisely(Gdx.files.local("Labrador256Bonus_GLSL.png"), p2, false);
+//            png8.writePrecisely(Gdx.files.local("Lava256Bonus_GLSL.png"), p2, false);
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
@@ -844,7 +873,7 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 //        }
 //        png8.palette = new PaletteReducer(PALETTE);
 //        try {
-//            png8.writePrecisely(Gdx.files.local("Labrador256BonusMagicaVoxel.png"), pix, false);
+//            png8.writePrecisely(Gdx.files.local("Lava256BonusMagicaVoxel.png"), pix, false);
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
