@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Pixmap;
 import org.cie.CIELABConverter;
 import squidpony.StringKit;
 import squidpony.squidmath.IntVLA;
-import warpwriter.Coloring;
 import warpwriter.PNG8;
 import warpwriter.PaletteReducer;
 
@@ -602,7 +601,7 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
         IntVLA base = new IntVLA(1000);
 
 
-        for (int i = 20, rr, gg, bb; i < 21; i++) {
+        for (int i = 20, rr, gg, bb; i < 920; i++) {
             double denominator = 3.0, resY = 0.0, resZ = 0.0;
             int n = i;
             while (n > 0)
@@ -640,8 +639,8 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 //                }
 //            }
 //        }
-        while (base.size < -1) {
-//        while (base.size > 256) {
+//        while (base.size < -1) {
+        while (base.size > 256) {
             System.out.println(base.size);
             int ca = 0, cb = 1, cc, idx, color1, color2;
 //            int t, d = 0xFFFFFFF;
@@ -694,8 +693,8 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 //
 //        base.insert(0, 0);
 ////        System.arraycopy(grayscale, 0, base.items, 1, grayscale.length);
-        int[] PALETTE = Coloring.AURORA;
-//        int[] PALETTE = base.toArray();
+//        int[] PALETTE = Coloring.AURORA;
+        int[] PALETTE = base.toArray();
 //        
 //        //// used for Uniform216 and SemiUniform256
 //        // used for NonUniform256
@@ -756,7 +755,7 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
         PNG8 png8 = new PNG8();
         png8.palette = new PaletteReducer(PALETTE);
         try {
-            png8.writePrecisely(Gdx.files.local("Aurora.png"), pix, false);
+            png8.writePrecisely(Gdx.files.local("Lava256.png"), pix, false);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -814,7 +813,7 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 //        }
 
         try {
-            png8.writePrecisely(Gdx.files.local("Aurora_GLSL.png"), p2, false);
+            png8.writePrecisely(Gdx.files.local("Lava256_GLSL.png"), p2, false);
         } catch (IOException e) {
             e.printStackTrace();
         }

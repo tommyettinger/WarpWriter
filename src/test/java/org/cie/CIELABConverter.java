@@ -347,8 +347,8 @@ Delta CMC = sqrt( xSL ^ 2 + xSC ^ 2 + xSH ^ 2 )
 	
 	public double delta(final Lab lab1, final Lab lab2)
 	{
-		return (lab1.L - lab2.L) * (lab1.L - lab2.L) * 8.0 +
-				(lab1.A - lab2.A) * (lab1.A - lab2.A) * 2.0 +
+		return (lab1.L - lab2.L) * (lab1.L - lab2.L) * 11.0 +
+				(lab1.A - lab2.A) * (lab1.A - lab2.A) * 1.6 +
 				(lab1.B - lab2.B) * (lab1.B - lab2.B);
 	}
 }
