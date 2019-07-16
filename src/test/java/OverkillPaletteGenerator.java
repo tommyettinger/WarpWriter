@@ -654,7 +654,7 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 //                    color2 = base.get(j);
                     lab2.fromRGBA(base.get(j));
 //                    if ((t = difference(color1, color2)) < d) {
-                    if ((t = cielab.CIEDE2000(lab1, lab2)) < d) {
+                    if ((t = cielab.delta(lab1, lab2)) < d) {
                         d = t;
                         ca = i;
                         cb = j;
@@ -790,7 +790,7 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 						lab1.fromRGBA(rr << 24 | gg << 16 | bb << 8 | 0xFF);
 						for (int i = 1; i < plen; i++) {
 							lab2.fromRGBA(PALETTE[i]);
-							if (dist > (dist = Math.min(dist, cielab.CIEDE2000(lab1, lab2))))
+							if (dist > (dist = Math.min(dist, cielab.delta(lab1, lab2))))
 								paletteMapping[c2] = (byte) i;
 						}
 						p2.drawPixel(r << 5 | b, g, PALETTE[paletteMapping[c2] & 0xFF]);
