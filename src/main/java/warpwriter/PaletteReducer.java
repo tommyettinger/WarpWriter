@@ -486,7 +486,6 @@ public class PaletteReducer {
             if ((color & 0x80) != 0) {
                 paletteArray[i] = color;
                 paletteMapping[(color >>> 17 & 0x7C00) | (color >>> 14 & 0x3E0) | (color >>> 11 & 0x1F)] = (byte) i;
-//                System.out.printf("%03d: %08X\n", i, color);
             }
         }
         int rr, gg, bb;

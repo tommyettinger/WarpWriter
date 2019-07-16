@@ -5,12 +5,13 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Pixmap;
 import org.cie.CIELABConverter;
 import squidpony.StringKit;
-import squidpony.squidmath.DiverRNG;
 import squidpony.squidmath.IntVLA;
+import warpwriter.Coloring;
 import warpwriter.PNG8;
 import warpwriter.PaletteReducer;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * Created by Tommy Ettinger on 1/21/2018.
@@ -500,7 +501,7 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 //            }
 //        }
 //
-//        System.out.println("public static final byte[][] LARVA256_RAMPS = new byte[][]{");
+//        System.out.println("public static final byte[][] AURORA_RAMPS = new byte[][]{");
 //        for (int i = 0; i < PALETTE.length; i++) {
 //            System.out.println(
 //                    "{ " + ramps[i][3]
@@ -511,7 +512,7 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 //        }
 //        System.out.println("};");
 //
-//        System.out.println("public static final int[][] LARVA256_RAMP_VALUES = new int[][]{");
+//        System.out.println("public static final int[][] AURORA_RAMP_VALUES = new int[][]{");
 //        for (int i = 0; i < PALETTE.length; i++) {
 //            System.out.println("{ 0x" + StringKit.hex(PALETTE[ramps[i][3] & 255])
 //                    + ", 0x" + StringKit.hex(PALETTE[ramps[i][2] & 255])
@@ -601,34 +602,33 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
         IntVLA base = new IntVLA(1000);
 
 
-        for (int i = 1, rr, gg, bb; i < 901; i++) {
-//            double denominator = 3.0, resY = 0.0, resZ = 0.0;
-//            int n = i;
-//            while (n > 0)
-//            {
-//                resY += (n % 3) / denominator;
-//                n /= 3;
-//                denominator *= 3.0;
-//            }
-//
-//            denominator = 5;
-//            n = i;
-//            while (n > 0)
-//            {
-//                resZ += (n % 5) / denominator;
-//                n /= 5;
-//                denominator *= 5.0;
-//            }
-//            rr = (int)((Integer.reverse(i) >>> 1) * 0x1p-23);
-//            gg = (int)(resY * 256);
-//            bb = (int)(resZ * 256);
-//            base.add(rr << 24 | gg << 16 | bb << 8 | 0xFF);
+        for (int i = 20, rr, gg, bb; i < 21; i++) {
+            double denominator = 3.0, resY = 0.0, resZ = 0.0;
+            int n = i;
+            while (n > 0)
+            {
+                resY += (n % 3) / denominator;
+                n /= 3;
+                denominator *= 3.0;
+            }
+
+            denominator = 5;
+            n = i;
+            while (n > 0)
+            {
+                resZ += (n % 5) / denominator;
+                n /= 5;
+                denominator *= 5.0;
+            }
+            rr = (int)((Integer.reverse(i) >>> 1) * 0x1p-23);
+            gg = (int)(resY * 256);
+            bb = (int)(resZ * 256);
+            base.add(rr << 24 | gg << 16 | bb << 8 | 0xFF);
             
-            //0xD1B54A32D192ED03L, 0xABC98388FB8FAC03L, 0x8CB92BA72F3D8DD7L
-            rr = (int)(i * 0xD1B54A32D192ED03L >>> 32 & 0xFF000000L);
-            gg = (int)(i * 0xABC98388FB8FAC03L >>> 40 & 0x00FF0000L);
-            bb = (int)(i * 0x8CB92BA72F3D8DD7L >>> 48 & 0x0000FF00L);
-            base.add(rr | gg | bb | 0xFF);
+//            rr = (int)(i * 0xD1B54A32D192ED03L >>> 32 & 0xFF000000L);
+//            gg = (int)(i * 0xABC98388FB8FAC03L >>> 40 & 0x00FF0000L);
+//            bb = (int)(i * 0x8CB92BA72F3D8DD7L >>> 48 & 0x0000FF00L);
+//            base.add(rr | gg | bb | 0xFF);
         }
 //        for (int r = 0, rr = 0; r < 10; r++) {
 //            rr = r * 32 - (r >>> 3) << 24;
@@ -640,7 +640,8 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 //                }
 //            }
 //        }
-        while (base.size > 256) {
+        while (base.size < -1) {
+//        while (base.size > 256) {
             System.out.println(base.size);
             int ca = 0, cb = 1, cc, idx, color1, color2;
 //            int t, d = 0xFFFFFFF;
@@ -662,37 +663,39 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
                     }
                 }
             }
-            idx = cb;
-            cc = base.get(DiverRNG.determine(ca * 0xC13FA9A902A6328FL + cb * 0x91E10DA5C79E7B1DL) < 0L ? ca : cb);
-            int ra = (cc >>> 24), ga = (cc >>> 16 & 0xFF), ba = (cc >>> 8 & 0xFF);
-//                    maxa = Math.max(ra, Math.max(ga, ba)), mina = Math.min(ra, Math.min(ga, ba)),
-//                    maxb = Math.max(rb, Math.max(gb, bb)), minb = Math.min(rb, Math.min(gb, bb));
-//            if (maxa - mina > 100)
-//                base.set(cb, ca);
-//            else if (maxb - minb > 100)
-//                base.set(cb, t);
-//            else
-            base.set(ca,
-                    (ra << 24 & 0xFF000000)
-                            | (ga << 16 & 0xFF0000)
-                            | (ba << 8 & 0xFF00)
-                            | 0xFF);
-
+			idx = cb;
+			cc = base.get(ca);
+			cb = base.get(cb);
+			int ra = (cc >>> 24), ga = (cc >>> 16 & 0xFF), ba = (cc >>> 8 & 0xFF),
+					rb = (cb >>> 24), gb = (cb >>> 16 & 0xFF), bb = (cb >>> 8 & 0xFF);
+			base.set(ca,
+					(ra + rb + 1 << 23 & 0xFF000000)
+							| (ga + gb + 1 << 15 & 0xFF0000)
+							| (ba + bb + 1 << 7 & 0xFF00)
+							| 0xFF);
+			base.removeIndex(idx);
+		}
+        //base.insert(0, 0);
 //            idx = cb;
-//            cc = base.get(ca);
-//            cb = base.get(cb);
-//            int ra = (cc >>> 24), ga = (cc >>> 16 & 0xFF), ba = (cc >>> 8 & 0xFF),
-//                    rb = (cb >>> 24), gb = (cb >>> 16 & 0xFF), bb = (cb >>> 8 & 0xFF);
+//            cc = base.get(DiverRNG.determine(ca * 0xC13FA9A902A6328FL + cb * 0x91E10DA5C79E7B1DL) < 0L ? ca : cb);
+//            int ra = (cc >>> 24), ga = (cc >>> 16 & 0xFF), ba = (cc >>> 8 & 0xFF);
+////                    maxa = Math.max(ra, Math.max(ga, ba)), mina = Math.min(ra, Math.min(ga, ba)),
+////                    maxb = Math.max(rb, Math.max(gb, bb)), minb = Math.min(rb, Math.min(gb, bb));
+////            if (maxa - mina > 100)
+////                base.set(cb, ca);
+////            else if (maxb - minb > 100)
+////                base.set(cb, t);
+////            else
 //            base.set(ca,
-//                    (ra + rb + 1 << 23 & 0xFF000000)
-//                            | (ga + gb + 1 << 15 & 0xFF0000)
-//                            | (ba + bb + 1 << 7 & 0xFF00)
+//                    (ra << 24 & 0xFF000000)
+//                            | (ga << 16 & 0xFF0000)
+//                            | (ba << 8 & 0xFF00)
 //                            | 0xFF);
-            base.removeIndex(idx);
-        }
+//
 //        base.insert(0, 0);
 ////        System.arraycopy(grayscale, 0, base.items, 1, grayscale.length);
-        int[] PALETTE = base.toArray();
+        int[] PALETTE = Coloring.AURORA;
+//        int[] PALETTE = base.toArray();
 //        
 //        //// used for Uniform216 and SemiUniform256
 //        // used for NonUniform256
@@ -753,32 +756,72 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
         PNG8 png8 = new PNG8();
         png8.palette = new PaletteReducer(PALETTE);
         try {
-            png8.writePrecisely(Gdx.files.local("Larva256.png"), pix, false);
+            png8.writePrecisely(Gdx.files.local("Aurora.png"), pix, false);
         } catch (IOException e) {
             e.printStackTrace();
         }
+		Pixmap p2 = new Pixmap(1024, 32, Pixmap.Format.RGBA8888);
+        
+        byte[] paletteMapping = new byte[0x8000];
+		Arrays.fill(paletteMapping, (byte) 0);
+		final int plen = Math.min(256, PALETTE.length);
+		int color, c2;
+		double dist;
+//		int dist;
+		for (int i = 0; i < plen; i++) {
+			color = PALETTE[i];
+			if ((color & 0x80) != 0) {
+				paletteMapping[(color >>> 17 & 0x7C00) | (color >>> 14 & 0x3E0) | (color >>> 11 & 0x1F)] = (byte) i;
+				p2.drawPixel((color >>> 22 & 0x3E0) | (color >>> 11 & 0x1F), color >>> 19 & 0x1F, color);
 
-        Pixmap p2 = new Pixmap(1024, 32, Pixmap.Format.RGBA8888);
-        for (int red = 0; red < 32; red++) {
-            for (int blu = 0; blu < 32; blu++) {
-                for (int gre = 0; gre < 32; gre++) {
-                    p2.drawPixel(red << 5 | blu, gre, PALETTE[png8.palette.paletteMapping[
-                            ((red << 10) & 0x7C00)
-                                    | ((gre << 5) & 0x3E0)
-                                    | blu] & 0xFF]);
-                }
-            }
-        }
+			}
+		}
+		int rr, gg, bb, idx = 0;
+		for (int r = 0; r < 32; r++) {
+			rr = (r << 3 | r >>> 2);
+			for (int g = 0; g < 32; g++) {
+				gg = (g << 3 | g >>> 2);
+				for (int b = 0; b < 32; b++) {
+					c2 = r << 10 | g << 5 | b;
+					if (paletteMapping[c2] == 0) {
+						bb = (b << 3 | b >>> 2);
+						dist = 0x1p500;
+//						dist = 0x7FFFFFFF;
+						lab1.fromRGBA(rr << 24 | gg << 16 | bb << 8 | 0xFF);
+						for (int i = 1; i < plen; i++) {
+							lab2.fromRGBA(PALETTE[i]);
+							if (dist > (dist = Math.min(dist, cielab.CIEDE2000(lab1, lab2))))
+								paletteMapping[c2] = (byte) i;
+						}
+						p2.drawPixel(r << 5 | b, g, PALETTE[paletteMapping[c2] & 0xFF]);
+						System.out.println("Finished " + ++idx + " colors.");
+					}
+				}
+			}
+		}
+
+
+//		Pixmap p2 = new Pixmap(1024, 32, Pixmap.Format.RGBA8888);
+//        for (int red = 0; red < 32; red++) {
+//            for (int blu = 0; blu < 32; blu++) {
+//                for (int gre = 0; gre < 32; gre++) {
+//                    p2.drawPixel(red << 5 | blu, gre, PALETTE[png8.palette.paletteMapping[
+//                            ((red << 10) & 0x7C00)
+//                                    | ((gre << 5) & 0x3E0)
+//                                    | blu] & 0xFF]);
+//                }
+//            }
+//        }
 
         try {
-            png8.writePrecisely(Gdx.files.local("Larva256_GLSL.png"), p2, false);
+            png8.writePrecisely(Gdx.files.local("Aurora_GLSL.png"), p2, false);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-//        int[][] LARVA256_BONUS_RAMP_VALUES = new int[256][4];
+//        int[][] AURORA_BONUS_RAMP_VALUES = new int[256][4];
 //        for (int i = 1; i < PALETTE.length; i++) {
-//            int color = LARVA256_BONUS_RAMP_VALUES[i | 128][2] = LARVA256_BONUS_RAMP_VALUES[i][2] =
+//            int color = AURORA_BONUS_RAMP_VALUES[i | 128][2] = AURORA_BONUS_RAMP_VALUES[i][2] =
 //                    PALETTE[i];             
 ////            r = (color >>> 24);
 ////            g = (color >>> 16 & 0xFF);
@@ -786,9 +829,9 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 //            luma = lumas[i];
 //            warm = warms[i];
 //            mild = milds[i];
-//            LARVA256_BONUS_RAMP_VALUES[i | 64][1] = LARVA256_BONUS_RAMP_VALUES[i | 64][2] =
-//                    LARVA256_BONUS_RAMP_VALUES[i | 64][3] = color;
-//            LARVA256_BONUS_RAMP_VALUES[i | 192][0] = LARVA256_BONUS_RAMP_VALUES[i | 192][2] = color;
+//            AURORA_BONUS_RAMP_VALUES[i | 64][1] = AURORA_BONUS_RAMP_VALUES[i | 64][2] =
+//                    AURORA_BONUS_RAMP_VALUES[i | 64][3] = color;
+//            AURORA_BONUS_RAMP_VALUES[i | 192][0] = AURORA_BONUS_RAMP_VALUES[i | 192][2] = color;
 ////            int co = r - b, t = b + (co >> 1), cg = g - t, y = t + (cg >> 1),
 ////                    yBright = y * 21 >> 4, yDim = y * 11 >> 4, yDark = y * 6 >> 4, chromO, chromG;
 ////            chromO = (co * 3) >> 2;
@@ -800,43 +843,43 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 //            r = MathUtils.clamp((int) ((luma * 0.83 + warm * 0.6) * 255.5), 0, 255);
 //            g = MathUtils.clamp((int) ((luma * 0.83 + mild * 0.6) * 255.5), 0, 255);
 //            b = MathUtils.clamp((int) ((luma * 0.83 - (warm + mild) * 0.3) * 255.5), 0, 255);
-//            LARVA256_BONUS_RAMP_VALUES[i | 192][1] = LARVA256_BONUS_RAMP_VALUES[i | 128][1] =
-//                    LARVA256_BONUS_RAMP_VALUES[i | 64][0] = LARVA256_BONUS_RAMP_VALUES[i][1] =
+//            AURORA_BONUS_RAMP_VALUES[i | 192][1] = AURORA_BONUS_RAMP_VALUES[i | 128][1] =
+//                    AURORA_BONUS_RAMP_VALUES[i | 64][0] = AURORA_BONUS_RAMP_VALUES[i][1] =
 //                            MathUtils.clamp(r, 0, 255) << 24 |
 //                                    MathUtils.clamp(g, 0, 255) << 16 |
 //                                    MathUtils.clamp(b, 0, 255) << 8 | 0xFF;
 //            r = MathUtils.clamp((int) ((luma * 1.2 + warm * 0.44) * 255.5), 0, 255);
 //            g = MathUtils.clamp((int) ((luma * 1.2 + mild * 0.44) * 255.5), 0, 255);
 //            b = MathUtils.clamp((int) ((luma * 1.2 - (warm + mild) * 0.22) * 255.5), 0, 255);
-//            LARVA256_BONUS_RAMP_VALUES[i | 192][3] = LARVA256_BONUS_RAMP_VALUES[i | 128][3] =
-//                    LARVA256_BONUS_RAMP_VALUES[i][3] =
+//            AURORA_BONUS_RAMP_VALUES[i | 192][3] = AURORA_BONUS_RAMP_VALUES[i | 128][3] =
+//                    AURORA_BONUS_RAMP_VALUES[i][3] =
 //                            MathUtils.clamp(r, 0, 255) << 24 |
 //                                    MathUtils.clamp(g, 0, 255) << 16 |
 //                                    MathUtils.clamp(b, 0, 255) << 8 | 0xFF;
 //            r = MathUtils.clamp((int) ((luma * 0.65 + warm * 0.5) * 255.5), 0, 255);
 //            g = MathUtils.clamp((int) ((luma * 0.65 + mild * 0.5) * 255.5), 0, 255);
 //            b = MathUtils.clamp((int) ((luma * 0.65 - (warm + mild) * 0.25) * 255.5), 0, 255);
-//            LARVA256_BONUS_RAMP_VALUES[i | 128][0] = LARVA256_BONUS_RAMP_VALUES[i][0] =
+//            AURORA_BONUS_RAMP_VALUES[i | 128][0] = AURORA_BONUS_RAMP_VALUES[i][0] =
 //                    MathUtils.clamp(r, 0, 255) << 24 |
 //                            MathUtils.clamp(g, 0, 255) << 16 |
 //                            MathUtils.clamp(b, 0, 255) << 8 | 0xFF;
 //        }
 //        sb.setLength(0);
 //        sb.ensureCapacity(2800);
-//        sb.append("private static final int[][] LARVA256_BONUS_RAMP_VALUES = new int[][] {\n");
+//        sb.append("private static final int[][] AURORA_BONUS_RAMP_VALUES = new int[][] {\n");
 //        for (int i = 0; i < 256; i++) {
 //            sb.append("{ 0x");
-//            StringKit.appendHex(sb, LARVA256_BONUS_RAMP_VALUES[i][0]);
-//            StringKit.appendHex(sb.append(", 0x"), LARVA256_BONUS_RAMP_VALUES[i][1]);
-//            StringKit.appendHex(sb.append(", 0x"), LARVA256_BONUS_RAMP_VALUES[i][2]);
-//            StringKit.appendHex(sb.append(", 0x"), LARVA256_BONUS_RAMP_VALUES[i][3]);
+//            StringKit.appendHex(sb, AURORA_BONUS_RAMP_VALUES[i][0]);
+//            StringKit.appendHex(sb.append(", 0x"), AURORA_BONUS_RAMP_VALUES[i][1]);
+//            StringKit.appendHex(sb.append(", 0x"), AURORA_BONUS_RAMP_VALUES[i][2]);
+//            StringKit.appendHex(sb.append(", 0x"), AURORA_BONUS_RAMP_VALUES[i][3]);
 //            sb.append(" },\n");
 //
 //        }
 //        System.out.println(sb.append("};"));
 //        PALETTE = new int[256];
 //        for (int i = 0; i < 64; i++) {
-//            System.arraycopy(LARVA256_BONUS_RAMP_VALUES[i], 0, PALETTE, i << 2, 4);
+//            System.arraycopy(AURORA_BONUS_RAMP_VALUES[i], 0, PALETTE, i << 2, 4);
 //        }
 //        sb.setLength(0);
 //        sb.ensureCapacity((1 + 12 * 8) * (PALETTE.length >>> 3));
@@ -856,7 +899,7 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 //        //pix.drawPixel(255, 0, 0);
 //        png8.palette = new PaletteReducer(PALETTE);
 //        try {
-//            png8.writePrecisely(Gdx.files.local("Larva256Bonus.png"), pix, false);
+//            png8.writePrecisely(Gdx.files.local("AuroraBonus.png"), pix, false);
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
@@ -873,7 +916,7 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 //            }
 //        }
 //        try {
-//            png8.writePrecisely(Gdx.files.local("Larva256Bonus_GLSL.png"), p2, false);
+//            png8.writePrecisely(Gdx.files.local("AuroraBonus_GLSL.png"), p2, false);
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
@@ -888,7 +931,7 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 //        }
 //        png8.palette = new PaletteReducer(PALETTE);
 //        try {
-//            png8.writePrecisely(Gdx.files.local("Larva256BonusMagicaVoxel.png"), pix, false);
+//            png8.writePrecisely(Gdx.files.local("AuroraBonusMagicaVoxel.png"), pix, false);
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
