@@ -3,14 +3,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Pixmap;
-import org.cie.CIELABConverter;
 import squidpony.StringKit;
-import squidpony.squidmath.IntVLA;
+import warpwriter.Coloring;
 import warpwriter.PNG8;
 import warpwriter.PaletteReducer;
 
 import java.io.IOException;
-import java.util.Arrays;
+
+import static warpwriter.PaletteReducer.labMetric;
 
 /**
  * Created by Tommy Ettinger on 1/21/2018.
@@ -97,6 +97,8 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
     }
     
     public void create() {
+        int[] PALETTE = Coloring.AURORA;
+
 //        int[] PALETTE = {0x00000000, 0xD73700FF, 0xAF92EBFF, 0x00E4DAFF, 0xD78200FF, 0x826B86FF, 0x00BDD4FF, 0xE7C33AFF,
 //                0xAE8DA4FF, 0x0091DDFF, 0x9FA620FF, 0xFFA2D5FF, 0x00BCFFFF, 0x5A7D21FF, 0xFF6693FF, 0x00E0FFFF,
 //                0x879E80FF, 0xD4324AFF, 0x00A7FFFF, 0xAECEB7FF, 0xFF4A34FF, 0x0071DEFF, 0x0DB28AFF, 0xFF8400FF,
@@ -596,84 +598,84 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 //        for (int r = 0, rr = 0; r < 29; r++, rr += 0x05000000) {
 //            for (int g = 0, gg = 0; g < 29; g++, gg += 0x050000) {
 //                for (int b = 0, bb = 0; b < 29; b++, bb += 0x0500) {
-        CIELABConverter cielab = new CIELABConverter();
-        CIELABConverter.Lab lab1 = new CIELABConverter.Lab(), lab2 = new CIELABConverter.Lab();
-        IntVLA base = new IntVLA(1000);
 
 
-        for (int i = 20, rr, gg, bb; i < 920; i++) {
-            double denominator = 3.0, resY = 0.0, resZ = 0.0;
-            int n = i;
-            while (n > 0)
-            {
-                resY += (n % 3) / denominator;
-                n /= 3;
-                denominator *= 3.0;
-            }
-
-            denominator = 5;
-            n = i;
-            while (n > 0)
-            {
-                resZ += (n % 5) / denominator;
-                n /= 5;
-                denominator *= 5.0;
-            }
-            rr = (int)((Integer.reverse(i) >>> 1) * 0x1p-23);
-            gg = (int)(resY * 256);
-            bb = (int)(resZ * 256);
-            base.add(rr << 24 | gg << 16 | bb << 8 | 0xFF);
-            
-//            rr = (int)(i * 0xD1B54A32D192ED03L >>> 32 & 0xFF000000L);
-//            gg = (int)(i * 0xABC98388FB8FAC03L >>> 40 & 0x00FF0000L);
-//            bb = (int)(i * 0x8CB92BA72F3D8DD7L >>> 48 & 0x0000FF00L);
-//            base.add(rr | gg | bb | 0xFF);
-        }
-//        for (int r = 0, rr = 0; r < 10; r++) {
-//            rr = r * 32 - (r >>> 3) << 24;
-//            for (int g = 0, gg = 0; g < 10; g++) {
-//                gg = g * 32 - (g >>> 3) << 16;
-//                for (int b = 0, bb = 0; b < 10; b++) {
-//                    bb = b * 32 - (b >>> 3) << 8;
-//                    base.add(rr | gg | bb | 0xFF);
+//        IntVLA base = new IntVLA(1000);
+//
+//
+//        for (int i = 20, rr, gg, bb; i < 920; i++) {
+//            double denominator = 3.0, resY = 0.0, resZ = 0.0;
+//            int n = i;
+//            while (n > 0)
+//            {
+//                resY += (n % 3) / denominator;
+//                n /= 3;
+//                denominator *= 3.0;
+//            }
+//
+//            denominator = 5;
+//            n = i;
+//            while (n > 0)
+//            {
+//                resZ += (n % 5) / denominator;
+//                n /= 5;
+//                denominator *= 5.0;
+//            }
+//            rr = (int)((Integer.reverse(i) >>> 1) * 0x1p-23);
+//            gg = (int)(resY * 256);
+//            bb = (int)(resZ * 256);
+//            base.add(rr << 24 | gg << 16 | bb << 8 | 0xFF);
+//            
+////            rr = (int)(i * 0xD1B54A32D192ED03L >>> 32 & 0xFF000000L);
+////            gg = (int)(i * 0xABC98388FB8FAC03L >>> 40 & 0x00FF0000L);
+////            bb = (int)(i * 0x8CB92BA72F3D8DD7L >>> 48 & 0x0000FF00L);
+////            base.add(rr | gg | bb | 0xFF);
+//        }
+////        for (int r = 0, rr = 0; r < 10; r++) {
+////            rr = r * 32 - (r >>> 3) << 24;
+////            for (int g = 0, gg = 0; g < 10; g++) {
+////                gg = g * 32 - (g >>> 3) << 16;
+////                for (int b = 0, bb = 0; b < 10; b++) {
+////                    bb = b * 32 - (b >>> 3) << 8;
+////                    base.add(rr | gg | bb | 0xFF);
+////                }
+////            }
+////        }
+////        while (base.size < -1) {
+//        while (base.size > 256) {
+//            System.out.println(base.size);
+//            int ca = 0, cb = 1, cc, idx, color1, color2;
+////            int t, d = 0xFFFFFFF;
+//            double t, d = 0x1p500;
+//            OUTER:
+//            for (int i = 0; i < base.size; i++) {
+//                color1 = base.get(i);
+////                lab1.fromRGBA(base.get(i));
+//                for (int j = i + 1; j < base.size; j++) {
+//                    color2 = base.get(j);
+////                    lab2.fromRGBA(base.get(j));
+////                    if ((t = difference(color1, color2)) < d) {
+//                    if ((t = labMetric.difference(color1, color2)) < d) {
+//                        d = t;
+//                        ca = i;
+//                        cb = j;
+//                        if(d <= 0)
+//                            break OUTER;
+//                    }
 //                }
 //            }
-//        }
-//        while (base.size < -1) {
-        while (base.size > 256) {
-            System.out.println(base.size);
-            int ca = 0, cb = 1, cc, idx, color1, color2;
-//            int t, d = 0xFFFFFFF;
-            double t, d = 0x1p500;
-            OUTER:
-            for (int i = 0; i < base.size; i++) {
-//                color1 = base.get(i);
-                lab1.fromRGBA(base.get(i));
-                for (int j = i + 1; j < base.size; j++) {
-//                    color2 = base.get(j);
-                    lab2.fromRGBA(base.get(j));
-//                    if ((t = difference(color1, color2)) < d) {
-                    if ((t = cielab.delta(lab1, lab2)) < d) {
-                        d = t;
-                        ca = i;
-                        cb = j;
-                        if(d <= 0)
-                            break OUTER;
-                    }
-                }
-            }
-			idx = cb;
-			cc = base.get(ca);
-			cb = base.get(cb);
-			int ra = (cc >>> 24), ga = (cc >>> 16 & 0xFF), ba = (cc >>> 8 & 0xFF),
-					rb = (cb >>> 24), gb = (cb >>> 16 & 0xFF), bb = (cb >>> 8 & 0xFF);
-			base.set(ca,
-					(ra + rb + 1 << 23 & 0xFF000000)
-							| (ga + gb + 1 << 15 & 0xFF0000)
-							| (ba + bb + 1 << 7 & 0xFF00)
-							| 0xFF);
-			base.removeIndex(idx);
-		}
+//			idx = cb;
+//			cc = base.get(ca);
+//			cb = base.get(cb);
+//			int ra = (cc >>> 24), ga = (cc >>> 16 & 0xFF), ba = (cc >>> 8 & 0xFF),
+//					rb = (cb >>> 24), gb = (cb >>> 16 & 0xFF), bb = (cb >>> 8 & 0xFF);
+//			base.set(ca,
+//					(ra + rb + 1 << 23 & 0xFF000000)
+//							| (ga + gb + 1 << 15 & 0xFF0000)
+//							| (ba + bb + 1 << 7 & 0xFF00)
+//							| 0xFF);
+//			base.removeIndex(idx);
+//		}
         //base.insert(0, 0);
 //            idx = cb;
 //            cc = base.get(DiverRNG.determine(ca * 0xC13FA9A902A6328FL + cb * 0x91E10DA5C79E7B1DL) < 0L ? ca : cb);
@@ -693,8 +695,7 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 //
 //        base.insert(0, 0);
 ////        System.arraycopy(grayscale, 0, base.items, 1, grayscale.length);
-//        int[] PALETTE = Coloring.AURORA;
-        int[] PALETTE = base.toArray();
+//        int[] PALETTE = base.toArray();
 //        
 //        //// used for Uniform216 and SemiUniform256
 //        // used for NonUniform256
@@ -745,75 +746,75 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
         sb.setLength(0);
 
         Pixmap pix = new Pixmap(256, 1, Pixmap.Format.RGBA8888);
-        for (int i = 0; i < PALETTE.length; i++) {
-            pix.drawPixel(i, 0, PALETTE[i]);
-        }
-//        for (int i = 0; i < PALETTE.length - 1; i++) {
-//            pix.drawPixel(i, 0, PALETTE[i + 1]);
+//        for (int i = 0; i < PALETTE.length; i++) {
+//            pix.drawPixel(i, 0, PALETTE[i]);
 //        }
+        for (int i = 0; i < PALETTE.length - 1; i++) {
+            pix.drawPixel(i, 0, PALETTE[i + 1]);
+        }
         //pix.drawPixel(255, 0, 0);
         PNG8 png8 = new PNG8();
-        png8.palette = new PaletteReducer(PALETTE);
+        png8.palette = new PaletteReducer(PALETTE, labMetric);
         try {
-            png8.writePrecisely(Gdx.files.local("Lava256.png"), pix, false);
+            png8.writePrecisely(Gdx.files.local("Aurora256.png"), pix, false);
         } catch (IOException e) {
             e.printStackTrace();
         }
-		Pixmap p2 = new Pixmap(1024, 32, Pixmap.Format.RGBA8888);
-        
-        byte[] paletteMapping = new byte[0x8000];
-		Arrays.fill(paletteMapping, (byte) 0);
-		final int plen = Math.min(256, PALETTE.length);
-		int color, c2;
-		double dist;
-//		int dist;
-		for (int i = 0; i < plen; i++) {
-			color = PALETTE[i];
-			if ((color & 0x80) != 0) {
-				paletteMapping[(color >>> 17 & 0x7C00) | (color >>> 14 & 0x3E0) | (color >>> 11 & 0x1F)] = (byte) i;
-				p2.drawPixel((color >>> 22 & 0x3E0) | (color >>> 11 & 0x1F), color >>> 19 & 0x1F, color);
-
-			}
-		}
-		int rr, gg, bb, idx = 0;
-		for (int r = 0; r < 32; r++) {
-			rr = (r << 3 | r >>> 2);
-			for (int g = 0; g < 32; g++) {
-				gg = (g << 3 | g >>> 2);
-				for (int b = 0; b < 32; b++) {
-					c2 = r << 10 | g << 5 | b;
-					if (paletteMapping[c2] == 0) {
-						bb = (b << 3 | b >>> 2);
-						dist = 0x1p500;
-//						dist = 0x7FFFFFFF;
-						lab1.fromRGBA(rr << 24 | gg << 16 | bb << 8 | 0xFF);
-						for (int i = 1; i < plen; i++) {
-							lab2.fromRGBA(PALETTE[i]);
-							if (dist > (dist = Math.min(dist, cielab.delta(lab1, lab2))))
-								paletteMapping[c2] = (byte) i;
-						}
-						p2.drawPixel(r << 5 | b, g, PALETTE[paletteMapping[c2] & 0xFF]);
-						System.out.println("Finished " + ++idx + " colors.");
-					}
-				}
-			}
-		}
-
-
 //		Pixmap p2 = new Pixmap(1024, 32, Pixmap.Format.RGBA8888);
-//        for (int red = 0; red < 32; red++) {
-//            for (int blu = 0; blu < 32; blu++) {
-//                for (int gre = 0; gre < 32; gre++) {
-//                    p2.drawPixel(red << 5 | blu, gre, PALETTE[png8.palette.paletteMapping[
-//                            ((red << 10) & 0x7C00)
-//                                    | ((gre << 5) & 0x3E0)
-//                                    | blu] & 0xFF]);
-//                }
-//            }
-//        }
+//        
+//        byte[] paletteMapping = new byte[0x8000];
+//		Arrays.fill(paletteMapping, (byte) 0);
+//		final int plen = Math.min(256, PALETTE.length);
+//		int color, c2;
+//		double dist;
+////		int dist;
+//		for (int i = 0; i < plen; i++) {
+//			color = PALETTE[i];
+//			if ((color & 0x80) != 0) {
+//				paletteMapping[(color >>> 17 & 0x7C00) | (color >>> 14 & 0x3E0) | (color >>> 11 & 0x1F)] = (byte) i;
+//				p2.drawPixel((color >>> 22 & 0x3E0) | (color >>> 11 & 0x1F), color >>> 19 & 0x1F, color);
+//
+//			}
+//		}
+//		int rr, gg, bb, idx = 0;
+//		for (int r = 0; r < 32; r++) {
+//			rr = (r << 3 | r >>> 2);
+//			for (int g = 0; g < 32; g++) {
+//				gg = (g << 3 | g >>> 2);
+//				for (int b = 0; b < 32; b++) {
+//					c2 = r << 10 | g << 5 | b;
+//					if (paletteMapping[c2] == 0) {
+//						bb = (b << 3 | b >>> 2);
+//						dist = 0x1p500;
+////						dist = 0x7FFFFFFF;
+//						lab1.fromRGBA(rr << 24 | gg << 16 | bb << 8 | 0xFF);
+//						for (int i = 1; i < plen; i++) {
+//							lab2.fromRGBA(PALETTE[i]);
+//							if (dist > (dist = Math.min(dist, cielab.delta(lab1, lab2))))
+//								paletteMapping[c2] = (byte) i;
+//						}
+//						p2.drawPixel(r << 5 | b, g, PALETTE[paletteMapping[c2] & 0xFF]);
+//						System.out.println("Finished " + ++idx + " colors.");
+//					}
+//				}
+//			}
+//		}
+
+
+		Pixmap p2 = new Pixmap(1024, 32, Pixmap.Format.RGBA8888);
+        for (int red = 0; red < 32; red++) {
+            for (int blu = 0; blu < 32; blu++) {
+                for (int gre = 0; gre < 32; gre++) {
+                    p2.drawPixel(red << 5 | blu, gre, PALETTE[png8.palette.paletteMapping[
+                            ((red << 10) & 0x7C00)
+                                    | ((gre << 5) & 0x3E0)
+                                    | blu] & 0xFF]);
+                }
+            }
+        }
 
         try {
-            png8.writePrecisely(Gdx.files.local("Lava256_GLSL.png"), p2, false);
+            png8.writePrecisely(Gdx.files.local("Aurora256_GLSL.png"), p2, false);
         } catch (IOException e) {
             e.printStackTrace();
         }
