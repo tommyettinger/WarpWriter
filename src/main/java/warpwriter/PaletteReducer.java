@@ -152,7 +152,7 @@ public class PaletteReducer {
             A -= 500.0 * (x - y);
             B -= 200.0 * (y - z);
 
-            return L * L * 175.0 + A * A * 25.0 + B * B * 16.0;
+            return L * L * 190.0 + A * A * 25.0 + B * B * 10.0;
         }
         @Override
         public double difference(final int rgba1, final int r2, final int g2, final int b2)
@@ -200,7 +200,7 @@ public class PaletteReducer {
             A -= 500.0 * (x - y);
             B -= 200.0 * (y - z);
 
-            return L * L * 175.0 + A * A * 25.0 + B * B * 16.0;
+            return L * L * 190.0 + A * A * 25.0 + B * B * 10.0;
         }
         @Override
         public double difference(final int r1, final int g1, final int b1, final int r2, final int g2, final int b2) {
@@ -246,7 +246,7 @@ public class PaletteReducer {
             A -= 500.0 * (x - y);
             B -= 200.0 * (y - z);
 
-            return L * L * 175.0 + A * A * 25.0 + B * B * 16.0;
+            return L * L * 190.0 + A * A * 25.0 + B * B * 10.0;
         }
 
     }

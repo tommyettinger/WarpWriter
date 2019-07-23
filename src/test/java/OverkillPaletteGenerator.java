@@ -4,6 +4,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Pixmap;
 import squidpony.StringKit;
+import squidpony.squidmath.IntVLA;
 import warpwriter.Coloring;
 import warpwriter.PNG8;
 import warpwriter.PaletteReducer;
@@ -97,7 +98,7 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
     }
     
     public void create() {
-        int[] PALETTE = Coloring.AURORA;
+//        int[] PALETTE = Coloring.AURORA;
 
 //        int[] PALETTE = {0x00000000, 0xD73700FF, 0xAF92EBFF, 0x00E4DAFF, 0xD78200FF, 0x826B86FF, 0x00BDD4FF, 0xE7C33AFF,
 //                0xAE8DA4FF, 0x0091DDFF, 0x9FA620FF, 0xFFA2D5FF, 0x00BCFFFF, 0x5A7D21FF, 0xFF6693FF, 0x00E0FFFF,
@@ -600,10 +601,10 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 //                for (int b = 0, bb = 0; b < 29; b++, bb += 0x0500) {
 
 
-//        IntVLA base = new IntVLA(1000);
-//
-//
-//        for (int i = 20, rr, gg, bb; i < 920; i++) {
+        IntVLA base = new IntVLA(1000);
+
+
+        for (int i = 20, rr, gg, bb; i < 920; i++) {
 //            double denominator = 3.0, resY = 0.0, resZ = 0.0;
 //            int n = i;
 //            while (n > 0)
@@ -624,58 +625,70 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 //            rr = (int)((Integer.reverse(i) >>> 1) * 0x1p-23);
 //            gg = (int)(resY * 256);
 //            bb = (int)(resZ * 256);
-//            base.add(rr << 24 | gg << 16 | bb << 8 | 0xFF);
-//            
-////            rr = (int)(i * 0xD1B54A32D192ED03L >>> 32 & 0xFF000000L);
-////            gg = (int)(i * 0xABC98388FB8FAC03L >>> 40 & 0x00FF0000L);
-////            bb = (int)(i * 0x8CB92BA72F3D8DD7L >>> 48 & 0x0000FF00L);
-////            base.add(rr | gg | bb | 0xFF);
-//        }
-////        for (int r = 0, rr = 0; r < 10; r++) {
-////            rr = r * 32 - (r >>> 3) << 24;
-////            for (int g = 0, gg = 0; g < 10; g++) {
-////                gg = g * 32 - (g >>> 3) << 16;
-////                for (int b = 0, bb = 0; b < 10; b++) {
-////                    bb = b * 32 - (b >>> 3) << 8;
-////                    base.add(rr | gg | bb | 0xFF);
-////                }
-////            }
-////        }
-////        while (base.size < -1) {
-//        while (base.size > 256) {
-//            System.out.println(base.size);
-//            int ca = 0, cb = 1, cc, idx, color1, color2;
-////            int t, d = 0xFFFFFFF;
-//            double t, d = 0x1p500;
-//            OUTER:
-//            for (int i = 0; i < base.size; i++) {
-//                color1 = base.get(i);
-////                lab1.fromRGBA(base.get(i));
-//                for (int j = i + 1; j < base.size; j++) {
-//                    color2 = base.get(j);
-////                    lab2.fromRGBA(base.get(j));
-////                    if ((t = difference(color1, color2)) < d) {
-//                    if ((t = labMetric.difference(color1, color2)) < d) {
-//                        d = t;
-//                        ca = i;
-//                        cb = j;
-//                        if(d <= 0)
-//                            break OUTER;
-//                    }
+            rr = (int)(i * i * 0xD1B54A32D192ED03L + i * 0xC13FA9A902A6328FL >>> 56);
+            gg = (int)(i * i * 0x9E3779B97F4A7C15L + i * 0xD1B54A32D192ED03L >>> 56);
+            bb = (int)(i * i * 0xC13FA9A902A6328FL + i * 0x9E3779B97F4A7C15L >>> 56);
+//            rr = (int)(Math.pow((i * 0xD1B54A32D192ED03L >>> 12) * 0x1p-52, DiverRNG.randomizeDouble(i * 17L) + 0.25) * 256.0);
+//            gg = (int)(Math.pow((i * 0xABC98388FB8FAC03L >>> 12) * 0x1p-52, DiverRNG.randomizeDouble(i * 37L) + 0.25) * 256.0);
+//            bb = (int)(Math.pow((i * 0x8CB92BA72F3D8DD7L >>> 12) * 0x1p-52, DiverRNG.randomizeDouble(i * 47L) + 0.25) * 256.0);
+//            rr = (int)(Math.pow(DiverRNG.randomizeDouble(i * 0xD1B54A32D192ED03L), DiverRNG.randomizeDouble(i * 17L) + 0.2) * 256.0);
+//            gg = (int)(Math.pow(DiverRNG.randomizeDouble(i * 0xABC98388FB8FAC03L), DiverRNG.randomizeDouble(i * 37L) + 0.2) * 256.0);
+//            bb = (int)(Math.pow(DiverRNG.randomizeDouble(i * 0x8CB92BA72F3D8DD7L), DiverRNG.randomizeDouble(i * 47L) + 0.2) * 256.0);
+            base.add(rr << 24 | gg << 16 | bb << 8 | 0xFF);
+            
+//            base.add((int)DiverRNG.randomize(i) | 0xFF);
+//            rr = (int)(i * 0xD1B54A32D192ED03L >>> 32 & 0xFF000000L);
+//            gg = (int)(i * 0xABC98388FB8FAC03L >>> 40 & 0x00FF0000L);
+//            bb = (int)(i * 0x8CB92BA72F3D8DD7L >>> 48 & 0x0000FF00L);
+//            base.add(rr | gg | bb | 0xFF);
+        }
+//        for (int r = 0, rr = 0; r < 10; r++) {
+//            rr = r * 32 - (r >>> 3) << 24;
+//            for (int g = 0, gg = 0; g < 10; g++) {
+//                gg = g * 32 - (g >>> 3) << 16;
+//                for (int b = 0, bb = 0; b < 10; b++) {
+//                    bb = b * 32 - (b >>> 3) << 8;
+//                    base.add(rr | gg | bb | 0xFF);
 //                }
 //            }
-//			idx = cb;
-//			cc = base.get(ca);
-//			cb = base.get(cb);
-//			int ra = (cc >>> 24), ga = (cc >>> 16 & 0xFF), ba = (cc >>> 8 & 0xFF),
-//					rb = (cb >>> 24), gb = (cb >>> 16 & 0xFF), bb = (cb >>> 8 & 0xFF);
-//			base.set(ca,
-//					(ra + rb + 1 << 23 & 0xFF000000)
-//							| (ga + gb + 1 << 15 & 0xFF0000)
-//							| (ba + bb + 1 << 7 & 0xFF00)
-//							| 0xFF);
-//			base.removeIndex(idx);
-//		}
+//        }
+        while (base.size < -1) {
+//        while (base.size > 256) {
+            System.out.println(base.size);
+            int ca = 0, cb = 1, cc, idx, color1, color2;
+//            int t, d = 0xFFFFFFF;
+            double t, d = 0x1p500;
+            OUTER:
+            for (int i = 0; i < base.size; i++) {
+                color1 = base.get(i);
+//                lab1.fromRGBA(base.get(i));
+                for (int j = i + 1; j < base.size; j++) {
+                    color2 = base.get(j);
+//                    lab2.fromRGBA(base.get(j));
+//                    if ((t = difference(color1, color2)) < d) {
+                    if ((t = labMetric.difference(color1, color2)) < d) {
+                        d = t;
+                        ca = i;
+                        cb = j;
+                        if(d <= 0)
+                            break OUTER;
+                    }
+                }
+            }
+			idx = cb;
+			cc = base.get(ca);
+			cb = base.get(cb);
+			int ra = (cc >>> 24), ga = (cc >>> 16 & 0xFF), ba = (cc >>> 8 & 0xFF),
+					rb = (cb >>> 24), gb = (cb >>> 16 & 0xFF), bb = (cb >>> 8 & 0xFF);
+			base.set(ca,
+					(ra + rb + 1 << 23 & 0xFF000000)
+							| (ga + gb + 1 << 15 & 0xFF0000)
+							| (ba + bb + 1 << 7 & 0xFF00)
+							| 0xFF);
+			base.removeIndex(idx);
+		}
+//        int[] PALETTE = base.toArray();
+        int[] PALETTE = Coloring.AURORA;
         //base.insert(0, 0);
 //            idx = cb;
 //            cc = base.get(DiverRNG.determine(ca * 0xC13FA9A902A6328FL + cb * 0x91E10DA5C79E7B1DL) < 0L ? ca : cb);
@@ -756,7 +769,7 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
         PNG8 png8 = new PNG8();
         png8.palette = new PaletteReducer(PALETTE, labMetric);
         try {
-            png8.writePrecisely(Gdx.files.local("Aurora256.png"), pix, false);
+            png8.writePrecisely(Gdx.files.local("Law256.png"), pix, false);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -814,7 +827,7 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
         }
 
         try {
-            png8.writePrecisely(Gdx.files.local("Aurora256_GLSL.png"), p2, false);
+            png8.writePrecisely(Gdx.files.local("Law256_GLSL.png"), p2, false);
         } catch (IOException e) {
             e.printStackTrace();
         }
