@@ -11,7 +11,7 @@ import warpwriter.PaletteReducer;
 
 import java.io.IOException;
 
-import static warpwriter.PaletteReducer.labMetric;
+import static warpwriter.PaletteReducer.labRoughMetric;
 
 /**
  * Created by Tommy Ettinger on 1/21/2018.
@@ -666,7 +666,7 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
                     color2 = base.get(j);
 //                    lab2.fromRGBA(base.get(j));
 //                    if ((t = difference(color1, color2)) < d) {
-                    if ((t = labMetric.difference(color1, color2)) < d) {
+                    if ((t = labRoughMetric.difference(color1, color2)) < d) {
                         d = t;
                         ca = i;
                         cb = j;
@@ -767,9 +767,9 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
         }
         //pix.drawPixel(255, 0, 0);
         PNG8 png8 = new PNG8();
-        png8.palette = new PaletteReducer(PALETTE, labMetric);
+        png8.palette = new PaletteReducer(PALETTE, labRoughMetric);
         try {
-            png8.writePrecisely(Gdx.files.local("Law256.png"), pix, false);
+            png8.writePrecisely(Gdx.files.local("Lawn256.png"), pix, false);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -827,7 +827,7 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
         }
 
         try {
-            png8.writePrecisely(Gdx.files.local("Law256_GLSL.png"), p2, false);
+            png8.writePrecisely(Gdx.files.local("Lawn256_GLSL.png"), p2, false);
         } catch (IOException e) {
             e.printStackTrace();
         }

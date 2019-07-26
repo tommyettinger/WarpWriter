@@ -246,6 +246,161 @@ public class PaletteReducer {
             A -= 500.0 * (x - y);
             B -= 200.0 * (y - z);
 
+            //return L * L * 190 + A * A * 25 + B * B * 10;
+            return L * L * 190.0 + A * A * 25.0 + B * B * 10.0;
+        }
+
+    }
+
+    public static class LABRoughColorMetric implements ColorMetric {
+        /**
+         * Color difference metric (squared) using L*A*B color space; returns large numbers even for smallish differences.
+         * If this returns 250 or more, the colors may be perceptibly different; 500 or more almost guarantees it.
+         *
+         * @param rgba1 an RGBA8888 color as an int
+         * @param rgba2 an RGBA8888 color as an int
+         * @return the difference between the given colors, as a positive double
+         */
+        @Override
+        public double difference(final int rgba1, final int rgba2)
+        {
+            if(((rgba1 ^ rgba2) & 0x80) == 0x80) return Double.POSITIVE_INFINITY;
+            double x, y, z, r, g, b;
+
+            r = (rgba1 >>> 24) / 255.0;
+            g = (rgba1 >>> 16 & 0xFF) / 255.0;
+            b = (rgba1 >>> 8 & 0xFF) / 255.0;
+
+            r = Math.pow((r + 0.055) / 1.055, 2.4);
+            g = Math.pow((g + 0.055) / 1.055, 2.4);
+            b = Math.pow((b + 0.055) / 1.055, 2.4);
+
+            x = (r * 0.4124 + g * 0.3576 + b * 0.1805);
+            y = (r * 0.2126 + g * 0.7152 + b * 0.0722);
+            z = (r * 0.0193 + g * 0.1192 + b * 0.9505);
+
+            x = Math.sqrt(x);
+            y = Math.sqrt(y);
+            z = Math.sqrt(z);
+
+            double L = 100.0 * y;
+            double A = 500.0 * (x - y);
+            double B = 200.0 * (y - z);
+
+            r = (rgba2 >>> 24) / 255.0;
+            g = (rgba2 >>> 16 & 0xFF) / 255.0;
+            b = (rgba2 >>> 8 & 0xFF) / 255.0;
+
+            r = Math.pow((r + 0.055) / 1.055, 2.4);
+            g = Math.pow((g + 0.055) / 1.055, 2.4);
+            b = Math.pow((b + 0.055) / 1.055, 2.4);
+
+            x = (r * 0.4124 + g * 0.3576 + b * 0.1805);
+            y = (r * 0.2126 + g * 0.7152 + b * 0.0722);
+            z = (r * 0.0193 + g * 0.1192 + b * 0.9505);
+
+            x = Math.sqrt(x);
+            y = Math.sqrt(y);
+            z = Math.sqrt(z);
+
+            L -= 100.0 * y;
+            A -= 500.0 * (x - y);
+            B -= 200.0 * (y - z);
+
+            return L * L * 190.0 + A * A * 25.0 + B * B * 10.0;
+        }
+        @Override
+        public double difference(final int rgba1, final int r2, final int g2, final int b2)
+        {
+            if((rgba1 & 0x80) == 0) return Double.POSITIVE_INFINITY;
+            double x, y, z, r, g, b;
+
+            r = (rgba1 >>> 24) / 255.0;
+            g = (rgba1 >>> 16 & 0xFF) / 255.0;
+            b = (rgba1 >>> 8 & 0xFF) / 255.0;
+
+            r = Math.pow((r + 0.055) / 1.055, 2.4);
+            g = Math.pow((g + 0.055) / 1.055, 2.4);
+            b = Math.pow((b + 0.055) / 1.055, 2.4);
+
+            x = (r * 0.4124 + g * 0.3576 + b * 0.1805);
+            y = (r * 0.2126 + g * 0.7152 + b * 0.0722);
+            z = (r * 0.0193 + g * 0.1192 + b * 0.9505);
+
+            x = Math.sqrt(x);
+            y = Math.sqrt(y);
+            z = Math.sqrt(z);
+
+            double L = 100 * y;
+            double A = 500.0 * (x - y);
+            double B = 200.0 * (y - z);
+
+            r = r2 / 255.0;
+            g = g2 / 255.0;
+            b = b2 / 255.0;
+
+            r = Math.pow((r + 0.055) / 1.055, 2.4);
+            g = Math.pow((g + 0.055) / 1.055, 2.4);
+            b = Math.pow((b + 0.055) / 1.055, 2.4);
+
+            x = (r * 0.4124 + g * 0.3576 + b * 0.1805);
+            y = (r * 0.2126 + g * 0.7152 + b * 0.0722);
+            z = (r * 0.0193 + g * 0.1192 + b * 0.9505);
+
+            x = Math.sqrt(x);
+            y = Math.sqrt(y);
+            z = Math.sqrt(z);
+
+            L -= 100.0 * y;
+            A -= 500.0 * (x - y);
+            B -= 200.0 * (y - z);
+
+            return L * L * 190.0 + A * A * 25.0 + B * B * 10.0;
+        }
+        @Override
+        public double difference(final int r1, final int g1, final int b1, final int r2, final int g2, final int b2) {
+            double x, y, z, r, g, b;
+
+            r = r1 / 255.0;
+            g = g1 / 255.0;
+            b = b1 / 255.0;
+
+            r = Math.pow((r + 0.055) / 1.055, 2.4);
+            g = Math.pow((g + 0.055) / 1.055, 2.4);
+            b = Math.pow((b + 0.055) / 1.055, 2.4);
+
+            x = (r * 0.4124 + g * 0.3576 + b * 0.1805);
+            y = (r * 0.2126 + g * 0.7152 + b * 0.0722);
+            z = (r * 0.0193 + g * 0.1192 + b * 0.9505);
+
+            x = Math.sqrt(x);
+            y = Math.sqrt(y);
+            z = Math.sqrt(z);
+
+            double L = 100 * y;
+            double A = 500.0 * (x - y);
+            double B = 200.0 * (y - z);
+
+            r = r2 / 255.0;
+            g = g2 / 255.0;
+            b = b2 / 255.0;
+
+            r = Math.pow((r + 0.055) / 1.055, 2.4);
+            g = Math.pow((g + 0.055) / 1.055, 2.4);
+            b = Math.pow((b + 0.055) / 1.055, 2.4);
+
+            x = (r * 0.4124 + g * 0.3576 + b * 0.1805);
+            y = (r * 0.2126 + g * 0.7152 + b * 0.0722);
+            z = (r * 0.0193 + g * 0.1192 + b * 0.9505);
+
+            x = Math.sqrt(x);
+            y = Math.sqrt(y);
+            z = Math.sqrt(z);
+
+            L -= 100.0 * y;
+            A -= 500.0 * (x - y);
+            B -= 200.0 * (y - z);
+
             return L * L * 190.0 + A * A * 25.0 + B * B * 10.0;
         }
 
@@ -253,6 +408,7 @@ public class PaletteReducer {
 
     public static final BasicColorMetric basicMetric = new BasicColorMetric(); // has no state, should be fine static
     public static final LABEuclideanColorMetric labMetric = new LABEuclideanColorMetric();
+    public static final LABRoughColorMetric labRoughMetric = new LABRoughColorMetric();
     public byte[] paletteMapping;
     public final int[] paletteArray = new int[256];
     ByteArray curErrorRedBytes, nextErrorRedBytes, curErrorGreenBytes, nextErrorGreenBytes, curErrorBlueBytes, nextErrorBlueBytes;
