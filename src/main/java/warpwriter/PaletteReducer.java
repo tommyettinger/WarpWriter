@@ -1891,6 +1891,46 @@ public class PaletteReducer {
         pixmap.setBlending(blending);
         return pixmap;
     }
+    public Pixmap reduceShaderMimic (Pixmap pixmap) {
+        boolean hasTransparent = (paletteArray[0] == 0);
+        final int lineLen = pixmap.getWidth(), h = pixmap.getHeight();
+        Pixmap.Blending blending = pixmap.getBlending();
+        pixmap.setBlending(Pixmap.Blending.None);
+        int color, used;
+        float pos;
+        float adj;
+        for (int y = 0; y < h; y++) {
+            for (int px = 0; px < lineLen; px++) {
+                color = pixmap.getPixel(px, y) & 0xF8F8F880;
+                if ((color & 0x80) == 0 && hasTransparent)
+                    pixmap.drawPixel(px, y, 0);
+                else {
+                    color |= (color >>> 5 & 0x07070700) | 0xFE;
+                    int rr = ((color >>> 24)       );
+                    int gg = ((color >>> 16) & 0xFF);
+                    int bb = ((color >>> 8)  & 0xFF);
+                    float len = (rr * 5 + gg * 9 + bb * 2) * 0x1.9p-12f + 1f;
+                    //adj = fract(52.9829189 * fract(dot(vec2(0.06711056, 0.00583715), gl_FragCoord.xy))) * len - len * 0.5;
+                    used = paletteArray[paletteMapping[((rr << 7) & 0x7C00)
+                            | ((gg << 2) & 0x3E0)
+                            | ((bb >>> 3))] & 0xFF];
+                    pos = (px * 0.06711056f + y * 0.00583715f);
+                    pos -= (int)pos;
+                    pos *= 52.9829189f;
+                    adj = (pos - (int)pos) * len - len * 0.5f;
+                    rr = MathUtils.clamp((int) (rr + (adj * ((rr - (used >>> 24))))), 0, 0xFF); //  * 17 >> 4
+                    gg = MathUtils.clamp((int) (gg + (adj * ((gg - (used >>> 16 & 0xFF))))), 0, 0xFF); //  * 23 >> 4
+                    bb = MathUtils.clamp((int) (bb + (adj * ((bb - (used >>> 8 & 0xFF))))), 0, 0xFF); // * 5 >> 4
+                    pixmap.drawPixel(px, y, paletteArray[paletteMapping[((rr << 7) & 0x7C00)
+                            | ((gg << 2) & 0x3E0)
+                            | ((bb >>> 3))] & 0xFF]);
+                }
+            }
+
+        }
+        pixmap.setBlending(blending);
+        return pixmap;
+    }
 
     /**
      * Retrieves a random non-0 color index for the palette this would reduce to, with a higher likelihood for colors

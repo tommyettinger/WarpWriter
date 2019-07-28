@@ -58,8 +58,6 @@ public class Palettizer extends ApplicationAdapter {
             png8.writePrecisely(Gdx.files.local(subname + "_FloydSteinbergHu.png"), pm, false);
             pm = reducer.reduceFloydSteinberg(new Pixmap(Gdx.files.absolute(name)));
             png8.writePrecisely(Gdx.files.local(subname + "_FloydSteinberg.png"), pm, false);
-//            pm = reducer.reduceWithBlueNoise(new Pixmap(Gdx.files.absolute(name)));
-//            png8.writePrecisely(Gdx.files.local(subname + "_BlueNoise.png"), pm, false);
             pm = reducer.reduceBurkes(new Pixmap(Gdx.files.absolute(name)));
             png8.writePrecisely(Gdx.files.local(subname + "_Burkes.png"), pm, false);
             pm = reducer.reduce(new Pixmap(Gdx.files.absolute(name)));
@@ -71,7 +69,9 @@ public class Palettizer extends ApplicationAdapter {
             pm = reducer.reduceRobertsMul(new Pixmap(Gdx.files.absolute(name)));
             png8.writePrecisely(Gdx.files.local(subname + "_RobertsMul.png"), pm, false);
             pm = reducer.reduceRobertsEdit(new Pixmap(Gdx.files.absolute(name)));
-            FileHandle next = Gdx.files.local(subname + "_RobertsEdit.png");
+            png8.writePrecisely(Gdx.files.local(subname + "_RobertsEdit.png"), pm, false);
+            pm = reducer.reduceShaderMimic(new Pixmap(Gdx.files.absolute(name)));
+            FileHandle next = Gdx.files.local(subname + "_ShaderMimic.png");
             png8.writePrecisely(next, pm, false);
             screenTexture = new Texture(next);
         } catch (IOException ignored) {
@@ -82,9 +82,9 @@ public class Palettizer extends ApplicationAdapter {
     public void create() {
         font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
         batch = new SpriteBatch();
-        reducer = new PaletteReducer(Colorizer.JudgeBonusPalette);
+        reducer = //new PaletteReducer(Colorizer.JudgeBonusPalette);
                 //Coloring.FLESURRECT_REDUCER;
-                //Colorizer.AuroraColorizer.getReducer();
+                Colorizer.AuroraColorizer.getReducer();
                 //Colorizer.RinsedColorizer.getReducer();
                 // new PaletteReducer(Coloring.RINSED);
         reducer.setDitherStrength(1f);
