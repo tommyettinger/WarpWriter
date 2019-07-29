@@ -5,7 +5,6 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Pixmap;
 import squidpony.StringKit;
 import squidpony.squidmath.IntVLA;
-import warpwriter.Coloring;
 import warpwriter.PNG8;
 import warpwriter.PaletteReducer;
 
@@ -75,7 +74,12 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
         return ((((a & 0x0000000000000FFFL) + ((a & 0x000000007FF00000L) >>> 20))
                 - ((b & 0x0000000000000FFFL) + ((b & 0x000000007FF00000L) >>> 20))) * 0x1p-10);
     }
-    
+
+    public double smooth (double a) {
+        return Math.sqrt(a) * a * (3 - 2 * a);
+    }
+
+
     private long state = 9005L;
     
     private double nextDouble()
@@ -602,32 +606,41 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 
 
         IntVLA base = new IntVLA(1000);
+        
+        for (int i = 20, rr, gg, bb; i < 1020; i++) {
+            float denominator = 3f, resX = 0f, resY = 0f, resZ = 0f;
+            int n = i;
+            while (n > 0)
+            {
+                resY += (n % 3) / denominator;
+                n /= 3;
+                denominator *= 3f;
+            }
 
-
-        for (int i = 20, rr, gg, bb; i < 920; i++) {
-//            double denominator = 3.0, resY = 0.0, resZ = 0.0;
-//            int n = i;
-//            while (n > 0)
-//            {
-//                resY += (n % 3) / denominator;
-//                n /= 3;
-//                denominator *= 3.0;
-//            }
-//
-//            denominator = 5;
-//            n = i;
-//            while (n > 0)
-//            {
-//                resZ += (n % 5) / denominator;
-//                n /= 5;
-//                denominator *= 5.0;
-//            }
+            denominator = 5;
+            n = i;
+            while (n > 0)
+            {
+                resZ += (n % 5) / denominator;
+                n /= 5;
+                denominator *= 5f;
+            }
+            
+            denominator = 7;
+            n = i;
+            while (n > 0)
+            {
+                resX += (n % 7) / denominator;
+                n /= 7;
+                denominator *= 7f;
+            }
 //            rr = (int)((Integer.reverse(i) >>> 1) * 0x1p-23);
-//            gg = (int)(resY * 256);
-//            bb = (int)(resZ * 256);
-            rr = (int)(i * i * 0xD1B54A32D192ED03L + i * 0xC13FA9A902A6328FL >>> 56);
-            gg = (int)(i * i * 0x9E3779B97F4A7C15L + i * 0xD1B54A32D192ED03L >>> 56);
-            bb = (int)(i * i * 0xC13FA9A902A6328FL + i * 0x9E3779B97F4A7C15L >>> 56);
+            rr = (int)(smooth(resX) * 256);
+            gg = (int)(smooth(resY) * 256);
+            bb = (int)(smooth(resZ) * 256);
+//            rr = (int)(i * i * 0xD1B54A32D192ED03L + i * 0xC13FA9A902A6328FL >>> 56);
+//            gg = (int)(i * i * 0x9E3779B97F4A7C15L + i * 0xD1B54A32D192ED03L >>> 56);
+//            bb = (int)(i * i * 0xC13FA9A902A6328FL + i * 0x9E3779B97F4A7C15L >>> 56);
 //            rr = (int)(Math.pow((i * 0xD1B54A32D192ED03L >>> 12) * 0x1p-52, DiverRNG.randomizeDouble(i * 17L) + 0.25) * 256.0);
 //            gg = (int)(Math.pow((i * 0xABC98388FB8FAC03L >>> 12) * 0x1p-52, DiverRNG.randomizeDouble(i * 37L) + 0.25) * 256.0);
 //            bb = (int)(Math.pow((i * 0x8CB92BA72F3D8DD7L >>> 12) * 0x1p-52, DiverRNG.randomizeDouble(i * 47L) + 0.25) * 256.0);
@@ -652,9 +665,12 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 //                }
 //            }
 //        }
-        while (base.size < -1) {
-//        while (base.size > 256) {
+        int[] BIG_PALETTE = new int[256];
+//        while (base.size < -1) {
+        while (base.size > 63) {
             System.out.println(base.size);
+            if(base.size == 255)
+                System.arraycopy(base.items, 0, BIG_PALETTE, 1, 255);
             int ca = 0, cb = 1, cc, idx, color1, color2;
 //            int t, d = 0xFFFFFFF;
             double t, d = 0x1p500;
@@ -687,9 +703,9 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 							| 0xFF);
 			base.removeIndex(idx);
 		}
-//        int[] PALETTE = base.toArray();
-        int[] PALETTE = Coloring.AURORA;
-        //base.insert(0, 0);
+        base.insert(0, 0);
+        int[] PALETTE = base.toArray();
+//        int[] PALETTE = Coloring.AURORA;
 //            idx = cb;
 //            cc = base.get(DiverRNG.determine(ca * 0xC13FA9A902A6328FL + cb * 0x91E10DA5C79E7B1DL) < 0L ? ca : cb);
 //            int ra = (cc >>> 24), ga = (cc >>> 16 & 0xFF), ba = (cc >>> 8 & 0xFF);
@@ -746,33 +762,88 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 ////        }
 //        
 //
-        StringBuilder sb = new StringBuilder((1 + 12 * 8) * (PALETTE.length >>> 3));
+        System.out.println("64-color: ");
+        StringBuilder sb = new StringBuilder((1 + 12 * 8) * (BIG_PALETTE.length >>> 3));
         for (int i = 0; i < (PALETTE.length + 7 >>> 3); i++) {
             for (int j = 0; j < 8 && (i << 3 | j) < PALETTE.length; j++) {
-                sb.append("0x").append(StringKit.hex(PALETTE[i << 3 | j]).toUpperCase()).append(", ");
+                sb.append("0x").append(StringKit.hex(PALETTE[i << 3 | j])).append(", ");
             }
             sb.append('\n');
         }
-        String sbs = sb.toString();
-        System.out.println(sbs);
-        //Gdx.files.local("GeneratedPalette.txt").writeString(sbs, false);
+        System.out.println(sb);
+        sb.setLength(0);
+        System.out.println("256-color: ");
+        for (int i = 0; i < (BIG_PALETTE.length + 7 >>> 3); i++) {
+            for (int j = 0; j < 8 && (i << 3 | j) < BIG_PALETTE.length; j++) {
+                sb.append("0x").append(StringKit.hex(BIG_PALETTE[i << 3 | j])).append(", ");
+            }
+            sb.append('\n');
+        }
+        System.out.println(sb);
         sb.setLength(0);
 
         Pixmap pix = new Pixmap(256, 1, Pixmap.Format.RGBA8888);
-//        for (int i = 0; i < PALETTE.length; i++) {
-//            pix.drawPixel(i, 0, PALETTE[i]);
-//        }
-        for (int i = 0; i < PALETTE.length - 1; i++) {
-            pix.drawPixel(i, 0, PALETTE[i + 1]);
+        for (int i = 0; i < PALETTE.length; i++) {
+            pix.drawPixel(i, 0, PALETTE[i]);
         }
+//        for (int i = 0; i < PALETTE.length - 1; i++) {
+//            pix.drawPixel(i, 0, PALETTE[i + 1]);
+//        }
         //pix.drawPixel(255, 0, 0);
         PNG8 png8 = new PNG8();
         png8.palette = new PaletteReducer(PALETTE, labRoughMetric);
+        try {
+            png8.writePrecisely(Gdx.files.local("Lawn64.png"), pix, false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Pixmap p2 = new Pixmap(1024, 32, Pixmap.Format.RGBA8888);
+        for (int red = 0; red < 32; red++) {
+            for (int blu = 0; blu < 32; blu++) {
+                for (int gre = 0; gre < 32; gre++) {
+                    p2.drawPixel(red << 5 | blu, gre, PALETTE[png8.palette.paletteMapping[
+                            ((red << 10) & 0x7C00)
+                                    | ((gre << 5) & 0x3E0)
+                                    | blu] & 0xFF]);
+                }
+            }
+        }
+
+        try {
+            png8.writePrecisely(Gdx.files.local("Lawn64_GLSL.png"), p2, false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        for (int i = 0; i < BIG_PALETTE.length; i++) {
+            pix.drawPixel(i, 0, BIG_PALETTE[i]);
+        }
+        png8.palette.exact(BIG_PALETTE, labRoughMetric);
         try {
             png8.writePrecisely(Gdx.files.local("Lawn256.png"), pix, false);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        for (int red = 0; red < 32; red++) {
+            for (int blu = 0; blu < 32; blu++) {
+                for (int gre = 0; gre < 32; gre++) {
+                    p2.drawPixel(red << 5 | blu, gre, BIG_PALETTE[png8.palette.paletteMapping[
+                            ((red << 10) & 0x7C00)
+                                    | ((gre << 5) & 0x3E0)
+                                    | blu] & 0xFF]);
+                }
+            }
+        }
+
+        try {
+            png8.writePrecisely(Gdx.files.local("Lawn256_GLSL.png"), p2, false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
 //		Pixmap p2 = new Pixmap(1024, 32, Pixmap.Format.RGBA8888);
 //        
 //        byte[] paletteMapping = new byte[0x8000];
@@ -812,26 +883,7 @@ public class OverkillPaletteGenerator extends ApplicationAdapter {
 //				}
 //			}
 //		}
-
-
-		Pixmap p2 = new Pixmap(1024, 32, Pixmap.Format.RGBA8888);
-        for (int red = 0; red < 32; red++) {
-            for (int blu = 0; blu < 32; blu++) {
-                for (int gre = 0; gre < 32; gre++) {
-                    p2.drawPixel(red << 5 | blu, gre, PALETTE[png8.palette.paletteMapping[
-                            ((red << 10) & 0x7C00)
-                                    | ((gre << 5) & 0x3E0)
-                                    | blu] & 0xFF]);
-                }
-            }
-        }
-
-        try {
-            png8.writePrecisely(Gdx.files.local("Lawn256_GLSL.png"), p2, false);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        
 //        int[][] AURORA_BONUS_RAMP_VALUES = new int[256][4];
 //        for (int i = 1; i < PALETTE.length; i++) {
 //            int color = AURORA_BONUS_RAMP_VALUES[i | 128][2] = AURORA_BONUS_RAMP_VALUES[i][2] =
