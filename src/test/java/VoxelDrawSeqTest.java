@@ -72,7 +72,8 @@ public class VoxelDrawSeqTest extends ApplicationAdapter {
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.CW_PALETTE);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.FLESURRECT);
-        colorizer = Colorizer.JudgeBonusColorizer;
+//        colorizer = Colorizer.LawnBonusColorizer;
+        colorizer = Colorizer.ToastyBonusColorizer;
         voxelColor = new VoxelColor().set(colorizer);
         batchRenderer = new VoxelSpriteBatchRenderer(batch);
         batchRenderer.color().set(colorizer);
@@ -86,7 +87,7 @@ public class VoxelDrawSeqTest extends ApplicationAdapter {
 //        }
 //        makeBoom(maker.fireRange());
         maker.rng.setState(rng.nextLong());
-        voxels = maker.shipLargeNoiseColorized();
+        voxels = maker.shipLargeSmoothColorized();
         VoxelSeq vs = new VoxelSeq(1024);
         vs.putArray(voxels);
         vs.hollow();
@@ -227,7 +228,7 @@ public class VoxelDrawSeqTest extends ApplicationAdapter {
 //                        model.set(ship);
 //                        chaos.setSeed(maker.rng.nextLong());
                         maker.rng.setState(rng.nextLong());
-                        Tools3D.deepCopyInto(maker.shipLargeNoiseColorized(), voxels);
+                        Tools3D.deepCopyInto(maker.shipLargeSmoothColorized(), voxels);
                         seq.setFrame(0);
                         seq.clear();
                         seq.putSurface(voxels);

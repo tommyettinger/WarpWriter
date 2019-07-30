@@ -713,9 +713,9 @@ public class ModelMaker {
         byte[] grays = colorizer.grayscale();
         byte mainColor = colorizer.getReducer().paletteMapping[seed & 0x7FFF], // bottom 15 bits
                 //highlightColor = colorizer.brighten(colorizer.getReducer().paletteMapping[seed >>> 17]), // top 15 bits
-                cockpitColor = colorizer.darken(colorizer.darken(colorizer.reduce((0x20 + determineBounded(seed ^ 0x11111, 0x60) << 24)
-                        | (0xA0 + determineBounded(seed ^ 0x22222, 0x60) << 16)
-                        | (0xC8 + determineBounded(seed ^ 0x33333, 0x38) << 8) | 0xFF))),
+                cockpitColor = colorizer.reduce((0x10 + determineBounded(seed ^ 0x11111, 0x30) << 24)
+                        | (0x90 + determineBounded(seed ^ 0x22222, 0x40) << 16)
+                        | (0xB0 + determineBounded(seed ^ 0x33333, 0x40) << 8) | 0xFF),
                 thrustColor = colorizer.reduce(thrust);
 //        byte lightColor = (byte) (colorizer.brighten(colorizer.getReducer().paletteMapping[(seed ^ seed >>> 4 ^ seed >>> 13) & 0x7FFF]) | colorizer.getShadeBit() | colorizer.getWaveBit());
         thrustColor = (byte) (colorizer.brighten(thrustColor) | colorizer.getWaveBit() | colorizer.getShadeBit());
