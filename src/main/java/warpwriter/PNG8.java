@@ -10,14 +10,10 @@ import com.badlogic.gdx.utils.IntIntMap;
 import com.badlogic.gdx.utils.StreamUtils;
 import squidpony.annotation.GwtIncompatible;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.zip.CRC32;
-import java.util.zip.CheckedOutputStream;
-import java.util.zip.Deflater;
-import java.util.zip.DeflaterOutputStream;
+import java.io.*;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.zip.*;
 
 import static warpwriter.PaletteReducer.randomXi;
 
@@ -85,7 +81,7 @@ public class PNG8 implements Disposable {
     private int lastLineLen;
 
     public PaletteReducer palette;
-    
+
     public PNG8() {
         this(128 * 128);
     }
@@ -197,7 +193,7 @@ public class PNG8 implements Disposable {
      * @param pixmap a Pixmap to write to the given output stream
      * @param computePalette if true, this will analyze the Pixmap and use the most common colors
      */
-    public void write (OutputStream output, Pixmap pixmap, boolean computePalette) throws IOException     
+    public void write (OutputStream output, Pixmap pixmap, boolean computePalette) throws IOException
     {
         if(computePalette)
             writePrecisely(output, pixmap, true);
@@ -325,7 +321,7 @@ public class PNG8 implements Disposable {
             for (int px = 0; px < w; px++) {
                 color = pixmap.getPixel(px, py);
                 if((color & 0xFE) != 0xFE && !colorToIndex.containsKey(color)) {
-                    if(hasTransparent == 0 && colorToIndex.size >= 256)                     
+                    if(hasTransparent == 0 && colorToIndex.size >= 256)
                     {
                         write(output, pixmap, true, ditherFallback, threshold);
                         return;
@@ -445,7 +441,7 @@ public class PNG8 implements Disposable {
         output.flush();
 
     }
-    
+
     private void writeSolid (OutputStream output, Pixmap pixmap) throws IOException{
         final int[] paletteArray = palette.paletteArray;
         final byte[] paletteMapping = palette.paletteMapping;
@@ -514,8 +510,8 @@ public class PNG8 implements Disposable {
                     int gg = ((color >>> 16) & 0xFF);
                     int bb = ((color >>> 8)  & 0xFF);
                     curLine[px] = paletteMapping[((rr << 7) & 0x7C00)
-                                    | ((gg << 2) & 0x3E0)
-                                    | ((bb >>> 3))];
+                            | ((gg << 2) & 0x3E0)
+                            | ((bb >>> 3))];
                 }
             }
 
@@ -765,6 +761,75 @@ public class PNG8 implements Disposable {
             target.writeInt((int)crc.getValue());
             buffer.reset();
             crc.reset();
+        }
+    }
+    protected static LinkedHashMap<String, byte[]> readChunks(InputStream inStream) throws IOException {
+        DataInputStream in = new DataInputStream(inStream);
+        if(in.readLong() != 0x89504e470d0a1a0aL)
+            throw  new IOException("PNG signature not found!");
+        LinkedHashMap<String, byte[]> chunks = new LinkedHashMap<>(10);
+        boolean trucking = true;
+        while (trucking) {
+            try {
+                // Read the length.
+                int length = in.readInt();
+                if (length < 0)
+                    throw new IOException("Sorry, that file is too long.");
+                // Read the type.
+                byte[] typeBytes = new byte[4];
+                in.readFully(typeBytes);
+                // Read the data.
+                byte[] data = new byte[length];
+                in.readFully(data);
+                // Read the CRC, discard it.
+                int crc = in.readInt();
+                String type = new String(typeBytes, "UTF8");
+                chunks.put(type, data);
+            } catch (EOFException eofe) {
+                trucking = false;
+            }
+        }
+        return chunks;
+    }
+    protected static void writeChunks(OutputStream outStream, LinkedHashMap<String, byte[]> chunks)
+    {
+        DataOutputStream out = new DataOutputStream(outStream);
+        CRC32 crc = new CRC32();
+        for (HashMap.Entry<String, byte[]> ent : chunks.entrySet())
+        {
+            try {
+                out.writeInt(ent.getValue().length);
+                out.writeBytes(ent.getKey());
+                crc.update(ent.getKey().getBytes("UTF8"));
+                out.write(ent.getValue());
+                crc.update(ent.getValue());
+                out.write((int)crc.getValue());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    public static void swapPalette(FileHandle input, FileHandle output, int[] palette)
+    {
+        try {
+            InputStream inputStream = input.read();
+            LinkedHashMap<String, byte[]> chunks = readChunks(inputStream);
+            byte[] pal = chunks.get("PLTE");
+            if(pal == null)
+            {
+                output.write(inputStream, false);
+                return;
+            }
+            for (int i = 0, p = 0; i < palette.length && p < pal.length - 2; i++) {
+                int rgba = palette[i];
+                pal[p++] = (byte) (rgba >>> 24);
+                pal[p++] = (byte) (rgba >>> 16);
+                pal[p++] = (byte) (rgba >>> 8);
+            }
+            writeChunks(output.write(false), chunks);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

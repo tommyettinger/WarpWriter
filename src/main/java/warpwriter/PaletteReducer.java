@@ -2035,8 +2035,9 @@ public class PaletteReducer {
         final int a = rgba & 0xFF;
         final float r = (rgba >>> 24) / 255f, g = (rgba >>> 16 & 0xFF) / 255f, b = (rgba >>> 8 & 0xFF) / 255f;
         float luma = (float)Math.pow(r * 0.375f + g * 0.5f + b * 0.125f, 1.3333);
-        float adj = NumberTools.sin_(luma * luma * (3f - 2f * luma));
-        adj *= Math.abs(adj) * -0.2f;
+//        float adj = NumberTools.sin_(luma * luma * (3f - 2f * luma));
+//        adj *= Math.abs(adj) * -0.2f;
+        final float adj = NumberTools.sin_((luma - 0.5f) * Math.abs(luma - 0.5f) * 2f) * 0.18f;
         final float warm = r - b + adj, mild = g - b + adj;
         return (MathUtils.clamp((int) ((luma + 0.625f * warm - 0.5f * mild) * 256f), 0, 255)<<24|
                 MathUtils.clamp((int) ((luma - 0.375f * warm + 0.5f * mild) * 256f), 0, 255)<<16|
