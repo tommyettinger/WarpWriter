@@ -13,7 +13,10 @@ import squidpony.annotation.GwtIncompatible;
 import java.io.*;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.zip.*;
+import java.util.zip.CRC32;
+import java.util.zip.CheckedOutputStream;
+import java.util.zip.Deflater;
+import java.util.zip.DeflaterOutputStream;
 
 import static warpwriter.PaletteReducer.randomXi;
 
@@ -279,6 +282,33 @@ public class PNG8 implements Disposable {
     }
 
     /**
+     * Attempts to write the given Pixmap exactly as a PNG-8 image to file; this attempt will only succeed if there
+     * are no more than 256 colors in the Pixmap (treating all partially transparent colors as fully transparent).
+     * If the colors in the Pixmap can be accurately represented by some or all of {@code exactPalette} (and it is
+     * non-null), then that palette will be used in full and in order.
+     * If the attempt fails, this falls back to calling {@link #write(FileHandle, Pixmap, boolean, boolean)}, which
+     * can dither the image to use no more than 255 colors (plus fully transparent) based on ditherFallback and will
+     * always analyze the Pixmap to get an accurate-enough palette, using the given threshold for analysis (which is
+     * typically between 1 and 1000, and most often near 200-400). All other write() methods in this class will
+     * reduce the color depth somewhat, but as long as the color count stays at 256 or less, this will keep the
+     * non-alpha components of colors exactly.
+     * @param file a FileHandle that must be writable, and will have the given Pixmap written as a PNG-8 image
+     * @param pixmap a Pixmap to write to the given output stream
+     * @param exactPalette if non-null, will try to use this palette exactly, in order and including unused colors
+     * @param ditherFallback if the Pixmap contains too many colors, this determines whether it will dither the output
+     * @param threshold the analysis threshold to use if there are too many colors (min 0, practical max is over 100000)
+     * @throws IOException if file writing fails for any reason
+     */
+    public void writePrecisely (FileHandle file, Pixmap pixmap, int[] exactPalette, boolean ditherFallback, int threshold) throws IOException {
+        OutputStream output = file.write(false);
+        try {
+            writePrecisely(output, pixmap, exactPalette, ditherFallback, threshold);
+        } finally {
+            StreamUtils.closeQuietly(output);
+        }
+    }
+
+    /**
      * Attempts to write the given Pixmap exactly as a PNG-8 image to output; this attempt will only succeed if there
      * are no more than 256 colors in the Pixmap (treating all partially transparent colors as fully transparent).
      * If the attempt fails, this falls back to calling {@link #write(OutputStream, Pixmap, boolean, boolean)}, which
@@ -311,42 +341,69 @@ public class PNG8 implements Disposable {
      * @throws IOException if OutputStream things fail for any reason
      */
     public void writePrecisely(OutputStream output, Pixmap pixmap, boolean ditherFallback, int threshold) throws IOException {
+        writePrecisely(output, pixmap, null, ditherFallback, threshold);
+    }
+
+    /**
+     * Attempts to write the given Pixmap exactly as a PNG-8 image to output; this attempt will only succeed if there
+     * are no more than 256 colors in the Pixmap (treating all partially transparent colors as fully transparent).
+     * If the colors in the Pixmap can be accurately represented by some or all of {@code exactPalette} (and it is
+     * non-null), then that palette will be used in full and in order.
+     * If the attempt fails, this falls back to calling {@link #write(OutputStream, Pixmap, boolean, boolean)}, which
+     * can dither the image to use no more than 255 colors (plus fully transparent) based on ditherFallback and will
+     * always analyze the Pixmap to get an accurate-enough palette, using the given threshold for analysis (which is
+     * typically between 1 and 1000, and most often near 200-400). All other write() methods in this class will
+     * reduce the color depth somewhat, but as long as the color count stays at 256 or less, this will keep the
+     * non-alpha components of colors exactly.
+     * @param output an OutputStream that will not be closed
+     * @param pixmap a Pixmap to write to the given output stream
+     * @param exactPalette if non-null, will try to use this palette exactly, in order and including unused colors
+     * @param ditherFallback if the Pixmap contains too many colors, this determines whether it will dither the output
+     * @param threshold the analysis threshold to use if there are too many colors (min 0, practical max is over 100000)
+     * @throws IOException if OutputStream things fail for any reason
+     */
+    public void writePrecisely(OutputStream output, Pixmap pixmap, int[] exactPalette, boolean ditherFallback, int threshold) throws IOException {
         IntIntMap colorToIndex = new IntIntMap(256);
         colorToIndex.put(0, 0);
         int color;
         int hasTransparent = 0;
         final int w = pixmap.getWidth(), h = pixmap.getHeight();
-        for (int y = 0; y < h; y++) {
-            int py = flipY ? (h - y - 1) : y;
-            for (int px = 0; px < w; px++) {
-                color = pixmap.getPixel(px, py);
-                if((color & 0xFE) != 0xFE && !colorToIndex.containsKey(color)) {
-                    if(hasTransparent == 0 && colorToIndex.size >= 256)
-                    {
-                        write(output, pixmap, true, ditherFallback, threshold);
-                        return;
-                    }
-                    hasTransparent = 1;
-                }
-                else if(!colorToIndex.containsKey(color))
-                {
-                    colorToIndex.put(color, colorToIndex.size & 255);
-                    if(colorToIndex.size == 257 && hasTransparent == 0)
-                    {
-                        colorToIndex.remove(0, 0);
-                    }
-                    if(colorToIndex.size > 256)
-                    {
-                        write(output, pixmap, true, ditherFallback, threshold);
-                        return;
+        int[] paletteArray;
+        if(exactPalette == null) {
+            for (int y = 0; y < h; y++) {
+                int py = flipY ? (h - y - 1) : y;
+                for (int px = 0; px < w; px++) {
+                    color = pixmap.getPixel(px, py);
+                    if ((color & 0xFE) != 0xFE && !colorToIndex.containsKey(color)) {
+                        if (hasTransparent == 0 && colorToIndex.size >= 256) {
+                            write(output, pixmap, true, ditherFallback, threshold);
+                            return;
+                        }
+                        hasTransparent = 1;
+                    } else if (!colorToIndex.containsKey(color)) {
+                        colorToIndex.put(color, colorToIndex.size & 255);
+                        if (colorToIndex.size == 257 && hasTransparent == 0) {
+                            colorToIndex.remove(0, 0);
+                        }
+                        if (colorToIndex.size > 256) {
+                            write(output, pixmap, true, ditherFallback, threshold);
+                            return;
+                        }
                     }
                 }
             }
+            paletteArray = new int[colorToIndex.size];
+            for (IntIntMap.Entry ent : colorToIndex) {
+                paletteArray[ent.value] = ent.key;
+            }
         }
-        int[] paletteArray = new int[colorToIndex.size];
-        for(IntIntMap.Entry ent : colorToIndex)
+        else
         {
-            paletteArray[ent.value] = ent.key;
+            hasTransparent = (exactPalette[0] == 0) ? 1 : 0;
+            paletteArray = exactPalette;
+            for (int i = hasTransparent; i < paletteArray.length; i++) {
+                colorToIndex.put(paletteArray[i], i);
+            }
         }
         DeflaterOutputStream deflaterOutput = new DeflaterOutputStream(buffer, deflater);
         DataOutputStream dataOutput = new DataOutputStream(output);
@@ -402,6 +459,171 @@ public class PNG8 implements Disposable {
             for (int px = 0; px < w; px++) {
                 color = pixmap.getPixel(px, py);
                 curLine[px] = (byte) colorToIndex.get(color, 0);
+            }
+
+            lineOut[0] = (byte)(curLine[0] - prevLine[0]);
+
+            //Paeth
+            for (int x = 1; x < lineLen; x++) {
+                int a = curLine[x - 1] & 0xff;
+                int b = prevLine[x] & 0xff;
+                int c = prevLine[x - 1] & 0xff;
+                int p = a + b - c;
+                int pa = p - a;
+                if (pa < 0) pa = -pa;
+                int pb = p - b;
+                if (pb < 0) pb = -pb;
+                int pc = p - c;
+                if (pc < 0) pc = -pc;
+                if (pa <= pb && pa <= pc)
+                    c = a;
+                else if (pb <= pc)
+                    c = b;
+                lineOut[x] = (byte)(curLine[x] - c);
+            }
+
+            deflaterOutput.write(PAETH);
+            deflaterOutput.write(lineOut, 0, lineLen);
+
+            byte[] temp = curLine;
+            curLine = prevLine;
+            prevLine = temp;
+        }
+        deflaterOutput.finish();
+        buffer.endChunk(dataOutput);
+
+        buffer.writeInt(IEND);
+        buffer.endChunk(dataOutput);
+
+        output.flush();
+
+    }
+    /**
+     * Attempts to write the given Pixmap exactly as a PNG-8 image to file; this attempt will only succeed if there
+     * are no more than 256 colors in the Pixmap (treating all partially transparent colors as fully transparent).
+     * If the attempt fails, this will throw an IllegalArgumentException. This will keep the non-alpha components of
+     * colors exactly.
+     * @param file a FileHandle that must be writable, and will have the given Pixmap written as a PNG-8 image
+     * @param pixmap a Pixmap to write to the given output stream
+     * @throws IOException if file writing fails for any reason
+     */
+    public void writePreciseSection (FileHandle file, Pixmap pixmap, int[] exactPalette, int startX, int startY, int width, int height) throws IOException {
+        OutputStream output = file.write(false);
+        try {
+            writePreciseSection(output, pixmap, exactPalette, startX, startY, width, height);
+        } finally {
+            StreamUtils.closeQuietly(output);
+        }
+    }
+
+    /**
+     * Attempts to write the given Pixmap exactly as a PNG-8 image to output; this attempt will only succeed if there
+     * are no more than 256 colors in the Pixmap (treating all partially transparent colors as fully transparent).
+     * If the attempt fails, this falls back to calling {@link #write(OutputStream, Pixmap, boolean, boolean)}, which
+     * can dither the image to use no more than 255 colors (plus fully transparent) based on ditherFallback and will
+     * always analyze the Pixmap to get an accurate-enough palette, using the given threshold for analysis (which is
+     * typically between 1 and 1000, and most often near 200-400). All other write() methods in this class will
+     * reduce the color depth somewhat, but as long as the color count stays at 256 or less, this will keep the
+     * non-alpha components of colors exactly.
+     * @param output an OutputStream that will not be closed
+     * @param pixmap a Pixmap to write to the given output stream
+     * @throws IOException if OutputStream things fail for any reason
+     */
+    public void writePreciseSection(OutputStream output, Pixmap pixmap, int[] exactPalette, int startX, int startY, int width, int height) throws IOException {
+        IntIntMap colorToIndex = new IntIntMap(256);
+        colorToIndex.put(0, 0);
+        int color;
+        int hasTransparent = 0;
+        final int w = startX + width, h = startY + height;
+        int[] paletteArray;
+        if(exactPalette == null) {
+            for (int y = startY; y < h; y++) {
+                int py = flipY ? (pixmap.getHeight() - y - 1) : y;
+                for (int px = startX; px < w; px++) {
+                    color = pixmap.getPixel(px, py);
+                    if ((color & 0xFE) != 0xFE && !colorToIndex.containsKey(color)) {
+                        if (hasTransparent == 0 && colorToIndex.size >= 256) {
+                            throw new IllegalArgumentException("Too many colors to write precisely!");
+                        }
+                        hasTransparent = 1;
+                    } else if (!colorToIndex.containsKey(color)) {
+                        colorToIndex.put(color, colorToIndex.size & 255);
+                        if (colorToIndex.size == 257 && hasTransparent == 0) {
+                            colorToIndex.remove(0, 0);
+                        }
+                        if (colorToIndex.size > 256) {
+                            throw new IllegalArgumentException("Too many colors to write precisely!");
+                        }
+                    }
+                }
+            }
+            paletteArray = new int[colorToIndex.size];
+            for (IntIntMap.Entry ent : colorToIndex) {
+                paletteArray[ent.value] = ent.key;
+            }
+        }
+        else
+        {
+            hasTransparent = (exactPalette[0] == 0) ? 1 : 0;
+            paletteArray = exactPalette;
+            for (int i = hasTransparent; i < paletteArray.length; i++) {
+                colorToIndex.put(paletteArray[i], i);
+            }
+        }
+        DeflaterOutputStream deflaterOutput = new DeflaterOutputStream(buffer, deflater);
+        DataOutputStream dataOutput = new DataOutputStream(output);
+        dataOutput.write(SIGNATURE);
+
+        buffer.writeInt(IHDR);
+        buffer.writeInt(width);
+        buffer.writeInt(height);
+        buffer.writeByte(8); // 8 bits per component.
+        buffer.writeByte(COLOR_INDEXED);
+        buffer.writeByte(COMPRESSION_DEFLATE);
+        buffer.writeByte(FILTER_NONE);
+        buffer.writeByte(INTERLACE_NONE);
+        buffer.endChunk(dataOutput);
+
+        buffer.writeInt(PLTE);
+        for (int i = 0; i < paletteArray.length; i++) {
+            int p = paletteArray[i];
+            buffer.write(p>>>24);
+            buffer.write(p>>>16);
+            buffer.write(p>>>8);
+        }
+        buffer.endChunk(dataOutput);
+
+        if(hasTransparent == 1) {
+            buffer.writeInt(TRNS);
+            buffer.write(0);
+            buffer.endChunk(dataOutput);
+        }
+        buffer.writeInt(IDAT);
+        deflater.reset();
+
+        int lineLen = width;
+        byte[] lineOut, curLine, prevLine;
+        if (lineOutBytes == null) {
+            lineOut = (lineOutBytes = new ByteArray(lineLen)).items;
+            curLine = (curLineBytes = new ByteArray(lineLen)).items;
+            prevLine = (prevLineBytes = new ByteArray(lineLen)).items;
+        } else {
+            lineOut = lineOutBytes.ensureCapacity(lineLen);
+            curLine = curLineBytes.ensureCapacity(lineLen);
+            prevLine = prevLineBytes.ensureCapacity(lineLen);
+            for (int i = 0, n = lastLineLen; i < n; i++)
+            {
+                prevLine[i] = 0;
+            }
+        }
+
+        lastLineLen = lineLen;
+
+        for (int y = startY; y < h; y++) {
+            int py = flipY ? (pixmap.getHeight() - y - 1) : y;
+            for (int px = startX; px < w; px++) {
+                color = pixmap.getPixel(px, py);
+                curLine[px - startX] = (byte) colorToIndex.get(color, 0);
             }
 
             lineOut[0] = (byte)(curLine[0] - prevLine[0]);
@@ -740,6 +962,7 @@ public class PNG8 implements Disposable {
         deflater.end();
     }
 
+    @GwtIncompatible
     static class ChunkBuffer extends DataOutputStream {
         final ByteArrayOutputStream buffer;
         final CRC32 crc;
@@ -763,6 +986,13 @@ public class PNG8 implements Disposable {
             crc.reset();
         }
     }
+
+    /**
+     * Simple PNG IO from https://www.java-tips.org/java-se-tips-100019/23-java-awt-image/2283-png-file-format-decoder-in-java.html .
+     * @param inStream
+     * @return
+     * @throws IOException
+     */
     protected static LinkedHashMap<String, byte[]> readChunks(InputStream inStream) throws IOException {
         DataInputStream in = new DataInputStream(inStream);
         if(in.readLong() != 0x89504e470d0a1a0aL)
@@ -789,27 +1019,46 @@ public class PNG8 implements Disposable {
                 trucking = false;
             }
         }
+        in.close();
         return chunks;
     }
-    protected static void writeChunks(OutputStream outStream, LinkedHashMap<String, byte[]> chunks)
-    {
+
+    /**
+     * Simple PNG IO from https://www.java-tips.org/java-se-tips-100019/23-java-awt-image/2283-png-file-format-decoder-in-java.html .
+     * @param outStream
+     * @param chunks
+     */
+    protected static void writeChunks(OutputStream outStream, LinkedHashMap<String, byte[]> chunks) {
         DataOutputStream out = new DataOutputStream(outStream);
         CRC32 crc = new CRC32();
-        for (HashMap.Entry<String, byte[]> ent : chunks.entrySet())
-        {
-            try {
+        try {
+            out.writeLong(0x89504e470d0a1a0aL);
+            for (HashMap.Entry<String, byte[]> ent : chunks.entrySet()) {
                 out.writeInt(ent.getValue().length);
                 out.writeBytes(ent.getKey());
                 crc.update(ent.getKey().getBytes("UTF8"));
                 out.write(ent.getValue());
                 crc.update(ent.getValue());
-                out.write((int)crc.getValue());
-            } catch (IOException e) {
-                e.printStackTrace();
+                out.writeInt((int) crc.getValue());
+                crc.reset();
             }
+            out.flush();
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
-    
+
+    /**
+     * Given a FileHandle to read from and a FileHandle to write to, duplicates the input FileHandle and changes its
+     * palette (in full and in order) to exactly match {@code palette}. This is only likely to work if the input file
+     * was written with the same palette order, such as by specifying an {@code exactPalette} in
+     * {@link #writePrecisely(FileHandle, Pixmap, int[], boolean, int)} where that exactPalette has similar colors at
+     * each palette index to {@code palette}.
+     * @param input FileHandle to read from that should have a similar palette (and very similar order) to {@code palette}
+     * @param output FileHandle that should be writable and empty
+     * @param palette RGBA8888 color array, as in {@link Coloring}
+     */
     public static void swapPalette(FileHandle input, FileHandle output, int[] palette)
     {
         try {

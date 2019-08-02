@@ -10,11 +10,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import warpwriter.Coloring;
 import warpwriter.PNG8;
 import warpwriter.PaletteReducer;
 import warpwriter.model.color.Colorizer;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class Palettizer extends ApplicationAdapter {
     //public static final int backgroundColor = Color.rgba8888(Color.DARK_GRAY);
@@ -72,7 +74,10 @@ public class Palettizer extends ApplicationAdapter {
             png8.writePrecisely(Gdx.files.local(subname + "_RobertsEdit.png"), pm, false);
             pm = reducer.reduceShaderMimic(new Pixmap(Gdx.files.absolute(name)));
             FileHandle next = Gdx.files.local(subname + "_ShaderMimic.png");
-            png8.writePrecisely(next, pm, false);
+            png8.writePrecisely(next, pm, Coloring.AURORA, false, 0);
+            int[] hsp = Arrays.copyOf(Coloring.AURORA, 256);
+            PaletteReducer.hueShiftPalette(hsp);
+            PNG8.swapPalette(next, Gdx.files.local(subname + "_ShaderMimic_HSP.png"), hsp);
             screenTexture = new Texture(next);
         } catch (IOException ignored) {
         }
