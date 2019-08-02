@@ -2131,11 +2131,13 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
 //            System.out.println(sb.append("};"));
 //
 //        }
+        for (int i = 0; i < 256; i++) {
+            System.arraycopy(LAWN_BONUS_RAMP_VALUES[i], 0, TOASTY_BONUS_RAMP_VALUES[i], 0, 4);
+            PaletteReducer.hueShiftPalette(TOASTY_BONUS_RAMP_VALUES[i]);
+        }
         for (int i = 0; i < 64; i++) {
             System.arraycopy(FLESURRECT_BONUS_RAMP_VALUES[i], 0, FlesurrectBonusPalette, i << 2, 4);
-            System.arraycopy(LAWN_BONUS_RAMP_VALUES[i], 0, TOASTY_BONUS_RAMP_VALUES[i], 0, 4);
             System.arraycopy(LAWN_BONUS_RAMP_VALUES[i], 0, LawnBonusPalette, i << 2, 4);
-            PaletteReducer.hueShiftPalette(TOASTY_BONUS_RAMP_VALUES[i]);
             System.arraycopy(TOASTY_BONUS_RAMP_VALUES[i], 0, ToastyBonusPalette, i << 2, 4);
             System.arraycopy(JUDGE_BONUS_RAMP_VALUES[i], 0, JudgeBonusPalette, i << 2, 4);
             System.arraycopy(CUBICLE_BONUS_RAMP_VALUES[i], 0, CubicleBonusPalette, i << 2, 4);

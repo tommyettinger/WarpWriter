@@ -74,9 +74,9 @@ public class VoxelDrawSeqTest extends ApplicationAdapter {
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.FLESURRECT);
 //        colorizer = Colorizer.LawnBonusColorizer;
         colorizer = Colorizer.ToastyBonusColorizer;
-        voxelColor = new VoxelColor().set(colorizer);
         batchRenderer = new VoxelSpriteBatchRenderer(batch);
         batchRenderer.color().set(colorizer);
+        voxelColor = batchRenderer.color();
         rng = new MiniMover64RNG(-123456789);
         maker = new ModelMaker(-123456789, colorizer);
 //        try {
@@ -255,6 +255,14 @@ public class VoxelDrawSeqTest extends ApplicationAdapter {
 //                        model.rotation().reset();
                         diagonal = false;
                         angle = 2;
+                        break;
+                    case Input.Keys.S: // shifted hues
+                        batchRenderer.color().set(Colorizer.ToastyBonusColorizer);
+                        colorizer = Colorizer.ToastyBonusColorizer;
+                        break;
+                    case Input.Keys.F: // flat hues
+                        batchRenderer.color().set(Colorizer.LawnBonusColorizer);
+                        colorizer = Colorizer.LawnBonusColorizer;
                         break;
                     case Input.Keys.W: // write
                         VoxIO.writeVOX(FakeLanguageGen.SIMPLISH.word(Tools3D.hash64(voxels), true) + ".vox", voxels, maker.getColorizer().getReducer().paletteArray);
