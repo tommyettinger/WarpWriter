@@ -88,7 +88,7 @@ public class ShaderPalettizer extends ApplicationAdapter {
 
         // if you don't have these files on this absolute path, that's fine, and they will be ignored
 //        load("D:/Painting_by_Henri_Biva.jpg");
-        load("D:/Among_the_Sierra_Nevada_by_Albert Bierstadt.jpg");
+        load("D:/Among_the_Sierra_Nevada_by_Albert_Bierstadt.jpg");
 //        load("D:/Mona_Lisa.jpg");
     }
 
@@ -178,27 +178,27 @@ public class ShaderPalettizer extends ApplicationAdapter {
                         break;
                     case Input.Keys.NUM_7:
                     case Input.Keys.NUMPAD_7:
-                        palette = new Texture(Gdx.files.local("palettes/Cubicle64Bonus_GLSL.png"), Pixmap.Format.RGBA8888, false);
+                        palette = new Texture(Gdx.files.local("palettes/Vinik24Bonus_GLSL.png"), Pixmap.Format.RGBA8888, false);
 //                        palette = new Texture(Gdx.files.local("palettes/JudgeBonus_GLSL.png"), Pixmap.Format.RGBA8888, false);
                         break;
                     case Input.Keys.NUM_8:
-                    case Input.Keys.NUMPAD_8:
-                        palette = new Texture(Gdx.files.local("palettes/RoughLAB_Aurora_GLSL.png"), Pixmap.Format.RGBA8888, false);
-//                        palette = new Texture(Gdx.files.local("palettes/Uniform216_GLSL.png"), Pixmap.Format.RGBA8888, false);
+                    case Input.Keys.NUMPAD_8:                         
+                        palette = new Texture(Gdx.files.local("palettes/Uniform216_GLSL.png"), Pixmap.Format.RGBA8888, false);
+                        //palette = new Texture(Gdx.files.local("palettes/RoughLAB_Aurora_GLSL.png"), Pixmap.Format.RGBA8888, false);
 //                        palette = new Texture(Gdx.files.local("palettes/Laser64_GLSL.png"), Pixmap.Format.RGBA8888, false);
 //                        palette = new Texture(Gdx.files.local("palettes/NonUniform256_GLSL.png"), Pixmap.Format.RGBA8888, false);
 //                        palette = new Texture(Gdx.files.local("palettes/Mash256_GLSL.png"), Pixmap.Format.RGBA8888, false);
                         break;
                     case Input.Keys.NUM_9:
                     case Input.Keys.NUMPAD_9:
-                        palette = new Texture(Gdx.files.local("palettes/Lawn64_GLSL.png"), Pixmap.Format.RGBA8888, false);
+                        palette = new Texture(Gdx.files.local("palettes/Twirl64_GLSL.png"), Pixmap.Format.RGBA8888, false);
 //                        palette = new Texture(Gdx.files.local("palettes/Laser64Bonus_GLSL.png"), Pixmap.Format.RGBA8888, false);
 //                        palette = new Texture(Gdx.files.local("palettes/PureBonus_GLSL.png"), Pixmap.Format.RGBA8888, false);
 //                        palette = new Texture(Gdx.files.local("palettes/Uniform216_GLSL.png"), Pixmap.Format.RGBA8888, false);
                         break;
                     case Input.Keys.NUM_0:
                     case Input.Keys.NUMPAD_0:
-                        palette = new Texture(Gdx.files.local("palettes/Lawn256_GLSL.png"), Pixmap.Format.RGBA8888, false);
+                        palette = new Texture(Gdx.files.local("palettes/Twirl256_GLSL.png"), Pixmap.Format.RGBA8888, false);
 //                        palette = new Texture(Gdx.files.local("palettes/CIELAB_Aurora_GLSL.png"), Pixmap.Format.RGBA8888, false);
 //                        palette = new Texture(Gdx.files.local("palettes/Uniform216_GLSL.png"), Pixmap.Format.RGBA8888, false);
                         break;
@@ -212,7 +212,7 @@ public class ShaderPalettizer extends ApplicationAdapter {
                         load("D:/Mona_Lisa.jpg");
                         break;
                     case Input.Keys.S: //Sierra Nevada
-                        load("D:/Among_the_Sierra_Nevada_by_Albert Bierstadt.jpg");
+                        load("D:/Among_the_Sierra_Nevada_by_Albert_Bierstadt.jpg");
                         break;
                     case Input.Keys.B: // Biva
                         load("D:/Painting_by_Henri_Biva.jpg");

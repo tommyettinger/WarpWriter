@@ -104,7 +104,7 @@ public class Palettizer extends ApplicationAdapter {
 
         // if you don't have these files on this absolute path, that's fine, and they will be ignored
         load("D:/Painting_by_Henri_Biva.jpg");
-        load("D:/Among_the_Sierra_Nevada_by_Albert Bierstadt.jpg");
+        load("D:/Among_the_Sierra_Nevada_by_Albert_Bierstadt.jpg");
         load("D:/Mona_Lisa.jpg");
     }
 
