@@ -6,10 +6,7 @@ import warpwriter.model.IVoxelSeq;
 import warpwriter.model.VoxelSeq;
 import warpwriter.model.nonvoxel.LittleEndianDataInputStream;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 
 import static warpwriter.model.nonvoxel.HashMap3D.*;
 
@@ -52,6 +49,9 @@ public class VoxIO {
             0x000088ff, 0x000077ff, 0x000055ff, 0x000044ff, 0x000022ff, 0x000011ff, 0xeeeeeeff, 0xddddddff,
             0xbbbbbbff, 0xaaaaaaff, 0x888888ff, 0x777777ff, 0x555555ff, 0x444444ff, 0x222222ff, 0x111111ff
     };
+    public static byte[][][] readVox(InputStream stream) {
+        return readVox(new LittleEndianDataInputStream(stream));
+    }
     public static byte[][][] readVox(LittleEndianDataInputStream stream) {
         // check out https://github.com/ephtracy/voxel-model/blob/master/MagicaVoxel-file-format-vox.txt for the file format used below
         byte[][][] voxelData = null;

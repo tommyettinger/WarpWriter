@@ -33,7 +33,8 @@ public class ColorSolidGenerator extends ApplicationAdapter {
         generate("FlesurrectBonus", Colorizer.FlesurrectBonusPalette);
         generate("Rinsed", Coloring.RINSED);
         generate("VGA256", Coloring.VGA256);
-        generate("Pure", Coloring.PURE);
+        generate("Twirl64", Coloring.TWIRL64);
+        generate("Twirl256", Coloring.TWIRL256);
 
         Gdx.app.exit();
     }

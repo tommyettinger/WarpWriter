@@ -5,7 +5,6 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import squidpony.squidmath.*;
 import warpwriter.model.color.Colorizer;
-import warpwriter.model.nonvoxel.LittleEndianDataInputStream;
 
 import java.io.InputStream;
 
@@ -30,20 +29,20 @@ public class ModelMaker {
 
     public ModelMaker()
     {
-        this((long)((Math.random() - 0.5) * 4.503599627370496E15) ^ (long)((Math.random() - 0.5) * 2.0 * -9.223372036854776E18), Colorizer.RinsedColorizer);
+        this((long)((Math.random() - 0.5) * 4.503599627370496E15) ^ (long)((Math.random() - 0.5) * 2.0 * -9.223372036854776E18), Colorizer.TwirlBonusColorizer);
     }
     public ModelMaker(long seed)
     {
-        this(seed, Colorizer.RinsedColorizer);
+        this(seed, Colorizer.TwirlBonusColorizer);
     }
     public ModelMaker(long seed, Colorizer colorizer)
     {
         rng = new GWTRNG(seed);
         InputStream is = Gdx.files.internal("ship.vox").read();
-        ship = VoxIO.readVox(new LittleEndianDataInputStream(is));
+        ship = VoxIO.readVox(is);
         if(ship == null) ship = new byte[12][12][8];
         is = Gdx.files.internal("ship_40_40_30.vox").read();
-        shipLarge = VoxIO.readVox(new LittleEndianDataInputStream(is));
+        shipLarge = VoxIO.readVox(is);
         if(shipLarge == null) shipLarge = new byte[40][40][30];
         xSize = ship.length;
         ySize = ship[0].length;
@@ -52,19 +51,19 @@ public class ModelMaker {
         this.colorizer = colorizer;
         
         is = Gdx.files.internal((RINSED_PALETTE ? "Rinsed_" : "")  + "Warrior_Male_Attach.vox").read();
-        warriorMale = VoxIO.readVox(new LittleEndianDataInputStream(is));
+        warriorMale = VoxIO.readVox(is);
         if(warriorMale == null) warriorMale = new byte[12][12][8];
         is = Gdx.files.internal((RINSED_PALETTE ? "Rinsed_" : "")  + "Sword_1H_Attach.vox").read();
-        sword0 = VoxIO.readVox(new LittleEndianDataInputStream(is));
+        sword0 = VoxIO.readVox(is);
         if(sword0 == null) sword0 = new byte[12][12][8];
         is = Gdx.files.internal((RINSED_PALETTE ? "Rinsed_" : "")  + "Spear_1H_Attach.vox").read();
-        spear0 = VoxIO.readVox(new LittleEndianDataInputStream(is));
+        spear0 = VoxIO.readVox(is);
         if(spear0 == null) spear0 = new byte[12][12][8];
         is = Gdx.files.internal((RINSED_PALETTE ? "Rinsed_" : "")  + "Board_Shield_1H_Attach.vox").read();
-        shield0 = VoxIO.readVox(new LittleEndianDataInputStream(is));
+        shield0 = VoxIO.readVox(is);
         if(shield0 == null) shield0 = new byte[12][12][8];
         is = Gdx.files.internal((RINSED_PALETTE ? "Rinsed_" : "")  + "Round_Shield_1H_Attach.vox").read();
-        shield1 = VoxIO.readVox(new LittleEndianDataInputStream(is));
+        shield1 = VoxIO.readVox(is);
         if(shield1 == null) shield1 = new byte[12][12][8];
         
         rightHand = new byte[][][][]{sword0, spear0};
@@ -266,8 +265,8 @@ public class ModelMaker {
         final int side = large ? shipLarge.length : ship.length,
                 high = large ? shipLarge[0][0].length : ship[0][0].length;
         byte[][][] voxels = new byte[side][side][high];
-        byte mainColor = (byte)(RINSED_PALETTE ? rng.nextSignedInt(30) * 8 + rng.between(17, 20) : rng.nextSignedInt(18) * 6 + rng.between(22, 25)),
-                highlightColor = (byte)(RINSED_PALETTE ? rng.nextSignedInt(30) * 8 + rng.between(18, 21) : rng.nextSignedInt(18) * 6 + rng.between(21, 24));
+        byte mainColor = colorizer.getReducer().randomColorIndex(rng),
+                highlightColor = colorizer.brighten(colorizer.getReducer().randomColorIndex(rng));
         for (int x = 0; x < side; x++) {
             for (int y = 0; y < side; y++) {
                 for (int z = 0; z < high; z++) {
@@ -281,21 +280,16 @@ public class ModelMaker {
     {
         byte[][][] voxels = new byte[12][12][8];
         int ctr;
-        int state = rng.getStateA();
-        int current = (RINSED_PALETTE) ? determineBounded(state+1, 30):  determineBounded(state + 1, 18);
-        final byte mainColor = (byte)((RINSED_PALETTE) 
-                ? (current * 8) + determineBounded(state + 22, 4) + 18 
-                : (current * 6) + determineBounded(state + 22, 3) + 22),
-                highlightColor = (byte)((RINSED_PALETTE)
-                        ? ((current + 4 + determineBounded(state + 333, 10)) % 30) * 8 + determineBounded(state + 4444, 4) + 18
-                        : ((current + 4 + determineBounded(state + 333, 10)) % 18) * 6 + determineBounded(state + 4444, 3) + 21);
+        int current;
+        final byte mainColor = colorizer.getReducer().randomColorIndex(rng),
+                highlightColor = colorizer.colorize(colorizer.getReducer().randomColorIndex(rng), ~rng.next(1) * (-rng.next(1) | 1));
         do {
             final int seed = rng.nextInt();
             ctr = 0;
             for (int x = 0; x < 12; x++) {
                 for (int y = 1; y < 6; y++) {
                     for (int z = 0; z < 8; z++) {
-                        if (y > (Math.abs(x - 6) < 2 ? 4 - (seed >>> (63 - (seed & 1))) : 3)) {
+                        if (y > (Math.abs(x - 6) < 2 ? 4 - (seed >>> (31 - (seed & 1))) : 3)) {
                             //current = hashAll(x >> 1, y >> 1, z >> 1, seed);
                             current = hashAll(x, y, z, seed);
                             if ((voxels[x][11 - y][z] = voxels[x][y][z] =
@@ -317,7 +311,7 @@ public class ModelMaker {
         for (int x = 10; x >= 5; x--) {
             for (int z = 7; z >= 2; z--) {
                 for (int y = 1; y < 5; y++) {
-                    if(y != 0 && voxels[x][y - 1][z] != 0) break;
+                    if(voxels[x][y - 1][z] != 0) break;
                     if (voxels[x][y][z] != 0) {
                         voxels[x][12 - y][z] = voxels[x][y - 1][z] = EYE_DARK;
                         voxels[x][11 - y][z] = voxels[x][y    ][z] = EYE_DARK;
@@ -357,11 +351,11 @@ public class ModelMaker {
     {
         final int xSize = fish.length, ySize = fish[0].length, zSize = fish[0][0].length;
         byte[][][][] frames = new byte[frameCount][xSize][ySize][zSize];
-        float changeAmount = 2f / (frameCount);
+        float changeAmount = 1f / (frameCount);
         int adjustment;
         for (int f = 0; f < frameCount; f++) {
             for (int x = 0; x < xSize; x++) {
-                adjustment = (int) (NumberTools.sin(changeAmount * (f + x * 0.6f) * 3.141592653589793f) * 1.5f);
+                adjustment = (int) (NumberTools.sin_(changeAmount * (f + x * 0.6f)) * 1.5f);
                 for (int y = 1; y < ySize - 1; y++) {
                     System.arraycopy(fish[x][y], 0, frames[f][x][y + adjustment], 0, zSize);
                 }
@@ -372,117 +366,119 @@ public class ModelMaker {
     private static final int[] RINSED_COCKPIT_COLORS = {19, 20, 21, 22, 23, 24, 25, 26, 27};
     public byte[][][] shipRandom()
     {
-        xSize = ship.length;
-        ySize = ship[0].length;
-        zSize = ship[0][0].length;
-        byte[][][] nextShip = new byte[xSize][ySize][zSize];
-        final int halfY = ySize >> 1, smallYSize = ySize - 1;
-        int seed = rng.nextInt(), current;
-        final byte mainColor = (byte)((RINSED_PALETTE)
-                ? determineBounded(seed + 1, 30) * 8 + determineBounded(seed + 22, 4) + 18
-                : determineBounded(seed + 1, 18) * 6 +  + determineBounded(seed + 22, 3) + 22),
-                highlightColor = (byte)((RINSED_PALETTE)
-                        ? ((determineBounded(seed + 333, 30))) * 8 + determineBounded(seed + 4444, 4) + 17
-                        : ((determineBounded(seed + 333, 18))) * 6 + determineBounded(seed + 4444, 3) + 21),
-                cockpitColor = (byte)((RINSED_PALETTE) 
-                        ? RINSED_COCKPIT_COLORS[determineBounded(seed + 55555, 6)] * 8 + 19 
-                        : 84 + (determineBounded(seed + 55555, 6) * 6));
-        byte color;
-//        final byte mainColor = (byte)((determineBounded(seed + 1L, 18) * 6) + determineBounded(seed + 22L, 3) + 22),
-//                highlightColor = (byte)((determineBounded(seed + 333L, 18) * 6) + determineBounded(seed + 4444L, 3) + 21),
-//                cockpitColor = (byte)(84 + (determineBounded(seed + 55555L, 6) * 6));
-        int xx, yy;
-        for (int x = 0; x < xSize; x++) {
-            for (int y = 0; y < halfY; y++) {
-                for (int z = 0; z < zSize; z++) {
-                    color = ship[x][y][z];
-                    if (color != 0) {
-                        // this 4-input-plus-state hash is really a slight modification on LightRNG.determine(), but
-                        // it mixes the x, y, and z inputs more thoroughly than other techniques do, and we then use
-                        // different sections of the random bits for different purposes. This helps reduce the possible
-                        // issues from using rng.next(5) and rng.next(6) all over if the bits those use have a pattern.
-                        // In the original model, all voxels of the same color will be hashed with similar behavior but
-                        // any with different colors will get unrelated values.
-                        xx = x + 1;
-                        yy = y + 1;
-                        current = hashAll(xx + (xx | z) >> 2, yy + (yy | z) >> 1, z, color, seed);
-                        if (color > 0 && color < 8 && z >= 2) {
-                            nextShip[x][smallYSize - y][z] = nextShip[x][y][z] = (byte) (cockpitColor - (z - 2 >> 1));//9;
-                        } else {
-                            nextShip[x][smallYSize - y][z] = nextShip[x][y][z] =
-                                    // checks bottom 6 bits
-                                    ((current & 0x3F) < 45)
-                                            ? 0
-                                            // checks another 6 bits, starting after discarding 6 bits from the bottom
-                                            : ((current >>> 6 & 0x3F) < 40) ? (byte)(
-                                            (RINSED_PALETTE) ? 18 + (current & 3) : 18 + (current & 7))
-                                            // checks another 6 bits, starting after discarding 12 bits from the bottom
-                                            : ((current >>> 12 & 0x3F) < 8) ? highlightColor : mainColor;
-                        }
-                    }
-                }
-            }
-        }
-        return nextShip;
-        //return Tools3D.runCA(nextShip, 1);
+        return shipSmoothColorized();
+//        xSize = ship.length;
+//        ySize = ship[0].length;
+//        zSize = ship[0][0].length;
+//        byte[][][] nextShip = new byte[xSize][ySize][zSize];
+//        final int halfY = ySize >> 1, smallYSize = ySize - 1;
+//        int seed = rng.nextInt(), current;
+//        final byte mainColor = (byte)((RINSED_PALETTE)
+//                ? determineBounded(seed + 1, 30) * 8 + determineBounded(seed + 22, 4) + 18
+//                : determineBounded(seed + 1, 18) * 6 +  + determineBounded(seed + 22, 3) + 22),
+//                highlightColor = (byte)((RINSED_PALETTE)
+//                        ? ((determineBounded(seed + 333, 30))) * 8 + determineBounded(seed + 4444, 4) + 17
+//                        : ((determineBounded(seed + 333, 18))) * 6 + determineBounded(seed + 4444, 3) + 21),
+//                cockpitColor = (byte)((RINSED_PALETTE) 
+//                        ? RINSED_COCKPIT_COLORS[determineBounded(seed + 55555, 6)] * 8 + 19 
+//                        : 84 + (determineBounded(seed + 55555, 6) * 6));
+//        byte color;
+////        final byte mainColor = (byte)((determineBounded(seed + 1L, 18) * 6) + determineBounded(seed + 22L, 3) + 22),
+////                highlightColor = (byte)((determineBounded(seed + 333L, 18) * 6) + determineBounded(seed + 4444L, 3) + 21),
+////                cockpitColor = (byte)(84 + (determineBounded(seed + 55555L, 6) * 6));
+//        int xx, yy;
+//        for (int x = 0; x < xSize; x++) {
+//            for (int y = 0; y < halfY; y++) {
+//                for (int z = 0; z < zSize; z++) {
+//                    color = ship[x][y][z];
+//                    if (color != 0) {
+//                        // this 4-input-plus-state hash is really a slight modification on LightRNG.determine(), but
+//                        // it mixes the x, y, and z inputs more thoroughly than other techniques do, and we then use
+//                        // different sections of the random bits for different purposes. This helps reduce the possible
+//                        // issues from using rng.next(5) and rng.next(6) all over if the bits those use have a pattern.
+//                        // In the original model, all voxels of the same color will be hashed with similar behavior but
+//                        // any with different colors will get unrelated values.
+//                        xx = x + 1;
+//                        yy = y + 1;
+//                        current = hashAll(xx + (xx | z) >> 2, yy + (yy | z) >> 1, z, color, seed);
+//                        if (color > 0 && color < 8 && z >= 2) {
+//                            nextShip[x][smallYSize - y][z] = nextShip[x][y][z] = (byte) (cockpitColor - (z - 2 >> 1));//9;
+//                        } else {
+//                            nextShip[x][smallYSize - y][z] = nextShip[x][y][z] =
+//                                    // checks bottom 6 bits
+//                                    ((current & 0x3F) < 45)
+//                                            ? 0
+//                                            // checks another 6 bits, starting after discarding 6 bits from the bottom
+//                                            : ((current >>> 6 & 0x3F) < 40) ? (byte)(
+//                                            (RINSED_PALETTE) ? 18 + (current & 3) : 18 + (current & 7))
+//                                            // checks another 6 bits, starting after discarding 12 bits from the bottom
+//                                            : ((current >>> 12 & 0x3F) < 8) ? highlightColor : mainColor;
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        return nextShip;
+//        //return Tools3D.runCA(nextShip, 1);
     }
 
     public byte[][][] shipLargeRandom()
     {
-        xSize = shipLarge.length;
-        ySize = shipLarge[0].length;
-        zSize = shipLarge[0][0].length;
-        byte[][][] nextShip = new byte[xSize][ySize][zSize];
-        final int halfY = ySize >> 1, smallYSize = ySize - 1;
-        int color;
-        int seed = rng.nextInt(), current, paint;
-        final byte mainColor = (byte)((RINSED_PALETTE)
-                ? determineBounded(seed + 1, 30) * 8 + determineBounded(seed + 22, 4) + 18
-                : determineBounded(seed + 1, 18) * 6 +  + determineBounded(seed + 22, 3) + 22),
-                highlightColor = (byte)((RINSED_PALETTE)
-                        ? ((determineBounded(seed + 333, 30))) * 8 + determineBounded(seed + 4444, 4) + 17
-                        : ((determineBounded(seed + 333, 18))) * 6 + determineBounded(seed + 4444, 3) + 21),
-                cockpitColor = (byte)((RINSED_PALETTE)
-                        ? RINSED_COCKPIT_COLORS[determineBounded(seed + 55555, 6)] * 8 + 22
-                        : 84 + (determineBounded(seed + 55555, 6) * 6));
-        int xx, yy, zz;
-        for (int x = 0; x < xSize; x++) {
-            for (int y = 0; y < halfY; y++) {
-                for (int z = 0; z < zSize; z++) {
-                    color = (shipLarge[x][y][z] & 255);
-                    if (color != 0) {
-                        // this 4-input-plus-state hash is really a slight modification on LightRNG.determine(), but
-                        // it mixes the x, y, and z inputs more thoroughly than other techniques do, and we then use
-                        // different sections of the random bits for different purposes. This helps reduce the possible
-                        // issues from using rng.next(5) and rng.next(6) all over if the bits those use have a pattern.
-                        // In the original model, all voxels of the same color will be hashed with similar behavior but
-                        // any with different colors will get unrelated values.
-                        xx = x + 1;
-                        yy = y + 1;
-                        zz = z / 3;
-                        current = hashAll(xx + (xx | zz) >> 3, (yy + (yy | zz)) / 3, zz, color, seed);
-                        paint = hashAll((xx + (xx | z)) / 7, (yy + (yy | z)) / 5, z, color, seed);
-                        if (color < 8) { // checks bottom 6 bits
-                            if((current >>> 6 & 0x7L) != 0)
-                                nextShip[x][smallYSize - y][z] = nextShip[x][y][z] = (byte) (cockpitColor - (z + 6 >> 3));//9;
-                        } else {
-                            nextShip[x][smallYSize - y][z] = nextShip[x][y][z] =
-                                    // checks 9 bits
-                                    ((current & 0x1FFL) < color * 6)
-                                            ? 0
-                                            // checks another 6 bits, starting after discarding 9 bits from the bottom
-                                            : ((paint >>> 9 & 0x3F) < 40) ? (byte)(
-                                            (RINSED_PALETTE) ? 18 + (paint & 3) : 18 + (paint & 7))
-                                            // checks another 6 bits, starting after discarding 15 bits from the bottom
-                                            : ((paint >>> 15 & 0x3F) < 8) ? highlightColor : mainColor;
-                        }
-                    }
-                }
-            }
-        }
-        return Tools3D.largestPart(nextShip);
-        //return nextShip;
-        //return Tools3D.runCA(nextShip, 1);
+        return shipLargeSmoothColorized();
+//        xSize = shipLarge.length;
+//        ySize = shipLarge[0].length;
+//        zSize = shipLarge[0][0].length;
+//        byte[][][] nextShip = new byte[xSize][ySize][zSize];
+//        final int halfY = ySize >> 1, smallYSize = ySize - 1;
+//        int color;
+//        int seed = rng.nextInt(), current, paint;
+//        final byte mainColor = (byte)((RINSED_PALETTE)
+//                ? determineBounded(seed + 1, 30) * 8 + determineBounded(seed + 22, 4) + 18
+//                : determineBounded(seed + 1, 18) * 6 +  + determineBounded(seed + 22, 3) + 22),
+//                highlightColor = (byte)((RINSED_PALETTE)
+//                        ? ((determineBounded(seed + 333, 30))) * 8 + determineBounded(seed + 4444, 4) + 17
+//                        : ((determineBounded(seed + 333, 18))) * 6 + determineBounded(seed + 4444, 3) + 21),
+//                cockpitColor = (byte)((RINSED_PALETTE)
+//                        ? RINSED_COCKPIT_COLORS[determineBounded(seed + 55555, 6)] * 8 + 22
+//                        : 84 + (determineBounded(seed + 55555, 6) * 6));
+//        int xx, yy, zz;
+//        for (int x = 0; x < xSize; x++) {
+//            for (int y = 0; y < halfY; y++) {
+//                for (int z = 0; z < zSize; z++) {
+//                    color = (shipLarge[x][y][z] & 255);
+//                    if (color != 0) {
+//                        // this 4-input-plus-state hash is really a slight modification on LightRNG.determine(), but
+//                        // it mixes the x, y, and z inputs more thoroughly than other techniques do, and we then use
+//                        // different sections of the random bits for different purposes. This helps reduce the possible
+//                        // issues from using rng.next(5) and rng.next(6) all over if the bits those use have a pattern.
+//                        // In the original model, all voxels of the same color will be hashed with similar behavior but
+//                        // any with different colors will get unrelated values.
+//                        xx = x + 1;
+//                        yy = y + 1;
+//                        zz = z / 3;
+//                        current = hashAll(xx + (xx | zz) >> 3, (yy + (yy | zz)) / 3, zz, color, seed);
+//                        paint = hashAll((xx + (xx | z)) / 7, (yy + (yy | z)) / 5, z, color, seed);
+//                        if (color < 8) { // checks bottom 6 bits
+//                            if((current >>> 6 & 0x7L) != 0)
+//                                nextShip[x][smallYSize - y][z] = nextShip[x][y][z] = (byte) (cockpitColor - (z + 6 >> 3));//9;
+//                        } else {
+//                            nextShip[x][smallYSize - y][z] = nextShip[x][y][z] =
+//                                    // checks 9 bits
+//                                    ((current & 0x1FFL) < color * 6)
+//                                            ? 0
+//                                            // checks another 6 bits, starting after discarding 9 bits from the bottom
+//                                            : ((paint >>> 9 & 0x3F) < 40) ? (byte)(
+//                                            (RINSED_PALETTE) ? 18 + (paint & 3) : 18 + (paint & 7))
+//                                            // checks another 6 bits, starting after discarding 15 bits from the bottom
+//                                            : ((paint >>> 15 & 0x3F) < 8) ? highlightColor : mainColor;
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        return Tools3D.largestPart(nextShip);
+//        //return nextShip;
+//        //return Tools3D.runCA(nextShip, 1);
     }
 //    /**
 //     * Use <a href="https://i.imgur.com/CrI1LyU.png">This image with Aurora hex codes</a> for reference.
@@ -675,8 +671,8 @@ public class ModelMaker {
     }
 
     /**
-     * Uses some simplex noise from {@link FastNoise} to make paint patterns and shapes more "flowing" and less
-     * haphazard in their placement. Still uses point hashes for a lot of its operations.
+     * Uses some simplex noise from {@link FastNoise} and some curving shapes from "Merlin Noise" to make paint patterns
+     * and shapes more "flowing" and less haphazard in their placement. Still uses point hashes for some operations.
      * @return a 12x12x8 3D byte array representing a spaceship
      */
     public byte[][][] shipSmoothColorized()
@@ -684,8 +680,8 @@ public class ModelMaker {
         return shipSmoothColorized(ship);
     }
     /**
-     * Uses some simplex noise from {@link FastNoise} to make paint patterns and shapes more "flowing" and less
-     * haphazard in their placement. Still uses point hashes for a lot of its operations.
+     * Uses some simplex noise from {@link FastNoise} and some curving shapes from "Merlin Noise" to make paint patterns
+     * and shapes more "flowing" and less haphazard in their placement. Still uses point hashes for some operations.
      * @return a larger (40x40x30) 3D byte array representing a spaceship
      */
     public byte[][][] shipLargeSmoothColorized()
@@ -695,8 +691,8 @@ public class ModelMaker {
         return next;
     }
     /**
-     * Uses some simplex noise from {@link FastNoise} to make paint patterns and shapes more "flowing" and less
-     * haphazard in their placement. Still uses point hashes for a lot of its operations.
+     * Uses some simplex noise from {@link FastNoise} and some curving shapes from "Merlin Noise" to make paint patterns
+     * and shapes more "flowing" and less haphazard in their placement. Still uses point hashes for some operations.
      * @param ship one of the two ships loaded from resources here, probably, {@link #ship} and {@link #shipLarge}
      * @return 3D byte array representing a spaceship
      */
@@ -1227,14 +1223,14 @@ public class ModelMaker {
 
     /**
      * Gets a random color palette index, adapted for whether this uses {@link Coloring#RINSED} or
-     * {@link Coloring#ALT_PALETTE}. It will always be in the middle of the color range, but can lean towards darker
+     * a Colorizer. It will always be in the middle of the color range, but can lean towards darker
      * colors more often than lighter ones.
      * @return a byte representing a color palette index, randomly chosen
      */
     public byte randomMainColor() {
         return (byte)(RINSED_PALETTE
                 ? rng.nextSignedInt(30) * 8 + rng.between(18, 22)
-                : rng.nextSignedInt(18) * 6 + rng.between(21, 24));
+                : colorizer.mainColors()[rng.nextSignedInt(colorizer.mainColors().length)]);
     }
 
     /**

@@ -489,7 +489,7 @@ public class TestDisplay extends ApplicationAdapter {
     public void remakeShipSmall(long newModel) {
         if (newModel != 0) {
             mm.rng.setState(determine(newModel));
-            voxels = new ArrayModel(mm.shipRandom());
+            voxels = new ArrayModel(mm.shipSmoothColorized());
             byte[][][][] anim = mm.animateShip(((ArrayModel) voxels).voxels, frames);
             for (int i = 0; i < frames; i++) {
                 animatedVoxels[i] = new ArrayModel(anim[i]);
