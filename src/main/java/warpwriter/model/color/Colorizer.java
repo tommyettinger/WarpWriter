@@ -3352,9 +3352,9 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
             warm = cwf - 0.175f * heat;
             mild = cmf;
             luma = yDim * 0x1p-8f;
+            r = (int)((luma + warm * 0.625f - mild * 0.5f) * 255);
             g = (int)((luma + mild * 0.5f - warm * 0.375f) * 255);
             b = (int)((luma - warm * 0.375f - mild * 0.5f) * 255);
-            r = (int)((luma + warm * 0.625f - mild * 0.5f) * 255);
             values[i][1] =
                     MathUtils.clamp(r, 0, 255) << 24 |
                             MathUtils.clamp(g, 0, 255) << 16 |
@@ -3362,9 +3362,9 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
             warm = cwf + 0.375f * heat;
             mild = cmf;
             luma = yBright * 0x1p-8f;
+            r = (int)((luma + warm * 0.625f - mild * 0.5f) * 255);
             g = (int)((luma + mild * 0.5f - warm * 0.375f) * 255);
             b = (int)((luma - warm * 0.375f - mild * 0.5f) * 255);
-            r = (int)((luma + warm * 0.625f - mild * 0.5f) * 255);
             values[i][3] =
                     MathUtils.clamp(r, 0, 255) << 24 |
                             MathUtils.clamp(g, 0, 255) << 16 |
@@ -3372,9 +3372,9 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
             warm = cwf - 0.375f * heat;
             mild = cmf;
             luma = yDark * 0x1p-8f;
+            r = (int)((luma + warm * 0.625f - mild * 0.5f) * 255);
             g = (int)((luma + mild * 0.5f - warm * 0.375f) * 255);
             b = (int)((luma - warm * 0.375f - mild * 0.5f) * 255);
-            r = (int)((luma + warm * 0.625f - mild * 0.5f) * 255);
             values[i][0] =
                     MathUtils.clamp(r, 0, 255) << 24 |
                             MathUtils.clamp(g, 0, 255) << 16 |

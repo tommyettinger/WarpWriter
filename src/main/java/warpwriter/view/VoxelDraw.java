@@ -690,7 +690,7 @@ public class VoxelDraw {
                 x = HashMap3D.extractX(xyz);
                 y = HashMap3D.extractY(xyz);
                 z = HashMap3D.extractZ(xyz);
-                dep = (x + y + z);
+                dep = (x + y + z) * 3;
                 final int xPos = (sizeY - y + x) * scaleX + 1, yPos = (z - x - y + sizeX + sizeY) * scaleY + 1;
                 renderer.rectLeft(xPos, yPos, scaleX, scaleY, v, dep, x, y, z);
                 renderer.rectRight(xPos + scaleX, yPos, scaleX, scaleY, v, dep, x, y, z);

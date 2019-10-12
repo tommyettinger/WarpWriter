@@ -1480,5 +1480,21 @@ public class Coloring {
             0xcdc12bff, 0x84fbebff, 0xf8fb73ff, 0x77322dff, 0x483b91ff, 0x883576ff, 0xef417cff, 0x8f74f1ff,
             0x948c50ff, 0xcc8830ff, 0xf17e77ff, 0x6fd4cbff, 0xb8d304ff, 0xc4d7cfff, 0xc9f46bff, 0x975439ff,
     };
+    /**
+     * A 64-color palette that started with specific colors from NamedColor's Color Wheel palette, then lightened and
+     * darkened to get 5 variants on all colors (except 8 for grayscale), and finally ran the whole set through Lloyd
+     * relaxation to improve the worst similarity between any two colors. It is very good for a 64-color palette, and
+     * its only real weakness is a somewhat poor coverage of low-saturation colors.
+     */
+    public static final int[] RELAXED_ROLL = {
+            0x00000000, 0x100818ff, 0x181818ff, 0x314a6bff, 0x396b7bff, 0x4a9494ff, 0xa5b5adff, 0xb5e7e7ff,
+            0xf7efefff, 0x6b1831ff, 0xbd5242ff, 0xef6b4aff, 0xef9c9cff, 0xf7c6deff, 0x6b3921ff, 0xbd8421ff,
+            0xefa531ff, 0xe7ce42ff, 0xefd6a5ff, 0x292921ff, 0x7b5231ff, 0x8c7339ff, 0xb59473ff, 0xcec6a5ff,
+            0x316b31ff, 0xadbd42ff, 0xefef39ff, 0xeff79cff, 0xe7f7deff, 0x215a21ff, 0x52bd39ff, 0x84e731ff,
+            0xb5ef42ff, 0xbdef9cff, 0x295221ff, 0x29ad29ff, 0x31e729ff, 0x39ef7bff, 0x52f7b5ff, 0x214221ff,
+            0x318439ff, 0x42ad84ff, 0x4aceadff, 0x5ae7e7ff, 0x180842ff, 0x3118a5ff, 0x3921deff, 0x428cc6ff,
+            0x42bde7ff, 0x293163ff, 0x4a63b5ff, 0x5a84efff, 0x9ca5e7ff, 0xced6efff, 0x211073ff, 0x5a3194ff,
+            0x8431d6ff, 0xb573b5ff, 0xc6bde7ff, 0x421039ff, 0xa5214aff, 0xde2152ff, 0xde31ceff, 0xe784deff,
+    };
 
 }
