@@ -58,12 +58,11 @@ public class VoxelDrawSeqMutantTest extends ApplicationAdapter {
     protected Texture palette;
     protected ShaderProgram shader;
     protected long startTime;
-//    private ChaoticFetch chaos;
 
     @Override
     public void create() {
-        shader = new ShaderProgram(ShaderUtils.vertexShader, ShaderUtils.fragmentShader);
-        palette = new Texture(Gdx.files.local("palettes/LazyRoll_GLSL.png"), Pixmap.Format.RGBA8888, false);
+        shader = new ShaderProgram(ShaderUtils.vertexShader, ShaderUtils.fragmentShaderRoberts);
+        palette = new Texture(Gdx.files.local("palettes/RelaxedRollBonus_GLSL.png"), Pixmap.Format.RGBA8888, false);
         palette.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         batch = new MutantBatch(1000);
         batch.setShader(shader);
@@ -176,7 +175,7 @@ public class VoxelDrawSeqMutantTest extends ApplicationAdapter {
         if(angle > 2)
         {
             if(diagonal)
-                VoxelDraw.drawAbove45(seq, renderer);
+                VoxelDraw.drawIso(seq, renderer);
             else
                 VoxelDraw.drawAbove(seq, renderer);
         }

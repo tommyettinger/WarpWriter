@@ -8,6 +8,7 @@ import warpwriter.model.nonvoxel.IntComparator;
  */
 public interface IVoxelSeq extends ITurnable {
     int size();
+    int fullSize();
     void clear();
     void hollow();
     int sizeX();
@@ -32,5 +33,4 @@ public interface IVoxelSeq extends ITurnable {
     byte getRotated(int index, int rotation);
     void sort(IntComparator comparator);
     void putSurface(byte[][][] voxels);
-    int fullSize();
 }
