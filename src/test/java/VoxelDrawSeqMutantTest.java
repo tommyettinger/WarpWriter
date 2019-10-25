@@ -62,7 +62,7 @@ public class VoxelDrawSeqMutantTest extends ApplicationAdapter {
     @Override
     public void create() {
         shader = new ShaderProgram(ShaderUtils.vertexShader, ShaderUtils.fragmentShaderRoberts);
-        palette = new Texture(Gdx.files.local("palettes/RelaxedRollBonus_GLSL.png"), Pixmap.Format.RGBA8888, false);
+        palette = new Texture(Gdx.files.local("palettes/ReallyRelaxedRollBonus_GLSL.png"), Pixmap.Format.RGBA8888, false);
         palette.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         batch = new MutantBatch(1000);
         batch.setShader(shader);
@@ -83,7 +83,7 @@ public class VoxelDrawSeqMutantTest extends ApplicationAdapter {
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.FLESURRECT);
 //        colorizer = Colorizer.AuroraColorizer;
-        colorizer = Colorizer.CubicleBonusColorizer;
+        colorizer = Colorizer.RollBonusColorizer;
         renderer = new VoxelImmediateRenderer(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         renderer.color().set(colorizer);
         voxelColor = renderer.color();

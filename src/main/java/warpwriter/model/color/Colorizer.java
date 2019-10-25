@@ -2882,6 +2882,65 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
             return 0x80;
         }
     };
+    public static final Colorizer RollBonusColorizer = new Colorizer(new PaletteReducer(Coloring.REALLY_RELAXED_ROLL)) {
+        private final byte[] primary = {
+                reducer.reduceIndex(0xFF0000FF),reducer.reduceIndex(0xFFFF00FF),
+                reducer.reduceIndex(0x00FF00FF),reducer.reduceIndex(0x00FFFFFF),
+                reducer.reduceIndex(0x0000FFFF),reducer.reduceIndex(0xFF00FFFF),
+        }, grays = {
+                reducer.reduceIndex(0x000000FF),reducer.reduceIndex(0x333333FF),
+                reducer.reduceIndex(0x666666FF),reducer.reduceIndex(0x999999FF),
+                reducer.reduceIndex(0xCCCCCCFF),reducer.reduceIndex(0xFFFFFFFF),
+        };
+
+        @Override
+        public byte[] mainColors() {
+            return primary;
+        }
+
+        /**
+         * @return An array of grayscale or close-to-grayscale color indices, with the darkest first and lightest last.
+         */
+        @Override
+        public byte[] grayscale() {
+            return grays;
+        }
+
+        @Override
+        public byte brighten(byte voxel) {
+            // the second half of voxels (with bit 0x40 set) don't shade visually, but Colorizer uses this method to
+            // denote a structural change to the voxel's makeup, so this uses the first 64 voxel colors to shade both
+            // halves, then marks voxels from the second half back to being an unshaded voxel as the last step.
+            return (byte) (Coloring.REALLY_RELAXED_ROLL_RAMPS[voxel & 0x3F][3] | (voxel & 0xC0));
+        }
+
+        @Override
+        public byte darken(byte voxel) {
+            // the second half of voxels (with bit 0x40 set) don't shade visually, but Colorizer uses this method to
+            // denote a structural change to the voxel's makeup, so this uses the first 64 voxel colors to shade both
+            // halves, then marks voxels from the second half back to being an unshaded voxel as the last step.
+            return (byte) (Coloring.REALLY_RELAXED_ROLL_RAMPS[voxel & 0x3F][1] | (voxel & 0xC0));
+        }
+
+        @Override
+        public int dimmer(int brightness, byte voxel) {
+            return Coloring.REALLY_RELAXED_ROLL_BONUS_RAMP_VALUES[voxel & 0xFF][
+                    brightness <= 0
+                            ? 0
+                            : Math.min(brightness, 3)
+                    ];
+        }
+
+        @Override
+        public int getShadeBit() {
+            return 0x40;
+        }
+        @Override
+        public int getWaveBit() {
+            return 0x80;
+        }
+    };
+
 
     public static Colorizer arbitraryColorizer(final int[] palette) {
         final int COUNT = palette.length;
