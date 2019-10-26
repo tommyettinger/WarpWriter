@@ -610,7 +610,7 @@ public class VoxelDraw {
                 final int xPos = (sizeY - y) * 3 + offsetPX;
                 renderer.rectRight(xPos, z * scaleY, scaleX, scaleY, v, x*3, x, y, z);//, x * 2, x, y, z
                 if (z >= sizeZ - 1 || seq.getRotated(x, y, z + 1) == 0)
-                    renderer.rectVertical(xPos, z * scaleY + 1, scaleX, 1, v, x*3, x, y, z);//, x * 2, x, y, z
+                    renderer.rectVertical(xPos, (z+1) * scaleY, scaleX, 1, v, x*3, x, y, z);//, x * 2, x, y, z
             }
         }
     }
@@ -635,10 +635,10 @@ public class VoxelDraw {
                 z = HashMap3D.extractZ(xyz);
                 final int xPos = (sizeY + x - y) * scaleX + 1;
                 dep = 50 + (x + y) * 2;
-                renderer.rectLeft(xPos, z * scaleY + 1, scaleX, scaleY, v, dep, x, y, z);
-                renderer.rectRight(xPos + scaleX, z * scaleY + 1, scaleX, scaleY, v, dep, x, y, z);
+                renderer.rectLeft(xPos, z * scaleY, scaleX, scaleY, v, dep, x, y, z);
+                renderer.rectRight(xPos + scaleX, z * scaleY, scaleX, scaleY, v, dep, x, y, z);
                 if (z >= sizeZ - 1 || seq.getRotated(x, y, z + 1) == 0)
-                    renderer.rectVertical(xPos, z * scaleY + 4, scaleX * 2, 1, v, dep, x, y, z);
+                    renderer.rectVertical(xPos, (z+1) * scaleY, scaleX * 2, 1, v, dep, x, y, z);
             }
         }
     }
