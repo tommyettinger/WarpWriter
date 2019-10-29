@@ -77,7 +77,7 @@ public class ShaderPalettizer extends ApplicationAdapter {
         defaultShader = SpriteBatch.createDefaultShader();
         shader = new ShaderProgram(vertexShader, fragmentShaderWarmMildLimited);
         if (!shader.isCompiled()) throw new GdxRuntimeException("Couldn't compile shader: " + shader.getLog());
-        shaderNoDither = new ShaderProgram(vertexShader, fragmentShaderWarmMildSoft);
+        shaderNoDither = new ShaderProgram(vertexShader, fragmentShaderRobertsWarmMild);
         if (!shaderNoDither.isCompiled()) throw new GdxRuntimeException("Couldn't compile shader: " + shaderNoDither.getLog());
         batch = new SpriteBatch(1000, defaultShader);
         screenView = new ScreenViewport();
