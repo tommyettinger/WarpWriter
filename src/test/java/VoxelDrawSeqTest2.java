@@ -16,18 +16,20 @@ import squidpony.squidmath.MiniMover64RNG;
 import warpwriter.ModelMaker;
 import warpwriter.Tools3D;
 import warpwriter.VoxIO;
+import warpwriter.model.Fetch;
+import warpwriter.model.FetchModel;
 import warpwriter.model.VoxelSeq;
 import warpwriter.model.color.Colorizer;
-import warpwriter.model.nonvoxel.LittleEndianDataInputStream;
+import warpwriter.model.decide.DecideFetch;
+import warpwriter.model.decide.SphereDecide;
+import warpwriter.model.fetch.ColorFetch;
+import warpwriter.model.fetch.Stripes;
 import warpwriter.model.nonvoxel.Transform;
 import warpwriter.model.nonvoxel.TurnQuaternion;
 import warpwriter.view.VoxelDraw;
 import warpwriter.view.color.VoxelColor;
 import warpwriter.view.render.MutantBatch;
 import warpwriter.view.render.VoxelImmediateRenderer;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 public class VoxelDrawSeqTest2 extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 320;//640;
@@ -47,7 +49,7 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
     protected VoxelColor voxelColor;
     protected int angle = 3;
     protected boolean diagonal = true;
-    protected boolean animating = true;
+    protected boolean animating = false;
 //    protected byte[][][][] explosion;
 //    protected AnimatedArrayModel boom;
     private byte[][][] voxels;
@@ -83,7 +85,8 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.CW_PALETTE);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.FLESURRECT);
-        colorizer = Colorizer.FlesurrectBonusColorizer;
+//        colorizer = Colorizer.FlesurrectBonusColorizer;
+        colorizer = Colorizer.RollBonusColorizer;
         batchRenderer = new VoxelImmediateRenderer(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);//.setOffset(VIRTUAL_WIDTH, 0).flipX();
         batch = new MutantBatch();
         batchRenderer.color().set(colorizer);
@@ -142,11 +145,13 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
         byte red = colorizer.reduce(0xFF0000FF), green = colorizer.reduce(0x00FF00FF),
                 blue = colorizer.reduce(0x0000FFFF), white = colorizer.reduce(0xFFFFFFFF);
         maker.rng.setState(rng.nextLong());
-        try {
-            voxels = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("FlesurrectBonus/Damned.vox")));
-        } catch (FileNotFoundException e) {
-            voxels = maker.shipLargeSmoothColorized();
-        }
+        voxels = maker.shipLargeSmoothColorized();
+//        try {
+//            voxels = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("FlesurrectBonus/Damned.vox")));
+//        } catch (FileNotFoundException e) {
+//            voxels = maker.shipLargeSmoothColorized();
+//        }
+        
 //        voxels = new byte[60][60][60];
 //        seq = new VoxelSeq(1024);
 //        seq.putSurface(voxels);
@@ -170,8 +175,16 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //        voxels[48][29][31]=(white);
 //        voxels[48][31][29]=(white);
         seq = new VoxelSeq(1024);
-        seq.putSurface(voxels);
-//        seq.hollow();
+        seq.putModel(new FetchModel(60, 60, 60, new DecideFetch()
+                .setDecide(new SphereDecide(29, 29, 29, 15))
+                .setFetch(new Stripes(new int[]{5, 5}, new Fetch[]{
+                        ColorFetch.color(colorizer.getReducer().paletteMapping[rng.next(15)]),
+//                                ColorFetch.color(colorizer.getReducer().paletteMapping[rng.next(15)]),
+//                                ColorFetch.color(colorizer.getReducer().paletteMapping[rng.next(15)]),
+                                ColorFetch.color(colorizer.getReducer().paletteMapping[rng.next(15)])})
+                )));
+        //seq.putSurface(voxels);
+        seq.hollow();
         middleSeq = new VoxelSeq(seq.fullSize());
         middleSeq.sizeX(60);
         middleSeq.sizeY(60);
@@ -204,6 +217,12 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //        gifRecorder.startRecording();
 
         startTime = TimeUtils.millis();
+        voxelColor.set(0);
+        alpha = 0f;
+        transforms[0].interpolateInto(transforms[1 % transforms.length], alpha, transformMid);
+        middleSeq.clear();
+        transformMid.transformInto(seq, middleSeq, 29f, 29f, 29f);
+
     }
 
 //    public void makeBoom(byte[] fireColors) {
@@ -216,14 +235,19 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
     public void render() {
 //        model.setFrame((int)(TimeUtils.millis() >>> 7) & 15);
 //        boom.setFrame((int)(TimeUtils.millis() >>> 7) & 15);
-        if(seq != null && animating)
+        if(seq != null)
         {
-            int time = (int) TimeUtils.timeSinceMillis(startTime);
-            voxelColor.set(time * 5 >>> 9);
-//            alpha = (time & 0x7FF) * 0x1p-11f;
-//            transforms[(time >>> 11) % transforms.length].interpolateInto(transforms[((time >>> 11) + 1) % transforms.length], alpha, transformMid);
+            int time;
+            if(animating) {
+                time = (int) TimeUtils.timeSinceMillis(startTime);
+                voxelColor.set(time * 5 >>> 9);
+                alpha = (time & 0x7FF) * 0x1p-11f;
+            }
+            else time = 0;
+            transforms[(time >>> 11) % transforms.length].interpolateInto(transforms[((time >>> 11) + 1) % transforms.length], alpha, transformMid);
             middleSeq.clear();
-            transformMid.transformInto(seq, middleSeq, 19.5f, 19.5f, 19.5f);
+            transformMid.transformInto(seq, middleSeq, 29f, 29f, 29f);
+//            transformMid.transformInto(seq, middleSeq, 19.5f, 19.5f, 19.5f);
 //            middleSeq.putAll(axes);
 //            middleSeq.hollow();
         }
@@ -312,47 +336,47 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
                         angle = 3;
                         break;
                     case Input.Keys.U:
-//                            middleSeq.clockX();
-//                        System.out.println("Current rotation: " + middleSeq.rotation());
-                        transformMid.rotation.setEulerAnglesBrad(--roll, pitch, yaw);
-                        System.out.println("Current rotation: " + transformMid.rotation.toBradString());
+                            middleSeq.clockX();
+                        System.out.println("Current rotation: " + middleSeq.rotation());
+//                        transformMid.rotation.setEulerAnglesBrad(--roll, pitch, yaw);
+//                        System.out.println("Current rotation: " + transformMid.rotation.toBradString());
                         break;
                     case Input.Keys.J:
-//                            middleSeq.counterX();
-//                        System.out.println("Current rotation: " + middleSeq.rotation());
-                        transformMid.rotation.setEulerAnglesBrad(++roll, pitch, yaw);
-                        System.out.println("Current rotation: " + transformMid.rotation.toBradString());
+                            middleSeq.counterX();
+                        System.out.println("Current rotation: " + middleSeq.rotation());
+//                        transformMid.rotation.setEulerAnglesBrad(++roll, pitch, yaw);
+//                        System.out.println("Current rotation: " + transformMid.rotation.toBradString());
                         break;
                     case Input.Keys.I:
-//                        middleSeq.clockY();
-//                        System.out.println("Current rotation: " + middleSeq.rotation());
-                        transformMid.rotation.setEulerAnglesBrad(roll, --pitch, yaw);
-                        System.out.println("Current rotation: " + transformMid.rotation.toBradString());
+                        middleSeq.clockY();
+                        System.out.println("Current rotation: " + middleSeq.rotation());
+//                        transformMid.rotation.setEulerAnglesBrad(roll, --pitch, yaw);
+//                        System.out.println("Current rotation: " + transformMid.rotation.toBradString());
                         break;
                     case Input.Keys.K:
-//                        middleSeq.counterY();
-//                        System.out.println("Current rotation: " + middleSeq.rotation());
-                        transformMid.rotation.setEulerAnglesBrad(roll, ++pitch, yaw);
-                        System.out.println("Current rotation: " + transformMid.rotation.toBradString());
+                        middleSeq.counterY();
+                        System.out.println("Current rotation: " + middleSeq.rotation());
+//                        transformMid.rotation.setEulerAnglesBrad(roll, ++pitch, yaw);
+//                        System.out.println("Current rotation: " + transformMid.rotation.toBradString());
                         break;
                     case Input.Keys.O:
-//                        if((middleSeq.rotation() & 28) == 0 ^ (diagonal = !diagonal)) // angle == 3 ||  
-//                            middleSeq.clockZ();
-//                        System.out.println("Current rotation: " + middleSeq.rotation());
-                        transformMid.rotation.setEulerAnglesBrad(roll, pitch, --yaw);
-                        System.out.println("Current rotation: " + transformMid.rotation.toBradString());
+                        if((middleSeq.rotation() & 28) == 0 ^ (diagonal = !diagonal)) // angle == 3 ||  
+                            middleSeq.clockZ();
+                        System.out.println("Current rotation: " + middleSeq.rotation());
+//                        transformMid.rotation.setEulerAnglesBrad(roll, pitch, --yaw);
+//                        System.out.println("Current rotation: " + transformMid.rotation.toBradString());
                         break;
                     case Input.Keys.L:
-//                        if((middleSeq.rotation() & 28) != 0 ^ (diagonal = !diagonal)) // angle == 3 ||  
-//                            middleSeq.counterZ();
-//                        System.out.println("Current rotation: " + middleSeq.rotation());
-                        transformMid.rotation.setEulerAnglesBrad(roll, pitch, ++yaw);
-                        System.out.println("Current rotation: " + transformMid.rotation.toBradString());
+                        if((middleSeq.rotation() & 28) != 0 ^ (diagonal = !diagonal)) // angle == 3 ||  
+                            middleSeq.counterZ();
+                        System.out.println("Current rotation: " + middleSeq.rotation());
+//                        transformMid.rotation.setEulerAnglesBrad(roll, pitch, ++yaw);
+//                        System.out.println("Current rotation: " + transformMid.rotation.toBradString());
                         break;
                     case Input.Keys.R:
+                        middleSeq.reset();
                         transformMid.rotation.setEulerAnglesBrad(roll = 0, pitch = 0, yaw = 0);
                         System.out.println("Current rotation: " + transformMid.rotation.toBradString());
-//                        model.rotation().reset();
                         break;
                     case Input.Keys.P:
 //                        model.set(model());
@@ -385,6 +409,9 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //                        model.rotation().reset();
                         diagonal = false;
                         angle = 2;
+                        break;
+                    case Input.Keys.D: // diagonal
+                        diagonal = !diagonal;
                         break;
                     case Input.Keys.A:
 //                        model.rotation().reset();
