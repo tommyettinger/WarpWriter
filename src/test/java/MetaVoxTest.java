@@ -104,7 +104,7 @@ public class MetaVoxTest extends ApplicationAdapter {
 //            transforms[i+2] = new Transform(transforms[i+1].rotation.cpy().mul(turnZ90).nor(), 0, 0, 0, 1, 1, 1);
 //        }
         for (int i = 0; i < transforms.length; i++) {
-            int r = DiverRNG.randomizeBounded(i, 0x1000000);
+            int r = rng.nextInt() & 0xFFFFFF;
             if (i == 0) {
                 transforms[i] = new Transform(new TurnQuaternion().setEulerAnglesBrad(r >>> 16, r >>> 8, r)
 //                        .mul(turnY90.setEulerAnglesBrad(0, r >>> 8 & 0x7F, 0))
@@ -223,8 +223,8 @@ public class MetaVoxTest extends ApplicationAdapter {
         {
             int time = (int) TimeUtils.timeSinceMillis(startTime);
             voxelColor.set(time * 5 >>> 9);
-//            alpha = (time & 0x7FF) * 0x1p-11f;
-//            transforms[(time >>> 11) % transforms.length].interpolateInto(transforms[((time >>> 11) + 1) % transforms.length], alpha, transformMid);
+            alpha = (time & 0x7FF) * 0x1p-11f;
+            transforms[(time >>> 11) % transforms.length].interpolateInto(transforms[((time >>> 11) + 1) % transforms.length], alpha, transformMid);
             middleSeq.clearAll();
             transformMid.transformInto(seq, middleSeq, 19.5f, 19.5f, 19.5f);
 //            middleSeq.putAll(axes);

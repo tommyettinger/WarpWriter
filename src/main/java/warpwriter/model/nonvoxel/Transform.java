@@ -232,7 +232,7 @@ public class Transform {
     {
         IVoxelSeq curr = initial.seqs[0];
         IVoxelSeq next = target.seqs[0];
-        int len = curr.fullSize();
+        int len = curr.size();
         int k, x, y, z;
         byte v;
         for (int i = 0; i < len; i++) {
@@ -244,21 +244,14 @@ public class Transform {
             z = extractZ(k);
             temp.set(x - jointX, y - jointY, z - jointZ);
             rotation.transform(temp)
-					.add(jointX + moveX, jointY + moveY, jointZ + moveZ)
-					.scl(stretchX, stretchY, stretchZ);
-//            if(stretchX <= 1.01f && stretchY <= 1.01f && stretchZ <= 1.01f)
-//                next.put(round(temp.x * stretchX), round(temp.y * stretchY), round(temp.z * stretchZ), v);
-//            else 
-			final float limX = (temp.x - floor(temp.x - 0.25f) < 0.75f) ? stretchX + 1 : stretchX;
-			final float limY = (temp.y - floor(temp.y - 0.25f) < 0.75f) ? stretchY + 1 : stretchY;
-			final float limZ = (temp.z - floor(temp.z - 0.25f) < 0.75f) ? stretchZ + 1 : stretchZ;
-            for (int sx = 0; sx < limX; sx++) {
-                for (int sy = 0; sy < limY; sy++) {
-                    for (int sz = 0; sz < limZ; sz++) {
+					.add(jointX + moveX, jointY + moveY, jointZ + moveZ);
+            for (int sx = 0; sx <= stretchX; sx++) {
+                for (int sy = 0; sy <= stretchY; sy++) {
+                    for (int sz = 0; sz <= stretchZ; sz++) {
                         next.put(
-                                round(temp.x + sx),
-                                round(temp.y + sy),
-                                round(temp.z + sz), v);
+                                round(temp.x * stretchX + sx),
+                                round(temp.y * stretchY + sy),
+                                round(temp.z * stretchZ + sz), v);
                     }
                 }
             }
@@ -269,24 +262,25 @@ public class Transform {
             next = f == 1 ? target.seqs[1] : target.seqs[0];
             len = curr.fullSize();
             for (int i = 0; i < len; i++) {
-                k = curr.keyAtRotatedHollow(i);
-                v = curr.getAtHollow(i);
+                k = curr.keyAtRotatedFull(i);
+                v = curr.getAt(i);
                 x = extractX(k);
                 y = extractY(k);
                 z = extractZ(k);
                 temp.set(x - jointX, y - jointY, z - jointZ);
                 rotation.transform(temp).add(jointX + moveX, jointY + moveY, jointZ + moveZ)
-						.scl(stretchX, stretchY, stretchZ);
-                if (stretchX <= 1.01f && stretchY <= 1.01f && stretchZ <= 1.01f)
-                    next.put(round(temp.x), round(temp.y), round(temp.z), v);
-                else {
-                    for (int sx = 0; sx < stretchX; sx++) {
-                        for (int sy = 0; sy < stretchY; sy++) {
-                            for (int sz = 0; sz < stretchZ; sz++) {
+                        .scl(stretchX, stretchY, stretchZ);
+//                if (stretchX <= 1.01f && stretchY <= 1.01f && stretchZ <= 1.01f)
+//                    next.put(round(temp.x), round(temp.y), round(temp.z), v);
+//                else 
+                    {
+                    for (int sx = 0; sx <= stretchX; sx++) {
+                        for (int sy = 0; sy <= stretchY; sy++) {
+                            for (int sz = 0; sz <= stretchZ; sz++) {
                                 next.put(
-                                        round(temp.x + sx),
-                                        round(temp.y + sy),
-                                        round(temp.z + sz), v);
+                                        round(temp.x * stretchX + sx),
+                                        round(temp.y * stretchY + sy),
+                                        round(temp.z * stretchZ + sz), v);
                             }
                         }
                     }
