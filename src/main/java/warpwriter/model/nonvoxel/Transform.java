@@ -170,7 +170,7 @@ public class Transform {
         int k, x, y, z;
         byte v;
         for (int i = 0; i < len; i++) {
-            k = start.keyAtRotated(i);
+            k = start.keyAtRotatedFull(i);
             v = start.getAt(i);
             x = extractX(k);
             y = extractY(k);
@@ -237,7 +237,7 @@ public class Transform {
         byte v;
         for (int i = 0; i < len; i++) {
 //            k = curr.rotate(curr.keyAt(i), curr.rotation());
-            k = curr.keyAtRotated(i);
+            k = curr.keyAtRotatedHollow(i);
             v = curr.getAtHollow(i);
             x = extractX(k);
             y = extractY(k);
@@ -269,7 +269,7 @@ public class Transform {
             next = f == 1 ? target.seqs[1] : target.seqs[0];
             len = curr.fullSize();
             for (int i = 0; i < len; i++) {
-                k = curr.keyAtRotated(i);
+                k = curr.keyAtRotatedHollow(i);
                 v = curr.getAtHollow(i);
                 x = extractX(k);
                 y = extractY(k);

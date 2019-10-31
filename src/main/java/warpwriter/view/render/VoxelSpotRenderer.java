@@ -138,7 +138,7 @@ public class VoxelSpotRenderer implements Disposable {
         for (int i = 0; i < len; i++) {
             v = seq.getAtHollow(i);
             if (v != 0) {
-                xyz = seq.keyAtRotated(i);
+                xyz = seq.keyAtRotatedHollow(i);
                 x = HashMap3D.extractX(xyz);
                 y = HashMap3D.extractY(xyz);
                 z = HashMap3D.extractZ(xyz);

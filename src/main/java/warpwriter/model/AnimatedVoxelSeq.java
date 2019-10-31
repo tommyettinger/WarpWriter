@@ -187,13 +187,23 @@ public class AnimatedVoxelSeq implements IVoxelSeq, ITemporal, Serializable {
     }
 
     @Override
-    public int keyAtRotated(int index) {
-        return seqs[frame].keyAtRotated(index);
+    public int keyAtRotatedHollow(int index) {
+        return seqs[frame].keyAtRotatedHollow(index);
     }
 
     @Override
-    public int keyAtRotated(int index, int rotation) {
-        return seqs[frame].keyAtRotated(index, rotation);
+    public int keyAtRotatedHollow(int index, int rotation) {
+        return seqs[frame].keyAtRotatedHollow(index, rotation);
+    }
+
+    @Override
+    public int keyAtRotatedFull(int index) {
+        return seqs[frame].keyAtRotatedFull(index);
+    }
+
+    @Override
+    public int keyAtRotatedFull(int index, int rotation) {
+        return seqs[frame].keyAtRotatedFull(index, rotation);
     }
 
     @Override

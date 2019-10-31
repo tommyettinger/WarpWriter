@@ -603,7 +603,7 @@ public class VoxelDraw {
         for (int i = 0; i < len; i++) {
             v = seq.getAtHollow(i);
             if (v != 0) {
-                xyz = seq.keyAtRotated(i);
+                xyz = seq.keyAtRotatedHollow(i);
                 x = HashMap3D.extractX(xyz);
                 y = HashMap3D.extractY(xyz);
                 z = HashMap3D.extractZ(xyz);
@@ -629,7 +629,7 @@ public class VoxelDraw {
         for (int i = 0; i < len; i++) {
             v = seq.getAtHollow(i);
             if (v != 0) {
-                xyz = seq.keyAtRotated(i);
+                xyz = seq.keyAtRotatedHollow(i);
                 x = HashMap3D.extractX(xyz);
                 y = HashMap3D.extractY(xyz);
                 z = HashMap3D.extractZ(xyz);
@@ -658,7 +658,7 @@ public class VoxelDraw {
         for (int i = 0; i < len; i++) {
             v = seq.getAtHollow(i);
             if (v != 0) {
-                xyz = seq.keyAtRotated(i);
+                xyz = seq.keyAtRotatedHollow(i);
                 x = HashMap3D.extractX(xyz);
                 y = HashMap3D.extractY(xyz);
                 z = HashMap3D.extractZ(xyz);
@@ -686,7 +686,7 @@ public class VoxelDraw {
         for (int i = 0; i < len; i++) {
             v = seq.getAtHollow(i);
             if (v != 0) {
-                xyz = seq.keyAtRotated(i);
+                xyz = seq.keyAtRotatedHollow(i);
                 x = HashMap3D.extractX(xyz);
                 y = HashMap3D.extractY(xyz);
                 z = HashMap3D.extractZ(xyz);
@@ -713,7 +713,7 @@ public class VoxelDraw {
         for (int i = 0; i < len; i++) {
             final byte v = seq.getAtHollow(i);
             if (v != 0) {
-				final int xyz = seq.keyAtRotated(i),
+				final int xyz = seq.keyAtRotatedHollow(i),
 						x = HashMap3D.extractX(xyz),
 						y = HashMap3D.extractY(xyz),
 						z = HashMap3D.extractZ(xyz),

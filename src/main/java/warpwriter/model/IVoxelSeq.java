@@ -27,8 +27,10 @@ public interface IVoxelSeq extends ITurnable {
     byte getAtHollow(int index);
     byte getRotated(int x, int y, int z);
     byte getRotated(int x, int y, int z, int rotation);
-    int keyAtRotated(int index);
-    int keyAtRotated(int index, int rotation);
+    int keyAtRotatedHollow(int index);
+    int keyAtRotatedHollow(int index, int rotation);
+    int keyAtRotatedFull(int index);
+    int keyAtRotatedFull(int index, int rotation);
     byte getRotated(int index);
     byte getRotated(int index, int rotation);
     void sort(IntComparator comparator);

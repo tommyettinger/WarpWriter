@@ -23,7 +23,7 @@ public class ShadowFinder {
         final int sz = seq.size();
         int k;
         for (int i = 0; i < sz; i++) {
-            k = seq.keyAtRotated(i);
+            k = seq.keyAtRotatedHollow(i);
             floor.insert(extractX(k), extractY(k));
         }
         if (blobShadow) {

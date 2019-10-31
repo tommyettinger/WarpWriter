@@ -2531,8 +2531,8 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
      * @param idx the index in the potentially-visible-voxel order of the key to fetch
      * @return the key at the index, if the index is valid, otherwise 0
      */
-    public int keyAtRotated(final int idx) {
-        return keyAtRotated(idx, rotation);
+    public int keyAtRotatedHollow(final int idx) {
+        return keyAtRotatedHollow(idx, rotation);
     }
     /**
      * Gets the key at the given index in the iteration order in constant time, rotating the x, y, and z components of
@@ -2541,11 +2541,34 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
      * @param rotation the rotation to use to edit the key; should be between 0 and 23 inclusive
      * @return the key at the index, if the index is valid, otherwise 0
      */
-    public int keyAtRotated(final int idx, final int rotation) {
+    public int keyAtRotatedHollow(final int idx, final int rotation) {
         if (idx < 0 || idx >= order.size)
             return 0;
         // The starting point.
         return rotate(key[order.get(idx)], rotation);
+    }
+
+    /**
+     * Gets the key at the given index in the entire iteration order in constant time, rotating the x, y, and z
+     * components of the key to match {@link #rotation}.
+     * @param idx the index in the entire order of the key to fetch
+     * @return the key at the index, if the index is valid, otherwise 0
+     */
+    public int keyAtRotatedFull(final int idx) {
+        return keyAtRotatedFull(idx, rotation);
+    }
+    /**
+     * Gets the key at the given index in the entire iteration order in constant time, rotating the x, y, and z
+     * components of the key to match {@code rotation} (a parameter, not the {@link #rotation} field of this class).
+     * @param idx the index in the entire order of the key to fetch
+     * @param rotation the rotation to use to edit the key; should be between 0 and 23 inclusive
+     * @return the key at the index, if the index is valid, otherwise 0
+     */
+    public int keyAtRotatedFull(final int idx, final int rotation) {
+        if (idx < 0 || idx >= full.size)
+            return 0;
+        // The starting point.
+        return rotate(key[full.get(idx)], rotation);
     }
 
     public byte getRotated(final int key)

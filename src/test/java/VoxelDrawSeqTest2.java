@@ -177,14 +177,13 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
         seq = new VoxelSeq(1024);
         seq.putModel(new FetchModel(60, 60, 60, new DecideFetch()
                 .setDecide(new SphereDecide(29, 29, 29, 15))
-                .setFetch(new Stripes(new int[]{5, 5}, new Fetch[]{
+                .setFetch(new Stripes(new int[]{12, 10, 12}, new Fetch[]{
                         ColorFetch.color(colorizer.getReducer().paletteMapping[rng.next(15)]),
-//                                ColorFetch.color(colorizer.getReducer().paletteMapping[rng.next(15)]),
-//                                ColorFetch.color(colorizer.getReducer().paletteMapping[rng.next(15)]),
+                                ColorFetch.color(colorizer.getReducer().paletteMapping[rng.next(15)]),
                                 ColorFetch.color(colorizer.getReducer().paletteMapping[rng.next(15)])})
                 )));
-        //seq.putSurface(voxels);
         seq.hollow();
+        //seq.putSurface(voxels);
         middleSeq = new VoxelSeq(seq.fullSize());
         middleSeq.sizeX(60);
         middleSeq.sizeY(60);
@@ -219,10 +218,11 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
         startTime = TimeUtils.millis();
         voxelColor.set(0);
         alpha = 0f;
-        transforms[0].interpolateInto(transforms[1 % transforms.length], alpha, transformMid);
-        middleSeq.clear();
-        transformMid.transformInto(seq, middleSeq, 29f, 29f, 29f);
-
+//        transforms[0].interpolateInto(transforms[1 % transforms.length], alpha, transformMid);
+//        middleSeq.clear();
+//        transformMid.transformInto(seq, middleSeq, 29f, 29f, 29f);
+        middleSeq.putAll(seq);
+        middleSeq.hollow();
     }
 
 //    public void makeBoom(byte[] fireColors) {
@@ -235,15 +235,12 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
     public void render() {
 //        model.setFrame((int)(TimeUtils.millis() >>> 7) & 15);
 //        boom.setFrame((int)(TimeUtils.millis() >>> 7) & 15);
-        if(seq != null)
+        if(seq != null && animating)
         {
             int time;
-            if(animating) {
                 time = (int) TimeUtils.timeSinceMillis(startTime);
                 voxelColor.set(time * 5 >>> 9);
                 alpha = (time & 0x7FF) * 0x1p-11f;
-            }
-            else time = 0;
             transforms[(time >>> 11) % transforms.length].interpolateInto(transforms[((time >>> 11) + 1) % transforms.length], alpha, transformMid);
             middleSeq.clear();
             transformMid.transformInto(seq, middleSeq, 29f, 29f, 29f);
@@ -376,19 +373,28 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
                     case Input.Keys.R:
                         middleSeq.reset();
                         transformMid.rotation.setEulerAnglesBrad(roll = 0, pitch = 0, yaw = 0);
+                        middleSeq.clear();
+                        middleSeq.putAll(seq);
+                        middleSeq.hollow();
                         System.out.println("Current rotation: " + transformMid.rotation.toBradString());
                         break;
                     case Input.Keys.P:
-//                        model.set(model());
-//                        model.set(ship);
-//                        chaos.setSeed(maker.rng.nextLong());
                         maker.rng.setState(rng.nextLong());
-                        Tools3D.deepCopyInto(maker.shipLargeSmoothColorized(), voxels);
-//                        seq.setFrame(0);
                         seq.clear();
-                        seq.putSurface(voxels);
-//                        seq = new AnimatedVoxelSeq(seq.seqs[0], 4);
+                        seq.putModel(new FetchModel(60, 60, 60, new DecideFetch()
+                                .setDecide(new SphereDecide(29, 29, 29, 15))
+                                .setFetch(new Stripes(new int[]{12, 10, 12}, new Fetch[]{
+                                        ColorFetch.color(colorizer.getReducer().paletteMapping[rng.next(15)]),
+                                        ColorFetch.color(colorizer.getReducer().paletteMapping[rng.next(15)]),
+                                        ColorFetch.color(colorizer.getReducer().paletteMapping[rng.next(15)])})
+                                )));
+                        seq.hollow();
+
+//                        Tools3D.deepCopyInto(maker.shipLargeSmoothColorized(), voxels);
+//                        seq.clear();
+//                        seq.putSurface(voxels);
                         break;
+
 //                    case Input.Keys.B: // burn!
 //                        maker.rng.setState(rng.nextLong());
 //                        makeBoom(maker.fireRange());
