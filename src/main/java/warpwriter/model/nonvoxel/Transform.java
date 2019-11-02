@@ -166,30 +166,52 @@ public class Transform {
      */
     public IVoxelSeq transformInto(IVoxelSeq start, IVoxelSeq next, float jointX, float jointY, float jointZ)
     {
-        final int len = start.fullSize();
-        int k, x, y, z;
+        final int len = start.size(), limX = next.sizeX(), limY = next.sizeY(), limZ = next.sizeZ();
+        int k, x, y, z;//, rx, ry, rz, fx, fy, fz;
         byte v;
         for (int i = 0; i < len; i++) {
-            k = start.keyAtRotatedFull(i);
-            v = start.getAt(i);
+            k = start.keyAtRotatedHollow(i);
+            v = start.getAtHollow(i);
             x = extractX(k);
             y = extractY(k);
             z = extractZ(k);
             temp.set(x - jointX, y - jointY, z - jointZ);
             rotation.transform(temp).add(jointX + moveX, jointY + moveY, jointZ + moveZ);
+            if(temp.x < 0 || temp.y < 0 || temp.z < 0 || temp.x >= limX || temp.y >= limY || temp.z >= limZ)
+                continue;
+            temp.scl(stretchX, stretchY, stretchZ).add(0.5f, 0.5f, 0.5f);
 //            if(stretchX <= 1.01f && stretchY <= 1.01f && stretchZ <= 1.01f)
-//                next.put(round(temp.x * stretchX), round(temp.y * stretchY), round(temp.z * stretchZ), v);
+//            {
+//                rx = (int)(temp.x + 0.5f);
+//                ry = (int)(temp.y + 0.5f);
+//                rz = (int)(temp.z + 0.5f);
+//                //next.put(rx, ry, rz, v);
+//                fx = (int)temp.x;
+//                fy = (int)temp.y;
+//                fz = (int)temp.z;
+//                if ((next.put(rx, ry, rz, v) != 0
+//                        && (fx == rx || next.put(fx, ry, rz, v) != 0)
+//                        && (fy == ry || next.put(rx, fy, rz, v) != 0)
+//                        && (fz == rz || next.put(rx, ry, fz, v) != 0))) {
+//                    if (fx != rx && fy != ry && fz != rz) {
+//                        next.put(fx, fy, fz, v);
+//                    }
+//                }
+//            }
 //            else 
-            for (int sx = 0; sx <= stretchX; sx++) {
-                for (int sy = 0; sy <= stretchY; sy++) {
-                    for (int sz = 0; sz <= stretchZ; sz++) {
-                        next.put(
-                                round(temp.x * stretchX + sx),
-                                round(temp.y * stretchY + sy),
-                                round(temp.z * stretchZ + sz), v);
+//                {
+                for (int sx = 0; sx <= stretchX; sx++) {
+                    for (int sy = 0; sy <= stretchY; sy++) {
+                        for (int sz = 0; sz <= stretchZ; sz++) {
+                            next.put(
+                                    (int) (temp.x + sx),
+                                    (int) (temp.y + sy),
+                                    (int) (temp.z + sz), v);
+
+                        }
                     }
                 }
-            }
+//            }
         }
         next.hollow();
         return next;

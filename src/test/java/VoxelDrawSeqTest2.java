@@ -81,7 +81,7 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.FLESURRECT);
 //        colorizer = Colorizer.FlesurrectBonusColorizer;
-        colorizer = Colorizer.RollBonusColorizer;
+        colorizer = Colorizer.AuroraColorizer;
         batchRenderer = new VoxelImmediateRenderer(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);//.setOffset(VIRTUAL_WIDTH, 0).flipX();
         batch = new MutantBatch();
         batchRenderer.color().set(colorizer);
@@ -235,10 +235,9 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //        boom.setFrame((int)(TimeUtils.millis() >>> 7) & 15);
         if(seq != null && animating)
         {
-            int time;
-                time = (int) TimeUtils.timeSinceMillis(startTime);
-                voxelColor.set(time * 5 >>> 9);
-                alpha = (time & 0x7FF) * 0x1p-11f;
+            int time = (int) TimeUtils.timeSinceMillis(startTime);
+            voxelColor.set(time * 5 >>> 9);
+            alpha = (time & 0x7FF) * 0x1p-11f;
             transforms[(time >>> 11) % transforms.length].interpolateInto(transforms[((time >>> 11) + 1) % transforms.length], alpha, transformMid);
             middleSeq.clear();
             transformMid.transformInto(seq, middleSeq, 29f, 29f, 29f);
@@ -300,20 +299,24 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 
     public void makeNetwork()
     {
-        FastNoise cells = new FastNoise(rng.nextInt(), 0.07f, FastNoise.CELLULAR)
+        FastNoise cells = new FastNoise(rng.nextInt(), 0.059f, FastNoise.CELLULAR)
                 , perturb = new FastNoise(rng.nextInt(), 0.37f, FastNoise.SIMPLEX_FRACTAL, 3);
         float adj;
         final byte color = colorizer.getReducer().paletteMapping[rng.next(15)];
-        cells.setCellularReturnType(FastNoise.DISTANCE);
+        cells.setCellularReturnType(FastNoise.DISTANCE_2);
+        cells.setCellularDistanceFunction(FastNoise.EUCLIDEAN);
         for (int x = 0; x < voxels.length; x++) {
             for (int y = 0; y < voxels[0].length; y++) {
                 for (int z = 0; z < voxels[0][0].length; z++) {
-                    adj = perturb.getConfiguredNoise(z, x, y);
-                    if(cells.getConfiguredNoise(x + adj, y - adj, z) >= -0.5f)
+                    adj = 
+//                            0f;
+                            perturb.getConfiguredNoise(x, y, z);
+                    if(cells.getConfiguredNoise(x + adj, y - adj, z) > -0.3f)
                         voxels[x][y][z] = color;
                 }
             }
         }
+        voxels = Tools3D.largestPart(voxels);
     }
 
     @Override
@@ -398,7 +401,7 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
                         seq.clear();
                         Tools3D.fill(voxels, 0);
                         makeNetwork();
-                        seq.putArray(voxels);
+                        seq.putSurface(voxels);
 //                        seq.putModel(new FetchModel(60, 60, 60, new DecideFetch()
 //                                .setDecide(new SphereDecide(29, 29, 29, 15))
 //                                .setFetch(new Stripes(new int[]{12, 10, 12}, new Fetch[]{
@@ -406,9 +409,9 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //                                        ColorFetch.color(colorizer.getReducer().paletteMapping[rng.next(15)]),
 //                                        ColorFetch.color(colorizer.getReducer().paletteMapping[rng.next(15)])})
 //                                )));
-                        seq.hollow();
+//                        seq.hollow();
                         middleSeq.clear();
-                        middleSeq.putAll(seq);
+                        middleSeq.putSurface(voxels);
                         middleSeq.hollow();
 
 //                        Tools3D.deepCopyInto(maker.shipLargeSmoothColorized(), voxels);
