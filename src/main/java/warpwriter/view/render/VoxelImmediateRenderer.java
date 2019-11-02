@@ -19,7 +19,7 @@ public class VoxelImmediateRenderer implements IRectangleRenderer, ITriangleRend
         this(640, 480);
     }
     public VoxelImmediateRenderer(int width, int height) {
-        batch = new ImmediateModeRenderer20(200000, false, true, 0);
+        batch = new ImmediateModeRenderer20(width * height * 8, false, true, 0);
         proj = new Matrix4();
         proj.setToOrtho2D(0, 0, width, height, -4096f, 4096f);
     }

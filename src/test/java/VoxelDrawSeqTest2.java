@@ -12,18 +12,13 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.FakeLanguageGen;
 import squidpony.squidmath.DiverRNG;
+import squidpony.squidmath.FastNoise;
 import squidpony.squidmath.MiniMover64RNG;
 import warpwriter.ModelMaker;
 import warpwriter.Tools3D;
 import warpwriter.VoxIO;
-import warpwriter.model.Fetch;
-import warpwriter.model.FetchModel;
 import warpwriter.model.VoxelSeq;
 import warpwriter.model.color.Colorizer;
-import warpwriter.model.decide.DecideFetch;
-import warpwriter.model.decide.SphereDecide;
-import warpwriter.model.fetch.ColorFetch;
-import warpwriter.model.fetch.Stripes;
 import warpwriter.model.nonvoxel.Transform;
 import warpwriter.model.nonvoxel.TurnQuaternion;
 import warpwriter.view.VoxelDraw;
@@ -145,7 +140,10 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
         byte red = colorizer.reduce(0xFF0000FF), green = colorizer.reduce(0x00FF00FF),
                 blue = colorizer.reduce(0x0000FFFF), white = colorizer.reduce(0xFFFFFFFF);
         maker.rng.setState(rng.nextLong());
-        voxels = maker.shipLargeSmoothColorized();
+        voxels = new byte[60][60][60];
+//        voxels = maker.shipLargeSmoothColorized();
+        makeNetwork();
+        
 //        try {
 //            voxels = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("FlesurrectBonus/Damned.vox")));
 //        } catch (FileNotFoundException e) {
@@ -175,15 +173,15 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //        voxels[48][29][31]=(white);
 //        voxels[48][31][29]=(white);
         seq = new VoxelSeq(1024);
-        seq.putModel(new FetchModel(60, 60, 60, new DecideFetch()
-                .setDecide(new SphereDecide(29, 29, 29, 15))
-                .setFetch(new Stripes(new int[]{12, 10, 12}, new Fetch[]{
-                        ColorFetch.color(colorizer.getReducer().paletteMapping[rng.next(15)]),
-                                ColorFetch.color(colorizer.getReducer().paletteMapping[rng.next(15)]),
-                                ColorFetch.color(colorizer.getReducer().paletteMapping[rng.next(15)])})
-                )));
-        seq.hollow();
-        //seq.putSurface(voxels);
+//        seq.putModel(new FetchModel(60, 60, 60, new DecideFetch()
+//                .setDecide(new SphereDecide(29, 29, 29, 15))
+//                .setFetch(new Stripes(new int[]{12, 10, 12}, new Fetch[]{
+//                        ColorFetch.color(colorizer.getReducer().paletteMapping[rng.next(15)]),
+//                                ColorFetch.color(colorizer.getReducer().paletteMapping[rng.next(15)]),
+//                                ColorFetch.color(colorizer.getReducer().paletteMapping[rng.next(15)])})
+//                )));
+//        seq.hollow();
+        seq.putSurface(voxels);
         middleSeq = new VoxelSeq(seq.fullSize());
         middleSeq.sizeX(60);
         middleSeq.sizeY(60);
@@ -298,7 +296,24 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //            gifRecorder.finishRecording();
 //            gifRecorder.writeGIF();
 //        }
+    }
 
+    public void makeNetwork()
+    {
+        FastNoise cells = new FastNoise(rng.nextInt(), 0.07f, FastNoise.CELLULAR)
+                , perturb = new FastNoise(rng.nextInt(), 0.37f, FastNoise.SIMPLEX_FRACTAL, 3);
+        float adj;
+        final byte color = colorizer.getReducer().paletteMapping[rng.next(15)];
+        cells.setCellularReturnType(FastNoise.DISTANCE);
+        for (int x = 0; x < voxels.length; x++) {
+            for (int y = 0; y < voxels[0].length; y++) {
+                for (int z = 0; z < voxels[0][0].length; z++) {
+                    adj = perturb.getConfiguredNoise(z, x, y);
+                    if(cells.getConfiguredNoise(x + adj, y - adj, z) >= -0.5f)
+                        voxels[x][y][z] = color;
+                }
+            }
+        }
     }
 
     @Override
@@ -378,17 +393,23 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
                         middleSeq.hollow();
                         System.out.println("Current rotation: " + transformMid.rotation.toBradString());
                         break;
-                    case Input.Keys.P:
-                        maker.rng.setState(rng.nextLong());
+                    case Input.Keys.P: 
+                        //maker.rng.setState(rng.nextLong());
                         seq.clear();
-                        seq.putModel(new FetchModel(60, 60, 60, new DecideFetch()
-                                .setDecide(new SphereDecide(29, 29, 29, 15))
-                                .setFetch(new Stripes(new int[]{12, 10, 12}, new Fetch[]{
-                                        ColorFetch.color(colorizer.getReducer().paletteMapping[rng.next(15)]),
-                                        ColorFetch.color(colorizer.getReducer().paletteMapping[rng.next(15)]),
-                                        ColorFetch.color(colorizer.getReducer().paletteMapping[rng.next(15)])})
-                                )));
+                        Tools3D.fill(voxels, 0);
+                        makeNetwork();
+                        seq.putArray(voxels);
+//                        seq.putModel(new FetchModel(60, 60, 60, new DecideFetch()
+//                                .setDecide(new SphereDecide(29, 29, 29, 15))
+//                                .setFetch(new Stripes(new int[]{12, 10, 12}, new Fetch[]{
+//                                        ColorFetch.color(colorizer.getReducer().paletteMapping[rng.next(15)]),
+//                                        ColorFetch.color(colorizer.getReducer().paletteMapping[rng.next(15)]),
+//                                        ColorFetch.color(colorizer.getReducer().paletteMapping[rng.next(15)])})
+//                                )));
                         seq.hollow();
+                        middleSeq.clear();
+                        middleSeq.putAll(seq);
+                        middleSeq.hollow();
 
 //                        Tools3D.deepCopyInto(maker.shipLargeSmoothColorized(), voxels);
 //                        seq.clear();

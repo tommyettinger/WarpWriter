@@ -108,7 +108,7 @@ public class VoxelDrawSeqTest extends ApplicationAdapter {
         Gdx.input.setInputProcessor(inputProcessor());
     }
     
-    public byte[][][] makeNetwork(long seed, byte color)
+    public void makeNetwork(long seed, byte color)
     {
         FastNoise cells = new FastNoise((int) seed, 0.07f, FastNoise.CELLULAR)
                 , perturb = new FastNoise((int)(seed>>>32), 0.37f, FastNoise.SIMPLEX_FRACTAL, 3);
@@ -123,7 +123,6 @@ public class VoxelDrawSeqTest extends ApplicationAdapter {
                 }
             }
         }
-        return voxels;
     }
 
     public void makeBoom(byte[] fireColors) {
