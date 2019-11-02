@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.FakeLanguageGen;
+import squidpony.squidmath.FastNoise;
 import squidpony.squidmath.MiniMover64RNG;
 import warpwriter.ModelMaker;
 import warpwriter.Tools3D;
@@ -73,11 +74,11 @@ public class VoxelDrawSeqTest extends ApplicationAdapter {
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.FLESURRECT);
 //        colorizer = Colorizer.LawnBonusColorizer;
-        colorizer = Colorizer.ToastyBonusColorizer;
+        colorizer = Colorizer.RollBonusColorizer;
         batchRenderer = new VoxelSpriteBatchRenderer(batch);
         batchRenderer.color().set(colorizer);
         voxelColor = batchRenderer.color();
-        rng = new MiniMover64RNG(-123456789);
+        rng = new MiniMover64RNG(123456789);
         maker = new ModelMaker(-123456789, colorizer);
 //        try {
 //            box = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("Aurora/dumbcube.vox")));
@@ -87,7 +88,11 @@ public class VoxelDrawSeqTest extends ApplicationAdapter {
 //        }
 //        makeBoom(maker.fireRange());
         maker.rng.setState(rng.nextLong());
-        voxels = maker.shipLargeSmoothColorized();
+        voxels = new byte[40][40][30];
+        //voxels = maker.shipLargeSmoothColorized();
+        //Tools3D.fill(voxels, 0);
+        makeNetwork(rng.nextLong(), colorizer.getReducer().paletteMapping[rng.next(15)]);
+        
         VoxelSeq vs = new VoxelSeq(1024);
         vs.putArray(voxels);
         vs.hollow();
@@ -101,6 +106,24 @@ public class VoxelDrawSeqTest extends ApplicationAdapter {
 //        model = new TurnModel().set(ship);
 //        model.setDuration(16);
         Gdx.input.setInputProcessor(inputProcessor());
+    }
+    
+    public byte[][][] makeNetwork(long seed, byte color)
+    {
+        FastNoise cells = new FastNoise((int) seed, 0.07f, FastNoise.CELLULAR)
+                , perturb = new FastNoise((int)(seed>>>32), 0.37f, FastNoise.SIMPLEX_FRACTAL, 3);
+        float adj;
+        cells.setCellularReturnType(FastNoise.DISTANCE);
+        for (int x = 0; x < voxels.length; x++) {
+            for (int y = 0; y < voxels[0].length; y++) {
+                for (int z = 0; z < voxels[0][0].length; z++) {
+                    adj = perturb.getConfiguredNoise(z, x, y);
+                    if(cells.getConfiguredNoise(x + adj, y - adj, z) >= -0.5f)
+                        voxels[x][y][z] = color;
+                }
+            }
+        }
+        return voxels;
     }
 
     public void makeBoom(byte[] fireColors) {
@@ -227,8 +250,13 @@ public class VoxelDrawSeqTest extends ApplicationAdapter {
 //                        model.set(model());
 //                        model.set(ship);
 //                        chaos.setSeed(maker.rng.nextLong());
-                        maker.rng.setState(rng.nextLong());
-                        Tools3D.deepCopyInto(maker.shipLargeSmoothColorized(), voxels);
+                        
+//                        maker.rng.setState(rng.nextLong());
+//                        Tools3D.deepCopyInto(maker.shipLargeSmoothColorized(), voxels);
+                        
+                        Tools3D.fill(voxels, 0);
+                        makeNetwork(rng.nextLong(), colorizer.getReducer().paletteMapping[rng.next(15)]);
+                        
                         seq.setFrame(0);
                         seq.clear();
                         seq.putSurface(voxels);
