@@ -140,7 +140,7 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
         byte red = colorizer.reduce(0xFF0000FF), green = colorizer.reduce(0x00FF00FF),
                 blue = colorizer.reduce(0x0000FFFF), white = colorizer.reduce(0xFFFFFFFF);
         maker.rng.setState(rng.nextLong());
-        voxels = new byte[60][60][60];
+        voxels = new byte[50][50][50];
 //        voxels = maker.shipLargeSmoothColorized();
         makeNetwork();
         
@@ -183,9 +183,9 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //        seq.hollow();
         seq.putSurface(voxels);
         middleSeq = new VoxelSeq(seq.fullSize());
-        middleSeq.sizeX(60);
-        middleSeq.sizeY(60);
-        middleSeq.sizeZ(60);
+        middleSeq.sizeX(50);
+        middleSeq.sizeY(50);
+        middleSeq.sizeZ(50);
 //        axes = new VoxelSeq(180);
 //        axes.sizeX(60);
 //        axes.sizeY(60);

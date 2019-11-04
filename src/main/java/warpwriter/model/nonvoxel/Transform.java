@@ -171,7 +171,6 @@ public class Transform {
         byte v;
         for (int i = 0; i < len; i++) {
             k = start.keyAtRotatedHollow(i);
-            v = start.getAtHollow(i);
             x = extractX(k);
             y = extractY(k);
             z = extractZ(k);
@@ -179,7 +178,8 @@ public class Transform {
             rotation.transform(temp).add(jointX + moveX, jointY + moveY, jointZ + moveZ);
             if(temp.x < 0 || temp.y < 0 || temp.z < 0 || temp.x >= limX || temp.y >= limY || temp.z >= limZ)
                 continue;
-            temp.scl(stretchX, stretchY, stretchZ).add(0.5f, 0.5f, 0.5f);
+            temp.scl(stretchX, stretchY, stretchZ).add(-0.5f, -0.5f, -0.5f);
+            v = start.getAtHollow(i);
 //            if(stretchX <= 1.01f && stretchY <= 1.01f && stretchZ <= 1.01f)
 //            {
 //                rx = (int)(temp.x + 0.5f);

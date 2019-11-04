@@ -406,9 +406,13 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
             y = extractY(k);
             z = extractZ(k);
             if(x <= 0 || x >= sizeX - 1 || y <= 0 || y >= sizeY -1 || z <= 0 || z >= sizeZ - 1 ||
-                    !containsKey(x - 1, y, z) || !containsKey(x + 1, y, z) ||
-                    !containsKey(x, y - 1, z) || !containsKey(x, y + 1, z) ||
-                    !containsKey(x, y, z - 1) || !containsKey(x, y, z + 1))
+                    !containsKey(k - 0x00000001) || !containsKey(k + 0x00000001) ||
+                    !containsKey(k - 0x00000400) || !containsKey(k + 0x00000400) ||
+                    !containsKey(k - 0x00100000) || !containsKey(k + 0x00100000)
+//                    !containsKey(x - 1, y, z) || !containsKey(x + 1, y, z) ||
+//                    !containsKey(x, y - 1, z) || !containsKey(x, y + 1, z) ||
+//                    !containsKey(x, y, z - 1) || !containsKey(x, y, z + 1)
+            )
                 order.add(item);
         }
     }
@@ -2507,7 +2511,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
     }
     /**
      * Sorts this whole VoxelSeq on its keys using the supplied Comparator.
-     * @param comparator a Comparator that can be used on the same type this uses for its keys (may need wildcards)
+     * @param comparator an {@link IntComparator} that can handle the x,y,z packed keys this uses
      */
     public void sort(IntComparator comparator)
     {
@@ -2516,8 +2520,8 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
 
     /**
      * Sorts a sub-range of this VoxelSeq on its keys from what is currently the index {@code start} up to (but not
-     * including) the index {@code end}, using the supplied Comparator. Only sorts potentially-visible voxels.
-     * @param comparator a Comparator that can be used on the same type this uses for its keys (may need wildcards)
+     * including) the index {@code end}, using the supplied IntComparator. Only sorts potentially-visible voxels.
+     * @param comparator an {@link IntComparator} that can handle the x,y,z packed keys this uses
      * @param start the first index of a key to sort (the index can change after this)
      * @param end the exclusive bound on the indices to sort; often this is just {@link #size()}
      */
