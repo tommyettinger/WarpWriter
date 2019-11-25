@@ -334,6 +334,11 @@ public class VoxelSpriteBatchRenderer implements IRectangleRenderer, ITriangleRe
                 : drawRightTriangle(x, y, color);
     }
 
+    @Override
+    public VoxelSpriteBatchRenderer drawTriangleOutline(int x, int y, byte voxel, int vx, int vy, int vz) {
+        return this;
+    }
+
     protected byte transparency = Byte.MAX_VALUE;
 
     @Override

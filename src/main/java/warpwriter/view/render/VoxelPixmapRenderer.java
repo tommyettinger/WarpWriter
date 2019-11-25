@@ -451,6 +451,11 @@ public class VoxelPixmapRenderer implements IRectangleRenderer, ITriangleRendere
                 : drawRightTriangle(x, y, color, voxel, depth);
     }
 
+    @Override
+    public VoxelPixmapRenderer drawTriangleOutline(int x, int y, byte voxel, int vx, int vy, int vz) {
+        return this;
+    }
+
     protected byte transparency = Byte.MAX_VALUE;
 
     @Override

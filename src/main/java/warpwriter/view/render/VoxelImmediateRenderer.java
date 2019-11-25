@@ -246,29 +246,41 @@ public class VoxelImmediateRenderer implements IRectangleRenderer, ITriangleRend
 	}
 
 	public VoxelImmediateRenderer drawLeftTriangle(int x, int y, int color, int outline, float depth) {
-		final float c = NumberTools.reversedIntBitsToFloat(transparency(color) & 0xFFFFFFFE);
-		final float o = NumberTools.reversedIntBitsToFloat(transparency(outline) & 0xFFFFFFFE);
-		final float back = depth - 7f;
+        final float c = NumberTools.reversedIntBitsToFloat(transparency(color) & 0xFFFFFFFE);
+        x = scaleX * (flipX ? -x : x) + offsetX;
+        y = scaleY * (flipY ? -y : y) + offsetY;
+        float sizeX = 2.000f * scaleX;
+        batch.color(c);
+        batch.vertex(x + sizeX, y, depth);
+        batch.color(c);
+        batch.vertex(x + sizeX, y + 4.00f * scaleY, depth);
+        batch.color(c);
+        batch.vertex(x, y + 2.00f * scaleY, depth);
+        return this;
 
-		x = scaleX * (flipX ? -x : x) + offsetX - 2;
-		y = scaleY * (flipY ? -y : y) + offsetY - 1;
-		float sizeX = 2.000f * scaleX;
-		batch.color(o);
-		batch.vertex(x + sizeX + 3, y, back);
-		batch.color(o);
-		batch.vertex(x + sizeX + 3, y + 4.00f * scaleY + 2, back);
-		batch.color(o);
-		batch.vertex(x, y + 2.00f * scaleY + 1, back);
-
-		x += 2;
-		y++;
-		batch.color(c);
-		batch.vertex(x + sizeX, y, depth);
-		batch.color(c);
-		batch.vertex(x + sizeX, y + 4.00f * scaleY, depth);
-		batch.color(c);
-		batch.vertex(x, y + 2.00f * scaleY, depth);
-		return this;
+//		final float c = NumberTools.reversedIntBitsToFloat(transparency(color) & 0xFFFFFFFE);
+//		final float o = NumberTools.reversedIntBitsToFloat(transparency(outline) & 0xFFFFFFFE);
+//		final float back = depth - 7f;
+//
+//		x = scaleX * (flipX ? -x : x) + offsetX - 1;
+//		y = scaleY * (flipY ? -y : y) + offsetY - 1;
+//		float sizeX = 2.000f * scaleX;
+//		batch.color(o);
+//		batch.vertex(x + sizeX + 2, y, back);
+//		batch.color(o);
+//		batch.vertex(x + sizeX + 2, y + 4.00f * scaleY + 2, back);
+//		batch.color(o);
+//		batch.vertex(x, y + 2.00f * scaleY + 1, back);
+//
+//		x += 1;
+//		y++;
+//		batch.color(c);
+//		batch.vertex(x + sizeX, y, depth);
+//		batch.color(c);
+//		batch.vertex(x + sizeX, y + 4.00f * scaleY, depth);
+//		batch.color(c);
+//		batch.vertex(x, y + 2.00f * scaleY, depth);
+//		return this;
 	}
 
 	@Override
@@ -290,27 +302,38 @@ public class VoxelImmediateRenderer implements IRectangleRenderer, ITriangleRend
 	}
 
 	public VoxelImmediateRenderer drawRightTriangle(int x, int y, int color, int outline, float depth) {
-		final float c = NumberTools.reversedIntBitsToFloat(transparency(color) & 0xFFFFFFFE);
-		final float o = NumberTools.reversedIntBitsToFloat(transparency(outline) & 0xFFFFFFFE);
-		final float back = depth - 7f;
-		x = scaleX * (flipX ? -x : x) + offsetX - 1;
-		y = scaleY * (flipY ? -y : y) + offsetY - 1;
-		batch.color(o);
-		batch.vertex(x, y, back);
-		batch.color(o);
-		batch.vertex(x + 2.000f * scaleX + 3, y + 2.00f * scaleY + 1, back);
-		batch.color(o);
-		batch.vertex(x, y + 4.00f * scaleY + 2, back);
+        final float c = NumberTools.reversedIntBitsToFloat(transparency(color) & 0xFFFFFFFE);
+        x = scaleX * (flipX ? -x : x) + offsetX;
+        y = scaleY * (flipY ? -y : y) + offsetY;
+        batch.color(c);
+        batch.vertex(x, y, depth);
+        batch.color(c);
+        batch.vertex(x + 2.000f * scaleX, y + 2.00f * scaleY, depth);
+        batch.color(c);
+        batch.vertex(x, y + 4.00f * scaleY, depth);
+        return this;
 
-		x++;
-		y++;
-		batch.color(c);
-		batch.vertex(x, y, depth);
-		batch.color(c);
-		batch.vertex(x + 2.000f * scaleX, y + 2.00f * scaleY, depth);
-		batch.color(c);
-		batch.vertex(x, y + 4.00f * scaleY, depth);
-		return this;
+//		final float c = NumberTools.reversedIntBitsToFloat(transparency(color) & 0xFFFFFFFE);
+//		final float o = NumberTools.reversedIntBitsToFloat(transparency(outline) & 0xFFFFFFFE);
+//		final float back = depth - 7f;
+//		x = scaleX * (flipX ? -x : x) + offsetX - 1;
+//		y = scaleY * (flipY ? -y : y) + offsetY - 1;
+//		batch.color(o);
+//		batch.vertex(x, y, back);
+//		batch.color(o);
+//		batch.vertex(x + 2.000f * scaleX + 2, y + 2.00f * scaleY + 1, back);
+//		batch.color(o);
+//		batch.vertex(x, y + 4.00f * scaleY + 2, back);
+//
+//		x++;
+//		y++;
+//		batch.color(c);
+//		batch.vertex(x, y, depth);
+//		batch.color(c);
+//		batch.vertex(x + 2.000f * scaleX, y + 2.00f * scaleY, depth);
+//		batch.color(c);
+//		batch.vertex(x, y + 4.00f * scaleY, depth);
+//		return this;
 	}
 
     public VoxelImmediateRenderer drawLeftTriangleBack(int x, int y, int color) {
@@ -452,6 +475,44 @@ public class VoxelImmediateRenderer implements IRectangleRenderer, ITriangleRend
     @Override
     public VoxelImmediateRenderer drawRightTriangleRightFace(int x, int y, byte voxel, int vx, int vy, int vz) {
         return drawRightTriangleRightFace(x, y, voxel, vx + vy + vz, vx, vy, vz);
+    }
+
+    @Override
+    public VoxelImmediateRenderer drawTriangleOutline(int x, int y, byte voxel, int vx, int vy, int vz) {
+        final float c = NumberTools.reversedIntBitsToFloat(transparency(color.twilight().dark(voxel)) & 0xFFFFFFFE);
+        x = scaleX * (flipX ? -x : x) + offsetX - 1;
+        y = scaleY * (flipY ? -y : y) + offsetY;
+        final float sizeX = 2.000f * scaleX;
+        final float depth = vx + vy + vz - 9;
+        batch.color(c);
+        batch.vertex(x + sizeX + 1, y, depth);
+        batch.color(c);
+        batch.vertex(x + sizeX * 2 + 2, y + 6 * scaleY + 1, depth);
+        batch.color(c);
+        batch.vertex(x + sizeX * 2 + 2, y + scaleY + 1, depth);
+
+        batch.color(c);
+        batch.vertex(x + sizeX + 1, y, depth);
+        batch.color(c);
+        batch.vertex(x, y + scaleY + 1, depth);
+        batch.color(c);
+        batch.vertex(x, y + 6 * scaleY + 1, depth);
+
+        batch.color(c);
+        batch.vertex(x + sizeX + 1, y + 7 * scaleY + 2, depth);
+        batch.color(c);
+        batch.vertex(x + sizeX * 2 + 2, y + 6 * scaleY + 1, depth);
+        batch.color(c);
+        batch.vertex(x, y + 6 * scaleY + 1, depth);
+
+        batch.color(c);
+        batch.vertex(x + sizeX * 2 + 2, y + 6 * scaleY + 1, depth);
+        batch.color(c);
+        batch.vertex(x + sizeX + 1, y, depth);
+        batch.color(c);
+        batch.vertex(x, y + 6 * scaleY + 1, depth);
+
+        return this;
     }
 
     protected byte transparency = Byte.MAX_VALUE;

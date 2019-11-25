@@ -81,7 +81,7 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.FLESURRECT);
 //        colorizer = Colorizer.FlesurrectBonusColorizer;
-        colorizer = Colorizer.AuroraColorizer;
+        colorizer = Colorizer.WardBonusColorizer;
         batchRenderer = new VoxelImmediateRenderer(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);//.setOffset(VIRTUAL_WIDTH, 0).flipX();
         batch = new MutantBatch();
         batchRenderer.color().set(colorizer);

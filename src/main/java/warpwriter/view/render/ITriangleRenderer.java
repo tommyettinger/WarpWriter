@@ -104,4 +104,5 @@ public interface ITriangleRenderer extends IVoxelRenderer {
      */
     ITriangleRenderer drawRightTriangleRightFace(int x, int y, byte voxel, int depth, int vx, int vy, int vz);
 
+    ITriangleRenderer drawTriangleOutline(int x, int y, byte voxel, int vx, int vy, int vz);
 }
