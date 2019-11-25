@@ -210,8 +210,9 @@ public class ShaderUtils {
 
     /**
      * This fragment shader substitutes colors with ones from a palette, dithering as needed using a variant on the R2
-     * with triangle wave dithering technique suggested by Martin Roberts. This shows line artifacts in some places,
-     * aligned to a rhombic grid (matching the lines in isometric pixel art, interestingly).
+     * point sequence dithering technique suggested by Martin Roberts. This particular set of changes seems especially
+     * good at avoiding obvious linear patterns, due to how it calculates the degree of adjustment towards (or, less
+     * frequently, away from) the target color using both R2 and asin().
      */
     public static final String fragmentShaderRoberts =
             "varying vec2 v_texCoords;\n" +
@@ -222,18 +223,19 @@ public class ShaderUtils {
                     "uniform vec3 u_mul;\n" +
                     "const float b_adj = 31.0 / 32.0;\n" +
                     "const float rb_adj = 32.0 / 1023.0;\n" +
-                    "const vec3 bright = vec3(0.375, 0.5, 0.125);\n" +
                     "void main()\n" +
                     "{\n" +
                     "   vec4 tgt = v_color * texture2D( u_texture, v_texCoords );\n" +                     
+                    "   tgt.rgb = u_add + u_mul * tgt.rgb;\n" +                     
                     "   vec4 used = texture2D(u_palette, vec2((tgt.b * b_adj + floor(tgt.r * 31.999)) * rb_adj, 1.0 - tgt.g));\n" +
-//                    "   float adj = fract(dot(vec2(0.7548776662466927, 0.5698402909980532), gl_FragCoord.xy)) * 0.375;\n" + // - 0.456                     
-                    "   float adj = fract(dot(vec2(0.7548776662466927, 0.5698402909980532), gl_FragCoord.xy));\n" +
-                    "   adj *= asin(adj - 0.3125);\n" +
+//                    "   float adj = fract(dot(vec2(0.7548776662466927, 0.5698402909980532), gl_FragCoord.xy));\n" +
+//                    "   adj *= asin(adj - 0.3125);\n" +
+                    "   float adj = asin(fract(52.9829189 * fract(dot(vec2(0.06711056, 0.00583715), gl_FragCoord.xy))) * 0.875 - fract(dot(vec2(0.7548776662466927, 0.5698402909980532), gl_FragCoord.xy)) * 0.5);\n" +
                     "   tgt.rgb = clamp(tgt.rgb + (tgt.rgb - used.rgb) * adj, 0.0, 1.0);\n" +
                     "   gl_FragColor.rgb = texture2D(u_palette, vec2((tgt.b * b_adj + floor(tgt.r * 31.999)) * rb_adj, 1.0 - tgt.g)).rgb;\n" +
                     "   gl_FragColor.a = tgt.a;\n" +
                     "}";
+//                    "   float adj = fract(dot(vec2(0.7548776662466927, 0.5698402909980532), gl_FragCoord.xy)) * 0.375;\n" + // - 0.456                     
     
     public static final String fragmentShaderRobertsWarmMild =
             "varying vec2 v_texCoords;\n" +
@@ -252,8 +254,9 @@ public class ShaderUtils {
                     "   vec4 used = texture2D(u_palette, vec2((clamp(dot(tgt.rgb, vec3(1.0, -0.375, -0.5)), 0.0, 1.0) * b_adj + floor(clamp(dot(tgt.rgb, vec3(1.0, 0.625, -0.5)), 0.0, 1.0) * 31.999)) * rb_adj, 1.0 - clamp(dot(tgt.rgb, vec3(1.0, -0.375, 0.5)), 0.0, 1.0)));\n" +
                     "   used.rgb = vec3(dot(used.rgb, bright), used.r - used.b, used.g - used.b);\n" +
                     //"   float adj = fract(dot(vec2(0.7548776662466927, 0.5698402909980532), gl_FragCoord.xy)) * 1.421 - 0.654;\n" +
-                    "   float adj = fract(dot(vec2(0.7548776662466927, 0.5698402909980532), gl_FragCoord.xy));\n" +
-                    "   adj *= asin(adj - 0.3125);\n" + 
+//                    "   float adj = fract(dot(vec2(0.7548776662466927, 0.5698402909980532), gl_FragCoord.xy));\n" +
+//                    "   adj *= asin(adj - 0.3125);\n" + 
+                    "   float adj = asin(fract(52.9829189 * fract(dot(vec2(0.06711056, 0.00583715), gl_FragCoord.xy))) * 0.875 - fract(dot(vec2(0.7548776662466927, 0.5698402909980532), gl_FragCoord.xy)) * 0.5);\n" +
                     "   tgt.rgb += (tgt.rgb - used.rgb) * adj;\n" +
                     "   gl_FragColor.rgb = texture2D(u_palette, vec2((clamp(dot(tgt.rgb, vec3(1.0, -0.375, -0.5)), 0.0, 1.0) * b_adj + floor(clamp(dot(tgt.rgb, vec3(1.0, 0.625, -0.5)), 0.0, 1.0) * 31.999)) * rb_adj, 1.0 - clamp(dot(tgt.rgb, vec3(1.0, -0.375, 0.5)), 0.0, 1.0))).rgb;\n" +
                     "   gl_FragColor.a = tgt.a;\n" +

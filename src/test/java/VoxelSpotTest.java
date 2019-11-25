@@ -76,7 +76,7 @@ public class VoxelSpotTest extends ApplicationAdapter {
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.CW_PALETTE);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.FLESURRECT);
-        colorizer = Colorizer.JudgeBonusColorizer;
+        colorizer = Colorizer.WardBonusColorizer;
         voxelColor = new VoxelColor().set(colorizer);
         batchRenderer = new VoxelSpotRenderer(VIRTUAL_WIDTH, VIRTUAL_HEIGHT).setOffset(VIRTUAL_WIDTH, 0).flipX();
         batch = new MutantBatch();

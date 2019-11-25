@@ -402,6 +402,7 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
                         Tools3D.fill(voxels, 0);
                         makeNetwork();
                         seq.putSurface(voxels);
+                        
 //                        seq.putModel(new FetchModel(60, 60, 60, new DecideFetch()
 //                                .setDecide(new SphereDecide(29, 29, 29, 15))
 //                                .setFetch(new Stripes(new int[]{12, 10, 12}, new Fetch[]{
@@ -410,13 +411,14 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //                                        ColorFetch.color(colorizer.getReducer().paletteMapping[rng.next(15)])})
 //                                )));
 //                        seq.hollow();
+                        
+//                        final byte[][][] v = maker.shipLargeSmoothColorized();
+//                        seq.clear();
+//                        seq.putSurface(v);
+
                         middleSeq.clear();
                         middleSeq.putSurface(voxels);
                         middleSeq.hollow();
-
-//                        Tools3D.deepCopyInto(maker.shipLargeSmoothColorized(), voxels);
-//                        seq.clear();
-//                        seq.putSurface(voxels);
                         break;
 
 //                    case Input.Keys.B: // burn!
