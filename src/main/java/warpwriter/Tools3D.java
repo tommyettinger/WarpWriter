@@ -1,6 +1,10 @@
 package warpwriter;
 
+import squidpony.squidmath.CrossHash;
+
 import java.util.Arrays;
+
+import static squidpony.squidmath.CrossHash.Water.*;
 
 /**
  * Just laying some foundation for 3D array manipulation.
@@ -411,83 +415,150 @@ public class Tools3D {
 ////        result = (result ^ result >>> 33) * 0xC4CEB9FE1A85EC53L;
 //        return (result ^ result >>> 33);
 //    }
-    /**
-     * Gets a 64-bit high-quality hash of the given 3D byte array. When GWT is a possible target, you should prefer
-     * {@link #hash(byte[][][])} if possible, since it's quite a lot faster to work with ints there.
-     * <br>
-     * This algorithm passes SMHasher on byte inputs in unusual patterns. The finalization step of this is based loosely
-     * on a work-in-progress unary hash in the vein of Pelle Evensen's rrxmrrxmsx_0, but with less rotations and more
-     * right-shifts. The unary hash is a "work-in-progress" because it's only gone through a week so far of testing
-     * using the setup here http://mostlymangling.blogspot.com/2019/01/better-stronger-mixer-and-test-procedure.html ,
-     * though it is promising because it hasn't had a failure on any test. This code interleaves changes to two
-     * variables with the rrxmrrxmsx_0-like step to increase mixing of the hash.
-     * @param data a 3D byte array; if null this returns 0, but if any sub-arrays are null this will throw an exception
-     * @return a 64-bit hash of the given data, with all bits approximately equally likely to be set
-     */
-    public static long hash64(byte[][][] data)
-    {
-        if (data == null)
-            return 0L;
-        final int sizeX = data.length, sizeY = data[0].length, sizeZ = data[0][0].length;
-        long run = 0x1A976FDF6BF60B85L ^ sizeX * 0xD1B54A32D192ED03L + sizeY * 0xABC98388FB8FAC03L + sizeZ * 0x8CB92BA72F3D8DD7L, result = 0x60642E2A34326F1EL ^ (run << 30 | run >>> 34);
-        byte[] current;
-        for (int x = 0; x < sizeX; x++) {
-            for (int y = 0; y < sizeY; y++) {
-                current = data[x][y];
-                for (int z = 0; z < sizeZ; z++) {
-                    result ^= (run += (current[z] ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L);
-                }
-            }
-        }
-        run ^= (result ^ (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47)) * 0xAEF17502108EF2D9L;
-        result += (run ^ run >>> 43 ^ run >>> 31 ^ run >>> 23) * 0xDB4F0B9175AE2165L;
-        return (result ^ result >>> 28);
-    }
-    private static int hash(final byte[] data) {
-        int result = 0x1A976FDF, z = 0x60642E25;
+
+    public static int hash(final byte[][] data) {
+        if (data == null) return 0;
+        long seed = -260224914646652572L;//b1 ^ b1 >>> 41 ^ b1 << 53;
         final int len = data.length;
-        for (int i = 0; i < len; i++) {
-            result ^= (z += (data[i] ^ 0xC3564E95) * 0x9E375);
-            z ^= (result = (result << 20 | result >>> 12));
+        for (int i = 3; i < len; i+=4) {
+            seed = mum(
+                    mum(CrossHash.hash(data[i-3]) ^ b1, CrossHash.hash(data[i-2]) ^ b2) + seed,
+                    mum(CrossHash.hash(data[i-1]) ^ b3, CrossHash.hash(data[i  ]) ^ b4));
         }
-        result += (z ^ z >>> 15 ^ 0xAE932BD5) * 0x632B9;
-//        result = (result ^ result >>> 15) * 0xFF51D;
-//        result = (result ^ result >>> 15) * 0xC4CEB;
-        return result ^ result >>> 15;
-    }
-    private static int hash(final byte[][] data) {
-        int result = 0xC3564E9F, z = 0x1A976FD5;
-        final int len = data.length;
-        for (int i = 0; i < len; i++) {
-            result ^= (z += hash(data[i]) + i);
-            z ^= (result = (result << 20 | result >>> 12));
+        int t;
+        switch (len & 3) {
+            case 0: seed = mum(b1 ^ seed, b4 + seed); break;
+            case 1: seed = mum(seed ^((t = CrossHash.hash(data[len-1])) >>> 16), b3 ^ (t & 0xFFFFL)); break;
+            case 2: seed = mum(seed ^ CrossHash.hash(data[len-2]), b0 ^ CrossHash.hash(data[len-1])); break;
+            case 3: seed = mum(seed ^ CrossHash.hash(data[len-3]), b2 ^ CrossHash.hash(data[len-2])) ^ mum(seed ^ CrossHash.hash(data[len-1]), b4); break;
         }
-        result += (z ^ z >>> 15 ^ 0xAE932BD5) * 0x632B9;
-//        result = (result ^ result >>> 15) * 0xFF51D;
-//        result = (result ^ result >>> 15) * 0xC4CEB;
-        return result ^ result >>> 15;
+        return (int) mum(seed ^ seed << 16, len ^ b0);
     }
 
-    /**
-     * Gets a 32-bit high-quality hash of the given 3D byte array. This should be preferred over
-     * {@link #hash64(byte[][][])} when GWT is a possible target, since it's quite a lot faster to work with ints there.
-     * @param data a 3D byte array; if null this returns 0, but if any sub-arrays are null this will throw an exception
-     * @return a 32-bit hash of the given data, with all bits approximately equally likely to be set
-     */
     public static int hash(final byte[][][] data) {
-        if (data == null)
-            return 0;
-        int result = 0x60642E2F, z = 0xC3564E95;
+        if (data == null) return 0;
+        long seed = -260224914646652572L;//b1 ^ b1 >>> 41 ^ b1 << 53;
         final int len = data.length;
-        for (int i = 0; i < len; i++) {
-            result ^= (z += hash(data[i]) ^ i);
-            z ^= (result = (result << 20 | result >>> 12));
+        for (int i = 3; i < len; i+=4) {
+            seed = mum(
+                    mum(CrossHash.hash(data[i-3]) ^ b1, CrossHash.hash(data[i-2]) ^ b2) + seed,
+                    mum(CrossHash.hash(data[i-1]) ^ b3, CrossHash.hash(data[i  ]) ^ b4));
         }
-        result += (z ^ z >>> 15 ^ 0xAE932BD5) * 0x632B9;
-        result = (result ^ result >>> 15) * 0xFF51D;
-        result = (result ^ result >>> 15) * 0xC4CEB;
-        return result ^ result >>> 15;
+        int t;
+        switch (len & 3) {
+            case 0: seed = mum(b1 ^ seed, b4 + seed); break;
+            case 1: seed = mum(seed ^((t = CrossHash.hash(data[len-1])) >>> 16), b3 ^ (t & 0xFFFFL)); break;
+            case 2: seed = mum(seed ^ CrossHash.hash(data[len-2]), b0 ^ CrossHash.hash(data[len-1])); break;
+            case 3: seed = mum(seed ^ CrossHash.hash(data[len-3]), b2 ^ CrossHash.hash(data[len-2])) ^ mum(seed ^ CrossHash.hash(data[len-1]), b4); break;
+        }
+        return (int) mum(seed ^ seed << 16, len ^ b0);
     }
+
+    public static long hash64(final byte[][][] data) {
+        if (data == null) return 0;
+        long seed = 9069147967908697017L;
+        final int len = data.length;
+        for (int i = 3; i < len; i += 4) {
+            seed = mum(
+                    mum(hash(data[i - 3]) ^ b1, hash(data[i - 2]) ^ b2) + seed,
+                    mum(hash(data[i - 1]) ^ b3, hash(data[i]) ^ b4));
+        }
+        int t;
+        switch (len & 3) {
+            case 0:
+                seed = mum(b1 ^ seed, b4 + seed);
+                break;
+            case 1:
+                seed = mum(seed ^ ((t = hash(data[len - 1])) >>> 16), b3 ^ (t & 0xFFFFL));
+                break;
+            case 2:
+                seed = mum(seed ^ hash(data[len - 2]), b0 ^ hash(data[len - 1]));
+                break;
+            case 3:
+                seed = mum(seed ^ hash(data[len - 3]), b2 ^ hash(data[len - 2])) ^ mum(seed ^ hash(data[len - 1]), b4);
+                break;
+        }
+        seed = (seed ^ seed << 16) * (len ^ b0);
+        return seed - (seed >>> 31) + (seed << 33);
+    }
+
+//    /**
+//     * Gets a 64-bit high-quality hash of the given 3D byte array. When GWT is a possible target, you should prefer
+//     * {@link #hash(byte[][][])} if possible, since it's quite a lot faster to work with ints there.
+//     * <br>
+//     * This algorithm passes SMHasher on byte inputs in unusual patterns. The finalization step of this is based loosely
+//     * on a work-in-progress unary hash in the vein of Pelle Evensen's rrxmrrxmsx_0, but with less rotations and more
+//     * right-shifts. The unary hash is a "work-in-progress" because it's only gone through a week so far of testing
+//     * using the setup here http://mostlymangling.blogspot.com/2019/01/better-stronger-mixer-and-test-procedure.html ,
+//     * though it is promising because it hasn't had a failure on any test. This code interleaves changes to two
+//     * variables with the rrxmrrxmsx_0-like step to increase mixing of the hash.
+//     * @param data a 3D byte array; if null this returns 0, but if any sub-arrays are null this will throw an exception
+//     * @return a 64-bit hash of the given data, with all bits approximately equally likely to be set
+//     */
+//    public static long hash64(byte[][][] data)
+//    {
+//        if (data == null)
+//            return 0L;
+//        final int sizeX = data.length, sizeY = data[0].length, sizeZ = data[0][0].length;
+//        long run = 0x1A976FDF6BF60B85L ^ sizeX * 0xD1B54A32D192ED03L + sizeY * 0xABC98388FB8FAC03L + sizeZ * 0x8CB92BA72F3D8DD7L, result = 0x60642E2A34326F1EL ^ (run << 30 | run >>> 34);
+//        byte[] current;
+//        for (int x = 0; x < sizeX; x++) {
+//            for (int y = 0; y < sizeY; y++) {
+//                current = data[x][y];
+//                for (int z = 0; z < sizeZ; z++) {
+//                    result ^= (run += (current[z] ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L);
+//                }
+//            }
+//        }
+//        run ^= (result ^ (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47)) * 0xAEF17502108EF2D9L;
+//        result += (run ^ run >>> 43 ^ run >>> 31 ^ run >>> 23) * 0xDB4F0B9175AE2165L;
+//        return (result ^ result >>> 28);
+//    }
+//    private static int hash(final byte[] data) {
+//        int result = 0x1A976FDF, z = 0x60642E25;
+//        final int len = data.length;
+//        for (int i = 0; i < len; i++) {
+//            result ^= (z += (data[i] ^ 0xC3564E95) * 0x9E375);
+//            z ^= (result = (result << 20 | result >>> 12));
+//        }
+//        result += (z ^ z >>> 15 ^ 0xAE932BD5) * 0x632B9;
+////        result = (result ^ result >>> 15) * 0xFF51D;
+////        result = (result ^ result >>> 15) * 0xC4CEB;
+//        return result ^ result >>> 15;
+//    }
+//    private static int hash(final byte[][] data) {
+//        int result = 0xC3564E9F, z = 0x1A976FD5;
+//        final int len = data.length;
+//        for (int i = 0; i < len; i++) {
+//            result ^= (z += hash(data[i]) + i);
+//            z ^= (result = (result << 20 | result >>> 12));
+//        }
+//        result += (z ^ z >>> 15 ^ 0xAE932BD5) * 0x632B9;
+////        result = (result ^ result >>> 15) * 0xFF51D;
+////        result = (result ^ result >>> 15) * 0xC4CEB;
+//        return result ^ result >>> 15;
+//    }
+//
+//    /**
+//     * Gets a 32-bit high-quality hash of the given 3D byte array. This should be preferred over
+//     * {@link #hash64(byte[][][])} when GWT is a possible target, since it's quite a lot faster to work with ints there.
+//     * @param data a 3D byte array; if null this returns 0, but if any sub-arrays are null this will throw an exception
+//     * @return a 32-bit hash of the given data, with all bits approximately equally likely to be set
+//     */
+//    public static int hash(final byte[][][] data) {
+//        if (data == null)
+//            return 0;
+//        int result = 0x60642E2F, z = 0xC3564E95;
+//        final int len = data.length;
+//        for (int i = 0; i < len; i++) {
+//            result ^= (z += hash(data[i]) ^ i);
+//            z ^= (result = (result << 20 | result >>> 12));
+//        }
+//        result += (z ^ z >>> 15 ^ 0xAE932BD5) * 0x632B9;
+//        result = (result ^ result >>> 15) * 0xFF51D;
+//        result = (result ^ result >>> 15) * 0xC4CEB;
+//        return result ^ result >>> 15;
+//    }
 
     /**
      * A helper method for taking already-random input states and getting random values inside a small range.
