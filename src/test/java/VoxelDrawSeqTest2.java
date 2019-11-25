@@ -140,7 +140,7 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
         byte red = colorizer.reduce(0xFF0000FF), green = colorizer.reduce(0x00FF00FF),
                 blue = colorizer.reduce(0x0000FFFF), white = colorizer.reduce(0xFFFFFFFF);
         maker.rng.setState(rng.nextLong());
-        voxels = new byte[50][50][50];
+        voxels = new byte[70][70][70];
 //        voxels = maker.shipLargeSmoothColorized();
         makeNetwork();
         
@@ -183,9 +183,9 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //        seq.hollow();
         seq.putSurface(voxels);
         middleSeq = new VoxelSeq(seq.fullSize());
-        middleSeq.sizeX(50);
-        middleSeq.sizeY(50);
-        middleSeq.sizeZ(50);
+        middleSeq.sizeX(70);
+        middleSeq.sizeY(70);
+        middleSeq.sizeZ(70);
 //        axes = new VoxelSeq(180);
 //        axes.sizeX(60);
 //        axes.sizeY(60);
@@ -240,7 +240,7 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
             alpha = (time & 0x7FF) * 0x1p-11f;
             transforms[(time >>> 11) % transforms.length].interpolateInto(transforms[((time >>> 11) + 1) % transforms.length], alpha, transformMid);
             middleSeq.clear();
-            transformMid.transformInto(seq, middleSeq, 29f, 29f, 29f);
+            transformMid.transformInto(seq, middleSeq, 35f, 35f, 35f);
 //            transformMid.transformInto(seq, middleSeq, 19.5f, 19.5f, 19.5f);
 //            middleSeq.putAll(axes);
 //            middleSeq.hollow();
@@ -305,9 +305,9 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
         final byte color = colorizer.getReducer().paletteMapping[rng.next(15)];
         cells.setCellularReturnType(FastNoise.DISTANCE_2);
         cells.setCellularDistanceFunction(FastNoise.EUCLIDEAN);
-        for (int x = 0; x < voxels.length; x++) {
-            for (int y = 0; y < voxels[0].length; y++) {
-                for (int z = 0; z < voxels[0][0].length; z++) {
+        for (int x = 15; x < 55; x++) {
+            for (int y = 15; y < 55; y++) {
+                for (int z = 15; z < 55; z++) {
                     adj = 
 //                            0f;
                             perturb.getConfiguredNoise(x, y, z);
