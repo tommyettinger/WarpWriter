@@ -481,36 +481,36 @@ public class VoxelImmediateRenderer implements IRectangleRenderer, ITriangleRend
     public VoxelImmediateRenderer drawTriangleOutline(int x, int y, byte voxel, int vx, int vy, int vz) {
         final float c = NumberTools.reversedIntBitsToFloat(transparency(color.twilight().dark(voxel)) & 0xFFFFFFFE);
         x = scaleX * (flipX ? -x : x) + offsetX - 1;
-        y = scaleY * (flipY ? -y : y) + offsetY;
+        y = scaleY * (flipY ? -y : y) + offsetY - 1;
         final float sizeX = 2.000f * scaleX;
-        final float depth = vx + vy + vz - 9;
+        final float depth = vx + vy + vz - 3.5f;
         batch.color(c);
-        batch.vertex(x + sizeX + 1, y, depth);
+        batch.vertex(x + sizeX, y, depth);
         batch.color(c);
-        batch.vertex(x + sizeX * 2 + 2, y + 6 * scaleY + 1, depth);
+        batch.vertex(x + sizeX * 2 + 2, y + 7 * scaleY + 1, depth);
         batch.color(c);
         batch.vertex(x + sizeX * 2 + 2, y + scaleY + 1, depth);
 
         batch.color(c);
-        batch.vertex(x + sizeX + 1, y, depth);
+        batch.vertex(x + sizeX, y, depth);
         batch.color(c);
         batch.vertex(x, y + scaleY + 1, depth);
         batch.color(c);
-        batch.vertex(x, y + 6 * scaleY + 1, depth);
+        batch.vertex(x, y + 7 * scaleY + 1, depth);
 
         batch.color(c);
-        batch.vertex(x + sizeX + 1, y + 7 * scaleY + 2, depth);
+        batch.vertex(x + sizeX, y + 8 * scaleY + 2, depth);
         batch.color(c);
-        batch.vertex(x + sizeX * 2 + 2, y + 6 * scaleY + 1, depth);
+        batch.vertex(x + sizeX * 2 + 2, y + 7 * scaleY + 1, depth);
         batch.color(c);
-        batch.vertex(x, y + 6 * scaleY + 1, depth);
+        batch.vertex(x, y + 7 * scaleY + 1, depth);
 
         batch.color(c);
-        batch.vertex(x + sizeX * 2 + 2, y + 6 * scaleY + 1, depth);
+        batch.vertex(x + sizeX * 2 + 2, y + 7 * scaleY + 1, depth);
         batch.color(c);
-        batch.vertex(x + sizeX + 1, y, depth);
+        batch.vertex(x + sizeX, y, depth);
         batch.color(c);
-        batch.vertex(x, y + 6 * scaleY + 1, depth);
+        batch.vertex(x, y + 7 * scaleY + 1, depth);
 
         return this;
     }

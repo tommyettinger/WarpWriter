@@ -1,6 +1,7 @@
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3WindowAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -19,12 +20,16 @@ import warpwriter.Tools3D;
 import warpwriter.VoxIO;
 import warpwriter.model.VoxelSeq;
 import warpwriter.model.color.Colorizer;
+import warpwriter.model.nonvoxel.LittleEndianDataInputStream;
 import warpwriter.model.nonvoxel.Transform;
 import warpwriter.model.nonvoxel.TurnQuaternion;
 import warpwriter.view.VoxelDraw;
 import warpwriter.view.color.VoxelColor;
 import warpwriter.view.render.MutantBatch;
 import warpwriter.view.render.VoxelImmediateRenderer;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class VoxelDrawSeqTest2 extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 320;//640;
@@ -324,6 +329,33 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
         screenView.update(width, height);
     }
 
+    public void load(String name) {
+        try {
+            //// loads a file by its full path, which we get via drag+drop
+            final byte[][][] arr = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream(name)));
+            batchRenderer.color().set(Colorizer.arbitraryColorizer(VoxIO.lastPalette));
+            seq.clear();
+            Tools3D.fill(voxels, 0);
+            Tools3D.translateCopyInto(arr, voxels, 15, 15, 15);
+            seq.putSurface(voxels);
+            middleSeq.clear();
+            middleSeq.putSurface(voxels);
+            middleSeq.hollow();
+            
+        } catch (FileNotFoundException e) {
+            maker.rng.setState(rng.nextLong());
+            final byte[][][] arr = maker.shipNoiseColorized();
+            batchRenderer.set(batchRenderer.color().set(colorizer));
+            seq.clear();
+            Tools3D.fill(voxels, 0);
+            Tools3D.translateCopyInto(arr, voxels, 15, 15, 15);
+            seq.putSurface(voxels);
+            middleSeq.clear();
+            middleSeq.putSurface(voxels);
+            middleSeq.hollow();
+        }
+    }
+
     public static void main(String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setTitle("Warp Tester");
@@ -332,6 +364,18 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
         config.useVsync(false);
         config.setResizable(false);
         final VoxelDrawSeqTest2 app = new VoxelDrawSeqTest2();
+        config.setWindowListener(new Lwjgl3WindowAdapter() {
+            @Override
+            public void filesDropped(String[] files) {
+                if (files != null && files.length > 0) {
+                    if (files[0].endsWith(".vox"))
+                        app.load(files[0]);
+//                    else if (files[0].endsWith(".hex"))
+//                        app.loadPalette(files[0]);
+                }
+            }
+        });
+
         new Lwjgl3Application(app, config);
     }
 
