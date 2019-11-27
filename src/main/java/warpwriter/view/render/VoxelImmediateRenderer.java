@@ -408,8 +408,8 @@ public class VoxelImmediateRenderer implements IRectangleRenderer, ITriangleRend
     @Override
     public VoxelImmediateRenderer drawLeftTriangleVerticalFace(int x, int y, byte voxel, int depth, int vx, int vy, int vz) {
         return flipX
-                ? drawRightTriangle(x, y, color.verticalFace(voxel, vx, vy, vz), color.twilight().dark(voxel), 3 + depth)
-                : drawLeftTriangle(x, y, color.verticalFace(voxel, vx, vy, vz), color.twilight().dark(voxel), 3 + depth);
+                ? drawRightTriangle(x, y, color.verticalFace(voxel, vx, vy, vz), color.twilight().dark(voxel), 1 + depth)
+                : drawLeftTriangle(x, y, color.verticalFace(voxel, vx, vy, vz), color.twilight().dark(voxel), 1 + depth);
     }
 
     @Override
@@ -429,8 +429,8 @@ public class VoxelImmediateRenderer implements IRectangleRenderer, ITriangleRend
     @Override
     public VoxelImmediateRenderer drawRightTriangleVerticalFace(int x, int y, byte voxel, int depth, int vx, int vy, int vz) {
 		return flipX
-				? drawLeftTriangle(x, y, color.verticalFace(voxel, vx, vy, vz), color.twilight().dark(voxel), 3 + depth)
-				: drawRightTriangle(x, y, color.verticalFace(voxel, vx, vy, vz), color.twilight().dark(voxel), 3 + depth);
+				? drawLeftTriangle(x, y, color.verticalFace(voxel, vx, vy, vz), color.twilight().dark(voxel), 1 + depth)
+				: drawRightTriangle(x, y, color.verticalFace(voxel, vx, vy, vz), color.twilight().dark(voxel), 1 + depth);
     }
 
     @Override
