@@ -496,4 +496,78 @@ public class VoxIO {
             e.printStackTrace();
         }
     }
+    /**
+     * This is meant to be used for AnimatedVoxelSeq collections that represent one primary voxel model in the first
+     * frame, and some amount of priority sections in subsequent frames.
+     * @param filename filename to write to
+     * @param voxelData AnimatedVoxelSeq to write; expected to have 2 or more frames, but not required
+     * @param palette the palette used by the model; the first item is always treated as 0 (fully transparent), and at
+     *                most 255 subsequent entries will be used
+     */
+    @GwtIncompatible
+    public static void writeVOX(String filename, IVoxelSeq voxelData, int[] palette) {
+        // check out http://voxel.codeplex.com/wikipage?title=VOX%20Format&referringTitle=Home for the file format used below
+        try {
+            int xSize = voxelData.sizeX(), ySize = voxelData.sizeY(), zSize = voxelData.sizeZ();
+
+            FileOutputStream fos = new FileOutputStream(filename);
+            DataOutputStream bin = new DataOutputStream(fos);
+            int totalSize = 0;
+                final IVoxelSeq vs = voxelData;
+                final int len = vs.fullSize();
+                ByteArrayOutputStream voxelsRaw = new ByteArrayOutputStream(len*4);
+                int xyz;
+                for (int i = 0; i < len; i++) {
+                    xyz = vs.keyAt(i);
+                    voxelsRaw.write(extractX(xyz));
+                    voxelsRaw.write(extractY(xyz));
+                    voxelsRaw.write(extractZ(xyz));
+                    voxelsRaw.write(vs.getAt(i));
+                }
+                byte[] rawArray = voxelsRaw.toByteArray();
+                totalSize = rawArray.length;
+
+            // a MagicaVoxel .vox file starts with a 'magic' 4 character 'VOX ' identifier
+            bin.writeBytes("VOX ");
+            // current version
+            writeInt(bin, 150);
+
+            bin.writeBytes("MAIN");
+            writeInt(bin,  0);
+            writeInt(bin, 12 + 12 + 12 + 4 + voxelsRaw.size() + 12 + 1024);
+
+            bin.writeBytes("SIZE");
+            writeInt(bin, 12);
+            writeInt(bin, 0);
+            writeInt(bin, xSize);
+            writeInt(bin, ySize);
+            writeInt(bin, zSize);
+
+            bin.writeBytes("XYZI");
+            writeInt(bin, 4 + voxelsRaw.size());
+            writeInt(bin, 0);
+            writeInt(bin, voxelsRaw.size() >> 2);
+            bin.write(voxelsRaw.toByteArray());
+
+            bin.writeBytes("RGBA");
+            writeInt(bin, 1024);
+            writeInt(bin,  0);
+            int i = 1;
+            for (; i < 256 && i < palette.length; i++) {
+                bin.writeInt(palette[i]);
+            }
+            // if the palette is smaller than 256 colors, this fills the rest with lastPalette's colors
+            for (; i < 256; i++) {
+                bin.writeInt(lastPalette[i]);
+            }
+            writeInt(bin,  0);
+
+            bin.flush();
+            bin.close();
+            fos.flush();
+            fos.close();
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -99,14 +99,14 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
      * positions in insertion order. The order can be changed with {@link #reorder(int...)} and other methods. This
      * IntVLA tracks only voxels that touch a boundary or empty space; use {@link #full} for the order of all voxels.
      */
-    protected IntVLA order;
+    public IntVLA order;
     /**
      * An IntVLA (variable-length int sequence) that stores the positions in the key array of all keys, with the
      * positions in insertion order. The order can be changed with {@link #reorder(int...)} and other methods. This
      * IntVLA tracks all voxels; many operations instead operate only on voxels that are potentially visible, which are
      * in the IntVLA {@link #order}.
      */
-    protected IntVLA full;
+    public IntVLA full;
     /**
      * The current table size.
      */

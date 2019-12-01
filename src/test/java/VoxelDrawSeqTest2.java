@@ -86,7 +86,8 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.FLESURRECT);
 //        colorizer = Colorizer.FlesurrectBonusColorizer;
-        colorizer = Colorizer.WardBonusColorizer;
+        colorizer = Colorizer.AuroraBonusColorizer;
+//        colorizer = Colorizer.WardBonusColorizer;
         batchRenderer = new VoxelImmediateRenderer(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);//.setOffset(VIRTUAL_WIDTH, 0).flipX();
         batch = new MutantBatch();
         batchRenderer.color().set(colorizer);
@@ -134,7 +135,7 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //                transforms[i] = new Transform(transforms[i-1].rotation.cpy().mul(turnX90), 0, 0, 0, 1, 1, 1);
 //            transforms[i+1] = new Transform(transforms[i].rotation.cpy().mul(turnZ90), 0, 0, 0, 1, 1, 1);
 //        }
-        transformMid = new Transform();
+        transformMid = new Transform(32, 32, 64, 0, 0, 0);
 //        try {
 //            box = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("Aurora/dumbcube.vox")));
 //        } catch (Exception e) {
@@ -145,15 +146,17 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
         byte red = colorizer.reduce(0xFF0000FF), green = colorizer.reduce(0x00FF00FF),
                 blue = colorizer.reduce(0x0000FFFF), white = colorizer.reduce(0xFFFFFFFF);
         maker.rng.setState(rng.nextLong());
-        voxels = new byte[70][70][70];
+        voxels = new byte[32][32][32];
+//        voxels = new byte[70][70][70];
 //        voxels = maker.shipLargeSmoothColorized();
-        makeNetwork();
+        //makeNetwork();
         
-//        try {
+        try {
+            voxels = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("ColorSolids/AuroraColorSolid.vox")));
 //            voxels = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("FlesurrectBonus/Damned.vox")));
-//        } catch (FileNotFoundException e) {
-//            voxels = maker.shipLargeSmoothColorized();
-//        }
+        } catch (FileNotFoundException e) {
+            voxels = maker.shipLargeSmoothColorized();
+        }
         
 //        voxels = new byte[60][60][60];
 //        seq = new VoxelSeq(1024);
@@ -186,11 +189,16 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //                                ColorFetch.color(colorizer.getReducer().paletteMapping[rng.next(15)])})
 //                )));
 //        seq.hollow();
-        seq.putSurface(voxels);
+        seq.putArray(voxels);
+        seq.order.clear();
+        seq.order.addAll(seq.full);
         middleSeq = new VoxelSeq(seq.fullSize());
-        middleSeq.sizeX(70);
-        middleSeq.sizeY(70);
-        middleSeq.sizeZ(70);
+//        middleSeq.sizeX(70);
+//        middleSeq.sizeY(70);
+//        middleSeq.sizeZ(70);
+        middleSeq.sizeX(32);
+        middleSeq.sizeY(32);
+        middleSeq.sizeZ(32);
 //        axes = new VoxelSeq(180);
 //        axes.sizeX(60);
 //        axes.sizeY(60);
@@ -224,7 +232,8 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //        transforms[0].interpolateInto(transforms[1 % transforms.length], alpha, transformMid);
 //        middleSeq.clear();
 //        transformMid.transformInto(seq, middleSeq, 29f, 29f, 29f);
-        middleSeq.putAll(seq);
+//        middleSeq.putAll(seq);
+        transformMid.transformInto(seq, middleSeq, 15.5f, 15.5f, 15.5f);
         middleSeq.hollow();
     }
 
@@ -494,7 +503,8 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
                         animating = !animating;
                         break;
                     case Input.Keys.W: // write
-                        VoxIO.writeVOX(FakeLanguageGen.SIMPLISH.word(Tools3D.hash64(voxels), true) + ".vox", voxels, maker.getColorizer().getReducer().paletteArray);
+//                        VoxIO.writeVOX(FakeLanguageGen.SIMPLISH.word(Tools3D.hash64(voxels), true) + ".vox", voxels, maker.getColorizer().getReducer().paletteArray);
+                        VoxIO.writeVOX(FakeLanguageGen.SIMPLISH.word(middleSeq.hash64(), true) + ".vox", middleSeq, maker.getColorizer().getReducer().paletteArray);
                         break;
                     case Input.Keys.ESCAPE:
                         Gdx.app.exit();
