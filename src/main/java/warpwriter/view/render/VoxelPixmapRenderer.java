@@ -12,7 +12,7 @@ public class VoxelPixmapRenderer implements IRectangleRenderer, ITriangleRendere
     protected Pixmap pixmap;
     public int[][] depths, working, render, outlines;
     protected VoxelColor color = new VoxelColor();
-    public boolean flipX, flipY, easing = true, outline = true;
+    public boolean flipX, flipY, easing = false, outline = true;
     public int scaleX = 1, scaleY = 1;
 
     public VoxelPixmapRenderer multiplyScale(int multiplier) {

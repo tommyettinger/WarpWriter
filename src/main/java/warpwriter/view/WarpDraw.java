@@ -331,6 +331,19 @@ public class WarpDraw {
         final int size = Math.max(model.sizeX(), Math.max(model.sizeY(), model.sizeZ())) - 1;
         return Math.max(size * 5 + (size >> 1) + 7, size * 6 + 7);
     }
+
+    public static int xLimit(IVoxelSeq model)
+    {
+        final int size = Math.max(model.sizeX(), Math.max(model.sizeY(), model.sizeZ()));
+        return (size + 2) * 4 + 1;
+    }
+
+    public static int yLimit(IVoxelSeq model)
+    {
+        final int size = Math.max(model.sizeX(), model.sizeY());
+        return (size + size + model.sizeZ() + 2) * 2 + 1;
+    }
+    
     public static Pixmap draw(IModel model, VoxelPixmapRenderer renderer)
     {
         if(model instanceof ITemporal) {
@@ -561,7 +574,7 @@ public class WarpDraw {
         }
         final int len = seq.size(), sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ(),
                 pixelWidth = (sizeY + sizeX + 2) * 2 * renderer.scaleX + 1,
-                pixelHeight = (sizeX + sizeY + sizeZ + 3) * 3 * renderer.scaleY + 1;
+                pixelHeight = (sizeX + sizeY) * 2 + sizeZ * 5 * renderer.scaleY + 1;
         seq.sort(IntComparator.side45[seq.rotation()]);
         for (int i = 0; i < len; i++) {
             final byte v = seq.getAtHollow(i);
