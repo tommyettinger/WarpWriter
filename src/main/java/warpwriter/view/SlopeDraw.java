@@ -10,7 +10,6 @@ import squidpony.squidmath.NumberTools;
 import warpwriter.model.IVoxelSeq;
 import warpwriter.model.nonvoxel.HashMap3D;
 import warpwriter.model.nonvoxel.IntComparator;
-import warpwriter.model.nonvoxel.IntSort;
 import warpwriter.view.color.VoxelColor;
 import warpwriter.view.render.IRectangleRenderer;
 
@@ -47,7 +46,7 @@ public class SlopeDraw {
         this(640, 480);
     }
     public SlopeDraw(int width, int height) {
-        batch = new ImmediateModeRenderer20(width * height * 9, false, true, 0);
+        batch = new ImmediateModeRenderer20(width * height * 48, false, true, 0);
         proj = new Matrix4();
         proj.setToOrtho2D(0, 0, width, height, -4096f, 4096f);
         for (int i = 0; i < 18; i++) {
@@ -266,28 +265,36 @@ public class SlopeDraw {
 //                pixelWidth = (sizeY + sizeX + 2) * scaleX + 1, pixelHeight = (sizeX + sizeY + sizeZ + 3) * scaleY + 1;
         final IntComparator comp = IntComparator.side45[seq.rotation()];
         seq.sort(comp);
-        IntSort.sort(isoAdjacent, isoOrder, comp);
+//        IntSort.sort(isoAdjacent, isoOrder, comp);
 
         byte color1, color2;
         int x1, y1, z1, x2, y2, z2, xPos1, yPos1, dep1, xPos2, yPos2, dep2;
         
         double lightX = -0.1440046082211958, lightY = 0.24000768036865966, lightZ = -0.9600307214746386;
-        
+
         for (int i = 0; i < 18; i++) {
-            final int xyz = isoAdjacent[isoOrder.get(i)];
+            final int xyz = isoAdjacent[i];
             isoRefs[i].clear();
             isoLights[i].clear();
-            x1 = isoPoints[i][0] = HashMap3D.extractX(xyz) - 1;
-            y1 = isoPoints[i][1] = HashMap3D.extractY(xyz) - 1;
-            z1 = isoPoints[i][2] = HashMap3D.extractZ(xyz) - 1;
-            for (int j = 0; j < i; j++) {
-                if(x1 != -(x2 = isoPoints[j][0]) && y1 != -(y2 = isoPoints[j][1]) && z1 != -(z2 = isoPoints[j][2])) 
+            isoPoints[i][0] = HashMap3D.extractX(xyz) - 1;
+            isoPoints[i][1] = HashMap3D.extractY(xyz) - 1;
+            isoPoints[i][2] = HashMap3D.extractZ(xyz) - 1;
+        }
+        for (int i = 0; i < 18; i++) {
+            x1 = isoPoints[i][0];
+            y1 = isoPoints[i][1];
+            z1 = isoPoints[i][2];
+            for (int j = 0; j < 18; j++) {
+                if((((x2 = isoPoints[j][0]) & x1) == 0 || (x1 != -x2))
+                        && (((y2 = isoPoints[j][1]) & z1) == 0 || (y1 != -y2))
+                        && (((z2 = isoPoints[j][2]) & z1) == 0 || (z1 != -z2)))
                 {
                     isoRefs[j].add(i);
                     // cross product
                     double cx = y1 * z2 - z1 * y2;
                     double cy = z1 * x2 - x1 * z2;
                     double cz = x1 * y2 - y1 * x2;
+                    // normalizer
                     final double mag = 1.0 / Math.sqrt(cx * cx + cy * cy + cz * cz);
                     isoLights[j].add((float)(1.75 * Math.min(
                             NumberTools.acos_(mag * (cx * lightX + cy * lightY + cz * lightZ)),
@@ -306,7 +313,7 @@ public class SlopeDraw {
 						yPos = (z + sizeX + sizeY - x - y) * 2 + 1,
                         dep = x + y + z;
                 
-                for (int j = 0; j < 17; j++) {
+                for (int j = 0; j < 18; j++) {
                     if((color1 = seq.getRotated(x1 = x + isoPoints[j][0], y1 = y + isoPoints[j][1], z1 = z + isoPoints[j][2])) != 0) {
                         xPos1 = (sizeY - y1 + x1) * 2 + 1;
                         yPos1 = (z1 + sizeX + sizeY - x1 - y1) * 2 + 1;
@@ -314,8 +321,8 @@ public class SlopeDraw {
                         final int innerLength = isoRefs[j].size;
                         for (int k = 0; k < innerLength; k++) {
                             final int r = isoRefs[j].get(k);
-                            final float d = isoLights[j].get(k);
                             if((color2 = seq.getRotated(x2 = x + isoPoints[r][0], y2 = y + isoPoints[r][1], z2 = z + isoPoints[r][2])) != 0) {
+                                final float d = isoLights[j].get(k);
                                 batch.color(NumberTools.reversedIntBitsToFloat(VoxelColor.darken(vc.verticalFace(color0, xPos, yPos, x + y + z), d)));
                                 batch.vertex(xPos, yPos, dep);
                                 batch.color(NumberTools.reversedIntBitsToFloat(VoxelColor.darken(vc.verticalFace(color1, xPos1, yPos1, x1 + y1 + z1), d)));

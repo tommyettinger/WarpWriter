@@ -256,7 +256,7 @@ public class SlopeDrawTest extends ApplicationAdapter {
             transformMid.transformInto(seq, middleSeq, 35f, 35f, 35f);
 //            transformMid.transformInto(seq, middleSeq, 19.5f, 19.5f, 19.5f);
 //            middleSeq.putAll(axes);
-//            middleSeq.hollow();
+            middleSeq.hollow();
         }
         buffer.begin();
         
@@ -346,10 +346,10 @@ public class SlopeDrawTest extends ApplicationAdapter {
             seq.clear();
             Tools3D.fill(voxels, 0);
             Tools3D.translateCopyInto(arr, voxels, 15, 15, 15);
-            seq.putArray(voxels);
+            seq.putSurface(voxels);
             seq.hollow();
             middleSeq.clear();
-            middleSeq.putArray(voxels);
+            middleSeq.putSurface(voxels);
             middleSeq.hollow();
             
         } catch (FileNotFoundException e) {
@@ -360,6 +360,7 @@ public class SlopeDrawTest extends ApplicationAdapter {
             Tools3D.fill(voxels, 0);
             Tools3D.translateCopyInto(arr, voxels, 15, 15, 15);
             seq.putSurface(voxels);
+            seq.hollow();
             middleSeq.clear();
             middleSeq.putSurface(voxels);
             middleSeq.hollow();
@@ -456,6 +457,7 @@ public class SlopeDrawTest extends ApplicationAdapter {
                         Tools3D.fill(voxels, 0);
                         makeNetwork();
                         seq.putSurface(voxels);
+                        seq.hollow();
                         
 //                        seq.putModel(new FetchModel(60, 60, 60, new DecideFetch()
 //                                .setDecide(new SphereDecide(29, 29, 29, 15))
