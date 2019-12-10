@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.utils.FloatArray;
 import squidpony.squidmath.IntVLA;
+import squidpony.squidmath.NumberTools;
 import warpwriter.model.IVoxelSeq;
 import warpwriter.model.nonvoxel.HashMap3D;
 import warpwriter.model.nonvoxel.IntComparator;
@@ -39,6 +41,8 @@ public class SlopeDraw {
     
     public final IntVLA[] isoRefs = new IntVLA[18];
     
+    public final FloatArray[] isoLights = new FloatArray[18];
+    
     public SlopeDraw(){
         this(640, 480);
     }
@@ -48,6 +52,7 @@ public class SlopeDraw {
         proj.setToOrtho2D(0, 0, width, height, -4096f, 4096f);
         for (int i = 0; i < 18; i++) {
             isoRefs[i] = new IntVLA(16);
+            isoLights[i] = new FloatArray(16);
         }
     }
     protected VoxelColor color = new VoxelColor();
@@ -262,19 +267,34 @@ public class SlopeDraw {
         final IntComparator comp = IntComparator.side45[seq.rotation()];
         seq.sort(comp);
         IntSort.sort(isoAdjacent, isoOrder, comp);
+
+        byte color1, color2;
+        int x1, y1, z1, x2, y2, z2, xPos1, yPos1, dep1, xPos2, yPos2, dep2;
+        
+        double lightX = -0.1440046082211958, lightY = 0.24000768036865966, lightZ = -0.9600307214746386;
+        
         for (int i = 0; i < 18; i++) {
             final int xyz = isoAdjacent[isoOrder.get(i)];
             isoRefs[i].clear();
-            final int x = isoPoints[i][0] = HashMap3D.extractX(xyz) - 1;
-            final int y = isoPoints[i][1] = HashMap3D.extractY(xyz) - 1;
-            final int z = isoPoints[i][2] = HashMap3D.extractZ(xyz) - 1;
+            isoLights[i].clear();
+            x1 = isoPoints[i][0] = HashMap3D.extractX(xyz) - 1;
+            y1 = isoPoints[i][1] = HashMap3D.extractY(xyz) - 1;
+            z1 = isoPoints[i][2] = HashMap3D.extractZ(xyz) - 1;
             for (int j = 0; j < i; j++) {
-                if(x != -isoPoints[j][0] && y != -isoPoints[j][1] && z != -isoPoints[j][2]) 
+                if(x1 != -(x2 = isoPoints[j][0]) && y1 != -(y2 = isoPoints[j][1]) && z1 != -(z2 = isoPoints[j][2])) 
+                {
                     isoRefs[j].add(i);
+                    // cross product
+                    double cx = y1 * z2 - z1 * y2;
+                    double cy = z1 * x2 - x1 * z2;
+                    double cz = x1 * y2 - y1 * x2;
+                    final double mag = 1.0 / Math.sqrt(cx * cx + cy * cy + cz * cz);
+                    isoLights[j].add((float)(1.75 * Math.min(
+                            NumberTools.acos_(mag * (cx * lightX + cy * lightY + cz * lightZ)),
+                            NumberTools.acos_(mag * (cx * -lightX + cy * -lightY + cz * -lightZ)))));
+                }
             }
         }
-        byte color1, color2;
-        int x1, y1, z1, x2, y2, z2, xPos1, yPos1;
         for (int i = 0; i < len; i++) {
             final byte color0 = seq.getAtHollow(i);
             if (color0 != 0) {
@@ -283,23 +303,25 @@ public class SlopeDraw {
 						y = HashMap3D.extractY(xyz),
 						z = HashMap3D.extractZ(xyz),
 						xPos = (sizeY - y + x) * 2 + 1,
-						yPos = (z + sizeX + sizeY - x - y) * 2 + 1;
-//                        dep = 3 * (x + y + z) + 256;
+						yPos = (z + sizeX + sizeY - x - y) * 2 + 1,
+                        dep = x + y + z;
                 
                 for (int j = 0; j < 17; j++) {
                     if((color1 = seq.getRotated(x1 = x + isoPoints[j][0], y1 = y + isoPoints[j][1], z1 = z + isoPoints[j][2])) != 0) {
                         xPos1 = (sizeY - y1 + x1) * 2 + 1;
                         yPos1 = (z1 + sizeX + sizeY - x1 - y1) * 2 + 1;
+                        dep1  = x1 + y1 + z1;
                         final int innerLength = isoRefs[j].size;
                         for (int k = 0; k < innerLength; k++) {
                             final int r = isoRefs[j].get(k);
+                            final float d = isoLights[j].get(k);
                             if((color2 = seq.getRotated(x2 = x + isoPoints[r][0], y2 = y + isoPoints[r][1], z2 = z + isoPoints[r][2])) != 0) {
-                                batch.color(vc.leftFace(color0, xPos, yPos, x + y + z));
-                                batch.vertex(x, y, z);
-                                batch.color(vc.leftFace(color1, xPos1, yPos1, x1 + y1 + z1));
-                                batch.vertex(x1, y1, z1);
-                                batch.color(vc.leftFace(color2, (sizeY - y2 + x2) * 2 + 1, (z2 + sizeX + sizeY - x2 - y2) * 2 + 1, x2 + y2 + z2));
-                                batch.vertex(x2, y2, z2);
+                                batch.color(NumberTools.reversedIntBitsToFloat(VoxelColor.darken(vc.verticalFace(color0, xPos, yPos, x + y + z), d)));
+                                batch.vertex(xPos, yPos, dep);
+                                batch.color(NumberTools.reversedIntBitsToFloat(VoxelColor.darken(vc.verticalFace(color1, xPos1, yPos1, x1 + y1 + z1), d)));
+                                batch.vertex(xPos1, yPos1, dep1);
+                                batch.color(NumberTools.reversedIntBitsToFloat(VoxelColor.darken(vc.verticalFace(color2, xPos2 = (sizeY - y2 + x2) * 2 + 1, yPos2 = (z2 + sizeX + sizeY - x2 - y2) * 2 + 1, dep2 = x2 + y2 + z2), d)));
+                                batch.vertex(xPos2, yPos2, dep2);
                             }
                         }
                     }

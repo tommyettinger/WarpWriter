@@ -324,6 +324,25 @@ public class VoxelColor implements IVoxelColor {
                 b = (mixColor >>> 10 & 0x3F) * 3 + (baseColor >>> 10 & 0x3F);
         return r << 24 | g << 16 | b << 8 | 0xFF;
     }
+
+    public static int mix(int baseColor, int mixColor, float amount)
+    {
+        final float i = 1f - amount;
+        final int
+                r = (int) ((baseColor >>> 24) * i + (mixColor >>> 24) * amount),
+                g = (int) ((baseColor >>> 16 & 0xFF) * i + (mixColor >>> 16 & 0xFF) * amount),
+                b = (int) ((baseColor >>> 8 & 0xFF) * i + (mixColor >>> 8 & 0xFF) * amount);
+        return r << 24 | g << 16 | b << 8 | (baseColor & 0xFF);
+    }
+    public static int darken(int baseColor, float amount)
+    {
+        amount = 1f - amount;
+        final int
+                r = (int) ((baseColor >>> 24) * amount),
+                g = (int) ((baseColor >>> 16 & 0xFF) * amount),
+                b = (int) ((baseColor >>> 8 & 0xFF) * amount);
+        return r << 24 | g << 16 | b << 8 | (baseColor & 0xFF);
+    }
     
     @Override
     public int verticalFace(byte voxel) {
