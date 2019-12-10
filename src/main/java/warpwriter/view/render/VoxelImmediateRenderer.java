@@ -251,9 +251,9 @@ public class VoxelImmediateRenderer implements IRectangleRenderer, ITriangleRend
         y = scaleY * (flipY ? -y : y) + offsetY;
         float sizeX = 2.000f * scaleX;
         batch.color(c);
-        batch.vertex(x + sizeX, y, depth);
-        batch.color(c);
         batch.vertex(x + sizeX, y + 4.00f * scaleY, depth);
+        batch.color(c); //TODO THIS WAS FIRST
+        batch.vertex(x + sizeX, y, depth); //TODO SO WAS THIS
         batch.color(c);
         batch.vertex(x, y + 2.00f * scaleY, depth);
         return this;
@@ -306,9 +306,9 @@ public class VoxelImmediateRenderer implements IRectangleRenderer, ITriangleRend
         x = scaleX * (flipX ? -x : x) + offsetX;
         y = scaleY * (flipY ? -y : y) + offsetY;
         batch.color(c);
-        batch.vertex(x, y, depth);
-        batch.color(c);
         batch.vertex(x + 2.000f * scaleX, y + 2.00f * scaleY, depth);
+        batch.color(c); //TODO THIS WAS REORDERED, IT WAS FIRST
+        batch.vertex(x, y, depth); //TODO SO WAS THIS
         batch.color(c);
         batch.vertex(x, y + 4.00f * scaleY, depth);
         return this;

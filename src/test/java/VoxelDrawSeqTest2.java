@@ -146,17 +146,17 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
         byte red = colorizer.reduce(0xFF0000FF), green = colorizer.reduce(0x00FF00FF),
                 blue = colorizer.reduce(0x0000FFFF), white = colorizer.reduce(0xFFFFFFFF);
         maker.rng.setState(rng.nextLong());
-        voxels = new byte[32][32][32];
-//        voxels = new byte[70][70][70];
+//        voxels = new byte[32][32][32];
+        voxels = new byte[70][70][70];
 //        voxels = maker.shipLargeSmoothColorized();
-        //makeNetwork();
+        makeNetwork();
         
-        try {
-            voxels = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("ColorSolids/AuroraColorSolid.vox")));
-//            voxels = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("FlesurrectBonus/Damned.vox")));
-        } catch (FileNotFoundException e) {
-            voxels = maker.shipLargeSmoothColorized();
-        }
+//        try {
+//            voxels = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("ColorSolids/AuroraColorSolid.vox")));
+////            voxels = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("FlesurrectBonus/Damned.vox")));
+//        } catch (FileNotFoundException e) {
+//            voxels = maker.shipLargeSmoothColorized();
+//        }
         
 //        voxels = new byte[60][60][60];
 //        seq = new VoxelSeq(1024);

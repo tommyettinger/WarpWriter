@@ -2585,10 +2585,12 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
     }
     public byte getRotated(final int x, final int y, final int z)
     {
+        if((x | y | z) < 0) return 0;
         return get(rotate(fuse(x, y, z), ((-rotation) & 3) | rotation & -4));
     }
     public byte getRotated(final int x, final int y, final int z, final int rotation)
     {
+        if((x | y | z) < 0) return 0;
         return get(rotate(fuse(x, y, z), ((-rotation) & 3) | rotation & -4));
     }
     
