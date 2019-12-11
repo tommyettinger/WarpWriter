@@ -200,17 +200,81 @@ public class Transform {
 //            }
 //            else 
 //                {
-                for (int sx = 0; sx <= stretchX; sx++) {
-                    for (int sy = 0; sy <= stretchY; sy++) {
-                        for (int sz = 0; sz <= stretchZ; sz++) {
-                            next.put(
-                                    (int) (temp.x + sx),
-                                    (int) (temp.y + sy),
-                                    (int) (temp.z + sz), v);
+            for (int sx = 0; sx <= stretchX; sx++) {
+                for (int sy = 0; sy <= stretchY; sy++) {
+                    for (int sz = 0; sz <= stretchZ; sz++) {
+                        next.put(
+                                (int) (temp.x + sx),
+                                (int) (temp.y + sy),
+                                (int) (temp.z + sz), v);
 
-                        }
                     }
                 }
+            }
+//            }
+        }
+        next.hollow();
+        return next;
+    }
+
+    /**
+     * Given a VoxelSeq {@code start} to use as a basis, a (usually empty) VoxelSeq {@code next} to fill with voxels,
+     * and a 3D point to rotate around like a socket joint, this inserts voxels into {@code next} that may be rotated,
+     * translated, and/or stretched from its original location.
+     * @param start a VoxelSeq that will not be modified
+     * @param start a VoxelSeq that will be modified, but won't be cleared (voxels will be added to its current content)
+     * @param jointX the x-coordinate of the joint to rotate around, which may be in-between voxel coordinates
+     * @param jointY the y-coordinate of the joint to rotate around, which may be in-between voxel coordinates
+     * @param jointZ the z-coordinate of the joint to rotate around, which may be in-between voxel coordinates
+     * @return {@code next}, with the added voxels, for chaining
+     */
+    public IVoxelSeq transformIntoBare(IVoxelSeq start, IVoxelSeq next, float jointX, float jointY, float jointZ)
+    {
+        final int len = start.size(), limX = next.sizeX(), limY = next.sizeY(), limZ = next.sizeZ();
+        int k, x, y, z;//, rx, ry, rz, fx, fy, fz;
+        byte v;
+        for (int i = 0; i < len; i++) {
+            k = start.keyAtRotatedHollow(i);
+            x = extractX(k);
+            y = extractY(k);
+            z = extractZ(k);
+            temp.set(x - jointX, y - jointY, z - jointZ);
+            rotation.transform(temp).add(jointX + moveX, jointY + moveY, jointZ + moveZ);
+            if(temp.x < 0 || temp.y < 0 || temp.z < 0 || temp.x >= limX || temp.y >= limY || temp.z >= limZ)
+                continue;
+            temp.scl(stretchX, stretchY, stretchZ).add(-0.5f, -0.5f, -0.5f);
+            v = start.getAtHollow(i);
+//            if(stretchX <= 1.01f && stretchY <= 1.01f && stretchZ <= 1.01f)
+//            {
+//                rx = (int)(temp.x + 0.5f);
+//                ry = (int)(temp.y + 0.5f);
+//                rz = (int)(temp.z + 0.5f);
+//                //next.put(rx, ry, rz, v);
+//                fx = (int)temp.x;
+//                fy = (int)temp.y;
+//                fz = (int)temp.z;
+//                if ((next.put(rx, ry, rz, v) != 0
+//                        && (fx == rx || next.put(fx, ry, rz, v) != 0)
+//                        && (fy == ry || next.put(rx, fy, rz, v) != 0)
+//                        && (fz == rz || next.put(rx, ry, fz, v) != 0))) {
+//                    if (fx != rx && fy != ry && fz != rz) {
+//                        next.put(fx, fy, fz, v);
+//                    }
+//                }
+//            }
+//            else 
+//                {
+            for (int sx = 0; sx <= stretchX; sx++) {
+                for (int sy = 0; sy <= stretchY; sy++) {
+                    for (int sz = 0; sz <= stretchZ; sz++) {
+                        next.put(
+                                (int) (temp.x + sx),
+                                (int) (temp.y + sy),
+                                (int) (temp.z + sz), v);
+
+                    }
+                }
+            }
 //            }
         }
         next.hollow();

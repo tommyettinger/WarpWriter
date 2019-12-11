@@ -114,10 +114,15 @@ public class AnimatedVoxelSeq implements IVoxelSeq, ITemporal, Serializable {
             seqs[i].clear();
         }
     }
-    
+
     @Override
     public void hollow() {
         seqs[frame].hollow();
+    }
+
+    @Override
+    public void hollowRemoving() {
+        seqs[frame].hollowRemoving();
     }
 
     @Override

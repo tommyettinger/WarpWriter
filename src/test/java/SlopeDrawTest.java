@@ -253,10 +253,11 @@ public class SlopeDrawTest extends ApplicationAdapter {
             alpha = (time & 0x7FF) * 0x1p-11f;
             transforms[(time >>> 11) % transforms.length].interpolateInto(transforms[((time >>> 11) + 1) % transforms.length], alpha, transformMid);
             middleSeq.clear();
-            transformMid.transformInto(seq, middleSeq, 35f, 35f, 35f);
+            transformMid.transformIntoBare(seq, middleSeq, 35f, 35f, 35f);
+//            System.out.println(middleSeq.order.size + " out of " + middleSeq.full.size);
 //            transformMid.transformInto(seq, middleSeq, 19.5f, 19.5f, 19.5f);
 //            middleSeq.putAll(axes);
-            middleSeq.hollow();
+//            middleSeq.hollow();
         }
         buffer.begin();
         

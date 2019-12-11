@@ -11,6 +11,7 @@ public interface IVoxelSeq extends ITurnable {
     int fullSize();
     void clear();
     void hollow();
+    void hollowRemoving();
     int sizeX();
     void sizeX(int i);
     int sizeY();

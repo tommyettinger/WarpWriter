@@ -416,6 +416,31 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
                 order.add(item);
         }
     }
+    public void hollowRemoving()
+    {
+        order.clear();
+        final int sz = full.size;
+        int k, x, y, z, item;
+        for (int i = sz - 1; i >= 0; i--) {
+            k = key[item = full.items[i]];
+            x = extractX(k);
+            y = extractY(k);
+            z = extractZ(k);
+            if(x <= 0 || x >= sizeX - 1 || y <= 0 || y >= sizeY -1 || z <= 0 || z >= sizeZ - 1 ||
+                    !containsKey(k - 0x00000001) || !containsKey(k + 0x00000001) ||
+                    !containsKey(k - 0x00000400) || !containsKey(k + 0x00000400) ||
+                    !containsKey(k - 0x00100000) || !containsKey(k + 0x00100000)
+            )
+                order.add(item);
+            else 
+            {
+                key[item] = 0;
+                value[item] = 0;
+                full.removeIndex(i);
+            }
+        }
+        size = full.size;
+    }
     private int realSize() {
         return containsNullKey ? size - 1 : size;
     }
@@ -934,7 +959,9 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
         }
         else
         {
-            order.set(order.indexOf(s), d);
+            int i = order.indexOf(s);
+            if(i >= 0) 
+                order.set(i, d);
         }
     }
 
