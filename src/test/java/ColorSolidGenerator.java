@@ -2,10 +2,15 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.badlogic.gdx.graphics.Color;
+import squidpony.squidmath.LightRNG;
 import warpwriter.Coloring;
 import warpwriter.PaletteReducer;
+import warpwriter.Tools3D;
 import warpwriter.VoxIO;
 import warpwriter.model.color.Colorizer;
+
+import java.util.Random;
 
 public class ColorSolidGenerator extends ApplicationAdapter {
     public static void main(String[] arg) {
@@ -35,6 +40,38 @@ public class ColorSolidGenerator extends ApplicationAdapter {
             sparse[(rgba >>> 27)*3+1][(rgba >>> 19 & 31)*3+1][(rgba >>> 11 & 31)*3+1] = (byte) i;
         }
         VoxIO.writeVOX("ColorSolids/AuroraColorSpots.vox", sparse, reducer.paletteArray);
+
+        {
+            Tools3D.fill(sparse, 0);
+            Random random = new Random(1);
+            Color color = new Color(0f, 0f, 0f, 1f);
+            for (int i = 0; i < 4096; i++) {
+                int x = random.nextInt(96);
+                int y = random.nextInt(96);
+                int z = random.nextInt(96);
+                color.set(x / 95f,
+                        y / 95f,
+                        z / 95f, 1f);
+                sparse[x][y][z] = reducer.reduceIndex(Color.rgba8888(color));
+            }
+            VoxIO.writeVOX("JavaUtilRandom.vox", sparse, reducer.paletteArray);
+        }
+
+        {
+            Tools3D.fill(sparse, 0);
+            LightRNG random = new LightRNG(1);
+            Color color = new Color(0f, 0f, 0f, 1f);
+            for (int i = 0; i < 4096; i++) {
+                int x = random.nextInt(96);
+                int y = random.nextInt(96);
+                int z = random.nextInt(96);
+                color.set(x / 95f,
+                        y / 95f,
+                        z / 95f, 1f);
+                sparse[x][y][z] = reducer.reduceIndex(Color.rgba8888(color));
+            }
+            VoxIO.writeVOX("JavaUtilSplittableRandom.vox", sparse, reducer.paletteArray);
+        }
         generate("Flesurrect", Coloring.FLESURRECT);
         generate("FlesurrectBonus", Colorizer.FlesurrectBonusPalette);
         generate("Rinsed", Coloring.RINSED);
