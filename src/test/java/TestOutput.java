@@ -4,12 +4,12 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import squidpony.FakeLanguageGen;
 import squidpony.StringKit;
 import squidpony.Thesaurus;
 import squidpony.squidmath.OrderedSet;
 import squidpony.squidmath.StatefulRNG;
 import squidpony.squidmath.UnorderedSet;
-import warpwriter.Coloring;
 import warpwriter.ModelMaker;
 import warpwriter.PNG8;
 import warpwriter.PaletteReducer;
@@ -27,7 +27,7 @@ import static squidpony.squidmath.LinnormRNG.determine;
  * Created by Tommy Ettinger on 1/19/2018.
  */
 public class TestOutput extends ApplicationAdapter {
-    private static final int LIMIT = 160;
+    private static final int LIMIT = 40;
     private Pixmap pix;
     private static long initialSeed = determine(System.nanoTime());
     private long seed = initialSeed;
@@ -43,6 +43,10 @@ public class TestOutput extends ApplicationAdapter {
     private String pathName, modelName;
     private StatefulRNG srng = new StatefulRNG(initialSeed);
     private PNG8 png;
+    private String makeName(Thesaurus thesaurus)
+    {
+        return StringKit.capitalize(thesaurus.makePlantName(FakeLanguageGen.MALAY).replaceAll("'s", "")).replaceAll("\\W", "");
+    }
     private String makeName(OrderedSet<String> alpha, OrderedSet<String> beta)
     {
         String a = alpha.randomItem(srng);
@@ -61,7 +65,7 @@ public class TestOutput extends ApplicationAdapter {
     }
     @Override
     public void create() {
-        mm = new ModelMaker(seed, Colorizer.arbitraryColorizer(Coloring.GRAY));
+        mm = new ModelMaker(seed, Colorizer.RollBonusColorizer);
         seq = new VoxelSeq(30000);
         seq.putSurface(mm.shipLargeSmoothColorized());
         width = WarpDraw.xLimit(seq);
@@ -74,7 +78,8 @@ public class TestOutput extends ApplicationAdapter {
         png = new PNG8(width * height);
         png.setFlipY(false);
         png.setCompression(6);
-        png.palette = new PaletteReducer(Coloring.GRAY
+        png.palette = new PaletteReducer(Colorizer.ReallyRelaxedRollBonusPalette); 
+                //new PaletteReducer(Coloring.GRAY);
 //                new int[]{
 //                        0x00000000,
 //                        0x1B092CFF, 0x1C162BFF, 0x1F1833FF, 0x2C1D3BFF,
@@ -141,23 +146,24 @@ public class TestOutput extends ApplicationAdapter {
 //                        0x92455EFF, 0xA26572FF, 0xC27182FF, 0xD09FA0FF,
 //                        0xA90A34FF, 0xA12F35FF, 0xC93038FF, 0xC74C5BFF,
 //        }
-        );
         png.palette.setDitherStrength(1f);
         pathName = "target/out/" + StringKit.hex(seed);
         Gdx.files.local(pathName).mkdirs();
-        OrderedSet<String> adjective = new OrderedSet<>(256), noun = new OrderedSet<>(256);
-        for (int i = 0; i < Thesaurus.adjective.size(); i++) {
-            adjective.addAll(Thesaurus.adjective.getAt(i));
-        }
-        for (int i = 0; i < Thesaurus.noun.size(); i++) {
-            noun.addAll(Thesaurus.noun.getAt(i));
-        }
+//        OrderedSet<String> adjective = new OrderedSet<>(256), noun = new OrderedSet<>(256);
+//        for (int i = 0; i < Thesaurus.adjective.size(); i++) {
+//            adjective.addAll(Thesaurus.adjective.getAt(i));
+//        }
+//        for (int i = 0; i < Thesaurus.noun.size(); i++) {
+//            noun.addAll(Thesaurus.noun.getAt(i));
+//        }
+        Thesaurus thesaurus = new Thesaurus(srng);
+        thesaurus.addKnownCategories();
         UnorderedSet<String> names = new UnorderedSet<>(LIMIT);
         for (int i = 0; i < LIMIT; i++) {
             dir = 0;
-            modelName = makeName(adjective, noun);
+            modelName = makeName(thesaurus);
             while (names.contains(modelName))
-                modelName = makeName(adjective, noun);
+                modelName = makeName(thesaurus);
             names.add(modelName);
             Gdx.files.local(pathName + "/" + modelName).mkdirs();
             remakeShip(++seed);

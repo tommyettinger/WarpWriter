@@ -2394,6 +2394,9 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
             { 0x6FD4CBFF, 0x64ABA5FF, 0x6FD4CBFF, 0xC2FFFEFF },
     };
 
+    public static final int[] ReallyRelaxedRollBonusPalette = new int[256];
+
+
     //        public final int[] ALL_COLORS = new int[256];     
     static {
 //        for (int i = 1; i < 64; i++) {
@@ -2533,6 +2536,7 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
             System.arraycopy(TOASTY_BONUS_RAMP_VALUES[i], 0, ToastyBonusPalette, i << 2, 4);
             System.arraycopy(WARD_BONUS_RAMP_VALUES[i], 0, WardBonusPalette, i << 2, 4);
             System.arraycopy(CUBICLE_BONUS_RAMP_VALUES[i], 0, CubicleBonusPalette, i << 2, 4);
+            System.arraycopy(Coloring.REALLY_RELAXED_ROLL_BONUS_RAMP_VALUES[i], 0, ReallyRelaxedRollBonusPalette, i << 2, 4);
         }
     }
     public static final Colorizer FlesurrectBonusColorizer = new Colorizer(Coloring.FLESURRECT_REDUCER) {

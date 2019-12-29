@@ -1,0 +1,2246 @@
+
+RelaxedRollShips.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+AcidleafElm/AcidleafElm_dir0
+  rotate: false
+  xy: 232, 65
+  size: 110, 112
+  orig: 249, 365
+  offset: 69, 126
+  index: 0
+AcidleafElm/AcidleafElm_dir1
+  rotate: false
+  xy: 1345, 1463
+  size: 104, 117
+  orig: 249, 365
+  offset: 58, 124
+  index: 0
+AcidleafElm/AcidleafElm_dir2
+  rotate: false
+  xy: 1376, 1586
+  size: 104, 122
+  orig: 249, 365
+  offset: 60, 107
+  index: 0
+AcidleafElm/AcidleafElm_dir3
+  rotate: false
+  xy: 1701, 1683
+  size: 104, 115
+  orig: 249, 365
+  offset: 56, 100
+  index: 0
+AcidleafElm/AcidleafElm_dir4
+  rotate: false
+  xy: 238, 780
+  size: 110, 108
+  orig: 249, 365
+  offset: 66, 109
+  index: 0
+AcidleafElm/AcidleafElm_dir5
+  rotate: false
+  xy: 1489, 1695
+  size: 104, 115
+  orig: 249, 365
+  offset: 84, 98
+  index: 0
+AcidleafElm/AcidleafElm_dir6
+  rotate: false
+  xy: 1021, 1105
+  size: 104, 122
+  orig: 249, 365
+  offset: 81, 104
+  index: 0
+AcidleafElm/AcidleafElm_dir7
+  rotate: false
+  xy: 1449, 1116
+  size: 104, 117
+  orig: 249, 365
+  offset: 86, 122
+  index: 0
+AromaticOakOfOkaurtun/AromaticOakOfOkaurtun_dir0
+  rotate: false
+  xy: 241, 890
+  size: 110, 132
+  orig: 249, 365
+  offset: 69, 103
+  index: 0
+AromaticOakOfOkaurtun/AromaticOakOfOkaurtun_dir1
+  rotate: false
+  xy: 608, 1558
+  size: 108, 115
+  orig: 249, 365
+  offset: 60, 122
+  index: 0
+AromaticOakOfOkaurtun/AromaticOakOfOkaurtun_dir2
+  rotate: false
+  xy: 1457, 1931
+  size: 116, 115
+  orig: 249, 365
+  offset: 66, 115
+  index: 0
+AromaticOakOfOkaurtun/AromaticOakOfOkaurtun_dir3
+  rotate: false
+  xy: 695, 1439
+  size: 108, 117
+  orig: 249, 365
+  offset: 58, 104
+  index: 0
+AromaticOakOfOkaurtun/AromaticOakOfOkaurtun_dir4
+  rotate: false
+  xy: 619, 1675
+  size: 110, 121
+  orig: 249, 365
+  offset: 66, 110
+  index: 0
+AromaticOakOfOkaurtun/AromaticOakOfOkaurtun_dir5
+  rotate: false
+  xy: 695, 1320
+  size: 108, 117
+  orig: 249, 365
+  offset: 78, 102
+  index: 0
+AromaticOakOfOkaurtun/AromaticOakOfOkaurtun_dir6
+  rotate: false
+  xy: 2, 19
+  size: 116, 115
+  orig: 249, 365
+  offset: 63, 112
+  index: 0
+AromaticOakOfOkaurtun/AromaticOakOfOkaurtun_dir7
+  rotate: false
+  xy: 359, 1144
+  size: 108, 115
+  orig: 249, 365
+  offset: 80, 120
+  index: 0
+BlackCherryAlder/BlackCherryAlder_dir0
+  rotate: false
+  xy: 120, 116
+  size: 110, 128
+  orig: 249, 365
+  offset: 69, 107
+  index: 0
+BlackCherryAlder/BlackCherryAlder_dir1
+  rotate: false
+  xy: 120, 352
+  size: 110, 115
+  orig: 249, 365
+  offset: 58, 122
+  index: 0
+BlackCherryAlder/BlackCherryAlder_dir2
+  rotate: false
+  xy: 123, 862
+  size: 113, 120
+  orig: 249, 365
+  offset: 69, 107
+  index: 0
+BlackCherryAlder/BlackCherryAlder_dir3
+  rotate: false
+  xy: 344, 401
+  size: 110, 117
+  orig: 249, 365
+  offset: 56, 98
+  index: 0
+BlackCherryAlder/BlackCherryAlder_dir4
+  rotate: false
+  xy: 232, 300
+  size: 110, 119
+  orig: 249, 365
+  offset: 66, 112
+  index: 0
+BlackCherryAlder/BlackCherryAlder_dir5
+  rotate: false
+  xy: 232, 540
+  size: 110, 117
+  orig: 249, 365
+  offset: 78, 96
+  index: 0
+BlackCherryAlder/BlackCherryAlder_dir6
+  rotate: false
+  xy: 244, 1240
+  size: 113, 120
+  orig: 249, 365
+  offset: 63, 104
+  index: 0
+BlackCherryAlder/BlackCherryAlder_dir7
+  rotate: false
+  xy: 1215, 1822
+  size: 110, 115
+  orig: 249, 365
+  offset: 80, 120
+  index: 0
+BranchOfChem/BranchOfChem_dir0
+  rotate: false
+  xy: 1633, 644
+  size: 80, 137
+  orig: 249, 365
+  offset: 84, 104
+  index: 0
+BranchOfChem/BranchOfChem_dir1
+  rotate: false
+  xy: 1128, 407
+  size: 86, 105
+  orig: 249, 365
+  offset: 82, 122
+  index: 0
+BranchOfChem/BranchOfChem_dir2
+  rotate: false
+  xy: 1339, 1958
+  size: 116, 88
+  orig: 249, 365
+  offset: 63, 130
+  index: 0
+BranchOfChem/BranchOfChem_dir3
+  rotate: false
+  xy: 936, 83
+  size: 86, 79
+  orig: 249, 365
+  offset: 80, 138
+  index: 0
+BranchOfChem/BranchOfChem_dir4
+  rotate: false
+  xy: 1216, 446
+  size: 80, 108
+  orig: 249, 365
+  offset: 81, 119
+  index: 0
+BranchOfChem/BranchOfChem_dir5
+  rotate: false
+  xy: 936, 2
+  size: 86, 79
+  orig: 249, 365
+  offset: 78, 136
+  index: 0
+BranchOfChem/BranchOfChem_dir6
+  rotate: false
+  xy: 1929, 1958
+  size: 116, 88
+  orig: 249, 365
+  offset: 66, 127
+  index: 0
+BranchOfChem/BranchOfChem_dir7
+  rotate: false
+  xy: 1032, 212
+  size: 86, 105
+  orig: 249, 365
+  offset: 80, 120
+  index: 0
+DroopingPapayaJuniper/DroopingPapayaJuniper_dir0
+  rotate: false
+  xy: 1715, 628
+  size: 80, 135
+  orig: 249, 365
+  offset: 84, 105
+  index: 0
+DroopingPapayaJuniper/DroopingPapayaJuniper_dir1
+  rotate: false
+  xy: 955, 992
+  size: 94, 111
+  orig: 249, 365
+  offset: 74, 122
+  index: 0
+DroopingPapayaJuniper/DroopingPapayaJuniper_dir2
+  rotate: false
+  xy: 374, 1952
+  size: 122, 94
+  orig: 249, 365
+  offset: 60, 126
+  index: 0
+DroopingPapayaJuniper/DroopingPapayaJuniper_dir3
+  rotate: false
+  xy: 848, 803
+  size: 94, 99
+  orig: 249, 365
+  offset: 72, 118
+  index: 0
+DroopingPapayaJuniper/DroopingPapayaJuniper_dir4
+  rotate: false
+  xy: 1305, 630
+  size: 80, 132
+  orig: 249, 365
+  offset: 81, 99
+  index: 0
+DroopingPapayaJuniper/DroopingPapayaJuniper_dir5
+  rotate: false
+  xy: 859, 904
+  size: 94, 99
+  orig: 249, 365
+  offset: 78, 116
+  index: 0
+DroopingPapayaJuniper/DroopingPapayaJuniper_dir6
+  rotate: false
+  xy: 2, 1952
+  size: 122, 94
+  orig: 249, 365
+  offset: 63, 123
+  index: 0
+DroopingPapayaJuniper/DroopingPapayaJuniper_dir7
+  rotate: false
+  xy: 754, 539
+  size: 94, 111
+  orig: 249, 365
+  offset: 80, 120
+  index: 0
+Earthwort/Earthwort_dir0
+  rotate: false
+  xy: 1380, 259
+  size: 74, 133
+  orig: 249, 365
+  offset: 87, 107
+  index: 0
+Earthwort/Earthwort_dir1
+  rotate: false
+  xy: 658, 541
+  size: 94, 111
+  orig: 249, 365
+  offset: 74, 122
+  index: 0
+Earthwort/Earthwort_dir2
+  rotate: false
+  xy: 250, 1954
+  size: 122, 92
+  orig: 249, 365
+  offset: 60, 126
+  index: 0
+Earthwort/Earthwort_dir3
+  rotate: false
+  xy: 655, 761
+  size: 94, 95
+  orig: 249, 365
+  offset: 72, 120
+  index: 0
+Earthwort/Earthwort_dir4
+  rotate: false
+  xy: 1551, 535
+  size: 74, 131
+  orig: 249, 365
+  offset: 84, 100
+  index: 0
+Earthwort/Earthwort_dir5
+  rotate: false
+  xy: 944, 790
+  size: 94, 95
+  orig: 249, 365
+  offset: 78, 118
+  index: 0
+Earthwort/Earthwort_dir6
+  rotate: false
+  xy: 2, 1449
+  size: 122, 92
+  orig: 249, 365
+  offset: 63, 123
+  index: 0
+Earthwort/Earthwort_dir7
+  rotate: false
+  xy: 654, 115
+  size: 94, 111
+  orig: 249, 365
+  offset: 80, 120
+  index: 0
+FlowerOfBisirnuk/FlowerOfBisirnuk_dir0
+  rotate: false
+  xy: 1380, 394
+  size: 74, 140
+  orig: 249, 365
+  offset: 87, 104
+  index: 0
+FlowerOfBisirnuk/FlowerOfBisirnuk_dir1
+  rotate: false
+  xy: 754, 652
+  size: 94, 107
+  orig: 249, 365
+  offset: 74, 120
+  index: 0
+FlowerOfBisirnuk/FlowerOfBisirnuk_dir2
+  rotate: false
+  xy: 498, 1762
+  size: 119, 89
+  orig: 249, 365
+  offset: 60, 126
+  index: 0
+FlowerOfBisirnuk/FlowerOfBisirnuk_dir3
+  rotate: false
+  xy: 654, 10
+  size: 94, 103
+  orig: 249, 365
+  offset: 72, 112
+  index: 0
+FlowerOfBisirnuk/FlowerOfBisirnuk_dir4
+  rotate: false
+  xy: 1532, 412
+  size: 74, 121
+  orig: 249, 365
+  offset: 84, 99
+  index: 0
+FlowerOfBisirnuk/FlowerOfBisirnuk_dir5
+  rotate: false
+  xy: 752, 761
+  size: 94, 103
+  orig: 249, 365
+  offset: 78, 110
+  index: 0
+FlowerOfBisirnuk/FlowerOfBisirnuk_dir6
+  rotate: false
+  xy: 2, 1246
+  size: 119, 89
+  orig: 249, 365
+  offset: 66, 123
+  index: 0
+FlowerOfBisirnuk/FlowerOfBisirnuk_dir7
+  rotate: false
+  xy: 859, 1005
+  size: 94, 107
+  orig: 249, 365
+  offset: 80, 118
+  index: 0
+FragrantMangroveOfAtou/FragrantMangroveOfAtou_dir0
+  rotate: false
+  xy: 454, 213
+  size: 98, 129
+  orig: 249, 365
+  offset: 75, 111
+  index: 0
+FragrantMangroveOfAtou/FragrantMangroveOfAtou_dir1
+  rotate: false
+  xy: 1056, 1582
+  size: 106, 113
+  orig: 249, 365
+  offset: 62, 122
+  index: 0
+FragrantMangroveOfAtou/FragrantMangroveOfAtou_dir2
+  rotate: false
+  xy: 126, 1288
+  size: 116, 109
+  orig: 249, 365
+  offset: 60, 111
+  index: 0
+FragrantMangroveOfAtou/FragrantMangroveOfAtou_dir3
+  rotate: false
+  xy: 1059, 1697
+  size: 106, 113
+  orig: 249, 365
+  offset: 60, 102
+  index: 0
+FragrantMangroveOfAtou/FragrantMangroveOfAtou_dir4
+  rotate: false
+  xy: 1555, 1079
+  size: 98, 125
+  orig: 249, 365
+  offset: 72, 98
+  index: 0
+FragrantMangroveOfAtou/FragrantMangroveOfAtou_dir5
+  rotate: false
+  xy: 840, 1612
+  size: 106, 113
+  orig: 249, 365
+  offset: 78, 100
+  index: 0
+FragrantMangroveOfAtou/FragrantMangroveOfAtou_dir6
+  rotate: false
+  xy: 2, 503
+  size: 116, 109
+  orig: 249, 365
+  offset: 69, 108
+  index: 0
+FragrantMangroveOfAtou/FragrantMangroveOfAtou_dir7
+  rotate: false
+  xy: 1131, 1467
+  size: 106, 113
+  orig: 249, 365
+  offset: 80, 120
+  index: 0
+FuzzyFlowerPine/FuzzyFlowerPine_dir0
+  rotate: false
+  xy: 1627, 504
+  size: 68, 138
+  orig: 249, 365
+  offset: 90, 103
+  index: 0
+FuzzyFlowerPine/FuzzyFlowerPine_dir1
+  rotate: false
+  xy: 558, 587
+  size: 98, 109
+  orig: 249, 365
+  offset: 70, 122
+  index: 0
+FuzzyFlowerPine/FuzzyFlowerPine_dir2
+  rotate: false
+  xy: 2, 1644
+  size: 122, 79
+  orig: 249, 365
+  offset: 60, 131
+  index: 0
+FuzzyFlowerPine/FuzzyFlowerPine_dir3
+  rotate: false
+  xy: 454, 104
+  size: 98, 107
+  orig: 249, 365
+  offset: 68, 110
+  index: 0
+FuzzyFlowerPine/FuzzyFlowerPine_dir4
+  rotate: false
+  xy: 1973, 1357
+  size: 68, 129
+  orig: 249, 365
+  offset: 87, 96
+  index: 0
+FuzzyFlowerPine/FuzzyFlowerPine_dir5
+  rotate: false
+  xy: 556, 343
+  size: 98, 107
+  orig: 249, 365
+  offset: 78, 108
+  index: 0
+FuzzyFlowerPine/FuzzyFlowerPine_dir6
+  rotate: false
+  xy: 250, 1673
+  size: 122, 79
+  orig: 249, 365
+  offset: 63, 128
+  index: 0
+FuzzyFlowerPine/FuzzyFlowerPine_dir7
+  rotate: false
+  xy: 1655, 1119
+  size: 98, 109
+  orig: 249, 365
+  offset: 80, 120
+  index: 0
+GlossyBarkLarch/GlossyBarkLarch_dir0
+  rotate: false
+  xy: 1120, 212
+  size: 68, 97
+  orig: 249, 365
+  offset: 90, 141
+  index: 0
+GlossyBarkLarch/GlossyBarkLarch_dir1
+  rotate: false
+  xy: 1051, 936
+  size: 90, 101
+  orig: 249, 365
+  offset: 68, 130
+  index: 0
+GlossyBarkLarch/GlossyBarkLarch_dir2
+  rotate: false
+  xy: 1649, 897
+  size: 80, 83
+  orig: 249, 365
+  offset: 60, 129
+  index: 0
+GlossyBarkLarch/GlossyBarkLarch_dir3
+  rotate: false
+  xy: 1955, 866
+  size: 90, 95
+  orig: 249, 365
+  offset: 66, 110
+  index: 0
+GlossyBarkLarch/GlossyBarkLarch_dir4
+  rotate: false
+  xy: 1973, 1253
+  size: 68, 102
+  orig: 249, 365
+  offset: 87, 96
+  index: 0
+GlossyBarkLarch/GlossyBarkLarch_dir5
+  rotate: false
+  xy: 1955, 1058
+  size: 90, 95
+  orig: 249, 365
+  offset: 88, 108
+  index: 0
+GlossyBarkLarch/GlossyBarkLarch_dir6
+  rotate: false
+  xy: 1024, 6
+  size: 80, 83
+  orig: 249, 365
+  offset: 105, 126
+  index: 0
+GlossyBarkLarch/GlossyBarkLarch_dir7
+  rotate: false
+  xy: 844, 172
+  size: 90, 101
+  orig: 249, 365
+  offset: 90, 128
+  index: 0
+HardyFigMaple/HardyFigMaple_dir0
+  rotate: false
+  xy: 944, 654
+  size: 92, 134
+  orig: 249, 365
+  offset: 78, 107
+  index: 0
+HardyFigMaple/HardyFigMaple_dir1
+  rotate: false
+  xy: 1131, 1158
+  size: 104, 109
+  orig: 249, 365
+  offset: 62, 126
+  index: 0
+HardyFigMaple/HardyFigMaple_dir2
+  rotate: false
+  xy: 374, 1746
+  size: 122, 103
+  orig: 249, 365
+  offset: 60, 114
+  index: 0
+HardyFigMaple/HardyFigMaple_dir3
+  rotate: false
+  xy: 1127, 1039
+  size: 104, 117
+  orig: 249, 365
+  offset: 60, 100
+  index: 0
+HardyFigMaple/HardyFigMaple_dir4
+  rotate: false
+  xy: 750, 177
+  size: 92, 125
+  orig: 249, 365
+  offset: 75, 106
+  index: 0
+HardyFigMaple/HardyFigMaple_dir5
+  rotate: false
+  xy: 1339, 976
+  size: 104, 117
+  orig: 249, 365
+  offset: 80, 98
+  index: 0
+HardyFigMaple/HardyFigMaple_dir6
+  rotate: false
+  xy: 126, 1743
+  size: 122, 103
+  orig: 249, 365
+  offset: 63, 111
+  index: 0
+HardyFigMaple/HardyFigMaple_dir7
+  rotate: false
+  xy: 1807, 1576
+  size: 104, 109
+  orig: 249, 365
+  offset: 82, 124
+  index: 0
+HollowRootMagnolia/HollowRootMagnolia_dir0
+  rotate: false
+  xy: 1343, 1095
+  size: 104, 132
+  orig: 249, 365
+  offset: 72, 105
+  index: 0
+HollowRootMagnolia/HollowRootMagnolia_dir1
+  rotate: false
+  xy: 695, 1205
+  size: 108, 113
+  orig: 249, 365
+  offset: 60, 122
+  index: 0
+HollowRootMagnolia/HollowRootMagnolia_dir2
+  rotate: false
+  xy: 2, 1030
+  size: 119, 109
+  orig: 249, 365
+  offset: 63, 108
+  index: 0
+HollowRootMagnolia/HollowRootMagnolia_dir3
+  rotate: false
+  xy: 585, 1439
+  size: 108, 117
+  orig: 249, 365
+  offset: 58, 100
+  index: 0
+HollowRootMagnolia/HollowRootMagnolia_dir4
+  rotate: false
+  xy: 1237, 1228
+  size: 104, 118
+  orig: 249, 365
+  offset: 69, 109
+  index: 0
+HollowRootMagnolia/HollowRootMagnolia_dir5
+  rotate: false
+  xy: 1449, 1812
+  size: 108, 117
+  orig: 249, 365
+  offset: 78, 98
+  index: 0
+HollowRootMagnolia/HollowRootMagnolia_dir6
+  rotate: false
+  xy: 126, 1399
+  size: 119, 109
+  orig: 249, 365
+  offset: 63, 105
+  index: 0
+HollowRootMagnolia/HollowRootMagnolia_dir7
+  rotate: false
+  xy: 746, 1858
+  size: 108, 113
+  orig: 249, 365
+  offset: 80, 120
+  index: 0
+ItoSmoothWood/ItoSmoothWood_dir0
+  rotate: false
+  xy: 1451, 1476
+  size: 104, 100
+  orig: 249, 365
+  offset: 72, 138
+  index: 0
+ItoSmoothWood/ItoSmoothWood_dir1
+  rotate: false
+  xy: 1557, 1345
+  size: 102, 111
+  orig: 249, 365
+  offset: 58, 128
+  index: 0
+ItoSmoothWood/ItoSmoothWood_dir2
+  rotate: false
+  xy: 1879, 618
+  size: 80, 113
+  orig: 249, 365
+  offset: 66, 113
+  index: 0
+ItoSmoothWood/ItoSmoothWood_dir3
+  rotate: false
+  xy: 1765, 1245
+  size: 102, 109
+  orig: 249, 365
+  offset: 56, 100
+  index: 0
+ItoSmoothWood/ItoSmoothWood_dir4
+  rotate: false
+  xy: 1131, 1269
+  size: 104, 81
+  orig: 249, 365
+  offset: 69, 117
+  index: 0
+ItoSmoothWood/ItoSmoothWood_dir5
+  rotate: false
+  xy: 1869, 1268
+  size: 102, 109
+  orig: 249, 365
+  offset: 86, 98
+  index: 0
+ItoSmoothWood/ItoSmoothWood_dir6
+  rotate: false
+  xy: 1469, 664
+  size: 80, 113
+  orig: 249, 365
+  offset: 99, 110
+  index: 0
+ItoSmoothWood/ItoSmoothWood_dir7
+  rotate: false
+  xy: 1661, 1343
+  size: 102, 111
+  orig: 249, 365
+  offset: 88, 126
+  index: 0
+KusiangClaycress/KusiangClaycress_dir0
+  rotate: false
+  xy: 1608, 365
+  size: 62, 137
+  orig: 249, 365
+  offset: 93, 104
+  index: 0
+KusiangClaycress/KusiangClaycress_dir1
+  rotate: false
+  xy: 658, 654
+  size: 94, 105
+  orig: 249, 365
+  offset: 74, 122
+  index: 0
+KusiangClaycress/KusiangClaycress_dir2
+  rotate: false
+  xy: 126, 1848
+  size: 122, 80
+  orig: 249, 365
+  offset: 60, 132
+  index: 0
+KusiangClaycress/KusiangClaycress_dir3
+  rotate: false
+  xy: 656, 858
+  size: 94, 103
+  orig: 249, 365
+  offset: 72, 114
+  index: 0
+KusiangClaycress/KusiangClaycress_dir4
+  rotate: false
+  xy: 1697, 493
+  size: 62, 133
+  orig: 249, 365
+  offset: 90, 98
+  index: 0
+KusiangClaycress/KusiangClaycress_dir5
+  rotate: false
+  xy: 955, 887
+  size: 94, 103
+  orig: 249, 365
+  offset: 78, 112
+  index: 0
+KusiangClaycress/KusiangClaycress_dir6
+  rotate: false
+  xy: 498, 1966
+  size: 122, 80
+  orig: 249, 365
+  offset: 63, 129
+  index: 0
+KusiangClaycress/KusiangClaycress_dir7
+  rotate: false
+  xy: 654, 228
+  size: 94, 105
+  orig: 249, 365
+  offset: 80, 120
+  index: 0
+LukuraimoOrangethorn/LukuraimoOrangethorn_dir0
+  rotate: false
+  xy: 344, 520
+  size: 110, 137
+  orig: 249, 365
+  offset: 69, 107
+  index: 0
+LukuraimoOrangethorn/LukuraimoOrangethorn_dir1
+  rotate: false
+  xy: 1275, 1715
+  size: 106, 105
+  orig: 249, 365
+  offset: 62, 124
+  index: 0
+LukuraimoOrangethorn/LukuraimoOrangethorn_dir2
+  rotate: false
+  xy: 126, 1628
+  size: 122, 113
+  orig: 249, 365
+  offset: 60, 107
+  index: 0
+LukuraimoOrangethorn/LukuraimoOrangethorn_dir3
+  rotate: false
+  xy: 1023, 1344
+  size: 106, 117
+  orig: 249, 365
+  offset: 60, 100
+  index: 0
+LukuraimoOrangethorn/LukuraimoOrangethorn_dir4
+  rotate: false
+  xy: 1103, 1826
+  size: 110, 132
+  orig: 249, 365
+  offset: 66, 99
+  index: 0
+LukuraimoOrangethorn/LukuraimoOrangethorn_dir5
+  rotate: false
+  xy: 1023, 1463
+  size: 106, 117
+  orig: 249, 365
+  offset: 78, 98
+  index: 0
+LukuraimoOrangethorn/LukuraimoOrangethorn_dir6
+  rotate: false
+  xy: 2, 1837
+  size: 122, 113
+  orig: 249, 365
+  offset: 63, 104
+  index: 0
+LukuraimoOrangethorn/LukuraimoOrangethorn_dir7
+  rotate: false
+  xy: 843, 1727
+  size: 106, 105
+  orig: 249, 365
+  offset: 80, 122
+  index: 0
+MeliamiakGreenwort/MeliamiakGreenwort_dir0
+  rotate: false
+  xy: 1449, 1235
+  size: 104, 106
+  orig: 249, 365
+  offset: 72, 132
+  index: 0
+MeliamiakGreenwort/MeliamiakGreenwort_dir1
+  rotate: false
+  xy: 1869, 1155
+  size: 102, 111
+  orig: 249, 365
+  offset: 58, 128
+  index: 0
+MeliamiakGreenwort/MeliamiakGreenwort_dir2
+  rotate: false
+  xy: 762, 1078
+  size: 95, 119
+  orig: 249, 365
+  offset: 60, 108
+  index: 0
+MeliamiakGreenwort/MeliamiakGreenwort_dir3
+  rotate: false
+  xy: 1869, 1379
+  size: 102, 107
+  orig: 249, 365
+  offset: 56, 100
+  index: 0
+MeliamiakGreenwort/MeliamiakGreenwort_dir4
+  rotate: false
+  xy: 1595, 1688
+  size: 104, 118
+  orig: 249, 365
+  offset: 69, 96
+  index: 0
+MeliamiakGreenwort/MeliamiakGreenwort_dir5
+  rotate: false
+  xy: 1765, 1463
+  size: 102, 107
+  orig: 249, 365
+  offset: 86, 98
+  index: 0
+MeliamiakGreenwort/MeliamiakGreenwort_dir6
+  rotate: false
+  xy: 665, 1080
+  size: 95, 119
+  orig: 249, 365
+  offset: 90, 105
+  index: 0
+MeliamiakGreenwort/MeliamiakGreenwort_dir7
+  rotate: false
+  xy: 1557, 1458
+  size: 102, 111
+  orig: 249, 365
+  offset: 88, 126
+  index: 0
+Mudleaf/Mudleaf_dir0
+  rotate: false
+  xy: 1233, 962
+  size: 104, 137
+  orig: 249, 365
+  offset: 72, 103
+  index: 0
+Mudleaf/Mudleaf_dir1
+  rotate: false
+  xy: 1779, 1800
+  size: 108, 117
+  orig: 249, 365
+  offset: 60, 120
+  index: 0
+Mudleaf/Mudleaf_dir2
+  rotate: false
+  xy: 126, 1930
+  size: 122, 116
+  orig: 249, 365
+  offset: 60, 108
+  index: 0
+Mudleaf/Mudleaf_dir3
+  rotate: false
+  xy: 344, 159
+  size: 108, 119
+  orig: 249, 365
+  offset: 58, 100
+  index: 0
+Mudleaf/Mudleaf_dir4
+  rotate: false
+  xy: 1482, 1578
+  size: 104, 115
+  orig: 249, 365
+  offset: 69, 110
+  index: 0
+Mudleaf/Mudleaf_dir5
+  rotate: false
+  xy: 805, 1439
+  size: 108, 119
+  orig: 249, 365
+  offset: 78, 98
+  index: 0
+Mudleaf/Mudleaf_dir6
+  rotate: false
+  xy: 126, 1510
+  size: 122, 116
+  orig: 249, 365
+  offset: 63, 105
+  index: 0
+Mudleaf/Mudleaf_dir7
+  rotate: false
+  xy: 585, 1201
+  size: 108, 117
+  orig: 249, 365
+  offset: 80, 118
+  index: 0
+OtakYellowroot/OtakYellowroot_dir0
+  rotate: false
+  xy: 1608, 231
+  size: 56, 132
+  orig: 249, 365
+  offset: 96, 104
+  index: 0
+OtakYellowroot/OtakYellowroot_dir1
+  rotate: false
+  xy: 469, 1150
+  size: 96, 109
+  orig: 249, 365
+  offset: 68, 122
+  index: 0
+OtakYellowroot/OtakYellowroot_dir2
+  rotate: false
+  xy: 622, 1886
+  size: 119, 73
+  orig: 249, 365
+  offset: 60, 138
+  index: 0
+OtakYellowroot/OtakYellowroot_dir3
+  rotate: false
+  xy: 1843, 735
+  size: 96, 101
+  orig: 249, 365
+  offset: 66, 108
+  index: 0
+OtakYellowroot/OtakYellowroot_dir4
+  rotate: false
+  xy: 1672, 370
+  size: 56, 121
+  orig: 249, 365
+  offset: 93, 99
+  index: 0
+OtakYellowroot/OtakYellowroot_dir5
+  rotate: false
+  xy: 558, 886
+  size: 96, 101
+  orig: 249, 365
+  offset: 82, 106
+  index: 0
+OtakYellowroot/OtakYellowroot_dir6
+  rotate: false
+  xy: 746, 1973
+  size: 119, 73
+  orig: 249, 365
+  offset: 66, 135
+  index: 0
+OtakYellowroot/OtakYellowroot_dir7
+  rotate: false
+  xy: 469, 1039
+  size: 96, 109
+  orig: 249, 365
+  offset: 84, 120
+  index: 0
+PeatsapOfMepujang/PeatsapOfMepujang_dir0
+  rotate: false
+  xy: 1811, 1919
+  size: 116, 127
+  orig: 249, 365
+  offset: 66, 113
+  index: 0
+PeatsapOfMepujang/PeatsapOfMepujang_dir1
+  rotate: false
+  xy: 1929, 1839
+  size: 110, 117
+  orig: 249, 365
+  offset: 58, 122
+  index: 0
+PeatsapOfMepujang/PeatsapOfMepujang_dir2
+  rotate: false
+  xy: 371, 1501
+  size: 113, 124
+  orig: 249, 365
+  offset: 60, 109
+  index: 0
+PeatsapOfMepujang/PeatsapOfMepujang_dir3
+  rotate: false
+  xy: 232, 179
+  size: 110, 119
+  orig: 249, 365
+  offset: 56, 98
+  index: 0
+PeatsapOfMepujang/PeatsapOfMepujang_dir4
+  rotate: false
+  xy: 374, 1627
+  size: 116, 117
+  orig: 249, 365
+  offset: 63, 112
+  index: 0
+PeatsapOfMepujang/PeatsapOfMepujang_dir5
+  rotate: false
+  xy: 238, 659
+  size: 110, 119
+  orig: 249, 365
+  offset: 78, 96
+  index: 0
+PeatsapOfMepujang/PeatsapOfMepujang_dir6
+  rotate: false
+  xy: 241, 1024
+  size: 113, 124
+  orig: 249, 365
+  offset: 72, 106
+  index: 0
+PeatsapOfMepujang/PeatsapOfMepujang_dir7
+  rotate: false
+  xy: 232, 421
+  size: 110, 117
+  orig: 249, 365
+  offset: 80, 120
+  index: 0
+PihDirtvine/PihDirtvine_dir0
+  rotate: false
+  xy: 1555, 1206
+  size: 98, 135
+  orig: 249, 365
+  offset: 75, 103
+  index: 0
+PihDirtvine/PihDirtvine_dir1
+  rotate: false
+  xy: 498, 1647
+  size: 108, 113
+  orig: 249, 365
+  offset: 60, 122
+  index: 0
+PihDirtvine/PihDirtvine_dir2
+  rotate: false
+  xy: 250, 1841
+  size: 122, 111
+  orig: 249, 365
+  offset: 60, 111
+  index: 0
+PihDirtvine/PihDirtvine_dir3
+  rotate: false
+  xy: 1669, 1808
+  size: 108, 119
+  orig: 249, 365
+  offset: 58, 100
+  index: 0
+PihDirtvine/PihDirtvine_dir4
+  rotate: false
+  xy: 1743, 765
+  size: 98, 123
+  orig: 249, 365
+  offset: 72, 108
+  index: 0
+PihDirtvine/PihDirtvine_dir5
+  rotate: false
+  xy: 344, 280
+  size: 108, 119
+  orig: 249, 365
+  offset: 78, 98
+  index: 0
+PihDirtvine/PihDirtvine_dir6
+  rotate: false
+  xy: 498, 1853
+  size: 122, 111
+  orig: 249, 365
+  offset: 63, 108
+  index: 0
+PihDirtvine/PihDirtvine_dir7
+  rotate: false
+  xy: 718, 1560
+  size: 108, 113
+  orig: 249, 365
+  offset: 80, 120
+  index: 0
+PungentJuniperCactus/PungentJuniperCactus_dir0
+  rotate: false
+  xy: 1694, 1572
+  size: 104, 109
+  orig: 249, 365
+  offset: 72, 126
+  index: 0
+PungentJuniperCactus/PungentJuniperCactus_dir1
+  rotate: false
+  xy: 456, 912
+  size: 100, 111
+  orig: 249, 365
+  offset: 60, 124
+  index: 0
+PungentJuniperCactus/PungentJuniperCactus_dir2
+  rotate: false
+  xy: 665, 963
+  size: 95, 115
+  orig: 249, 365
+  offset: 60, 108
+  index: 0
+PungentJuniperCactus/PungentJuniperCactus_dir3
+  rotate: false
+  xy: 453, 698
+  size: 100, 109
+  orig: 249, 365
+  offset: 58, 98
+  index: 0
+PungentJuniperCactus/PungentJuniperCactus_dir4
+  rotate: false
+  xy: 1383, 1710
+  size: 104, 100
+  orig: 249, 365
+  offset: 69, 99
+  index: 0
+PungentJuniperCactus/PungentJuniperCactus_dir5
+  rotate: false
+  xy: 1339, 865
+  size: 100, 109
+  orig: 249, 365
+  offset: 86, 96
+  index: 0
+PungentJuniperCactus/PungentJuniperCactus_dir6
+  rotate: false
+  xy: 762, 961
+  size: 95, 115
+  orig: 249, 365
+  offset: 90, 105
+  index: 0
+PungentJuniperCactus/PungentJuniperCactus_dir7
+  rotate: false
+  xy: 456, 585
+  size: 100, 111
+  orig: 249, 365
+  offset: 88, 122
+  index: 0
+RedHazelnutCactus/RedHazelnutCactus_dir0
+  rotate: false
+  xy: 1237, 1101
+  size: 104, 125
+  orig: 249, 365
+  offset: 72, 115
+  index: 0
+RedHazelnutCactus/RedHazelnutCactus_dir1
+  rotate: false
+  xy: 1559, 1814
+  size: 108, 113
+  orig: 249, 365
+  offset: 60, 126
+  index: 0
+RedHazelnutCactus/RedHazelnutCactus_dir2
+  rotate: false
+  xy: 2, 614
+  size: 116, 114
+  orig: 249, 365
+  offset: 60, 115
+  index: 0
+RedHazelnutCactus/RedHazelnutCactus_dir3
+  rotate: false
+  xy: 856, 1834
+  size: 108, 117
+  orig: 249, 365
+  offset: 58, 100
+  index: 0
+RedHazelnutCactus/RedHazelnutCactus_dir4
+  rotate: false
+  xy: 1451, 1343
+  size: 104, 131
+  orig: 249, 365
+  offset: 69, 96
+  index: 0
+RedHazelnutCactus/RedHazelnutCactus_dir5
+  rotate: false
+  xy: 362, 1261
+  size: 108, 117
+  orig: 249, 365
+  offset: 78, 98
+  index: 0
+RedHazelnutCactus/RedHazelnutCactus_dir6
+  rotate: false
+  xy: 1693, 1932
+  size: 116, 114
+  orig: 249, 365
+  offset: 69, 112
+  index: 0
+RedHazelnutCactus/RedHazelnutCactus_dir7
+  rotate: false
+  xy: 475, 1267
+  size: 108, 113
+  orig: 249, 365
+  offset: 80, 124
+  index: 0
+RoughSapMaple/RoughSapMaple_dir0
+  rotate: false
+  xy: 1532, 280
+  size: 74, 130
+  orig: 249, 365
+  offset: 87, 110
+  index: 0
+RoughSapMaple/RoughSapMaple_dir1
+  rotate: false
+  xy: 1855, 838
+  size: 98, 109
+  orig: 249, 365
+  offset: 68, 122
+  index: 0
+RoughSapMaple/RoughSapMaple_dir2
+  rotate: false
+  xy: 123, 1078
+  size: 116, 86
+  orig: 249, 365
+  offset: 60, 129
+  index: 0
+RoughSapMaple/RoughSapMaple_dir3
+  rotate: false
+  xy: 1855, 949
+  size: 98, 107
+  orig: 249, 365
+  offset: 66, 108
+  index: 0
+RoughSapMaple/RoughSapMaple_dir4
+  rotate: false
+  xy: 1456, 269
+  size: 74, 129
+  orig: 249, 365
+  offset: 84, 96
+  index: 0
+RoughSapMaple/RoughSapMaple_dir5
+  rotate: false
+  xy: 554, 117
+  size: 98, 107
+  orig: 249, 365
+  offset: 80, 106
+  index: 0
+RoughSapMaple/RoughSapMaple_dir6
+  rotate: false
+  xy: 1103, 1960
+  size: 116, 86
+  orig: 249, 365
+  offset: 69, 126
+  index: 0
+RoughSapMaple/RoughSapMaple_dir7
+  rotate: false
+  xy: 555, 698
+  size: 98, 109
+  orig: 249, 365
+  offset: 82, 120
+  index: 0
+SaltyFruitBeech/SaltyFruitBeech_dir0
+  rotate: false
+  xy: 554, 226
+  size: 98, 115
+  orig: 249, 365
+  offset: 75, 126
+  index: 0
+SaltyFruitBeech/SaltyFruitBeech_dir1
+  rotate: false
+  xy: 1765, 1356
+  size: 102, 105
+  orig: 249, 365
+  offset: 62, 130
+  index: 0
+SaltyFruitBeech/SaltyFruitBeech_dir2
+  rotate: false
+  xy: 966, 1812
+  size: 107, 112
+  orig: 249, 365
+  offset: 60, 111
+  index: 0
+SaltyFruitBeech/SaltyFruitBeech_dir3
+  rotate: false
+  xy: 1661, 1456
+  size: 102, 113
+  orig: 249, 365
+  offset: 60, 102
+  index: 0
+SaltyFruitBeech/SaltyFruitBeech_dir4
+  rotate: false
+  xy: 456, 344
+  size: 98, 124
+  orig: 249, 365
+  offset: 72, 98
+  index: 0
+SaltyFruitBeech/SaltyFruitBeech_dir5
+  rotate: false
+  xy: 1445, 894
+  size: 102, 113
+  orig: 249, 365
+  offset: 82, 100
+  index: 0
+SaltyFruitBeech/SaltyFruitBeech_dir6
+  rotate: false
+  xy: 734, 1744
+  size: 107, 112
+  orig: 249, 365
+  offset: 78, 108
+  index: 0
+SaltyFruitBeech/SaltyFruitBeech_dir7
+  rotate: false
+  xy: 1449, 1009
+  size: 102, 105
+  orig: 249, 365
+  offset: 84, 128
+  index: 0
+Sandvine/Sandvine_dir0
+  rotate: false
+  xy: 2, 730
+  size: 116, 86
+  orig: 249, 365
+  offset: 66, 149
+  index: 0
+Sandvine/Sandvine_dir1
+  rotate: false
+  xy: 1855, 1058
+  size: 98, 95
+  orig: 249, 365
+  offset: 58, 140
+  index: 0
+Sandvine/Sandvine_dir2
+  rotate: false
+  xy: 1298, 311
+  size: 80, 119
+  orig: 249, 365
+  offset: 69, 108
+  index: 0
+Sandvine/Sandvine_dir3
+  rotate: false
+  xy: 554, 2
+  size: 98, 113
+  orig: 249, 365
+  offset: 56, 98
+  index: 0
+Sandvine/Sandvine_dir4
+  rotate: false
+  xy: 867, 1953
+  size: 116, 93
+  orig: 249, 365
+  offset: 63, 116
+  index: 0
+Sandvine/Sandvine_dir5
+  rotate: false
+  xy: 1549, 894
+  size: 98, 113
+  orig: 249, 365
+  offset: 90, 96
+  index: 0
+Sandvine/Sandvine_dir6
+  rotate: false
+  xy: 1216, 325
+  size: 80, 119
+  orig: 249, 365
+  offset: 96, 105
+  index: 0
+Sandvine/Sandvine_dir7
+  rotate: false
+  xy: 454, 7
+  size: 98, 95
+  orig: 249, 365
+  offset: 92, 138
+  index: 0
+SihCedar/SihCedar_dir0
+  rotate: false
+  xy: 2, 136
+  size: 116, 114
+  orig: 249, 365
+  offset: 66, 124
+  index: 0
+SihCedar/SihCedar_dir1
+  rotate: false
+  xy: 1913, 1605
+  size: 104, 115
+  orig: 249, 365
+  offset: 60, 124
+  index: 0
+SihCedar/SihCedar_dir2
+  rotate: false
+  xy: 353, 900
+  size: 101, 122
+  orig: 249, 365
+  offset: 66, 107
+  index: 0
+SihCedar/SihCedar_dir3
+  rotate: false
+  xy: 1913, 1488
+  size: 104, 115
+  orig: 249, 365
+  offset: 58, 98
+  index: 0
+SihCedar/SihCedar_dir4
+  rotate: false
+  xy: 1575, 1929
+  size: 116, 117
+  orig: 249, 365
+  offset: 63, 105
+  index: 0
+SihCedar/SihCedar_dir5
+  rotate: false
+  xy: 1239, 1348
+  size: 104, 115
+  orig: 249, 365
+  offset: 82, 96
+  index: 0
+SihCedar/SihCedar_dir6
+  rotate: false
+  xy: 350, 766
+  size: 101, 122
+  orig: 249, 365
+  offset: 78, 104
+  index: 0
+SihCedar/SihCedar_dir7
+  rotate: false
+  xy: 1588, 1571
+  size: 104, 115
+  orig: 249, 365
+  offset: 84, 122
+  index: 0
+SmoketwigMangrove/SmoketwigMangrove_dir0
+  rotate: false
+  xy: 123, 984
+  size: 116, 92
+  orig: 249, 365
+  offset: 66, 148
+  index: 0
+SmoketwigMangrove/SmoketwigMangrove_dir1
+  rotate: false
+  xy: 567, 989
+  size: 96, 103
+  orig: 249, 365
+  offset: 58, 134
+  index: 0
+SmoketwigMangrove/SmoketwigMangrove_dir2
+  rotate: false
+  xy: 1024, 91
+  size: 86, 119
+  orig: 249, 365
+  offset: 60, 108
+  index: 0
+SmoketwigMangrove/SmoketwigMangrove_dir3
+  rotate: false
+  xy: 567, 1094
+  size: 96, 105
+  orig: 249, 365
+  offset: 56, 100
+  index: 0
+SmoketwigMangrove/SmoketwigMangrove_dir4
+  rotate: false
+  xy: 1221, 1939
+  size: 116, 107
+  orig: 249, 365
+  offset: 63, 98
+  index: 0
+SmoketwigMangrove/SmoketwigMangrove_dir5
+  rotate: false
+  xy: 486, 1520
+  size: 96, 105
+  orig: 249, 365
+  offset: 92, 98
+  index: 0
+SmoketwigMangrove/SmoketwigMangrove_dir6
+  rotate: false
+  xy: 1128, 597
+  size: 86, 119
+  orig: 249, 365
+  offset: 99, 105
+  index: 0
+SmoketwigMangrove/SmoketwigMangrove_dir7
+  rotate: false
+  xy: 1941, 733
+  size: 96, 103
+  orig: 249, 365
+  offset: 94, 132
+  index: 0
+SmokyAlmondTree/SmokyAlmondTree_dir0
+  rotate: false
+  xy: 850, 537
+  size: 92, 132
+  orig: 249, 365
+  offset: 78, 107
+  index: 0
+SmokyAlmondTree/SmokyAlmondTree_dir1
+  rotate: false
+  xy: 1051, 827
+  size: 90, 107
+  orig: 249, 365
+  offset: 76, 122
+  index: 0
+SmokyAlmondTree/SmokyAlmondTree_dir2
+  rotate: false
+  xy: 2, 818
+  size: 119, 103
+  orig: 249, 365
+  offset: 60, 117
+  index: 0
+SmokyAlmondTree/SmokyAlmondTree_dir3
+  rotate: false
+  xy: 844, 77
+  size: 90, 93
+  orig: 249, 365
+  offset: 74, 122
+  index: 0
+SmokyAlmondTree/SmokyAlmondTree_dir4
+  rotate: false
+  xy: 752, 304
+  size: 92, 122
+  orig: 249, 365
+  offset: 75, 104
+  index: 0
+SmokyAlmondTree/SmokyAlmondTree_dir5
+  rotate: false
+  xy: 1955, 963
+  size: 90, 93
+  orig: 249, 365
+  offset: 80, 120
+  index: 0
+SmokyAlmondTree/SmokyAlmondTree_dir6
+  rotate: false
+  xy: 2, 1141
+  size: 119, 103
+  orig: 249, 365
+  offset: 66, 114
+  index: 0
+SmokyAlmondTree/SmokyAlmondTree_dir7
+  rotate: false
+  xy: 940, 289
+  size: 90, 107
+  orig: 249, 365
+  offset: 82, 120
+  index: 0
+SoftHazelOfSetiban/SoftHazelOfSetiban_dir0
+  rotate: false
+  xy: 850, 671
+  size: 92, 130
+  orig: 249, 365
+  offset: 78, 108
+  index: 0
+SoftHazelOfSetiban/SoftHazelOfSetiban_dir1
+  rotate: false
+  xy: 915, 1467
+  size: 106, 113
+  orig: 249, 365
+  offset: 62, 122
+  index: 0
+SoftHazelOfSetiban/SoftHazelOfSetiban_dir2
+  rotate: false
+  xy: 250, 1566
+  size: 119, 105
+  orig: 249, 365
+  offset: 60, 114
+  index: 0
+SoftHazelOfSetiban/SoftHazelOfSetiban_dir3
+  rotate: false
+  xy: 1167, 1703
+  size: 106, 117
+  orig: 249, 365
+  offset: 60, 100
+  index: 0
+SoftHazelOfSetiban/SoftHazelOfSetiban_dir4
+  rotate: false
+  xy: 750, 44
+  size: 92, 131
+  orig: 249, 365
+  offset: 75, 96
+  index: 0
+SoftHazelOfSetiban/SoftHazelOfSetiban_dir5
+  rotate: false
+  xy: 915, 1348
+  size: 106, 117
+  orig: 249, 365
+  offset: 78, 98
+  index: 0
+SoftHazelOfSetiban/SoftHazelOfSetiban_dir6
+  rotate: false
+  xy: 2, 923
+  size: 119, 105
+  orig: 249, 365
+  offset: 66, 111
+  index: 0
+SoftHazelOfSetiban/SoftHazelOfSetiban_dir7
+  rotate: false
+  xy: 1023, 1229
+  size: 106, 113
+  orig: 249, 365
+  offset: 80, 120
+  index: 0
+SoiltwigOfZah/SoiltwigOfZah_dir0
+  rotate: false
+  xy: 1797, 601
+  size: 80, 132
+  orig: 249, 365
+  offset: 84, 108
+  index: 0
+SoiltwigOfZah/SoiltwigOfZah_dir1
+  rotate: false
+  xy: 1038, 423
+  size: 88, 105
+  orig: 249, 365
+  offset: 78, 122
+  index: 0
+SoiltwigOfZah/SoiltwigOfZah_dir2
+  rotate: false
+  xy: 241, 1150
+  size: 113, 88
+  orig: 249, 365
+  offset: 60, 123
+  index: 0
+SoiltwigOfZah/SoiltwigOfZah_dir3
+  rotate: false
+  xy: 1038, 619
+  size: 88, 97
+  orig: 249, 365
+  offset: 76, 114
+  index: 0
+SoiltwigOfZah/SoiltwigOfZah_dir4
+  rotate: false
+  xy: 1387, 661
+  size: 80, 116
+  orig: 249, 365
+  offset: 81, 98
+  index: 0
+SoiltwigOfZah/SoiltwigOfZah_dir5
+  rotate: false
+  xy: 1233, 863
+  size: 88, 97
+  orig: 249, 365
+  offset: 80, 112
+  index: 0
+SoiltwigOfZah/SoiltwigOfZah_dir6
+  rotate: false
+  xy: 250, 1476
+  size: 113, 88
+  orig: 249, 365
+  offset: 72, 120
+  index: 0
+SoiltwigOfZah/SoiltwigOfZah_dir7
+  rotate: false
+  xy: 1130, 720
+  size: 88, 105
+  orig: 249, 365
+  offset: 82, 120
+  index: 0
+SourJuniperBeech/SourJuniperBeech_dir0
+  rotate: false
+  xy: 1456, 400
+  size: 74, 133
+  orig: 249, 365
+  offset: 87, 105
+  index: 0
+SourJuniperBeech/SourJuniperBeech_dir1
+  rotate: false
+  xy: 656, 335
+  size: 94, 109
+  orig: 249, 365
+  offset: 74, 122
+  index: 0
+SourJuniperBeech/SourJuniperBeech_dir2
+  rotate: false
+  xy: 622, 1961
+  size: 122, 85
+  orig: 249, 365
+  offset: 60, 132
+  index: 0
+SourJuniperBeech/SourJuniperBeech_dir3
+  rotate: false
+  xy: 752, 866
+  size: 94, 93
+  orig: 249, 365
+  offset: 72, 122
+  index: 0
+SourJuniperBeech/SourJuniperBeech_dir4
+  rotate: false
+  xy: 1469, 535
+  size: 74, 127
+  orig: 249, 365
+  offset: 84, 102
+  index: 0
+SourJuniperBeech/SourJuniperBeech_dir5
+  rotate: false
+  xy: 658, 446
+  size: 94, 93
+  orig: 249, 365
+  offset: 78, 120
+  index: 0
+SourJuniperBeech/SourJuniperBeech_dir6
+  rotate: false
+  xy: 250, 1754
+  size: 122, 85
+  orig: 249, 365
+  offset: 63, 129
+  index: 0
+SourJuniperBeech/SourJuniperBeech_dir7
+  rotate: false
+  xy: 754, 428
+  size: 94, 109
+  orig: 249, 365
+  offset: 80, 120
+  index: 0
+SpicyCashewHazel/SpicyCashewHazel_dir0
+  rotate: false
+  xy: 1298, 432
+  size: 80, 122
+  orig: 249, 365
+  offset: 84, 116
+  index: 0
+SpicyCashewHazel/SpicyCashewHazel_dir1
+  rotate: false
+  xy: 456, 470
+  size: 100, 113
+  orig: 249, 365
+  offset: 68, 122
+  index: 0
+SpicyCashewHazel/SpicyCashewHazel_dir2
+  rotate: false
+  xy: 120, 563
+  size: 110, 86
+  orig: 249, 365
+  offset: 63, 137
+  index: 0
+SpicyCashewHazel/SpicyCashewHazel_dir3
+  rotate: false
+  xy: 350, 663
+  size: 100, 101
+  orig: 249, 365
+  offset: 66, 116
+  index: 0
+SpicyCashewHazel/SpicyCashewHazel_dir4
+  rotate: false
+  xy: 1551, 668
+  size: 80, 113
+  orig: 249, 365
+  offset: 81, 111
+  index: 0
+SpicyCashewHazel/SpicyCashewHazel_dir5
+  rotate: false
+  xy: 456, 809
+  size: 100, 101
+  orig: 249, 365
+  offset: 78, 114
+  index: 0
+SpicyCashewHazel/SpicyCashewHazel_dir6
+  rotate: false
+  xy: 622, 1798
+  size: 110, 86
+  orig: 249, 365
+  offset: 72, 134
+  index: 0
+SpicyCashewHazel/SpicyCashewHazel_dir7
+  rotate: false
+  xy: 1441, 779
+  size: 100, 113
+  orig: 249, 365
+  offset: 80, 120
+  index: 0
+SpinyMangoPalm/SpinyMangoPalm_dir0
+  rotate: false
+  xy: 1730, 360
+  size: 56, 131
+  orig: 249, 365
+  offset: 96, 105
+  index: 0
+SpinyMangoPalm/SpinyMangoPalm_dir1
+  rotate: false
+  xy: 1112, 101
+  size: 86, 109
+  orig: 249, 365
+  offset: 76, 122
+  index: 0
+SpinyMangoPalm/SpinyMangoPalm_dir2
+  rotate: false
+  xy: 232, 2
+  size: 107, 61
+  orig: 249, 365
+  offset: 69, 150
+  index: 0
+SpinyMangoPalm/SpinyMangoPalm_dir3
+  rotate: false
+  xy: 1128, 514
+  size: 86, 81
+  orig: 249, 365
+  offset: 74, 128
+  index: 0
+SpinyMangoPalm/SpinyMangoPalm_dir4
+  rotate: false
+  xy: 1321, 764
+  size: 56, 97
+  orig: 249, 365
+  offset: 93, 120
+  index: 0
+SpinyMangoPalm/SpinyMangoPalm_dir5
+  rotate: false
+  xy: 1126, 324
+  size: 86, 81
+  orig: 249, 365
+  offset: 84, 126
+  index: 0
+SpinyMangoPalm/SpinyMangoPalm_dir6
+  rotate: false
+  xy: 731, 1681
+  size: 107, 61
+  orig: 249, 365
+  offset: 69, 147
+  index: 0
+SpinyMangoPalm/SpinyMangoPalm_dir7
+  rotate: false
+  xy: 936, 164
+  size: 86, 109
+  orig: 249, 365
+  offset: 86, 120
+  index: 0
+StiffSeedBirch/StiffSeedBirch_dir0
+  rotate: false
+  xy: 1233, 764
+  size: 86, 97
+  orig: 249, 365
+  offset: 81, 138
+  index: 0
+StiffSeedBirch/StiffSeedBirch_dir1
+  rotate: false
+  xy: 1038, 530
+  size: 88, 87
+  orig: 249, 365
+  offset: 62, 148
+  index: 0
+StiffSeedBirch/StiffSeedBirch_dir2
+  rotate: false
+  xy: 1216, 556
+  size: 83, 102
+  orig: 249, 365
+  offset: 72, 117
+  index: 0
+StiffSeedBirch/StiffSeedBirch_dir3
+  rotate: false
+  xy: 1040, 718
+  size: 88, 107
+  orig: 249, 365
+  offset: 60, 102
+  index: 0
+StiffSeedBirch/StiffSeedBirch_dir4
+  rotate: false
+  xy: 1038, 319
+  size: 86, 102
+  orig: 249, 365
+  offset: 78, 112
+  index: 0
+StiffSeedBirch/StiffSeedBirch_dir5
+  rotate: false
+  xy: 1143, 841
+  size: 88, 107
+  orig: 249, 365
+  offset: 96, 100
+  index: 0
+StiffSeedBirch/StiffSeedBirch_dir6
+  rotate: false
+  xy: 1220, 660
+  size: 83, 102
+  orig: 249, 365
+  offset: 90, 114
+  index: 0
+StiffSeedBirch/StiffSeedBirch_dir7
+  rotate: false
+  xy: 1143, 950
+  size: 88, 87
+  orig: 249, 365
+  offset: 98, 146
+  index: 0
+SweetLimePalm/SweetLimePalm_dir0
+  rotate: false
+  xy: 2, 252
+  size: 116, 124
+  orig: 249, 365
+  offset: 66, 114
+  index: 0
+SweetLimePalm/SweetLimePalm_dir1
+  rotate: false
+  xy: 585, 1320
+  size: 108, 117
+  orig: 249, 365
+  offset: 60, 122
+  index: 0
+SweetLimePalm/SweetLimePalm_dir2
+  rotate: false
+  xy: 985, 1926
+  size: 116, 120
+  orig: 249, 365
+  offset: 60, 108
+  index: 0
+SweetLimePalm/SweetLimePalm_dir3
+  rotate: false
+  xy: 365, 1380
+  size: 108, 119
+  orig: 249, 365
+  offset: 58, 98
+  index: 0
+SweetLimePalm/SweetLimePalm_dir4
+  rotate: false
+  xy: 2, 378
+  size: 116, 123
+  orig: 249, 365
+  offset: 63, 104
+  index: 0
+SweetLimePalm/SweetLimePalm_dir5
+  rotate: false
+  xy: 344, 38
+  size: 108, 119
+  orig: 249, 365
+  offset: 78, 96
+  index: 0
+SweetLimePalm/SweetLimePalm_dir6
+  rotate: false
+  xy: 123, 1166
+  size: 116, 120
+  orig: 249, 365
+  offset: 69, 105
+  index: 0
+SweetLimePalm/SweetLimePalm_dir7
+  rotate: false
+  xy: 805, 1320
+  size: 108, 117
+  orig: 249, 365
+  offset: 80, 120
+  index: 0
+TelungRustlingThorn/TelungRustlingThorn_dir0
+  rotate: false
+  xy: 120, 469
+  size: 110, 92
+  orig: 249, 365
+  offset: 69, 149
+  index: 0
+TelungRustlingThorn/TelungRustlingThorn_dir1
+  rotate: false
+  xy: 1643, 785
+  size: 98, 107
+  orig: 249, 365
+  offset: 58, 132
+  index: 0
+TelungRustlingThorn/TelungRustlingThorn_dir2
+  rotate: false
+  xy: 1387, 536
+  size: 80, 123
+  orig: 249, 365
+  offset: 63, 107
+  index: 0
+TelungRustlingThorn/TelungRustlingThorn_dir3
+  rotate: false
+  xy: 1755, 999
+  size: 98, 109
+  orig: 249, 365
+  offset: 56, 98
+  index: 0
+TelungRustlingThorn/TelungRustlingThorn_dir4
+  rotate: false
+  xy: 120, 651
+  size: 110, 95
+  orig: 249, 365
+  offset: 66, 107
+  index: 0
+TelungRustlingThorn/TelungRustlingThorn_dir5
+  rotate: false
+  xy: 1543, 783
+  size: 98, 109
+  orig: 249, 365
+  offset: 90, 96
+  index: 0
+TelungRustlingThorn/TelungRustlingThorn_dir6
+  rotate: false
+  xy: 1961, 608
+  size: 80, 123
+  orig: 249, 365
+  offset: 102, 104
+  index: 0
+TelungRustlingThorn/TelungRustlingThorn_dir7
+  rotate: false
+  xy: 1755, 890
+  size: 98, 107
+  orig: 249, 365
+  offset: 92, 130
+  index: 0
+TenenokBirch/TenenokBirch_dir0
+  rotate: false
+  xy: 558, 452
+  size: 98, 133
+  orig: 249, 365
+  offset: 75, 105
+  index: 0
+TenenokBirch/TenenokBirch_dir1
+  rotate: false
+  xy: 805, 1199
+  size: 108, 119
+  orig: 249, 365
+  offset: 60, 120
+  index: 0
+TenenokBirch/TenenokBirch_dir2
+  rotate: false
+  xy: 123, 748
+  size: 113, 112
+  orig: 249, 365
+  offset: 63, 114
+  index: 0
+TenenokBirch/TenenokBirch_dir3
+  rotate: false
+  xy: 356, 1025
+  size: 108, 117
+  orig: 249, 365
+  offset: 58, 100
+  index: 0
+TenenokBirch/TenenokBirch_dir4
+  rotate: false
+  xy: 1655, 1230
+  size: 98, 111
+  orig: 249, 365
+  offset: 72, 108
+  index: 0
+TenenokBirch/TenenokBirch_dir5
+  rotate: false
+  xy: 475, 1382
+  size: 108, 117
+  orig: 249, 365
+  offset: 78, 98
+  index: 0
+TenenokBirch/TenenokBirch_dir6
+  rotate: false
+  xy: 247, 1362
+  size: 113, 112
+  orig: 249, 365
+  offset: 69, 111
+  index: 0
+TenenokBirch/TenenokBirch_dir7
+  rotate: false
+  xy: 1339, 1837
+  size: 108, 119
+  orig: 249, 365
+  offset: 80, 118
+  index: 0
+VioletGrapeLarch/VioletGrapeLarch_dir0
+  rotate: false
+  xy: 1655, 982
+  size: 98, 135
+  orig: 249, 365
+  offset: 75, 107
+  index: 0
+VioletGrapeLarch/VioletGrapeLarch_dir1
+  rotate: false
+  xy: 951, 1697
+  size: 106, 113
+  orig: 249, 365
+  offset: 60, 126
+  index: 0
+VioletGrapeLarch/VioletGrapeLarch_dir2
+  rotate: false
+  xy: 2, 1337
+  size: 122, 110
+  orig: 249, 365
+  offset: 60, 116
+  index: 0
+VioletGrapeLarch/VioletGrapeLarch_dir3
+  rotate: false
+  xy: 1131, 1352
+  size: 106, 113
+  orig: 249, 365
+  offset: 58, 102
+  index: 0
+VioletGrapeLarch/VioletGrapeLarch_dir4
+  rotate: false
+  xy: 1755, 1110
+  size: 98, 133
+  orig: 249, 365
+  offset: 72, 98
+  index: 0
+VioletGrapeLarch/VioletGrapeLarch_dir5
+  rotate: false
+  xy: 915, 1233
+  size: 106, 113
+  orig: 249, 365
+  offset: 80, 100
+  index: 0
+VioletGrapeLarch/VioletGrapeLarch_dir6
+  rotate: false
+  xy: 2, 1725
+  size: 122, 110
+  orig: 249, 365
+  offset: 63, 113
+  index: 0
+VioletGrapeLarch/VioletGrapeLarch_dir7
+  rotate: false
+  xy: 948, 1582
+  size: 106, 113
+  orig: 249, 365
+  offset: 82, 124
+  index: 0
+WeepingPineWillow/WeepingPineWillow_dir0
+  rotate: false
+  xy: 944, 523
+  size: 92, 129
+  orig: 249, 365
+  offset: 78, 109
+  index: 0
+WeepingPineWillow/WeepingPineWillow_dir1
+  rotate: false
+  xy: 1807, 1687
+  size: 104, 111
+  orig: 249, 365
+  offset: 62, 122
+  index: 0
+WeepingPineWillow/WeepingPineWillow_dir2
+  rotate: false
+  xy: 2, 1543
+  size: 122, 99
+  orig: 249, 365
+  offset: 60, 114
+  index: 0
+WeepingPineWillow/WeepingPineWillow_dir3
+  rotate: false
+  xy: 915, 1114
+  size: 104, 117
+  orig: 249, 365
+  offset: 60, 102
+  index: 0
+WeepingPineWillow/WeepingPineWillow_dir4
+  rotate: false
+  xy: 846, 275
+  size: 92, 135
+  orig: 249, 365
+  offset: 75, 96
+  index: 0
+WeepingPineWillow/WeepingPineWillow_dir5
+  rotate: false
+  xy: 1343, 1229
+  size: 104, 117
+  orig: 249, 365
+  offset: 80, 100
+  index: 0
+WeepingPineWillow/WeepingPineWillow_dir6
+  rotate: false
+  xy: 374, 1851
+  size: 122, 99
+  orig: 249, 365
+  offset: 63, 111
+  index: 0
+WeepingPineWillow/WeepingPineWillow_dir7
+  rotate: false
+  xy: 1270, 1582
+  size: 104, 111
+  orig: 249, 365
+  offset: 82, 120
+  index: 0
+WhiteChestnutMagnolia/WhiteChestnutMagnolia_dir0
+  rotate: false
+  xy: 120, 246
+  size: 110, 104
+  orig: 249, 365
+  offset: 69, 131
+  index: 0
+WhiteChestnutMagnolia/WhiteChestnutMagnolia_dir1
+  rotate: false
+  xy: 1345, 1348
+  size: 104, 113
+  orig: 249, 365
+  offset: 58, 126
+  index: 0
+WhiteChestnutMagnolia/WhiteChestnutMagnolia_dir2
+  rotate: false
+  xy: 944, 398
+  size: 92, 123
+  orig: 249, 365
+  offset: 66, 107
+  index: 0
+WhiteChestnutMagnolia/WhiteChestnutMagnolia_dir3
+  rotate: false
+  xy: 1913, 1722
+  size: 104, 115
+  orig: 249, 365
+  offset: 56, 100
+  index: 0
+WhiteChestnutMagnolia/WhiteChestnutMagnolia_dir4
+  rotate: false
+  xy: 120, 4
+  size: 110, 110
+  orig: 249, 365
+  offset: 66, 107
+  index: 0
+WhiteChestnutMagnolia/WhiteChestnutMagnolia_dir5
+  rotate: false
+  xy: 1239, 1465
+  size: 104, 115
+  orig: 249, 365
+  offset: 84, 98
+  index: 0
+WhiteChestnutMagnolia/WhiteChestnutMagnolia_dir6
+  rotate: false
+  xy: 850, 412
+  size: 92, 123
+  orig: 249, 365
+  offset: 87, 104
+  index: 0
+WhiteChestnutMagnolia/WhiteChestnutMagnolia_dir7
+  rotate: false
+  xy: 1164, 1582
+  size: 104, 113
+  orig: 249, 365
+  offset: 86, 124
+  index: 0
