@@ -2623,6 +2623,9 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
     
     public int rotate(final int k, final int rotation)
     {
+        final int sizeX = this.sizeX - 1;
+        final int sizeY = this.sizeY - 1;
+        final int sizeZ = this.sizeZ - 1;
         switch (rotation)
         {
             // 0-3 have z pointing towards z+ and the voxels rotating on that axis

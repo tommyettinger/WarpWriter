@@ -573,8 +573,10 @@ public class WarpDraw {
             renderer.color().set(((ITemporal) seq).frame());
         }
         final int len = seq.size(), sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ(),
-                pixelWidth = (sizeY + sizeX + 2) * 2 * renderer.scaleX + 1,
-                pixelHeight = (sizeX + sizeY) * 2 + sizeZ * 5 * renderer.scaleY + 1;
+                pixelWidth = xLimit(seq), 
+                        //(sizeY + sizeX + 2) * 2 * renderer.scaleX + 1,
+                pixelHeight = yLimit(seq);
+                        //(sizeX + sizeY) * 2 + sizeZ * 5 * renderer.scaleY + 1;
         seq.sort(IntComparator.side45[seq.rotation()]);
         for (int i = 0; i < len; i++) {
             final byte v = seq.getAtHollow(i);
@@ -583,8 +585,8 @@ public class WarpDraw {
                         x = HashMap3D.extractX(xyz),
                         y = HashMap3D.extractY(xyz),
                         z = HashMap3D.extractZ(xyz),
-                        xPos = (sizeY - y + x) * 2 + 1,
-                        yPos = (z + sizeX + sizeY - x - y) * 2 + 1,
+                        xPos = (sizeY - y + x) * 2 - 1,
+                        yPos = (z + sizeX + sizeY - x - y) * 2 - 3,
                         dep = 3 * (x + y + z) + 256;
                 renderer.drawLeftTriangleLeftFace(xPos, yPos, v, dep, x, y, z);
                 renderer.drawRightTriangleLeftFace(xPos, yPos + 2, v, dep, x, y, z);
