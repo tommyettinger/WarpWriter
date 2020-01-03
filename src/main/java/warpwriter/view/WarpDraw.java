@@ -335,13 +335,13 @@ public class WarpDraw {
     public static int xLimit(IVoxelSeq model)
     {
         final int size = Math.max(model.sizeX(), Math.max(model.sizeY(), model.sizeZ()));
-        return (size + 2) * 4 + 1;
+        return (size) * 4 + 2;
     }
 
     public static int yLimit(IVoxelSeq model)
     {
         final int size = Math.max(model.sizeX(), model.sizeY());
-        return (size + size + model.sizeZ() + 2) * 2 + 1;
+        return (size + size + model.sizeZ() + 1) * 2 + 1;
     }
     
     public static Pixmap draw(IModel model, VoxelPixmapRenderer renderer)
@@ -461,8 +461,9 @@ public class WarpDraw {
         }
         final int len = seq.size(), sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ(),
                 offsetPX = (sizeY - 1 >> 1) + 1,
-                pixelWidth = (sizeY * 3 + (sizeY - 1 >> 1)) * renderer.scaleX + 3,
-                pixelHeight = sizeZ * 3 * renderer.scaleY + 4;
+                pixelWidth = xLimit(seq), pixelHeight = yLimit(seq);
+//                pixelWidth = (sizeY * 3 + (sizeY - 1 >> 1)) * renderer.scaleX + 3,
+//                pixelHeight = sizeZ * 3 * renderer.scaleY + 4;
         seq.sort(IntComparator.side[seq.rotation()]);
         int xyz, x, y, z;
         byte v;
@@ -486,7 +487,9 @@ public class WarpDraw {
             renderer.color().set(((ITemporal) seq).frame());
         }
         final int len = seq.size(), sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ(),
-                pixelWidth = (sizeX + sizeY) * 2 * renderer.scaleX + 3, pixelHeight = sizeZ * 3 * renderer.scaleY + 4;
+                pixelWidth = xLimit(seq), pixelHeight = yLimit(seq);
+//                pixelWidth = (sizeX + sizeY) * 2 * renderer.scaleX + 3,
+//                pixelHeight = sizeZ * 3 * renderer.scaleY + 4;
         int dep;
         seq.sort(IntComparator.side45[seq.rotation()]);
         int xyz, x, y, z;
@@ -514,8 +517,11 @@ public class WarpDraw {
             renderer.color().set(((ITemporal) seq).frame());
         }
         final int len = seq.size(), sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ(),
-                offsetPX = (sizeY >> 1) + 1, offsetPY = (sizeX >> 1) + 1,
-                pixelWidth = ((sizeY * 3) + (sizeY >> 1)) * renderer.scaleX + 6, pixelHeight = (sizeZ * 2 + sizeX * 3 + (sizeX >> 1)) * renderer.scaleY + 8;
+                pixelWidth = xLimit(seq), pixelHeight = yLimit(seq),
+                offsetPX = pixelWidth - Math.max(sizeX, sizeY) * 3 - 6 >> 1, 
+                offsetPY = pixelHeight - Math.max(sizeX, sizeY) * 3 - sizeZ * 2 - 6 >> 1;
+//                pixelWidth = ((sizeY * 3) + (sizeY >> 1)) * renderer.scaleX + 6,
+//                pixelHeight = (sizeZ * 2 + sizeX * 3 + (sizeX >> 1)) * renderer.scaleY + 8;
         seq.sort(IntComparator.side[seq.rotation()]);
         int xyz, x, y, z;
         byte v;
@@ -540,7 +546,9 @@ public class WarpDraw {
             renderer.color().set(((ITemporal) seq).frame());
         }
         final int len = seq.size(), sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ(),
-                pixelWidth = (sizeY + sizeX) * 2 * renderer.scaleX + 7, pixelHeight = (sizeX + sizeY + sizeZ) * 2 * renderer.scaleY + 7;
+                pixelWidth = xLimit(seq), pixelHeight = yLimit(seq);
+//                pixelWidth = (sizeY + sizeX) * 2 * renderer.scaleX + 7,
+//                pixelHeight = (sizeX + sizeY + sizeZ) * 2 * renderer.scaleY + 7;
         int dep;
         seq.sort(IntComparator.side45[seq.rotation()]);
         int xyz, x, y, z;
@@ -573,9 +581,8 @@ public class WarpDraw {
             renderer.color().set(((ITemporal) seq).frame());
         }
         final int len = seq.size(), sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ(),
-                pixelWidth = xLimit(seq), 
+                pixelWidth = xLimit(seq), pixelHeight = yLimit(seq);
                         //(sizeY + sizeX + 2) * 2 * renderer.scaleX + 1,
-                pixelHeight = yLimit(seq);
                         //(sizeX + sizeY) * 2 + sizeZ * 5 * renderer.scaleY + 1;
         seq.sort(IntComparator.side45[seq.rotation()]);
         for (int i = 0; i < len; i++) {

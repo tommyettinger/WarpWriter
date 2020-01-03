@@ -341,7 +341,7 @@ public class PNG8 implements Disposable {
      * @throws IOException if OutputStream things fail for any reason
      */
     public void writePrecisely(OutputStream output, Pixmap pixmap, boolean ditherFallback, int threshold) throws IOException {
-        writePrecisely(output, pixmap, null, ditherFallback, threshold);
+        writePrecisely(output, pixmap, palette.paletteArray, ditherFallback, threshold);
     }
 
     /**

@@ -109,7 +109,7 @@ public class TestOutput extends ApplicationAdapter {
                 pix = WarpDraw.drawAbove(seq, vpr);
             }
             try {
-                png.write(Gdx.files.local("target/out/AuroraColorSolid/Cube_dir" + dir + "_0.png"), pix, false, true);
+                png.writePrecisely(Gdx.files.local("target/out/AuroraColorSolid2/Cube_dir" + dir + "_0.png"), pix, true, 1);
             } catch (IOException ex) {
                 throw new GdxRuntimeException("Error writing PNG: Cube_dir" + dir + "_0.png", ex);
             }

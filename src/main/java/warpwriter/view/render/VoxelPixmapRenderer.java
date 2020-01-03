@@ -238,8 +238,8 @@ public class VoxelPixmapRenderer implements IRectangleRenderer, ITriangleRendere
         }
 
         final int pmh = pixmap.getHeight() - 1;
-        for (int x = 0; x < xSize; x++) {
-            for (int y = 0; y < ySize; y++) {
+        for (int x = 0; x <= xSize; x++) {
+            for (int y = 0; y <= ySize; y++) {
                 if (render[x][y] != 0) {
                     pixmap.setColor(render[x][y]);
                     pixmap.fillRectangle(x * scaleX + offsetX, pmh - (y * scaleY) + offsetY, scaleX, scaleY);
