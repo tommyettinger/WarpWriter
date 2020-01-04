@@ -345,12 +345,12 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
             final byte[][][] arr = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream(name)));
             batchRenderer.color().set(Colorizer.arbitraryColorizer(VoxIO.lastPalette));
             seq.clear();
-            Tools3D.fill(voxels, 0);
-            Tools3D.deepCopyInto(arr, voxels);
+//            Tools3D.fill(voxels, 0);
+//            Tools3D.deepCopyInto(arr, voxels);
 //            Tools3D.translateCopyInto(arr, voxels, 15, 15, 15);
-            seq.putSurface(voxels);
+            seq.putSurface(arr);
             middleSeq.clear();
-            middleSeq.putSurface(voxels);
+            middleSeq.putSurface(arr);
             middleSeq.hollow();
             
         } catch (FileNotFoundException e) {
