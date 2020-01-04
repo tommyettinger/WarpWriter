@@ -2780,18 +2780,34 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
         return this;
     }
 
-//    @Override
-    public float angleX() {
-        return 90f;
-    }
+    @Override
+    public void doubleSize() {
+        int[] full0 = new int[full.size];
+        System.arraycopy(full.items, 0, full0, 0, full.size);
+        int[] key0 = new int[key.length];
+        System.arraycopy(key, 0, key0, 0, key.length);
+        byte[] val0 = new byte[value.length];
+        System.arraycopy(value, 0, val0, 0, value.length);
+        sizeX(sizeX * 2);
+        sizeY(sizeY * 2);
+        sizeZ(sizeZ * 2);
+        
+        clear();
 
-//    @Override
-    public float angleY() {
-        return 90f;
-    }
-
-//    @Override
-    public float angleZ() {
-        return 90f;
+        for (int i = 0; i < full0.length; i++) {
+            int f = full0[i], k = key0[f], 
+                    // complex. this doubles the x, y, and z in k, removing any bits that would exceed the limit
+                    k2 = k << 1 & (0x3FE | 0x3FE << 10 | 0x3FE << 20);
+            byte v = val0[f];
+            put(k2, v);
+            put(k2|1, v);
+            put(k2|1<<10, v);
+            put(k2|1<<20, v);
+            put(k2|1<<10|1, v);
+            put(k2|1<<20|1, v);
+            put(k2|1<<20|1<<10, v);
+            put(k2|1<<20|1<<10|1, v);
+        }
+        hollow();
     }
 }

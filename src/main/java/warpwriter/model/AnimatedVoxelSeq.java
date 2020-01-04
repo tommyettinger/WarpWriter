@@ -10,24 +10,24 @@ import java.io.Serializable;
  */
 public class AnimatedVoxelSeq implements IVoxelSeq, ITemporal, Serializable {
     private static final long serialVersionUID = 0L;
-    public IVoxelSeq[] seqs;
+    public VoxelSeq[] seqs;
 
     public AnimatedVoxelSeq() {
-        seqs = new IVoxelSeq[]{new VoxelSeq(32)};
+        seqs = new VoxelSeq[]{new VoxelSeq(32)};
     }
-    public AnimatedVoxelSeq(IVoxelSeq[] voxelSeqs) {
+    public AnimatedVoxelSeq(VoxelSeq[] voxelSeqs) {
         seqs = voxelSeqs;
     }
-    public AnimatedVoxelSeq(IVoxelSeq single, int duration)
+    public AnimatedVoxelSeq(VoxelSeq single, int duration)
     {
-        seqs = new IVoxelSeq[duration];
+        seqs = new VoxelSeq[duration];
         for (int i = 0; i < duration; i++) {
             seqs[i] = single;
         }
     }
 
     public AnimatedVoxelSeq(byte[][][][] voxels) {
-        this.seqs = new IVoxelSeq[voxels.length];
+        this.seqs = new VoxelSeq[voxels.length];
         final int rough = voxels[0].length * voxels[0][0].length * voxels[0][0][0].length * 3 >>> 4;
         for (int i = 0; i < voxels.length; i++) {
             seqs[i] = new VoxelSeq(rough);
@@ -272,18 +272,10 @@ public class AnimatedVoxelSeq implements IVoxelSeq, ITemporal, Serializable {
         return this;
     }
 
-//    @Override
-    public float angleX() {
-        return 90f;
-    }
-
-//    @Override
-    public float angleY() {
-        return 90f;
-    }
-
-//    @Override
-    public float angleZ() {
-        return 90f;
+    @Override
+    public void doubleSize() {
+        for (int i = 0; i < seqs.length; i++) {
+            seqs[i].doubleSize();
+        }
     }
 }

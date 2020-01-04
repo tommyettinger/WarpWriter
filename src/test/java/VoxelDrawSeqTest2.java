@@ -193,12 +193,12 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
         seq.order.clear();
         seq.order.addAll(seq.full);
         middleSeq = new VoxelSeq(seq.fullSize());
-//        middleSeq.sizeX(70);
-//        middleSeq.sizeY(70);
-//        middleSeq.sizeZ(70);
-        middleSeq.sizeX(32);
-        middleSeq.sizeY(32);
-        middleSeq.sizeZ(32);
+        middleSeq.sizeX(70);
+        middleSeq.sizeY(70);
+        middleSeq.sizeZ(70);
+//        middleSeq.sizeX(32);
+//        middleSeq.sizeY(32);
+//        middleSeq.sizeZ(32);
 //        axes = new VoxelSeq(180);
 //        axes.sizeX(60);
 //        axes.sizeY(60);
@@ -233,7 +233,8 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //        middleSeq.clear();
 //        transformMid.transformInto(seq, middleSeq, 29f, 29f, 29f);
 //        middleSeq.putAll(seq);
-        transformMid.transformInto(seq, middleSeq, 15.5f, 15.5f, 15.5f);
+        transformMid.transformInto(seq, middleSeq, 35f, 35f, 35f);
+//        transformMid.transformInto(seq, middleSeq, 15.5f, 15.5f, 15.5f);
         middleSeq.hollow();
     }
 
@@ -345,7 +346,8 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
             batchRenderer.color().set(Colorizer.arbitraryColorizer(VoxIO.lastPalette));
             seq.clear();
             Tools3D.fill(voxels, 0);
-            Tools3D.translateCopyInto(arr, voxels, 15, 15, 15);
+            Tools3D.deepCopyInto(arr, voxels);
+//            Tools3D.translateCopyInto(arr, voxels, 15, 15, 15);
             seq.putSurface(voxels);
             middleSeq.clear();
             middleSeq.putSurface(voxels);
@@ -495,9 +497,13 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
                         diagonal = false;
                         angle = 2;
                         break;
-                    case Input.Keys.D: // diagonal
-                        diagonal = !diagonal;
+                    case Input.Keys.D: // double size
+                        animating = false;
+                        middleSeq.doubleSize();
                         break;
+//                    case Input.Keys.D: // diagonal
+//                        diagonal = !diagonal;
+//                        break;
                     case Input.Keys.A:
 //                        model.rotation().reset();
                         animating = !animating;

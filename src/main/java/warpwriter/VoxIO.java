@@ -432,7 +432,7 @@ public class VoxIO {
             byte[][] rawArrays = new byte[frames][];
             int totalSize = 0;
             for (int f = 0; f < frames; f++) {
-                final IVoxelSeq vs = voxelData.seqs[f];
+                final VoxelSeq vs = voxelData.seqs[f];
                 final int len = vs.fullSize();
                 ByteArrayOutputStream voxelsRaw = new ByteArrayOutputStream(len*4);
                 int xyz;
