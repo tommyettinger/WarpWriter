@@ -37,4 +37,5 @@ public interface IVoxelSeq extends ITurnable {
     void sort(IntComparator comparator);
     void putSurface(byte[][][] voxels);
     void doubleSize();
+    void doubleSizeSmooth();
 }

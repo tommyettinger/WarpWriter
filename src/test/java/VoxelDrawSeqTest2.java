@@ -499,7 +499,7 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
                         break;
                     case Input.Keys.D: // double size
                         animating = false;
-                        middleSeq.doubleSize();
+                        middleSeq.doubleSizeSmooth();
                         break;
 //                    case Input.Keys.D: // diagonal
 //                        diagonal = !diagonal;

@@ -278,4 +278,11 @@ public class AnimatedVoxelSeq implements IVoxelSeq, ITemporal, Serializable {
             seqs[i].doubleSize();
         }
     }
+
+    @Override
+    public void doubleSizeSmooth() {
+        for (int i = 0; i < seqs.length; i++) {
+            seqs[i].doubleSizeSmooth();
+        }
+    }
 }

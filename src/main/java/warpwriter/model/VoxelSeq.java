@@ -1897,30 +1897,27 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
     /**
      * Returns a deep copy of this map.
      *
-     * <P>
-     * This method performs a deep copy of this VoxelSeq; the data stored in the
-     * map, however, is not cloned. Note that this makes a difference only for
-     * object keys.
-     *
      * @return a deep copy of this map.
      */
-    @SuppressWarnings("unchecked")
-    @GwtIncompatible
     public VoxelSeq clone() {
-        VoxelSeq c;
-        try {
-            c = (VoxelSeq) super.clone();
-            c.key = new int[n + 1];
-            System.arraycopy(key, 0, c.key, 0, n + 1);
-            c.value = new byte[n + 1];
-            System.arraycopy(value, 0, c.value, 0, n + 1);
-            c.order = order.copy();
-            c.full = full.copy();
-            return c;
-        } catch (Exception cantHappen) {
-            throw new UnsupportedOperationException(cantHappen + (cantHappen.getMessage() != null ?
-                    "; " + cantHappen.getMessage() : ""));
-        }
+        VoxelSeq c = new VoxelSeq(1, f);
+        c.key = new int[n + 1];
+        System.arraycopy(key, 0, c.key, 0, n + 1);
+        c.value = new byte[n + 1];
+        System.arraycopy(value, 0, c.value, 0, n + 1);
+        c.order = order.copy();
+        c.full = full.copy();
+        c.size = size;
+        c.mask = mask;
+        c.n = n;
+        c.maxFill = maxFill;
+        c.sizeX = sizeX;
+        c.sizeY = sizeY;
+        c.sizeZ = sizeZ;
+        c.rotation = rotation;
+        c.containsNullKey = containsNullKey;
+        c.defRetValue = defRetValue;
+        return c;
     }
     /**
      * Returns a hash code for this map.
@@ -2808,6 +2805,60 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
             put(k2|1<<20|1<<10, v);
             put(k2|1<<20|1<<10|1, v);
         }
+        hollow();
+    }
+
+    @Override
+    public void doubleSizeSmooth() {
+        final VoxelSeq vs0 = clone();
+        final int[] key0 = vs0.key;
+        final byte[] val0 = vs0.value;
+        final int size0 = vs0.size;
+        final int[] full0 = vs0.full.items;
+        final int oldSizeX = sizeX, oldSizeY = sizeY, oldSizeZ = sizeZ;
+        sizeX(sizeX * 2);
+        sizeY(sizeY * 2);
+        sizeZ(sizeZ * 2);
+
+        clear();
+
+        for (int i = 0; i < size0; i++) {
+            int f = full0[i], k = key0[f],
+                    // complex. this doubles the x, y, and z in k, removing any bits that would exceed the limit
+                    k2 = k << 1 & (0x3FE | 0x3FE << 10 | 0x3FE << 20);
+            byte v = val0[f];
+            put(k2, v);
+            put(k2|1, v);
+            put(k2|1<<10, v);
+            put(k2|1<<20, v);
+            put(k2|1<<10|1, v);
+            put(k2|1<<20|1, v);
+            put(k2|1<<20|1<<10, v);
+            put(k2|1<<20|1<<10|1, v);
+            
+            final int x = k & 0x3FF, y = k >>> 10 & 0x3FF, z = k >>> 20 & 0x3FF;
+            for (int xm = -1; xm <= 1; xm++) {
+                if(x + xm < 0 || x + xm >= oldSizeX) continue;
+                for (int ym = -1; ym <= 1; ym++) {
+                    if(y + ym < 0 || y + ym >= oldSizeY || (xm | ym) == 0) continue;
+                    for (int zm = -1; zm <= 1; zm++) {
+                        if(z + zm < 0 || z + zm >= oldSizeZ || (xm | zm) == 0 || (zm | ym) == 0 || (xm & ym & zm) != 0) continue;
+                        if(vs0.get(x + xm, y + ym, z + zm) == v)
+                        {
+                            putIfAbsent(fuse(x * 2 + xm, y * 2 + ym, z * 2 + zm), v);
+                            putIfAbsent(fuse(x * 2 + xm + 1, y * 2 + ym, z * 2 + zm), v);
+                            putIfAbsent(fuse(x * 2 + xm, y * 2 + ym + 1, z * 2 + zm), v);
+                            putIfAbsent(fuse(x * 2 + xm, y * 2 + ym, z * 2 + zm + 1), v);
+                            putIfAbsent(fuse(x * 2 + xm + 1, y * 2 + ym + 1, z * 2 + zm), v);
+                            putIfAbsent(fuse(x * 2 + xm + 1, y * 2 + ym, z * 2 + zm + 1), v);
+                            putIfAbsent(fuse(x * 2 + xm, y * 2 + ym + 1, z * 2 + zm + 1), v);
+                            putIfAbsent(fuse(x * 2 + xm + 1, y * 2 + ym + 1, z * 2 + zm + 1), v);
+                        }
+                    }
+                }
+            }
+        }
+        
         hollow();
     }
 }
