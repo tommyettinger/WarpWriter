@@ -62,10 +62,11 @@ public class VoxelDrawSeqMutantTest extends ApplicationAdapter {
     @Override
     public void create() {
         shader = new ShaderProgram(ShaderUtils.vertexShader, ShaderUtils.fragmentShaderRoberts);
+        if(!shader.isCompiled())
+            System.out.println(shader.getLog());
         palette = new Texture(Gdx.files.local("palettes/ReallyRelaxedRollBonus_GLSL.png"), Pixmap.Format.RGBA8888, false);
         palette.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
-        batch = new MutantBatch(1000);
-        batch.setShader(shader);
+        batch = new MutantBatch(1000, shader);
         font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
         worldView = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         screenView = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
@@ -83,6 +84,7 @@ public class VoxelDrawSeqMutantTest extends ApplicationAdapter {
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.FLESURRECT);
 //        colorizer = Colorizer.AuroraColorizer;
+        
         colorizer = Colorizer.RollBonusColorizer;
         renderer = new VoxelImmediateRenderer(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         renderer.color().set(colorizer);
@@ -209,8 +211,8 @@ public class VoxelDrawSeqMutantTest extends ApplicationAdapter {
         //font.draw(batch, model.voxels.length + ", " + model.voxels[0].length + ", " + model.voxels[0][0].length + ", " + " (original)", 0, 80);
 //        font.draw(batch, model.sizeX() + ", " + model.sizeY() + ", " + model.sizeZ() + " (sizes)", 0, 60);
 //        font.draw(batch, StringKit.join(", ", model.rotation().rotation()) + " (rotation)", 0, 40);
-        batch.end();
-        batch.begin();
+//        batch.end();
+//        batch.begin();
         //// for GB_GREEN
         font.setColor(0x34 / 255f, 0x68 / 255f, 0x56 / 255f, 1f);
 //        font.setColor(0f, 0f, 0f, 1f);

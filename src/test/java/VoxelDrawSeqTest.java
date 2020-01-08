@@ -23,7 +23,7 @@ import warpwriter.model.color.Colorizer;
 import warpwriter.view.VoxelDraw;
 import warpwriter.view.color.VoxelColor;
 import warpwriter.view.render.MutantBatch;
-import warpwriter.view.render.VoxelSpriteBatchRenderer;
+import warpwriter.view.render.VoxelImmediateRenderer;
 
 public class VoxelDrawSeqTest extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 320;//640;
@@ -39,7 +39,7 @@ public class VoxelDrawSeqTest extends ApplicationAdapter {
     protected TextureRegion screenRegion;
 //    protected TurnModel model, ship;
     protected ModelMaker maker;
-    protected VoxelSpriteBatchRenderer batchRenderer;
+    protected VoxelImmediateRenderer batchRenderer;
     protected VoxelColor voxelColor;
     protected int angle = 2;
     protected boolean diagonal = false;
@@ -60,7 +60,7 @@ public class VoxelDrawSeqTest extends ApplicationAdapter {
         batch = new MutantBatch();
         worldView = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         screenView = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
-        buffer = new FrameBuffer(Pixmap.Format.RGBA8888, VIRTUAL_WIDTH, VIRTUAL_HEIGHT, false, false);
+        buffer = new FrameBuffer(Pixmap.Format.RGBA8888, VIRTUAL_WIDTH, VIRTUAL_HEIGHT, true, false);
         screenRegion = new TextureRegion();
         screenView.getCamera().position.set(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2, 0);
         screenView.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -75,7 +75,7 @@ public class VoxelDrawSeqTest extends ApplicationAdapter {
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.FLESURRECT);
 //        colorizer = Colorizer.LawnBonusColorizer;
         colorizer = Colorizer.RollBonusColorizer;
-        batchRenderer = new VoxelSpriteBatchRenderer(batch);
+        batchRenderer = new VoxelImmediateRenderer(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         batchRenderer.color().set(colorizer);
         voxelColor = batchRenderer.color();
         rng = new MiniMover64RNG(123456789);
@@ -147,8 +147,9 @@ public class VoxelDrawSeqTest extends ApplicationAdapter {
         worldView.apply();
         worldView.getCamera().position.set(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2, 0);
         worldView.update(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
-        batch.setProjectionMatrix(screenView.getCamera().combined);
-        batch.begin();
+//        System.out.println(seq.size());
+//        batch.setProjectionMatrix(screenView.getCamera().combined);
+        batchRenderer.begin();
         if(angle > 2)
         {
             if(diagonal)
@@ -163,12 +164,13 @@ public class VoxelDrawSeqTest extends ApplicationAdapter {
                 VoxelDraw.draw(seq, batchRenderer);
         }
         batch.setPackedColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
-        batch.end();
+        batchRenderer.end();
         buffer.end();
         Gdx.gl.glClearColor(0, 0, 0, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         screenView.apply();
         batch.setProjectionMatrix(screenView.getCamera().combined);
+        
         batch.begin();
         screenTexture = buffer.getColorBufferTexture();
         screenTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
