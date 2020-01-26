@@ -682,7 +682,7 @@ public class ModelMaker {
     /**
      * Uses some simplex noise from {@link FastNoise} and some curving shapes from "Merlin Noise" to make paint patterns
      * and shapes more "flowing" and less haphazard in their placement. Still uses point hashes for some operations.
-     * @return a larger (40x40x30) 3D byte array representing a spaceship
+     * @return a larger (60x60x60) 3D byte array representing a spaceship
      */
     public byte[][][] shipLargeSmoothColorized()
     {

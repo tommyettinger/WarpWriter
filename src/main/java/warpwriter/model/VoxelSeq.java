@@ -76,7 +76,7 @@ import static warpwriter.model.nonvoxel.HashMap3D.*;
  * @author Sebastiano Vigna (responsible for all the hard parts)
  * @author Tommy Ettinger (mostly responsible for squashing several layers of parent classes into one monster class)
  */
-public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
+public class VoxelSeq implements IVoxelSeq, Serializable {
     private static final long serialVersionUID = 0L;
     /**
      * The array of position keys.
@@ -1218,7 +1218,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
         }
     }
     public final class MapEntrySet
-            implements Cloneable, SortedSet<MapEntry>, Set<MapEntry>, Serializable {
+            implements SortedSet<MapEntry>, Set<MapEntry>, Serializable {
         private static final long serialVersionUID = 0L;
         public EntryIterator iterator() {
             return new EntryIterator();
@@ -1899,7 +1899,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
      *
      * @return a deep copy of this map.
      */
-    public VoxelSeq clone() {
+    public VoxelSeq copy() {
         VoxelSeq c = new VoxelSeq(1, f);
         c.key = new int[n + 1];
         System.arraycopy(key, 0, c.key, 0, n + 1);
@@ -2810,7 +2810,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable, Cloneable {
 
     @Override
     public void doubleSizeSmooth() {
-        final VoxelSeq vs0 = clone();
+        final VoxelSeq vs0 = copy();
         final int[] key0 = vs0.key;
         final byte[] val0 = vs0.value;
         final int size0 = vs0.size;

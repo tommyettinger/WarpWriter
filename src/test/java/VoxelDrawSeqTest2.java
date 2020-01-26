@@ -32,10 +32,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class VoxelDrawSeqTest2 extends ApplicationAdapter {
-    public static final int SCREEN_WIDTH = 320;//640;
-    public static final int SCREEN_HEIGHT = 360;//720;
-    public static final int VIRTUAL_WIDTH = 320;
-    public static final int VIRTUAL_HEIGHT = 360;
+    public static final int SCREEN_WIDTH = 640;
+    public static final int SCREEN_HEIGHT = 720;
+    public static final int VIRTUAL_WIDTH = 640;//= 320;
+    public static final int VIRTUAL_HEIGHT = 720;// = 360;
     protected MutantBatch batch;
     protected Viewport worldView;
     protected Viewport screenView;
@@ -147,9 +147,9 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
                 blue = colorizer.reduce(0x0000FFFF), white = colorizer.reduce(0xFFFFFFFF);
         maker.rng.setState(rng.nextLong());
 //        voxels = new byte[32][32][32];
-        voxels = new byte[70][70][70];
-//        voxels = maker.shipLargeSmoothColorized();
-        makeNetwork();
+//        voxels = new byte[70][70][70];
+//        makeNetwork();
+        voxels = maker.shipLargeSmoothColorized();
         
 //        try {
 //            voxels = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("ColorSolids/AuroraColorSolid.vox")));
@@ -193,9 +193,9 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
         seq.order.clear();
         seq.order.addAll(seq.full);
         middleSeq = new VoxelSeq(seq.fullSize());
-        middleSeq.sizeX(70);
-        middleSeq.sizeY(70);
-        middleSeq.sizeZ(70);
+        middleSeq.sizeX(voxels.length);
+        middleSeq.sizeY(voxels[0].length);
+        middleSeq.sizeZ(voxels[0][0].length);
 //        middleSeq.sizeX(32);
 //        middleSeq.sizeY(32);
 //        middleSeq.sizeZ(32);
@@ -232,8 +232,8 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //        transforms[0].interpolateInto(transforms[1 % transforms.length], alpha, transformMid);
 //        middleSeq.clear();
 //        transformMid.transformInto(seq, middleSeq, 29f, 29f, 29f);
-//        middleSeq.putAll(seq);
-        transformMid.transformInto(seq, middleSeq, 35f, 35f, 35f);
+        middleSeq.putAll(seq);
+//        transformMid.transformInto(seq, middleSeq, middleSeq.sizeX * 0.5f, middleSeq.sizeY * 0.5f, middleSeq.sizeZ * 0.5f);
 //        transformMid.transformInto(seq, middleSeq, 15.5f, 15.5f, 15.5f);
         middleSeq.hollow();
     }
@@ -255,7 +255,7 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
             alpha = (time & 0x7FF) * 0x1p-11f;
             transforms[(time >>> 11) % transforms.length].interpolateInto(transforms[((time >>> 11) + 1) % transforms.length], alpha, transformMid);
             middleSeq.clear();
-            transformMid.transformInto(seq, middleSeq, 35f, 35f, 35f);
+            transformMid.transformInto(seq, middleSeq, middleSeq.sizeX * 0.5f, middleSeq.sizeY * 0.5f, middleSeq.sizeZ * 0.5f);
 //            transformMid.transformInto(seq, middleSeq, 19.5f, 19.5f, 19.5f);
 //            middleSeq.putAll(axes);
 //            middleSeq.hollow();
@@ -453,10 +453,10 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
                         break;
                     case Input.Keys.P: 
                         //maker.rng.setState(rng.nextLong());
-                        seq.clear();
-                        Tools3D.fill(voxels, 0);
-                        makeNetwork();
-                        seq.putSurface(voxels);
+//                        seq.clear();
+//                        Tools3D.fill(voxels, 0);
+//                        makeNetwork();
+//                        seq.putSurface(voxels);
                         
 //                        seq.putModel(new FetchModel(60, 60, 60, new DecideFetch()
 //                                .setDecide(new SphereDecide(29, 29, 29, 15))
@@ -467,12 +467,12 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //                                )));
 //                        seq.hollow();
                         
-//                        final byte[][][] v = maker.shipLargeSmoothColorized();
-//                        seq.clear();
-//                        seq.putSurface(v);
+                        final byte[][][] v = maker.shipLargeSmoothColorized();
+                        seq.clear();
+                        seq.putSurface(v);
 
                         middleSeq.clear();
-                        middleSeq.putSurface(voxels);
+                        middleSeq.putSurface(v);
                         middleSeq.hollow();
                         break;
 

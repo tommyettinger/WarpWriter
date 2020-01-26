@@ -12,7 +12,7 @@ import squidpony.annotation.GwtIncompatible;
 import squidpony.squidmath.IRNG;
 import squidpony.squidmath.NumberTools;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -976,12 +976,7 @@ public class PaletteReducer {
             if((color & 0x80) != 0)
                 paletteArray[i] = color;
         }
-        try {
-            paletteMapping = preload.getBytes("ISO-8859-1"); // don't use StandardCharsets; not supported on GWT
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            paletteMapping = new byte[0x8000];
-        }
+        paletteMapping = preload.getBytes(StandardCharsets.ISO_8859_1);
     }
 
     /**

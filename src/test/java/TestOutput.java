@@ -8,6 +8,7 @@ import squidpony.FakeLanguageGen;
 import squidpony.StringKit;
 import squidpony.Thesaurus;
 import squidpony.squidmath.StatefulRNG;
+import squidpony.squidmath.UnorderedSet;
 import warpwriter.ModelMaker;
 import warpwriter.PNG8;
 import warpwriter.Tools3D;
@@ -80,42 +81,42 @@ public class TestOutput extends ApplicationAdapter {
         png.palette.setDitherStrength(1f);
         pathName = "target/out/" + StringKit.hex(seed);
         Gdx.files.local(pathName).mkdirs();
-//        Thesaurus thesaurus = new Thesaurus(srng);
-//        thesaurus.addKnownCategories();
-//        UnorderedSet<String> names = new UnorderedSet<>(LIMIT);
-//        for (int i = 0; i < LIMIT; i++) {
-//            dir = 0;
-//            modelName = makeName(thesaurus);
-//            while (names.contains(modelName))
-//                modelName = makeName(thesaurus);
-//            names.add(modelName);
-//            Gdx.files.local(pathName + "/" + modelName).mkdirs();
-//            remakeShip(++seed);
-//            for (dir = 1; dir < 8; dir++) {
-//                remakeShip(0);
+        Thesaurus thesaurus = new Thesaurus(srng);
+        thesaurus.addKnownCategories();
+        UnorderedSet<String> names = new UnorderedSet<>(LIMIT);
+        for (int i = 0; i < LIMIT; i++) {
+            dir = 0;
+            modelName = makeName(thesaurus);
+            while (names.contains(modelName))
+                modelName = makeName(thesaurus);
+            names.add(modelName);
+            Gdx.files.local(pathName + "/" + modelName).mkdirs();
+            remakeShip(++seed);
+            for (dir = 1; dir < 8; dir++) {
+                remakeShip(0);
+            }
+        }
+        
+//        try {
+//            seq = VoxIO.readVoxelSeq(new LittleEndianDataInputStream(new FileInputStream("ColorSolids/AuroraColorSolid.vox")));
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//
+//        for (dir = 0; dir < 8; dir++) {
+//            if ((dir & 1) == 1) {
+//                pix = WarpDraw.drawIso(seq, vpr);
+//                seq.clockZ();
+//            } else {
+//                pix = WarpDraw.drawAbove(seq, vpr);
+//            }
+//            try {
+//                png.writePrecisely(Gdx.files.local("target/out/AuroraColorSolid2/Cube_dir" + dir + "_0.png"), pix, true, 1);
+//            } catch (IOException ex) {
+//                throw new GdxRuntimeException("Error writing PNG: Cube_dir" + dir + "_0.png", ex);
 //            }
 //        }
-        try {
-            seq = VoxIO.readVoxelSeq(new LittleEndianDataInputStream(new FileInputStream("ColorSolids/AuroraColorSolid.vox")));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        for (dir = 0; dir < 8; dir++) {
-            if ((dir & 1) == 1) {
-                pix = WarpDraw.drawIso(seq, vpr);
-                seq.clockZ();
-            } else {
-                pix = WarpDraw.drawAbove(seq, vpr);
-            }
-            try {
-                png.writePrecisely(Gdx.files.local("target/out/AuroraColorSolid2/Cube_dir" + dir + "_0.png"), pix, true, 1);
-            } catch (IOException ex) {
-                throw new GdxRuntimeException("Error writing PNG: Cube_dir" + dir + "_0.png", ex);
-            }
-        }
-
-
+        
         Gdx.app.exit();
     }
 
