@@ -60,7 +60,7 @@ public class TestDisplay extends ApplicationAdapter {
      * is the default and usually isn't mentioned in names), and 4 being directly above (top).
      */
     private int angle = 3;
-    private boolean playing = false, rotating = false, errorDiffusion = false, large = true, dither = false;
+    private boolean playing = false, rotating = false, errorDiffusion = true, large = true, dither = false;
     private Pixmap[] pixes = new Pixmap[frames];
     private int[][] indices;
     private int[] palette = Coloring.RINSED;
@@ -80,7 +80,7 @@ public class TestDisplay extends ApplicationAdapter {
 //                //new int[]{0, 255, -1}
 //        ); 
         //Coloring.FLESURRECT_REDUCER; //Colorizer.FlesurrectBonusPalette
-        PaletteReducer.generatePreloadCode(reducer.paletteMapping);
+        //PaletteReducer.generatePreloadCode(reducer.paletteMapping);
         reducer.setDitherStrength(0.25f);
         batch = new SpriteBatch();
 //        pix = new Pixmap(16, 16, Pixmap.Format.RGBA8888);
@@ -124,7 +124,7 @@ public class TestDisplay extends ApplicationAdapter {
                         mr.easing = !mr.easing;
                         remakeShip(0);
                         return true;
-                    case Input.Keys.R: // randomized dither
+                    case Input.Keys.R: // change dither algorithm
                         errorDiffusion = !errorDiffusion;
                         remakeShip(0);
                         return true;
@@ -266,8 +266,8 @@ public class TestDisplay extends ApplicationAdapter {
                 }
             }
             if (dither) {
-                if (errorDiffusion) reducer.reduceWithNoise(pix);
-                else reducer.reduceRobertsEdit(pix);
+                if (errorDiffusion) reducer.reduceFloydSteinberg(pix);
+                else reducer.reduceShaderMimic(pix);
             }
         }
     }
@@ -311,8 +311,8 @@ public class TestDisplay extends ApplicationAdapter {
                 }
             }
             if (dither) {
-                if (errorDiffusion) reducer.reduceWithNoise(pix);
-                else reducer.reduceRobertsEdit(pix);
+                if (errorDiffusion) reducer.reduceFloydSteinberg(pix);
+                else reducer.reduceShaderMimic(pix);
             }
         }
     }
@@ -361,8 +361,8 @@ public class TestDisplay extends ApplicationAdapter {
                 }
             }
             if (dither) {
-                if (errorDiffusion) reducer.reduceWithNoise(pix);
-                else reducer.reduceRobertsEdit(pix);
+                if (errorDiffusion) reducer.reduceFloydSteinberg(pix);
+                else reducer.reduceShaderMimic(pix);
             }
         }
     }
@@ -420,8 +420,8 @@ public class TestDisplay extends ApplicationAdapter {
                 }
             }
             if (dither) {
-                if (errorDiffusion) reducer.reduceWithNoise(pix);
-                else reducer.reduceRobertsEdit(pix);
+                if (errorDiffusion) reducer.reduceFloydSteinberg(pix);
+                else reducer.reduceShaderMimic(pix);
             }
         }
         if (oldWidth != width || oldHeight != height)
@@ -478,8 +478,8 @@ public class TestDisplay extends ApplicationAdapter {
                 }
             }
             if (dither) {
-                if (errorDiffusion) reducer.reduceWithNoise(pix);
-                else reducer.reduceRobertsEdit(pix);
+                if (errorDiffusion) reducer.reduceFloydSteinberg(pix);
+                else reducer.reduceShaderMimic(pix);
             }
         }
         if (oldWidth != width || oldHeight != height)
@@ -523,8 +523,8 @@ public class TestDisplay extends ApplicationAdapter {
                 }
             }
             if (dither) {
-                if (errorDiffusion) reducer.reduceWithNoise(pix);
-                else reducer.reduceRobertsEdit(pix);
+                if (errorDiffusion) reducer.reduceFloydSteinberg(pix);
+                else reducer.reduceShaderMimic(pix);
             }
         }
     }
@@ -576,8 +576,8 @@ public class TestDisplay extends ApplicationAdapter {
                 }
             }
             if (dither) {
-                if (errorDiffusion) reducer.reduceWithNoise(pix);
-                else reducer.reduceRobertsEdit(pix);
+                if (errorDiffusion) reducer.reduceFloydSteinberg(pix);
+                else reducer.reduceShaderMimic(pix);
             }
         }
         if (oldWidth != width || oldHeight != height)
@@ -627,8 +627,8 @@ public class TestDisplay extends ApplicationAdapter {
                 }
             }
             if (dither) {
-                if (errorDiffusion) reducer.reduceWithNoise(pix);
-                else reducer.reduceRobertsEdit(pix);
+                if (errorDiffusion) reducer.reduceFloydSteinberg(pix);
+                else reducer.reduceShaderMimic(pix);
             }
         }
         if (oldWidth != width || oldHeight != height)
@@ -680,8 +680,8 @@ public class TestDisplay extends ApplicationAdapter {
                 }
             }
             if (dither) {
-                if (errorDiffusion) reducer.reduceWithNoise(pix);
-                else reducer.reduceRobertsEdit(pix);
+                if (errorDiffusion) reducer.reduceFloydSteinberg(pix);
+                else reducer.reduceShaderMimic(pix);
             }
         }
         if (oldWidth != width || oldHeight != height)
@@ -737,8 +737,8 @@ public class TestDisplay extends ApplicationAdapter {
                 }
             }
             if (dither) {
-                if (errorDiffusion) reducer.reduceWithNoise(pix);
-                else reducer.reduceRobertsEdit(pix);
+                if (errorDiffusion) reducer.reduceFloydSteinberg(pix);
+                else reducer.reduceShaderMimic(pix);
             }
         }
     }
