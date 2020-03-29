@@ -8,7 +8,7 @@ import squidpony.squidmath.GWTRNG;
  */
 public class WorldMaker {
     public GWTRNG rng;
-    protected static final float terrainFreq = 1.45f, terrainRidgedFreq = 3.1f, heatFreq = 2.1f, moistureFreq = 2.125f, otherFreq = 3.375f;
+    protected static final float terrainFreq = 1.15f, terrainRidgedFreq = 1.95f, heatFreq = 1.4f, moistureFreq = 1.55f, otherFreq = 2.375f;
     protected double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
             minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
             minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
@@ -23,12 +23,12 @@ public class WorldMaker {
     public WorldMaker(long seed, double detailMultiplier)
     {
         rng = new GWTRNG(seed);
-        terrain = new FastNoise(rng.nextInt(), terrainFreq * 0.6f, FastNoise.SIMPLEX_FRACTAL, (int) (0.5 + detailMultiplier * 10));
+        terrain = new FastNoise(rng.nextInt(), terrainFreq * 0.6f, FastNoise.FOAM_FRACTAL, (int) (0.5 + detailMultiplier * 5));
         terrain.setFractalType(FastNoise.RIDGED_MULTI);
-        terrainLayered = new FastNoise(rng.nextInt(), terrainRidgedFreq * 2.75f, FastNoise.SIMPLEX_FRACTAL, (int) (1 + detailMultiplier * 6), 0.5f, 2f);
-        heat = new FastNoise(rng.nextInt(), heatFreq, FastNoise.SIMPLEX_FRACTAL, (int) (0.5 + detailMultiplier * 3), 0.75f, 1f / 0.75f);
-        moisture = new FastNoise(rng.nextInt(), moistureFreq, FastNoise.SIMPLEX_FRACTAL, (int) (0.5 + detailMultiplier * 4), 0.55f, 1f / 0.55f);
-        heatRidged = new FastNoise(rng.nextInt(), otherFreq, FastNoise.SIMPLEX_FRACTAL, (int) (0.5 + detailMultiplier * 6));
+        terrainLayered = new FastNoise(rng.nextInt(), terrainRidgedFreq * 2.75f, FastNoise.SIMPLEX_FRACTAL, (int) (1 + detailMultiplier * 4), 0.5f, 2f);
+        heat = new FastNoise(rng.nextInt(), heatFreq, FastNoise.FOAM_FRACTAL, (int) (0.5 + detailMultiplier * 4), 0.75f, 1f / 0.75f);
+        moisture = new FastNoise(rng.nextInt(), moistureFreq, FastNoise.FOAM_FRACTAL, (int) (0.5 + detailMultiplier * 5), 0.55f, 1f / 0.55f);
+        heatRidged = new FastNoise(rng.nextInt(), otherFreq, FastNoise.SIMPLEX_FRACTAL, (int) (0.5 + detailMultiplier * 5));
         heatRidged.setFractalType(FastNoise.RIDGED_MULTI);
         moistureRidged = new FastNoise(rng.nextInt(), otherFreq, FastNoise.SIMPLEX_FRACTAL, (int) (0.5 + detailMultiplier * 6));
         moistureRidged.setFractalType(FastNoise.RIDGED_MULTI);

@@ -11,11 +11,12 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import warpwriter.ModelRenderer;
 import warpwriter.WorldMaker;
-import warpwriter.model.fetch.ArrayModel;
-import warpwriter.model.nonvoxel.CompassDirection;
-import warpwriter.model.TurnModel;
+import warpwriter.model.VoxelSeq;
+import warpwriter.model.color.Colorizer;
+import warpwriter.view.WarpDraw;
+import warpwriter.view.color.VoxelColor;
+import warpwriter.view.render.VoxelPixmapRenderer;
 
 public class TurnTest extends ApplicationAdapter {
     public static final int width = 1280;
@@ -23,17 +24,15 @@ public class TurnTest extends ApplicationAdapter {
     protected SpriteBatch batch;
     protected Viewport view;
     protected BitmapFont font;
-    protected TurnModel turnModel;
-    private ModelRenderer modelRenderer = new ModelRenderer(true, true);
+    private VoxelPixmapRenderer modelRenderer;
     private Texture tex;
-    private Pixmap pix;
-    private CompassDirection direction = CompassDirection.NORTH;
     private int angle = 2;
     private final WorldMaker wm = new WorldMaker(123456789L, 0.8);
-    private ArrayModel world;
+    private VoxelSeq world;
 
     @Override
     public void create() {
+        modelRenderer = new VoxelPixmapRenderer().set(new Pixmap(width, height, Pixmap.Format.RGBA8888)).set(new VoxelColor().set(Colorizer.RinsedColorizer));
         batch = new SpriteBatch();
         view = new FitViewport(width, height);
         font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
@@ -44,20 +43,8 @@ public class TurnTest extends ApplicationAdapter {
 //            e.printStackTrace();
 //            arr = new byte[80][80][60];
 //        }
-        world = new ArrayModel(arr);
-
-        turnModel = new TurnModel().set(
-                world
-//                new DecideFetch(
-////                        new PlaneDecide(1, 1, 1, 100).set(PlaneDecide.Condition.ON),
-//                        new BalloonDecide(0, 30, 30, 30, 0, 0), // gives it a weird angle for testing
-//                        ColorFetch.color(Coloring.rinsed("Coastal Water 2"))
-//                )
-//                        .boxModel(world,
-//                                ColorFetch.color(Coloring.rinsed("Red 4"))
-//                        )
-//                        .model(world.sizeX(), world.sizeY(), world.sizeZ())
-        );
+        world = new VoxelSeq(10000);
+        world.putSurface(arr);
 
         reDraw();
         Gdx.input.setInputProcessor(new InputAdapter() {
@@ -66,7 +53,8 @@ public class TurnTest extends ApplicationAdapter {
                 boolean needRedraw = true;
                 switch (keycode) {
                     case Input.Keys.R:
-                        world.voxels = (wm.makeWorld(120, -1, -1));
+                        world.clear();
+                        world.putSurface(wm.makeWorld(120, -1, -1));
                         break;
                     case Input.Keys.NUM_0:
                         angle = 1;
@@ -78,22 +66,22 @@ public class TurnTest extends ApplicationAdapter {
                         angle = 3;
                         break;
                     case Input.Keys.U:
-                        turnModel.rotation().clockX();
+                        world.clockX();
                         break;
                     case Input.Keys.I:
-                        turnModel.rotation().clockY();
+                        world.clockY();
                         break;
                     case Input.Keys.O:
-                        turnModel.rotation().clockZ();
+                        world.clockZ();
                         break;
                     case Input.Keys.J:
-                        turnModel.rotation().counterX();
+                        world.counterX();
                         break;
                     case Input.Keys.K:
-                        turnModel.rotation().counterY();
+                        world.counterY();
                         break;
                     case Input.Keys.L:
-                        turnModel.rotation().counterZ();
+                        world.counterZ();
                         break;
                     case Input.Keys.ESCAPE:
                         Gdx.app.exit();
@@ -109,10 +97,18 @@ public class TurnTest extends ApplicationAdapter {
     }
 
     public TurnTest reDraw() {
-        if (pix != null) pix.dispose();
-        pix = modelRenderer.renderToPixmap(turnModel, angle, direction);
-        if (tex != null) tex.dispose();
-        tex = new Texture(pix);
+        Pixmap pix;
+        switch (angle){
+            case 1:
+                pix = WarpDraw.draw45(world, modelRenderer);
+                break;
+            default:
+                pix = WarpDraw.drawIso(world, modelRenderer);
+                break;
+        }
+//        pix = modelRenderer.renderToPixmap(turnModel, angle, direction);
+        if (tex != null) tex.draw(pix, 0, 0);
+        else tex = new Texture(pix);
         return this;
     }
 
