@@ -37,7 +37,7 @@ public class SeqTest extends ApplicationAdapter {
     protected ModelMaker maker;
     private VoxelPixmapRenderer pixmapRenderer;
     protected VoxelColor voxelColor;
-    protected int angle = 2;
+    protected int angle = 3;
     protected boolean diagonal = false;
     protected boolean animating = false;
 //    protected byte[][][][] explosion;
@@ -91,6 +91,7 @@ public class SeqTest extends ApplicationAdapter {
         VoxelSeq vs = new VoxelSeq(1024);
         vs.putArray(voxels);
         vs.hollow();
+        vs.counterZ();
         seq = new AnimatedVoxelSeq(vs, 4);
 //        chaos = new ChaoticFetch(maker.rng.nextLong(), (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 1);
 //        ship = new TurnModel().set(
@@ -130,22 +131,22 @@ public class SeqTest extends ApplicationAdapter {
         if(angle > 2)
         {
             if(diagonal)
-                pmTexture.draw(WarpDraw.drawIsoShadow(seq, pixmapRenderer, shadowColor), 0, 0);
-//                pmTexture.draw(WarpDraw.drawIso(seq, pixmapRenderer), 0, 0);
+//                pmTexture.draw(WarpDraw.drawIsoShadow(seq, pixmapRenderer, shadowColor), 0, 0);
+                pmTexture.draw(WarpDraw.drawIso(seq, pixmapRenderer), 0, 0);
             else 
-                pmTexture.draw(WarpDraw.drawAboveShadow(seq, pixmapRenderer, shadowColor), 0, 0);
-//                pmTexture.draw(WarpDraw.drawAbove(seq, pixmapRenderer), 0, 0);
+//                pmTexture.draw(WarpDraw.drawAboveShadow(seq, pixmapRenderer, shadowColor), 0, 0);
+                pmTexture.draw(WarpDraw.drawAbove(seq, pixmapRenderer), 0, 0);
         }
         else{
             if(diagonal)
             {
-                pmTexture.draw(WarpDraw.draw45Shadow(seq, pixmapRenderer, shadowColor), 0, 0);
-//                pmTexture.draw(WarpDraw.draw45(seq, pixmapRenderer), 0, 0);
+//                pmTexture.draw(WarpDraw.draw45Shadow(seq, pixmapRenderer, shadowColor), 0, 0);
+                pmTexture.draw(WarpDraw.draw45(seq, pixmapRenderer), 0, 0);
             }
             else
             {
-                pmTexture.draw(WarpDraw.drawShadow(seq, pixmapRenderer, shadowColor), 0, 0);
-//                pmTexture.draw(WarpDraw.draw(seq, pixmapRenderer), 0, 0);
+//                pmTexture.draw(WarpDraw.drawShadow(seq, pixmapRenderer, shadowColor), 0, 0);
+                pmTexture.draw(WarpDraw.draw(seq, pixmapRenderer), 0, 0);
             }
         }
         batch.draw(pmTexture, 64, 64);

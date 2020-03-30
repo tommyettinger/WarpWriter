@@ -533,12 +533,11 @@ public class WarpDraw {
                 y = HashMap3D.extractY(xyz);
                 z = HashMap3D.extractZ(xyz);
                 final int xPos = (sizeY - y) * 3 + offsetPX, yPos = z * 2 + (sizeX - x) * 3 + offsetPY;
-                renderer.rectRight(xPos, yPos, 3, 2, v, 256 + z * 8 - x * 5, x, y, z);
-                //if (z >= sizeZ - 1 || seq.getRotated(x, y, z + 1) == 0)
-                renderer.rectVertical(xPos, yPos + 3, 3, 3, v, 260 + z * 8 - x * 5, x, y, z);
+                renderer.rectRight(xPos, yPos, 3, 2, v, 256 + z * 11 - x * 3, x, y, z);
+                renderer.rectVertical(xPos, yPos + 2, 3, 3, v, 260 + z * 11 - x * 3, x, y, z);
             }
         }
-        return renderer.blit(13, pixelWidth, pixelHeight);
+        return renderer.blit(12, pixelWidth, pixelHeight);
     }
     public static Pixmap drawAbove45(IVoxelSeq seq, VoxelPixmapRenderer renderer)
     {
@@ -684,12 +683,11 @@ public class WarpDraw {
                 z = HashMap3D.extractZ(xyz);
                 final int xPos = (sizeY - y) * 3 + offsetPX, yPos = z * 2 + (sizeX - x) * 3 + offsetPY;
                 renderer.rect(xPos, (sizeX - x) * 3 + offsetPY, 3, 3, shadowColor, 0, -99999);
-                renderer.rectRight(xPos, yPos, 3, 2, v, 256 + z * 8 - x * 5, x, y, z);
-                //if (z >= sizeZ - 1 || seq.getRotated(x, y, z + 1) == 0)
-                renderer.rectVertical(xPos, yPos + 3, 3, 3, v, 260 + z * 8 - x * 5, x, y, z);
+                renderer.rectRight(xPos, yPos, 3, 2, v, 256 + z * 11 - x * 3, x, y, z);
+                renderer.rectVertical(xPos, yPos + 2, 3, 3, v, 260 + z * 11 - x * 3, x, y, z);
             }
         }
-        return renderer.blit(13, pixelWidth, pixelHeight);
+        return renderer.blit(12, pixelWidth, pixelHeight);
     }
     public static Pixmap drawAbove45Shadow(IVoxelSeq seq, VoxelPixmapRenderer renderer, int shadowColor)
     {
