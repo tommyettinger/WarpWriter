@@ -499,56 +499,7 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
                 {0x740033FF, 0x6D2431FF, 0x98344DFF, 0xAD5E75FF},
                 {0x820034FF, 0x6C0C23FF, 0x911437FF, 0x993656FF},
         };
-
-//        {
-//            StringBuilder sb = new StringBuilder(1024).append("{\n{ 0x00000000, 0x00000000, 0x00000000, 0x00000000 },\n");
-//            for (int i = 1; i < 256; i++) {
-//                int color = RAMP_VALUES[i][2] = Coloring.AURORA[i],
-//                        r = (color >>> 24),
-//                        g = (color >>> 16 & 0xFF),
-//                        b = (color >>> 8 & 0xFF);
-//                int co = r - b, t = b + (co >> 1), cg = g - t, y = t + (cg >> 1),
-//                        yBright = y * 23 >> 4, yDim = y * 11 >> 4, yDark = y * 6 >> 4, chromO, chromG;
-//                chromO = (co * 13) >> 4;
-//                chromG = (cg * (256 - yDim) * 14) >> 12;
-//                t = yDim - (chromG >> 1);
-//                g = chromG + t;
-//                b = t - (chromO >> 1);
-//                r = b + chromO;
-//                RAMP_VALUES[i][1] =
-//                        MathUtils.clamp(r, 0, 255) << 24 |
-//                                MathUtils.clamp(g, 0, 255) << 16 |
-//                                MathUtils.clamp(b, 0, 255) << 8 | 0xFF;
-//                chromO = (co * 12) >> 4;
-//                chromG = (cg * 13) >> 4;
-//                t = yBright - (chromG >> 1);
-//                g = chromG + t;
-//                b = t - (chromO >> 1);
-//                r = b + chromO;
-//                RAMP_VALUES[i][3] =
-//                        MathUtils.clamp(r, 0, 255) << 24 |
-//                                MathUtils.clamp(g, 0, 255) << 16 |
-//                                MathUtils.clamp(b, 0, 255) << 8 | 0xFF;
-//                chromO = (co * 14) >> 4;
-//                chromG = (cg * (256 - yDark) * 15) >> 11;
-//                t = yDark - (chromG >> 1);
-//                g = chromG + t;
-//                b = t - (chromO >> 1);
-//                r = b + chromO;
-//                RAMP_VALUES[i][0] =
-//                        MathUtils.clamp(r, 0, 255) << 24 |
-//                                MathUtils.clamp(g, 0, 255) << 16 |
-//                                MathUtils.clamp(b, 0, 255) << 8 | 0xFF;
-//                sb.append("{ 0x");
-//                StringKit.appendHex(sb, RAMP_VALUES[i][0]);
-//                StringKit.appendHex(sb.append(", 0x"), RAMP_VALUES[i][1]);
-//                StringKit.appendHex(sb.append(", 0x"), RAMP_VALUES[i][2]);
-//                StringKit.appendHex(sb.append(", 0x"), RAMP_VALUES[i][3]);
-//                sb.append(" },\n");
-//            }
-//            System.out.println(sb.append("};"));
-//        }
-
+        
         @Override
         public int dimmer(int brightness, byte voxel) {
             return RAMP_VALUES[voxel & 255][
@@ -890,72 +841,6 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
             { 9, 57, 61, 15 },
             { 26, 61, 62, 34 },
             { 27, 32, 63, 32 },
-    };
-    public static final int[][] LAWN_RAMP_VALUES = new int[][]{
-            { 0x00000000, 0x00000000, 0x00000000, 0x00000000 },
-            { 0x901720FF, 0x934F46FF, 0x31E635FF, 0xF56F71FF },
-            { 0x31E635FF, 0x31E635FF, 0x0F368AFF, 0x49435EFF },
-            { 0x791781FF, 0x8F6890FF, 0x1CBDB2FF, 0x8F6890FF },
-            { 0x21107CFF, 0x0F368AFF, 0x341DE9FF, 0x0F368AFF },
-            { 0x33510EFF, 0x645F1BFF, 0xA56D07FF, 0x328F31FF },
-            { 0xDE9581FF, 0xEED483FF, 0xD9EA22FF, 0xEED483FF },
-            { 0x12703DFF, 0x348D8AFF, 0xE41DA2FF, 0x348D8AFF },
-            { 0x31E635FF, 0x31E635FF, 0x21107CFF, 0x3050CAFF },
-            { 0x791781FF, 0x8F6890FF, 0x3D81BCFF, 0x8F6890FF },
-            { 0x1F391BFF, 0x12703DFF, 0x901720FF, 0x12703DFF },
-            { 0x8F9E1CFF, 0x8FB079FF, 0xBCB71EFF, 0x8FB079FF },
-            { 0xB2CFA6FF, 0xF3F3E1FF, 0xE4F7A9FF, 0xF3F3E1FF },
-            { 0x1CBDB2FF, 0x9F9BB0FF, 0xEB6AF3FF, 0x8CC8FCFF },
-            { 0x31E635FF, 0x31E635FF, 0x1A0C1CFF, 0x1F391BFF },
-            { 0x348D8AFF, 0x8F6890FF, 0x9F9BB0FF, 0xD9BEDDFF },
-            { 0xF5A2E6FF, 0xD9BEDDFF, 0xB9EFE8FF, 0xD9BEDDFF },
-            { 0x33510EFF, 0x328F31FF, 0xEA1D21FF, 0x328F31FF },
-            { 0xB81D71FF, 0x934F46FF, 0x1EBC51FF, 0x8F6890FF },
-            { 0x0F368AFF, 0x791781FF, 0x3050CAFF, 0x791781FF },
-            { 0xE41DA2FF, 0xA472DBFF, 0x32DCECFF, 0xEB6AF3FF },
-            { 0x1F391BFF, 0x12703DFF, 0xB81D71FF, 0x348D8AFF },
-            { 0x1EBC51FF, 0x8FB079FF, 0xDE9581FF, 0xB2CFA6FF },
-            { 0xEB6AF3FF, 0xEF66B2FF, 0x45F7D8FF, 0xF5A2E6FF },
-            { 0x56100EFF, 0x33510EFF, 0x645F1BFF, 0x934F46FF },
-            { 0xF56F71FF, 0xDE9581FF, 0xA7EA8EFF, 0xF6B093FF },
-            { 0x0C6F96FF, 0x3D81BCFF, 0xA220EBFF, 0x3D81BCFF },
-            { 0x56100EFF, 0x49435EFF, 0x12703DFF, 0x49435EFF },
-            { 0x31E635FF, 0x21107CFF, 0x251FB2FF, 0x3050CAFF },
-            { 0x8F6890FF, 0xA472DBFF, 0x35A6E6FF, 0xA472DBFF },
-            { 0x33510EFF, 0x328F31FF, 0xC65028FF, 0x1EBC51FF },
-            { 0xA7EA8EFF, 0xB2CFA6FF, 0xEED483FF, 0xE4F7A9FF },
-            { 0x901720FF, 0x934F46FF, 0x328F31FF, 0x934F46FF },
-            { 0xC88536FF, 0xDE9581FF, 0x90F521FF, 0xF6B093FF },
-            { 0x8F6890FF, 0x9F9BB0FF, 0xD9BEDDFF, 0xB9EFE8FF },
-            { 0x0C6F96FF, 0x348D8AFF, 0xEF16E6FF, 0x1CBDB2FF },
-            { 0x56100EFF, 0x1F391BFF, 0x33510EFF, 0x645F1BFF },
-            { 0xA472DBFF, 0x9F9BB0FF, 0xB29FFBFF, 0xB9EFE8FF },
-            { 0x791781FF, 0x3D81BCFF, 0x3C80F3FF, 0xA472DBFF },
-            { 0x21107CFF, 0x791781FF, 0x0C6F96FF, 0x791781FF },
-            { 0x31E635FF, 0x31E635FF, 0x07210CFF, 0x49435EFF },
-            { 0x791781FF, 0x49435EFF, 0x348D8AFF, 0x8F6890FF },
-            { 0x1A0C1CFF, 0x1F391BFF, 0x49435EFF, 0x348D8AFF },
-            { 0x0F368AFF, 0x49435EFF, 0x791781FF, 0x49435EFF },
-            { 0x645F1BFF, 0x8FB079FF, 0xC88536FF, 0x8FB079FF },
-            { 0x99CF37FF, 0xEED483FF, 0xFBFC37FF, 0xE4F7A9FF },
-            { 0xC88536FF, 0x8FB079FF, 0x99CF37FF, 0xDE9581FF },
-            { 0x31E635FF, 0x1A0C1CFF, 0x1F391BFF, 0x49435EFF },
-            { 0x8F6890FF, 0x9F9BB0FF, 0x8FB079FF, 0x9F9BB0FF },
-            { 0x8F9E1CFF, 0x99CF37FF, 0xEEB30BFF, 0xA7EA8EFF },
-            { 0x07210CFF, 0x1F391BFF, 0x56100EFF, 0x1F391BFF },
-            { 0x8FB079FF, 0xDE9581FF, 0xB2CFA6FF, 0xD9BEDDFF },
-            { 0x8F9E1CFF, 0x8FB079FF, 0xEF7215FF, 0x8FB079FF },
-            { 0xA7EA8EFF, 0xB2CFA6FF, 0xF6B093FF, 0xB2CFA6FF },
-            { 0xE41DA2FF, 0x8F6890FF, 0x3FDD8CFF, 0xEF66B2FF },
-            { 0x3FDD8CFF, 0x9F9BB0FF, 0xEF66B2FF, 0x9F9BB0FF },
-            { 0xB2CFA6FF, 0xD9BEDDFF, 0xF3F3E1FF, 0x3D81BCFF },
-            { 0x49435EFF, 0x348D8AFF, 0x8F6890FF, 0x9F9BB0FF },
-            { 0x31E635FF, 0x8FB079FF, 0xF56F71FF, 0x8FB079FF },
-            { 0x9F9BB0FF, 0x8CC8FCFF, 0xF5A2E6FF, 0xB9EFE8FF },
-            { 0xA56D07FF, 0x934F46FF, 0x8F9E1CFF, 0x8FB079FF },
-            { 0x3D81BCFF, 0x8F6890FF, 0xA472DBFF, 0x9F9BB0FF },
-            { 0xA220EBFF, 0xA472DBFF, 0x8CC8FCFF, 0xD9BEDDFF },
-            { 0x12703DFF, 0x328F31FF, 0x934F46FF, 0x328F31FF },
     };
     private static final int[][] LAWN_BONUS_RAMP_VALUES = new int[][] {
             { 0x00000000, 0x00000000, 0x00000000, 0x00000000 },
@@ -2596,15 +2481,15 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
         }
     };
 
-    public static final Colorizer LawnBonusColorizer = new Colorizer(new PaletteReducer(Coloring.LAWN64)) {
+    public static final Colorizer AzurestarColorizer = new Colorizer(new PaletteReducer(Coloring.AZURESTAR33)) {
         private final byte[] primary = {
                 reducer.reduceIndex(0xFF0000FF),reducer.reduceIndex(0xFFFF00FF),
                 reducer.reduceIndex(0x00FF00FF),reducer.reduceIndex(0x00FFFFFF),
                 reducer.reduceIndex(0x0000FFFF),reducer.reduceIndex(0xFF00FFFF),
         }, grays = {
-                reducer.reduceIndex(0x000000FF),reducer.reduceIndex(0x333333FF),
+                reducer.reduceIndex(0x000000FF),reducer.reduceIndex(0x444444FF),
                 reducer.reduceIndex(0x666666FF),reducer.reduceIndex(0x999999FF),
-                reducer.reduceIndex(0xCCCCCCFF),reducer.reduceIndex(0xFFFFFFFF),
+                reducer.reduceIndex(0xBBBBBBFF),reducer.reduceIndex(0xFFFFFFFF),
         };
 
         @Override
@@ -2622,10 +2507,7 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
 
         @Override
         public byte brighten(byte voxel) {
-            // the second half of voxels (with bit 0x40 set) don't shade visually, but Colorizer uses this method to
-            // denote a structural change to the voxel's makeup, so this uses the first 64 voxel colors to shade both
-            // halves, then marks voxels from the second half back to being an unshaded voxel as the last step.
-            return (byte) (LAWN_RAMPS[voxel & 0x3F][3] | (voxel & 0xC0));
+            return Coloring.AZURESTAR_RAMPS[voxel & 0x3F][3];
         }
 
         @Override
@@ -2633,89 +2515,26 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
             // the second half of voxels (with bit 0x40 set) don't shade visually, but Colorizer uses this method to
             // denote a structural change to the voxel's makeup, so this uses the first 64 voxel colors to shade both
             // halves, then marks voxels from the second half back to being an unshaded voxel as the last step.
-            return (byte) (LAWN_RAMPS[voxel & 0x3F][1] | (voxel & 0xC0));
+            return Coloring.AZURESTAR_RAMPS[voxel & 0x3F][1];
         }
 
         @Override
         public int dimmer(int brightness, byte voxel) {
-            return LAWN_BONUS_RAMP_VALUES[voxel & 0xFF][
-                    brightness <= 0
-                            ? 0
-                            : Math.min(brightness, 3)
-                    ];
+            if(brightness < 0) return Coloring.AZURESTAR33[1];
+            if(brightness > 3) return Coloring.AZURESTAR33[13];
+            return Coloring.AZURESTAR33[Coloring.AZURESTAR_RAMPS[voxel & 0x3F][brightness] & 0xFF];
         }
 
         @Override
         public int getShadeBit() {
-            return 0x40;
+            return 0;
         }
         @Override
         public int getWaveBit() {
-            return 0x80;
+            return 0;
         }
     };
-
-    public static final Colorizer ToastyBonusColorizer = new Colorizer(new PaletteReducer(Coloring.LAWN64)) {
-        private final byte[] primary = {
-                reducer.reduceIndex(0xFF0000FF),reducer.reduceIndex(0xFFFF00FF),
-                reducer.reduceIndex(0x00FF00FF),reducer.reduceIndex(0x00FFFFFF),
-                reducer.reduceIndex(0x0000FFFF),reducer.reduceIndex(0xFF00FFFF),
-        }, grays = {
-                reducer.reduceIndex(0x000000FF),reducer.reduceIndex(0x333333FF),
-                reducer.reduceIndex(0x666666FF),reducer.reduceIndex(0x999999FF),
-                reducer.reduceIndex(0xCCCCCCFF),reducer.reduceIndex(0xFFFFFFFF),
-        };
-        {
-            reducer.hueShift();
-        }
-
-        @Override
-        public byte[] mainColors() {
-            return primary;
-        }
-
-        /**
-         * @return An array of grayscale or close-to-grayscale color indices, with the darkest first and lightest last.
-         */
-        @Override
-        public byte[] grayscale() {
-            return grays;
-        }
-
-        @Override
-        public byte brighten(byte voxel) {
-            // the second half of voxels (with bit 0x40 set) don't shade visually, but Colorizer uses this method to
-            // denote a structural change to the voxel's makeup, so this uses the first 64 voxel colors to shade both
-            // halves, then marks voxels from the second half back to being an unshaded voxel as the last step.
-            return (byte) (LAWN_RAMPS[voxel & 0x3F][3] | (voxel & 0xC0));
-        }
-
-        @Override
-        public byte darken(byte voxel) {
-            // the second half of voxels (with bit 0x40 set) don't shade visually, but Colorizer uses this method to
-            // denote a structural change to the voxel's makeup, so this uses the first 64 voxel colors to shade both
-            // halves, then marks voxels from the second half back to being an unshaded voxel as the last step.
-            return (byte) (LAWN_RAMPS[voxel & 0x3F][1] | (voxel & 0xC0));
-        }
-
-        @Override
-        public int dimmer(int brightness, byte voxel) {
-            return TOASTY_BONUS_RAMP_VALUES[voxel & 0xFF][
-                    brightness <= 0
-                            ? 0
-                            : Math.min(brightness, 3)
-                    ];
-        }
-
-        @Override
-        public int getShadeBit() {
-            return 0x40;
-        }
-        @Override
-        public int getWaveBit() {
-            return 0x80;
-        }
-    };
+    
     public static final Colorizer WardBonusColorizer = new Colorizer(new PaletteReducer(Coloring.WARD)) {
         private final byte[] primary = {
                 reducer.reduceIndex(0xFF0000FF),reducer.reduceIndex(0xFFFF00FF),

@@ -285,14 +285,6 @@ public class VoxelDrawSeqTest extends ApplicationAdapter {
                         diagonal = false;
                         angle = 2;
                         break;
-                    case Input.Keys.S: // shifted hues
-                        batchRenderer.color().set(Colorizer.ToastyBonusColorizer);
-                        colorizer = Colorizer.ToastyBonusColorizer;
-                        break;
-                    case Input.Keys.F: // flat hues
-                        batchRenderer.color().set(Colorizer.LawnBonusColorizer);
-                        colorizer = Colorizer.LawnBonusColorizer;
-                        break;
                     case Input.Keys.W: // write
                         VoxIO.writeVOX(FakeLanguageGen.SIMPLISH.word(Tools3D.hash64(voxels), true) + ".vox", voxels, maker.getColorizer().getReducer().paletteArray);
                         break;

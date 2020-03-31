@@ -722,23 +722,13 @@ public class ModelMaker {
 //                break;
 //            }
 //        }
-        final FastNoise noise = new FastNoise(seed ^ seed >>> 21 ^ seed << 6, 0x1.4p0f / xSize);
-        int xx, yy;
+        final FastNoise noise = new FastNoise(seed ^ seed >>> 21 ^ seed << 6, 0xBp-2f / xSize);
         for (int x = 0; x < xSize; x++) {
             for (int y = 0; y < halfY; y++) {
                 for (int z = 0; z < zSize; z++) {
                     color = (ship[x][y][z] & 255);
                     if (color != 0) {
-                        // this 4-input-plus-state hash is really a slight modification on LightRNG.determine(), but
-                        // it mixes the x, y, and z inputs more thoroughly than other techniques do, and we then use
-                        // different sections of the random bits for different purposes. This helps reduce the possible
-                        // issues from using rng.next(5) and rng.next(6) all over if the bits those use have a pattern.
-                        // In the original model, all voxels of the same color will be hashed with similar behavior but
-                        // any with different colors will get unrelated values.
-                        xx = x + 1;
-                        yy = y + 1;
-                        current = //hashAll(xx + (xx | zz) >> 3, (yy + (yy | zz)) / 3, zz, color, seed)
-                                + (int) (noise.getSimplex(x * 0.5f, y * 0.75f, z * 0.666f) * 0x800000f) + 0x800000;
+                        current = (int) (noise.getFoam(x * 0.5f, y * 0.75f, z * 0.666f) * 0x1.5p27f) + 0x8000000;
                         if (color < 8) {
                             // checks sorta-top 4 bits
                             if((current >>> 21 & 15) != 0)
@@ -750,17 +740,13 @@ public class ModelMaker {
                                             ? 0
                                             // checks 6 bits of paint
                                             : (merlin3D(x, y, z, seed) == 0) 
-                                            ? grays[(int)((noise.getSimplex(x * 0.125f, y * 0.2f, z * 0.24f) * 0.4f + 0.599f) * (grays.length - 1))]
-                                            : colorizer.colorize(mainColor, (int)(noise.getSimplex(x * 0.0625f, y * 0.1f, z * 0.14f) * 2.25f));
-//                                            (noise.getSimplex(x * 0.04f, y * 0.07f, z * 0.09f) > 0.15f)
-//                                            ? highlightColor
-//                                            : mainColor;
+                                            ? grays[(int)((noise.getFoam(x * 0.125f, y * 0.2f, z * 0.24f) * 0.4f + 0.599f) * (grays.length - 1))]
+                                            : colorizer.colorize(mainColor, (int)(noise.getFoam(x * 0.0625f, y * 0.1f, z * 0.14f) * 2.25f));
                         }
                     }
                 }
             }
         }
-//        paint ^= paint << 7 ^ paint >>> 23;
         current ^= current << 5 ^ current >>> 19;
         for (int y = 0; y < halfY; y++) {
             for (int x = xSize - 1; x > 0; x--) {
