@@ -46,8 +46,10 @@ public class SlopeSeq implements Iterable<SlopeSeq.Entry> {
 
 	int[] keyTable;
 	byte[] valueTable;
+	byte[] slopeTable;
 
 	byte zeroValue;
+	byte zeroSlope;
 	boolean hasZeroValue;
 
 	private final float loadFactor;
@@ -98,6 +100,7 @@ public class SlopeSeq implements Iterable<SlopeSeq.Entry> {
 
 		keyTable = new int[tableSize];
 		valueTable = new byte[tableSize];
+		slopeTable = new byte[tableSize];
 		keys = new IntVLA(initialCapacity);
 	}
 
@@ -112,11 +115,14 @@ public class SlopeSeq implements Iterable<SlopeSeq.Entry> {
 
 		keyTable = new int[tableSize];
 		valueTable = new byte[tableSize];
+		slopeTable = new byte[tableSize];
 
 		System.arraycopy(map.keyTable, 0, keyTable, 0, map.keyTable.length);
 		System.arraycopy(map.valueTable, 0, valueTable, 0, map.valueTable.length);
+		System.arraycopy(map.slopeTable, 0, slopeTable, 0, map.slopeTable.length);
 		size = map.size;
 		zeroValue = map.zeroValue;
+		zeroSlope = map.zeroSlope;
 		hasZeroValue = map.hasZeroValue;
 		keys = new IntVLA(map.keys);
 	}
@@ -150,9 +156,10 @@ public class SlopeSeq implements Iterable<SlopeSeq.Entry> {
 		}
 	}
 
-	public void put (int key, byte value) {
+	public void put (int key, int value, int slope) {
 		if (key == 0) {
-			zeroValue = value;
+			zeroValue = (byte) value;
+			zeroSlope = (byte) slope;
 			if (!hasZeroValue) {
 				hasZeroValue = true;
 				size++;
@@ -161,75 +168,58 @@ public class SlopeSeq implements Iterable<SlopeSeq.Entry> {
 		}
 		int i = locateKey(key);
 		if (i >= 0) { // Existing key was found.
-			valueTable[i] = value;
+			valueTable[i] = (byte) value;
+			slopeTable[i] = (byte) slope;
 			return;
 		}
 		i = ~i; // Empty space was found.
 		keyTable[i] = key;
-		valueTable[i] = value;
+		valueTable[i] = (byte) value;
+		slopeTable[i] = (byte) slope;
 		keys.add(key);
 		if (++size >= threshold) resize(keyTable.length << 1);
 	}
 
 	public void putAll (SlopeSeq map) {
 		ensureCapacity(map.size);
-		if (map.hasZeroValue) put(0, map.zeroValue);
+		if (map.hasZeroValue) put(0, map.zeroValue, map.zeroSlope);
 		int[] keyTable = map.keyTable;
 		byte[] valueTable = map.valueTable;
+		byte[] slopeTable = map.slopeTable;
 		for (int i = 0, n = keyTable.length; i < n; i++) {
 			int key = keyTable[i];
-			if (key != 0) put(key, valueTable[i]);
+			if (key != 0) put(key, valueTable[i], slopeTable[i]);
 		}
 	}
 
 	/** Skips checks for existing keys, doesn't increment size, doesn't need to handle key 0. */
-	private void putResize (int key, byte value) {
+	private void putResize (int key, byte value, byte slope) {
 		int[] keyTable = this.keyTable;
 		for (int i = place(key);; i = (i + 1) & mask) {
 			if (keyTable[i] == 0) {
 				keyTable[i] = key;
 				valueTable[i] = value;
+				slopeTable[i] = slope;
 				return;
 			}
 		}
 	}
 
-	public byte get (int key, byte defaultValue) {
-		if (key == 0) return hasZeroValue ? zeroValue : defaultValue;
+	public byte get (int key, int defaultValue) {
+		if (key == 0) return hasZeroValue ? zeroValue : (byte) defaultValue;
 		int i = locateKey(key);
-		return i >= 0 ? valueTable[i] : defaultValue;
+		return i >= 0 ? valueTable[i] : (byte) defaultValue;
 	}
 
-	/** Returns the key's current value and increments the stored value. If the key is not in the map, defaultValue + increment is
-	 * put into the map and defaultValue is returned. */
-	public byte getAndIncrement (int key, byte defaultValue, byte increment) {
-		if (key == 0) {
-			if (!hasZeroValue) {
-				hasZeroValue = true;
-				zeroValue = (byte) (defaultValue + increment);
-				size++;
-				return defaultValue;
-			}
-			byte oldValue = zeroValue;
-			zeroValue += increment;
-			return oldValue;
-		}
+	public byte getSlope (int key, int defaultSlope) {
+		if (key == 0) return hasZeroValue ? zeroSlope : (byte) defaultSlope;
 		int i = locateKey(key);
-		if (i >= 0) { // Existing key was found.
-			byte oldValue = valueTable[i];
-			valueTable[i] += increment;
-			return oldValue;
-		}
-		i = ~i; // Empty space was found.
-		keyTable[i] = key;
-		valueTable[i] = (byte) (defaultValue + increment);
-		if (++size >= threshold) resize(keyTable.length << 1);
-		return defaultValue;
+		return i >= 0 ? slopeTable[i] : (byte) defaultSlope;
 	}
-
-	public byte remove (int key, byte defaultValue) {
+	
+	public byte remove (int key, int defaultValue) {
 		if (key == 0) {
-			if (!hasZeroValue) return defaultValue;
+			if (!hasZeroValue) return (byte) defaultValue;
 			keys.removeValue(key);
 			hasZeroValue = false;
 			size--;
@@ -237,10 +227,11 @@ public class SlopeSeq implements Iterable<SlopeSeq.Entry> {
 		}
 
 		int i = locateKey(key);
-		if (i < 0) return defaultValue;
+		if (i < 0) return (byte) defaultValue;
 		keys.removeValue(key);
 		int[] keyTable = this.keyTable;
 		byte[] valueTable = this.valueTable;
+		byte[] slopeTable = this.slopeTable;
 		byte oldValue = valueTable[i];
 		int mask = this.mask, next = i + 1 & mask;
 		while ((key = keyTable[next]) != 0) {
@@ -248,6 +239,7 @@ public class SlopeSeq implements Iterable<SlopeSeq.Entry> {
 			if ((next - placement & mask) > (i - placement & mask)) {
 				keyTable[i] = key;
 				valueTable[i] = valueTable[next];
+				slopeTable[i] = slopeTable[next];
 				i = next;
 			}
 			next = next + 1 & mask;
@@ -300,7 +292,7 @@ public class SlopeSeq implements Iterable<SlopeSeq.Entry> {
 
 
 	public byte removeIndex (int index) {
-		return remove(keys.removeIndex(index), (byte) 0);
+		return remove(keys.removeIndex(index), 0);
 	}
 
 	/** Changes the key {@code before} to {@code after} without changing its position in the order or its value. Returns true if
@@ -314,7 +306,8 @@ public class SlopeSeq implements Iterable<SlopeSeq.Entry> {
 		if (containsKey(after)) return false;
 		int index = keys.indexOf(before);
 		if (index == -1) return false;
-		put(after, remove(before, (byte)0));
+		byte slope = getSlope(before, 0);
+		put(after, remove(before, 0), slope);
 		keys.set(index, after);
 		return true;
 	}
@@ -327,38 +320,16 @@ public class SlopeSeq implements Iterable<SlopeSeq.Entry> {
 	 * @return true if {@code after} successfully replaced the key at {@code index}, false otherwise */
 	public boolean alterIndex (int index, int after) {
 		if (index < 0 || index >= size || containsKey(after)) return false;
-		put(after, remove(keys.get(index), (byte) 0));
+		int before = keys.get(index);
+		byte slope = getSlope(before, 0);
+		put(after, remove(before, 0), slope);
 		keys.set(index, after);
 		return true;
 	}
-
-	/** Returns true if the specified value is in the map. Note this traverses the entire map and compares every value, which may
-	 * be an expensive operation. */
-	public boolean containsValue (int value) {
-		if (hasZeroValue && zeroValue == value) return true;
-		int[] keyTable = this.keyTable;
-		byte[] valueTable = this.valueTable;
-		for (int i = valueTable.length - 1; i >= 0; i--)
-			if (keyTable[i] != 0 && valueTable[i] == value) return true;
-		return false;
-	}
-
+	
 	public boolean containsKey (int key) {
 		if (key == 0) return hasZeroValue;
 		return locateKey(key) >= 0;
-	}
-
-	/** Returns the key for the specified value, or notFound if it is not in the map. Note this traverses the entire map and
-	 * compares every value, which may be an expensive operation. */
-	public int findKey (int value, int notFound) {
-		if (hasZeroValue && zeroValue == value) return 0;
-		int[] keyTable = this.keyTable;
-		byte[] valueTable = this.valueTable;
-		for (int i = valueTable.length - 1; i >= 0; i--) {
-			int key = keyTable[i];
-			if (key != 0 && valueTable[i] == value) return key;
-		}
-		return notFound;
 	}
 
 	/** Increases the size of the backing array to accommodate the specified number of additional items / loadFactor. Useful before
@@ -376,6 +347,7 @@ public class SlopeSeq implements Iterable<SlopeSeq.Entry> {
 
 		int[] oldKeyTable = keyTable;
 		byte[] oldValueTable = valueTable;
+		byte[] oldSlopeTable = slopeTable;
 
 		keyTable = new int[newSize];
 		valueTable = new byte[newSize];
@@ -383,7 +355,7 @@ public class SlopeSeq implements Iterable<SlopeSeq.Entry> {
 		if (size > 0) {
 			for (int i = 0; i < oldCapacity; i++) {
 				int key = oldKeyTable[i];
-				if (key != 0) putResize(key, oldValueTable[i]);
+				if (key != 0) putResize(key, oldValueTable[i], oldSlopeTable[i]);
 			}
 		}
 	}
@@ -397,12 +369,13 @@ public class SlopeSeq implements Iterable<SlopeSeq.Entry> {
 
 	public int hashCode () {
 		int h = size;
-		if (hasZeroValue) h += (zeroValue);
+		if (hasZeroValue) h += ((zeroValue + zeroSlope * 421) * 421);
 		int[] keyTable = this.keyTable;
 		byte[] valueTable = this.valueTable;
+		byte[] slopeTable = this.slopeTable;
 		for (int i = 0, n = keyTable.length; i < n; i++) {
 			int key = keyTable[i];
-			if (key != 0) h += key * 31 + (valueTable[i]);
+			if (key != 0) h += key + ((valueTable[i] + slopeTable[i] * 421) * 421);
 		}
 		return h;
 	}
@@ -415,15 +388,19 @@ public class SlopeSeq implements Iterable<SlopeSeq.Entry> {
 		if (other.hasZeroValue != hasZeroValue) return false;
 		if (hasZeroValue) {
 			if (other.zeroValue != zeroValue) return false;
+			if (other.zeroSlope != zeroSlope) return false;
 		}
 		int[] keyTable = this.keyTable;
 		byte[] valueTable = this.valueTable;
+		byte[] slopeTable = this.slopeTable;
 		for (int i = 0, n = keyTable.length; i < n; i++) {
 			int key = keyTable[i];
 			if (key != 0) {
-				byte otherValue = other.get(key, (byte) 0);
-				if (otherValue == 0f && !other.containsKey(key)) return false;
+				byte otherValue = other.get(key, 0);
+				byte otherSlope = other.getSlope(key, 0);
+				if (otherValue == 0) return false;
 				if (otherValue != valueTable[i]) return false;
+				if (otherSlope != slopeTable[i]) return false;
 			}
 		}
 		return true;
@@ -435,27 +412,22 @@ public class SlopeSeq implements Iterable<SlopeSeq.Entry> {
 		buffer.append('[');
 		int[] keyTable = this.keyTable;
 		byte[] valueTable = this.valueTable;
+		byte[] slopeTable = this.slopeTable;
 		int i = keyTable.length;
 		if (hasZeroValue) {
-			buffer.append("0=");
-			buffer.append(zeroValue);
+			buffer.append("0=(").append(zeroValue).append(',').append(zeroSlope).append(')');
 		} else {
 			while (i-- > 0) {
 				int key = keyTable[i];
 				if (key == 0) continue;
-				buffer.append(key);
-				buffer.append('=');
-				buffer.append(valueTable[i]);
+				buffer.append(key).append("=(").append(valueTable[i]).append(',').append(slopeTable[i]).append(')');
 				break;
 			}
 		}
 		while (i-- > 0) {
 			int key = keyTable[i];
-			if (key == 0) continue;
-			buffer.append(", ");
-			buffer.append(key);
-			buffer.append('=');
-			buffer.append(valueTable[i]);
+			if (key != 0) 
+				buffer.append(", ").append(key).append("=(").append(valueTable[i]).append(',').append(slopeTable[i]).append(')');
 		}
 		buffer.append(']');
 		return buffer.toString();
@@ -508,9 +480,10 @@ public class SlopeSeq implements Iterable<SlopeSeq.Entry> {
 	static public class Entry {
 		public int key;
 		public byte value;
+		public byte slope;
 
 		public String toString () {
-			return key + "=" + value;
+			return key + "=(" + value + "," + slope + ")";
 		}
 	}
 	
@@ -540,7 +513,8 @@ public class SlopeSeq implements Iterable<SlopeSeq.Entry> {
 			if (!valid) throw new RuntimeException("#iterator() cannot be used nested.");
 			currentIndex = nextIndex;
 			entry.key = keys.get(nextIndex);
-			entry.value = map.get(entry.key, (byte) 0);
+			entry.value = map.get(entry.key, 0);
+			entry.slope = map.getSlope(entry.key, 0);
 			nextIndex++;
 			hasNext = nextIndex < map.size;
 			return entry;
@@ -548,7 +522,7 @@ public class SlopeSeq implements Iterable<SlopeSeq.Entry> {
 
 		public void remove() {
 			if (currentIndex < 0) throw new IllegalStateException("next must be called before remove.");
-			map.remove(entry.key, (byte) 0);
+			map.remove(entry.key, 0);
 			nextIndex--;
 			currentIndex = -1;
 		}
@@ -609,5 +583,6 @@ public class SlopeSeq implements Iterable<SlopeSeq.Entry> {
 
 		public IntVLA toArray () {
 			return toArray(new IntVLA(keys.size - nextIndex));
-		}	}
+		}	
+	}
 }
