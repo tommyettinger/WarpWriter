@@ -18,7 +18,7 @@ package warpwriter.model;
 import squidpony.annotation.GwtIncompatible;
 import squidpony.squidmath.*;
 import warpwriter.model.nonvoxel.IntComparator;
-import warpwriter.model.nonvoxel.IntSort;
+import warpwriter.model.nonvoxel.IntSortIndirect;
 
 import java.io.Serializable;
 import java.util.*;
@@ -2551,7 +2551,7 @@ public class VoxelSeq implements IVoxelSeq, Serializable {
      */
     public void sort(IntComparator comparator, int start, int end)
     {
-        IntSort.sort(key, order, start, end, comparator);
+        IntSortIndirect.sort(key, order, start, end, comparator);
     }
     /**
      * Gets the key at the given index in the iteration order in constant time, rotating the x, y, and z components of

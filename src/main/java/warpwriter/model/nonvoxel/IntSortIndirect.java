@@ -33,10 +33,10 @@ import squidpony.squidmath.IntVLA;
  * "Optimistic Sorting and Information Theoretic Complexity" Peter McIlroy SODA (Fourth Annual ACM-SIAM Symposium on Discrete
  * Algorithms), pp 467-474, Austin, Texas, 25-27 January 1993.
  * 
- * While the API to this class consists solely of static methods, it is (privately) instantiable; an IntSort instance holds the
- * state of an ongoing sort, assuming the input array is large enough to warrant the full-blown IntSort. Small arrays are sorted
+ * While the API to this class consists solely of static methods, it is (privately) instantiable; an IntSortIndirect instance holds the
+ * state of an ongoing sort, assuming the input array is large enough to warrant the full-blown IntSortIndirect. Small arrays are sorted
  * in place, using a binary insertion sort. */
-public class IntSort {
+public class IntSortIndirect {
 	/** This is the minimum sized sequence that will be merged. Shorter sequences will be lengthened by calling binarySort. If the
 	 * entire array is less than this length, no merges will be performed.
 	 * 
@@ -44,7 +44,7 @@ public class IntSort {
 	 * better in this implementation. In the unlikely event that you set this constant to be a number that's not a power of two,
 	 * you'll need to change the {@link #minRunLength} computation.
 	 * 
-	 * If you decrease this constant, you must change the stackLen computation in the IntSort constructor, or you risk an
+	 * If you decrease this constant, you must change the stackLen computation in the IntSortIndirect constructor, or you risk an
 	 * ArrayOutOfBounds exception. See listsort.txt for a discussion of the minimum stack length required as a function of the
 	 * length of the array being sorted and the minimum merge sequence length. */
 	private static final int MIN_MERGE = 32;
@@ -89,17 +89,17 @@ public class IntSort {
 	 * a command line flag. If you modify this class, please do test the asserts! */
 	private static final boolean DEBUG = false;
 
-	IntSort() {
+	IntSortIndirect() {
 		tmp = new int[INITIAL_TMP_STORAGE_LENGTH];
 		runBase = new int[40];
 		runLen = new int[40];
 	}
 
-	/** Creates an IntSort instance to maintain the state of an ongoing sort.
+	/** Creates an IntSortIndirect instance to maintain the state of an ongoing sort.
 	 * 
 	 * @param a the array to be sorted
 	 * @param c the comparator to determine the order of the sort */
-	private IntSort(int[] a, IntVLA order, IntComparator c) {
+	private IntSortIndirect(int[] a, IntVLA order, IntComparator c) {
 		this.a = a;
 		this.c = c;
 		this.indices = order;
@@ -138,7 +138,7 @@ public class IntSort {
 		int nRemaining = hi - lo;
 		if (nRemaining < 2) return; // Arrays of size 0 and 1 are always sorted
 
-		// If array is small, do a "mini-IntSort" with no merges
+		// If array is small, do a "mini-IntSortIndirect" with no merges
 		if (nRemaining < MIN_MERGE) {
 			int initRunLen = countRunAndMakeAscending(a, order, lo, hi, c);
 			binarySort(a, order, lo, hi, lo + initRunLen, c);
@@ -147,7 +147,7 @@ public class IntSort {
 
 		/** March over the array once, left to right, finding natural runs, extending short natural runs to minRun elements, and
 		 * merging runs to maintain stack invariant. */
-		IntSort ts = new IntSort(a, order, c);
+		IntSortIndirect ts = new IntSortIndirect(a, order, c);
 		int minRun = minRunLength(nRemaining);
 		do {
 			// Identify next run

@@ -265,7 +265,7 @@ public class SlopeDraw {
 //                pixelWidth = (sizeY + sizeX + 2) * scaleX + 1, pixelHeight = (sizeX + sizeY + sizeZ + 3) * scaleY + 1;
         final IntComparator comp = IntComparator.side45[seq.rotation()];
         seq.sort(comp);
-//        IntSort.sort(isoAdjacent, isoOrder, comp);
+//        IntSortIndirect.sort(isoAdjacent, isoOrder, comp);
 
         byte color1, color2;
         int x1, y1, z1, x2, y2, z2, xPos1, yPos1, dep1, xPos2, yPos2, dep2;
