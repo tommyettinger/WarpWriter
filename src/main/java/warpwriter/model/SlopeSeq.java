@@ -23,6 +23,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import static warpwriter.model.nonvoxel.HashMap3D.fuse;
+
 /** An unordered map where the keys are unboxed ints and values are unboxed floats. No allocation is done except when growing the
  * table size.
  * <p>
@@ -40,7 +42,7 @@ import java.util.NoSuchElementException;
  * @author Nathan Sweet
  * @author Tommy Ettinger */
 public class SlopeSeq implements Iterable<SlopeSeq.Entry> {
-	public final IntVLA keys;
+	public final IntVLA order;
 	
 	public int size;
 
@@ -72,6 +74,57 @@ public class SlopeSeq implements Iterable<SlopeSeq.Entry> {
 
 	private Entries entries1, entries2;
 	private Keys keys1, keys2;
+	/**
+	 * Maximum size on the x-dimension for keys.
+	 */
+	public int sizeX = 32;
+
+	/**
+	 * Maximum size on the y-dimension for keys.
+	 */
+	public int sizeY = 32;
+
+	/**
+	 * Maximum size on the z-dimension for keys.
+	 */
+	public int sizeZ = 32;
+
+	/**
+	 * Index into a rotation array, which should almost always have 24 items, so this should be between 0-23 inclusive.
+	 */
+	public int rotation = 0;
+
+	public int sizeX() {
+		return sizeX;
+	}
+
+	public void sizeX(int sizeX) {
+		this.sizeX = sizeX;
+	}
+
+	public int sizeY() {
+		return sizeY;
+	}
+
+	public void sizeY(int sizeY) {
+		this.sizeY = sizeY;
+	}
+
+	public int sizeZ() {
+		return sizeZ;
+	}
+
+	public void sizeZ(int sizeZ) {
+		this.sizeZ = sizeZ;
+	}
+
+	public int rotation() {
+		return rotation;
+	}
+
+	public void rotate(int rotation) {
+		this.rotation = rotation;
+	}
 
 	/** Creates a new map with an initial capacity of 51 and a load factor of 0.8. */
 	public SlopeSeq() {
@@ -101,7 +154,7 @@ public class SlopeSeq implements Iterable<SlopeSeq.Entry> {
 		keyTable = new int[tableSize];
 		valueTable = new byte[tableSize];
 		slopeTable = new byte[tableSize];
-		keys = new IntVLA(initialCapacity);
+		order = new IntVLA(initialCapacity);
 	}
 
 	/** Creates a new map identical to the specified map. */
@@ -124,7 +177,23 @@ public class SlopeSeq implements Iterable<SlopeSeq.Entry> {
 		zeroValue = map.zeroValue;
 		zeroSlope = map.zeroSlope;
 		hasZeroValue = map.hasZeroValue;
-		keys = new IntVLA(map.keys);
+		order = new IntVLA(map.order);
+	}
+	
+	public void putArray(byte[][][] voxels)
+	{
+		final int sizeX = (voxels.length);
+		final int sizeY = (voxels[0].length);
+		final int sizeZ = (voxels[0][0].length);
+		this.sizeX = this.sizeY = this.sizeZ = Math.max(sizeX, Math.max(sizeY, sizeZ));
+		for (int x = 0; x < sizeX; x++) {
+			for (int y = 0; y < sizeY; y++) {
+				for (int z = 0; z < sizeZ; z++) {
+					if(voxels[x][y][z] != 0)
+						put(x, y, z, voxels[x][y][z], -1);
+				}
+			}
+		}
 	}
 
 	/** Returns an index >= 0 and <= {@link #mask} for the specified {@code item}.
@@ -155,7 +224,10 @@ public class SlopeSeq implements Iterable<SlopeSeq.Entry> {
 			if (other == key) return i; // Same key was found.
 		}
 	}
-
+	public void put (int x, int y, int z, int value, int slope) {
+		if(x < 0 || x >= sizeX || y < 0 || y >= sizeY || z < 0 || z >= sizeZ) return;
+		put(fuse(x, y, z), value, slope);
+	}
 	public void put (int key, int value, int slope) {
 		if (key == 0) {
 			zeroValue = (byte) value;
@@ -176,7 +248,7 @@ public class SlopeSeq implements Iterable<SlopeSeq.Entry> {
 		keyTable[i] = key;
 		valueTable[i] = (byte) value;
 		slopeTable[i] = (byte) slope;
-		keys.add(key);
+		order.add(key);
 		if (++size >= threshold) resize(keyTable.length << 1);
 	}
 
@@ -205,30 +277,42 @@ public class SlopeSeq implements Iterable<SlopeSeq.Entry> {
 		}
 	}
 
-	public byte get (int key, int defaultValue) {
-		if (key == 0) return hasZeroValue ? zeroValue : (byte) defaultValue;
+	public byte get(int x, int y, int z) {
+		if(x < 0 || x >= sizeX || y < 0 || y >= sizeY || z < 0 || z >= sizeZ) return 0;
+		return get(fuse(x, y, z));
+	}
+	public byte get(int key) {
+		if (key == 0) return hasZeroValue ? zeroValue : 0;
 		int i = locateKey(key);
-		return i >= 0 ? valueTable[i] : (byte) defaultValue;
+		return i >= 0 ? valueTable[i] : 0;
 	}
 
-	public byte getSlope (int key, int defaultSlope) {
-		if (key == 0) return hasZeroValue ? zeroSlope : (byte) defaultSlope;
+	public byte getSlope(int x, int y, int z) {
+		if(x < 0 || x >= sizeX || y < 0 || y >= sizeY || z < 0 || z >= sizeZ) return 0;
+		return getSlope(fuse(x, y, z));
+	}
+	public byte getSlope(int key) {
+		if (key == 0) return hasZeroValue ? zeroSlope :  0;
 		int i = locateKey(key);
-		return i >= 0 ? slopeTable[i] : (byte) defaultSlope;
+		return i >= 0 ? slopeTable[i] : 0;
 	}
 	
-	public byte remove (int key, int defaultValue) {
+	public byte remove(int x, int y, int z) {
+		if(x < 0 || x >= sizeX || y < 0 || y >= sizeY || z < 0 || z >= sizeZ) return 0;
+		return remove(fuse(x, y, z));
+	}
+	public byte remove(int key) {
 		if (key == 0) {
-			if (!hasZeroValue) return (byte) defaultValue;
-			keys.removeValue(key);
+			if (!hasZeroValue) return 0;
+			order.removeValue(key);
 			hasZeroValue = false;
 			size--;
 			return zeroValue;
 		}
 
 		int i = locateKey(key);
-		if (i < 0) return (byte) defaultValue;
-		keys.removeValue(key);
+		if (i < 0) return 0;
+		order.removeValue(key);
 		int[] keyTable = this.keyTable;
 		byte[] valueTable = this.valueTable;
 		byte[] slopeTable = this.slopeTable;
@@ -275,7 +359,7 @@ public class SlopeSeq implements Iterable<SlopeSeq.Entry> {
 			clear();
 			return;
 		}
-		keys.clear();
+		order.clear();
 		size = 0;
 		hasZeroValue = false;
 		resize(tableSize);
@@ -286,29 +370,36 @@ public class SlopeSeq implements Iterable<SlopeSeq.Entry> {
 		Arrays.fill(keyTable, 0);
 		size = 0;
 		hasZeroValue = false;
-		keys.clear();
+		order.clear();
 	}
 
-
-
-	public byte removeIndex (int index) {
-		return remove(keys.removeIndex(index), 0);
+	public int keyAt(int index){
+		return order.get(index);
+	}
+	public byte getAt(int index){
+		return get(order.get(index));
+	}
+	public byte getSlopeAt(int index){
+		return getSlope(order.get(index));
+	}
+	public byte removeAt(int index) {
+		return remove(order.removeIndex(index));
 	}
 
 	/** Changes the key {@code before} to {@code after} without changing its position in the order or its value. Returns true if
 	 * {@code after} has been added to the OrderedMap and {@code before} has been removed; returns false if {@code after} is
 	 * already present or {@code before} is not present. If you are iterating over an OrderedMap and have an index, you should
-	 * prefer {@link #alterIndex(int, int)}, which doesn't need to search for an index like this does and so can be faster.
+	 * prefer {@link #alterAt(int, int)}, which doesn't need to search for an index like this does and so can be faster.
 	 * @param before a key that must be present for this to succeed
 	 * @param after a key that must not be in this map for this to succeed
 	 * @return true if {@code before} was removed and {@code after} was added, false otherwise */
 	public boolean alter (int before, int after) {
 		if (containsKey(after)) return false;
-		int index = keys.indexOf(before);
+		int index = order.indexOf(before);
 		if (index == -1) return false;
-		byte slope = getSlope(before, 0);
-		put(after, remove(before, 0), slope);
-		keys.set(index, after);
+		byte slope = getSlope(before);
+		put(after, remove(before), slope);
+		order.set(index, after);
 		return true;
 	}
 
@@ -318,15 +409,19 @@ public class SlopeSeq implements Iterable<SlopeSeq.Entry> {
 	 * @param index the index in the order of the key to change; must be non-negative and less than {@link #size}
 	 * @param after the key that will replace the contents at {@code index}; this key must not be present for this to succeed
 	 * @return true if {@code after} successfully replaced the key at {@code index}, false otherwise */
-	public boolean alterIndex (int index, int after) {
+	public boolean alterAt (int index, int after) {
 		if (index < 0 || index >= size || containsKey(after)) return false;
-		int before = keys.get(index);
-		byte slope = getSlope(before, 0);
-		put(after, remove(before, 0), slope);
-		keys.set(index, after);
+		int before = order.get(index);
+		byte slope = getSlope(before);
+		put(after, remove(before), slope);
+		order.set(index, after);
 		return true;
 	}
-	
+	public boolean containsKey(int x, int y, int z) {
+		if(x < 0 || x >= sizeX || y < 0 || y >= sizeY || z < 0 || z >= sizeZ) return false;
+		return containsKey(fuse(x, y, z));
+	}
+
 	public boolean containsKey (int key) {
 		if (key == 0) return hasZeroValue;
 		return locateKey(key) >= 0;
@@ -396,8 +491,8 @@ public class SlopeSeq implements Iterable<SlopeSeq.Entry> {
 		for (int i = 0, n = keyTable.length; i < n; i++) {
 			int key = keyTable[i];
 			if (key != 0) {
-				byte otherValue = other.get(key, 0);
-				byte otherSlope = other.getSlope(key, 0);
+				byte otherValue = other.get(key);
+				byte otherSlope = other.getSlope(key);
 				if (otherValue == 0) return false;
 				if (otherValue != valueTable[i]) return false;
 				if (otherSlope != slopeTable[i]) return false;
@@ -498,7 +593,7 @@ public class SlopeSeq implements Iterable<SlopeSeq.Entry> {
 
 		public Entries(SlopeSeq map) {
 			this.map = map;
-			this.keys = map.keys;
+			this.keys = map.order;
 			reset();
 		}
 
@@ -513,8 +608,8 @@ public class SlopeSeq implements Iterable<SlopeSeq.Entry> {
 			if (!valid) throw new RuntimeException("#iterator() cannot be used nested.");
 			currentIndex = nextIndex;
 			entry.key = keys.get(nextIndex);
-			entry.value = map.get(entry.key, 0);
-			entry.slope = map.getSlope(entry.key, 0);
+			entry.value = map.get(entry.key);
+			entry.slope = map.getSlope(entry.key);
 			nextIndex++;
 			hasNext = nextIndex < map.size;
 			return entry;
@@ -522,7 +617,7 @@ public class SlopeSeq implements Iterable<SlopeSeq.Entry> {
 
 		public void remove() {
 			if (currentIndex < 0) throw new IllegalStateException("next must be called before remove.");
-			map.remove(entry.key, 0);
+			map.remove(entry.key);
 			nextIndex--;
 			currentIndex = -1;
 		}
@@ -547,7 +642,7 @@ public class SlopeSeq implements Iterable<SlopeSeq.Entry> {
 
 		public Keys (SlopeSeq map) {
 			this.map = map;
-			this.keys = map.keys;
+			this.keys = map.order;
 			reset();
 		}
 		
@@ -569,7 +664,7 @@ public class SlopeSeq implements Iterable<SlopeSeq.Entry> {
 
 		public void remove () {
 			if (currentIndex < 0) throw new IllegalStateException("next must be called before remove.");
-			map.removeIndex(currentIndex);
+			map.removeAt(currentIndex);
 			nextIndex = currentIndex;
 			currentIndex = -1;
 		}
