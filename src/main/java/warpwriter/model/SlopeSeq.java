@@ -18,6 +18,8 @@ package warpwriter.model;
 
 import com.badlogic.gdx.math.MathUtils;
 import squidpony.squidmath.IntVLA;
+import warpwriter.model.nonvoxel.IntComparator;
+import warpwriter.model.nonvoxel.IntSort;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -94,6 +96,10 @@ public class SlopeSeq implements Iterable<SlopeSeq.Entry> {
 	 */
 	public int rotation = 0;
 
+	public int size() {
+		return size;
+	}
+	
 	public int sizeX() {
 		return sizeX;
 	}
@@ -264,6 +270,13 @@ public class SlopeSeq implements Iterable<SlopeSeq.Entry> {
 		}
 	}
 
+	public void putAll (IVoxelSeq map) {
+		ensureCapacity(map.size());
+		for (int i = 0, n = map.size(); i < n; i++) {
+			put(map.keyAt(i), map.getAt(i), -1);
+		}
+	}
+
 	/** Skips checks for existing keys, doesn't increment size, doesn't need to handle key 0. */
 	private void putResize (int key, byte value, byte slope) {
 		int[] keyTable = this.keyTable;
@@ -427,6 +440,223 @@ public class SlopeSeq implements Iterable<SlopeSeq.Entry> {
 		return locateKey(key) >= 0;
 	}
 
+	/**
+	 * Sorts this whole SlopeSeq on its keys using the supplied Comparator.
+	 * @param comparator an {@link IntComparator} that can handle the x,y,z packed keys this uses
+	 */
+	public void sort(IntComparator comparator)
+	{
+		sort(comparator, 0, order.size);
+	}
+
+	/**
+	 * Sorts a sub-range of this SlopeSeq on its keys from what is currently the index {@code start} up to (but not
+	 * including) the index {@code end}, using the supplied IntComparator. Only sorts potentially-visible voxels.
+	 * @param comparator an {@link IntComparator} that can handle the x,y,z packed keys this uses
+	 * @param start the first index of a key to sort (the index can change after this)
+	 * @param end the exclusive bound on the indices to sort; often this is just {@link #size()}
+	 */
+	public void sort(IntComparator comparator, int start, int end)
+	{
+		IntSort.sort(order.items, start, end, comparator);
+	}
+
+
+	/**
+	 * Gets the key at the given index in the entire iteration order in constant time, rotating the x, y, and z
+	 * components of the key to match {@link #rotation}.
+	 * @param idx the index in the entire order of the key to fetch
+	 * @return the key at the index, if the index is valid, otherwise 0
+	 */
+	public int keyAtRotated(final int idx) {
+		return keyAtRotated(idx, rotation);
+	}
+	/**
+	 * Gets the key at the given index in the entire iteration order in constant time, rotating the x, y, and z
+	 * components of the key to match {@code rotation} (a parameter, not the {@link #rotation} field of this class).
+	 * @param idx the index in the entire order of the key to fetch
+	 * @param rotation the rotation to use to edit the key; should be between 0 and 23 inclusive
+	 * @return the key at the index, if the index is valid, otherwise 0
+	 */
+	public int keyAtRotated(final int idx, final int rotation) {
+		if (idx < 0 || idx >= order.size)
+			return 0;
+		return rotate(order.get(idx), rotation);
+	}
+
+	public byte getRotated(final int key)
+	{
+		return getRotated(key, rotation);
+	}
+	public byte getRotated(final int key, final int rotation)
+	{
+		return get(rotate(key, ((-rotation) & 3) | rotation & -4));
+	}
+	public byte getRotated(final int x, final int y, final int z)
+	{
+		if((x | y | z) < 0) return 0;
+		return get(rotate(fuse(x, y, z), ((-rotation) & 3) | rotation & -4));
+	}
+	public byte getRotated(final int x, final int y, final int z, final int rotation)
+	{
+		if((x | y | z) < 0) return 0;
+		return get(rotate(fuse(x, y, z), ((-rotation) & 3) | rotation & -4));
+	}
+
+	public int rotate(final int k, final int rotation)
+	{
+		final int sizeX = this.sizeX - 1;
+		final int sizeY = this.sizeY - 1;
+		final int sizeZ = this.sizeZ - 1;
+		switch (rotation)
+		{
+			// 0-3 have z pointing towards z+ and the voxels rotating on that axis
+			case 0: return k;
+			case 1: return (k & 0x3FF00000) | sizeX - (k & 0x3FF) << 10 | (k >>> 10 & 0x3FF);
+			case 2: return (k & 0x3FF00000) | (sizeY << 10) - (k & 0xFFC00) | sizeX - (k & 0x3FF);
+			case 3: return (k & 0x3FF00000) | (k & 0x3FF) << 10 | (sizeY - (k >>> 10 & 0x3FF));
+			// 4-7 have z pointing towards y+ and the voxels rotating on that axis
+			case 4: return (k >>> 10 & 0x000FFC00) | (sizeY << 10) - (k & 0x000FFC00) << 10 | (k & 0x3FF);
+			case 5: return (k >>> 10 & 0x000FFC00) | (k & 0x3FF) << 20 | (k >>> 10 & 0x3FF);
+			case 6: return (k >>> 10 & 0x000FFC00) | (k & 0x000FFC00) << 10 | sizeX - (k & 0x3FF);
+			case 7: return (k >>> 10 & 0x000FFC00) | (sizeX - (k & 0x3FF) << 20) | sizeY - (k >>> 10 & 0x3FF);
+			// 8-11 have z pointing towards z-
+			case 8: return (sizeZ << 20) - (k & 0x3FF00000) | (k & 0xFFC00) | (k & 0x3FF);
+			case 9: return (sizeZ << 20) - (k & 0x3FF00000) |(sizeY) - (k >>> 10 & 0x3FF) | (k & 0x3FF) << 10;
+			case 10: return (sizeZ << 20) - (k & 0x3FF00000) | (sizeY << 10) - (k & 0xFFC00) | sizeX - (k & 0x3FF);
+			case 11: return (sizeZ << 20) - (k & 0x3FF00000) | (k >>> 10 & 0x3FF) | sizeX - (k & 0x3FF) << 10;
+			// 12-15 have z pointing towards y-
+			case 12: return (sizeZ << 10) - (k >>> 10 & 0x000FFC00) | (k & 0x000FFC00) << 10 | (k & 0x3FF);
+			case 13: return (sizeZ << 10) - (k >>> 10 & 0x000FFC00) | sizeX - (k & 0x3FF) << 20 | (k >>> 10 & 0x3FF);
+			case 14: return (sizeZ << 10) - (k >>> 10 & 0x000FFC00) | (sizeY << 20) - (k << 10 & 0x3FF00000) | sizeX - (k & 0x3FF);
+			case 15: return (sizeZ << 10) - (k >>> 10 & 0x000FFC00) | (k & 0x3FF) << 20 | sizeY - (k >>> 10 & 0x3FF);
+			// 16-19 have z pointing towards x+ and the voxels rotating on that axis
+			case 16: return (k >>> 20 & 0x3FF) | (k & 0x000FFC00) | (k << 20 & 0x3FF00000);
+			case 17: return (k >>> 20 & 0x3FF) | (k << 10 & 0x3FF00000) | (sizeX - (k & 0x3FF) << 10);
+			case 18: return (k >>> 20 & 0x3FF) | (sizeY << 10) - (k & 0x000FFC00) | (sizeX - (k & 0x3FF)) << 20;
+			case 19: return (k >>> 20 & 0x3FF) | (sizeY << 20) - (k << 10 & 0x3FF00000) | (k << 10 & 0x000FFC00);
+			// 20-23 have z pointing towards x- and the voxels rotating on that axis
+			case 20: return sizeZ - (k >>> 20 & 0x3FF) | (k & 0x000FFC00) | (k << 20 & 0x3FF00000);
+			case 21: return sizeZ - (k >>> 20 & 0x3FF) | (k << 10 & 0x3FF00000) | (sizeX - (k & 0x3FF) << 10);
+			case 22: return sizeZ - (k >>> 20 & 0x3FF) | (sizeY << 10) - (k & 0x000FFC00) | (sizeX - (k & 0x3FF)) << 20;
+			case 23: return sizeZ - (k >>> 20 & 0x3FF) | (sizeY << 20) - (k << 10 & 0x3FF00000) | (k << 10 & 0x000FFC00);
+			default:
+//                System.out.println("this shouldn't be happening! " + k);
+				return 0;
+		}
+
+	}
+
+	public SlopeSeq counterX() {
+		final int r = rotation();
+		switch (r & 28) { // 16, 8, 4
+			case 0:
+			case 8:
+				rotate(r ^ 4);
+				break;
+			case 12:
+			case 4:
+				rotate(r ^ 12);
+				break;
+			case 16:
+				rotate((r + 1 & 3) | 16);
+				break;
+			case 20:
+				rotate((r - 1 & 3) | 20);
+				break;
+		}
+		return this;
+	}
+
+	public SlopeSeq counterY() {
+		final int r = rotation();
+		switch (r & 28) // 16, 8, and 4 can each be set.
+		{
+			case 0:
+				rotate((r & 3) | 20);
+				break;
+			case 4:
+				rotate((r - 1 & 3) | (r & 12));
+				break;
+			case 8:
+				rotate((2-r & 3) | 16);
+				break;
+			case 12:
+				rotate((r + 1 & 3) | (r & 12));
+				break;
+			case 16:
+				rotate(-r & 3);
+				break;
+			case 20:
+				rotate((2+r & 3) | 8);
+				break;
+		}
+		return this;
+	}
+
+	public SlopeSeq counterZ() {
+		rotate((rotation() - 1 & 3) | (rotation() & 28));
+		return this;
+	}
+
+	public SlopeSeq clockX() {
+		final int r = rotation();
+		switch (r & 28) {
+			case 4:
+			case 12:
+				rotate(r ^ 4);
+				break;
+			case 0:
+			case 8:
+				rotate(r ^ 12);
+				break;
+			case 16:
+				rotate((r - 1 & 3) | 16);
+				break;
+			case 20:
+				rotate((r + 1 & 3) | 20);
+				break;
+		}
+		return this;
+	}
+
+	public SlopeSeq clockY() {
+		final int r = rotation();
+		switch (r & 28) // 16, 8, and 4 can each be set.
+		{
+			case 0:
+				rotate((-r & 3) | 16);
+				break;
+			case 4:
+				rotate((r + 1 & 3) | (r & 12));
+				break;
+			case 8:
+				rotate((2+r & 3) | 20);
+				break;
+			case 12:
+				rotate((r - 1 & 3) | (r & 12));
+				break;
+			case 16:
+				rotate((2-r & 3) | 8);
+				break;
+			case 20:
+				rotate(r & 3);
+				break;
+		}
+		return this;
+	}
+
+	public SlopeSeq clockZ() {
+		rotate((rotation() + 1 & 3) | (rotation() & 28));
+		return this;
+	}
+
+	public SlopeSeq reset() {
+		rotate(0);
+		return this;
+	}
+
+
 	/** Increases the size of the backing array to accommodate the specified number of additional items / loadFactor. Useful before
 	 * adding many items to avoid multiple backing array resizes. */
 	public void ensureCapacity (int additionalCapacity) {
@@ -446,6 +676,7 @@ public class SlopeSeq implements Iterable<SlopeSeq.Entry> {
 
 		keyTable = new int[newSize];
 		valueTable = new byte[newSize];
+		slopeTable = new byte[newSize];
 
 		if (size > 0) {
 			for (int i = 0; i < oldCapacity; i++) {
