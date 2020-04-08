@@ -69,7 +69,8 @@ public class SeqTest extends ApplicationAdapter {
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.FLESURRECT);
 //        colorizer = Colorizer.FlesurrectBonusColorizer;
-        colorizer = Colorizer.AzurestarColorizer;
+//        colorizer = Colorizer.AzurestarColorizer;
+        colorizer = Colorizer.SplatColorizer;
         shadowColor = colorizer.medium(colorizer.reduce(0x505050FF));
         voxelColor = new VoxelColor().set(colorizer);
         pixmapRenderer = new VoxelPixmapRenderer().set(new Pixmap(512, 512, Pixmap.Format.RGBA8888)).set(voxelColor);
