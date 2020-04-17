@@ -176,7 +176,7 @@ public class SlopeBox {
     }
 
 
-    public static Pixmap drawIso(SlopeBox seq, VoxelPixmapRenderer renderer) {
+    public static Pixmap drawIsoTri(SlopeBox seq, VoxelPixmapRenderer renderer) {
         // To move one x+ in voxels is x + 2, y - 2 in pixels.
         // To move one x- in voxels is x - 2, y + 2 in pixels.
         // To move one y+ in voxels is x + 2, y + 2 in pixels.
@@ -204,6 +204,36 @@ public class SlopeBox {
                     //if (z >= sizeZ - 1 || seq.getRotated(x, y, z + 1) == 0)
                     renderer.drawLeftTriangleVerticalFace(xPos, yPos + 4, v, dep, x, y, z);
                     renderer.drawRightTriangleVerticalFace(xPos + 2, yPos + 4, v, dep, x, y, z);
+                }
+            }
+        }
+        return renderer.blit(12, pixelWidth, pixelHeight);
+    }
+
+    public static Pixmap drawIso(SlopeBox seq, VoxelPixmapRenderer renderer) {
+        // To move one x+ in voxels is x + 2, y - 2 in pixels.
+        // To move one x- in voxels is x - 2, y + 2 in pixels.
+        // To move one y+ in voxels is x + 2, y + 2 in pixels.
+        // To move one y- in voxels is x - 2, y - 2 in pixels.
+        // To move one z+ in voxels is y + 4 in pixels.
+        // To move one z- in voxels is y - 4 in pixels.
+        if(seq instanceof ITemporal) {
+            renderer.color().time(((ITemporal) seq).frame());
+        }
+        final int sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ(),
+                pixelWidth = (Math.max(seq.sizeX(), Math.max(seq.sizeY(), seq.sizeZ()))) * 4 + 2,
+                pixelHeight = (Math.max(seq.sizeX(), seq.sizeY()) + seq.sizeZ() * 3) + 2;
+        for (int z = 0; z < sizeZ; z++) {
+            for (int x = 0; x < sizeX; x++) {
+                for (int y = 0; y < sizeY; y++) {
+                    final byte v = seq.color(x, y, z);
+                    if(v == 0) continue;
+                    final int xPos = (sizeY - y + x) * 2 - 1,
+                            yPos = (z * 3 + sizeX + sizeY - x - y) - 1,
+                            dep = (x + y + z * 2) * 2 + 256;
+                    renderer.rectLeft(xPos, yPos, 2, 3, v, dep, x, y, z);
+                    renderer.rectRight(xPos+2, yPos, 2, 3, v, dep, x, y, z);
+                    renderer.rectVertical(xPos, yPos+3, 4, 1, v, dep, x, y, z);
                 }
             }
         }
