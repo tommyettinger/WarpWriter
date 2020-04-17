@@ -2535,7 +2535,7 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
         }
     };
 
-    public static final Colorizer SplatColorizer = new Colorizer(new PaletteReducer(Coloring.SPLAT32)) {
+    public static final Colorizer SplayColorizer = new Colorizer(new PaletteReducer(Coloring.SPLAY32)) {
         private final byte[] primary = {
                 reducer.reduceIndex(0xFF0000FF),reducer.reduceIndex(0xFFFF00FF),
                 reducer.reduceIndex(0x00FF00FF),reducer.reduceIndex(0x00FFFFFF),
@@ -2561,7 +2561,7 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
 
         @Override
         public byte brighten(byte voxel) {
-            return Coloring.SPLAT_RAMPS[voxel & 0x1F][3];
+            return Coloring.SPLAY_RAMPS[voxel & 0x1F][3];
         }
 
         @Override
@@ -2569,23 +2569,23 @@ public abstract class Colorizer extends Dimmer implements IColorizer {
             // the second half of voxels (with bit 0x40 set) don't shade visually, but Colorizer uses this method to
             // denote a structural change to the voxel's makeup, so this uses the first 64 voxel colors to shade both
             // halves, then marks voxels from the second half back to being an unshaded voxel as the last step.
-            return Coloring.SPLAT_RAMPS[voxel & 0x1F][1];
+            return Coloring.SPLAY_RAMPS[voxel & 0x1F][1];
         }
 
         @Override
         public int dimmer(int brightness, byte voxel) {
-            if(brightness < 0) return Coloring.SPLAT32[1];
-            if(brightness > 3) return Coloring.SPLAT32[8];
-            return Coloring.SPLAT32[Coloring.SPLAT_RAMPS[voxel & 0x3F][brightness] & 0xFF];
+            if(brightness < 0) return Coloring.SPLAY32[1];
+            if(brightness > 3) return Coloring.SPLAY32[13];
+            return Coloring.SPLAY32[Coloring.SPLAY_RAMPS[voxel & 0x1F][brightness] & 0x1F];
         }
 
         @Override
         public int getShadeBit() {
-            return 128;
+            return 64;
         }
         @Override
         public int getWaveBit() {
-            return 0;
+            return 128;
         }
     };
 
