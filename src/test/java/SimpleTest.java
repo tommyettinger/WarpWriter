@@ -125,7 +125,7 @@ public class SimpleTest extends ApplicationAdapter {
             //// loads a file by its full path, which we get via drag+drop
             final byte[][][] arr = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream(name)));
             //// set the palette to the one from the vox model, using arbitraryDimmer()
-            batchRenderer.color().set(Colorizer.arbitraryColorizer(VoxIO.lastPalette));
+            batchRenderer.color().colorizer(Colorizer.arbitraryColorizer(VoxIO.lastPalette));
             voxelSprite.set(new ArrayModel(
                     arr
                     //// Aurora folder has vox models with a different palette, which involves a different IDimmer.
@@ -136,7 +136,7 @@ public class SimpleTest extends ApplicationAdapter {
         } catch (FileNotFoundException e) {
             maker.rng.setState(rng.nextLong());
             voxelSprite.set(new ArrayModel(maker.shipNoiseColorized()));
-            batchRenderer.set(batchRenderer.color().set(colorizer));
+            batchRenderer.set(batchRenderer.color().colorizer(colorizer));
         }
     }
 
@@ -156,7 +156,7 @@ public class SimpleTest extends ApplicationAdapter {
         rng = new MiniMover64RNG(-123456789);
         maker = new ModelMaker(-123456789, colorizer);
         batchRenderer = new VoxelSpriteBatchRenderer(batch);
-        batchRenderer.color().set(colorizer);
+        batchRenderer.color().colorizer(colorizer);
         voxelSprite = new VoxelSprite()
                 .set(batchRenderer)
                 .setOffset(VIRTUAL_WIDTH / 2, 100);
@@ -296,10 +296,10 @@ public class SimpleTest extends ApplicationAdapter {
                         makeModel();
                         break;
                     case Input.Keys.G:
-                        batchRenderer.color().set(batchRenderer.color().direction().counter());
+                        batchRenderer.color().direction(batchRenderer.color().direction().counter());
                         break;
                     case Input.Keys.H:
-                        batchRenderer.color().set(batchRenderer.color().direction().clock());
+                        batchRenderer.color().direction(batchRenderer.color().direction().clock());
                         break;
                     case Input.Keys.T: // try again
                         voxelSprite.reset();

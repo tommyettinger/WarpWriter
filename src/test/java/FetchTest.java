@@ -70,7 +70,7 @@ public class FetchTest extends ApplicationAdapter {
         screenRegion = new TextureRegion();
         screenView.getCamera().position.set(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2, 0);
         screenView.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        voxelColor = new VoxelColor().set(Colorizer.FlesurrectBonusColorizer);
+        voxelColor = new VoxelColor().colorizer(Colorizer.FlesurrectBonusColorizer);
         tex = new Texture[16];
         for (int f = 0; f < tex.length; f++) {
             tex[f] = new Texture(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, Pixmap.Format.RGBA8888);

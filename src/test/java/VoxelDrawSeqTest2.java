@@ -90,7 +90,7 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //        colorizer = Colorizer.WardBonusColorizer;
         batchRenderer = new VoxelImmediateRenderer(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);//.setOffset(VIRTUAL_WIDTH, 0).flipX();
         batch = new MutantBatch();
-        batchRenderer.color().set(colorizer);
+        batchRenderer.color().colorizer(colorizer);
         voxelColor = batchRenderer.color();
 //        batchRenderer.setScale(2, 2);
         rng = new MiniMover64RNG(-123456789);
@@ -227,7 +227,7 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //        gifRecorder.startRecording();
 
         startTime = TimeUtils.millis();
-        voxelColor.set(0);
+        voxelColor.time(0);
         alpha = 0f;
 //        transforms[0].interpolateInto(transforms[1 % transforms.length], alpha, transformMid);
 //        middleSeq.clear();
@@ -251,7 +251,7 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
         if(seq != null && animating)
         {
             int time = (int) TimeUtils.timeSinceMillis(startTime);
-            voxelColor.set(time * 5 >>> 9);
+            voxelColor.time(time * 5 >>> 9);
             alpha = (time & 0x7FF) * 0x1p-11f;
             transforms[(time >>> 11) % transforms.length].interpolateInto(transforms[((time >>> 11) + 1) % transforms.length], alpha, transformMid);
             middleSeq.clear();
@@ -343,7 +343,7 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
         try {
             //// loads a file by its full path, which we get via drag+drop
             final byte[][][] arr = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream(name)));
-            batchRenderer.color().set(Colorizer.arbitraryColorizer(VoxIO.lastPalette));
+            batchRenderer.color().colorizer(Colorizer.arbitraryColorizer(VoxIO.lastPalette));
             seq.clear();
 //            Tools3D.fill(voxels, 0);
 //            Tools3D.deepCopyInto(arr, voxels);
@@ -356,7 +356,7 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
         } catch (FileNotFoundException e) {
             maker.rng.setState(rng.nextLong());
             final byte[][][] arr = maker.shipNoiseColorized();
-            batchRenderer.set(batchRenderer.color().set(colorizer));
+            batchRenderer.set(batchRenderer.color().colorizer(colorizer));
             seq.clear();
             Tools3D.fill(voxels, 0);
             Tools3D.translateCopyInto(arr, voxels, 15, 15, 15);
@@ -487,10 +487,10 @@ public class VoxelDrawSeqTest2 extends ApplicationAdapter {
 //                        animating = true;
 //                        break;
                     case Input.Keys.G:
-                        voxelColor.set(voxelColor.direction().counter());
+                        voxelColor.direction(voxelColor.direction().counter());
                         break;
                     case Input.Keys.H:
-                        voxelColor.set(voxelColor.direction().clock());
+                        voxelColor.direction(voxelColor.direction().clock());
                         break;
                     case Input.Keys.T: // try again
 //                        model.rotation().reset();

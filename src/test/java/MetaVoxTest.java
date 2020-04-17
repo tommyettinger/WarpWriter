@@ -82,7 +82,7 @@ public class MetaVoxTest extends ApplicationAdapter {
         colorizer = Colorizer.FlesurrectBonusColorizer;
         batchRenderer = new VoxelImmediateRenderer(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);//.setOffset(VIRTUAL_WIDTH, 0).flipX();
         batch = new MutantBatch();
-        batchRenderer.color().set(colorizer);
+        batchRenderer.color().colorizer(colorizer);
         voxelColor = batchRenderer.color();
 //        batchRenderer.setScale(2, 2);
         rng = new MiniMover64RNG(-123456789);
@@ -222,7 +222,7 @@ public class MetaVoxTest extends ApplicationAdapter {
         if(seq != null && animating)
         {
             int time = (int) TimeUtils.timeSinceMillis(startTime);
-            voxelColor.set(time * 5 >>> 9);
+            voxelColor.time(time * 5 >>> 9);
             alpha = (time & 0x7FF) * 0x1p-11f;
             transforms[(time >>> 11) % transforms.length].interpolateInto(transforms[((time >>> 11) + 1) % transforms.length], alpha, transformMid);
             middleSeq.clearAll();
@@ -378,10 +378,10 @@ public class MetaVoxTest extends ApplicationAdapter {
 //                        animating = true;
 //                        break;
                     case Input.Keys.G:
-                        voxelColor.set(voxelColor.direction().counter());
+                        voxelColor.direction(voxelColor.direction().counter());
                         break;
                     case Input.Keys.H:
-                        voxelColor.set(voxelColor.direction().clock());
+                        voxelColor.direction(voxelColor.direction().clock());
                         break;
                     case Input.Keys.T: // try again
 //                        model.rotation().reset();

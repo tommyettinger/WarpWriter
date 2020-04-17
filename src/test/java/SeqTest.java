@@ -70,9 +70,9 @@ public class SeqTest extends ApplicationAdapter {
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.FLESURRECT);
 //        colorizer = Colorizer.FlesurrectBonusColorizer;
 //        colorizer = Colorizer.AzurestarColorizer;
-        colorizer = Colorizer.SplatColorizer;
+        colorizer = Colorizer.SplayColorizer;
         shadowColor = colorizer.medium(colorizer.reduce(0x505050FF));
-        voxelColor = new VoxelColor().set(colorizer);
+        voxelColor = new VoxelColor().colorizer(colorizer);
         pixmapRenderer = new VoxelPixmapRenderer().set(new Pixmap(512, 512, Pixmap.Format.RGBA8888)).set(voxelColor);
         pixmapRenderer.easing = false;
         pmTexture = new Texture(512, 512, Pixmap.Format.RGBA8888);
@@ -255,10 +255,10 @@ public class SeqTest extends ApplicationAdapter {
                         animating = true;
                         break;
                     case Input.Keys.G:
-                        voxelColor.set(voxelColor.direction().counter());
+                        voxelColor.direction(voxelColor.direction().counter());
                         break;
                     case Input.Keys.H:
-                        voxelColor.set(voxelColor.direction().clock());
+                        voxelColor.direction(voxelColor.direction().clock());
                         break;
                     case Input.Keys.E: // easing
                         pixmapRenderer.easing = !pixmapRenderer.easing;
@@ -274,24 +274,24 @@ public class SeqTest extends ApplicationAdapter {
                     case Input.Keys.A:
                         if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT))
                         {
-                            pixmapRenderer.color().set(Colorizer.AuroraBonusColorizer);
+                            pixmapRenderer.color().colorizer(Colorizer.AuroraBonusColorizer);
                             maker.setColorizer(Colorizer.AuroraBonusColorizer);
                         }
                         else
                         {
-                            pixmapRenderer.voxelColor().set(Colorizer.AuroraColorizer);
+                            pixmapRenderer.voxelColor().colorizer(Colorizer.AuroraColorizer);
                             maker.setColorizer(Colorizer.AuroraColorizer);
                         }
                         break;
                     case Input.Keys.S: // smaller palette, 64 colors
                         if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT))
                         {
-                            pixmapRenderer.color().set(Colorizer.FlesurrectBonusColorizer);
+                            pixmapRenderer.color().colorizer(Colorizer.FlesurrectBonusColorizer);
                             maker.setColorizer(Colorizer.FlesurrectBonusColorizer);
                         }
                         else 
                         {
-                            pixmapRenderer.color().set(Colorizer.FlesurrectColorizer);
+                            pixmapRenderer.color().colorizer(Colorizer.FlesurrectColorizer);
                             maker.setColorizer(Colorizer.FlesurrectColorizer);
                         }
                         break;

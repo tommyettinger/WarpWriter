@@ -32,7 +32,7 @@ public class TurnTest extends ApplicationAdapter {
 
     @Override
     public void create() {
-        modelRenderer = new VoxelPixmapRenderer().set(new Pixmap(width, height, Pixmap.Format.RGBA8888)).set(new VoxelColor().set(Colorizer.RinsedColorizer));
+        modelRenderer = new VoxelPixmapRenderer().set(new Pixmap(width, height, Pixmap.Format.RGBA8888)).set(new VoxelColor().colorizer(Colorizer.RinsedColorizer));
         batch = new SpriteBatch();
         view = new FitViewport(width, height);
         font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));

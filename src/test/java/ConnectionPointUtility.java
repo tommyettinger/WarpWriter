@@ -127,7 +127,7 @@ public class ConnectionPointUtility extends ApplicationAdapter {
         naming = new Mnemonic(54321);
         maker = new ModelMaker(987654321123456789L, colorizer);
         renderer = new VoxelSpriteBatchRenderer(batch);
-        renderer.color().set(colorizer);
+        renderer.color().colorizer(colorizer);
         voxelSprite = new VoxelSprite()
                 .set(renderer)
                 .setOffset(VIRTUAL_WIDTH / 2, 100)
@@ -310,10 +310,10 @@ public class ConnectionPointUtility extends ApplicationAdapter {
                         makeModel();
                         break;
                     case Input.Keys.G:
-                        renderer.color().set(renderer.color().direction().counter());
+                        renderer.color().direction(renderer.color().direction().counter());
                         break;
                     case Input.Keys.H:
-                        renderer.color().set(renderer.color().direction().clock());
+                        renderer.color().direction(renderer.color().direction().clock());
                         break;
                     case Input.Keys.W:
                         cursorModel.addX(1);

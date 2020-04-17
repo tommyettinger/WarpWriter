@@ -22,7 +22,7 @@ public class VoxelPixmapRenderer implements IRectangleRenderer, ITriangleRendere
     public VoxelPixmapRenderer setScale(int scale) {
         return setScale(scale, scale);
     }
-
+    
     public VoxelPixmapRenderer setScale(int scaleX, int scaleY) {
         this.scaleX = scaleX;
         this.scaleY = scaleY;
@@ -122,15 +122,15 @@ public class VoxelPixmapRenderer implements IRectangleRenderer, ITriangleRendere
     }
 
     public VoxelPixmapRenderer rectVertical(int px, int py, int sizeX, int sizeY, byte voxel, int depth, int vx, int vy, int vz) {
-        return rect(px, py, sizeX, sizeY, color.verticalFace(voxel, vx, vy, vz), color.twilight().dark(voxel), depth);
+        return rect(px, py, sizeX, sizeY, color.verticalFace(voxel, vx, vy, vz), color.colorizer().dark(voxel), depth);
     }
 
     public VoxelPixmapRenderer rectLeft(int px, int py, int sizeX, int sizeY, byte voxel, int depth, int vx, int vy, int vz) {
-        return rect(px, py, sizeX, sizeY, color.leftFace(voxel, vx, vy, vz), color.twilight().dark(voxel), depth);
+        return rect(px, py, sizeX, sizeY, color.leftFace(voxel, vx, vy, vz), color.colorizer().dark(voxel), depth);
     }
 
     public VoxelPixmapRenderer rectRight(int px, int py, int sizeX, int sizeY, byte voxel, int depth, int vx, int vy, int vz) {
-        return rect(px, py, sizeX, sizeY, color.rightFace(voxel, vx, vy, vz), color.twilight().dark(voxel), depth);
+        return rect(px, py, sizeX, sizeY, color.rightFace(voxel, vx, vy, vz), color.colorizer().dark(voxel), depth);
     }
 
     public int getPixel(int x, int y) {
@@ -383,13 +383,13 @@ public class VoxelPixmapRenderer implements IRectangleRenderer, ITriangleRendere
     }
 
     public VoxelPixmapRenderer drawLeftTriangle(int x, int y, int shown, byte voxel, int depth) {
-        final int outline = color.twilight().dark(voxel);
+        final int outline = color.colorizer().dark(voxel);
         rect((x + 1) * scaleX + offsetX, y * scaleY + offsetY, scaleX, scaleY * 3, shown, outline, depth);
         return rect(x * scaleX + offsetX, (y + 1) * scaleY + offsetY * scaleY, scaleX, scaleY, shown, outline, depth);
     }
 
     public VoxelPixmapRenderer drawRightTriangle(int x, int y, int shown, byte voxel, int depth) {
-        final int outline = color.twilight().dark(voxel);
+        final int outline = color.colorizer().dark(voxel);
         rect(x * scaleX + offsetX, y * scaleY + offsetY, scaleX, scaleY * 3, shown, outline, depth);
         return rect((x + 1) * scaleX + offsetX, (y + 1) * scaleY + offsetY, scaleX, scaleY, shown, outline, depth);
     }

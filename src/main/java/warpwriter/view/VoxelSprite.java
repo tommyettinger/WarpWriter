@@ -218,7 +218,7 @@ public class VoxelSprite implements Disposable, ITurnable {
                 break;
             case 1: // Below
                 if (z45) {
-                    renderer.color().set(renderer.color().direction().flipY());
+                    renderer.color().direction(renderer.color().direction().flipY());
                     turnModel.clockY().clockY().clockZ();
                     VoxelDraw.drawIso(turnModel, renderer
                             .setFlipX(false).setFlipY(true)
@@ -229,9 +229,9 @@ public class VoxelSprite implements Disposable, ITurnable {
                             )
                     );
                     turnModel.counterZ().counterY().counterY();
-                    renderer.color().set(renderer.color().direction().flipY());
+                    renderer.color().direction(renderer.color().direction().flipY());
                 } else {
-                    renderer.color().set(renderer.color().direction().opposite());
+                    renderer.color().direction(renderer.color().direction().opposite());
                     turnModel.clockY().clockY().clockZ().clockZ();
                     VoxelDraw.drawAbove(turnModel, renderer
                             .setFlipX(false).setFlipY(true)
@@ -242,7 +242,7 @@ public class VoxelSprite implements Disposable, ITurnable {
                             )
                     );
                     turnModel.counterZ().counterZ().counterY().counterY();
-                    renderer.color().set(renderer.color().direction().opposite());
+                    renderer.color().direction(renderer.color().direction().opposite());
                 }
                 break;
             case 2: // Side

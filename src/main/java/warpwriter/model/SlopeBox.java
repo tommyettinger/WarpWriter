@@ -1,6 +1,8 @@
 package warpwriter.model;
 
+import com.badlogic.gdx.graphics.Pixmap;
 import warpwriter.Tools3D;
+import warpwriter.view.render.VoxelPixmapRenderer;
 
 public class SlopeBox {
     public byte[][][][] data;
@@ -18,7 +20,7 @@ public class SlopeBox {
         Tools3D.fill(data[1], -1);
         putSlopes();
     }
-    
+
     public int sizeX(){
         return data[0].length;
     }
@@ -172,4 +174,40 @@ public class SlopeBox {
         }
         return this;
     }
+
+
+    public static Pixmap drawIso(SlopeBox seq, VoxelPixmapRenderer renderer) {
+        // To move one x+ in voxels is x + 2, y - 2 in pixels.
+        // To move one x- in voxels is x - 2, y + 2 in pixels.
+        // To move one y+ in voxels is x + 2, y + 2 in pixels.
+        // To move one y- in voxels is x - 2, y - 2 in pixels.
+        // To move one z+ in voxels is y + 4 in pixels.
+        // To move one z- in voxels is y - 4 in pixels.
+        if(seq instanceof ITemporal) {
+            renderer.color().time(((ITemporal) seq).frame());
+        }
+        final int sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ(),
+                pixelWidth = (Math.max(seq.sizeX(), Math.max(seq.sizeY(), seq.sizeZ()))) * 4 + 2,
+                pixelHeight = (Math.max(seq.sizeX(), seq.sizeY()) * 2 + seq.sizeZ() + 1) * 2 + 1;
+        for (int z = 0; z < sizeZ; z++) {
+            for (int x = 0; x < sizeX; x++) {
+                for (int y = 0; y < sizeY; y++) {
+                    final byte v = seq.color(x, y, z);
+                    if(v == 0) continue;
+                    final int xPos = (sizeY - y + x) * 2 - 1,
+                            yPos = (z + sizeX + sizeY - x - y) * 2 - 3,
+                            dep = 3 * (x + y + z) + 256;
+                    renderer.drawLeftTriangleLeftFace(xPos, yPos, v, dep, x, y, z);
+                    renderer.drawRightTriangleLeftFace(xPos, yPos + 2, v, dep, x, y, z);
+                    renderer.drawLeftTriangleRightFace(xPos + 2, yPos + 2, v, dep, x, y, z);
+                    renderer.drawRightTriangleRightFace(xPos + 2, yPos, v, dep, x, y, z);
+                    //if (z >= sizeZ - 1 || seq.getRotated(x, y, z + 1) == 0)
+                    renderer.drawLeftTriangleVerticalFace(xPos, yPos + 4, v, dep, x, y, z);
+                    renderer.drawRightTriangleVerticalFace(xPos + 2, yPos + 4, v, dep, x, y, z);
+                }
+            }
+        }
+        return renderer.blit(12, pixelWidth, pixelHeight);
+    }
+
 }

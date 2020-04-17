@@ -3,6 +3,7 @@ package warpwriter.view.color;
 import squidpony.squidmath.FastNoise;
 import warpwriter.Coloring;
 import warpwriter.model.IVoxelSeq;
+import warpwriter.model.color.Colorizer;
 
 /**
  * VoxelColor will color voxel cubes in a way that varies based on the direction of the light.
@@ -242,7 +243,7 @@ public class VoxelColor implements IVoxelColor {
         return lightDirection;
     }
 
-    public VoxelColor set(LightDirection lightDirection) {
+    public VoxelColor direction(LightDirection lightDirection) {
         this.lightDirection = lightDirection;
         return this;
     }
@@ -264,25 +265,25 @@ public class VoxelColor implements IVoxelColor {
      * @param time the time to set for animated effects when the palette is capable of them; usually in milliseconds.
      * @return this for chaining
      */
-    public VoxelColor set(int time) {
+    public VoxelColor time(int time) {
         this.time = time;
         return this;
     }
 
-    protected IDimmer dimmer = Dimmer.RinsedDimmer;
+    protected Colorizer colorizer = Colorizer.SplayColorizer;
     
-    protected int shadeBit = dimmer.getShadeBit();
-    protected int waveBit = dimmer.getWaveBit();
+    protected int shadeBit = colorizer.getShadeBit();
+    protected int waveBit = colorizer.getWaveBit();
     protected FastNoise noise = null;
     
-    public IDimmer twilight() {
-        return dimmer;
+    public Colorizer colorizer() {
+        return colorizer;
     }
 
-    public VoxelColor set(IDimmer twilight) {
-        this.dimmer = twilight;
-        shadeBit = dimmer.getShadeBit();
-        waveBit = dimmer.getWaveBit();
+    public VoxelColor colorizer(Colorizer twilight) {
+        this.colorizer = twilight;
+        shadeBit = colorizer.getShadeBit();
+        waveBit = colorizer.getWaveBit();
         if(waveBit != 0 && waveBit != shadeBit)
         {
             noise = new FastNoise(0x1337BEEF, 0.125f, FastNoise.SIMPLEX_FRACTAL, 2);
@@ -349,17 +350,17 @@ public class VoxelColor implements IVoxelColor {
         switch (lightDirection) {
             case ABOVE_RIGHT:
             case ABOVE_LEFT:
-                return dimmer.bright(voxel);
+                return colorizer.bright(voxel);
             case LEFT_BELOW:
             case RIGHT_BELOW:
-                return dimmer.dim(voxel);
+                return colorizer.dim(voxel);
             case BELOW_RIGHT:
             case BELOW_LEFT:
-                return dimmer.dark(voxel);
+                return colorizer.dark(voxel);
             case RIGHT_ABOVE:
             case LEFT_ABOVE:
             default:
-                return dimmer.medium(voxel);
+                return colorizer.medium(voxel);
         }
     }
 
@@ -367,17 +368,17 @@ public class VoxelColor implements IVoxelColor {
         switch (lightDirection) {
             case BELOW_RIGHT:
             case BELOW_LEFT:
-                return dimmer.bright(voxel);
+                return colorizer.bright(voxel);
             case RIGHT_ABOVE:
             case LEFT_ABOVE:
-                return dimmer.dim(voxel);
+                return colorizer.dim(voxel);
             case ABOVE_RIGHT:
             case ABOVE_LEFT:
-                return dimmer.dark(voxel);
+                return colorizer.dark(voxel);
             case LEFT_BELOW:
             case RIGHT_BELOW:
             default:
-                return dimmer.medium(voxel);
+                return colorizer.medium(voxel);
         }
     }
 
@@ -386,16 +387,16 @@ public class VoxelColor implements IVoxelColor {
         switch (lightDirection) {
             case RIGHT_ABOVE:
             case RIGHT_BELOW:
-                return dimmer.bright(voxel);
+                return colorizer.bright(voxel);
             case ABOVE_LEFT:
             case BELOW_LEFT:
             case LEFT_ABOVE:
-                return dimmer.dim(voxel);
+                return colorizer.dim(voxel);
             case ABOVE_RIGHT:
             case BELOW_RIGHT:
             case LEFT_BELOW:
             default:
-                return dimmer.medium(voxel);
+                return colorizer.medium(voxel);
         }
     }
 
@@ -404,16 +405,16 @@ public class VoxelColor implements IVoxelColor {
         switch (lightDirection) {
             case LEFT_ABOVE:
             case LEFT_BELOW:
-                return dimmer.bright(voxel);
+                return colorizer.bright(voxel);
             case ABOVE_LEFT:
             case BELOW_LEFT:
             case RIGHT_BELOW:
-                return dimmer.medium(voxel);
+                return colorizer.medium(voxel);
             default:
             case ABOVE_RIGHT:
             case BELOW_RIGHT:
             case RIGHT_ABOVE:
-                return dimmer.dim(voxel);
+                return colorizer.dim(voxel);
         }
     }
     
@@ -432,11 +433,11 @@ public class VoxelColor implements IVoxelColor {
             if((voxel & shadeBit) != 0)
             {
                 final int brightness = (voxel + time & 3);
-                return dimmer.dimmer(brightness + 1 - (brightness & (brightness << 1)), voxel);
+                return colorizer.dimmer(brightness + 1 - (brightness & (brightness << 1)), voxel);
             }
             else
             {
-                return dimmer.dimmer(processNoise(x, y, z), voxel);
+                return colorizer.dimmer(processNoise(x, y, z), voxel);
             }
         }
         return verticalFace(voxel);
@@ -447,11 +448,11 @@ public class VoxelColor implements IVoxelColor {
             if((voxel & shadeBit) != 0)
             {
                 final int brightness = (voxel + time & 3);
-                return dimmer.dimmer(brightness + 1 - (brightness & (brightness << 1)), voxel);
+                return colorizer.dimmer(brightness + 1 - (brightness & (brightness << 1)), voxel);
             }
             else
             {
-                return dimmer.dimmer(processNoise(x, y, z), voxel);
+                return colorizer.dimmer(processNoise(x, y, z), voxel);
             }
         }
         return reverseVerticalFace(voxel);
@@ -464,11 +465,11 @@ public class VoxelColor implements IVoxelColor {
             if((voxel & shadeBit) != 0)
             {
                 final int brightness = (voxel + time & 3);
-                return dimmer.dimmer(brightness + 1 - (brightness & (brightness << 1)), voxel);
+                return colorizer.dimmer(brightness + 1 - (brightness & (brightness << 1)), voxel);
             }
             else
             {
-                return dimmer.dimmer(processNoise(x, y, z), voxel);
+                return colorizer.dimmer(processNoise(x, y, z), voxel);
             }
         }
         return rightFace(voxel);
@@ -481,11 +482,11 @@ public class VoxelColor implements IVoxelColor {
             if((voxel & shadeBit) != 0)
             {
                 final int brightness = (voxel + time & 3);
-                return dimmer.dimmer(brightness + 1 - (brightness & (brightness << 1)), voxel);
+                return colorizer.dimmer(brightness + 1 - (brightness & (brightness << 1)), voxel);
             }
             else
             {
-                return dimmer.dimmer(processNoise(x, y, z), voxel);
+                return colorizer.dimmer(processNoise(x, y, z), voxel);
             }
         }
         return leftFace(voxel);
@@ -594,16 +595,16 @@ public class VoxelColor implements IVoxelColor {
             switch (lightDirection) {
                 case ABOVE_RIGHT:
                 case ABOVE_LEFT:
-                    return darkSide ? dimmer.medium(voxel) : dimmer.bright(voxel);
+                    return darkSide ? colorizer.medium(voxel) : colorizer.bright(voxel);
                 default:
                 case RIGHT_ABOVE:
                 case LEFT_ABOVE:
                 case RIGHT_BELOW:
                 case LEFT_BELOW:
-                    return darkSide ? dimmer.dim(voxel) : dimmer.medium(voxel);
+                    return darkSide ? colorizer.dim(voxel) : colorizer.medium(voxel);
                 case BELOW_RIGHT:
                 case BELOW_LEFT:
-                    return darkSide ? dimmer.dark(voxel) : dimmer.dim(voxel);
+                    return darkSide ? colorizer.dark(voxel) : colorizer.dim(voxel);
             }
         }
 
@@ -612,9 +613,9 @@ public class VoxelColor implements IVoxelColor {
             switch (lightDirection) {
                 case LEFT_ABOVE:
                 case LEFT_BELOW:
-                    return darkSide ? dimmer.medium(voxel) : dimmer.bright(voxel);
+                    return darkSide ? colorizer.medium(voxel) : colorizer.bright(voxel);
                 default:
-                    return darkSide ? dimmer.dim(voxel) : dimmer.medium(voxel);
+                    return darkSide ? colorizer.dim(voxel) : colorizer.medium(voxel);
             }
         }
 
@@ -623,9 +624,9 @@ public class VoxelColor implements IVoxelColor {
             switch (lightDirection) {
                 case RIGHT_ABOVE:
                 case RIGHT_BELOW:
-                    return darkSide ? dimmer.medium(voxel) : dimmer.bright(voxel);
+                    return darkSide ? colorizer.medium(voxel) : colorizer.bright(voxel);
                 default:
-                    return darkSide ? dimmer.dim(voxel) : dimmer.medium(voxel);
+                    return darkSide ? colorizer.dim(voxel) : colorizer.medium(voxel);
             }
         }
     }

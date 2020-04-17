@@ -76,7 +76,7 @@ public class VoxelDrawSeqTest extends ApplicationAdapter {
 //        colorizer = Colorizer.LawnBonusColorizer;
         colorizer = Colorizer.RollBonusColorizer;
         batchRenderer = new VoxelImmediateRenderer(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
-        batchRenderer.color().set(colorizer);
+        batchRenderer.color().colorizer(colorizer);
         voxelColor = batchRenderer.color();
         rng = new MiniMover64RNG(123456789);
         maker = new ModelMaker(-123456789, colorizer);
@@ -275,10 +275,10 @@ public class VoxelDrawSeqTest extends ApplicationAdapter {
                         animating = true;
                         break;
                     case Input.Keys.G:
-                        voxelColor.set(voxelColor.direction().counter());
+                        voxelColor.direction(voxelColor.direction().counter());
                         break;
                     case Input.Keys.H:
-                        voxelColor.set(voxelColor.direction().clock());
+                        voxelColor.direction(voxelColor.direction().clock());
                         break;
                     case Input.Keys.T: // try again
 //                        model.rotation().reset();

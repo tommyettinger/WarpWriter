@@ -182,7 +182,7 @@ public class BurstTest extends ApplicationAdapter {
 
         maker = new ModelMaker(-123456789, Colorizer.FlesurrectBonusColorizer);
         batchRenderer = new VoxelSpriteBatchRenderer(batch);
-        batchRenderer.color().set(Colorizer.FlesurrectBonusColorizer);
+        batchRenderer.color().colorizer(Colorizer.FlesurrectBonusColorizer);
         voxelSprite = new VoxelSprite()
                 .set(batchRenderer)
                 .setOffset(VIRTUAL_WIDTH / 2, 100);
@@ -307,10 +307,10 @@ public class BurstTest extends ApplicationAdapter {
                         makeModel();
                         break;
                     case Input.Keys.G:
-                        batchRenderer.color().set(batchRenderer.color().direction().counter());
+                        batchRenderer.color().direction(batchRenderer.color().direction().counter());
                         break;
                     case Input.Keys.H:
-                        batchRenderer.color().set(batchRenderer.color().direction().clock());
+                        batchRenderer.color().direction(batchRenderer.color().direction().clock());
                         break;
                     case Input.Keys.T: // try again
                         voxelSprite.reset();

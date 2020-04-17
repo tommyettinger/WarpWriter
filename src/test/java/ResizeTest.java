@@ -114,7 +114,7 @@ public class ResizeTest extends ApplicationAdapter {
         colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
         maker = new ModelMaker(12345, colorizer);
         batchRenderer = new VoxelSpriteBatchRenderer(batch);
-        batchRenderer.color().set(colorizer);
+        batchRenderer.color().colorizer(colorizer);
         voxelSprite = new VoxelSprite()
                 .set(batchRenderer)
                 .setOffset(VIRTUAL_WIDTH / 2, 100);
@@ -250,10 +250,10 @@ public class ResizeTest extends ApplicationAdapter {
                         makeModel();
                         break;
                     case Input.Keys.G:
-                        batchRenderer.color().set(batchRenderer.color().direction().counter());
+                        batchRenderer.color().direction(batchRenderer.color().direction().counter());
                         break;
                     case Input.Keys.H:
-                        batchRenderer.color().set(batchRenderer.color().direction().clock());
+                        batchRenderer.color().direction(batchRenderer.color().direction().clock());
                         break;
                     case Input.Keys.T: // try again
                         voxelSprite.reset();

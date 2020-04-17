@@ -77,10 +77,10 @@ public class VoxelSpotTest extends ApplicationAdapter {
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.FLESURRECT);
         colorizer = Colorizer.WardBonusColorizer;
-        voxelColor = new VoxelColor().set(colorizer);
+        voxelColor = new VoxelColor().colorizer(colorizer);
         batchRenderer = new VoxelSpotRenderer(VIRTUAL_WIDTH, VIRTUAL_HEIGHT).setOffset(VIRTUAL_WIDTH, 0).flipX();
         batch = new MutantBatch();
-        batchRenderer.color().set(colorizer);
+        batchRenderer.color().colorizer(colorizer);
         rng = new MiniMover64RNG(-123456789);
         maker = new ModelMaker(-123456789, colorizer);
 //        transformStart = new Transform();
@@ -332,10 +332,10 @@ public class VoxelSpotTest extends ApplicationAdapter {
 //                        animating = true;
 //                        break;
                     case Input.Keys.G:
-                        voxelColor.set(voxelColor.direction().counter());
+                        voxelColor.direction(voxelColor.direction().counter());
                         break;
                     case Input.Keys.H:
-                        voxelColor.set(voxelColor.direction().clock());
+                        voxelColor.direction(voxelColor.direction().clock());
                         break;
                     case Input.Keys.T: // try again
 //                        model.rotation().reset();

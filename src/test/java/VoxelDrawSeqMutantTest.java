@@ -87,7 +87,7 @@ public class VoxelDrawSeqMutantTest extends ApplicationAdapter {
         
         colorizer = Colorizer.RollBonusColorizer;
         renderer = new VoxelImmediateRenderer(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
-        renderer.color().set(colorizer);
+        renderer.color().colorizer(colorizer);
         voxelColor = renderer.color();
 //        batchRenderer = new VoxelSpriteBatchRenderer(batch);
         rng = new MiniMover64RNG(-123456789);
@@ -156,7 +156,7 @@ public class VoxelDrawSeqMutantTest extends ApplicationAdapter {
     @Override
     public void render() {
         int time = (int) TimeUtils.timeSinceMillis(startTime);
-        voxelColor.set(time * 5 >>> 9);
+        voxelColor.time(time * 5 >>> 9);
 
 //        model.setFrame((int)(TimeUtils.millis() >>> 7) & 15);
 //        boom.setFrame((int)(TimeUtils.millis() >>> 7) & 15);
@@ -318,10 +318,10 @@ public class VoxelDrawSeqMutantTest extends ApplicationAdapter {
                         animating = true;
                         break;
                     case Input.Keys.G:
-                        voxelColor.set(voxelColor.direction().counter());
+                        voxelColor.direction(voxelColor.direction().counter());
                         break;
                     case Input.Keys.H:
-                        voxelColor.set(voxelColor.direction().clock());
+                        voxelColor.direction(voxelColor.direction().clock());
                         break;
                     case Input.Keys.T: // try again
 //                        model.rotation().reset();

@@ -10,9 +10,9 @@ import warpwriter.VoxIO;
 import warpwriter.model.IModel;
 import warpwriter.model.TurnModel;
 import warpwriter.model.VoxelModel;
+import warpwriter.model.color.Colorizer;
 import warpwriter.model.nonvoxel.LittleEndianDataInputStream;
 import warpwriter.view.VoxelDraw;
-import warpwriter.view.color.Dimmer;
 import warpwriter.view.render.VoxelPixmapRenderer;
 
 import javax.imageio.ImageIO;
@@ -46,7 +46,7 @@ public class PreviewSpinnerTest extends ApplicationAdapter {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        renderer.color().set(Dimmer.arbitraryDimmer(VoxIO.lastPalette));
+        renderer.color().colorizer(Colorizer.arbitraryColorizer(VoxIO.lastPalette));
 
         Pixmap[] pixmaps = spin(model);
 
@@ -184,7 +184,7 @@ public class PreviewSpinnerTest extends ApplicationAdapter {
                 break;
             case 1: // Below
                 if (z45) {
-                    renderer.color().set(renderer.color().direction().flipY());
+                    renderer.color().direction(renderer.color().direction().flipY());
                     turnModel.rotation().clockY().clockY().clockZ();
                     VoxelDraw.drawIso(turnModel, renderer
                             //.setFlipX(true).setFlipY(true)
@@ -195,9 +195,9 @@ public class PreviewSpinnerTest extends ApplicationAdapter {
                             )
                     );
                     turnModel.rotation().counterZ().counterY().counterY();
-                    renderer.color().set(renderer.color().direction().flipY());
+                    renderer.color().direction(renderer.color().direction().flipY());
                 } else {
-                    renderer.color().set(renderer.color().direction().opposite());
+                    renderer.color().direction(renderer.color().direction().opposite());
                     turnModel.rotation().clockY().clockY().clockZ().clockZ();
                     VoxelDraw.drawAbove(turnModel, renderer
                             //.setFlipX(true).setFlipY(true)
@@ -208,7 +208,7 @@ public class PreviewSpinnerTest extends ApplicationAdapter {
                             )
                     );
                     turnModel.rotation().counterZ().counterZ().counterY().counterY();
-                    renderer.color().set(renderer.color().direction().opposite());
+                    renderer.color().direction(renderer.color().direction().opposite());
                 }
                 break;
             case 2: // Side

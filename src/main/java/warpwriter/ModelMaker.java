@@ -11,8 +11,8 @@ import java.io.InputStream;
 import static squidpony.squidmath.GWTRNG.determineBounded;
 import static squidpony.squidmath.GWTRNG.determineInt;
 import static squidpony.squidmath.MathExtras.clamp;
-import static squidpony.squidmath.Noise.IntPointHash.hash32;
-import static squidpony.squidmath.Noise.IntPointHash.hashAll;
+import static squidpony.squidmath.IntPointHash.hash32;
+import static squidpony.squidmath.IntPointHash.hashAll;
 /**
  * Created by Tommy Ettinger on 11/4/2017.
  */
@@ -88,7 +88,7 @@ public class ModelMaker {
      * for some more information on how he uses this, but we do things differently because we want random-seeming
      * results instead of separated sub-random results.
      * <p>
-     * Should be very similar to {@link squidpony.squidmath.Noise.HastyPointHash#hashAll(long, long, long, long)}, but
+     * Should be very similar to {@link squidpony.squidmath.HastyPointHash#hashAll(long, long, long, long)}, but
      * gets a hash between 0 and a bound, instead of a 64-bit long.
      * @param x x position; any long
      * @param y y position; any long
@@ -118,7 +118,7 @@ public class ModelMaker {
      * for some more information on how he uses this, but we do things differently because we want random-seeming
      * results instead of separated sub-random results.
      * <p>
-     * Should be very similar to {@link squidpony.squidmath.Noise.HastyPointHash#hashAll(long, long, long, long, long)},
+     * Should be very similar to {@link squidpony.squidmath.HastyPointHash#hashAll(long, long, long, long, long)},
      * but gets a hash between 0 and a bound, instead of a 64-bit long.
      * @param x x position; any long
      * @param y y position; any long
@@ -153,7 +153,7 @@ public class ModelMaker {
      * for some more information on how he uses this, but we do things differently because we want random-seeming
      * results instead of separated sub-random results.
      * <p>
-     * Should be very similar to {@link squidpony.squidmath.Noise.IntPointHash#hashAll(int, int, int)}, but gets a hash
+     * Should be very similar to {@link squidpony.squidmath.IntPointHash#hashAll(int, int, int)}, but gets a hash
      * between 0 and a bound, instead of any 32-bit int.
      * @param x x position; any int
      * @param y y position; any int
@@ -179,7 +179,7 @@ public class ModelMaker {
      * for some more information on how he uses this, but we do things differently because we want random-seeming
      * results instead of separated sub-random results.
      * <p>
-     * Should be very similar to {@link squidpony.squidmath.Noise.IntPointHash#hashAll(int, int, int, int)}, but gets a
+     * Should be very similar to {@link squidpony.squidmath.IntPointHash#hashAll(int, int, int, int)}, but gets a
      * hash between 0 and a bound, instead of any 32-bit int.
      * @param x x position; any int
      * @param y y position; any int
@@ -206,7 +206,7 @@ public class ModelMaker {
      * for some more information on how he uses this, but we do things differently because we want random-seeming
      * results instead of separated sub-random results.
      * <p>
-     * Should be very similar to {@link squidpony.squidmath.Noise.IntPointHash#hashAll(int, int, int, int, int)}, but
+     * Should be very similar to {@link squidpony.squidmath.IntPointHash#hashAll(int, int, int, int, int)}, but
      * gets a hash between 0 and a bound, instead of any 32-bit int.
      * @param x x position; any int
      * @param y y position; any int
@@ -645,7 +645,7 @@ public class ModelMaker {
         current ^= current << 5 ^ current >>> 19;
         for (int y = 0; y < halfY; y++) {
             for (int z = 0; z < zSize; z++) {
-                if(Noise.IntPointHash.hash64(z, y, paint) < 3)
+                if(IntPointHash.hash64(z, y, paint) < 3)
                 {
                     for (int x = xSize - 2; x >= 0; x--) {
                         if(nextShip[x][y][z] != 0 && nextShip[x][y][z] != cockpitColor)
@@ -750,7 +750,7 @@ public class ModelMaker {
         current ^= current << 5 ^ current >>> 19;
         for (int y = 0; y < halfY; y++) {
             for (int x = xSize - 1; x > 0; x--) {
-                int antennaHash = Noise.IntPointHash.hash256(x, y, ~current);
+                int antennaHash = IntPointHash.hash256(x, y, ~current);
                 if (antennaHash < 9) {
                     for (int z = zSize - 2; z >= 0; z--) {
                         if (nextShip[x][y][z] != 0 && nextShip[x][y][z] != cockpitColor) {
@@ -907,7 +907,7 @@ public class ModelMaker {
         for (int x = 2; x < xSize; x+=4) {
             for (int y = 2; y < halfY + 4; y+=4) {
                 for (int z = 0; z < zSize; z+=4) {
-                    hashes[x][smallYSize - y][z] |= hashes[x][y][z] |= Noise.HastyPointHash.hashAll(x, y, z, seed) | 1L;
+                    hashes[x][smallYSize - y][z] |= hashes[x][y][z] |= HastyPointHash.hashAll(x, y, z, seed) | 1L;
                 }
             }
         }
@@ -1050,7 +1050,7 @@ public class ModelMaker {
         for (int x = 2; x < xSize; x+=4) {
             for (int y = 2; y < halfY + 4; y+=4) {
                 for (int z = 0; z < zSize; z+=4) {
-                    hashes[x][smallYSize - y][z] |= hashes[x][y][z] |= Noise.HastyPointHash.hashAll(x, y, z, seed) | 1L;
+                    hashes[x][smallYSize - y][z] |= hashes[x][y][z] |= HastyPointHash.hashAll(x, y, z, seed) | 1L;
                 }
             }
         }
