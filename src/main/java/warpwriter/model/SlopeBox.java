@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.Pixmap;
 import warpwriter.Tools3D;
 import warpwriter.view.render.VoxelPixmapRenderer;
 
+import java.util.Arrays;
+
 public class SlopeBox {
     public byte[][][][] data;
 
@@ -174,8 +176,16 @@ public class SlopeBox {
         }
         return this;
     }
-
-
+    
+    public static final double[][] SHAPES = new double[256][16];
+    static {
+        Arrays.fill(SHAPES, new double[]{
+                3.0,3.0,3.0,3.0,
+                2.0,2.0,1.0,1.0,
+                2.0,2.0,1.0,1.0,
+                2.0,2.0,1.0,1.0});
+    }
+    
     public static Pixmap drawIsoTri(SlopeBox seq, VoxelPixmapRenderer renderer) {
         // To move one x+ in voxels is x + 2, y - 2 in pixels.
         // To move one x- in voxels is x - 2, y + 2 in pixels.
@@ -231,9 +241,10 @@ public class SlopeBox {
                     final int xPos = (sizeY - y + x) * 2 - 1,
                             yPos = (z * 3 + sizeX + sizeY - x - y) - 1,
                             dep = (x + y + z * 2) * 2 + 256;
-                    renderer.rectLeft(xPos, yPos, 2, 3, v, dep, x, y, z);
-                    renderer.rectRight(xPos+2, yPos, 2, 3, v, dep, x, y, z);
-                    renderer.rectVertical(xPos, yPos+3, 4, 1, v, dep, x, y, z);
+                    renderer.select(xPos, yPos, v, SHAPES[seq.slope(x, y, z) & 255], dep);
+//                    renderer.rectLeft(xPos, yPos, 2, 3, v, dep, x, y, z);
+//                    renderer.rectRight(xPos+2, yPos, 2, 3, v, dep, x, y, z);
+//                    renderer.rectVertical(xPos, yPos+3, 4, 1, v, dep, x, y, z);
                 }
             }
         }
