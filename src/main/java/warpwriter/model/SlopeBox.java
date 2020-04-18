@@ -183,37 +183,54 @@ public class SlopeBox {
     
     public static final double[][] SHAPES = new double[256][16];
     static {
-        Arrays.fill(SHAPES, new double[]{
+        Arrays.fill(SHAPES, new double[]{ // all default to being empty
                 7.0,7.0,7.0,7.0,
                 7.0,7.0,7.0,7.0,
                 7.0,7.0,7.0,7.0,
                 7.0,7.0,7.0,7.0});
-        SHAPES[0x77] = new double[]{
+        
+        SHAPES[0x77] = new double[]{ //wedge facing camera
                 1.5,1.5,1.5,1.5,
                 1.5,1.5,1.5,1.5,
                 1.5,1.5,1.5,1.5,
                 1.5,1.5,1.5,1.5};
-        SHAPES[0x3F] = new double[]{
+        SHAPES[0xBB] = new double[]{ //wedge missing left half
+                7.3,7.3,3.0,3.0,
+                7.3,7.3,1.0,1.0,
+                7.3,7.3,1.0,1.0,
+                7.3,7.3,1.0,1.0};
+        SHAPES[0xDD] = new double[]{ //wedge missing right half
+                3.0,3.0,7.3,7.3,
+                2.0,2.0,7.3,7.3,
+                2.0,2.0,7.3,7.3,
+                2.0,2.0,7.3,7.3};
+        SHAPES[0xEE] = new double[]{ //wedge missing back; usually doesn't render
+                7.3,7.3,7.3,7.3,
+                2.0,2.0,1.0,1.0,
+                2.0,2.0,1.0,1.0,
+                2.0,2.0,1.0,1.0};
+
+        SHAPES[0x3F] = new double[]{ // ramp from front left up to back right
                 7.3,7.3,2.6,2.6,
                 7.3,2.6,2.6,2.6,
                 7.3,2.6,2.6,1.0,
                 2.6,2.6,2.6,1.0};
-        SHAPES[0x5F] = new double[]{
+        SHAPES[0x5F] = new double[]{ // ramp from front right up to back left
                 1.4,1.4,7.3,7.3,
                 1.4,1.4,1.4,7.3,
                 2.0,1.4,1.4,7.3,
                 2.0,1.4,1.4,1.4};
-        SHAPES[0xAF] = new double[]{
+        SHAPES[0xAF] = new double[]{ // ramp from back left up to front right
                 7.3,7.3,7.3,7.3,
-                2.0,2.0,1.0,1.0,
-                2.0,2.0,1.0,1.0,
+                7.3,2.0,1.0,1.0,
+                7.3,2.0,1.0,1.0,
                 2.0,2.0,1.0,1.0};
-        SHAPES[0xCF] = new double[]{
+        SHAPES[0xCF] = new double[]{ // ramp from back right up to front left
                 7.3,7.3,7.3,7.3,
-                2.0,2.0,1.0,1.0,
-                2.0,2.0,1.0,1.0,
+                2.0,2.0,1.0,7.3,
+                2.0,2.0,1.0,7.3,
                 2.0,2.0,1.0,1.0};
-        SHAPES[0xFF] = new double[]{
+        SHAPES[0xFF] = new double[]{ // standard full block
                 3.0,3.0,3.0,3.0,
                 2.0,2.0,1.0,1.0,
                 2.0,2.0,1.0,1.0,
