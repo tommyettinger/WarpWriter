@@ -3,7 +3,6 @@ package warpwriter.view.render;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.utils.IntIntMap;
 import squidpony.ArrayTools;
-import squidpony.squidmath.BlueNoise;
 import warpwriter.view.color.VoxelColor;
 
 /**
@@ -104,7 +103,7 @@ public class VoxelPixmapRenderer implements IRectangleRenderer, ITriangleRendere
         for (int x = 0; x < 4 && px + x < working.length; x++) {
             for (int y = 0; y < 4 && py + y < working[0].length; y++) {
                 if(shape[3-y << 2 | x] >= 6.0) continue;
-                working[px+x][py+y] = color.colorizer().dimmer((int)(shape[3-y << 2 | x]+0x1p-8*(BlueNoise.get(px+x,py+y)+128)), voxel);
+                working[px+x][py+y] = color.colorizer().dimmer((int)(shape[3-y << 2 | x]+0.9 * (px+x+py+y & 1)), voxel);
                 depths[px+x][py+y] = depth;
                 outlines[px+x][py+y] = color.colorizer().dark(voxel);
             }
