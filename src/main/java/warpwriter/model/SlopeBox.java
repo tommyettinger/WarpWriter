@@ -79,6 +79,7 @@ public class SlopeBox {
     }
     
     public SlopeBox putSlopes(){
+//        BitSet usedSlopes = new BitSet(256);
         final int limitX = sizeX() - 1;
         final int limitY = sizeY() - 1;
         final int limitZ = sizeZ() - 1;
@@ -107,11 +108,12 @@ public class SlopeBox {
                         for (int i = 0; i < 6; i++) {
                             if(neighbors[i] == 0) continue;
                             if(bestIndex == -1) bestIndex = i;
-                            for (int j = 0; j < i; j++) {
+                            for (int j = i + 1; j < 6; j++) {
                                 if(neighbors[i] == neighbors[j]){
-                                    if(i == bestIndex || j == bestIndex) {
+                                    if((i == bestIndex || j == bestIndex) && neighbors[bestIndex] != 0) {
                                         nextColors[x][y][z] = (byte) neighbors[bestIndex];
                                         nextData[x][y][z] = (byte) slope;
+//                                        usedSlopes.set(slope);
                                         continue PER_CELL;
                                     }
                                     else {
@@ -122,16 +124,22 @@ public class SlopeBox {
                         }
                         nextColors[x][y][z] = (byte) neighbors[bestIndex];
                         nextData[x][y][z] = (byte) slope;
+//                        usedSlopes.set(slope);
                     }
                     else
                     {
                         nextColors[x][y][z] = data[0][x][y][z];
                         nextData[x][y][z] = -1;
+//                        usedSlopes.set(255);
                     }
                 }
             }
         }
-        
+//        for (int i = usedSlopes.nextSetBit(0), w = 0; i < 256 && i >= 0; i = usedSlopes.nextSetBit(i+1)) {
+//            System.out.printf("%02X, ", i);
+//            if((++w & 7) == 0) System.out.println();
+//        }
+        System.out.println("\n");
         for (int x = 0; x <= limitX; x++) {
             for (int y = 0; y <= limitY; y++) {
                 PER_CELL:
@@ -154,11 +162,12 @@ public class SlopeBox {
                         for (int i = 0; i < 6; i++) {
                             if(neighbors[i] == 0) continue;
                             if(bestIndex == -1) bestIndex = i;
-                            for (int j = 0; j < i; j++) {
+                            for (int j = i + 1; j < 6; j++) {
                                 if(neighbors[i] == neighbors[j]){
-                                    if(i == bestIndex || j == bestIndex) {
+                                    if((i == bestIndex || j == bestIndex) && neighbors[bestIndex] != 0) {
                                         data[0][x][y][z] = (byte) neighbors[bestIndex];
                                         data[1][x][y][z] = (byte) slope;
+//                                        usedSlopes.set(slope);
                                         continue PER_CELL;
                                     }
                                     else {
@@ -169,6 +178,7 @@ public class SlopeBox {
                         }
                         data[0][x][y][z] = (byte) neighbors[bestIndex];
                         data[1][x][y][z] = (byte) slope;
+//                        usedSlopes.set(slope);
                     }
                     else
                     {
@@ -178,11 +188,18 @@ public class SlopeBox {
                 }
             }
         }
+//        for (int i = usedSlopes.nextSetBit(0), w = 0; i < 256 && i >= 0; i = usedSlopes.nextSetBit(i+1)) {
+//            System.out.printf("%02X, ", i);
+//            if((++w & 7) == 0) System.out.println();
+//        }
+//        System.out.println("\n");
+
         return this;
     }
     
     public static final double[][] SHAPES = new double[256][16];
     static {
+//                5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,
         Arrays.fill(SHAPES, new double[]{ // all default to being empty
                 7.0,7.0,7.0,7.0,
                 7.0,7.0,7.0,7.0,
@@ -236,30 +253,52 @@ public class SlopeBox {
                 7.3,7.3,7.3,7.3,
                 7.3,2.4,2.4,7.3,
                 2.4,2.4,2.4,2.4,
-                2.4,2.4,2.4,2.4};
+                2.4,2.4,2.4,2.4
+        };
         SHAPES[0x2B] = new double[]{ // small slope centered on bottom right corner
                 7.3,7.3,7.3,7.3,
-                7.3,7.3,7.3,7.3,
                 7.3,7.3,7.3,1.0,
+                7.3,7.3,1.0,1.0,
                 7.3,7.3,1.0,1.0};
         SHAPES[0x4D] = new double[]{ // small slope centered on bottom left corner
-                7.3,7.3,7.3,7.3,
-                7.3,7.3,7.3,7.3,
+                7.3,7.3,7.3,7.3, 
                 2.0,7.3,7.3,7.3,
+                2.0,2.0,7.3,7.3,
                 2.0,2.0,7.3,7.3};
         SHAPES[0x8E] = new double[]{ // small slope centered on front bottom center corner
                 7.3,7.3,7.3,7.3,
                 7.3,7.3,7.3,7.3,
                 7.3,2.0,1.0,7.3,
                 2.0,2.0,1.0,1.0};
+        SHAPES[0x71] = new double[]{ // small slope centered on back top center corner
+                3.0,3.0,3.0,3.0,
+                7.3,0.6,0.6,7.3,
+                7.3,7.3,7.3,7.3,
+                7.3,7.3,7.3,7.3};
+        SHAPES[0xB2] = new double[]{ // small slope centered on top right corner
+                7.3,7.3,3.0,3.0,
+                7.3,7.3,7.3,0.6,
+                7.3,7.3,7.3,7.3,
+                7.3,7.3,7.3,7.3};
+        SHAPES[0xD4] = new double[]{ // small slope centered on top left corner
+                3.0,3.0,7.3,7.3,
+                0.6,7.3,7.3,7.3,
+                7.3,7.3,7.3,7.3,
+                7.3,7.3,7.3,7.3};
+        SHAPES[0xE8] = new double[]{ // small slope centered on front top center corner
+                3.0,3.0,3.0,3.0,
+                7.3,2.0,1.0,7.3,
+                7.3,7.3,7.3,7.3,
+                7.3,7.3,7.3,7.3};
         // big slopes with one vertex truncated
-        SHAPES[0x7F] = new double[]{ // full block minus top center corner
+        SHAPES[0x7F] = new double[]{ // full block minus top front center corner
                 3.0,2.4,2.4,3.0,
                 2.4,2.4,2.4,2.4,
                 2.0,2.4,2.4,1.0,
-                2.0,2.0,1.0,1.0};
+                2.0,2.0,1.0,1.0
+        };
         SHAPES[0xBF] = new double[]{ // full block minus top left corner
-                7.3,3.0,3.0,3.0, 
+                7.3,3.0,3.0,3.0,
                 7.3,2.0,1.0,1.0,
                 2.0,2.0,1.0,1.0,
                 2.0,2.0,1.0,1.0};
@@ -268,50 +307,37 @@ public class SlopeBox {
                 2.0,2.0,1.0,7.3,
                 2.0,2.0,1.0,1.0,
                 2.0,2.0,1.0,1.0};
-        SHAPES[0xEF] = new double[]{ // full block minus back center corner
+        SHAPES[0xEF] = new double[]{ // full block minus top back center corner
                 7.3,7.3,7.3,7.3,
                 2.0,2.0,1.0,1.0,
                 2.0,2.0,1.0,1.0,
                 2.0,2.0,1.0,1.0};
+        SHAPES[0xF7] = new double[]{ // full block minus bottom front center corner
+                3.0,3.0,3.0,3.0,
+                2.0,2.0,1.0,1.0,
+                2.0,2.0,1.0,1.0,
+                0.6,0.6,0.6,0.6};
+        SHAPES[0xFB] = new double[]{ // full block minus bottom left corner
+                3.0,3.0,3.0,3.0,
+                2.0,2.0,1.0,1.0,
+                0.6,2.0,1.0,1.0,
+                7.3,0.6,1.0,1.0};
+        SHAPES[0xFD] = new double[]{ // full block minus bottom right corner
+                3.0,3.0,3.0,3.0,
+                2.0,2.0,1.0,1.0,
+                2.0,2.0,1.0,0.6,
+                2.0,2.0,0.6,7.3};
+        SHAPES[0xFE] = new double[]{ // full block minus bottom back center corner; the same as full
+                3.0,3.0,3.0,3.0,
+                2.0,2.0,1.0,1.0,
+                2.0,2.0,1.0,1.0,
+                2.0,2.0,1.0,1.0};
+        // the biggest one
         SHAPES[0xFF] = new double[]{ // standard full block
                 3.0,3.0,3.0,3.0,
                 2.0,2.0,1.0,1.0,
                 2.0,2.0,1.0,1.0,
                 2.0,2.0,1.0,1.0};
-    }
-    
-    public static Pixmap drawIsoTri(SlopeBox seq, VoxelPixmapRenderer renderer) {
-        // To move one x+ in voxels is x + 2, y - 2 in pixels.
-        // To move one x- in voxels is x - 2, y + 2 in pixels.
-        // To move one y+ in voxels is x + 2, y + 2 in pixels.
-        // To move one y- in voxels is x - 2, y - 2 in pixels.
-        // To move one z+ in voxels is y + 4 in pixels.
-        // To move one z- in voxels is y - 4 in pixels.
-        if(seq instanceof ITemporal) {
-            renderer.color().time(((ITemporal) seq).frame());
-        }
-        final int sizeX = seq.sizeX(), sizeY = seq.sizeY(), sizeZ = seq.sizeZ(),
-                pixelWidth = (Math.max(seq.sizeX(), Math.max(seq.sizeY(), seq.sizeZ()))) * 4 + 2,
-                pixelHeight = (Math.max(seq.sizeX(), seq.sizeY()) * 2 + seq.sizeZ() + 1) * 2 + 1;
-        for (int z = 0; z < sizeZ; z++) {
-            for (int x = 0; x < sizeX; x++) {
-                for (int y = 0; y < sizeY; y++) {
-                    final byte v = seq.color(x, y, z);
-                    if(v == 0) continue;
-                    final int xPos = (sizeY - y + x) * 2 - 1,
-                            yPos = (z + sizeX + sizeY - x - y) * 2 - 3,
-                            dep = 3 * (x + y + z) + 256;
-                    renderer.drawLeftTriangleLeftFace(xPos, yPos, v, dep, x, y, z);
-                    renderer.drawRightTriangleLeftFace(xPos, yPos + 2, v, dep, x, y, z);
-                    renderer.drawLeftTriangleRightFace(xPos + 2, yPos + 2, v, dep, x, y, z);
-                    renderer.drawRightTriangleRightFace(xPos + 2, yPos, v, dep, x, y, z);
-                    //if (z >= sizeZ - 1 || seq.getRotated(x, y, z + 1) == 0)
-                    renderer.drawLeftTriangleVerticalFace(xPos, yPos + 4, v, dep, x, y, z);
-                    renderer.drawRightTriangleVerticalFace(xPos + 2, yPos + 4, v, dep, x, y, z);
-                }
-            }
-        }
-        return renderer.blit(12, pixelWidth, pixelHeight);
     }
 
     public static Pixmap drawIso(SlopeBox seq, VoxelPixmapRenderer renderer) {
@@ -339,7 +365,7 @@ public class SlopeBox {
                 }
             }
         }
-        return renderer.blit(12, pixelWidth, pixelHeight);
+        return renderer.blit(13, pixelWidth, pixelHeight);
     }
 
 }
