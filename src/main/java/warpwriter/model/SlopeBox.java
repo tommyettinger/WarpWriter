@@ -188,7 +188,7 @@ public class SlopeBox {
                 7.0,7.0,7.0,7.0,
                 7.0,7.0,7.0,7.0,
                 7.0,7.0,7.0,7.0});
-        
+        // wedges with two sides solid
         SHAPES[0x77] = new double[]{ //wedge facing camera
                 1.5,1.5,1.5,1.5,
                 1.5,1.5,1.5,1.5,
@@ -210,6 +210,7 @@ public class SlopeBox {
                 2.0,2.0,1.0,1.0,
                 2.0,2.0,1.0,1.0};
 
+        // ramps with the bottom solid
         SHAPES[0x3F] = new double[]{ // ramp from front left up to back right
                 7.3,7.3,2.6,2.6,
                 7.3,2.6,2.6,2.6,
@@ -229,6 +230,48 @@ public class SlopeBox {
                 7.3,7.3,7.3,7.3,
                 2.0,2.0,1.0,7.3,
                 2.0,2.0,1.0,7.3,
+                2.0,2.0,1.0,1.0};
+        // small slopes with four vertices truncated
+        SHAPES[0x17] = new double[]{ // small slope centered on back bottom center corner
+                7.3,7.3,7.3,7.3,
+                7.3,2.4,2.4,7.3,
+                2.4,2.4,2.4,2.4,
+                2.4,2.4,2.4,2.4};
+        SHAPES[0x2B] = new double[]{ // small slope centered on bottom right corner
+                7.3,7.3,7.3,7.3,
+                7.3,7.3,7.3,7.3,
+                7.3,7.3,7.3,1.0,
+                7.3,7.3,1.0,1.0};
+        SHAPES[0x4D] = new double[]{ // small slope centered on bottom left corner
+                7.3,7.3,7.3,7.3,
+                7.3,7.3,7.3,7.3,
+                2.0,7.3,7.3,7.3,
+                2.0,2.0,7.3,7.3};
+        SHAPES[0x8E] = new double[]{ // small slope centered on front bottom center corner
+                7.3,7.3,7.3,7.3,
+                7.3,7.3,7.3,7.3,
+                7.3,2.0,1.0,7.3,
+                2.0,2.0,1.0,1.0};
+        // big slopes with one vertex truncated
+        SHAPES[0x7F] = new double[]{ // full block minus top center corner
+                3.0,2.4,2.4,3.0,
+                2.4,2.4,2.4,2.4,
+                2.0,2.4,2.4,1.0,
+                2.0,2.0,1.0,1.0};
+        SHAPES[0xBF] = new double[]{ // full block minus top left corner
+                7.3,3.0,3.0,3.0, 
+                7.3,2.0,1.0,1.0,
+                2.0,2.0,1.0,1.0,
+                2.0,2.0,1.0,1.0};
+        SHAPES[0xDF] = new double[]{ // full block minus top right corner
+                3.0,3.0,3.0,7.3,
+                2.0,2.0,1.0,7.3,
+                2.0,2.0,1.0,1.0,
+                2.0,2.0,1.0,1.0};
+        SHAPES[0xEF] = new double[]{ // full block minus back center corner
+                7.3,7.3,7.3,7.3,
+                2.0,2.0,1.0,1.0,
+                2.0,2.0,1.0,1.0,
                 2.0,2.0,1.0,1.0};
         SHAPES[0xFF] = new double[]{ // standard full block
                 3.0,3.0,3.0,3.0,
