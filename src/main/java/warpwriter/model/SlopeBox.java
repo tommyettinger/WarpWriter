@@ -231,23 +231,45 @@ public class SlopeBox {
         SHAPES[0x3F] = new double[]{ // ramp from front left up to back right
                 7.3,7.3,2.6,2.6,
                 7.3,2.6,2.6,2.6,
-                7.3,2.6,2.6,1.0,
+                2.6,2.6,2.6,1.0,
                 2.6,2.6,2.6,1.0};
         SHAPES[0x5F] = new double[]{ // ramp from front right up to back left
                 1.4,1.4,7.3,7.3,
                 1.4,1.4,1.4,7.3,
-                2.0,1.4,1.4,7.3,
+                2.0,1.4,1.4,1.4,
                 2.0,1.4,1.4,1.4};
         SHAPES[0xAF] = new double[]{ // ramp from back left up to front right
                 7.3,7.3,7.3,7.3,
                 7.3,2.0,1.0,1.0,
-                7.3,2.0,1.0,1.0,
-                2.0,2.0,1.0,1.0};
+                2.0,2.0,1.0,1.0,
+                7.3,2.0,1.0,1.0};
         SHAPES[0xCF] = new double[]{ // ramp from back right up to front left
                 7.3,7.3,7.3,7.3,
                 2.0,2.0,1.0,7.3,
+                2.0,2.0,1.0,1.0,
+                2.0,2.0,1.0,7.3};
+
+        // ramps with the top solid
+        SHAPES[0xF3] = new double[]{ // ramp from front left down to back right
+                3.0,3.0,3.0,3.0,
+                7.3,7.3,1.0,1.0,
+                7.3,7.3,7.3,1.0,
+                7.3,7.3,7.3,7.3};
+        SHAPES[0xF5] = new double[]{ // ramp from front right down to back left
+                3.0,3.0,3.0,3.0,
+                2.0,2.0,7.3,7.3,
+                2.0,7.3,7.3,7.3,
+                7.3,7.3,7.3,7.3};
+        SHAPES[0xFA] = new double[]{ // ramp from back left down to front right
+                3.0,3.0,3.0,3.0,
+                2.0,2.0,1.0,1.0,
+                7.3,2.0,1.0,1.0,
+                7.3,7.3,1.0,1.0};
+        SHAPES[0xFC] = new double[]{ // ramp from back right down to front left
+                3.0,3.0,3.0,3.0,
+                2.0,2.0,1.0,1.0,
                 2.0,2.0,1.0,7.3,
-                2.0,2.0,1.0,1.0};
+                2.0,2.0,7.3,7.3};
         // small slopes with four vertices truncated
         SHAPES[0x17] = new double[]{ // small slope centered on back bottom center corner
                 7.3,7.3,7.3,7.3,
@@ -295,8 +317,7 @@ public class SlopeBox {
                 3.0,2.4,2.4,3.0,
                 2.4,2.4,2.4,2.4,
                 2.0,2.4,2.4,1.0,
-                2.0,2.0,1.0,1.0
-        };
+                2.0,2.0,1.0,1.0};
         SHAPES[0xBF] = new double[]{ // full block minus top left corner
                 7.3,3.0,3.0,3.0,
                 7.3,2.0,1.0,1.0,
@@ -365,7 +386,7 @@ public class SlopeBox {
                 }
             }
         }
-        return renderer.blit(13, pixelWidth, pixelHeight);
+        return renderer.blit(12, pixelWidth, pixelHeight);
     }
 
 }

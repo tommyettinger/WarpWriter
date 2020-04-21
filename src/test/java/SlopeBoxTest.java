@@ -48,7 +48,7 @@ public class SlopeBoxTest extends ApplicationAdapter {
         screenView.getCamera().position.set(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2, 0);
         screenView.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.enableBlending();
-//        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.AURORA);
+//        colorizer = Colorizer.arbitraryColorizer(Coloring.AURORA);
 //        colorizer = Colorizer.arbitraryColorizer(Coloring.DB16);
 //        colorizer = Colorizer.arbitraryColorizer(Coloring.GB_GREEN);
 //        colorizer = Colorizer.arbitraryColorizer(Coloring.DB32);
@@ -57,9 +57,10 @@ public class SlopeBoxTest extends ApplicationAdapter {
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.CW_PALETTE);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.VGA256);
 //        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.FLESURRECT);
-        colorizer = Colorizer.FlesurrectColorizer;
+//        colorizer = Colorizer.arbitraryBonusColorizer(Coloring.GB_GREEN);
+//        colorizer = Colorizer.FlesurrectColorizer;
 //        colorizer = Colorizer.AzurestarColorizer;
-//        colorizer = Colorizer.SplayColorizer;
+        colorizer = Colorizer.SplayColorizer;
         voxelColor = new VoxelColor().colorizer(colorizer);
         pixmapRenderer = new VoxelPixmapRenderer().set(new Pixmap(512, 512, Pixmap.Format.RGBA8888)).set(voxelColor);
         pixmapRenderer.easing = false;
