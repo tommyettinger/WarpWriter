@@ -72,6 +72,33 @@ public class ColorSolidGenerator extends ApplicationAdapter {
             }
             VoxIO.writeVOX("JavaUtilSplittableRandom.vox", sparse, reducer.paletteArray);
         }
+
+        {
+            reducer.exact(Coloring.WEBSAFE);
+            Tools3D.fill(sparse, 0);
+            Color color = new Color(0f, 0f, 0f, 1f);
+            double l, m, s, i, p, t;
+            int limit = 500;
+            float mul = 1f / ((limit - 1f) * (limit - 1f));
+            for (int x = 0; x < limit; x++) {
+                for (int y = 0; y < limit; y++) {
+                    for (int z = 0; z < limit; z++) {
+                        color.set(x * x * mul, y * y * mul, z * z * mul, 1f);
+                        l = Math.pow(0.313921 * color.r + 0.639468 * color.g + 0.0465970 * color.b, 0.43);
+                        m = Math.pow(0.151693 * color.r + 0.748209 * color.g + 0.1000044 * color.b, 0.43);
+                        s = Math.pow(0.017700 * color.r + 0.109400 * color.g + 0.8729000 * color.b, 0.43);
+
+                        i = 0.4000 * l + 0.4000 * m + 0.2000 * s;
+                        p = 6.6825 * l - 7.2765 * m + 0.5940 * s;
+                        t = 1.0741 * l + 0.4763 * m - 1.5504 * s;
+
+                        sparse[(int)(p * 47.5 + 48)][(int)(t * 47.5 + 48)][(int)(95.5 * i)] = reducer.reduceIndex(Color.rgba8888(color));
+
+                    }
+                }
+            }
+            VoxIO.writeVOX("IPT.vox", sparse, reducer.paletteArray);
+        }
         generate("Flesurrect", Coloring.FLESURRECT);
         generate("FlesurrectBonus", Colorizer.FlesurrectBonusPalette);
         generate("Rinsed", Coloring.RINSED);
@@ -144,6 +171,5 @@ public class ColorSolidGenerator extends ApplicationAdapter {
         }
         VoxIO.writeVOX("ColorSolids/" + name + "ColorSolid.vox", dense, reducer.paletteArray);
         VoxIO.writeVOX("ColorSolids/" + name + "ColorSpots.vox", sparse, reducer.paletteArray);
-
     }
 }
