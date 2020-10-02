@@ -3,14 +3,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
-import squidpony.squidmath.LightRNG;
 import warpwriter.Coloring;
 import warpwriter.PaletteReducer;
 import warpwriter.Tools3D;
 import warpwriter.VoxIO;
 import warpwriter.model.color.Colorizer;
-
-import java.util.Random;
 
 public class ColorSolidGenerator extends ApplicationAdapter {
     public static void main(String[] arg) {
@@ -40,64 +37,101 @@ public class ColorSolidGenerator extends ApplicationAdapter {
             sparse[(rgba >>> 27)*3+1][(rgba >>> 19 & 31)*3+1][(rgba >>> 11 & 31)*3+1] = (byte) i;
         }
         VoxIO.writeVOX("ColorSolids/AuroraColorSpots.vox", sparse, reducer.paletteArray);
-
-        {
-            Tools3D.fill(sparse, 0);
-            Random random = new Random(1);
-            Color color = new Color(0f, 0f, 0f, 1f);
-            for (int i = 0; i < 4096; i++) {
-                int x = random.nextInt(96);
-                int y = random.nextInt(96);
-                int z = random.nextInt(96);
-                color.set(x / 95f,
-                        y / 95f,
-                        z / 95f, 1f);
-                sparse[x][y][z] = reducer.reduceIndex(Color.rgba8888(color));
-            }
-            VoxIO.writeVOX("JavaUtilRandom.vox", sparse, reducer.paletteArray);
-        }
-
-        {
-            Tools3D.fill(sparse, 0);
-            LightRNG random = new LightRNG(1);
-            Color color = new Color(0f, 0f, 0f, 1f);
-            for (int i = 0; i < 4096; i++) {
-                int x = random.nextInt(96);
-                int y = random.nextInt(96);
-                int z = random.nextInt(96);
-                color.set(x / 95f,
-                        y / 95f,
-                        z / 95f, 1f);
-                sparse[x][y][z] = reducer.reduceIndex(Color.rgba8888(color));
-            }
-            VoxIO.writeVOX("JavaUtilSplittableRandom.vox", sparse, reducer.paletteArray);
-        }
-
+//
+//        {
+//            Tools3D.fill(sparse, 0);
+//            Random random = new Random(1);
+//            Color color = new Color(0f, 0f, 0f, 1f);
+//            for (int i = 0; i < 4096; i++) {
+//                int x = random.nextInt(96);
+//                int y = random.nextInt(96);
+//                int z = random.nextInt(96);
+//                color.set(x / 95f,
+//                        y / 95f,
+//                        z / 95f, 1f);
+//                sparse[x][y][z] = reducer.reduceIndex(Color.rgba8888(color));
+//            }
+//            VoxIO.writeVOX("JavaUtilRandom.vox", sparse, reducer.paletteArray);
+//        }
+//
+//        {
+//            Tools3D.fill(sparse, 0);
+//            LightRNG random = new LightRNG(1);
+//            Color color = new Color(0f, 0f, 0f, 1f);
+//            for (int i = 0; i < 4096; i++) {
+//                int x = random.nextInt(96);
+//                int y = random.nextInt(96);
+//                int z = random.nextInt(96);
+//                color.set(x / 95f,
+//                        y / 95f,
+//                        z / 95f, 1f);
+//                sparse[x][y][z] = reducer.reduceIndex(Color.rgba8888(color));
+//            }
+//            VoxIO.writeVOX("JavaUtilSplittableRandom.vox", sparse, reducer.paletteArray);
+//        }
+//
+//        {
+//            reducer.exact(Coloring.WEBSAFE);
+//            Tools3D.fill(sparse, 0);
+//            Color color = new Color(0f, 0f, 0f, 1f);
+//            double l, m, s, i, p, t;
+//            int limit = 500;
+//            float mul = 1f / ((limit - 1f) * (limit - 1f));
+//            for (int x = 0; x < limit; x++) {
+//                for (int y = 0; y < limit; y++) {
+//                    for (int z = 0; z < limit; z++) {
+//                        color.set(x * x * mul, y * y * mul, z * z * mul, 1f);
+//                        l = Math.pow(0.313921 * color.r + 0.639468 * color.g + 0.0465970 * color.b, 0.43);
+//                        m = Math.pow(0.151693 * color.r + 0.748209 * color.g + 0.1000044 * color.b, 0.43);
+//                        s = Math.pow(0.017700 * color.r + 0.109400 * color.g + 0.8729000 * color.b, 0.43);
+//
+//                        i = 0.4000 * l + 0.4000 * m + 0.2000 * s;
+//                        p = 6.6825 * l - 7.2765 * m + 0.5940 * s;
+//                        t = 1.0741 * l + 0.4763 * m - 1.5504 * s;
+//
+//                        sparse[(int)(p * 47.5 + 48)][(int)(t * 47.5 + 48)][(int)(95.5 * i)] = reducer.reduceIndex(Color.rgba8888(color));
+//
+//                    }
+//                }
+//            }
+//            VoxIO.writeVOX("ColorSolids/IPT.vox", sparse, reducer.paletteArray);
+//        }
         {
             reducer.exact(Coloring.WEBSAFE);
             Tools3D.fill(sparse, 0);
             Color color = new Color(0f, 0f, 0f, 1f);
-            double l, m, s, i, p, t;
-            int limit = 500;
+            double r, g, b, x, y, z, L, A, B;
+            int limit = 600;
             float mul = 1f / ((limit - 1f) * (limit - 1f));
-            for (int x = 0; x < limit; x++) {
-                for (int y = 0; y < limit; y++) {
-                    for (int z = 0; z < limit; z++) {
-                        color.set(x * x * mul, y * y * mul, z * z * mul, 1f);
-                        l = Math.pow(0.313921 * color.r + 0.639468 * color.g + 0.0465970 * color.b, 0.43);
-                        m = Math.pow(0.151693 * color.r + 0.748209 * color.g + 0.1000044 * color.b, 0.43);
-                        s = Math.pow(0.017700 * color.r + 0.109400 * color.g + 0.8729000 * color.b, 0.43);
+            for (int xx = 0; xx < limit; xx++) {
+                for (int yy = 0; yy < limit; yy++) {
+                    for (int zz = 0; zz < limit; zz++) {
+                        color.set(xx * xx * mul, yy * yy * mul, zz * zz * mul, 1f);
+                        r = color.r;
+                        g = color.g;
+                        b = color.b;
+                        
+                        r = ((r > 0.04045) ? Math.pow((r + 0.055) / 1.055, 2.4) : r / 12.92);
+                        g = ((g > 0.04045) ? Math.pow((g + 0.055) / 1.055, 2.4) : g / 12.92);
+                        b = ((b > 0.04045) ? Math.pow((b + 0.055) / 1.055, 2.4) : b / 12.92);
 
-                        i = 0.4000 * l + 0.4000 * m + 0.2000 * s;
-                        p = 6.6825 * l - 7.2765 * m + 0.5940 * s;
-                        t = 1.0741 * l + 0.4763 * m - 1.5504 * s;
+                        x = (r * 0.4124 + g * 0.3576 + b * 0.1805) / 0.950489;
+                        y = (r * 0.2126 + g * 0.7152 + b * 0.0722) / 1.000000;
+                        z = (r * 0.0193 + g * 0.1192 + b * 0.9505) / 1.088840;
 
-                        sparse[(int)(p * 47.5 + 48)][(int)(t * 47.5 + 48)][(int)(95.5 * i)] = reducer.reduceIndex(Color.rgba8888(color));
+                        x = (x > 0.008856) ? Math.cbrt(x) : (7.787037037037037 * x) + 0.13793103448275862;
+                        y = (y > 0.008856) ? Math.cbrt(y) : (7.787037037037037 * y) + 0.13793103448275862;
+                        z = (z > 0.008856) ? Math.cbrt(z) : (7.787037037037037 * z) + 0.13793103448275862;
 
+                        L = (116.0 * y) - 16.0;
+                        A = 600.0 * (x - y);
+                        B = 210.0 * (y - z);
+
+                        sparse[(int)(A * 0.39 + 48)][(int)(B * 0.39 + 48)][(int)(L * 0.959)] = reducer.reduceIndex(Color.rgba8888(color));
                     }
                 }
             }
-            VoxIO.writeVOX("IPT.vox", sparse, reducer.paletteArray);
+            VoxIO.writeVOX("ColorSolids/LAB.vox", sparse, reducer.paletteArray);
         }
         generate("Flesurrect", Coloring.FLESURRECT);
         generate("FlesurrectBonus", Colorizer.FlesurrectBonusPalette);
