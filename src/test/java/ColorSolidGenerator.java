@@ -81,15 +81,19 @@ public class ColorSolidGenerator extends ApplicationAdapter {
                 for (int y = 0; y < limit; y++) {
                     for (int z = 0; z < limit; z++) {
                         color.set(x * x * mul, y * y * mul, z * z * mul, 1f);
-                        l = Math.pow(0.313921 * color.r + 0.639468 * color.g + 0.0465970 * color.b, 0.43);
-                        m = Math.pow(0.151693 * color.r + 0.748209 * color.g + 0.1000044 * color.b, 0.43);
-                        s = Math.pow(0.017700 * color.r + 0.109400 * color.g + 0.8729000 * color.b, 0.43);
+                        l = 0.313921 * color.r + 0.639468 * color.g + 0.0465970 * color.b;
+                        m = 0.151693 * color.r + 0.748209 * color.g + 0.1000044 * color.b;
+                        s = 0.017700 * color.r + 0.109400 * color.g + 0.8729000 * color.b;
 
                         //0.4000, 4.4550, 0.8056, 0.4000, 4.8510, 0.3572, 0.2000, 0.3960, 1.1628
-                        
-                        i = 0.4000 * l + 0.4000 * m + 0.2000 * s;
-                        p = 4.4550 * l - 4.8510 * m + 0.3960 * s;
-                        t = 0.8056 * l + 0.3572 * m - 1.1628 * s;
+                        // original, 0 - 1, -1 - 1, -1 - 1 
+                        i = +0.4000 * l +0.4000 * m +0.2000 * s;
+                        p = +4.4550 * l -4.8510 * m +0.3960 * s;
+                        t = +0.8056 * l +0.3572 * m -1.1628 * s;
+                        // half-range
+                        //i = 0.4000 * l +0.4000 * m +0.2000 * s;
+                        //p = 2.2275 * l -2.4255 * m +0.1980 * s;
+                        //t = 0.4028 * l +0.1786 * m -0.5814 * s;
 
 //                        i = 0.4000 * l + 0.4000 * m + 0.2000 * s;
 //                        p = 6.6825 * l - 7.2765 * m + 0.5940 * s;
@@ -100,7 +104,10 @@ public class ColorSolidGenerator extends ApplicationAdapter {
                     }
                 }
             }
-            VoxIO.writeVOX("ColorSolids/IPT_Original.vox", sparse, reducer.paletteArray);
+            VoxIO.writeVOX("ColorSolids/IPT_No_Pow.vox", sparse, reducer.paletteArray);
+//            VoxIO.writeVOX("ColorSolids/IPT_Original.vox", sparse, reducer.paletteArray);
+            Gdx.app.exit();
+            System.exit(0);
         }
         {
             reducer.exact(Coloring.WEBSAFE);
