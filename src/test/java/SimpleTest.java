@@ -80,9 +80,9 @@ public class SimpleTest extends ApplicationAdapter {
 
     //public static final int backgroundColor = Color.rgba8888(Color.DARK_GRAY);
     public static final int SCREEN_WIDTH = 640;
-    public static final int SCREEN_HEIGHT = 360;
+    public static final int SCREEN_HEIGHT = 880;
     public static final int VIRTUAL_WIDTH = 640;
-    public static final int VIRTUAL_HEIGHT = 360;
+    public static final int VIRTUAL_HEIGHT = 880;
     protected Batch batch;
     protected Viewport worldView;
     protected Viewport screenView;
@@ -125,7 +125,7 @@ public class SimpleTest extends ApplicationAdapter {
             //// loads a file by its full path, which we get via drag+drop
             final byte[][][] arr = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream(name)));
             //// set the palette to the one from the vox model, using arbitraryDimmer()
-            batchRenderer.color().colorizer(Colorizer.arbitraryColorizer(VoxIO.lastPalette));
+            batchRenderer.color().colorizer(Colorizer.arbitraryBonusColorizer(VoxIO.lastPalette));
             voxelSprite.set(new ArrayModel(
                     arr
                     //// Aurora folder has vox models with a different palette, which involves a different IDimmer.

@@ -13,16 +13,21 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import warpwriter.ModelMaker;
 import warpwriter.Tools3D;
+import warpwriter.VoxIO;
 import warpwriter.model.SlopeBox;
 import warpwriter.model.color.Colorizer;
+import warpwriter.model.nonvoxel.LittleEndianDataInputStream;
 import warpwriter.view.color.VoxelColor;
 import warpwriter.view.render.VoxelPixmapRenderer;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 public class SlopeBoxTest extends ApplicationAdapter {
-    public static final int SCREEN_WIDTH = 320;//640;
-    public static final int SCREEN_HEIGHT = 360;//720;
-    public static final int VIRTUAL_WIDTH = 320;
-    public static final int VIRTUAL_HEIGHT = 360;
+    public static final int SCREEN_WIDTH = 480;//640;
+    public static final int SCREEN_HEIGHT = 640;//720;
+    public static final int VIRTUAL_WIDTH = 480;
+    public static final int VIRTUAL_HEIGHT = 640;
     protected SpriteBatch batch;
     protected Viewport worldView;
     protected Viewport screenView;
@@ -73,12 +78,16 @@ public class SlopeBoxTest extends ApplicationAdapter {
 //            box = maker.shipNoiseColorized();
 //        }
 //        makeBoom(maker.fireRange());
-//        try {
-//            voxels = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("FlesurrectBonus/Damned.vox")));
-//        } catch (FileNotFoundException e) {
-//            voxels = maker.shipLargeNoiseColorized();
-//        }
-        voxels = maker.shipLargeSmoothColorized();
+        try {
+            voxels = VoxIO.readVox(new LittleEndianDataInputStream(new FileInputStream("HasOwnPalette/Tree.vox")));
+            colorizer = Colorizer.arbitraryBonusColorizer(VoxIO.lastPalette);
+            voxelColor = new VoxelColor().colorizer(colorizer);
+            pixmapRenderer = new VoxelPixmapRenderer().set(new Pixmap(512, 512, Pixmap.Format.RGBA8888)).set(voxelColor);
+            pixmapRenderer.easing = false;
+        } catch (FileNotFoundException e) {
+            voxels = maker.shipLargeSmoothColorized();
+        }
+//        voxels = maker.shipLargeSmoothColorized();
         seq = new SlopeBox(voxels);
 //        chaos = new ChaoticFetch(maker.rng.nextLong(), (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 1);
 //        ship = new TurnModel().set(

@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -34,7 +35,7 @@ public class VoxelDrawSeqMutantTest extends ApplicationAdapter {
     public static final int SCREEN_HEIGHT = 360;//720;
     public static final int VIRTUAL_WIDTH = 320;
     public static final int VIRTUAL_HEIGHT = 360;
-    protected MutantBatch batch;
+    protected SpriteBatch batch;
     protected Viewport worldView;
     protected Viewport screenView;
     protected BitmapFont font;
@@ -66,7 +67,7 @@ public class VoxelDrawSeqMutantTest extends ApplicationAdapter {
             System.out.println(shader.getLog());
         palette = new Texture(Gdx.files.local("palettes/ReallyRelaxedRollBonus_GLSL.png"), Pixmap.Format.RGBA8888, false);
         palette.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
-        batch = new MutantBatch(1000, shader);
+        batch = new SpriteBatch(1000, shader);
         font = new BitmapFont(Gdx.files.internal("PxPlus_IBM_VGA_8x16.fnt"));
         worldView = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         screenView = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
@@ -187,7 +188,7 @@ public class VoxelDrawSeqMutantTest extends ApplicationAdapter {
             else
                 VoxelDraw.draw(seq, renderer);
         }
-        batch.setPackedColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
+//        batch.setPackedColor(-0x1.fffffep126f); // white as a packed float, resets any color changes that the renderer made
         renderer.end();
         buffer.end();
 
@@ -206,8 +207,9 @@ public class VoxelDrawSeqMutantTest extends ApplicationAdapter {
         palette.bind(1);
         screenTexture.bind(0);
         shader.setUniformi("u_palette", 1);
-//        Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0); //GL20.GL_TEXTURE0 + screenTexture.getTextureObjectHandle()
         batch.draw(screenRegion, 0, 0);
+
+
         //font.draw(batch, model.voxels.length + ", " + model.voxels[0].length + ", " + model.voxels[0][0].length + ", " + " (original)", 0, 80);
 //        font.draw(batch, model.sizeX() + ", " + model.sizeY() + ", " + model.sizeZ() + " (sizes)", 0, 60);
 //        font.draw(batch, StringKit.join(", ", model.rotation().rotation()) + " (rotation)", 0, 40);
@@ -217,6 +219,7 @@ public class VoxelDrawSeqMutantTest extends ApplicationAdapter {
         font.setColor(0x34 / 255f, 0x68 / 255f, 0x56 / 255f, 1f);
 //        font.setColor(0f, 0f, 0f, 1f);
         font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", 0, 20);
+//        System.out.println(Gdx.graphics.getFramesPerSecond() + " FPS");
         batch.end();
 
 //        batch.begin();
@@ -246,7 +249,7 @@ public class VoxelDrawSeqMutantTest extends ApplicationAdapter {
         config.setTitle("Warp Tester");
         config.setWindowedMode(SCREEN_WIDTH, SCREEN_HEIGHT);
         config.setIdleFPS(10);
-        config.useVsync(false);
+        config.useVsync(true);
         config.setResizable(false);
         final VoxelDrawSeqMutantTest app = new VoxelDrawSeqMutantTest();
         new Lwjgl3Application(app, config);
