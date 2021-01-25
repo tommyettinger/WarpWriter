@@ -13,6 +13,7 @@ public class ColorSolidGenerator extends ApplicationAdapter {
     public static void main(String[] arg) {
         final ColorSolidGenerator app = new ColorSolidGenerator();
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        config.disableAudio(true);
         new Lwjgl3Application(app, config);
     }
 
@@ -106,8 +107,8 @@ public class ColorSolidGenerator extends ApplicationAdapter {
             }
             VoxIO.writeVOX("ColorSolids/IPT_No_Pow.vox", sparse, reducer.paletteArray);
 //            VoxIO.writeVOX("ColorSolids/IPT_Original.vox", sparse, reducer.paletteArray);
-            Gdx.app.exit();
-            System.exit(0);
+//            Gdx.app.exit();
+//            System.exit(0);
         }
         {
             reducer.exact(Coloring.WEBSAFE);
@@ -145,6 +146,42 @@ public class ColorSolidGenerator extends ApplicationAdapter {
                 }
             }
             VoxIO.writeVOX("ColorSolids/LAB.vox", sparse, reducer.paletteArray);
+        }
+        {
+            reducer.exact(Coloring.WEBSAFE);
+            Tools3D.fill(sparse, 0);
+            Color color = new Color(0f, 0f, 0f, 1f);
+            double r, g, b, x, y, z, L, A, B;
+            int limit = 600;
+            float mul = 1f / ((limit - 1f) * (limit - 1f));
+            for (int xx = 0; xx < limit; xx++) {
+                for (int yy = 0; yy < limit; yy++) {
+                    for (int zz = 0; zz < limit; zz++) {
+                        color.set(xx * xx * mul, yy * yy * mul, zz * zz * mul, 1f);
+                        r = color.r;
+                        g = color.g;
+                        b = color.b;
+
+                        r *= r;
+                        g *= g;
+                        b *= b;
+
+                        final double l = Math.cbrt(0.4121656120f * r + 0.5362752080f * g + 0.0514575653f * b);
+                        final double m = Math.cbrt(0.2118591070f * r + 0.6807189584f * g + 0.1074065790f * b);
+                        final double s = Math.cbrt(0.0883097947f * r + 0.2818474174f * g + 0.6302613616f * b);
+
+                        //+0.2104542553 +0.7936177850 -0.0040720468
+                        //+1.9779984951 -2.4285922050 +0.4505937099
+                        //+0.0259040371 +0.7827717662 -0.8086757660
+                        L = l * +0.2104542553 + m * +0.7936177850 + s * -0.0040720468;
+                        A = l * +1.9779984951 + m * -2.4285922050 + s * +0.4505937099;
+                        B = l * +0.0259040371 + m * +0.7827717662 + s * -0.8086757660;
+
+                        sparse[(int)(A * 95 + 48)][(int)(B * 95 + 48)][(int)(L * 95)] = reducer.reduceIndex(Color.rgba8888(color));
+                    }
+                }
+            }
+            VoxIO.writeVOX("ColorSolids/Oklab.vox", sparse, reducer.paletteArray);
         }
         generate("Flesurrect", Coloring.FLESURRECT);
         generate("FlesurrectBonus", Colorizer.FlesurrectBonusPalette);
