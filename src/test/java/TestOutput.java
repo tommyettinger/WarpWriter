@@ -53,18 +53,18 @@ public class TestOutput extends ApplicationAdapter {
     }
     @Override
     public void create() {
-//        mm = new ModelMaker(seed, Colorizer.AuroraColorizer);
-//        seq = new VoxelSeq(30000);
-//        seq.putSurface(mm.shipLargeSmoothColorized());
-        try {
-            seq = VoxIO.readVoxelSeq(new LittleEndianDataInputStream(new FileInputStream("ColorSolids/AuroraColorSolid.vox")));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            byte[][][] bytes = new byte[32][32][32];
-            Tools3D.fill(bytes, 40);
-            seq = new VoxelSeq(32 * 32 * 6);
-            seq.putSurface(bytes);
-        }
+        mm = new ModelMaker(seed, Colorizer.AuroraColorizer);
+        seq = new VoxelSeq(30000);
+        seq.putSurface(mm.shipLargeSmoothColorized());
+//        try {
+//            seq = VoxIO.readVoxelSeq(new LittleEndianDataInputStream(new FileInputStream("ColorSolids/AuroraColorSolid.vox")));
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//            byte[][][] bytes = new byte[32][32][32];
+//            Tools3D.fill(bytes, 40);
+//            seq = new VoxelSeq(32 * 32 * 6);
+//            seq.putSurface(bytes);
+//        }
 
         width = WarpDraw.xLimit(seq);
         height = WarpDraw.yLimit(seq);

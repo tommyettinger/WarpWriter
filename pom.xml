@@ -68,7 +68,7 @@
         <jdk.version>1.8</jdk.version>
         <junit.version>4.13.1</junit.version>
         <squidlib.version>3.0.3</squidlib.version>
-        <gdx.version>1.9.13</gdx.version>
+        <gdx.version>1.13.0</gdx.version>
     </properties>
 
 
